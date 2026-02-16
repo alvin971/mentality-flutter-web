@@ -156,16 +156,33 @@ class _MentalityChatPageState extends State<MentalityChatPage> {
         children: [
           // Zone de messages
           Expanded(
-            child: ListView.builder(
-              controller: _scrollController,
-              padding: EdgeInsets.all(16.w),
-              itemCount: _messages.length + (_isLoading ? 1 : 0),
-              itemBuilder: (context, index) {
-                if (index == _messages.length && _isLoading) {
-                  return _buildLoadingBubble();
-                }
-                return _buildMessageBubble(_messages[index]);
-              },
+            child: Stack(
+              children: [
+                // Liste des messages de conversation
+                ListView.builder(
+                  controller: _scrollController,
+                  padding: EdgeInsets.all(16.w),
+                  itemCount: _messages.length + (_isLoading ? 1 : 0),
+                  itemBuilder: (context, index) {
+                    if (index == _messages.length && _isLoading) {
+                      return _buildLoadingBubble();
+                    }
+                    return _buildMessageBubble(_messages[index]);
+                  },
+                ),
+                // Texte de présentation en arrière-plan (comme ChatGPT/Claude)
+                if (_messages.isEmpty && !_isLoading)
+                  Center(
+                    child: Text(
+                      'Mentality, l\'IA qui t\'aide à mieux te sentir',
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        color: AppColors.grey400,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  ),
+              ],
             ),
           ),
 
