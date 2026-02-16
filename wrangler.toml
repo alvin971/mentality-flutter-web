@@ -1,11 +1,1 @@
-# Cloudflare Pages configuration for Flutter Web
-
 name = "mentality-flutter-web"
-
-[build]
-command = "flutter build web"
-cwd = "."
-
-[build.upload]
-format = "zip"
-dir = "build/web"
