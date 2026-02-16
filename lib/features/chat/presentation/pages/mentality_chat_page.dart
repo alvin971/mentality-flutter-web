@@ -375,3 +375,4 @@ class ChatMessage {
     this.isError = false,
   });
 }
+
