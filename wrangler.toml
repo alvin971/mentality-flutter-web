@@ -1,3 +1,5 @@
+# Cloudflare Pages configuration for Flutter Web
+
 name = "mentality-flutter-web"
 compatibility_date = "2024-01-01"
 
