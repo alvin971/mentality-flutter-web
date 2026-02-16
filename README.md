@@ -178,7 +178,7 @@ mentality/
 
 ```bash
 # 1. Cloner le repository
-git clone https://github.com/votre-org/mentality.git
+git clone https://github.com/alvin971/mentality-flutter-web.git
 cd mentality
 
 # 2. Installer les dépendances
