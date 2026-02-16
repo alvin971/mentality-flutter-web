@@ -5,13 +5,21 @@
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
   <title>Mentality</title>
   <link rel="manifest" href="manifest.json">
-  <script src="flutter_bootstrap.js" async></script>
-</head>
-<body>
+  <script src="flutter.js" defer></script>
   <script>
     window._flutter = {
-      loader: { loadServiceWorker: () => Promise.resolve() }
+      loader: {
+        loadEntrypoint: async () => {
+          return {
+            serviceWorker: {
+              registrationStrategy: 'change-before-visit',
+            },
+          };
+        },
+      },
     };
   </script>
+</head>
+<body>
 </body>
 </html>
