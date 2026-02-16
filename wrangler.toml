@@ -1,18 +1,8 @@
 name = "mentality-flutter-web"
 compatibility_date = "2024-01-01"
 
-# Configuration for Cloudflare Pages deployment of Flutter Web
-# Build command: flutter build web
-# Build output directory: build/web
-
 [build]
 command = "flutter build web"
 cwd = "."
 
-[build.upload]
-format = "zip"
-dir = "build/web"
-
-# Function binding (if needed)
-# [vars]
-# SOME_VARIABLE = "value"
+pages_build_output_dir = "build/web"
