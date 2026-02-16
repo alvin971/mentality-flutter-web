@@ -1,6 +1,0 @@
-# Cloudflare Pages configuration for Flutter Web
-
-name = "mentality-flutter-web"
-
-[site]
-bucket = "."

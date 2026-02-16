@@ -1,0 +1,244 @@
+/// Constantes globales de l'application
+class AppConstants {
+  AppConstants._();
+
+  // ========================================
+  // APPLICATION INFO
+  // ========================================
+
+  static const String appName = 'Mentality';
+  static const String appVersion = '1.0.0';
+  static const String appTagline = 'Évaluation cognitive adaptative par IA';
+
+  // ========================================
+  // STORAGE KEYS
+  // ========================================
+
+  static const String keyUserProfile = 'user_profile';
+  static const String keyAssessmentHistory = 'assessment_history';
+  static const String keySettings = 'app_settings';
+  static const String keyConsent = 'gdpr_consent';
+  static const String keyLastAssessmentDate = 'last_assessment_date';
+  static const String keyAuthToken = 'auth_token';
+  static const String keyThemeMode = 'theme_mode';
+  static const String keyLanguage = 'language';
+
+  // ========================================
+  // DATABASE
+  // ========================================
+
+  static const String databaseName = 'mentality.db';
+  static const int databaseVersion = 1;
+
+  // Tables
+  static const String tableUsers = 'users';
+  static const String tableAssessments = 'assessments';
+  static const String tableResponses = 'responses';
+  static const String tableItems = 'items';
+  static const String tableResults = 'results';
+
+  // ========================================
+  // API ENDPOINTS (placeholder)
+  // ========================================
+
+  static const String baseUrl = 'https://api.mentality.app/v1';
+  static const String endpointAuth = '/auth';
+  static const String endpointUsers = '/users';
+  static const String endpointAssessments = '/assessments';
+  static const String endpointItems = '/items';
+  static const String endpointGenerate = '/ai/generate';
+  static const String endpointSync = '/sync';
+
+  // ========================================
+  // TIMEOUTS
+  // ========================================
+
+  static const Duration connectionTimeout = Duration(seconds: 30);
+  static const Duration receiveTimeout = Duration(seconds: 30);
+
+  // ========================================
+  // PAGINATION
+  // ========================================
+
+  static const int defaultPageSize = 20;
+  static const int maxPageSize = 100;
+
+  // ========================================
+  // EXERCISE TYPES
+  // ========================================
+
+  static const String exerciseMatrices = 'matrix_reasoning';
+  static const String exerciseBalances = 'figure_weights';
+  static const String exercisePuzzles = 'visual_puzzles';
+  static const String exerciseCubes = 'block_design';
+  static const String exerciseCoding = 'coding';
+  static const String exerciseSymbols = 'symbol_search';
+  static const String exerciseDigitSpan = 'digit_span';
+  static const String exercisePictureMemory = 'picture_memory';
+  static const String exerciseVocabulary = 'vocabulary';
+  static const String exerciseSimilarities = 'similarities';
+  static const String exerciseInformation = 'information';
+  static const String exerciseCancellation = 'cancellation';
+
+  // ========================================
+  // AGE GROUPS
+  // ========================================
+
+  static const String ageGroupPreschool = 'preschool'; // 2-5 ans
+  static const String ageGroupChild = 'child'; // 6-12 ans
+  static const String ageGroupAdolescent = 'adolescent'; // 13-17 ans
+  static const String ageGroupAdult = 'adult'; // 18+ ans
+
+  // ========================================
+  // UI MODES
+  // ========================================
+
+  static const String uiModePreschool = 'ui_preschool';
+  static const String uiModeChild = 'ui_child';
+  static const String uiModeAdult = 'ui_adult';
+
+  // ========================================
+  // ASSESSMENT STATES
+  // ========================================
+
+  static const String stateNotStarted = 'not_started';
+  static const String stateInProgress = 'in_progress';
+  static const String statePaused = 'paused';
+  static const String stateCompleted = 'completed';
+  static const String stateAbandoned = 'abandoned';
+
+  // ========================================
+  // DIFFICULTY LEVELS
+  // ========================================
+
+  static const String difficultyVeryEasy = 'very_easy';
+  static const String difficultyEasy = 'easy';
+  static const String difficultyMedium = 'medium';
+  static const String difficultyHard = 'hard';
+  static const String difficultyVeryHard = 'very_hard';
+
+  // ========================================
+  // RESPONSE TYPES
+  // ========================================
+
+  static const String responseTypeChoice = 'multiple_choice';
+  static const String responseTypeInput = 'text_input';
+  static const String responseTypeVoice = 'voice';
+  static const String responseTypeDragDrop = 'drag_drop';
+  static const String responseTypeTap = 'tap';
+  static const String responseTypeDraw = 'draw';
+
+  // ========================================
+  // VALIDATION
+  // ========================================
+
+  static const int minAge = 2;
+  static const int maxAge = 90;
+  static const int minPasswordLength = 8;
+  static const int maxPasswordLength = 128;
+  static const int maxUsernameLength = 50;
+
+  // ========================================
+  // ANIMATIONS
+  // ========================================
+
+  static const Duration shortAnimationDuration = Duration(milliseconds: 200);
+  static const Duration mediumAnimationDuration = Duration(milliseconds: 400);
+  static const Duration longAnimationDuration = Duration(milliseconds: 600);
+
+  // ========================================
+  // CACHE
+  // ========================================
+
+  static const Duration cacheValidityDuration = Duration(days: 7);
+  static const int maxCacheSize = 100 * 1024 * 1024; // 100 MB
+
+  // ========================================
+  // ASSETS PATHS
+  // ========================================
+
+  static const String imagesPath = 'assets/images/';
+  static const String exercisesPath = 'assets/images/exercises/';
+  static const String iconsPath = 'assets/images/icons/';
+  static const String animationsPath = 'assets/animations/';
+  static const String audioPath = 'assets/audio/';
+  static const String dataPath = 'assets/data/';
+  static const String normsPath = 'assets/data/norms/';
+  static const String itemsPath = 'assets/data/items/';
+
+  // ========================================
+  // AUDIO
+  // ========================================
+
+  static const double defaultVolume = 0.8;
+  static const double ttsRate = 0.9; // Vitesse TTS (0.5 - 2.0)
+  static const double ttsPitch = 1.0; // Tonalité TTS (0.5 - 2.0)
+
+  // ========================================
+  // ACCESSIBILITY
+  // ========================================
+
+  static const double minTapTargetSize = 48.0; // Points
+  static const double childTapTargetSize = 80.0; // Pour enfants
+
+  // ========================================
+  // GDPR
+  // ========================================
+
+  static const int dataRetentionDays = 365;
+  static const int exportRequestProcessingDays = 30;
+  static const int deletionRequestProcessingDays = 30;
+
+  // ========================================
+  // ERROR MESSAGES
+  // ========================================
+
+  static const String errorNetwork = 'Erreur de connexion réseau';
+  static const String errorServer = 'Erreur serveur';
+  static const String errorUnknown = 'Erreur inconnue';
+  static const String errorValidation = 'Données invalides';
+  static const String errorPermission = 'Permission refusée';
+  static const String errorNotFound = 'Ressource introuvable';
+
+  // ========================================
+  // SUCCESS MESSAGES
+  // ========================================
+
+  static const String successSaved = 'Sauvegardé avec succès';
+  static const String successCompleted = 'Complété avec succès';
+  static const String successDeleted = 'Supprimé avec succès';
+
+  // ========================================
+  // ROUTES
+  // ========================================
+
+  static const String routeSplash = '/';
+  static const String routeOnboarding = '/onboarding';
+  static const String routeLogin = '/login';
+  static const String routeRegister = '/register';
+  static const String routeHome = '/home';
+  static const String routeProfile = '/profile';
+  static const String routeAssessment = '/assessment';
+  static const String routeExercise = '/exercise';
+  static const String routeResults = '/results';
+  static const String routeSettings = '/settings';
+  static const String routeGDPR = '/gdpr';
+
+  // ========================================
+  // FEATURE FLAGS
+  // ========================================
+
+  static const bool enableAIGeneration = true;
+  static const bool enableVoiceRecognition = true;
+  static const bool enable3DCubes = true;
+  static const bool enableAnalytics = true;
+  static const bool enableCrashReporting = true;
+
+  // ========================================
+  // DEVELOPMENT
+  // ========================================
+
+  static const bool isDebugMode = true; // À changer en production
+  static const bool enableLogging = true;
+  static const bool enablePerformanceMonitoring = true;
+}

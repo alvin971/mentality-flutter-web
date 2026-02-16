@@ -1,0 +1,32 @@
+name: mentality
+description: Application mobile de test de QI adaptatif par IA - Inspirée des échelles Wechsler (WPPSI, WISC, WAIS)
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.5.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # ===== STATE MANAGEMENT =====
+  flutter_bloc: ^8.1.6
+  bloc: ^8.1.4
+  equatable: ^2.0.5
+
+  # ===== UI COMPONENTS =====
+  flutter_screenutil: ^5.9.3
+
+  # ===== NETWORKING =====
+  http: ^1.2.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # ===== LINTING =====
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
