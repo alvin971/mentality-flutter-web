@@ -18,6 +18,7 @@ import 'features/exercises_implementations/coding/presentation/pages/coding_test
 import 'features/exercises_implementations/symbol_search/presentation/pages/symbol_search_test_page.dart';
 import 'features/complete_test/presentation/pages/complete_test_orchestrator_page.dart';
 import 'features/chat/presentation/pages/mentality_chat_page.dart';
+import 'features/data_collection/oral_test_flow.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -478,6 +479,66 @@ class HomePage extends StatelessWidget {
                               SizedBox(height: 4.h),
                               Text(
                                 'Historique des évaluations',
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                  color: AppColors.grey600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          size: 20.sp,
+                          color: AppColors.grey400,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16.h),
+
+              // Card : Collecte audio
+              Card(
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const OralTestFlow(),
+                      ),
+                    );
+                  },
+                  borderRadius: BorderRadius.circular(16.r),
+                  child: Padding(
+                    padding: EdgeInsets.all(20.w),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 60.w,
+                          height: 60.w,
+                          decoration: BoxDecoration(
+                            color: Colors.teal.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                          child: Icon(
+                            Icons.record_voice_over,
+                            size: 32.sp,
+                            color: Colors.teal,
+                          ),
+                        ),
+                        SizedBox(width: 16.w),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Contribuer à la recherche',
+                                style: Theme.of(context).textTheme.titleLarge,
+                              ),
+                              SizedBox(height: 4.h),
+                              Text(
+                                'Collecte vocale en français · 5 textes',
                                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                   color: AppColors.grey600,
                                 ),
