@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'core/theme/app_colors.dart';
+import 'services/data_collection_service.dart';
 import 'features/exercises_implementations/cubes/presentation/pages/cubes_test_page.dart';
 import 'features/exercises_implementations/matrices/presentation/pages/matrices_test_page.dart';
 import 'features/exercises_implementations/figure_weights/presentation/pages/figure_weights_test_page.dart';
@@ -44,8 +46,9 @@ Future<void> _configureApp() async {
     ),
   );
 
-  // TODO: Initialiser Hive
-  // await Hive.initFlutter();
+  // Persistance locale (IndexedDB sur web)
+  await Hive.initFlutter();
+  await DataCollectionService.instance.initialize();
 
   // TODO: Initialiser Firebase
   // await Firebase.initializeApp();
