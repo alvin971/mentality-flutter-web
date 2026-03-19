@@ -1094,6 +1094,44 @@ class AssessmentIntroPage extends StatelessWidget {
                   child: const Text('Test de Recherche de Symboles'),
                 ),
               ),
+
+              SizedBox(height: 24.h),
+
+              // Séparateur collecte vocale
+              Row(
+                children: [
+                  Expanded(child: Divider(color: AppColors.grey300)),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    child: Text(
+                      'Collecte de données',
+                      style: TextStyle(fontSize: 14.sp, color: AppColors.grey600),
+                    ),
+                  ),
+                  Expanded(child: Divider(color: AppColors.grey300)),
+                ],
+              ),
+
+              SizedBox(height: 12.h),
+
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const OralTestFlow(),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.teal,
+                  ),
+                  icon: const Icon(Icons.record_voice_over),
+                  label: const Text('Lecture & Résumé Vocal (5 textes)'),
+                ),
+              ),
             ],
           ),
         ),
