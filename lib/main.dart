@@ -48,8 +48,12 @@ Future<void> _configureApp() async {
   );
 
   // Persistance locale (IndexedDB sur web)
-  await Hive.initFlutter();
-  await DataCollectionService.instance.initialize();
+  try {
+    await Hive.initFlutter();
+    await DataCollectionService.instance.initialize();
+  } catch (_) {
+    // Ne pas bloquer le démarrage si Hive échoue
+  }
 
   // TODO: Initialiser Firebase
   // await Firebase.initializeApp();
