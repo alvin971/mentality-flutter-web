@@ -185,7 +185,7 @@ class _OralTestFlowState extends State<OralTestFlow> {
           Icon(Icons.record_voice_over, size: 64.sp, color: AppColors.primary),
           SizedBox(height: 24.h),
           Text(
-            'Collecte de données vocales',
+            'Test de Compréhension Orale',
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontSize: 20.sp, fontWeight: FontWeight.bold),

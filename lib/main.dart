@@ -502,66 +502,6 @@ class HomePage extends StatelessWidget {
               ),
               SizedBox(height: 16.h),
 
-              // Card : Collecte audio
-              Card(
-                child: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const OralTestFlow(),
-                      ),
-                    );
-                  },
-                  borderRadius: BorderRadius.circular(16.r),
-                  child: Padding(
-                    padding: EdgeInsets.all(20.w),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 60.w,
-                          height: 60.w,
-                          decoration: BoxDecoration(
-                            color: Colors.teal.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(12.r),
-                          ),
-                          child: Icon(
-                            Icons.record_voice_over,
-                            size: 32.sp,
-                            color: Colors.teal,
-                          ),
-                        ),
-                        SizedBox(width: 16.w),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Contribuer à la recherche',
-                                style: Theme.of(context).textTheme.titleLarge,
-                              ),
-                              SizedBox(height: 4.h),
-                              Text(
-                                'Collecte vocale en français · 5 textes',
-                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  color: AppColors.grey600,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Icon(
-                          Icons.arrow_forward_ios,
-                          size: 20.sp,
-                          color: AppColors.grey400,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 16.h),
-
               // Card : Parler avec Mentality
               Card(
                 child: InkWell(
@@ -772,6 +712,12 @@ class AssessmentIntroPage extends StatelessWidget {
                 icon: Icons.speed_outlined,
                 title: 'Vitesse de Traitement',
                 color: AppColors.indexPSI,
+              ),
+              SizedBox(height: 12.h),
+              _DomainTile(
+                icon: Icons.record_voice_over,
+                title: 'Langage Oral',
+                color: Colors.teal,
               ),
               SizedBox(height: 32.h),
 
@@ -1099,28 +1045,10 @@ class AssessmentIntroPage extends StatelessWidget {
                 ),
               ),
 
-              SizedBox(height: 24.h),
-
-              // Séparateur collecte vocale
-              Row(
-                children: [
-                  Expanded(child: Divider(color: AppColors.grey300)),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w),
-                    child: Text(
-                      'Collecte de données',
-                      style: TextStyle(fontSize: 14.sp, color: AppColors.grey600),
-                    ),
-                  ),
-                  Expanded(child: Divider(color: AppColors.grey300)),
-                ],
-              ),
-
               SizedBox(height: 12.h),
-
               SizedBox(
                 width: double.infinity,
-                child: ElevatedButton.icon(
+                child: ElevatedButton(
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -1132,8 +1060,7 @@ class AssessmentIntroPage extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.teal,
                   ),
-                  icon: const Icon(Icons.record_voice_over),
-                  label: const Text('Lecture & Résumé Vocal (5 textes)'),
+                  child: const Text('Test de Compréhension Orale'),
                 ),
               ),
             ],
