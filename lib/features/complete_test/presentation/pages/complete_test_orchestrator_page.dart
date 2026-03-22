@@ -113,21 +113,43 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
             }
           });
         } else if (state is CompleteTestDoneState) {
-          // Naviguer vers la page de résultats
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (_) => CompleteTestResultsPage(
-                session: state.session,
-                ageInMonths: state.ageInMonths,
-              ),
-            ),
-          );
+          // addPostFrameCallback garantit que la navigation se fait
+          // après la fin du cycle de build (évite l'écran gris).
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (context.mounted) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => CompleteTestResultsPage(
+                    session: state.session,
+                    ageInMonths: state.ageInMonths,
+                  ),
+                ),
+              );
+            }
+          });
         }
       },
       builder: (context, state) {
         if (state is CompleteTestIntroState) {
           return _buildIntroScreen(context);
+        }
+        // CompleteTestDoneState : afficher un écran d'attente pendant la
+        // navigation (addPostFrameCallback n'est pas encore exécuté).
+        if (state is CompleteTestDoneState) {
+          return Scaffold(
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const CircularProgressIndicator(),
+                  SizedBox(height: 24.h),
+                  Text('Chargement des résultats...',
+                      style: TextStyle(fontSize: 16.sp)),
+                ],
+              ),
+            ),
+          );
         }
         return _buildProgressScreen(context, state);
       },

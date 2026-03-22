@@ -30,9 +30,15 @@ class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
   @override
   void initState() {
     super.initState();
-    _iqScore = widget.ageInMonths != null
-        ? const ScoringService().computeScore(widget.session, widget.ageInMonths!)
-        : null;
+    // Try-catch : un score manquant ou hors-table ne doit pas faire crasher
+    // silencieusement la page (qui resterait grise en production).
+    try {
+      _iqScore = widget.ageInMonths != null
+          ? const ScoringService().computeScore(widget.session, widget.ageInMonths!)
+          : null;
+    } catch (_) {
+      _iqScore = null;
+    }
     _saveToHistory();
   }
 
