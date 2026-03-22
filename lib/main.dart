@@ -5,6 +5,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'core/theme/app_colors.dart';
 import 'core/theme/theme_notifier.dart';
 import 'core/router/app_router.dart';
+import 'core/constants/app_constants.dart';
+import 'core/services/remote_config_service.dart';
 import 'services/data_collection_service.dart';
 import 'services/session_history_service.dart';
 import 'services/session_persistence_service.dart';
@@ -51,6 +53,13 @@ Future<void> _configureApp() async {
 
   // Charger le thème sauvegardé
   await themeNotifier.load();
+
+  // Charger la configuration distante depuis Supabase admin
+  // Fallback automatique sur les valeurs locales si inaccessible
+  await RemoteConfigService.instance.loadConfig(
+    supabaseUrl: AppConstants.supabaseUrl,
+    supabaseAnonKey: AppConstants.supabaseAnonKey,
+  );
 
   // TODO (Batch 12): Initialiser Firebase
   // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);

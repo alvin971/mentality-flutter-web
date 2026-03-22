@@ -40,6 +40,17 @@ class AppConstants {
   static const String tableResults = 'results';
 
   // ========================================
+  // SUPABASE (admin backend)
+  // ========================================
+
+  /// URL du projet Supabase admin (visible dans Supabase Dashboard → Settings → API)
+  /// Laisser vide pour désactiver la configuration distante.
+  static const String supabaseUrl = '';
+
+  /// Clé anon publique Supabase (safe à inclure côté client — RLS contrôle l'accès)
+  static const String supabaseAnonKey = '';
+
+  // ========================================
   // API ENDPOINTS
   // ========================================
 
