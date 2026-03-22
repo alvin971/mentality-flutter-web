@@ -11,7 +11,18 @@ import 'services/session_persistence_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await _configureApp();
+
+  // Capture les erreurs Flutter non gérées pour éviter l'écran blanc.
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
+  };
+
+  try {
+    await _configureApp();
+  } catch (_) {
+    // Ne pas bloquer le démarrage si la config échoue
+  }
+
   runApp(const MentalityApp());
 }
 

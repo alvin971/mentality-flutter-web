@@ -169,8 +169,11 @@ class _SplashRedirectState extends State<_SplashRedirect> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 3), () {
-      if (mounted) context.go(AppConstants.routeHome);
+    // addPostFrameCallback garantit que GoRouter est monté avant la navigation.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(const Duration(seconds: 2), () {
+        if (mounted) context.go(AppConstants.routeHome);
+      });
     });
   }
 
