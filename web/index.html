@@ -18,19 +18,65 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="A new Flutter project.">
+  <meta name="description" content="Mentality — Évaluation cognitive adaptative WAIS-IV">
+
+  <!-- Viewport : critique pour mobile — viewport-fit=cover active l'edge-to-edge -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="mentality">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <!-- black-translucent : rendu edge-to-edge sur iOS (barre status transparente) -->
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Mentality">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>mentality</title>
+  <title>Mentality</title>
   <link rel="manifest" href="manifest.json">
+
+  <!-- Mobile browser chrome handling
+       - html height: -webkit-fill-available : iOS Safari tient compte de la barre dynamique
+       - body overflow hidden : Flutter gère son propre scroll interne
+       - background-color : évite le flash blanc pendant le chargement -->
+  <style>
+    html {
+      height: 100%;
+      height: -webkit-fill-available;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+      background-color: #1a237e;
+    }
+  </style>
+
+  <!-- Visual Viewport API : adapte Flutter quand la barre d'adresse mobile
+       apparaît ou disparaît (sinon du vide blanc apparaît en bas de l'écran) -->
+  <script>
+    (function () {
+      function updateHeight() {
+        var h = (window.visualViewport ? window.visualViewport.height : window.innerHeight);
+        document.body.style.height = h + 'px';
+      }
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', updateHeight);
+        window.visualViewport.addEventListener('scroll', updateHeight);
+      }
+      window.addEventListener('resize', updateHeight);
+      // Appel initial
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', updateHeight);
+      } else {
+        updateHeight();
+      }
+    })();
+  </script>
 </head>
 <body>
   <script src="flutter_bootstrap.js" async></script>
