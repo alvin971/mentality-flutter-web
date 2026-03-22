@@ -1,0 +1,9 @@
+name = "claude-proxy"
+main = "index.js"
+compatibility_date = "2025-01-01"
+
+# Secrets requis (à configurer via CLI) :
+#   wrangler secret put ANTHROPIC_API_KEY
+#
+# Après déploiement, copier l'URL du worker dans :
+#   lib/core/constants/app_constants.dart → claudeWorkerUrl

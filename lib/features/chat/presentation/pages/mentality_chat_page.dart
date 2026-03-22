@@ -1,28 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../services/claude_chat_service.dart';
+import '../../bloc/chat_bloc.dart';
+import '../../bloc/chat_event.dart';
+import '../../bloc/chat_state.dart';
 
-/// Page de chat avec l'assistant IA Mentality (Claude Haiku)
-class MentalityChatPage extends StatefulWidget {
+/// Page de chat avec l'assistant IA Mentality (Claude via Cloudflare Worker).
+class MentalityChatPage extends StatelessWidget {
   const MentalityChatPage({super.key});
 
   @override
-  State<MentalityChatPage> createState() => _MentalityChatPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => ChatBloc(),
+      child: const _ChatView(),
+    );
+  }
 }
 
-class _MentalityChatPageState extends State<MentalityChatPage> {
-  final TextEditingController _messageController = TextEditingController();
-  final ScrollController _scrollController = ScrollController();
-  final ClaudeChatService _chatService = ClaudeChatService();
-  final List<ChatMessage> _messages = [];
-  bool _isLoading = false;
+class _ChatView extends StatefulWidget {
+  const _ChatView();
 
   @override
-  void initState() {
-    super.initState();
-    // Page de chat propre sans message de bienvenue
-  }
+  State<_ChatView> createState() => _ChatViewState();
+}
+
+class _ChatViewState extends State<_ChatView> {
+  final TextEditingController _messageController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void dispose() {
@@ -31,61 +37,14 @@ class _MentalityChatPageState extends State<MentalityChatPage> {
     super.dispose();
   }
 
-  /// Envoie un message à l'IA
-  Future<void> _sendMessage() async {
+  void _sendMessage(BuildContext context) {
     final text = _messageController.text.trim();
     if (text.isEmpty) return;
-
-    // Ajouter le message de l'utilisateur
-    setState(() {
-      _messages.add(
-        ChatMessage(
-          text: text,
-          isUser: true,
-          timestamp: DateTime.now(),
-        ),
-      );
-      _isLoading = true;
-    });
-
     _messageController.clear();
-    _scrollToBottom();
-
-    try {
-      // Appeler l'API Claude Haiku
-      final response = await _chatService.sendMessage(
-        message: text,
-        conversationHistory: _messages,
-      );
-
-      setState(() {
-        _messages.add(
-          ChatMessage(
-            text: response,
-            isUser: false,
-            timestamp: DateTime.now(),
-          ),
-        );
-        _isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        _messages.add(
-          ChatMessage(
-            text: 'Désolé, une erreur s\'est produite. Veuillez réessayer.',
-            isUser: false,
-            timestamp: DateTime.now(),
-            isError: true,
-          ),
-        );
-        _isLoading = false;
-      });
-    }
-
+    context.read<ChatBloc>().add(SendMessageEvent(text));
     _scrollToBottom();
   }
 
-  /// Scroll automatique vers le bas
   void _scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollController.hasClients) {
@@ -111,31 +70,19 @@ class _MentalityChatPageState extends State<MentalityChatPage> {
                 color: AppColors.tertiary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8.r),
               ),
-              child: Icon(
-                Icons.psychology,
-                size: 20.sp,
-                color: AppColors.tertiary,
-              ),
+              child: Icon(Icons.psychology, size: 20.sp, color: AppColors.tertiary),
             ),
             SizedBox(width: 12.w),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Mentality',
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                Text(
-                  'Assistant IA',
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.normal,
-                    color: AppColors.grey600,
-                  ),
-                ),
+                Text('Mentality',
+                    style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600)),
+                Text('Assistant IA',
+                    style: TextStyle(
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.normal,
+                        color: AppColors.grey600)),
               ],
             ),
           ],
@@ -143,111 +90,120 @@ class _MentalityChatPageState extends State<MentalityChatPage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
-            onPressed: () {
-              setState(() {
-                _messages.clear();
-              });
-            },
             tooltip: 'Nouvelle conversation',
+            onPressed: () =>
+                context.read<ChatBloc>().add(const ClearConversationEvent()),
           ),
         ],
       ),
       body: Column(
         children: [
-          // Zone de messages
           Expanded(
-            child: Stack(
-              children: [
-                // Liste des messages de conversation
-                ListView.builder(
-                  controller: _scrollController,
-                  padding: EdgeInsets.all(16.w),
-                  itemCount: _messages.length + (_isLoading ? 1 : 0),
-                  itemBuilder: (context, index) {
-                    if (index == _messages.length && _isLoading) {
-                      return _buildLoadingBubble();
-                    }
-                    return _buildMessageBubble(_messages[index]);
-                  },
-                ),
-                // Texte de présentation en arrière-plan (comme ChatGPT/Claude)
-                if (_messages.isEmpty && !_isLoading)
-                  Center(
-                    child: Text(
-                      'Mentality, l\'IA qui t\'aide à mieux te sentir',
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        color: AppColors.grey400,
-                        fontStyle: FontStyle.italic,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-          ),
+            child: BlocConsumer<ChatBloc, ChatState>(
+              listener: (context, state) {
+                // Scroll vers le bas à chaque nouveau message
+                _scrollToBottom();
+              },
+              builder: (context, state) {
+                final messages = state.messages;
+                final isLoading = state is ChatLoadingState;
 
-          // Zone de saisie
-          Container(
-            padding: EdgeInsets.all(16.w),
-            decoration: BoxDecoration(
-              color: AppColors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, -2),
-                ),
-              ],
-            ),
-            child: SafeArea(
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _messageController,
-                      decoration: InputDecoration(
-                        hintText: 'Envoyer un message...',
-                        filled: true,
-                        fillColor: AppColors.grey50,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(24.r),
-                          borderSide: BorderSide.none,
-                        ),
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 20.w,
-                          vertical: 12.h,
+                return Stack(
+                  children: [
+                    ListView.builder(
+                      controller: _scrollController,
+                      padding: EdgeInsets.all(16.w),
+                      itemCount: messages.length + (isLoading ? 1 : 0),
+                      itemBuilder: (_, i) {
+                        if (i == messages.length && isLoading) {
+                          return _buildLoadingBubble();
+                        }
+                        return _buildMessageBubble(messages[i]);
+                      },
+                    ),
+                    if (messages.isEmpty && !isLoading)
+                      Center(
+                        child: Text(
+                          'Mentality, l\'IA qui t\'aide à mieux te comprendre',
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            color: AppColors.grey400,
+                            fontStyle: FontStyle.italic,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
                       ),
-                      maxLines: null,
-                      textCapitalization: TextCapitalization.sentences,
-                      onSubmitted: (_) => _sendMessage(),
-                    ),
-                  ),
-                  SizedBox(width: 8.w),
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: AppColors.primaryGradient,
-                      borderRadius: BorderRadius.circular(24.r),
-                    ),
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.send,
-                        color: Colors.white,
-                        size: 24.sp,
-                      ),
-                      onPressed: _isLoading ? null : _sendMessage,
-                    ),
-                  ),
-                ],
-              ),
+                  ],
+                );
+              },
             ),
           ),
+          _buildInputBar(context),
         ],
       ),
     );
   }
 
-  /// Construit une bulle de message
+  Widget _buildInputBar(BuildContext context) {
+    return BlocBuilder<ChatBloc, ChatState>(
+      builder: (context, state) {
+        final isLoading = state is ChatLoadingState;
+        return Container(
+          padding: EdgeInsets.all(16.w),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.05),
+                blurRadius: 10,
+                offset: const Offset(0, -2),
+              ),
+            ],
+          ),
+          child: SafeArea(
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _messageController,
+                    enabled: !isLoading,
+                    decoration: InputDecoration(
+                      hintText: 'Envoyer un message...',
+                      filled: true,
+                      fillColor: AppColors.grey50,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(24.r),
+                        borderSide: BorderSide.none,
+                      ),
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 20.w,
+                        vertical: 12.h,
+                      ),
+                    ),
+                    maxLines: null,
+                    textCapitalization: TextCapitalization.sentences,
+                    onSubmitted: (_) => _sendMessage(context),
+                  ),
+                ),
+                SizedBox(width: 8.w),
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: AppColors.primaryGradient,
+                    borderRadius: BorderRadius.circular(24.r),
+                  ),
+                  child: IconButton(
+                    icon: Icon(Icons.send, color: Colors.white, size: 24.sp),
+                    onPressed: isLoading ? null : () => _sendMessage(context),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   Widget _buildMessageBubble(ChatMessage message) {
     return Align(
       alignment: message.isUser ? Alignment.centerRight : Alignment.centerLeft,
@@ -270,8 +226,10 @@ class _MentalityChatPageState extends State<MentalityChatPage> {
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(16.r),
                   topRight: Radius.circular(16.r),
-                  bottomLeft: message.isUser ? Radius.circular(16.r) : Radius.zero,
-                  bottomRight: message.isUser ? Radius.zero : Radius.circular(16.r),
+                  bottomLeft:
+                      message.isUser ? Radius.circular(16.r) : Radius.zero,
+                  bottomRight:
+                      message.isUser ? Radius.zero : Radius.circular(16.r),
                 ),
               ),
               child: Text(
@@ -291,10 +249,7 @@ class _MentalityChatPageState extends State<MentalityChatPage> {
               padding: EdgeInsets.symmetric(horizontal: 4.w),
               child: Text(
                 _formatTimestamp(message.timestamp),
-                style: TextStyle(
-                  fontSize: 10.sp,
-                  color: AppColors.grey500,
-                ),
+                style: TextStyle(fontSize: 10.sp, color: AppColors.grey500),
               ),
             ),
           ],
@@ -303,7 +258,6 @@ class _MentalityChatPageState extends State<MentalityChatPage> {
     );
   }
 
-  /// Construit la bulle de chargement
   Widget _buildLoadingBubble() {
     return Align(
       alignment: Alignment.centerLeft,
@@ -344,24 +298,16 @@ class _MentalityChatPageState extends State<MentalityChatPage> {
     );
   }
 
-  /// Formate le timestamp
   String _formatTimestamp(DateTime timestamp) {
-    final now = DateTime.now();
-    final difference = now.difference(timestamp);
-
-    if (difference.inMinutes < 1) {
-      return 'À l\'instant';
-    } else if (difference.inHours < 1) {
-      return '${difference.inMinutes} min';
-    } else if (difference.inDays < 1) {
-      return '${difference.inHours}h';
-    } else {
-      return '${timestamp.day}/${timestamp.month}';
-    }
+    final diff = DateTime.now().difference(timestamp);
+    if (diff.inMinutes < 1) return 'À l\'instant';
+    if (diff.inHours < 1) return '${diff.inMinutes} min';
+    if (diff.inDays < 1) return '${diff.inHours}h';
+    return '${timestamp.day}/${timestamp.month}';
   }
 }
 
-/// Modèle de message de chat
+/// Modèle de message de chat — partagé entre la UI et le BLoC.
 class ChatMessage {
   final String text;
   final bool isUser;
@@ -375,4 +321,3 @@ class ChatMessage {
     this.isError = false,
   });
 }
-

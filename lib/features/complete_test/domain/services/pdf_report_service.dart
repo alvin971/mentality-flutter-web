@@ -1,0 +1,326 @@
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
+import '../../../../core/models/complete_test_session.dart';
+import '../../../scoring/domain/entities/iq_score.dart';
+
+/// Service de génération et d'impression du rapport PDF WAIS-IV.
+///
+/// Utilise les packages `pdf` + `printing` pour générer un document
+/// imprimable / téléchargeable directement dans le navigateur.
+class PdfReportService {
+  const PdfReportService();
+
+  /// Génère et affiche/télécharge le PDF de résultats.
+  Future<void> generateAndPrint({
+    required CompleteTestSession session,
+    required IQScore? iqScore,
+    required int? ageInMonths,
+  }) async {
+    final doc = pw.Document();
+
+    doc.addPage(
+      pw.MultiPage(
+        pageFormat: PdfPageFormat.a4,
+        margin: const pw.EdgeInsets.all(40),
+        build: (pw.Context ctx) => [
+          _buildHeader(),
+          pw.SizedBox(height: 20),
+          _buildSessionInfo(session, ageInMonths),
+          pw.SizedBox(height: 20),
+          if (iqScore != null) ...[
+            _buildFSIQSection(iqScore),
+            pw.SizedBox(height: 20),
+            _buildIndexTable(iqScore),
+            pw.SizedBox(height: 20),
+            _buildSubtestTable(session),
+          ],
+          pw.SizedBox(height: 20),
+          _buildDisclaimer(),
+        ],
+      ),
+    );
+
+    await Printing.layoutPdf(
+      onLayout: (_) async => doc.save(),
+      name: 'mentality_resultats_${_dateString()}.pdf',
+    );
+  }
+
+  pw.Widget _buildHeader() {
+    return pw.Column(
+      crossAxisAlignment: pw.CrossAxisAlignment.start,
+      children: [
+        pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+          children: [
+            pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              children: [
+                pw.Text('MENTALITY',
+                    style: pw.TextStyle(
+                        fontSize: 28,
+                        fontWeight: pw.FontWeight.bold,
+                        color: PdfColors.indigo700)),
+                pw.Text('Rapport d\'évaluation cognitive WAIS-IV',
+                    style: const pw.TextStyle(
+                        fontSize: 12, color: PdfColors.grey700)),
+              ],
+            ),
+            pw.Text(_dateString(),
+                style:
+                    const pw.TextStyle(fontSize: 11, color: PdfColors.grey600)),
+          ],
+        ),
+        pw.Divider(color: PdfColors.indigo700, thickness: 2),
+      ],
+    );
+  }
+
+  pw.Widget _buildSessionInfo(
+      CompleteTestSession session, int? ageInMonths) {
+    final duration = session.totalDuration;
+    final age =
+        ageInMonths != null ? '${ageInMonths ~/ 12} ans' : 'Non renseigné';
+    final dur = duration != null
+        ? '${duration.inMinutes} min ${duration.inSeconds % 60} sec'
+        : 'N/A';
+
+    return pw.Container(
+      padding: const pw.EdgeInsets.all(12),
+      decoration: pw.BoxDecoration(
+        color: PdfColors.indigo50,
+        borderRadius: pw.BorderRadius.circular(8),
+      ),
+      child: pw.Row(
+        children: [
+          _infoItem('Âge', age),
+          pw.SizedBox(width: 40),
+          _infoItem('Durée', dur),
+          pw.SizedBox(width: 40),
+          _infoItem('Date', _dateString()),
+        ],
+      ),
+    );
+  }
+
+  pw.Widget _infoItem(String label, String value) {
+    return pw.Column(
+      crossAxisAlignment: pw.CrossAxisAlignment.start,
+      children: [
+        pw.Text(label,
+            style: pw.TextStyle(
+                fontSize: 9,
+                color: PdfColors.grey600,
+                fontWeight: pw.FontWeight.bold)),
+        pw.Text(value,
+            style: pw.TextStyle(
+                fontSize: 12, fontWeight: pw.FontWeight.bold)),
+      ],
+    );
+  }
+
+  pw.Widget _buildFSIQSection(IQScore iqScore) {
+    final ci = iqScore.fsiqCI;
+    return pw.Container(
+      padding: const pw.EdgeInsets.all(16),
+      decoration: pw.BoxDecoration(
+        color: PdfColors.indigo700,
+        borderRadius: pw.BorderRadius.circular(12),
+      ),
+      child: pw.Row(
+        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+        children: [
+          pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              pw.Text('SCORE QI GLOBAL (FSIQ)',
+                  style: pw.TextStyle(
+                      fontSize: 11,
+                      color: PdfColors.white,
+                      fontWeight: pw.FontWeight.bold)),
+              pw.Text('${iqScore.fsiq}',
+                  style: pw.TextStyle(
+                      fontSize: 48,
+                      color: PdfColors.white,
+                      fontWeight: pw.FontWeight.bold)),
+              pw.Text(iqScore.fsiqClassification,
+                  style: pw.TextStyle(
+                      fontSize: 14, color: PdfColors.white)),
+            ],
+          ),
+          pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.end,
+            children: [
+              pw.Text('Intervalle de confiance 95%',
+                  style: pw.TextStyle(
+                      fontSize: 9, color: PdfColors.white)),
+              pw.Text('${ci.lowerBound} — ${ci.upperBound}',
+                  style: pw.TextStyle(
+                      fontSize: 13,
+                      color: PdfColors.white,
+                      fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 8),
+              pw.Text('Percentile',
+                  style: pw.TextStyle(
+                      fontSize: 9, color: PdfColors.white)),
+              pw.Text('${iqScore.fsiqPercentile}e',
+                  style: pw.TextStyle(
+                      fontSize: 20,
+                      color: PdfColors.white,
+                      fontWeight: pw.FontWeight.bold)),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  pw.Widget _buildIndexTable(IQScore iqScore) {
+    final rows = [
+      ('VCI — Compréhension Verbale', iqScore.vci),
+      ('VSI — Visuo-Spatial', iqScore.vsi),
+      ('FRI — Raisonnement Fluide', iqScore.fri),
+      ('WMI — Mémoire de Travail', iqScore.wmi),
+      ('PSI — Vitesse de Traitement', iqScore.psi),
+    ];
+
+    return pw.Column(
+      crossAxisAlignment: pw.CrossAxisAlignment.start,
+      children: [
+        pw.Text('PROFIL DES INDICES COGNITIFS',
+            style: pw.TextStyle(
+                fontSize: 12,
+                fontWeight: pw.FontWeight.bold,
+                color: PdfColors.grey900)),
+        pw.SizedBox(height: 8),
+        pw.Table(
+          border: pw.TableBorder.all(color: PdfColors.grey300, width: 0.5),
+          columnWidths: {
+            0: const pw.FlexColumnWidth(5),
+            1: const pw.FlexColumnWidth(2),
+            2: const pw.FlexColumnWidth(3),
+          },
+          children: [
+            pw.TableRow(
+              decoration: const pw.BoxDecoration(color: PdfColors.grey100),
+              children: [
+                _tableHeader('Indice'),
+                _tableHeader('Score'),
+                _tableHeader('Classification'),
+              ],
+            ),
+            ...rows.map((r) {
+              final score = r.$2;
+              final key = r.$1.substring(0, 3);
+              final classif = score != null
+                  ? (iqScore.classifications[key] ?? '')
+                  : 'N/A';
+              return pw.TableRow(children: [
+                _tableCell(r.$1),
+                _tableCell(score != null ? '$score' : 'N/A', centered: true),
+                _tableCell(classif),
+              ]);
+            }),
+          ],
+        ),
+      ],
+    );
+  }
+
+  pw.Widget _buildSubtestTable(CompleteTestSession session) {
+    final subtests = [
+      ('Cubes (BD)', session.cubesScore),
+      ('Similitudes (SI)', session.similaritiesScore),
+      ('Mémoire Chiffres (DS)', session.digitSpanScore),
+      ('Matrices (MR)', session.matricesScore),
+      ('Vocabulaire (VO)', session.vocabularyScore),
+      ('Arithmétique (AR)', session.arithmeticScore),
+      ('Rech. Symboles (SS)', session.symbolSearchScore),
+      ('Puzzles Visuels (VP)', session.visualPuzzlesScore),
+      ('Information (IN)', session.informationScore),
+      ('Code (CD)', session.codingScore),
+      ('Mémoire Images (PS)', session.pictureSpanScore),
+      ('Balances (FW)', session.figureWeightsScore),
+    ];
+
+    return pw.Column(
+      crossAxisAlignment: pw.CrossAxisAlignment.start,
+      children: [
+        pw.Text('SCORES BRUTS DES SUBTESTS',
+            style: pw.TextStyle(
+                fontSize: 12,
+                fontWeight: pw.FontWeight.bold,
+                color: PdfColors.grey900)),
+        pw.SizedBox(height: 8),
+        pw.Table(
+          border: pw.TableBorder.all(color: PdfColors.grey300, width: 0.5),
+          columnWidths: {
+            0: const pw.FlexColumnWidth(4),
+            1: const pw.FlexColumnWidth(2),
+          },
+          children: [
+            pw.TableRow(
+              decoration: const pw.BoxDecoration(color: PdfColors.grey100),
+              children: [
+                _tableHeader('Subtest'),
+                _tableHeader('Score brut'),
+              ],
+            ),
+            ...subtests.map((s) => pw.TableRow(children: [
+                  _tableCell(s.$1),
+                  _tableCell(
+                    s.$2 != null ? '${s.$2}' : 'N/A',
+                    centered: true,
+                  ),
+                ])),
+          ],
+        ),
+      ],
+    );
+  }
+
+  pw.Widget _buildDisclaimer() {
+    return pw.Container(
+      padding: const pw.EdgeInsets.all(12),
+      decoration: pw.BoxDecoration(
+        color: PdfColors.orange50,
+        border: pw.Border.all(color: PdfColors.orange300),
+        borderRadius: pw.BorderRadius.circular(6),
+      ),
+      child: pw.Text(
+        'AVERTISSEMENT : Ce rapport est généré par une application d\'aide à l\'évaluation '
+        'et ne constitue pas un diagnostic clinique officiel. Il doit être interprété '
+        'par un professionnel de santé qualifié. Ne pas utiliser à des fins médicales '
+        'ou légales sans évaluation professionnelle complémentaire.',
+        style: const pw.TextStyle(fontSize: 8, color: PdfColors.orange900),
+      ),
+    );
+  }
+
+  pw.Widget _tableHeader(String text) {
+    return pw.Padding(
+      padding: const pw.EdgeInsets.all(6),
+      child: pw.Text(text,
+          style: pw.TextStyle(
+              fontSize: 9,
+              fontWeight: pw.FontWeight.bold,
+              color: PdfColors.grey800)),
+    );
+  }
+
+  pw.Widget _tableCell(String text, {bool centered = false}) {
+    return pw.Padding(
+      padding: const pw.EdgeInsets.all(6),
+      child: pw.Text(text,
+          textAlign:
+              centered ? pw.TextAlign.center : pw.TextAlign.left,
+          style: const pw.TextStyle(fontSize: 9)),
+    );
+  }
+
+  String _dateString() {
+    final now = DateTime.now();
+    return '${now.day.toString().padLeft(2, '0')}/${now.month.toString().padLeft(2, '0')}/${now.year}';
+  }
+}

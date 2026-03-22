@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/models/complete_test_session.dart';
+import '../../bloc/complete_test_bloc.dart';
+import '../../bloc/complete_test_event.dart';
+import '../../bloc/complete_test_state.dart';
 import '../../../exercises_implementations/cubes/presentation/pages/cubes_test_page.dart';
 import '../../../exercises_implementations/similarities/presentation/pages/similarities_test_page.dart';
 import '../../../exercises_implementations/digit_span/presentation/pages/digit_span_test_page.dart';
@@ -16,60 +19,55 @@ import '../../../exercises_implementations/picture_span/presentation/pages/pictu
 import '../../../exercises_implementations/figure_weights/presentation/pages/figure_weights_test_page.dart';
 import 'complete_test_results_page.dart';
 
-/// Page d'orchestration du test complet WAIS-IV
-/// Lance automatiquement tous les subtests dans l'ordre
-class CompleteTestOrchestratorPage extends StatefulWidget {
-  const CompleteTestOrchestratorPage({Key? key}) : super(key: key);
+/// Orchestrateur du test complet WAIS-IV.
+///
+/// Pilote la séquence des 12 sous-tests via CompleteTestBloc.
+/// Chaque sous-test est lancé dans Navigator.push() et retourne
+/// son score via Navigator.pop(score).
+class CompleteTestOrchestratorPage extends StatelessWidget {
+  const CompleteTestOrchestratorPage({super.key});
 
   @override
-  State<CompleteTestOrchestratorPage> createState() => _CompleteTestOrchestratorPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => CompleteTestBloc(),
+      child: const _OrchestratorView(),
+    );
+  }
 }
 
-class _CompleteTestOrchestratorPageState extends State<CompleteTestOrchestratorPage> {
-  late CompleteTestSession _session;
-  bool _isIntroScreen = true;
+class _OrchestratorView extends StatefulWidget {
+  const _OrchestratorView();
 
   @override
-  void initState() {
-    super.initState();
-    _session = CompleteTestSession(startTime: DateTime.now());
+  State<_OrchestratorView> createState() => _OrchestratorViewState();
+}
+
+class _OrchestratorViewState extends State<_OrchestratorView> {
+  final TextEditingController _ageController = TextEditingController();
+  int? _ageInMonths;
+
+  @override
+  void dispose() {
+    _ageController.dispose();
+    super.dispose();
   }
 
-  /// Lance le test suivant dans la séquence
-  void _launchNextTest() {
-    if (_session.isComplete) {
-      _showResults();
-      return;
-    }
-
-    final testName = _session.currentTestName;
-
-    // Navigation vers le test approprié
-    Navigator.push(
+  void _launchTest(BuildContext context, String testName) {
+    final page = _getTestPage(testName);
+    Navigator.push<int>(
       context,
-      MaterialPageRoute(
-        builder: (context) => _getTestPage(testName),
-      ),
-    ).then((result) {
-      // Récupérer le score du test
-      if (result != null && result is int) {
-        _saveTestScore(testName, result);
-        _session.completeCurrentTest();
-        setState(() {});
-
-        // Lancer le test suivant automatiquement
-        if (!_session.isComplete) {
-          Future.delayed(const Duration(milliseconds: 500), () {
-            _launchNextTest();
-          });
-        } else {
-          _showResults();
-        }
+      MaterialPageRoute(builder: (_) => page),
+    ).then((score) {
+      if (!context.mounted) return;
+      if (score != null) {
+        context.read<CompleteTestBloc>().add(
+              SubmitSubtestScoreEvent(testName: testName, score: score),
+            );
       }
     });
   }
 
-  /// Retourne la page de test appropriée
   Widget _getTestPage(String testName) {
     switch (testName) {
       case 'Cubes':
@@ -98,81 +96,49 @@ class _CompleteTestOrchestratorPageState extends State<CompleteTestOrchestratorP
         return const FigureWeightsTestPage();
       default:
         return Scaffold(
-          body: Center(child: Text('Test non trouvé: $testName')),
+          body: Center(child: Text('Test non trouvé : $testName')),
         );
     }
   }
 
-  /// Sauvegarde le score d'un test
-  void _saveTestScore(String testName, int score) {
-    switch (testName) {
-      case 'Cubes':
-        _session = _session.copyWith(cubesScore: score);
-        break;
-      case 'Similitudes':
-        _session = _session.copyWith(similaritiesScore: score);
-        break;
-      case 'Mémoire des Chiffres':
-        _session = _session.copyWith(digitSpanScore: score);
-        break;
-      case 'Matrices':
-        _session = _session.copyWith(matricesScore: score);
-        break;
-      case 'Vocabulaire':
-        _session = _session.copyWith(vocabularyScore: score);
-        break;
-      case 'Arithmétique':
-        _session = _session.copyWith(arithmeticScore: score);
-        break;
-      case 'Recherche de Symboles':
-        _session = _session.copyWith(symbolSearchScore: score);
-        break;
-      case 'Puzzles Visuels':
-        _session = _session.copyWith(visualPuzzlesScore: score);
-        break;
-      case 'Information':
-        _session = _session.copyWith(informationScore: score);
-        break;
-      case 'Code':
-        _session = _session.copyWith(codingScore: score);
-        break;
-      case 'Mémoire des Images':
-        _session = _session.copyWith(pictureSpanScore: score);
-        break;
-      case 'Balances':
-        _session = _session.copyWith(figureWeightsScore: score);
-        break;
-    }
-  }
-
-  /// Affiche la page de résultats finaux
-  void _showResults() {
-    _session = _session.copyWith(endTime: DateTime.now());
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => CompleteTestResultsPage(session: _session),
-      ),
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<CompleteTestBloc, CompleteTestState>(
+      listener: (context, state) {
+        if (state is CompleteTestRunningState) {
+          // Lancer le prochain sous-test après 500 ms
+          Future.delayed(const Duration(milliseconds: 500), () {
+            if (context.mounted) {
+              _launchTest(context, state.nextTestName);
+            }
+          });
+        } else if (state is CompleteTestDoneState) {
+          // Naviguer vers la page de résultats
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (_) => CompleteTestResultsPage(
+                session: state.session,
+                ageInMonths: state.ageInMonths,
+              ),
+            ),
+          );
+        }
+      },
+      builder: (context, state) {
+        if (state is CompleteTestIntroState) {
+          return _buildIntroScreen(context);
+        }
+        return _buildProgressScreen(context, state);
+      },
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    if (_isIntroScreen) {
-      return _buildIntroScreen();
-    }
-
-    return _buildProgressScreen();
-  }
-
-  Widget _buildIntroScreen() {
+  Widget _buildIntroScreen(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: Text(
-          'Test Complet WAIS-IV',
-          style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
-        ),
+        title: Text('Test Complet WAIS-IV',
+            style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold)),
         backgroundColor: AppColors.primary,
       ),
       body: SafeArea(
@@ -185,114 +151,135 @@ class _CompleteTestOrchestratorPageState extends State<CompleteTestOrchestratorP
               Container(
                 padding: EdgeInsets.all(20.w),
                 decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.1),
+                  color: AppColors.primary.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(16.r),
                 ),
-                child: Column(
-                  children: [
-                    Icon(Icons.psychology, size: 64.sp, color: AppColors.primary),
-                    SizedBox(height: 16.h),
-                    Text(
-                      'Test Complet WAIS-IV',
+                child: Column(children: [
+                  Icon(Icons.psychology, size: 64.sp, color: AppColors.primary),
+                  SizedBox(height: 16.h),
+                  Text('Test Complet WAIS-IV',
                       style: TextStyle(
-                        fontSize: 24.sp,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primary,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(height: 8.h),
-                    Text(
-                      'Évaluation cognitive complète',
+                          fontSize: 24.sp,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primary),
+                      textAlign: TextAlign.center),
+                  SizedBox(height: 8.h),
+                  Text('Évaluation cognitive complète',
                       style: TextStyle(fontSize: 16.sp, color: AppColors.grey600),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
+                      textAlign: TextAlign.center),
+                ]),
               ),
 
               SizedBox(height: 24.h),
 
-              // Description
               _buildInfoCard(
                 icon: Icons.info_outline,
                 title: 'À propos du test',
                 description:
                     'Ce test complet évalue 4 indices cognitifs majeurs à travers 12 subtests standardisés.',
               ),
-
               _buildInfoCard(
                 icon: Icons.timer,
                 title: 'Durée estimée',
                 description: '60-90 minutes pour compléter tous les subtests.',
               ),
-
               _buildInfoCard(
                 icon: Icons.list_alt,
                 title: '12 Subtests inclus',
                 description:
-                    '• Cubes (Design de blocs)\n'
-                    '• Similitudes\n'
-                    '• Mémoire des chiffres\n'
-                    '• Matrices\n'
-                    '• Vocabulaire\n'
-                    '• Arithmétique\n'
-                    '• Recherche de symboles\n'
-                    '• Puzzles visuels\n'
-                    '• Information\n'
-                    '• Code\n'
-                    '• Mémoire des images\n'
-                    '• Balances',
+                    '• Cubes • Similitudes • Mémoire des chiffres\n'
+                    '• Matrices • Vocabulaire • Arithmétique\n'
+                    '• Recherche de symboles • Puzzles visuels\n'
+                    '• Information • Code • Mémoire des images • Balances',
               ),
-
-              _buildInfoCard(
-                icon: Icons.trending_up,
-                title: 'Indices évalués',
-                description:
-                    '• ICV - Compréhension Verbale\n'
-                    '• IRP - Raisonnement Perceptif\n'
-                    '• IMT - Mémoire de Travail\n'
-                    '• IVT - Vitesse de Traitement',
-              ),
-
               _buildInfoCard(
                 icon: Icons.warning_amber,
                 title: 'Important',
                 description:
                     'Les tests se lanceront automatiquement l\'un après l\'autre. '
-                    'Assurez-vous d\'avoir suffisamment de temps avant de commencer.',
+                    'Assurez-vous d\'avoir suffisamment de temps.',
                 color: AppColors.warning,
               ),
 
               SizedBox(height: 32.h),
 
-              // Bouton de démarrage
+              // Saisie de l'âge
+              Container(
+                padding: EdgeInsets.all(16.w),
+                decoration: BoxDecoration(
+                  color: AppColors.surface,
+                  borderRadius: BorderRadius.circular(12.r),
+                  border: Border.all(
+                      color: AppColors.primary.withValues(alpha: 0.3)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Âge du patient (requis pour les normes)',
+                        style: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.grey900)),
+                    SizedBox(height: 12.h),
+                    TextField(
+                      controller: _ageController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        hintText: 'Ex : 35',
+                        suffixText: 'ans',
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.r)),
+                        contentPadding: EdgeInsets.symmetric(
+                            horizontal: 16.w, vertical: 12.h),
+                      ),
+                      onChanged: (v) {
+                        final years = int.tryParse(v);
+                        setState(() {
+                          _ageInMonths = (years != null &&
+                                  years >= 16 &&
+                                  years <= 90)
+                              ? years * 12
+                              : null;
+                        });
+                      },
+                    ),
+                    if (_ageController.text.isNotEmpty && _ageInMonths == null)
+                      Padding(
+                        padding: EdgeInsets.only(top: 8.h),
+                        child: Text('Âge valide : entre 16 et 90 ans',
+                            style: TextStyle(
+                                fontSize: 13.sp, color: AppColors.error)),
+                      ),
+                  ],
+                ),
+              ),
+
+              SizedBox(height: 24.h),
+
               SizedBox(
                 width: double.infinity,
                 height: 56.h,
                 child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      _isIntroScreen = false;
-                    });
-                    _launchNextTest();
-                  },
+                  onPressed: _ageInMonths != null
+                      ? () => context.read<CompleteTestBloc>().add(
+                            StartTestEvent(_ageInMonths!),
+                          )
+                      : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.success,
+                    disabledBackgroundColor:
+                        AppColors.success.withValues(alpha: 0.4),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.r),
-                    ),
+                        borderRadius: BorderRadius.circular(12.r)),
                   ),
-                  child: Text(
-                    'Commencer le Test Complet',
-                    style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
-                  ),
+                  child: Text('Commencer le Test Complet',
+                      style: TextStyle(
+                          fontSize: 18.sp, fontWeight: FontWeight.bold)),
                 ),
               ),
 
               SizedBox(height: 16.h),
 
-              // Bouton d'annulation
               SizedBox(
                 width: double.infinity,
                 height: 56.h,
@@ -301,13 +288,11 @@ class _CompleteTestOrchestratorPageState extends State<CompleteTestOrchestratorP
                   style: OutlinedButton.styleFrom(
                     side: BorderSide(color: AppColors.error),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.r),
-                    ),
+                        borderRadius: BorderRadius.circular(12.r)),
                   ),
-                  child: Text(
-                    'Annuler',
-                    style: TextStyle(fontSize: 18.sp, color: AppColors.error),
-                  ),
+                  child: Text('Annuler',
+                      style:
+                          TextStyle(fontSize: 18.sp, color: AppColors.error)),
                 ),
               ),
             ],
@@ -317,14 +302,17 @@ class _CompleteTestOrchestratorPageState extends State<CompleteTestOrchestratorP
     );
   }
 
-  Widget _buildProgressScreen() {
+  Widget _buildProgressScreen(BuildContext context, CompleteTestState state) {
+    final session = state is CompleteTestRunningState
+        ? state.session
+        : state is CompleteTestAwaitingNextState
+            ? state.session
+            : null;
+
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: Text(
-          'Test en cours',
-          style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
-        ),
+        title: Text('Test en cours',
+            style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold)),
         backgroundColor: AppColors.primary,
       ),
       body: SafeArea(
@@ -333,48 +321,43 @@ class _CompleteTestOrchestratorPageState extends State<CompleteTestOrchestratorP
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Progression
-              Text(
-                'Progression du Test',
-                style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.bold),
-              ),
+              Text('Progression du Test',
+                  style:
+                      TextStyle(fontSize: 24.sp, fontWeight: FontWeight.bold)),
               SizedBox(height: 24.h),
 
-              // Barre de progression
-              LinearProgressIndicator(
-                value: _session.progressPercentage / 100,
-                backgroundColor: AppColors.surfaceVariant,
-                valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
-                minHeight: 12.h,
-              ),
-              SizedBox(height: 16.h),
-
-              Text(
-                '${_session.completedTestsCount} / ${_session.totalTests} tests complétés',
-                style: TextStyle(fontSize: 18.sp, color: AppColors.grey600),
-              ),
-
-              SizedBox(height: 48.h),
-
-              // Message d'attente
-              CircularProgressIndicator(color: AppColors.primary),
-              SizedBox(height: 24.h),
-
-              Text(
-                'Lancement du prochain test...',
-                style: TextStyle(fontSize: 16.sp, color: AppColors.grey600),
-                textAlign: TextAlign.center,
-              ),
-
-              if (!_session.isComplete) ...[
+              if (session != null) ...[
+                // Barre de progression globale
+                LinearProgressIndicator(
+                  value: session.progressPercentage / 100,
+                  backgroundColor: AppColors.surfaceVariant,
+                  valueColor:
+                      const AlwaysStoppedAnimation<Color>(AppColors.primary),
+                  minHeight: 12.h,
+                ),
                 SizedBox(height: 16.h),
                 Text(
-                  'Prochain: ${_session.currentTestName}',
+                  '${session.completedTestsCount} / ${session.totalTests} tests complétés',
+                  style:
+                      TextStyle(fontSize: 18.sp, color: AppColors.grey600),
+                ),
+              ],
+
+              SizedBox(height: 48.h),
+              const CircularProgressIndicator(color: AppColors.primary),
+              SizedBox(height: 24.h),
+              Text('Lancement du prochain test...',
+                  style: TextStyle(fontSize: 16.sp, color: AppColors.grey600),
+                  textAlign: TextAlign.center),
+
+              if (state is CompleteTestRunningState) ...[
+                SizedBox(height: 16.h),
+                Text(
+                  'Prochain : ${state.nextTestName}',
                   style: TextStyle(
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.primary,
-                  ),
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primary),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -391,39 +374,34 @@ class _CompleteTestOrchestratorPageState extends State<CompleteTestOrchestratorP
     required String description,
     Color? color,
   }) {
+    final c = color ?? AppColors.primary;
     return Container(
       margin: EdgeInsets.only(bottom: 16.h),
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(
-          color: color?.withOpacity(0.3) ?? AppColors.primary.withOpacity(0.3),
-          width: 1,
-        ),
+        border:
+            Border.all(color: c.withValues(alpha: 0.3)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: color ?? AppColors.primary, size: 24.sp),
+          Icon(icon, color: c, size: 24.sp),
           SizedBox(width: 12.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.bold,
-                    color: color ?? AppColors.grey900,
-                  ),
-                ),
+                Text(title,
+                    style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.bold,
+                        color: c)),
                 SizedBox(height: 4.h),
-                Text(
-                  description,
-                  style: TextStyle(fontSize: 14.sp, color: AppColors.grey600),
-                ),
+                Text(description,
+                    style:
+                        TextStyle(fontSize: 14.sp, color: AppColors.grey600)),
               ],
             ),
           ),

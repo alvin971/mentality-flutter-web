@@ -7,9 +7,17 @@
 //
 // CONTRAINTE : aucune méthode publique n'écrit dans _keepBox.
 // La séparation est garantie structurellement, pas seulement par convention.
+//
+// Sécurité : les deux boxes sont chiffrées avec HiveAesCipher (AES-256-CBC).
+// La clé est générée aléatoirement au premier lancement et stockée dans
+// SharedPreferences sous la clé 'hive_aes_key' (base64-encodée).
+// Sur mobile, envisager flutter_secure_storage pour davantage de sécurité.
 
 import 'dart:convert';
+import 'dart:math';
+import 'dart:typed_data';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DataCollectionService {
   static final DataCollectionService instance = DataCollectionService._();
@@ -17,17 +25,43 @@ class DataCollectionService {
 
   static const String _sellBoxName = 'mentality_sell';
   static const String _keepBoxName = 'mentality_keep';
+  static const String _aesKeyPref = 'hive_aes_key';
 
   late Box<dynamic> _sellBox;
+  // _keepBox is opened to reserve the name and apply encryption,
+  // but never written to from public API (structural separation guarantee).
+  // ignore: unused_field
   late Box<dynamic> _keepBox;
   bool _initialized = false;
 
   /// À appeler une fois au démarrage de l'app, après Hive.initFlutter().
   Future<void> initialize() async {
     if (_initialized) return;
-    _sellBox = await Hive.openBox<dynamic>(_sellBoxName);
-    _keepBox = await Hive.openBox<dynamic>(_keepBoxName);
+    final cipher = await _buildCipher();
+    _sellBox = await Hive.openBox<dynamic>(_sellBoxName, encryptionCipher: cipher);
+    _keepBox = await Hive.openBox<dynamic>(_keepBoxName, encryptionCipher: cipher);
     _initialized = true;
+  }
+
+  /// Retourne le cipher AES-256 à utiliser pour d'autres boxes (ex: session_history).
+  static Future<HiveCipher> buildSharedCipher() => _buildCipher();
+
+  /// Génère (ou charge depuis SharedPreferences) la clé AES-256 de 32 octets.
+  static Future<HiveAesCipher> _buildCipher() async {
+    final prefs = await SharedPreferences.getInstance();
+    final existing = prefs.getString(_aesKeyPref);
+
+    final Uint8List keyBytes;
+    if (existing != null) {
+      keyBytes = Uint8List.fromList(base64Decode(existing));
+    } else {
+      keyBytes = Uint8List.fromList(
+        List<int>.generate(32, (_) => Random.secure().nextInt(256)),
+      );
+      await prefs.setString(_aesKeyPref, base64Encode(keyBytes));
+    }
+
+    return HiveAesCipher(keyBytes);
   }
 
   void _assertReady() {
@@ -70,7 +104,7 @@ class DataCollectionService {
   Future<String> exportForUpload() async {
     _assertReady();
     final all = _sellBox.values
-        .map((v) => Map<String, dynamic>.from(v as Map))
+        .map((v) => Map<String, dynamic>.from(v as Map<dynamic, dynamic>))
         .toList();
     return jsonEncode(all);
   }

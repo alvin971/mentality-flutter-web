@@ -1,103 +1,98 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import '../../../../core/constants/app_constants.dart';
 import '../pages/mentality_chat_page.dart';
 
-/// Service de communication avec l'API Claude (Anthropic)
+/// Service de communication avec Claude via le Cloudflare Worker proxy.
+///
+/// La clé API n'est jamais exposée côté client. Elle est stockée comme
+/// secret Cloudflare Workers et injectée par le worker à chaque requête.
+///
+/// Pour configurer le worker :
+///   1. cd workers/claude-proxy
+///   2. wrangler secret put ANTHROPIC_API_KEY
+///   3. wrangler deploy
+///   4. Mettre à jour AppConstants.claudeWorkerUrl avec l'URL du worker
 class ClaudeChatService {
-  // Configuration API
-  static const String _apiUrl = 'https://api.anthropic.com/v1/messages';
-  static const String _apiVersion = '2023-06-01';
-
-  // TODO: Remplacer par votre clé API Claude
-  // IMPORTANT: Ne JAMAIS commiter la vraie clé API dans le code
-  // Utiliser plutôt un fichier .env ou Firebase Remote Config
-  static const String _apiKey = 'YOUR_CLAUDE_API_KEY_HERE';
-
-  // Modèle Claude Haiku (le plus rapide et économique)
-  static const String _model = 'claude-3-haiku-20240307';
+  static const String _model = 'claude-haiku-4-5-20251001';
 
   /// Envoie un message à Claude et retourne la réponse
   Future<String> sendMessage({
     required String message,
     required List<ChatMessage> conversationHistory,
   }) async {
+    final workerUrl = AppConstants.claudeWorkerUrl;
+
+    if (workerUrl.contains('YOUR_SUBDOMAIN')) {
+      throw Exception(
+        'Worker Claude non configuré. '
+        'Déployer workers/claude-proxy/ et mettre à jour AppConstants.claudeWorkerUrl.',
+      );
+    }
+
     try {
-      // Construire l'historique de conversation pour le contexte
       final messages = _buildMessages(message, conversationHistory);
 
-      // Préparer la requête
-      final response = await http.post(
-        Uri.parse(_apiUrl),
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': _apiKey,
-          'anthropic-version': _apiVersion,
-        },
-        body: jsonEncode({
-          'model': _model,
-          'max_tokens': 1024,
-          'system': _getSystemPrompt(),
-          'messages': messages,
-        }),
-      );
+      final response = await http
+          .post(
+            Uri.parse(workerUrl),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({
+              'model': _model,
+              'max_tokens': 1024,
+              'system': _getSystemPrompt(),
+              'messages': messages,
+            }),
+          )
+          .timeout(AppConstants.connectionTimeout);
 
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-
-        // Extraire le texte de la réponse
-        if (data['content'] != null && data['content'].isNotEmpty) {
-          return data['content'][0]['text'] as String;
-        } else {
-          throw Exception('Réponse vide de l\'API');
+        final data = jsonDecode(response.body) as Map<String, dynamic>;
+        final content = data['content'] as List?;
+        if (content != null && content.isNotEmpty) {
+          return (content[0] as Map<String, dynamic>)['text'] as String;
         }
-      } else if (response.statusCode == 401) {
-        throw Exception('Clé API invalide. Veuillez configurer votre clé API Claude.');
+        throw Exception('Réponse vide du worker');
+      } else if (response.statusCode == 403) {
+        throw Exception('Accès refusé par le worker (origine non autorisée).');
       } else if (response.statusCode == 429) {
-        throw Exception('Limite de requêtes atteinte. Veuillez réessayer dans quelques instants.');
+        throw Exception('Limite de requêtes atteinte. Réessayez dans quelques instants.');
+      } else if (response.statusCode == 500) {
+        final data = jsonDecode(response.body) as Map<String, dynamic>;
+        throw Exception(data['error'] ?? 'Erreur serveur (${response.statusCode})');
       } else {
-        throw Exception('Erreur API: ${response.statusCode} - ${response.body}');
+        throw Exception('Erreur ${response.statusCode}: ${response.body}');
       }
     } catch (e) {
-      // Log l'erreur (en production, utiliser un service de logging comme Sentry)
-      // ignore: avoid_print
-      debugPrint('Erreur ClaudeChatService: $e');
+      if (kDebugMode) debugPrint('ClaudeChatService error: $e');
       rethrow;
     }
   }
 
-  /// Construit la liste des messages pour l'API Claude
   List<Map<String, dynamic>> _buildMessages(
     String currentMessage,
     List<ChatMessage> history,
   ) {
     final messages = <Map<String, dynamic>>[];
 
-    // Ajouter l'historique (limité aux 10 derniers messages pour économiser tokens)
-    final recentHistory = history.length > 10
-        ? history.sublist(history.length - 10)
-        : history;
+    // Limiter aux 10 derniers messages pour économiser les tokens
+    final recentHistory =
+        history.length > 10 ? history.sublist(history.length - 10) : history;
 
     for (final msg in recentHistory) {
       // Ignorer le message de bienvenue initial
       if (!msg.isUser && recentHistory.first == msg) continue;
-
       messages.add({
         'role': msg.isUser ? 'user' : 'assistant',
         'content': msg.text,
       });
     }
 
-    // Ajouter le message actuel
-    messages.add({
-      'role': 'user',
-      'content': currentMessage,
-    });
-
+    messages.add({'role': 'user', 'content': currentMessage});
     return messages;
   }
 
-  /// Retourne le prompt système qui définit le comportement de Mentality
   String _getSystemPrompt() {
     return '''Tu es Mentality, un assistant IA spécialisé dans l'évaluation cognitive basée sur les échelles WAIS-IV (Wechsler Adult Intelligence Scale).
 

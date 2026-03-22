@@ -1,13 +1,60 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:uuid/uuid.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/models/complete_test_session.dart';
+import '../../../../services/session_history_service.dart';
+import '../../../scoring/domain/entities/iq_score.dart';
+import '../../../scoring/domain/services/scoring_service.dart';
+import '../../domain/services/pdf_report_service.dart';
 
 /// Page de résultats du test complet WAIS-IV
-class CompleteTestResultsPage extends StatelessWidget {
+class CompleteTestResultsPage extends StatefulWidget {
   final CompleteTestSession session;
+  final int? ageInMonths;
 
-  const CompleteTestResultsPage({Key? key, required this.session}) : super(key: key);
+  const CompleteTestResultsPage({
+    super.key,
+    required this.session,
+    this.ageInMonths,
+  });
+
+  @override
+  State<CompleteTestResultsPage> createState() =>
+      _CompleteTestResultsPageState();
+}
+
+class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
+  late final IQScore? _iqScore;
+
+  @override
+  void initState() {
+    super.initState();
+    _iqScore = widget.ageInMonths != null
+        ? const ScoringService().computeScore(widget.session, widget.ageInMonths!)
+        : null;
+    _saveToHistory();
+  }
+
+  Future<void> _saveToHistory() async {
+    if (_iqScore == null) return;
+    final entry = SessionHistoryEntry(
+      id: const Uuid().v4(),
+      date: widget.session.startTime,
+      ageInMonths: widget.ageInMonths!,
+      fsiq: _iqScore!.fsiq,
+      vci: _iqScore!.vci,
+      vsi: _iqScore!.vsi,
+      fri: _iqScore!.fri,
+      wmi: _iqScore!.wmi,
+      psi: _iqScore!.psi,
+      classification: _iqScore!.fsiqClassification,
+    );
+    await SessionHistoryService.instance.saveEntry(entry);
+  }
+
+  CompleteTestSession get session => widget.session;
+  int? get ageInMonths => widget.ageInMonths;
 
   @override
   Widget build(BuildContext context) {
@@ -27,228 +74,687 @@ class CompleteTestResultsPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // En-tête avec félicitations
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(24.w),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [AppColors.success, AppColors.success.withOpacity(0.7)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(16.r),
-                ),
-                child: Column(
-                  children: [
-                    Icon(Icons.emoji_events, size: 64.sp, color: Colors.white),
-                    SizedBox(height: 16.h),
-                    Text(
-                      'Test Complet Terminé !',
-                      style: TextStyle(
-                        fontSize: 28.sp,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(height: 8.h),
-                    Text(
-                      'Félicitations pour avoir complété tous les subtests',
-                      style: TextStyle(fontSize: 16.sp, color: Colors.white.withOpacity(0.9)),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-
+              _buildHeader(),
+              SizedBox(height: 24.h),
+              _buildSessionInfo(),
               SizedBox(height: 24.h),
 
-              // Informations de session
-              _buildSectionTitle('Informations de la Session'),
-              _buildInfoRow('Date', _formatDate(session.startTime)),
-              _buildInfoRow('Durée totale', _formatDuration(session.totalDuration)),
-              _buildInfoRow('Tests complétés', '${session.completedTestsCount} / ${session.totalTests}'),
-
-              SizedBox(height: 24.h),
-
-              // Scores par indice
-              _buildSectionTitle('Indice de Compréhension Verbale (ICV)'),
-              _buildScoreCard(
-                color: AppColors.indexVCI,
-                tests: [
-                  ('Similitudes', session.similaritiesScore),
-                  ('Vocabulaire', session.vocabularyScore),
-                  ('Information', session.informationScore),
-                ],
-                totalScore: session.icvRawScore,
-              ),
-
-              SizedBox(height: 16.h),
-
-              _buildSectionTitle('Indice de Raisonnement Perceptif (IRP)'),
-              _buildScoreCard(
-                color: AppColors.indexFRI,
-                tests: [
-                  ('Cubes', session.cubesScore),
-                  ('Matrices', session.matricesScore),
-                  ('Puzzles Visuels', session.visualPuzzlesScore),
-                ],
-                totalScore: session.irpRawScore,
-              ),
-
-              SizedBox(height: 16.h),
-
-              _buildSectionTitle('Indice de Mémoire de Travail (IMT)'),
-              _buildScoreCard(
-                color: AppColors.indexWMI,
-                tests: [
-                  ('Mémoire des Chiffres', session.digitSpanScore),
-                  ('Arithmétique', session.arithmeticScore),
-                ],
-                totalScore: session.imtRawScore,
-              ),
-
-              SizedBox(height: 16.h),
-
-              _buildSectionTitle('Indice de Vitesse de Traitement (IVT)'),
-              _buildScoreCard(
-                color: AppColors.indexPSI,
-                tests: [
-                  ('Code', session.codingScore),
-                  ('Recherche de Symboles', session.symbolSearchScore),
-                ],
-                totalScore: session.ivtRawScore,
-              ),
-
-              SizedBox(height: 24.h),
-
-              // Tests supplémentaires
-              if (session.pictureSpanScore != null || session.figureWeightsScore != null) ...[
-                _buildSectionTitle('Tests Supplémentaires'),
-                if (session.pictureSpanScore != null)
-                  _buildScoreRow('Mémoire des Images', session.pictureSpanScore!),
-                if (session.figureWeightsScore != null)
-                  _buildScoreRow('Balances', session.figureWeightsScore!),
+              if (_iqScore != null) ...[
+                _buildFSIQCard(_iqScore),
                 SizedBox(height: 24.h),
-              ],
-
-              // Score total et QI estimé
-              if (session.estimatedIQ != null) ...[
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.all(24.w),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [AppColors.primary, AppColors.primary.withOpacity(0.7)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(16.r),
-                  ),
-                  child: Column(
-                    children: [
-                      Text(
-                        'QI Total Estimé',
-                        style: TextStyle(
-                          fontSize: 20.sp,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(height: 16.h),
-                      Text(
-                        '${session.estimatedIQ}',
-                        style: TextStyle(
-                          fontSize: 72.sp,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(height: 8.h),
-                      Text(
-                        _getIQInterpretation(session.estimatedIQ!),
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          color: Colors.white.withOpacity(0.9),
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
+                _buildIndexProfile(_iqScore),
+                SizedBox(height: 24.h),
+                _buildSubtestDetails(_iqScore),
+                SizedBox(height: 24.h),
+                _buildStrengthsWeaknesses(_iqScore),
+              ] else ...[
+                _buildRawScoresFallback(),
                 SizedBox(height: 16.h),
-                Container(
-                  padding: EdgeInsets.all(16.w),
-                  decoration: BoxDecoration(
-                    color: AppColors.warning.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(12.r),
-                    border: Border.all(color: AppColors.warning.withOpacity(0.3)),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(Icons.info_outline, color: AppColors.warning, size: 24.sp),
-                      SizedBox(width: 12.w),
-                      Expanded(
-                        child: Text(
-                          'Note: Ce score est une estimation simplifiée. Pour une évaluation clinique précise, consultez un psychologue qualifié.',
-                          style: TextStyle(fontSize: 14.sp, color: AppColors.grey600),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                _buildNoScoreNotice(),
               ],
 
               SizedBox(height: 32.h),
-
-              // Boutons d'action
-              SizedBox(
-                width: double.infinity,
-                height: 56.h,
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    // TODO: Implémenter l'exportation PDF
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Fonctionnalité d\'exportation à venir')),
-                    );
-                  },
-                  icon: Icon(Icons.picture_as_pdf, size: 24.sp),
-                  label: Text('Exporter en PDF', style: TextStyle(fontSize: 18.sp)),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.r),
-                    ),
-                  ),
-                ),
-              ),
-
-              SizedBox(height: 16.h),
-
-              SizedBox(
-                width: double.infinity,
-                height: 56.h,
-                child: OutlinedButton.icon(
-                  onPressed: () {
-                    Navigator.popUntil(context, (route) => route.isFirst);
-                  },
-                  icon: Icon(Icons.home, size: 24.sp),
-                  label: Text('Retour à l\'Accueil', style: TextStyle(fontSize: 18.sp)),
-                  style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: AppColors.primary),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.r),
-                    ),
-                  ),
-                ),
-              ),
+              _buildActions(context),
             ],
           ),
         ),
       ),
     );
   }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // EN-TÊTE
+  // ─────────────────────────────────────────────────────────────────────────
+
+  Widget _buildHeader() {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(24.w),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [AppColors.success, AppColors.success.withOpacity(0.7)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(16.r),
+      ),
+      child: Column(
+        children: [
+          Icon(Icons.emoji_events, size: 64.sp, color: Colors.white),
+          SizedBox(height: 16.h),
+          Text(
+            'Test Complet Terminé !',
+            style: TextStyle(
+              fontSize: 28.sp,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 8.h),
+          Text(
+            'Félicitations pour avoir complété tous les subtests',
+            style: TextStyle(fontSize: 16.sp, color: Colors.white.withOpacity(0.9)),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // INFORMATIONS DE SESSION
+  // ─────────────────────────────────────────────────────────────────────────
+
+  Widget _buildSessionInfo() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildSectionTitle('Informations de la Session'),
+        _buildInfoRow('Date', _formatDate(session.startTime)),
+        _buildInfoRow('Durée totale', _formatDuration(session.totalDuration)),
+        _buildInfoRow(
+            'Tests complétés', '${session.completedTestsCount} / ${session.totalTests}'),
+        if (ageInMonths != null)
+          _buildInfoRow('Âge du patient', '${(ageInMonths! / 12).floor()} ans'),
+      ],
+    );
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // CARTE QI TOTAL
+  // ─────────────────────────────────────────────────────────────────────────
+
+  Widget _buildFSIQCard(IQScore iq) {
+    final ci = iq.confidenceIntervals['FSIQ'];
+    final percentile = iq.percentiles['FSIQ'] ?? 50;
+    final classification = iq.classifications['FSIQ'] ?? '';
+
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(24.w),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [AppColors.primary, AppColors.primary.withOpacity(0.75)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(16.r),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'QI Total (FSIQ)',
+            style: TextStyle(fontSize: 18.sp, color: Colors.white.withOpacity(0.9)),
+          ),
+          SizedBox(height: 12.h),
+          Text(
+            '${iq.fsiq}',
+            style: TextStyle(
+              fontSize: 80.sp,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              height: 1,
+            ),
+          ),
+          SizedBox(height: 8.h),
+          Text(
+            classification,
+            style: TextStyle(
+              fontSize: 22.sp,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          SizedBox(height: 12.h),
+          if (ci != null) ...[
+            Text(
+              'IC 95% : ${ci.lowerBound} – ${ci.upperBound}',
+              style: TextStyle(fontSize: 15.sp, color: Colors.white.withOpacity(0.85)),
+            ),
+            SizedBox(height: 4.h),
+          ],
+          Text(
+            '$percentile${_ordinal(percentile)} percentile',
+            style: TextStyle(fontSize: 15.sp, color: Colors.white.withOpacity(0.85)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // PROFIL DES INDICES (barres)
+  // ─────────────────────────────────────────────────────────────────────────
+
+  Widget _buildIndexProfile(IQScore iq) {
+    final indices = [
+      ('VCI', 'Compréhension Verbale', iq.vci, AppColors.indexVCI),
+      ('VSI', 'Visuo-Spatial', iq.vsi, AppColors.indexVSI),
+      ('FRI', 'Raisonnement Fluide', iq.fri, AppColors.indexFRI),
+      ('WMI', 'Mémoire de Travail', iq.wmi, AppColors.indexWMI),
+      ('PSI', 'Vitesse de Traitement', iq.psi, AppColors.indexPSI),
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildSectionTitle('Profil des Indices Cognitifs'),
+        Container(
+          padding: EdgeInsets.all(16.w),
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(12.r),
+          ),
+          child: Column(
+            children: indices.map((entry) {
+              final code = entry.$1;
+              final label = entry.$2;
+              final score = entry.$3;
+              final color = entry.$4;
+              if (score == null) return const SizedBox.shrink();
+
+              final ci = iq.confidenceIntervals[code];
+              final percentile = iq.percentiles[code] ?? 50;
+              final classification = iq.classifications[code] ?? '';
+              final barWidth = ((score - 40) / 120).clamp(0.0, 1.0);
+
+              return Padding(
+                padding: EdgeInsets.only(bottom: 16.h),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            label,
+                            style: TextStyle(
+                              fontSize: 15.sp,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.grey900,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          '$score',
+                          style: TextStyle(
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.bold,
+                            color: color,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 6.h),
+                    // Barre de progression
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(4.r),
+                      child: LinearProgressIndicator(
+                        value: barWidth,
+                        backgroundColor: color.withOpacity(0.15),
+                        valueColor: AlwaysStoppedAnimation<Color>(color),
+                        minHeight: 10.h,
+                      ),
+                    ),
+                    SizedBox(height: 4.h),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          classification,
+                          style: TextStyle(fontSize: 13.sp, color: color),
+                        ),
+                        Text(
+                          ci != null
+                              ? 'IC 95% : ${ci.lowerBound}–${ci.upperBound}  •  ${percentile}e %ile'
+                              : '${percentile}e percentile',
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            color: AppColors.grey600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // NOTES STANDARDISÉES PAR SOUS-TEST
+  // ─────────────────────────────────────────────────────────────────────────
+
+  Widget _buildSubtestDetails(IQScore iq) {
+    final groups = [
+      (
+        'Compréhension Verbale',
+        AppColors.indexVCI,
+        [
+          ('Similitudes', 'SI', session.similaritiesScore),
+          ('Vocabulaire', 'VO', session.vocabularyScore),
+          ('Information', 'IN', session.informationScore),
+        ]
+      ),
+      (
+        'Visuo-Spatial',
+        AppColors.indexVSI,
+        [
+          ('Cubes', 'BD', session.cubesScore),
+          ('Puzzles Visuels', 'VP', session.visualPuzzlesScore),
+        ]
+      ),
+      (
+        'Raisonnement Fluide',
+        AppColors.indexFRI,
+        [
+          ('Matrices', 'MR', session.matricesScore),
+          ('Balances', 'FW', session.figureWeightsScore),
+        ]
+      ),
+      (
+        'Mémoire de Travail',
+        AppColors.indexWMI,
+        [
+          ('Mémoire des Chiffres', 'DS', session.digitSpanScore),
+          ('Arithmétique', 'AR', session.arithmeticScore),
+          ('Mémoire des Images', 'PM', session.pictureSpanScore),
+        ]
+      ),
+      (
+        'Vitesse de Traitement',
+        AppColors.indexPSI,
+        [
+          ('Code', 'CD', session.codingScore),
+          ('Recherche de Symboles', 'SS', session.symbolSearchScore),
+        ]
+      ),
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildSectionTitle('Notes Standardisées par Sous-test'),
+        ...groups.map((group) {
+          final title = group.$1;
+          final color = group.$2;
+          final subtests = group.$3;
+
+          return Container(
+            margin: EdgeInsets.only(bottom: 12.h),
+            padding: EdgeInsets.all(16.w),
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(12.r),
+              border: Border.all(color: color.withOpacity(0.3), width: 2),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.bold,
+                    color: color,
+                  ),
+                ),
+                SizedBox(height: 10.h),
+                ...subtests.map((s) {
+                  final name = s.$1;
+                  final code = s.$2;
+                  final rawScore = s.$3;
+                  if (rawScore == null) return const SizedBox.shrink();
+
+                  final scaledScore = iq.percentiles[code]; // note standardisée
+                  final classif = iq.classifications[code] ?? '';
+
+                  return Padding(
+                    padding: EdgeInsets.symmetric(vertical: 5.h),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: Text(
+                            name,
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              color: AppColors.grey700,
+                            ),
+                          ),
+                        ),
+                        Text(
+                          'Brut : $rawScore',
+                          style: TextStyle(
+                            fontSize: 13.sp,
+                            color: AppColors.grey500,
+                          ),
+                        ),
+                        SizedBox(width: 16.w),
+                        Container(
+                          width: 36.w,
+                          height: 36.w,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: color.withOpacity(0.15),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Text(
+                            '${scaledScore ?? '-'}',
+                            style: TextStyle(
+                              fontSize: 15.sp,
+                              fontWeight: FontWeight.bold,
+                              color: color,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10.w),
+                        Expanded(
+                          flex: 2,
+                          child: Text(
+                            classif,
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              color: AppColors.grey500,
+                            ),
+                            textAlign: TextAlign.right,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+              ],
+            ),
+          );
+        }),
+      ],
+    );
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // FORCES ET FAIBLESSES
+  // ─────────────────────────────────────────────────────────────────────────
+
+  Widget _buildStrengthsWeaknesses(IQScore iq) {
+    final strengths = iq.strengths;
+    final weaknesses = iq.weaknesses;
+    final isHomogeneous = iq.isHomogeneousProfile;
+
+    final indexLabels = {
+      'VCI': 'Compréhension Verbale',
+      'VSI': 'Visuo-Spatial',
+      'FRI': 'Raisonnement Fluide',
+      'WMI': 'Mémoire de Travail',
+      'PSI': 'Vitesse de Traitement',
+    };
+
+    return Container(
+      padding: EdgeInsets.all(16.w),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(color: AppColors.grey200),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Profil Cognitif',
+            style: TextStyle(
+              fontSize: 18.sp,
+              fontWeight: FontWeight.bold,
+              color: AppColors.grey900,
+            ),
+          ),
+          SizedBox(height: 12.h),
+          Text(
+            isHomogeneous
+                ? 'Profil homogène — les indices sont cohérents entre eux (écart max : ${iq.maxIndexDiscrepancy} pts)'
+                : 'Profil hétérogène — disparités notables entre indices (écart max : ${iq.maxIndexDiscrepancy} pts)',
+            style: TextStyle(fontSize: 14.sp, color: AppColors.grey600),
+          ),
+          if (strengths.isNotEmpty) ...[
+            SizedBox(height: 16.h),
+            _buildProfileTag(
+              label: 'Forces relatives',
+              items: strengths.map((c) => indexLabels[c] ?? c).toList(),
+              color: AppColors.success,
+              icon: Icons.trending_up,
+            ),
+          ],
+          if (weaknesses.isNotEmpty) ...[
+            SizedBox(height: 12.h),
+            _buildProfileTag(
+              label: 'Points de vigilance',
+              items: weaknesses.map((c) => indexLabels[c] ?? c).toList(),
+              color: AppColors.warning,
+              icon: Icons.trending_down,
+            ),
+          ],
+          SizedBox(height: 16.h),
+          Container(
+            padding: EdgeInsets.all(12.w),
+            decoration: BoxDecoration(
+              color: AppColors.warning.withOpacity(0.08),
+              borderRadius: BorderRadius.circular(8.r),
+              border: Border.all(color: AppColors.warning.withOpacity(0.3)),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(Icons.info_outline, color: AppColors.warning, size: 20.sp),
+                SizedBox(width: 10.w),
+                Expanded(
+                  child: Text(
+                    'Ces résultats sont indicatifs. Pour une évaluation clinique officielle, consultez un neuropsychologue ou psychologue qualifié.',
+                    style: TextStyle(fontSize: 13.sp, color: AppColors.grey600),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProfileTag({
+    required String label,
+    required List<String> items,
+    required Color color,
+    required IconData icon,
+  }) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(icon, color: color, size: 18.sp),
+        SizedBox(width: 8.w),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.bold,
+                  color: color,
+                ),
+              ),
+              SizedBox(height: 4.h),
+              Wrap(
+                spacing: 8.w,
+                children: items
+                    .map(
+                      (item) => Chip(
+                        label: Text(item, style: TextStyle(fontSize: 13.sp)),
+                        backgroundColor: color.withOpacity(0.12),
+                        labelStyle: TextStyle(color: color),
+                        visualDensity: VisualDensity.compact,
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                    )
+                    .toList(),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // FALLBACK : SCORES BRUTS (si pas d'âge renseigné)
+  // ─────────────────────────────────────────────────────────────────────────
+
+  Widget _buildRawScoresFallback() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildSectionTitle('Indice de Compréhension Verbale'),
+        _buildScoreCard(
+          color: AppColors.indexVCI,
+          tests: [
+            ('Similitudes', session.similaritiesScore),
+            ('Vocabulaire', session.vocabularyScore),
+            ('Information', session.informationScore),
+          ],
+          totalScore: session.icvRawScore,
+        ),
+        SizedBox(height: 16.h),
+        _buildSectionTitle('Indice Visuo-Spatial / Raisonnement Perceptif'),
+        _buildScoreCard(
+          color: AppColors.indexFRI,
+          tests: [
+            ('Cubes', session.cubesScore),
+            ('Matrices', session.matricesScore),
+            ('Puzzles Visuels', session.visualPuzzlesScore),
+          ],
+          totalScore: session.irpRawScore,
+        ),
+        SizedBox(height: 16.h),
+        _buildSectionTitle('Indice de Mémoire de Travail'),
+        _buildScoreCard(
+          color: AppColors.indexWMI,
+          tests: [
+            ('Mémoire des Chiffres', session.digitSpanScore),
+            ('Arithmétique', session.arithmeticScore),
+          ],
+          totalScore: session.imtRawScore,
+        ),
+        SizedBox(height: 16.h),
+        _buildSectionTitle('Indice de Vitesse de Traitement'),
+        _buildScoreCard(
+          color: AppColors.indexPSI,
+          tests: [
+            ('Code', session.codingScore),
+            ('Recherche de Symboles', session.symbolSearchScore),
+          ],
+          totalScore: session.ivtRawScore,
+        ),
+        if (session.pictureSpanScore != null || session.figureWeightsScore != null) ...[
+          SizedBox(height: 16.h),
+          _buildSectionTitle('Tests Supplémentaires'),
+          if (session.pictureSpanScore != null)
+            _buildScoreRow('Mémoire des Images', session.pictureSpanScore!),
+          if (session.figureWeightsScore != null)
+            _buildScoreRow('Balances', session.figureWeightsScore!),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildNoScoreNotice() {
+    return Container(
+      padding: EdgeInsets.all(16.w),
+      decoration: BoxDecoration(
+        color: AppColors.warning.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(color: AppColors.warning.withOpacity(0.3)),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.info_outline, color: AppColors.warning, size: 24.sp),
+          SizedBox(width: 12.w),
+          Expanded(
+            child: Text(
+              'L\'âge n\'a pas été renseigné. Seuls les scores bruts sont affichés. '
+              'Pour obtenir le QI standardisé avec percentiles et intervalles de confiance, '
+              'relancez le test en renseignant l\'âge du patient.',
+              style: TextStyle(fontSize: 14.sp, color: AppColors.grey600),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // BOUTONS D'ACTION
+  // ─────────────────────────────────────────────────────────────────────────
+
+  Widget _buildActions(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          width: double.infinity,
+          height: 56.h,
+          child: ElevatedButton.icon(
+            onPressed: () async {
+              try {
+                await const PdfReportService().generateAndPrint(
+                  session: session,
+                  iqScore: _iqScore,
+                  ageInMonths: ageInMonths,
+                );
+              } catch (e) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Erreur PDF : $e')),
+                  );
+                }
+              }
+            },
+            icon: Icon(Icons.picture_as_pdf, size: 24.sp),
+            label: Text('Exporter en PDF', style: TextStyle(fontSize: 18.sp)),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primary,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.r),
+              ),
+            ),
+          ),
+        ),
+        SizedBox(height: 16.h),
+        SizedBox(
+          width: double.infinity,
+          height: 56.h,
+          child: OutlinedButton.icon(
+            onPressed: () => Navigator.popUntil(context, (route) => route.isFirst),
+            icon: Icon(Icons.home, size: 24.sp),
+            label: Text('Retour à l\'Accueil', style: TextStyle(fontSize: 18.sp)),
+            style: OutlinedButton.styleFrom(
+              side: BorderSide(color: AppColors.primary),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.r),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // WIDGETS UTILITAIRES
+  // ─────────────────────────────────────────────────────────────────────────
 
   Widget _buildSectionTitle(String title) {
     return Padding(
@@ -270,10 +776,7 @@ class CompleteTestResultsPage extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            label,
-            style: TextStyle(fontSize: 16.sp, color: AppColors.grey600),
-          ),
+          Text(label, style: TextStyle(fontSize: 16.sp, color: AppColors.grey600)),
           Text(
             value,
             style: TextStyle(
@@ -301,15 +804,13 @@ class CompleteTestResultsPage extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // Scores individuels
           ...tests.map((test) => _buildScoreRow(test.$1, test.$2)),
           Divider(height: 24.h, color: color.withOpacity(0.3)),
-          // Score total
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Score Total',
+                'Score Brut Total',
                 style: TextStyle(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
@@ -344,10 +845,7 @@ class CompleteTestResultsPage extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            testName,
-            style: TextStyle(fontSize: 16.sp, color: AppColors.grey600),
-          ),
+          Text(testName, style: TextStyle(fontSize: 16.sp, color: AppColors.grey600)),
           Text(
             score?.toString() ?? 'N/A',
             style: TextStyle(
@@ -361,8 +859,13 @@ class CompleteTestResultsPage extends StatelessWidget {
     );
   }
 
+  // ─────────────────────────────────────────────────────────────────────────
+  // HELPERS
+  // ─────────────────────────────────────────────────────────────────────────
+
   String _formatDate(DateTime date) {
-    return '${date.day}/${date.month}/${date.year} à ${date.hour}:${date.minute.toString().padLeft(2, '0')}';
+    return '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year} '
+        'à ${date.hour}:${date.minute.toString().padLeft(2, '0')}';
   }
 
   String _formatDuration(Duration? duration) {
@@ -370,23 +873,13 @@ class CompleteTestResultsPage extends StatelessWidget {
     final hours = duration.inHours;
     final minutes = duration.inMinutes.remainder(60);
     final seconds = duration.inSeconds.remainder(60);
-
-    if (hours > 0) {
-      return '${hours}h ${minutes}min ${seconds}s';
-    } else if (minutes > 0) {
-      return '${minutes}min ${seconds}s';
-    } else {
-      return '${seconds}s';
-    }
+    if (hours > 0) return '${hours}h ${minutes}min ${seconds}s';
+    if (minutes > 0) return '${minutes}min ${seconds}s';
+    return '${seconds}s';
   }
 
-  String _getIQInterpretation(int iq) {
-    if (iq >= 130) return 'Très supérieur';
-    if (iq >= 120) return 'Supérieur';
-    if (iq >= 110) return 'Moyen supérieur';
-    if (iq >= 90) return 'Moyen';
-    if (iq >= 80) return 'Moyen inférieur';
-    if (iq >= 70) return 'Limite';
-    return 'Très faible';
+  String _ordinal(int n) {
+    if (n == 1) return 'er';
+    return 'e';
   }
 }

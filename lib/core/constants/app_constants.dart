@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 /// Constantes globales de l'application
 class AppConstants {
   AppConstants._();
@@ -38,10 +40,15 @@ class AppConstants {
   static const String tableResults = 'results';
 
   // ========================================
-  // API ENDPOINTS (placeholder)
+  // API ENDPOINTS
   // ========================================
 
   static const String baseUrl = 'https://api.mentality.app/v1';
+
+  /// URL du Cloudflare Worker qui proxie les appels Claude.
+  /// Déployer workers/claude-proxy/ et remplacer cette valeur.
+  static const String claudeWorkerUrl =
+      'https://claude-proxy.YOUR_SUBDOMAIN.workers.dev';
   static const String endpointAuth = '/auth';
   static const String endpointUsers = '/users';
   static const String endpointAssessments = '/assessments';
@@ -238,7 +245,8 @@ class AppConstants {
   // DEVELOPMENT
   // ========================================
 
-  static const bool isDebugMode = true; // À changer en production
-  static const bool enableLogging = true;
-  static const bool enablePerformanceMonitoring = true;
+  /// Automatiquement false en release build (flutter build web).
+  static bool get isDebugMode => kDebugMode;
+  static bool get enableLogging => kDebugMode;
+  static const bool enablePerformanceMonitoring = false;
 }

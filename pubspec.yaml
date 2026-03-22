@@ -15,8 +15,15 @@ dependencies:
   bloc: ^8.1.4
   equatable: ^2.0.5
 
+  # ===== NAVIGATION =====
+  go_router: ^14.6.3
+
   # ===== UI COMPONENTS =====
   flutter_screenutil: ^5.9.3
+
+  # ===== PDF EXPORT =====
+  pdf: ^3.11.1
+  printing: ^5.13.2
 
   # ===== NETWORKING =====
   http: ^1.2.0
@@ -36,6 +43,10 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  # ===== TESTS =====
+  bloc_test: ^9.1.7
+  mocktail: ^1.0.4
 
   # ===== LINTING =====
   flutter_lints: ^5.0.0
