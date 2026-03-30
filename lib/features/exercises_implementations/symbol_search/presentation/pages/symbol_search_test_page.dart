@@ -7,7 +7,8 @@ import '../../domain/symbol_search_generator.dart';
 /// Page du test Recherche de Symboles (Symbol Search)
 /// 60 items en 120 secondes avec réponse OUI/NON
 class SymbolSearchTestPage extends StatefulWidget {
-  const SymbolSearchTestPage({super.key});
+  final String? filterLevel;
+  const SymbolSearchTestPage({super.key, this.filterLevel});
 
   @override
   State<SymbolSearchTestPage> createState() => _SymbolSearchTestPageState();
@@ -217,7 +218,6 @@ class _SymbolSearchTestPageState extends State<SymbolSearchTestPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Recherche de Symboles'),
-        backgroundColor: AppColors.indexPSI,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -375,7 +375,6 @@ class _SymbolSearchTestPageState extends State<SymbolSearchTestPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_isTraining ? 'Entraînement' : 'Recherche de Symboles'),
-        backgroundColor: AppColors.indexPSI,
         actions: [
           if (!_isTraining)
             Center(
@@ -385,20 +384,20 @@ class _SymbolSearchTestPageState extends State<SymbolSearchTestPage> {
                   padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
                   decoration: BoxDecoration(
                     color: _remainingSeconds <= 10
-                        ? AppColors.error
-                        : Colors.white.withValues(alpha: 0.2),
+                        ? AppColors.errorContainer
+                        : AppColors.grey200,
                     borderRadius: BorderRadius.circular(20.r),
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.timer, size: 20.sp, color: Colors.white),
+                      Icon(Icons.timer, size: 20.sp, color: _remainingSeconds <= 10 ? AppColors.error : AppColors.textPrimary),
                       SizedBox(width: 4.w),
                       Text(
                         '$_remainingSeconds s',
                         style: TextStyle(
                           fontSize: 16.sp,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          color: _remainingSeconds <= 10 ? AppColors.error : AppColors.textPrimary,
                         ),
                       ),
                     ],

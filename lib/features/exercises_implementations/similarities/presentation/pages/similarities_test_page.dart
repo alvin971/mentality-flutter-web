@@ -10,7 +10,8 @@ import '../../domain/similarities_generator.dart';
 /// Scoring : 0, 1, ou 2 points selon le niveau d'abstraction
 /// Règle de discontinuation : 3 scores consécutifs de 0
 class SimilaritiesTestPage extends StatefulWidget {
-  const SimilaritiesTestPage({super.key});
+  final String? filterLevel;
+  const SimilaritiesTestPage({super.key, this.filterLevel});
 
   @override
   State<SimilaritiesTestPage> createState() => _SimilaritiesTestPageState();
@@ -120,10 +121,10 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
                   : 'Réponse incomplète',
           style: TextStyle(
             color: itemScore == 2
-                ? Colors.green
+                ? AppColors.success
                 : itemScore == 1
-                    ? Colors.orange
-                    : Colors.red,
+                    ? AppColors.warning
+                    : AppColors.error,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -150,7 +151,7 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
                   'Exemples de réponses à 2 points :',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: Colors.green.shade700,
+                    color: AppColors.success,
                   ),
                 ),
                 ...item.twoPointAnswers.take(2).map((ans) => Padding(
@@ -164,7 +165,7 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
                   'Exemples de réponses à 1 point :',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: Colors.orange.shade700,
+                    color: AppColors.warning,
                   ),
                 ),
                 ...item.onePointAnswers.take(2).map((ans) => Padding(
@@ -180,7 +181,7 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
                 Text(
                   '3 scores de 0 consécutifs - Test terminé (WAIS-IV)',
                   style: TextStyle(
-                    color: Colors.orange,
+                    color: AppColors.warning,
                     fontWeight: FontWeight.bold,
                     fontSize: 14.sp,
                   ),
@@ -250,7 +251,7 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
                 style: TextStyle(
                   fontSize: 12.sp,
                   fontStyle: FontStyle.italic,
-                  color: Colors.grey.shade600,
+                  color: AppColors.grey600,
                 ),
               ),
               SizedBox(height: 16.h),
@@ -315,11 +316,11 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
   }
 
   Color _getPerformanceColor(int score) {
-    if (score >= 36) return Colors.purple;
-    if (score >= 28) return Colors.green;
-    if (score >= 20) return Colors.blue;
-    if (score >= 12) return Colors.orange;
-    return Colors.red;
+    if (score >= 36) return AppColors.indexFSIQ;
+    if (score >= 28) return AppColors.success;
+    if (score >= 20) return AppColors.info;
+    if (score >= 12) return AppColors.warning;
+    return AppColors.error;
   }
 
   @override
@@ -329,7 +330,6 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Similitudes'),
-        backgroundColor: AppColors.indexVCI,
         actions: [
           Center(
             child: Padding(
@@ -360,9 +360,9 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
               Container(
                 padding: EdgeInsets.all(12.w),
                 decoration: BoxDecoration(
-                  color: Colors.blue.shade50,
+                  color: AppColors.infoContainer,
                   borderRadius: BorderRadius.circular(8.r),
-                  border: Border.all(color: Colors.blue.shade200),
+                  border: Border.all(color: AppColors.infoLight),
                 ),
                 child: Text(
                   'En quoi ces deux mots sont-ils similaires ?',
@@ -405,7 +405,7 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
                       style: TextStyle(
                         fontSize: 24.sp,
                         fontWeight: FontWeight.w300,
-                        color: Colors.grey.shade600,
+                        color: AppColors.textTertiary,
                       ),
                     ),
                     SizedBox(height: 16.h),
@@ -435,7 +435,7 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
                   style: TextStyle(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: AppColors.white,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -461,7 +461,7 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
                     borderRadius: BorderRadius.circular(8.r),
                   ),
                   filled: true,
-                  fillColor: Colors.grey.shade50,
+                  fillColor: AppColors.grey50,
                 ),
                 textCapitalization: TextCapitalization.sentences,
               ),
@@ -472,9 +472,9 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
               Container(
                 padding: EdgeInsets.all(12.w),
                 decoration: BoxDecoration(
-                  color: Colors.amber.shade50,
+                  color: AppColors.warningContainer,
                   borderRadius: BorderRadius.circular(8.r),
-                  border: Border.all(color: Colors.amber.shade300),
+                  border: Border.all(color: AppColors.warningLight),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -511,7 +511,7 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
                       : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.indexVCI,
-                    disabledBackgroundColor: Colors.grey.shade300,
+                    disabledBackgroundColor: AppColors.grey300,
                   ),
                   child: Text(
                     'Valider',
@@ -537,9 +537,9 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
         Container(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
           decoration: BoxDecoration(
-            color: Colors.blue.shade50,
+            color: AppColors.infoContainer,
             borderRadius: BorderRadius.circular(20.r),
-            border: Border.all(color: Colors.blue.shade300, width: 2),
+            border: Border.all(color: AppColors.infoLight, width: 2),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -547,7 +547,7 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
               Icon(
                 Icons.timer,
                 size: 20.sp,
-                color: Colors.blue.shade700,
+                color: AppColors.info,
               ),
               SizedBox(width: 8.w),
               Text(
@@ -555,7 +555,7 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
                 style: TextStyle(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
-                  color: Colors.blue.shade700,
+                  color: AppColors.info,
                 ),
               ),
             ],
@@ -566,9 +566,9 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
         Container(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
           decoration: BoxDecoration(
-            color: Colors.green.shade50,
+            color: AppColors.successContainer,
             borderRadius: BorderRadius.circular(20.r),
-            border: Border.all(color: Colors.green.shade300, width: 2),
+            border: Border.all(color: AppColors.successLight, width: 2),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -576,7 +576,7 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
               Icon(
                 Icons.star,
                 size: 20.sp,
-                color: Colors.amber.shade700,
+                color: AppColors.warning,
               ),
               SizedBox(width: 8.w),
               Text(
@@ -584,7 +584,7 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
                 style: TextStyle(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
-                  color: Colors.green.shade700,
+                  color: AppColors.success,
                 ),
               ),
             ],
@@ -597,13 +597,13 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
   Color _getLevelColor(AbstractionLevel level) {
     switch (level) {
       case AbstractionLevel.concrete:
-        return Colors.green;
+        return AppColors.success;
       case AbstractionLevel.functional:
-        return Colors.blue;
+        return AppColors.info;
       case AbstractionLevel.categorical:
-        return Colors.orange;
+        return AppColors.warning;
       case AbstractionLevel.abstract:
-        return Colors.purple;
+        return AppColors.indexFSIQ;
     }
   }
 }

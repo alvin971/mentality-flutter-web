@@ -22,6 +22,23 @@ import '../../features/exercises_implementations/coding/presentation/pages/codin
 import '../../features/exercises_implementations/symbol_search/presentation/pages/symbol_search_test_page.dart';
 import '../constants/app_constants.dart';
 
+/// Mapping des clés admin (English slugs) vers les routes Flutter.
+/// Utilisé pour le prévisualisation des tests depuis mentality-admin.
+const Map<String, String> _adminTestRoutes = {
+  'cubes':          '/test/cubes',
+  'matrices':       '/test/matrices',
+  'figure-weights': '/test/figure-weights',
+  'visual-puzzles': '/test/visual-puzzles',
+  'similarities':   '/test/similarities',
+  'vocabulary':     '/test/vocabulary',
+  'information':    '/test/information',
+  'digit-span':     '/test/digit-span',
+  'arithmetic':     '/test/arithmetic',
+  'picture-span':   '/test/picture-span',
+  'coding':         '/test/coding',
+  'symbol-search':  '/test/symbol-search',
+};
+
 /// Configuration centrale de la navigation avec GoRouter.
 ///
 /// Toutes les routes nommées de l'application sont définies ici,
@@ -68,62 +85,62 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/test/cubes',
       name: 'test-cubes',
-      builder: (_, __) => const CubesTestPage(),
+      builder: (_, state) => CubesTestPage(filterLevel: state.uri.queryParameters['level']),
     ),
     GoRoute(
       path: '/test/matrices',
       name: 'test-matrices',
-      builder: (_, __) => const MatricesTestPage(),
+      builder: (_, state) => MatricesTestPage(filterLevel: state.uri.queryParameters['level']),
     ),
     GoRoute(
       path: '/test/figure-weights',
       name: 'test-figure-weights',
-      builder: (_, __) => const FigureWeightsTestPage(),
+      builder: (_, state) => FigureWeightsTestPage(filterLevel: state.uri.queryParameters['level']),
     ),
     GoRoute(
       path: '/test/visual-puzzles',
       name: 'test-visual-puzzles',
-      builder: (_, __) => const VisualPuzzlesTestPage(),
+      builder: (_, state) => VisualPuzzlesTestPage(filterLevel: state.uri.queryParameters['level']),
     ),
     GoRoute(
       path: '/test/similarities',
       name: 'test-similarities',
-      builder: (_, __) => const SimilaritiesTestPage(),
+      builder: (_, state) => SimilaritiesTestPage(filterLevel: state.uri.queryParameters['level']),
     ),
     GoRoute(
       path: '/test/vocabulary',
       name: 'test-vocabulary',
-      builder: (_, __) => const VocabularyTestPage(),
+      builder: (_, state) => VocabularyTestPage(filterLevel: state.uri.queryParameters['level']),
     ),
     GoRoute(
       path: '/test/information',
       name: 'test-information',
-      builder: (_, __) => const InformationTestPage(),
+      builder: (_, state) => InformationTestPage(filterLevel: state.uri.queryParameters['level']),
     ),
     GoRoute(
       path: '/test/digit-span',
       name: 'test-digit-span',
-      builder: (_, __) => const DigitSpanTestPage(),
+      builder: (_, state) => DigitSpanTestPage(filterLevel: state.uri.queryParameters['level']),
     ),
     GoRoute(
       path: '/test/arithmetic',
       name: 'test-arithmetic',
-      builder: (_, __) => const ArithmeticTestPage(),
+      builder: (_, state) => ArithmeticTestPage(filterLevel: state.uri.queryParameters['level']),
     ),
     GoRoute(
       path: '/test/picture-span',
       name: 'test-picture-span',
-      builder: (_, __) => const PictureSpanTestPage(),
+      builder: (_, state) => PictureSpanTestPage(filterLevel: state.uri.queryParameters['level']),
     ),
     GoRoute(
       path: '/test/coding',
       name: 'test-coding',
-      builder: (_, __) => const CodingTestPage(),
+      builder: (_, state) => CodingTestPage(filterLevel: state.uri.queryParameters['level']),
     ),
     GoRoute(
       path: '/test/symbol-search',
       name: 'test-symbol-search',
-      builder: (_, __) => const SymbolSearchTestPage(),
+      builder: (_, state) => SymbolSearchTestPage(filterLevel: state.uri.queryParameters['level']),
     ),
     GoRoute(
       path: '/test/oral',
@@ -171,6 +188,18 @@ class _SplashRedirectState extends State<_SplashRedirect> {
     super.initState();
     // addPostFrameCallback garantit que GoRouter est monté avant la navigation.
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Mode prévisualisation admin : ?adminTest=matrices&level=medium
+      final params = Uri.base.queryParameters;
+      final testKey = params['adminTest'];
+      final level = params['level'];
+      final route = testKey != null ? _adminTestRoutes[testKey] : null;
+      if (route != null) {
+        // Naviguer immédiatement vers le test (skip splash)
+        final destination = level != null ? '$route?level=$level' : route;
+        if (mounted) context.go(destination);
+        return;
+      }
+      // Comportement normal : splash 2 secondes puis home
       Future.delayed(const Duration(seconds: 2), () {
         if (mounted) context.go(AppConstants.routeHome);
       });

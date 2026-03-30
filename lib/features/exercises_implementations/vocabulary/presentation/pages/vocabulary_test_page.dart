@@ -10,7 +10,8 @@ import '../../domain/vocabulary_generator.dart';
 /// Scoring : 0, 1, ou 2 points selon la précision de la définition
 /// Règle de discontinuation : 3 scores consécutifs de 0
 class VocabularyTestPage extends StatefulWidget {
-  const VocabularyTestPage({super.key});
+  final String? filterLevel;
+  const VocabularyTestPage({super.key, this.filterLevel});
 
   @override
   State<VocabularyTestPage> createState() => _VocabularyTestPageState();
@@ -119,10 +120,10 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
                   : 'Réponse incomplète',
           style: TextStyle(
             color: itemScore == 2
-                ? Colors.green
+                ? AppColors.success
                 : itemScore == 1
-                    ? Colors.orange
-                    : Colors.red,
+                    ? AppColors.warning
+                    : AppColors.error,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -157,7 +158,7 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
                   'Exemples de réponses à 2 points :',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: Colors.green.shade700,
+                    color: AppColors.success,
                   ),
                 ),
                 ...item.twoPointAnswers.take(2).map((ans) => Padding(
@@ -171,7 +172,7 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
                   'Exemples de réponses à 1 point :',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: Colors.orange.shade700,
+                    color: AppColors.warning,
                   ),
                 ),
                 ...item.onePointAnswers.take(2).map((ans) => Padding(
@@ -187,7 +188,7 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
                 Text(
                   '3 scores de 0 consécutifs - Test terminé (WAIS-IV)',
                   style: TextStyle(
-                    color: Colors.orange,
+                    color: AppColors.warning,
                     fontWeight: FontWeight.bold,
                     fontSize: 14.sp,
                   ),
@@ -257,7 +258,7 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
                 style: TextStyle(
                   fontSize: 12.sp,
                   fontStyle: FontStyle.italic,
-                  color: Colors.grey.shade600,
+                  color: AppColors.grey600,
                 ),
               ),
               SizedBox(height: 16.h),
@@ -322,11 +323,11 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
   }
 
   Color _getPerformanceColor(int score) {
-    if (score >= 50) return Colors.purple;
-    if (score >= 40) return Colors.green;
-    if (score >= 28) return Colors.blue;
-    if (score >= 18) return Colors.orange;
-    return Colors.red;
+    if (score >= 50) return AppColors.indexFSIQ;
+    if (score >= 40) return AppColors.success;
+    if (score >= 28) return AppColors.info;
+    if (score >= 18) return AppColors.warning;
+    return AppColors.error;
   }
 
   @override
@@ -336,7 +337,6 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Vocabulaire'),
-        backgroundColor: AppColors.indexVCI,
         actions: [
           Center(
             child: Padding(
@@ -367,9 +367,9 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
               Container(
                 padding: EdgeInsets.all(12.w),
                 decoration: BoxDecoration(
-                  color: Colors.blue.shade50,
+                  color: AppColors.infoContainer,
                   borderRadius: BorderRadius.circular(8.r),
-                  border: Border.all(color: Colors.blue.shade200),
+                  border: Border.all(color: AppColors.infoLight),
                 ),
                 child: Text(
                   'Définissez le mot suivant',
@@ -436,7 +436,7 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
                         Icon(
                           Icons.star,
                           size: 16.sp,
-                          color: Colors.white,
+                          color: AppColors.white,
                         ),
                         SizedBox(width: 6.w),
                         Text(
@@ -444,7 +444,7 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
                           style: TextStyle(
                             fontSize: 13.sp,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: AppColors.white,
                           ),
                         ),
                       ],
@@ -471,14 +471,14 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
                   hintText: 'Écrivez la définition du mot...',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.r),
-                    borderSide: BorderSide(color: Colors.grey.shade300, width: 2),
+                    borderSide: BorderSide(color: AppColors.grey300, width: 2),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.r),
                     borderSide: BorderSide(color: AppColors.indexVCI, width: 2),
                   ),
                   filled: true,
-                  fillColor: Colors.grey.shade50,
+                  fillColor: AppColors.grey50,
                   contentPadding: EdgeInsets.all(16.w),
                 ),
                 textCapitalization: TextCapitalization.sentences,
@@ -491,9 +491,9 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
               Container(
                 padding: EdgeInsets.all(14.w),
                 decoration: BoxDecoration(
-                  color: Colors.amber.shade50,
+                  color: AppColors.warningContainer,
                   borderRadius: BorderRadius.circular(12.r),
-                  border: Border.all(color: Colors.amber.shade300, width: 2),
+                  border: Border.all(color: AppColors.warningLight, width: 2),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -502,7 +502,7 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
                       children: [
                         Icon(
                           Icons.lightbulb_outline,
-                          color: Colors.amber.shade700,
+                          color: AppColors.warning,
                           size: 20.sp,
                         ),
                         SizedBox(width: 8.w),
@@ -511,7 +511,7 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 14.sp,
-                            color: Colors.amber.shade900,
+                            color: AppColors.tertiary,
                           ),
                         ),
                       ],
@@ -545,7 +545,7 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
                       : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.indexVCI,
-                    disabledBackgroundColor: Colors.grey.shade300,
+                    disabledBackgroundColor: AppColors.grey300,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.r),
                     ),
@@ -576,9 +576,9 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
         Container(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
           decoration: BoxDecoration(
-            color: Colors.blue.shade50,
+            color: AppColors.infoContainer,
             borderRadius: BorderRadius.circular(24.r),
-            border: Border.all(color: Colors.blue.shade300, width: 2),
+            border: Border.all(color: AppColors.infoLight, width: 2),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -586,7 +586,7 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
               Icon(
                 Icons.timer_outlined,
                 size: 22.sp,
-                color: Colors.blue.shade700,
+                color: AppColors.info,
               ),
               SizedBox(width: 8.w),
               Text(
@@ -594,7 +594,7 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
                 style: TextStyle(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
-                  color: Colors.blue.shade700,
+                  color: AppColors.info,
                 ),
               ),
             ],
@@ -605,9 +605,9 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
         Container(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
           decoration: BoxDecoration(
-            color: Colors.green.shade50,
+            color: AppColors.successContainer,
             borderRadius: BorderRadius.circular(24.r),
-            border: Border.all(color: Colors.green.shade300, width: 2),
+            border: Border.all(color: AppColors.successLight, width: 2),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -615,7 +615,7 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
               Icon(
                 Icons.stars_rounded,
                 size: 22.sp,
-                color: Colors.amber.shade700,
+                color: AppColors.warning,
               ),
               SizedBox(width: 8.w),
               Text(
@@ -623,7 +623,7 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
                 style: TextStyle(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
-                  color: Colors.green.shade700,
+                  color: AppColors.success,
                 ),
               ),
             ],
@@ -636,15 +636,15 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
   Color _getFrequencyColor(WordFrequency frequency) {
     switch (frequency) {
       case WordFrequency.veryHigh:
-        return Colors.green;
+        return AppColors.success;
       case WordFrequency.high:
-        return Colors.blue;
+        return AppColors.info;
       case WordFrequency.medium:
-        return Colors.orange;
+        return AppColors.warning;
       case WordFrequency.low:
-        return Colors.deepOrange;
+        return AppColors.indexPSI;
       case WordFrequency.veryLow:
-        return Colors.red;
+        return AppColors.error;
     }
   }
 }

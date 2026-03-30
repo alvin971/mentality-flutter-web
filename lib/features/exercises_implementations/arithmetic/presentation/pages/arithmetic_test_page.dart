@@ -8,7 +8,8 @@ import '../../domain/arithmetic_generator.dart';
 /// Résolution mentale de 22 problèmes sous contrainte de temps
 /// Possibilité de répéter l'énoncé UNE fois (chrono continue)
 class ArithmeticTestPage extends StatefulWidget {
-  const ArithmeticTestPage({super.key});
+  final String? filterLevel;
+  const ArithmeticTestPage({super.key, this.filterLevel});
 
   @override
   State<ArithmeticTestPage> createState() => _ArithmeticTestPageState();
@@ -36,7 +37,14 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
   @override
   void initState() {
     super.initState();
-    _generatedItems = _generator.generateComplete22Items();
+    final all = _generator.generateComplete22Items();
+    final level = widget.filterLevel;
+    if (level != null) {
+      final filtered = all.where((item) => item.difficulty.name == level).toList();
+      _generatedItems = filtered.isNotEmpty ? filtered : all;
+    } else {
+      _generatedItems = all;
+    }
   }
 
   @override
@@ -289,7 +297,6 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Arithmétique'),
-        backgroundColor: AppColors.indexWMI,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -387,7 +394,6 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Arithmétique'),
-        backgroundColor: AppColors.indexWMI,
         actions: [
           Center(
             child: Padding(
@@ -538,7 +544,7 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
                         style: OutlinedButton.styleFrom(
                           foregroundColor: AppColors.indexWMI,
                           side: BorderSide(color: AppColors.indexWMI, width: 2),
-                          disabledForegroundColor: Colors.grey,
+                          disabledForegroundColor: AppColors.grey400,
                         ),
                       ),
                     ),
@@ -554,7 +560,7 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
                             : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.indexWMI,
-                          disabledBackgroundColor: Colors.grey.shade300,
+                          disabledBackgroundColor: AppColors.grey300,
                         ),
                         child: Text(
                           'Valider',

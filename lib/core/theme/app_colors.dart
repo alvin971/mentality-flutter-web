@@ -11,46 +11,46 @@ class AppColors {
   // COULEURS PRIMAIRES
   // ========================================
 
-  /// Couleur primaire principale (violet/indigo pour intelligence)
-  static const Color primary = Color(0xFF6366F1); // Indigo-500
+  /// Couleur primaire principale (vert forêt — style Kepler)
+  static const Color primary = Color(0xFF4D7C4A); // Vert forêt
 
   /// Variante plus claire de la couleur primaire
-  static const Color primaryLight = Color(0xFF818CF8); // Indigo-400
+  static const Color primaryLight = Color(0xFF6AB060); // Vert clair
 
   /// Variante plus foncée de la couleur primaire
-  static const Color primaryDark = Color(0xFF4F46E5); // Indigo-600
+  static const Color primaryDark = Color(0xFF22805A); // Vert foncé
 
   /// Couleur primaire conteneur
-  static const Color primaryContainer = Color(0xFFE0E7FF); // Indigo-100
+  static const Color primaryContainer = Color(0xFFD7E8D2); // Vert-crème
 
   // ========================================
   // COULEURS SECONDAIRES
   // ========================================
 
-  /// Couleur secondaire (turquoise pour créativité)
-  static const Color secondary = Color(0xFF06B6D4); // Cyan-500
+  /// Couleur secondaire (vert profond)
+  static const Color secondary = Color(0xFF22805A);
 
   /// Variante claire
-  static const Color secondaryLight = Color(0xFF22D3EE); // Cyan-400
+  static const Color secondaryLight = Color(0xFF4D7C4A);
 
   /// Variante foncée
-  static const Color secondaryDark = Color(0xFF0891B2); // Cyan-600
+  static const Color secondaryDark = Color(0xFF0B3D2E);
 
   /// Couleur secondaire conteneur
-  static const Color secondaryContainer = Color(0xFFCFFAFE); // Cyan-100
+  static const Color secondaryContainer = Color(0xFFEEF1EC); // Vert-crème clair
 
   // ========================================
   // COULEURS TERTIAIRES
   // ========================================
 
-  /// Couleur tertiaire (rose pour engagement émotionnel)
-  static const Color tertiary = Color(0xFFEC4899); // Pink-500
+  /// Couleur tertiaire (olive chaud — accent analogique)
+  static const Color tertiary = Color(0xFF8A7C4A);
 
   /// Variante claire
-  static const Color tertiaryLight = Color(0xFFF472B6); // Pink-400
+  static const Color tertiaryLight = Color(0xFFB8A86A);
 
   /// Variante foncée
-  static const Color tertiaryDark = Color(0xFFDB2777); // Pink-600
+  static const Color tertiaryDark = Color(0xFF5C5030);
 
   // ========================================
   // COULEURS DE FEEDBACK
@@ -102,9 +102,9 @@ class AppColors {
   // COULEURS DE SURFACE (Light Mode)
   // ========================================
 
-  static const Color background = Color(0xFFFAFAFA);
+  static const Color background = Color(0xFFFAF9F6); // Crème chaud Kepler
   static const Color surface = Color(0xFFFFFFFF);
-  static const Color surfaceVariant = Color(0xFFF3F4F6);
+  static const Color surfaceVariant = Color(0xFFEEF1EC); // Vert-crème Kepler
 
   // ========================================
   // COULEURS DE SURFACE (Dark Mode)
@@ -150,10 +150,29 @@ class AppColors {
   static const Color childSecondary = Color(0xFF8B5CF6); // Violet
   static const Color childAccent = Color(0xFF06B6D4); // Cyan
 
-  /// Adulte (couleurs professionnelles)
-  static const Color adultPrimary = Color(0xFF6366F1); // Indigo
-  static const Color adultSecondary = Color(0xFF0891B2); // Cyan foncé
-  static const Color adultAccent = Color(0xFF64748B); // Slate
+  /// Adulte (palette verte Kepler)
+  static const Color adultPrimary = Color(0xFF4D7C4A); // Vert forêt
+  static const Color adultSecondary = Color(0xFF22805A); // Vert profond
+  static const Color adultAccent = Color(0xFF7A9488); // Gris-vert
+
+  // ========================================
+  // COULEURS TEXTE KEPLER
+  // ========================================
+
+  /// Texte principal (vert forêt quasi-noir)
+  static const Color textPrimary = Color(0xFF0B1F17);
+
+  /// Texte secondaire
+  static const Color textSecondary = Color(0xFF3D5248);
+
+  /// Texte tertiaire (labels, méta)
+  static const Color textTertiary = Color(0xFF7A9488);
+
+  /// Fond accent translucide (50%)
+  static const Color accentLight = Color(0x80D7E8D2);
+
+  /// Bordure accent subtile (12%)
+  static const Color accentDim = Color(0x1F4D7C4A);
 
   // ========================================
   // GRADIENTS

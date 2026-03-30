@@ -11,7 +11,8 @@ import '../widgets/token_widget.dart';
 /// Temps limite : 20s (facile), 30s (moyen), 45s (difficile)
 /// Règle de discontinuation : 3 échecs consécutifs
 class FigureWeightsTestPage extends StatefulWidget {
-  const FigureWeightsTestPage({super.key});
+  final String? filterLevel;
+  const FigureWeightsTestPage({super.key, this.filterLevel});
 
   @override
   State<FigureWeightsTestPage> createState() => _FigureWeightsTestPageState();
@@ -114,7 +115,7 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
         title: Text(
           isCorrect ? 'Correct !' : 'Incorrect',
           style: TextStyle(
-            color: isCorrect ? Colors.green : Colors.red,
+            color: isCorrect ? AppColors.success : AppColors.error,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -138,7 +139,7 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
               Text(
                 '3 échecs consécutifs - Test terminé (WAIS-IV)',
                 style: TextStyle(
-                  color: Colors.orange,
+                  color: AppColors.warning,
                   fontWeight: FontWeight.bold,
                   fontSize: 14.sp,
                 ),
@@ -205,7 +206,7 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
               style: TextStyle(
                 fontSize: 12.sp,
                 fontStyle: FontStyle.italic,
-                color: Colors.grey.shade600,
+                color: AppColors.grey600,
               ),
             ),
           ],
@@ -232,11 +233,11 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
   }
 
   Color _getPerformanceColor(int score) {
-    if (score >= 23) return Colors.purple;
-    if (score >= 18) return Colors.green;
-    if (score >= 12) return Colors.blue;
-    if (score >= 7) return Colors.orange;
-    return Colors.red;
+    if (score >= 23) return AppColors.indexFSIQ;
+    if (score >= 18) return AppColors.success;
+    if (score >= 12) return AppColors.info;
+    if (score >= 7) return AppColors.warning;
+    return AppColors.error;
   }
 
   @override
@@ -246,7 +247,6 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Balances Quantitatives'),
-        backgroundColor: AppColors.indexFRI,
         actions: [
           Center(
             child: Padding(
@@ -277,9 +277,9 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
               Container(
                 padding: EdgeInsets.all(12.w),
                 decoration: BoxDecoration(
-                  color: Colors.blue.shade50,
+                  color: AppColors.infoContainer,
                   borderRadius: BorderRadius.circular(8.r),
-                  border: Border.all(color: Colors.blue.shade200),
+                  border: Border.all(color: AppColors.infoLight),
                 ),
                 child: Text(
                   'Trouvez la valeur manquante qui équilibre la balance.',
@@ -312,9 +312,9 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
                 Container(
                   padding: EdgeInsets.all(12.w),
                   decoration: BoxDecoration(
-                    color: Colors.orange.shade50,
+                    color: AppColors.warningContainer,
                     borderRadius: BorderRadius.circular(8.r),
-                    border: Border.all(color: Colors.orange.shade300, width: 2),
+                    border: Border.all(color: AppColors.warningLight, width: 2),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -368,13 +368,13 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
                       padding: EdgeInsets.all(16.w),
                       decoration: BoxDecoration(
                         color: isSelected
-                            ? Colors.blue.shade100
-                            : Colors.grey.shade50,
+                            ? AppColors.infoContainer
+                            : AppColors.grey50,
                         borderRadius: BorderRadius.circular(12.r),
                         border: Border.all(
                           color: isSelected
-                              ? Colors.blue.shade400
-                              : Colors.grey.shade300,
+                              ? AppColors.info
+                              : AppColors.grey300,
                           width: isSelected ? 3 : 2,
                         ),
                       ),
@@ -408,7 +408,7 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
                   onPressed: _selectedAnswer != null ? _submitAnswer : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.indexFRI,
-                    disabledBackgroundColor: Colors.grey.shade300,
+                    disabledBackgroundColor: AppColors.grey300,
                   ),
                   child: Text(
                     'Valider',
@@ -434,10 +434,10 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
         Container(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
           decoration: BoxDecoration(
-            color: _remainingSeconds <= 5 ? Colors.red.shade100 : Colors.blue.shade50,
+            color: _remainingSeconds <= 5 ? AppColors.errorContainer : AppColors.infoContainer,
             borderRadius: BorderRadius.circular(20.r),
             border: Border.all(
-              color: _remainingSeconds <= 5 ? Colors.red.shade400 : Colors.blue.shade300,
+              color: _remainingSeconds <= 5 ? AppColors.errorLight : AppColors.infoLight,
               width: 2,
             ),
           ),
@@ -447,7 +447,7 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
               Icon(
                 Icons.timer,
                 size: 20.sp,
-                color: _remainingSeconds <= 5 ? Colors.red.shade700 : Colors.blue.shade700,
+                color: _remainingSeconds <= 5 ? AppColors.error : AppColors.info,
               ),
               SizedBox(width: 8.w),
               Text(
@@ -455,7 +455,7 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
                 style: TextStyle(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
-                  color: _remainingSeconds <= 5 ? Colors.red.shade700 : Colors.blue.shade700,
+                  color: _remainingSeconds <= 5 ? AppColors.error : AppColors.info,
                 ),
               ),
             ],
@@ -466,9 +466,9 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
         Container(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
           decoration: BoxDecoration(
-            color: Colors.green.shade50,
+            color: AppColors.successContainer,
             borderRadius: BorderRadius.circular(20.r),
-            border: Border.all(color: Colors.green.shade300, width: 2),
+            border: Border.all(color: AppColors.successLight, width: 2),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -476,7 +476,7 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
               Icon(
                 Icons.star,
                 size: 20.sp,
-                color: Colors.amber.shade700,
+                color: AppColors.warning,
               ),
               SizedBox(width: 8.w),
               Text(
@@ -484,7 +484,7 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
                 style: TextStyle(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
-                  color: Colors.green.shade700,
+                  color: AppColors.success,
                 ),
               ),
             ],

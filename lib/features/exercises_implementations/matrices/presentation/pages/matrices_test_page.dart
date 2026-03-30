@@ -6,7 +6,8 @@ import '../widgets/matrix_cell_widget.dart';
 
 /// Page de test des Matrices Progressives (WAIS-IV: 26 items, WISC-V: 32 items)
 class MatricesTestPage extends StatefulWidget {
-  const MatricesTestPage({super.key});
+  final String? filterLevel;
+  const MatricesTestPage({super.key, this.filterLevel});
 
   @override
   State<MatricesTestPage> createState() => _MatricesTestPageState();
@@ -32,7 +33,14 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
   void _generateItems() {
     // Génération des 26 items UNIQUES en une seule fois
     final generator = MatrixGenerator();
-    _generatedItems = generator.generateComplete26Items();
+    final all = generator.generateComplete26Items();
+    final level = widget.filterLevel;
+    if (level != null) {
+      final filtered = all.where((item) => item.difficulty.name == level).toList();
+      _generatedItems = filtered.isNotEmpty ? filtered : all;
+    } else {
+      _generatedItems = all;
+    }
   }
 
   void _handleAnswerSelected(MatrixCell answer) {

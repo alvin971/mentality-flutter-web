@@ -71,7 +71,6 @@ class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
           'Résultats du Test Complet',
           style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: AppColors.primary,
         automaticallyImplyLeading: false,
       ),
       body: SafeArea(
@@ -126,21 +125,21 @@ class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
       ),
       child: Column(
         children: [
-          Icon(Icons.emoji_events, size: 64.sp, color: Colors.white),
+          Icon(Icons.emoji_events, size: 64.sp, color: AppColors.white),
           SizedBox(height: 16.h),
           Text(
             'Test Complet Terminé !',
             style: TextStyle(
               fontSize: 28.sp,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: AppColors.white,
             ),
             textAlign: TextAlign.center,
           ),
           SizedBox(height: 8.h),
           Text(
             'Félicitations pour avoir complété tous les subtests',
-            style: TextStyle(fontSize: 16.sp, color: Colors.white.withOpacity(0.9)),
+            style: TextStyle(fontSize: 16.sp, color: AppColors.white.withOpacity(0.9)),
             textAlign: TextAlign.center,
           ),
         ],
@@ -191,7 +190,7 @@ class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
         children: [
           Text(
             'QI Total (FSIQ)',
-            style: TextStyle(fontSize: 18.sp, color: Colors.white.withOpacity(0.9)),
+            style: TextStyle(fontSize: 18.sp, color: AppColors.white.withOpacity(0.9)),
           ),
           SizedBox(height: 12.h),
           Text(
@@ -199,7 +198,7 @@ class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
             style: TextStyle(
               fontSize: 80.sp,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: AppColors.white,
               height: 1,
             ),
           ),
@@ -209,20 +208,20 @@ class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
             style: TextStyle(
               fontSize: 22.sp,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: AppColors.white,
             ),
           ),
           SizedBox(height: 12.h),
           if (ci != null) ...[
             Text(
               'IC 95% : ${ci.lowerBound} – ${ci.upperBound}',
-              style: TextStyle(fontSize: 15.sp, color: Colors.white.withOpacity(0.85)),
+              style: TextStyle(fontSize: 15.sp, color: AppColors.white.withOpacity(0.85)),
             ),
             SizedBox(height: 4.h),
           ],
           Text(
             '$percentile${_ordinal(percentile)} percentile',
-            style: TextStyle(fontSize: 15.sp, color: Colors.white.withOpacity(0.85)),
+            style: TextStyle(fontSize: 15.sp, color: AppColors.white.withOpacity(0.85)),
           ),
         ],
       ),

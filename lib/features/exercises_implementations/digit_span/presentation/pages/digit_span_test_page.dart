@@ -8,7 +8,8 @@ import '../../domain/digit_span_generator.dart';
 /// 3 parties : Forward, Backward, Sequencing
 /// Présentation auditive TTS à 1 chiffre/seconde
 class DigitSpanTestPage extends StatefulWidget {
-  const DigitSpanTestPage({super.key});
+  final String? filterLevel;
+  const DigitSpanTestPage({super.key, this.filterLevel});
 
   @override
   State<DigitSpanTestPage> createState() => _DigitSpanTestPageState();
@@ -307,7 +308,6 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Mémoire des Chiffres'),
-        backgroundColor: AppColors.indexWMI,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -399,7 +399,6 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_currentItem.typeDescription),
-        backgroundColor: AppColors.indexWMI,
       ),
       body: SafeArea(
         child: Padding(
@@ -453,7 +452,6 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_currentItem.typeDescription),
-        backgroundColor: AppColors.indexWMI,
         actions: [
           Center(
             child: Padding(
@@ -540,7 +538,6 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_currentItem.typeDescription),
-        backgroundColor: AppColors.indexWMI,
         actions: [
           Center(
             child: Padding(
@@ -595,7 +592,7 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
                                 style: TextStyle(
                                   fontSize: 24.sp,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                                  color: AppColors.white,
                                 ),
                               ),
                             ),
@@ -627,7 +624,7 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
                         onPressed: _userAnswer.isNotEmpty ? _removeLastDigit : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.error,
-                          disabledBackgroundColor: Colors.grey.shade300,
+                          disabledBackgroundColor: AppColors.grey300,
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -651,7 +648,7 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
                             : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.indexWMI,
-                          disabledBackgroundColor: Colors.grey.shade300,
+                          disabledBackgroundColor: AppColors.grey300,
                         ),
                         child: Text(
                           'Valider (${_userAnswer.length}/${_currentItem.length})',
@@ -675,7 +672,7 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
       onPressed: isDisabled ? null : () => _addDigit(number),
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.indexWMI,
-        disabledBackgroundColor: Colors.grey.shade300,
+        disabledBackgroundColor: AppColors.grey300,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.r),
         ),

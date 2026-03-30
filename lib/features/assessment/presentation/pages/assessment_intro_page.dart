@@ -94,7 +94,7 @@ class AssessmentIntroPage extends StatelessWidget {
       (Icons.extension_outlined, 'Raisonnement Fluide', AppColors.indexFRI),
       (Icons.memory_outlined, 'Mémoire de Travail', AppColors.indexWMI),
       (Icons.speed_outlined, 'Vitesse de Traitement', AppColors.indexPSI),
-      (Icons.record_voice_over, 'Langage Oral', Colors.teal),
+      (Icons.record_voice_over, 'Langage Oral', AppColors.secondary),
     ];
 
     return Column(
@@ -143,7 +143,8 @@ class AssessmentIntroPage extends StatelessWidget {
           MaterialPageRoute(builder: (_) => const CompleteTestOrchestratorPage()),
         ),
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.success,
+          backgroundColor: AppColors.primary,
+          foregroundColor: AppColors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16.r),
           ),
@@ -203,7 +204,7 @@ class AssessmentIntroPage extends StatelessWidget {
       ('Mémoire des Images', AppColors.indexWMI, () => const PictureSpanTestPage()),
       ('Code (Coding)', AppColors.indexPSI, () => const CodingTestPage()),
       ('Recherche de Symboles', AppColors.indexPSI, () => const SymbolSearchTestPage()),
-      ('Compréhension Orale', Colors.teal, () => const OralTestFlow()),
+      ('Compréhension Orale', AppColors.secondary, () => const OralTestFlow()),
     ];
 
     if (isWide) {
@@ -242,6 +243,7 @@ class AssessmentIntroPage extends StatelessWidget {
     BuildContext context,
     (String, Color, Widget Function()) test,
   ) {
+    final color = test.$2;
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
@@ -249,8 +251,20 @@ class AssessmentIntroPage extends StatelessWidget {
           context,
           MaterialPageRoute(builder: (_) => test.$3()),
         ),
-        style: ElevatedButton.styleFrom(backgroundColor: test.$2),
-        child: Text(test.$1),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: color.withOpacity(0.08),
+          foregroundColor: color,
+          elevation: 0,
+          side: BorderSide(color: color.withOpacity(0.3)),
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.r),
+          ),
+        ),
+        child: Text(
+          test.$1,
+          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
+        ),
       ),
     );
   }

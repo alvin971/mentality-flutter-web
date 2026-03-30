@@ -10,7 +10,8 @@ import '../../domain/information_generator.dart';
 /// Scoring dichotomique : 0 ou 1
 /// Règle de discontinuation : 3 échecs consécutifs
 class InformationTestPage extends StatefulWidget {
-  const InformationTestPage({super.key});
+  final String? filterLevel;
+  const InformationTestPage({super.key, this.filterLevel});
 
   @override
   State<InformationTestPage> createState() => _InformationTestPageState();
@@ -45,7 +46,14 @@ class _InformationTestPageState extends State<InformationTestPage> {
   void _generateItems() {
     // Génération des 28 items UNIQUES en une seule fois
     final generator = InformationGenerator();
-    _generatedItems = generator.generateComplete28Items();
+    final all = generator.generateComplete28Items();
+    final level = widget.filterLevel;
+    if (level != null) {
+      final filtered = all.where((item) => item.difficulty.name == level).toList();
+      _generatedItems = filtered.isNotEmpty ? filtered : all;
+    } else {
+      _generatedItems = all;
+    }
   }
 
   void _startItem() {
@@ -118,7 +126,7 @@ class _InformationTestPageState extends State<InformationTestPage> {
         title: Text(
           isCorrect ? 'Correct !' : 'Incorrect',
           style: TextStyle(
-            color: isCorrect ? Colors.green : Colors.red,
+            color: isCorrect ? AppColors.success : AppColors.error,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -142,7 +150,7 @@ class _InformationTestPageState extends State<InformationTestPage> {
                 Text(
                   'Bonne réponse : ${item.options[item.correctAnswer]}',
                   style: TextStyle(
-                    color: Colors.green.shade700,
+                    color: AppColors.success,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -156,7 +164,7 @@ class _InformationTestPageState extends State<InformationTestPage> {
                 style: TextStyle(
                   fontSize: 12.sp,
                   fontStyle: FontStyle.italic,
-                  color: Colors.grey.shade600,
+                  color: AppColors.grey600,
                 ),
               ),
               if (_consecutiveFailures >= 3) ...[
@@ -164,7 +172,7 @@ class _InformationTestPageState extends State<InformationTestPage> {
                 Text(
                   '3 échecs consécutifs - Test terminé (WAIS-IV)',
                   style: TextStyle(
-                    color: Colors.orange,
+                    color: AppColors.warning,
                     fontWeight: FontWeight.bold,
                     fontSize: 14.sp,
                   ),
@@ -236,7 +244,7 @@ class _InformationTestPageState extends State<InformationTestPage> {
                 style: TextStyle(
                   fontSize: 12.sp,
                   fontStyle: FontStyle.italic,
-                  color: Colors.grey.shade600,
+                  color: AppColors.grey600,
                 ),
               ),
               SizedBox(height: 16.h),
@@ -301,11 +309,11 @@ class _InformationTestPageState extends State<InformationTestPage> {
   }
 
   Color _getPerformanceColor(int score) {
-    if (score >= 24) return Colors.purple;
-    if (score >= 20) return Colors.green;
-    if (score >= 14) return Colors.blue;
-    if (score >= 8) return Colors.orange;
-    return Colors.red;
+    if (score >= 24) return AppColors.indexFSIQ;
+    if (score >= 20) return AppColors.success;
+    if (score >= 14) return AppColors.info;
+    if (score >= 8) return AppColors.warning;
+    return AppColors.error;
   }
 
   @override
@@ -315,7 +323,6 @@ class _InformationTestPageState extends State<InformationTestPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Information'),
-        backgroundColor: AppColors.indexVCI,
         actions: [
           Center(
             child: Padding(
@@ -359,7 +366,7 @@ class _InformationTestPageState extends State<InformationTestPage> {
                         style: TextStyle(
                           fontSize: 12.sp,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          color: AppColors.white,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -378,7 +385,7 @@ class _InformationTestPageState extends State<InformationTestPage> {
                       style: TextStyle(
                         fontSize: 12.sp,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: AppColors.white,
                       ),
                     ),
                   ),
@@ -407,7 +414,7 @@ class _InformationTestPageState extends State<InformationTestPage> {
                   style: TextStyle(
                     fontSize: 20.sp,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                    color: AppColors.textPrimary,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -428,12 +435,12 @@ class _InformationTestPageState extends State<InformationTestPage> {
                       decoration: BoxDecoration(
                         color: isSelected
                             ? AppColors.indexVCI.withValues(alpha: 0.15)
-                            : Colors.grey.shade50,
+                            : AppColors.grey50,
                         borderRadius: BorderRadius.circular(12.r),
                         border: Border.all(
                           color: isSelected
                               ? AppColors.indexVCI
-                              : Colors.grey.shade300,
+                              : AppColors.grey300,
                           width: isSelected ? 3 : 2,
                         ),
                       ),
@@ -446,15 +453,15 @@ class _InformationTestPageState extends State<InformationTestPage> {
                               shape: BoxShape.circle,
                               color: isSelected
                                   ? AppColors.indexVCI
-                                  : Colors.grey.shade300,
+                                  : AppColors.grey300,
                             ),
                             child: Center(
                               child: Text(
                                 String.fromCharCode(65 + index), // A, B, C, D
                                 style: TextStyle(
                                   color: isSelected
-                                      ? Colors.white
-                                      : Colors.black54,
+                                      ? AppColors.white
+                                      : AppColors.textTertiary,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16.sp,
                                 ),
@@ -472,7 +479,7 @@ class _InformationTestPageState extends State<InformationTestPage> {
                                     : FontWeight.normal,
                                 color: isSelected
                                     ? AppColors.indexVCI
-                                    : Colors.black87,
+                                    : AppColors.textPrimary,
                               ),
                             ),
                           ),
@@ -493,7 +500,7 @@ class _InformationTestPageState extends State<InformationTestPage> {
                   onPressed: _selectedAnswer != null ? _submitAnswer : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.indexVCI,
-                    disabledBackgroundColor: Colors.grey.shade300,
+                    disabledBackgroundColor: AppColors.grey300,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.r),
                     ),
@@ -524,9 +531,9 @@ class _InformationTestPageState extends State<InformationTestPage> {
         Container(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
           decoration: BoxDecoration(
-            color: Colors.blue.shade50,
+            color: AppColors.infoContainer,
             borderRadius: BorderRadius.circular(24.r),
-            border: Border.all(color: Colors.blue.shade300, width: 2),
+            border: Border.all(color: AppColors.infoLight, width: 2),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -534,7 +541,7 @@ class _InformationTestPageState extends State<InformationTestPage> {
               Icon(
                 Icons.timer_outlined,
                 size: 22.sp,
-                color: Colors.blue.shade700,
+                color: AppColors.info,
               ),
               SizedBox(width: 8.w),
               Text(
@@ -542,7 +549,7 @@ class _InformationTestPageState extends State<InformationTestPage> {
                 style: TextStyle(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
-                  color: Colors.blue.shade700,
+                  color: AppColors.info,
                 ),
               ),
             ],
@@ -553,9 +560,9 @@ class _InformationTestPageState extends State<InformationTestPage> {
         Container(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
           decoration: BoxDecoration(
-            color: Colors.green.shade50,
+            color: AppColors.successContainer,
             borderRadius: BorderRadius.circular(24.r),
-            border: Border.all(color: Colors.green.shade300, width: 2),
+            border: Border.all(color: AppColors.successLight, width: 2),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -563,7 +570,7 @@ class _InformationTestPageState extends State<InformationTestPage> {
               Icon(
                 Icons.stars_rounded,
                 size: 22.sp,
-                color: Colors.amber.shade700,
+                color: AppColors.warning,
               ),
               SizedBox(width: 8.w),
               Text(
@@ -571,7 +578,7 @@ class _InformationTestPageState extends State<InformationTestPage> {
                 style: TextStyle(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
-                  color: Colors.green.shade700,
+                  color: AppColors.success,
                 ),
               ),
             ],
@@ -584,26 +591,26 @@ class _InformationTestPageState extends State<InformationTestPage> {
   Color _getDomainColor(KnowledgeDomain domain) {
     switch (domain) {
       case KnowledgeDomain.science:
-        return Colors.green;
+        return AppColors.success;
       case KnowledgeDomain.historyGeography:
-        return Colors.blue;
+        return AppColors.info;
       case KnowledgeDomain.generalCulture:
-        return Colors.orange;
+        return AppColors.warning;
       case KnowledgeDomain.mathLogic:
-        return Colors.purple;
+        return AppColors.indexFSIQ;
       case KnowledgeDomain.artsLiterature:
-        return Colors.pink;
+        return AppColors.indexPSI;
     }
   }
 
   Color _getDifficultyColor(DifficultyLevel difficulty) {
     switch (difficulty) {
       case DifficultyLevel.easy:
-        return Colors.green.shade600;
+        return AppColors.success;
       case DifficultyLevel.medium:
-        return Colors.orange.shade600;
+        return AppColors.warning;
       case DifficultyLevel.hard:
-        return Colors.red.shade600;
+        return AppColors.error;
     }
   }
 }

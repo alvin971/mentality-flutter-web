@@ -107,18 +107,18 @@ class MentalityApp extends StatelessWidget {
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.transparent,
-        foregroundColor: AppColors.grey900,
+        foregroundColor: AppColors.textPrimary,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
       textTheme: _buildTextTheme(),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: Colors.white,
+          backgroundColor: const Color(0xFF0B1F17), // Bouton sombre Kepler
+          foregroundColor: const Color(0xFFFAF9F6),
           elevation: 0,
           padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 16.h),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.r),
+            borderRadius: BorderRadius.circular(4.r), // quasi-carré Kepler
           ),
           textStyle: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
         ),
@@ -126,28 +126,28 @@ class MentalityApp extends StatelessWidget {
       cardTheme: CardThemeData(
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16.r),
+          borderRadius: BorderRadius.circular(4.r), // quasi-carré Kepler
           side: BorderSide(color: AppColors.grey200),
         ),
         color: AppColors.white,
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.grey50,
+        fillColor: AppColors.background,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12.r),
+          borderRadius: BorderRadius.circular(4.r),
           borderSide: BorderSide.none,
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12.r),
+          borderRadius: BorderRadius.circular(4.r),
           borderSide: BorderSide(color: AppColors.grey200),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12.r),
+          borderRadius: BorderRadius.circular(4.r),
           borderSide: const BorderSide(color: AppColors.primary, width: 2),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12.r),
+          borderRadius: BorderRadius.circular(4.r),
           borderSide: const BorderSide(color: AppColors.error),
         ),
       ),
@@ -184,21 +184,21 @@ class MentalityApp extends StatelessWidget {
 
   TextTheme _buildTextTheme() {
     return TextTheme(
-      displayLarge: TextStyle(fontSize: 32.sp, fontWeight: FontWeight.bold, color: AppColors.grey900),
-      displayMedium: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.bold, color: AppColors.grey900),
-      displaySmall: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.bold, color: AppColors.grey900),
-      headlineLarge: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.w600, color: AppColors.grey900),
-      headlineMedium: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w600, color: AppColors.grey900),
-      headlineSmall: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600, color: AppColors.grey900),
-      titleLarge: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600, color: AppColors.grey900),
-      titleMedium: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500, color: AppColors.grey900),
-      titleSmall: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500, color: AppColors.grey900),
-      bodyLarge: TextStyle(fontSize: 16.sp, color: AppColors.grey700),
-      bodyMedium: TextStyle(fontSize: 14.sp, color: AppColors.grey700),
-      bodySmall: TextStyle(fontSize: 12.sp, color: AppColors.grey600),
-      labelLarge: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500, color: AppColors.grey900),
-      labelMedium: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500, color: AppColors.grey700),
-      labelSmall: TextStyle(fontSize: 10.sp, fontWeight: FontWeight.w500, color: AppColors.grey600),
+      displayLarge:   TextStyle(fontSize: 32.sp, fontWeight: FontWeight.w500, color: AppColors.textPrimary, letterSpacing: -1),
+      displayMedium:  TextStyle(fontSize: 28.sp, fontWeight: FontWeight.w500, color: AppColors.textPrimary, letterSpacing: -0.5),
+      displaySmall:   TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w400, color: AppColors.textPrimary),
+      headlineLarge:  TextStyle(fontSize: 22.sp, fontWeight: FontWeight.w400, color: AppColors.textPrimary),
+      headlineMedium: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w400, color: AppColors.textPrimary),
+      headlineSmall:  TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w400, color: AppColors.textPrimary),
+      titleLarge:     TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600, color: AppColors.textPrimary),
+      titleMedium:    TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500, color: AppColors.textPrimary),
+      titleSmall:     TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500, color: AppColors.textPrimary),
+      bodyLarge:      TextStyle(fontSize: 16.sp, color: AppColors.textSecondary),
+      bodyMedium:     TextStyle(fontSize: 14.sp, color: AppColors.textSecondary),
+      bodySmall:      TextStyle(fontSize: 12.sp, color: AppColors.textTertiary),
+      labelLarge:     TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500, color: AppColors.textPrimary),
+      labelMedium:    TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500, color: AppColors.textSecondary),
+      labelSmall:     TextStyle(fontSize: 10.sp, fontWeight: FontWeight.w500, color: AppColors.textTertiary, letterSpacing: 1.5),
     );
   }
 }

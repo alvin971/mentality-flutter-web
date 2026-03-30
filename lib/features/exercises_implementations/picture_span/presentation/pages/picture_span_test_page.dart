@@ -7,7 +7,8 @@ import '../../domain/picture_span_generator.dart';
 /// Page du test Mémoire des Images (Picture Span)
 /// Présentation séquentielle puis rappel ordonné sur grille
 class PictureSpanTestPage extends StatefulWidget {
-  const PictureSpanTestPage({super.key});
+  final String? filterLevel;
+  const PictureSpanTestPage({super.key, this.filterLevel});
 
   @override
   State<PictureSpanTestPage> createState() => _PictureSpanTestPageState();
@@ -253,7 +254,6 @@ class _PictureSpanTestPageState extends State<PictureSpanTestPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Mémoire des Images'),
-        backgroundColor: AppColors.indexWMI,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -350,7 +350,6 @@ class _PictureSpanTestPageState extends State<PictureSpanTestPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Mémorisation'),
-        backgroundColor: AppColors.indexWMI,
         actions: [
           Center(
             child: Padding(
@@ -452,7 +451,6 @@ class _PictureSpanTestPageState extends State<PictureSpanTestPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Rappel'),
-        backgroundColor: AppColors.indexWMI,
         actions: [
           Center(
             child: Padding(
@@ -597,7 +595,7 @@ class _PictureSpanTestPageState extends State<PictureSpanTestPage> {
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.error,
-                    disabledBackgroundColor: Colors.grey.shade300,
+                    disabledBackgroundColor: AppColors.grey300,
                   ),
                 ),
               ),

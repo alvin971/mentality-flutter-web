@@ -6,7 +6,8 @@ import '../../domain/pattern_generator.dart';
 
 /// Page de test des Cubes avec progression par niveaux
 class CubesTestPage extends StatefulWidget {
-  const CubesTestPage({super.key});
+  final String? filterLevel;
+  const CubesTestPage({super.key, this.filterLevel});
 
   @override
   State<CubesTestPage> createState() => _CubesTestPageState();
@@ -57,7 +58,12 @@ class _CubesTestPageState extends State<CubesTestPage> {
   }
 
   void _generateLevels() {
-    _generatedPatterns = _difficultyProgression
+    final level = widget.filterLevel;
+    final progression = level != null
+        ? _difficultyProgression.where((d) => d.name == level).toList()
+        : _difficultyProgression;
+    final effectiveProgression = progression.isNotEmpty ? progression : _difficultyProgression;
+    _generatedPatterns = effectiveProgression
         .map((difficulty) => _patternGenerator.generatePattern(difficulty))
         .toList();
   }

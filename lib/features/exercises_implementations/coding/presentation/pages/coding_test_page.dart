@@ -7,7 +7,8 @@ import '../../domain/coding_generator.dart';
 /// Page du test Code (Coding / Digit Symbol)
 /// 135 cases à compléter en 120 secondes avec palette de symboles
 class CodingTestPage extends StatefulWidget {
-  const CodingTestPage({super.key});
+  final String? filterLevel;
+  const CodingTestPage({super.key, this.filterLevel});
 
   @override
   State<CodingTestPage> createState() => _CodingTestPageState();
@@ -229,7 +230,6 @@ class _CodingTestPageState extends State<CodingTestPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Code (Digit Symbol)'),
-        backgroundColor: AppColors.indexPSI,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -329,7 +329,6 @@ class _CodingTestPageState extends State<CodingTestPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(_isTraining ? 'Entraînement' : 'Test de Code'),
-        backgroundColor: AppColors.indexPSI,
         actions: [
           if (!_isTraining)
             Center(
@@ -339,20 +338,20 @@ class _CodingTestPageState extends State<CodingTestPage> {
                   padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
                   decoration: BoxDecoration(
                     color: _remainingSeconds <= 10
-                        ? AppColors.error
-                        : Colors.white.withValues(alpha: 0.2),
+                        ? AppColors.errorContainer
+                        : AppColors.grey200,
                     borderRadius: BorderRadius.circular(20.r),
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.timer, size: 20.sp, color: Colors.white),
+                      Icon(Icons.timer, size: 20.sp, color: _remainingSeconds <= 10 ? AppColors.error : AppColors.textPrimary),
                       SizedBox(width: 4.w),
                       Text(
                         '$_remainingSeconds s',
                         style: TextStyle(
                           fontSize: 16.sp,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          color: _remainingSeconds <= 10 ? AppColors.error : AppColors.textPrimary,
                         ),
                       ),
                     ],

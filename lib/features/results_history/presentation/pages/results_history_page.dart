@@ -260,7 +260,7 @@ class _ResultsHistoryPageState extends State<ResultsHistoryPage> {
 
   Color _colorForFSIQ(int fsiq) {
     if (fsiq >= 130) return AppColors.success;
-    if (fsiq >= 115) return const Color(0xFF2196F3);
+    if (fsiq >= 115) return AppColors.info;
     if (fsiq >= 85) return AppColors.primary;
     if (fsiq >= 70) return AppColors.warning;
     return AppColors.error;

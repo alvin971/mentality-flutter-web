@@ -13,7 +13,8 @@ import '../widgets/puzzle_target_widget.dart';
 /// Temps limite : 20-30s selon difficulté
 /// Règle de discontinuation : 3 échecs consécutifs
 class VisualPuzzlesTestPage extends StatefulWidget {
-  const VisualPuzzlesTestPage({super.key});
+  final String? filterLevel;
+  const VisualPuzzlesTestPage({super.key, this.filterLevel});
 
   @override
   State<VisualPuzzlesTestPage> createState() => _VisualPuzzlesTestPageState();
@@ -47,7 +48,14 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
   void _generateItems() {
     // Génération des 26 items UNIQUES en une seule fois
     final generator = PuzzleGenerator();
-    _generatedItems = generator.generateComplete26Items();
+    final all = generator.generateComplete26Items();
+    final level = widget.filterLevel;
+    if (level != null) {
+      final filtered = all.where((item) => item.difficulty.name == level).toList();
+      _generatedItems = filtered.isNotEmpty ? filtered : all;
+    } else {
+      _generatedItems = all;
+    }
   }
 
   void _startItem() {
@@ -123,7 +131,7 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
         title: Text(
           isCorrect ? 'Correct !' : 'Incorrect',
           style: TextStyle(
-            color: isCorrect ? Colors.green : Colors.red,
+            color: isCorrect ? AppColors.success : AppColors.error,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -145,7 +153,7 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
                     style: TextStyle(
                       fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
-                      color: Colors.blue,
+                      color: AppColors.info,
                     ),
                   );
                 }).toList(),
@@ -159,7 +167,7 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
               Text(
                 '3 échecs consécutifs - Test terminé (WAIS-IV)',
                 style: TextStyle(
-                  color: Colors.orange,
+                  color: AppColors.warning,
                   fontWeight: FontWeight.bold,
                   fontSize: 14.sp,
                 ),
@@ -226,7 +234,7 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
               style: TextStyle(
                 fontSize: 12.sp,
                 fontStyle: FontStyle.italic,
-                color: Colors.grey.shade600,
+                color: AppColors.grey600,
               ),
             ),
           ],
@@ -253,11 +261,11 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
   }
 
   Color _getPerformanceColor(int score) {
-    if (score >= 22) return Colors.purple;
-    if (score >= 17) return Colors.green;
-    if (score >= 11) return Colors.blue;
-    if (score >= 6) return Colors.orange;
-    return Colors.red;
+    if (score >= 22) return AppColors.indexFSIQ;
+    if (score >= 17) return AppColors.success;
+    if (score >= 11) return AppColors.info;
+    if (score >= 6) return AppColors.warning;
+    return AppColors.error;
   }
 
   @override
@@ -267,7 +275,6 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Puzzles Visuels'),
-        backgroundColor: AppColors.indexVSI,
         actions: [
           Center(
             child: Padding(
@@ -298,9 +305,9 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
               Container(
                 padding: EdgeInsets.all(12.w),
                 decoration: BoxDecoration(
-                  color: Colors.blue.shade50,
+                  color: AppColors.infoContainer,
                   borderRadius: BorderRadius.circular(8.r),
-                  border: Border.all(color: Colors.blue.shade200),
+                  border: Border.all(color: AppColors.infoLight),
                 ),
                 child: Text(
                   'Sélectionnez exactement 3 pièces qui reconstituent la forme ci-dessous.',
@@ -378,13 +385,13 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
                 padding: EdgeInsets.all(12.w),
                 decoration: BoxDecoration(
                   color: _selectedIndices.length == 3
-                      ? Colors.green.shade50
-                      : Colors.orange.shade50,
+                      ? AppColors.successContainer
+                      : AppColors.warningContainer,
                   borderRadius: BorderRadius.circular(8.r),
                   border: Border.all(
                     color: _selectedIndices.length == 3
-                        ? Colors.green.shade300
-                        : Colors.orange.shade300,
+                        ? AppColors.successLight
+                        : AppColors.warningLight,
                   ),
                 ),
                 child: Text(
@@ -393,8 +400,8 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
                     fontSize: 16.sp,
                     fontWeight: FontWeight.bold,
                     color: _selectedIndices.length == 3
-                        ? Colors.green.shade700
-                        : Colors.orange.shade700,
+                        ? AppColors.success
+                        : AppColors.warning,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -410,7 +417,7 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
                   onPressed: _selectedIndices.length == 3 ? _submitAnswer : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.indexVSI,
-                    disabledBackgroundColor: Colors.grey.shade300,
+                    disabledBackgroundColor: AppColors.grey300,
                   ),
                   child: Text(
                     'Valider',
@@ -436,10 +443,10 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
         Container(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
           decoration: BoxDecoration(
-            color: _remainingSeconds <= 5 ? Colors.red.shade100 : Colors.blue.shade50,
+            color: _remainingSeconds <= 5 ? AppColors.errorContainer : AppColors.infoContainer,
             borderRadius: BorderRadius.circular(20.r),
             border: Border.all(
-              color: _remainingSeconds <= 5 ? Colors.red.shade400 : Colors.blue.shade300,
+              color: _remainingSeconds <= 5 ? AppColors.errorLight : AppColors.infoLight,
               width: 2,
             ),
           ),
@@ -449,7 +456,7 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
               Icon(
                 Icons.timer,
                 size: 20.sp,
-                color: _remainingSeconds <= 5 ? Colors.red.shade700 : Colors.blue.shade700,
+                color: _remainingSeconds <= 5 ? AppColors.error : AppColors.info,
               ),
               SizedBox(width: 8.w),
               Text(
@@ -457,7 +464,7 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
                 style: TextStyle(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
-                  color: _remainingSeconds <= 5 ? Colors.red.shade700 : Colors.blue.shade700,
+                  color: _remainingSeconds <= 5 ? AppColors.error : AppColors.info,
                 ),
               ),
             ],
@@ -468,9 +475,9 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
         Container(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
           decoration: BoxDecoration(
-            color: Colors.green.shade50,
+            color: AppColors.successContainer,
             borderRadius: BorderRadius.circular(20.r),
-            border: Border.all(color: Colors.green.shade300, width: 2),
+            border: Border.all(color: AppColors.successLight, width: 2),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -478,7 +485,7 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
               Icon(
                 Icons.star,
                 size: 20.sp,
-                color: Colors.amber.shade700,
+                color: AppColors.warning,
               ),
               SizedBox(width: 8.w),
               Text(
@@ -486,7 +493,7 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
                 style: TextStyle(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
-                  color: Colors.green.shade700,
+                  color: AppColors.success,
                 ),
               ),
             ],
