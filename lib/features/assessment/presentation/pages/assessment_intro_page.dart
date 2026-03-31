@@ -16,40 +16,45 @@ import '../../../exercises_implementations/picture_span/presentation/pages/pictu
 import '../../../exercises_implementations/coding/presentation/pages/coding_test_page.dart';
 import '../../../exercises_implementations/symbol_search/presentation/pages/symbol_search_test_page.dart';
 
+/// Catégories de tests affichées dans le tab bar
+enum _TestDomain { verbal, visuel, memoire, vitesse }
+
 /// Page d'introduction à l'évaluation cognitive.
-///
-/// Présente les 5+1 domaines mesurés, puis propose :
-/// - Un bouton "TEST COMPLET WAIS-IV" bien mis en avant
-/// - Des boutons pour chaque sous-test individuel
-class AssessmentIntroPage extends StatelessWidget {
+class AssessmentIntroPage extends StatefulWidget {
   const AssessmentIntroPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final isWide = MediaQuery.sizeOf(context).width >= 800;
+  State<AssessmentIntroPage> createState() => _AssessmentIntroPageState();
+}
 
+class _AssessmentIntroPageState extends State<AssessmentIntroPage> {
+  _TestDomain _selectedDomain = _TestDomain.verbal;
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Nouvelle évaluation')),
+      appBar: AppBar(
+        title: const Text('Nouvelle évaluation'),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(
-            horizontal: isWide ? 80.w : 24.w,
-            vertical: 24.h,
-          ),
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildHeroSection(context),
-              SizedBox(height: 32.h),
-              _buildDomainsSection(context),
-              SizedBox(height: 24.h),
-              _buildInfoBanner(context),
-              SizedBox(height: 24.h),
-              _buildCompleteTestButton(context),
-              SizedBox(height: 24.h),
-              _buildDivider(context),
+              _buildHeader(),
+              SizedBox(height: 28.h),
+              _buildTabBar(),
               SizedBox(height: 16.h),
-              _buildIndividualTests(context, isWide),
+              _buildTestList(),
+              SizedBox(height: 8.h),
+              _buildDomainIndicator(),
+              SizedBox(height: 28.h),
+              _buildCompleteTestButton(),
+              SizedBox(height: 12.h),
+              _buildOralButton(),
+              SizedBox(height: 16.h),
+              _buildInfoBanner(),
             ],
           ),
         ),
@@ -57,245 +62,339 @@ class AssessmentIntroPage extends StatelessWidget {
     );
   }
 
-  Widget _buildHeroSection(BuildContext context) {
-    return Center(
-      child: Column(
-        children: [
-          Container(
-            width: 140.w,
-            height: 140.w,
-            decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(Icons.psychology, size: 72.sp, color: AppColors.primary),
-          ),
-          SizedBox(height: 24.h),
-          Text(
-            'Évaluation cognitive',
-            style: Theme.of(context).textTheme.displayMedium,
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 12.h),
-          Text(
-            'Cette évaluation mesure vos capacités cognitives à travers 5 domaines :',
-            style: Theme.of(context).textTheme.bodyLarge,
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDomainsSection(BuildContext context) {
-    final domains = [
-      (Icons.chat_bubble_outline, 'Compréhension Verbale', AppColors.indexVCI),
-      (Icons.view_in_ar_outlined, 'Raisonnement Visuo-Spatial', AppColors.indexVSI),
-      (Icons.extension_outlined, 'Raisonnement Fluide', AppColors.indexFRI),
-      (Icons.memory_outlined, 'Mémoire de Travail', AppColors.indexWMI),
-      (Icons.speed_outlined, 'Vitesse de Traitement', AppColors.indexPSI),
-      (Icons.record_voice_over, 'Langage Oral', AppColors.secondary),
-    ];
-
+  Widget _buildHeader() {
     return Column(
-      children: domains
-          .map((d) => Padding(
-                padding: EdgeInsets.only(bottom: 12.h),
-                child: _DomainTile(icon: d.$1, title: d.$2, color: d.$3),
-              ))
-          .toList(),
-    );
-  }
-
-  Widget _buildInfoBanner(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(16.w),
-      decoration: BoxDecoration(
-        color: AppColors.info.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: AppColors.info.withOpacity(0.3)),
-      ),
-      child: Row(
-        children: [
-          Icon(Icons.info_outline, color: AppColors.info, size: 24.sp),
-          SizedBox(width: 12.w),
-          Expanded(
-            child: Text(
-              'Durée estimée : 30-45 minutes\nAssurez-vous d\'être dans un environnement calme sans distractions.',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall
-                  ?.copyWith(color: AppColors.info),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCompleteTestButton(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 72.h,
-      child: ElevatedButton(
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const CompleteTestOrchestratorPage()),
-        ),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: AppColors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.r),
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.psychology, size: 28.sp),
-            SizedBox(width: 12.w),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'TEST COMPLET WAIS-IV',
-                  style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  'Tous les subtests (60-90 min)',
-                  style: TextStyle(fontSize: 12.sp),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDivider(BuildContext context) {
-    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(child: Divider(color: AppColors.grey300)),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.w),
-          child: Text(
-            'OU tests individuels',
-            style: TextStyle(fontSize: 14.sp, color: AppColors.grey600),
+        Text(
+          'LES 12 TESTS',
+          style: TextStyle(
+            fontSize: 11.sp,
+            fontWeight: FontWeight.w500,
+            letterSpacing: 1.8,
+            color: AppColors.textTertiary,
           ),
         ),
-        Expanded(child: Divider(color: AppColors.grey300)),
+        SizedBox(height: 10.h),
+        RichText(
+          text: TextSpan(
+            style: TextStyle(
+              fontSize: 26.sp,
+              fontWeight: FontWeight.w700,
+              color: AppColors.textPrimary,
+              height: 1.25,
+            ),
+            children: const [
+              TextSpan(text: 'Basé sur le '),
+              TextSpan(
+                text: 'WAIS-IV',
+                style: TextStyle(
+                  color: AppColors.secondary,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 8.h),
+        Text(
+          'La batterie de tests d\'intelligence la plus utilisée et validée scientifiquement dans le monde.',
+          style: TextStyle(
+            fontSize: 13.sp,
+            color: AppColors.textSecondary,
+            height: 1.55,
+          ),
+        ),
       ],
     );
   }
 
-  Widget _buildIndividualTests(BuildContext context, bool isWide) {
-    final tests = [
-      ('Cubes (Block Design)', AppColors.indexVSI, () => const CubesTestPage()),
-      ('Matrices Progressives', AppColors.indexFRI, () => const MatricesTestPage()),
-      ('Balances Quantitatives', AppColors.indexFRI, () => const FigureWeightsTestPage()),
-      ('Puzzles Visuels', AppColors.indexVSI, () => const VisualPuzzlesTestPage()),
-      ('Similitudes', AppColors.indexVCI, () => const SimilaritiesTestPage()),
-      ('Vocabulaire', AppColors.indexVCI, () => const VocabularyTestPage()),
-      ('Information', AppColors.indexVCI, () => const InformationTestPage()),
-      ('Mémoire des Chiffres', AppColors.indexWMI, () => const DigitSpanTestPage()),
-      ('Arithmétique', AppColors.indexWMI, () => const ArithmeticTestPage()),
-      ('Mémoire des Images', AppColors.indexWMI, () => const PictureSpanTestPage()),
-      ('Code (Coding)', AppColors.indexPSI, () => const CodingTestPage()),
-      ('Recherche de Symboles', AppColors.indexPSI, () => const SymbolSearchTestPage()),
-      ('Compréhension Orale', AppColors.secondary, () => const OralTestFlow()),
+  Widget _buildTabBar() {
+    final tabs = [
+      (_TestDomain.verbal, Icons.menu_book_outlined, 'Verbal'),
+      (_TestDomain.visuel, Icons.visibility_outlined, 'Visuel'),
+      (_TestDomain.memoire, Icons.storage_outlined, 'Mémoire'),
+      (_TestDomain.vitesse, Icons.bolt_outlined, 'Vitesse'),
     ];
 
-    if (isWide) {
-      // Grille 2 colonnes sur desktop
-      final rows = <Widget>[];
-      for (int i = 0; i < tests.length; i += 2) {
-        rows.add(
-          Row(
-            children: [
-              Expanded(child: _testButton(context, tests[i])),
-              SizedBox(width: 12.w),
-              Expanded(
-                child: i + 1 < tests.length
-                    ? _testButton(context, tests[i + 1])
-                    : const SizedBox(),
+    return Container(
+      padding: EdgeInsets.all(4.w),
+      decoration: BoxDecoration(
+        color: AppColors.primaryContainer.withOpacity(0.5),
+        borderRadius: BorderRadius.circular(12.r),
+      ),
+      child: Row(
+        children: tabs.map((tab) {
+          final isActive = _selectedDomain == tab.$1;
+          return Expanded(
+            child: GestureDetector(
+              onTap: () => setState(() => _selectedDomain = tab.$1),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 180),
+                padding: EdgeInsets.symmetric(vertical: 10.h),
+                decoration: BoxDecoration(
+                  color: isActive ? AppColors.white : Colors.transparent,
+                  borderRadius: BorderRadius.circular(9.r),
+                  boxShadow: isActive
+                      ? [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.06),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          )
+                        ]
+                      : null,
+                ),
+                child: Column(
+                  children: [
+                    Icon(
+                      tab.$2,
+                      size: 18.sp,
+                      color: isActive
+                          ? AppColors.secondary
+                          : AppColors.textTertiary,
+                    ),
+                    SizedBox(height: 3.h),
+                    Text(
+                      tab.$3,
+                      style: TextStyle(
+                        fontSize: 11.sp,
+                        fontWeight: isActive
+                            ? FontWeight.w600
+                            : FontWeight.w400,
+                        color: isActive
+                            ? AppColors.textPrimary
+                            : AppColors.textTertiary,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
-        );
-        rows.add(SizedBox(height: 12.h));
-      }
-      return Column(children: rows);
-    }
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
 
-    return Column(
-      children: tests.map((t) {
-        return Padding(
-          padding: EdgeInsets.only(bottom: 12.h),
-          child: _testButton(context, t),
+  Widget _buildTestList() {
+    final testsMap = {
+      _TestDomain.verbal: [
+        ('01', 'Similitudes', 'Identifier des points communs entre deux concepts.',
+            () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SimilaritiesTestPage()))),
+        ('02', 'Vocabulaire', 'Définir le sens de mots de complexité croissante.',
+            () => Navigator.push(context, MaterialPageRoute(builder: (_) => const VocabularyTestPage()))),
+        ('03', 'Information', 'Répondre à des questions de culture générale.',
+            () => Navigator.push(context, MaterialPageRoute(builder: (_) => const InformationTestPage()))),
+      ],
+      _TestDomain.visuel: [
+        ('01', 'Cubes', 'Reproduire des modèles géométriques avec des cubes.',
+            () => Navigator.push(context, MaterialPageRoute(builder: (_) => const CubesTestPage()))),
+        ('02', 'Matrices Progressives', 'Compléter des séquences de formes abstraites.',
+            () => Navigator.push(context, MaterialPageRoute(builder: (_) => const MatricesTestPage()))),
+        ('03', 'Puzzles Visuels', 'Reconstruire une image à partir de pièces.',
+            () => Navigator.push(context, MaterialPageRoute(builder: (_) => const VisualPuzzlesTestPage()))),
+        ('04', 'Balances', 'Résoudre des équations de balance visuelle.',
+            () => Navigator.push(context, MaterialPageRoute(builder: (_) => const FigureWeightsTestPage()))),
+      ],
+      _TestDomain.memoire: [
+        ('01', 'Mémoire des Chiffres', 'Répéter des séquences de chiffres.',
+            () => Navigator.push(context, MaterialPageRoute(builder: (_) => const DigitSpanTestPage()))),
+        ('02', 'Mémoire des Images', 'Mémoriser et reconnaître des séquences d\'images.',
+            () => Navigator.push(context, MaterialPageRoute(builder: (_) => const PictureSpanTestPage()))),
+        ('03', 'Arithmétique', 'Résoudre des problèmes mathématiques de tête.',
+            () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ArithmeticTestPage()))),
+      ],
+      _TestDomain.vitesse: [
+        ('01', 'Code', 'Associer des symboles à des chiffres rapidement.',
+            () => Navigator.push(context, MaterialPageRoute(builder: (_) => const CodingTestPage()))),
+        ('02', 'Recherche de Symboles', 'Détecter des symboles cibles parmi des distracteurs.',
+            () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SymbolSearchTestPage()))),
+      ],
+    };
+
+    final tests = testsMap[_selectedDomain] ?? [];
+
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(16.r),
+      ),
+      child: Column(
+        children: List.generate(tests.length, (i) {
+          final t = tests[i];
+          final isLast = i == tests.length - 1;
+          return _TestRow(
+            number: t.$1,
+            title: t.$2,
+            description: t.$3,
+            onTap: t.$4,
+            showDivider: !isLast,
+          );
+        }),
+      ),
+    );
+  }
+
+  Widget _buildDomainIndicator() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: _TestDomain.values.map((d) {
+        final isActive = d == _selectedDomain;
+        return Container(
+          margin: EdgeInsets.symmetric(horizontal: 3.w),
+          width: isActive ? 20.w : 6.w,
+          height: 6.h,
+          decoration: BoxDecoration(
+            color: isActive ? AppColors.secondary : AppColors.grey300,
+            borderRadius: BorderRadius.circular(3.r),
+          ),
         );
       }).toList(),
     );
   }
 
-  Widget _testButton(
-    BuildContext context,
-    (String, Color, Widget Function()) test,
-  ) {
-    final color = test.$2;
+  Widget _buildCompleteTestButton() {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
         onPressed: () => Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => test.$3()),
+          MaterialPageRoute(
+              builder: (_) => const CompleteTestOrchestratorPage()),
         ),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: color.withOpacity(0.08),
-          foregroundColor: color,
-          elevation: 0,
-          side: BorderSide(color: color.withOpacity(0.3)),
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.r),
+        child: const Text('Commencer l\'évaluation complète'),
+      ),
+    );
+  }
+
+  Widget _buildOralButton() {
+    return SizedBox(
+      width: double.infinity,
+      child: OutlinedButton(
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const OralTestFlow()),
+        ),
+        child: const Text('Test de compréhension orale →'),
+      ),
+    );
+  }
+
+  Widget _buildInfoBanner() {
+    return Container(
+      padding: EdgeInsets.all(14.w),
+      decoration: BoxDecoration(
+        color: AppColors.surfaceVariant,
+        borderRadius: BorderRadius.circular(12.r),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.schedule_outlined,
+              color: AppColors.textSecondary, size: 20.sp),
+          SizedBox(width: 10.w),
+          Expanded(
+            child: Text(
+              'Durée estimée : 30-45 min · Environnement calme recommandé',
+              style: TextStyle(
+                fontSize: 12.sp,
+                color: AppColors.textSecondary,
+              ),
+            ),
           ),
-        ),
-        child: Text(
-          test.$1,
-          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
-        ),
+        ],
       ),
     );
   }
 }
 
-class _DomainTile extends StatelessWidget {
-  final IconData icon;
+class _TestRow extends StatelessWidget {
+  final String number;
   final String title;
-  final Color color;
+  final String description;
+  final VoidCallback onTap;
+  final bool showDivider;
 
-  const _DomainTile({
-    required this.icon,
+  const _TestRow({
+    required this.number,
     required this.title,
-    required this.color,
+    required this.description,
+    required this.onTap,
+    required this.showDivider,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       children: [
-        Container(
-          width: 40.w,
-          height: 40.w,
-          decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(8.r),
+        InkWell(
+          onTap: onTap,
+          borderRadius: showDivider
+              ? BorderRadius.zero
+              : BorderRadius.only(
+                  bottomLeft: Radius.circular(16.r),
+                  bottomRight: Radius.circular(16.r),
+                ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+            child: Row(
+              children: [
+                Container(
+                  width: 32.w,
+                  height: 32.w,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: AppColors.secondary,
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
+                  child: Text(
+                    number,
+                    style: TextStyle(
+                      fontSize: 11.sp,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 14.w),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      SizedBox(height: 2.h),
+                      Text(
+                        description,
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          color: AppColors.textSecondary,
+                          height: 1.4,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(Icons.arrow_forward_ios,
+                    size: 14.sp, color: AppColors.grey400),
+              ],
+            ),
           ),
-          child: Icon(icon, size: 20.sp, color: color),
         ),
-        SizedBox(width: 12.w),
-        Text(title, style: Theme.of(context).textTheme.bodyLarge),
+        if (showDivider)
+          Divider(
+            height: 1,
+            thickness: 1,
+            color: AppColors.grey200,
+            indent: 16.w,
+            endIndent: 16.w,
+          ),
       ],
     );
   }

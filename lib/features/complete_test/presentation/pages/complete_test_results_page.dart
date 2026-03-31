@@ -65,11 +65,10 @@ class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text(
-          'Résultats du Test Complet',
-          style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
+          'Résultats',
+          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600),
         ),
         automaticallyImplyLeading: false,
       ),
@@ -85,7 +84,7 @@ class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
               SizedBox(height: 24.h),
 
               if (_iqScore != null) ...[
-                _buildFSIQCard(_iqScore),
+                _buildFSIQCard(context, _iqScore),
                 SizedBox(height: 24.h),
                 _buildIndexProfile(_iqScore),
                 SizedBox(height: 24.h),
@@ -112,38 +111,45 @@ class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
   // ─────────────────────────────────────────────────────────────────────────
 
   Widget _buildHeader() {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(24.w),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [AppColors.success, AppColors.success.withOpacity(0.7)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'PROFIL COGNITIF',
+          style: TextStyle(
+            fontSize: 11.sp,
+            fontWeight: FontWeight.w500,
+            letterSpacing: 1.8,
+            color: AppColors.textTertiary,
+          ),
         ),
-        borderRadius: BorderRadius.circular(16.r),
-      ),
-      child: Column(
-        children: [
-          Icon(Icons.emoji_events, size: 64.sp, color: AppColors.white),
-          SizedBox(height: 16.h),
-          Text(
-            'Test Complet Terminé !',
+        SizedBox(height: 8.h),
+        RichText(
+          text: TextSpan(
             style: TextStyle(
-              fontSize: 28.sp,
-              fontWeight: FontWeight.bold,
-              color: AppColors.white,
+              fontSize: 24.sp,
+              fontWeight: FontWeight.w700,
+              color: AppColors.textPrimary,
+              height: 1.2,
             ),
-            textAlign: TextAlign.center,
+            children: const [
+              TextSpan(text: 'Une carte complète de votre\n'),
+              TextSpan(
+                text: 'intelligence.',
+                style: TextStyle(
+                  color: AppColors.secondary,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ],
           ),
-          SizedBox(height: 8.h),
-          Text(
-            'Félicitations pour avoir complété tous les subtests',
-            style: TextStyle(fontSize: 16.sp, color: AppColors.white.withOpacity(0.9)),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
+        ),
+        SizedBox(height: 6.h),
+        Text(
+          'Bien au-delà d\'un simple score QI.',
+          style: TextStyle(fontSize: 14.sp, color: AppColors.textSecondary),
+        ),
+      ],
     );
   }
 
@@ -170,58 +176,113 @@ class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
   // CARTE QI TOTAL
   // ─────────────────────────────────────────────────────────────────────────
 
-  Widget _buildFSIQCard(IQScore iq) {
-    final ci = iq.confidenceIntervals['FSIQ'];
+  Widget _buildFSIQCard(BuildContext context, IQScore iq) {
     final percentile = iq.percentiles['FSIQ'] ?? 50;
     final classification = iq.classifications['FSIQ'] ?? '';
+    // Position du score sur l'axe 40-160
+    final progress = ((iq.fsiq - 40) / 120).clamp(0.0, 1.0);
 
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(24.w),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [AppColors.primary, AppColors.primary.withOpacity(0.75)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+        color: const Color(0xFF0B1F17),
         borderRadius: BorderRadius.circular(16.r),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'QI Total (FSIQ)',
-            style: TextStyle(fontSize: 18.sp, color: AppColors.white.withOpacity(0.9)),
-          ),
-          SizedBox(height: 12.h),
-          Text(
-            '${iq.fsiq}',
+            'QI estimé global',
             style: TextStyle(
-              fontSize: 80.sp,
-              fontWeight: FontWeight.bold,
-              color: AppColors.white,
-              height: 1,
+              fontSize: 13.sp,
+              color: Colors.white60,
+              fontWeight: FontWeight.w400,
             ),
           ),
           SizedBox(height: 8.h),
-          Text(
-            classification,
-            style: TextStyle(
-              fontSize: 22.sp,
-              fontWeight: FontWeight.bold,
-              color: AppColors.white,
-            ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.baseline,
+            textBaseline: TextBaseline.alphabetic,
+            children: [
+              Text(
+                '${iq.fsiq}',
+                style: TextStyle(
+                  fontSize: 56.sp,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                  height: 1,
+                ),
+              ),
+              SizedBox(width: 12.w),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    classification,
+                    style: TextStyle(
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.secondary,
+                    ),
+                  ),
+                  Text(
+                    '${percentile}e percentile',
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      color: Colors.white54,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-          SizedBox(height: 12.h),
-          if (ci != null) ...[
-            Text(
-              'IC 95% : ${ci.lowerBound} – ${ci.upperBound}',
-              style: TextStyle(fontSize: 15.sp, color: AppColors.white.withOpacity(0.85)),
-            ),
-            SizedBox(height: 4.h),
-          ],
-          Text(
-            '$percentile${_ordinal(percentile)} percentile',
-            style: TextStyle(fontSize: 15.sp, color: AppColors.white.withOpacity(0.85)),
+          SizedBox(height: 20.h),
+          // Barre gradient rouge → vert avec indicateur
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(4.r),
+                child: Container(
+                  height: 6.h,
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Color(0xFFDC2626),
+                        Color(0xFFF59E0B),
+                        Color(0xFF10B981),
+                        Color(0xFF3B82F6),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                left: (progress * 1).clamp(0.0, 1.0) *
+                    (MediaQuery.sizeOf(context).width - 48.w - 12.w),
+                top: -5.h,
+                child: Container(
+                  width: 16.w,
+                  height: 16.w,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                        color: const Color(0xFF10B981), width: 2),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 10.h),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('40', style: TextStyle(fontSize: 11.sp, color: Colors.white38)),
+              Text('100', style: TextStyle(fontSize: 11.sp, color: Colors.white38)),
+              Text('160', style: TextStyle(fontSize: 11.sp, color: Colors.white38)),
+            ],
           ),
         ],
       ),
@@ -234,101 +295,95 @@ class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
 
   Widget _buildIndexProfile(IQScore iq) {
     final indices = [
-      ('VCI', 'Compréhension Verbale', iq.vci, AppColors.indexVCI),
-      ('VSI', 'Visuo-Spatial', iq.vsi, AppColors.indexVSI),
-      ('FRI', 'Raisonnement Fluide', iq.fri, AppColors.indexFRI),
-      ('WMI', 'Mémoire de Travail', iq.wmi, AppColors.indexWMI),
-      ('PSI', 'Vitesse de Traitement', iq.psi, AppColors.indexPSI),
+      ('ICV', 'Compréhension verbale', iq.vci, AppColors.secondary),
+      ('IRP', 'Raisonnement perceptif', iq.vsi, AppColors.secondary),
+      ('IMT', 'Mémoire de travail', iq.wmi, AppColors.secondary),
+      ('IVT', 'Vitesse de traitement', iq.psi, AppColors.secondary),
     ];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildSectionTitle('Profil des Indices Cognitifs'),
-        Container(
+      children: indices.map((entry) {
+        final code = entry.$1;
+        final label = entry.$2;
+        final score = entry.$3;
+        final color = entry.$4;
+        if (score == null) return const SizedBox.shrink();
+
+        final percentile = iq.percentiles[code] ?? 50;
+        final barWidth = ((score - 40) / 120).clamp(0.0, 1.0);
+
+        return Container(
+          margin: EdgeInsets.only(bottom: 12.h),
           padding: EdgeInsets.all(16.w),
           decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.circular(12.r),
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(14.r),
           ),
           child: Column(
-            children: indices.map((entry) {
-              final code = entry.$1;
-              final label = entry.$2;
-              final score = entry.$3;
-              final color = entry.$4;
-              if (score == null) return const SizedBox.shrink();
-
-              final ci = iq.confidenceIntervals[code];
-              final percentile = iq.percentiles[code] ?? 50;
-              final classification = iq.classifications[code] ?? '';
-              final barWidth = ((score - 40) / 120).clamp(0.0, 1.0);
-
-              return Padding(
-                padding: EdgeInsets.only(bottom: 16.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            label,
-                            style: TextStyle(
-                              fontSize: 15.sp,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.grey900,
-                            ),
-                          ),
-                        ),
-                        Text(
-                          '$score',
-                          style: TextStyle(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.bold,
-                            color: color,
-                          ),
-                        ),
-                      ],
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.h),
+                    decoration: BoxDecoration(
+                      color: AppColors.surfaceVariant,
+                      borderRadius: BorderRadius.circular(6.r),
+                      border: Border.all(
+                          color: AppColors.primary.withOpacity(0.4)),
                     ),
-                    SizedBox(height: 6.h),
-                    // Barre de progression
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(4.r),
-                      child: LinearProgressIndicator(
-                        value: barWidth,
-                        backgroundColor: color.withOpacity(0.15),
-                        valueColor: AlwaysStoppedAnimation<Color>(color),
-                        minHeight: 10.h,
+                    child: Text(
+                      code,
+                      style: TextStyle(
+                        fontSize: 11.sp,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.secondary,
                       ),
                     ),
-                    SizedBox(height: 4.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          classification,
-                          style: TextStyle(fontSize: 13.sp, color: color),
-                        ),
-                        Text(
-                          ci != null
-                              ? 'IC 95% : ${ci.lowerBound}–${ci.upperBound}  •  ${percentile}e %ile'
-                              : '${percentile}e percentile',
-                          style: TextStyle(
-                            fontSize: 12.sp,
-                            color: AppColors.grey600,
-                          ),
-                        ),
-                      ],
+                  ),
+                  SizedBox(width: 10.w),
+                  Expanded(
+                    child: Text(
+                      label,
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.textPrimary,
+                      ),
                     ),
-                  ],
+                  ),
+                  Text(
+                    '$score',
+                    style: TextStyle(
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10.h),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(4.r),
+                child: LinearProgressIndicator(
+                  value: barWidth,
+                  backgroundColor: AppColors.grey200,
+                  valueColor: AlwaysStoppedAnimation<Color>(color),
+                  minHeight: 4.h,
                 ),
-              );
-            }).toList(),
+              ),
+              SizedBox(height: 6.h),
+              Text(
+                '${percentile}e percentile',
+                style:
+                    TextStyle(fontSize: 12.sp, color: AppColors.textTertiary),
+              ),
+            ],
           ),
-        ),
-      ],
+        );
+      }).toList(),
     );
   }
 
