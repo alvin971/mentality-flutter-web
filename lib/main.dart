@@ -102,9 +102,9 @@ class MentalityApp extends StatelessWidget {
         error: AppColors.error,
         surface: AppColors.surface,
       ),
-      scaffoldBackgroundColor: AppColors.surfaceVariant, // #EEF1EC sage
+      scaffoldBackgroundColor: AppColors.background,
       appBarTheme: const AppBarTheme(
-        centerTitle: false,
+        centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.transparent,
         foregroundColor: AppColors.textPrimary,
@@ -113,58 +113,46 @@ class MentalityApp extends StatelessWidget {
       textTheme: _buildTextTheme(),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.secondary, // #22805A CTA vert
-          foregroundColor: AppColors.white,
+          backgroundColor: const Color(0xFF0B1F17), // Bouton sombre Kepler
+          foregroundColor: const Color(0xFFFAF9F6),
           elevation: 0,
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+          padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 16.h),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.r),
+            borderRadius: BorderRadius.circular(4.r), // quasi-carré Kepler
           ),
           textStyle: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
-        ),
-      ),
-      outlinedButtonTheme: OutlinedButtonThemeData(
-        style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.secondary,
-          side: const BorderSide(color: AppColors.secondary, width: 1.5),
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.r),
-          ),
-          textStyle: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w500),
         ),
       ),
       cardTheme: CardThemeData(
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16.r),
+          borderRadius: BorderRadius.circular(4.r), // quasi-carré Kepler
+          side: BorderSide(color: AppColors.grey200),
         ),
         color: AppColors.white,
-        shadowColor: Colors.black.withOpacity(0.06),
-        margin: EdgeInsets.zero,
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.white,
+        fillColor: AppColors.background,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.r),
+          borderRadius: BorderRadius.circular(4.r),
           borderSide: BorderSide.none,
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.r),
+          borderRadius: BorderRadius.circular(4.r),
           borderSide: BorderSide(color: AppColors.grey200),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.r),
-          borderSide: const BorderSide(color: AppColors.secondary, width: 2),
+          borderRadius: BorderRadius.circular(4.r),
+          borderSide: const BorderSide(color: AppColors.primary, width: 2),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.r),
+          borderRadius: BorderRadius.circular(4.r),
           borderSide: const BorderSide(color: AppColors.error),
         ),
       ),
       progressIndicatorTheme: const ProgressIndicatorThemeData(
-        color: AppColors.secondary,
+        color: AppColors.primary,
         linearTrackColor: AppColors.grey200,
       ),
     );
