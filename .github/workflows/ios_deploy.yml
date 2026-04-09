@@ -81,7 +81,17 @@ jobs:
           ITC_TEAM_ID:                ${{ secrets.ITC_TEAM_ID }}
         run: |
           cd ios
-          bundle exec fastlane beta
+          bundle exec fastlane beta 2>&1 | tee /tmp/fastlane.log
+          EXIT=${PIPESTATUS[0]}
+          echo "## Fastlane log (dernières 100 lignes)" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          tail -100 /tmp/fastlane.log >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          if [ $EXIT -ne 0 ]; then
+            ERR=$(grep -i "\[!\]\|error\|fail" /tmp/fastlane.log | tail -8 | tr '\n' ' ' | cut -c1-400)
+            echo "::error::Fastlane beta failed — $ERR"
+          fi
+          exit $EXIT
 
       # ── 8. Nettoyage ─────────────────────────────────────────────────────────
       - name: Clean up API key
