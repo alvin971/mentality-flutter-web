@@ -24,14 +24,13 @@ platform :ios do
       lock_when_sleeps: false,
     )
 
-    # 3. Télécharger le certificat de distribution EXISTANT dans le keychain CI
-    # (pas force: true — le compte Apple a atteint le max de 2 certs)
+    # 3. Créer un nouveau certificat de distribution + l'installer dans le keychain CI
     cert(
       api_key: api_key,
       team_id: ENV["APPLE_TEAM_ID"],
       keychain_path: "~/Library/Keychains/#{keychain_name}-db",
       keychain_password: keychain_password,
-      force: false,
+      force: true,
     )
 
     # 4. Télécharger/créer le profil de provisioning → stocke l'UUID dans ENV["SIGH_UUID"]
