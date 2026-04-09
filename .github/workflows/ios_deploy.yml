@@ -60,6 +60,46 @@ jobs:
           cd ios
           pod install --repo-update
 
+      # 7b. Purger les certificats DISTRIBUTION orphelins (évite "max certs reached")
+      # Chaque build CI échoué crée un cert sans clé privée → quota bloqué
+      - name: Purge orphan Distribution certificates
+        env:
+          APP_STORE_KEY_ID: ${{ secrets.APP_STORE_KEY_ID }}
+          APP_STORE_ISSUER_ID: ${{ secrets.APP_STORE_ISSUER_ID }}
+          APP_STORE_API_KEY_CONTENT: ${{ secrets.APP_STORE_API_KEY_CONTENT }}
+        run: |
+          pip3 install PyJWT cryptography --quiet
+          python3 << 'PYEOF'
+          import jwt, time, json, subprocess, os
+
+          KEY_ID    = os.environ["APP_STORE_KEY_ID"]
+          ISSUER_ID = os.environ["APP_STORE_ISSUER_ID"]
+          PEM       = os.environ["APP_STORE_API_KEY_CONTENT"]
+
+          token = jwt.encode(
+              {"iss": ISSUER_ID, "exp": int(time.time()) + 1200, "aud": "appstoreconnect-v1"},
+              PEM, algorithm="ES256", headers={"kid": KEY_ID}
+          )
+
+          def asc(method, path, **kwargs):
+              cmd = ["curl", "-s", "--max-time", "30",
+                     "-H", f"Authorization: Bearer {token}",
+                     "-H", "Content-Type: application/json"]
+              if method == "DELETE":
+                  cmd += ["-X", "DELETE"]
+              cmd.append(f"https://api.appstoreconnect.apple.com{path}")
+              return subprocess.run(cmd, capture_output=True, text=True)
+
+          resp = asc("GET", "/v1/certificates?limit=20")
+          certs = json.loads(resp.stdout).get("data", [])
+          dist = [c for c in certs if "DISTRIBUTION" in c["attributes"]["certificateType"]]
+          print(f"Certs DISTRIBUTION trouvés : {len(dist)}")
+          for c in dist:
+              r = asc("DELETE", f"/v1/certificates/{c['id']}")
+              print(f"  Supprimé {c['id']} ({c['attributes']['name']}) → HTTP {r.returncode == 0 and 'OK' or r.stderr}")
+          print("Quota libéré — cert(force:true) peut créer un cert propre.")
+          PYEOF
+
       # 8. Build Flutter iOS (génère le code natif, sans signature)
       - name: Flutter build iOS
         run: flutter build ios --release --no-codesign
