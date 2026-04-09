@@ -21,6 +21,7 @@ import '../../features/exercises_implementations/picture_span/presentation/pages
 import '../../features/exercises_implementations/coding/presentation/pages/coding_test_page.dart';
 import '../../features/exercises_implementations/symbol_search/presentation/pages/symbol_search_test_page.dart';
 import '../constants/app_constants.dart';
+import '../../features/splash/presentation/pages/splash_page.dart';
 
 /// Mapping des clés admin (English slugs) vers les routes Flutter.
 /// Utilisé pour le prévisualisation des tests depuis mentality-admin.
@@ -50,7 +51,23 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: AppConstants.routeSplash,
       name: 'splash',
-      builder: (_, __) => const _SplashRedirect(),
+      builder: (context, state) {
+        // Mode prévisualisation admin : ?adminTest=matrices&level=medium
+        final params = Uri.base.queryParameters;
+        final testKey = params['adminTest'];
+        final level = params['level'];
+        final route = testKey != null ? _adminTestRoutes[testKey] : null;
+        if (route != null) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            final destination = level != null ? '$route?level=$level' : route;
+            context.go(destination);
+          });
+          return const Scaffold(
+            body: SizedBox.shrink(),
+          );
+        }
+        return const SplashPage();
+      },
     ),
 
     // Onboarding (premier lancement)
@@ -174,69 +191,4 @@ final GoRouter appRouter = GoRouter(
   ),
 );
 
-/// Redirige immédiatement vers /home après le splash (3 secondes).
-class _SplashRedirect extends StatefulWidget {
-  const _SplashRedirect();
-
-  @override
-  State<_SplashRedirect> createState() => _SplashRedirectState();
-}
-
-class _SplashRedirectState extends State<_SplashRedirect> {
-  @override
-  void initState() {
-    super.initState();
-    // addPostFrameCallback garantit que GoRouter est monté avant la navigation.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Mode prévisualisation admin : ?adminTest=matrices&level=medium
-      final params = Uri.base.queryParameters;
-      final testKey = params['adminTest'];
-      final level = params['level'];
-      final route = testKey != null ? _adminTestRoutes[testKey] : null;
-      if (route != null) {
-        // Naviguer immédiatement vers le test (skip splash)
-        final destination = level != null ? '$route?level=$level' : route;
-        if (mounted) context.go(destination);
-        return;
-      }
-      // Comportement normal : splash 2 secondes puis home
-      Future.delayed(const Duration(seconds: 2), () {
-        if (mounted) context.go(AppConstants.routeHome);
-      });
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(gradient: AppColors.primaryGradient),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.psychology, size: 120, color: Colors.white),
-              const SizedBox(height: 24),
-              const Text(
-                'Mentality',
-                style: TextStyle(
-                  fontSize: 48,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'Évaluation cognitive adaptative',
-                style: TextStyle(fontSize: 16, color: Colors.white),
-              ),
-              const SizedBox(height: 48),
-              const CircularProgressIndicator(color: Colors.white),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
 

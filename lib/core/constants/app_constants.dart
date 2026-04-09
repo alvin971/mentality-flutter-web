@@ -45,10 +45,11 @@ class AppConstants {
 
   /// URL du projet Supabase admin (visible dans Supabase Dashboard → Settings → API)
   /// Laisser vide pour désactiver la configuration distante.
-  static const String supabaseUrl = '';
+  static const String supabaseUrl = 'https://supabase.0for0.com';
 
   /// Clé anon publique Supabase (safe à inclure côté client — RLS contrôle l'accès)
-  static const String supabaseAnonKey = '';
+  static const String supabaseAnonKey =
+      'eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJyb2xlIjogImFub24iLCAiaXNzIjogInN1cGFiYXNlIiwgImlhdCI6IDE3NzM5NjE0NTIsICJleHAiOiAyMDg5MzIxNDUyfQ.zU4lqg55i1aUG-SEIz_SeVCdMI5twUyqK4W1eyVMXYo';
 
   // ========================================
   // API ENDPOINTS
