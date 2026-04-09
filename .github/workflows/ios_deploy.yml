@@ -43,26 +43,43 @@ jobs:
       # ── 5. Clé API App Store Connect ────────────────────────────────────────
       - name: Write App Store API key
         run: |
-          echo "${{ secrets.APP_STORE_API_KEY_CONTENT }}" | base64 --decode > /tmp/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8
-          mkdir -p ~/.appstoreconnect/private_keys
-          cp /tmp/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8 ~/.appstoreconnect/private_keys/
-
-      # ── 5b. Conversion format clé EC (fix ARM64 OpenSSL invalid curve name) ──
-      - name: Convert API key to SEC1 format (ARM64 fix)
-        run: |
           KEY_FILE="/tmp/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8"
-          echo "Format avant conversion: $(head -1 $KEY_FILE)"
-          # Homebrew OpenSSL (pas LibreSSL) convertit PKCS8 → SEC1 (BEGIN EC PRIVATE KEY)
-          # SEC1 est lisible par OpenSSL::PKey::EC.new sur ARM64
-          OPENSSL_BIN="/opt/homebrew/opt/openssl@3/bin/openssl"
-          if [ ! -f "$OPENSSL_BIN" ]; then
-            brew install openssl@3 --quiet
+          CONTENT="${{ secrets.APP_STORE_API_KEY_CONTENT }}"
+
+          # Support les deux formats : PEM brut ou PEM encodé en base64
+          # Si le contenu commence par "-----BEGIN", c'est du PEM brut
+          FIRST_CHARS=$(printf '%s' "$CONTENT" | head -c 5)
+          if [ "$FIRST_CHARS" = "-----" ]; then
+            printf '%s' "$CONTENT" > "$KEY_FILE"
+            echo "Clé API : format PEM brut"
+          else
+            printf '%s' "$CONTENT" | base64 --decode > "$KEY_FILE"
+            echo "Clé API : format base64 décodé"
           fi
-          $OPENSSL_BIN ec -in "$KEY_FILE" -out "${KEY_FILE}.sec1" 2>/dev/null \
-            && mv "${KEY_FILE}.sec1" "$KEY_FILE" \
-            && cp "$KEY_FILE" ~/.appstoreconnect/private_keys/ \
-            && echo "Format après conversion: $(head -1 $KEY_FILE)" \
-            || echo "Conversion échouée, on garde le format original"
+
+          # Diagnostic sans exposer le contenu
+          echo "Taille clé : $(wc -c < $KEY_FILE) octets"
+          echo "Première ligne : $(head -1 $KEY_FILE | cut -c1-40)"
+
+          mkdir -p ~/.appstoreconnect/private_keys
+          cp "$KEY_FILE" ~/.appstoreconnect/private_keys/
+
+      # ── 5b. Patch Fastlane spaceship — fix ARM64 invalid curve name ──────────
+      - name: Patch Fastlane spaceship token.rb (ARM64 OpenSSL fix)
+        run: |
+          # OpenSSL::PKey::EC.new échoue sur ARM64 avec les clés Apple P-256 (PKCS8)
+          # OpenSSL::PKey.read fonctionne via l'API EVP qui gère correctement les OIDs
+          TOKEN_RB=$(find ios/vendor/bundle -name "token.rb" \
+            -path "*/spaceship/connect_api/*" 2>/dev/null | head -1)
+          if [ -n "$TOKEN_RB" ]; then
+            sed -i '' \
+              's/OpenSSL::PKey::EC\.new(private_key)/OpenSSL::PKey.read(private_key)/g' \
+              "$TOKEN_RB"
+            echo "Patched: $TOKEN_RB"
+            grep -n "private_key\s*=" "$TOKEN_RB" | head -3
+          else
+            echo "WARN: token.rb non trouvé dans vendor/bundle — bundle pas encore installé ?"
+          fi
 
       # ── 6. Build Flutter iOS ─────────────────────────────────────────────────
       - name: Diagnostic — environnement
