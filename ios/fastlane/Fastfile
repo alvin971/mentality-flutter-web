@@ -75,19 +75,21 @@ platform :ios do
 
     key = api_key
 
-    # Télécharger le certificat de distribution existant (readonly — max 2 certs atteint)
+    # Télécharger le certificat de distribution existant sans en créer de nouveau
+    # generate_apple_certs:false → utilise un certificat existant du compte
     cert(
-      api_key:   key,
-      team_id:   ENV["APPLE_TEAM_ID"],
-      readonly:  true
+      api_key:               key,
+      team_id:               ENV["APPLE_TEAM_ID"],
+      generate_apple_certs:  false
     )
 
     # Télécharger/créer le profil de provisionnement App Store
+    # readonly:true → utilise un profil existant sans en créer un nouveau
     sigh(
       api_key:        key,
       app_identifier: "com.mentalite.app",
       team_id:        ENV["APPLE_TEAM_ID"],
-      force:          true
+      readonly:       true
     )
 
     # Associer explicitement le profil téléchargé au projet Xcode
