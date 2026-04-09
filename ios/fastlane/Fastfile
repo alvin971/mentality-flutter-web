@@ -1,146 +1,86 @@
 default_platform(:ios)
 
 platform :ios do
-  # ─────────────────────────────────────────────────────────────
-  # Authentification App Store Connect via API key (CI/CD)
-  # ─────────────────────────────────────────────────────────────
-  def api_key
-    app_store_connect_api_key(
-      key_id:       ENV["APP_STORE_KEY_ID"],      # W426TUCNJK
-      issuer_id:    ENV["APP_STORE_ISSUER_ID"],   # 9ed054a6-6ff1-47d8-b54d-27e1a0c12862
-      key_filepath: "/tmp/AuthKey_#{ENV['APP_STORE_KEY_ID']}.p8"
+  desc "Build, signe et upload vers TestFlight (utilisé par GitHub Actions)"
+  lane :release do
+    # 1. Authentification App Store Connect via clé API
+    api_key = app_store_connect_api_key(
+      key_id: ENV["APP_STORE_KEY_ID"],
+      issuer_id: ENV["APP_STORE_ISSUER_ID"],
+      key_filepath: ENV["APP_STORE_API_KEY_PATH"],
+      duration: 1200,
+      in_house: false,
     )
-  end
 
-  # Paramètres communs deliver (export compliance, IDFA, droits contenu)
-  SUBMISSION_INFO = {
-    export_compliance_uses_encryption:                   false,
-    export_compliance_contains_proprietary_cryptography: false,
-    export_compliance_contains_third_party_cryptography: false,
-    export_compliance_is_exempt:                         true,
-    export_compliance_encryption_updated:                false,
-    export_compliance_compliance_required:               false,
-    export_compliance_available_on_french_store:         true,
-    export_compliance_platform:                          "ios",
-    content_rights_contains_third_party_content:         false,
-    content_rights_has_rights:                           true,
-    add_id_info_uses_idfa:                               false,
-    add_id_info_serves_ads:                              false,
-    add_id_info_tracks_install:                          false,
-    add_id_info_tracks_action:                           false,
-    add_id_info_limits_tracking:                         true
-  }.freeze
-
-  # ─────────────────────────────────────────────
-  # Lane: metadata — pousse tous les textes
-  # Usage: bundle exec fastlane metadata
-  # ─────────────────────────────────────────────
-  lane :metadata do
-    deliver(
-      api_key:                  api_key,
-      skip_binary_upload:       true,
-      skip_screenshots:         true,
-      skip_metadata:            false,
-      force:                    true,
-      languages:                ["fr-FR"],
-      submit_for_review:        false,
-      app_rating_config_path:   "./fastlane/metadata/rating_config.json",
-      submission_information:   SUBMISSION_INFO
+    # 2. Keychain temporaire (obligatoire en CI — GitHub Actions n'a pas de keychain par défaut)
+    keychain_name = "ci_keychain"
+    keychain_password = "ci_keychain_password"
+    create_keychain(
+      name: keychain_name,
+      password: keychain_password,
+      default_keychain: true,
+      unlock: true,
+      timeout: 3600,
+      lock_when_sleeps: false,
     )
-  end
 
-  # ─────────────────────────────────────────────
-  # Lane: screenshots — pousse uniquement les screenshots
-  # Usage: bundle exec fastlane screenshots
-  # ─────────────────────────────────────────────
-  lane :screenshots do
-    deliver(
-      api_key:             api_key,
-      skip_binary_upload:  true,
-      skip_screenshots:    false,
-      skip_metadata:       true,
-      force:               true,
-      screenshots_path:    "./fastlane/screenshots",
-      submit_for_review:   false
-    )
-  end
-
-  # ─────────────────────────────────────────────
-  # Lane: beta — build Flutter iOS + upload TestFlight
-  # Usage: bundle exec fastlane beta
-  # ─────────────────────────────────────────────
-  lane :beta do
-    # flutter build ios déjà exécuté par le workflow CI avant cette lane
-    # (en local, relancer manuellement : flutter build ios --release --no-codesign)
-
-    key = api_key
-
-    # Télécharger le certificat de distribution existant sans en créer de nouveau
-    # generate_apple_certs:false → utilise un certificat existant du compte
+    # 3. Télécharger/créer le certificat de distribution → l'installe dans le keychain CI
+    # force: true révoque l'ancien cert avant d'en créer un nouveau
     cert(
-      api_key:               key,
-      team_id:               ENV["APPLE_TEAM_ID"],
-      generate_apple_certs:  false
+      api_key: api_key,
+      team_id: ENV["APPLE_TEAM_ID"],
+      keychain_path: "~/Library/Keychains/#{keychain_name}-db",
+      keychain_password: keychain_password,
+      force: true,
     )
 
-    # Télécharger/créer le profil de provisionnement App Store
-    # readonly:true → utilise un profil existant sans en créer un nouveau
+    # 4. Télécharger/créer le profil de provisioning → stocke l'UUID dans ENV["SIGH_UUID"]
     sigh(
-      api_key:        key,
-      app_identifier: "com.mentalite.app",
-      team_id:        ENV["APPLE_TEAM_ID"],
-      readonly:       true
+      api_key: api_key,
+      app_identifier: ENV["BUNDLE_ID"],
+      team_id: ENV["APPLE_TEAM_ID"],
+      force: true,
     )
 
-    # Associer explicitement le profil téléchargé au projet Xcode
-    # (nécessaire sur CI : gym ne peut pas le trouver automatiquement)
+    # 5. Appliquer le profil au projet Xcode (passe en signing manuel)
     update_code_signing_settings(
       use_automatic_signing: false,
-      path:                  "Runner.xcodeproj",
-      team_id:               ENV["APPLE_TEAM_ID"],
-      bundle_identifier:     "com.mentalite.app",
-      code_sign_identity:    "iPhone Distribution",
-      profile_name:          lane_context[SharedValues::SIGH_NAME]
+      path: "Runner.xcodeproj",
+      team_id: ENV["APPLE_TEAM_ID"],
+      bundle_identifier: ENV["BUNDLE_ID"],
+      code_sign_identity: "iPhone Distribution",
+      profile_uuid: ENV["SIGH_UUID"],
     )
 
-    gym(
-      workspace:        "Runner.xcworkspace",
-      scheme:           "Runner",
-      configuration:    "Release",
-      export_method:    "app-store",
+    # 6. Build number = timestamp YYYYMMDDHHMM → toujours unique sur TestFlight
+    increment_build_number(
+      xcodeproj: "Runner.xcodeproj",
+      build_number: Time.now.strftime("%Y%m%d%H%M"),
+    )
+
+    # 7. Compiler et signer l'app
+    build_app(
+      workspace: "Runner.xcworkspace",
+      scheme: "Runner",
+      export_method: "app-store",
+      export_options: {
+        provisioningProfiles: {
+          ENV["BUNDLE_ID"] => ENV["SIGH_UUID"],
+        },
+        signingStyle: "manual",
+        teamID: ENV["APPLE_TEAM_ID"],
+      },
       output_directory: "./build",
-      output_name:      "Mental_ET.ipa"
+      output_name: "Mental_ET.ipa",
     )
 
+    # 8. Upload vers TestFlight
     upload_to_testflight(
-      api_key:                           key,
+      api_key: api_key,
+      ipa: "./build/Mental_ET.ipa",
       skip_waiting_for_build_processing: true,
-      changelog:                         "Nouvelle version — tests cognitifs adaptatifs Mental E.T."
-    )
-  end
-
-  # ─────────────────────────────────────────────
-  # Lane: release — build + submit App Store
-  # Usage: bundle exec fastlane release
-  # ─────────────────────────────────────────────
-  lane :release do
-    gym(
-      workspace:        "Runner.xcworkspace",
-      scheme:           "Runner",
-      configuration:    "Release",
-      export_method:    "app-store",
-      output_directory: "./build",
-      output_name:      "Mental_ET.ipa"
     )
 
-    deliver(
-      api_key:                  api_key,
-      skip_screenshots:         false,
-      submit_for_review:        true,
-      automatic_release:        false,
-      force:                    true,
-      app_rating_config_path:   "./fastlane/metadata/rating_config.json",
-      submission_information:   SUBMISSION_INFO
-    )
+    UI.success("Build uploadé sur TestFlight avec succès !")
   end
 end

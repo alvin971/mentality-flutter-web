@@ -1,8 +1,9 @@
-name: iOS Deploy — TestFlight
+name: iOS — Build & Deploy TestFlight
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
@@ -11,150 +12,65 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      # ── 1. Checkout ─────────────────────────────────────────────────────────
-      - name: Checkout repository
+      # 1. Récupérer le code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      # ── 2. Flutter setup ────────────────────────────────────────────────────
+      # 2. Installer Flutter
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.27.4"
-          channel: stable
+          flutter-version: '3.27.0'
+          channel: 'stable'
           cache: true
 
-      - name: Install Flutter dependencies
+      # 3. Installer les dépendances Dart/Flutter
+      - name: Flutter pub get
         run: flutter pub get
 
-      # ── 3. Ruby + Fastlane setup ────────────────────────────────────────────
+      # 4. Écrire la clé API Apple (.p8) depuis les secrets GitHub
+      - name: Write App Store Connect API Key
+        run: |
+          mkdir -p ~/.appstoreconnect/private_keys
+          echo "${{ secrets.APP_STORE_API_KEY_CONTENT }}" > ~/.appstoreconnect/private_keys/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8
+
+      # 5. Créer l'Appfile Fastlane dynamiquement
+      - name: Create Fastlane Appfile
+        run: |
+          cat > ios/fastlane/Appfile << EOF
+          app_identifier "${{ secrets.BUNDLE_ID }}"
+          team_id "${{ secrets.APPLE_TEAM_ID }}"
+          EOF
+
+      # 6. Installer Ruby + dépendances via Gemfile
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.2"
+          ruby-version: '3.2'
           bundler-cache: true
           working-directory: ios
 
-      # ── 4. CocoaPods ────────────────────────────────────────────────────────
-      - name: Install CocoaPods dependencies
+      - name: Install Fastlane via Bundler
+        run: bundle install
+        working-directory: ios
+
+      # 7. Installer les pods iOS
+      - name: Install CocoaPods
         run: |
           cd ios
           pod install --repo-update
 
-      # ── 5. Clé API App Store Connect ─────────────────────────────────────────
-      # Le secret est passé via env: pour éviter les problèmes de substitution
-      # inline (newlines, caractères spéciaux) avec ${{ secrets.XXX }} dans run:
-      - name: Write App Store API key
+      # 8. Build Flutter iOS (génère le code natif, sans signature)
+      - name: Flutter build iOS
+        run: flutter build ios --release --no-codesign
+
+      # 9. Fastlane : keychain + signature + upload TestFlight
+      - name: Fastlane release
+        run: bundle exec fastlane ios release
+        working-directory: ios
         env:
-          KEY_CONTENT: ${{ secrets.APP_STORE_API_KEY_CONTENT }}
-          KEY_ID: ${{ secrets.APP_STORE_KEY_ID }}
-        run: |
-          KEY_FILE="/tmp/AuthKey_${KEY_ID}.p8"
-
-          # ── Diagnostic du secret ────────────────────────────────────────────
-          KEY_LEN=${#KEY_CONTENT}
-          echo "APP_STORE_API_KEY_CONTENT : ${KEY_LEN} caractères"
-          echo "APP_STORE_KEY_ID          : ${#KEY_ID} caractères"
-
-          if [ "$KEY_LEN" -eq 0 ]; then
-            echo "::error::APP_STORE_API_KEY_CONTENT est VIDE — vérifier GitHub Secrets"
-            exit 1
-          fi
-
-          # Premiers octets (hex) pour identifier le format sans exposer le contenu
-          FIRST_HEX=$(printf '%s' "$KEY_CONTENT" | head -c 10 | xxd -p | tr -d '\n')
-          echo "Premiers octets (hex) : $FIRST_HEX"
-
-          # Détecte PEM brut (commence par "-----") vs base64
-          FIRST_CHARS=$(printf '%s' "$KEY_CONTENT" | head -c 5)
-          if [ "$FIRST_CHARS" = "-----" ]; then
-            printf '%s' "$KEY_CONTENT" > "$KEY_FILE"
-            echo "Format détecté : PEM brut"
-          else
-            printf '%s' "$KEY_CONTENT" | base64 --decode > "$KEY_FILE" 2>/dev/null
-            DECODE_EXIT=$?
-            echo "Format détecté : base64 (exit decode=$DECODE_EXIT)"
-          fi
-
-          echo "Taille fichier .p8 : $(wc -c < $KEY_FILE) octets"
-          if [ "$(wc -c < $KEY_FILE)" -gt 0 ]; then
-            echo "Première ligne .p8 : $(head -1 $KEY_FILE | cut -c1-40)"
-          else
-            echo "::error::Fichier .p8 vide après écriture — secret mal encodé ?"
-            exit 1
-          fi
-
-          mkdir -p ~/.appstoreconnect/private_keys
-          cp "$KEY_FILE" ~/.appstoreconnect/private_keys/
-
-      # ── 5b. Patch Fastlane spaceship token.rb ────────────────────────────────
-      # OpenSSL::PKey::EC.new échoue sur ARM64 macOS avec les clés P-256 Apple
-      # OpenSSL::PKey.read passe par l'API EVP et gère correctement les OIDs
-      - name: Patch Fastlane token.rb (ARM64 OpenSSL fix)
-        run: |
-          TOKEN_RB=$(find ios/vendor/bundle -name "token.rb" \
-            -path "*/spaceship/connect_api/*" 2>/dev/null | head -1)
-          if [ -z "$TOKEN_RB" ]; then
-            echo "WARN: token.rb introuvable"
-            exit 0
-          fi
-          echo "=== Lignes 69-73 avant patch ==="
-          sed -n '69,73p' "$TOKEN_RB"
-          # Pattern générique : remplace OpenSSL::PKey::EC.new(QQCH) par PKey.read(QQCH)
-          sed -i '' \
-            's/OpenSSL::PKey::EC\.new(\(.*\))/OpenSSL::PKey.read(\1)/g' \
-            "$TOKEN_RB"
-          echo "=== Lignes 69-73 après patch ==="
-          sed -n '69,73p' "$TOKEN_RB"
-
-      # ── 6. Build Flutter iOS ─────────────────────────────────────────────────
-      - name: Diagnostic — environnement
-        run: |
-          echo "## Environnement" >> $GITHUB_STEP_SUMMARY
-          echo "- Xcode: $(xcodebuild -version | tr '\n' ' ')" >> $GITHUB_STEP_SUMMARY
-          echo "- Flutter: $(flutter --version | head -1)" >> $GITHUB_STEP_SUMMARY
-          echo "- CocoaPods: $(pod --version)" >> $GITHUB_STEP_SUMMARY
-          flutter doctor --suppress-analytics 2>&1 | tee -a $GITHUB_STEP_SUMMARY || true
-
-      - name: Build Flutter iOS (release)
-        run: |
-          flutter build ios --release --no-codesign 2>&1 | tee /tmp/flutter_build.log
-          EXIT=${PIPESTATUS[0]}
-          echo "## Build log (dernières 80 lignes)" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          tail -80 /tmp/flutter_build.log >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          if [ $EXIT -ne 0 ]; then
-            ERR=$(grep -i "error:" /tmp/flutter_build.log | tail -5 | tr '\n' ' ' | cut -c1-300)
-            echo "::error::Flutter build failed — $ERR"
-          fi
-          exit $EXIT
-
-      # ── 7. Fastlane — signature + upload TestFlight ──────────────────────────
-      - name: Upload to TestFlight via Fastlane
-        env:
-          APP_STORE_KEY_ID:           ${{ secrets.APP_STORE_KEY_ID }}
-          APP_STORE_ISSUER_ID:        ${{ secrets.APP_STORE_ISSUER_ID }}
-          APP_STORE_API_KEY_CONTENT:  ${{ secrets.APP_STORE_API_KEY_CONTENT }}
-          APPLE_TEAM_ID:              ${{ secrets.APPLE_TEAM_ID }}
-          APPLE_ID:                   ${{ secrets.APPLE_ID }}
-          ITC_TEAM_ID:                ${{ secrets.ITC_TEAM_ID }}
-        run: |
-          cd ios
-          bundle exec fastlane beta 2>&1 | tee /tmp/fastlane.log
-          EXIT=${PIPESTATUS[0]}
-          echo "## Fastlane log (dernières 100 lignes)" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          tail -100 /tmp/fastlane.log >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          if [ $EXIT -ne 0 ]; then
-            ERR=$(grep -i "\[!\]\|error\|fail" /tmp/fastlane.log | tail -8 | tr '\n' ' ' | cut -c1-400)
-            echo "::error::Fastlane beta failed — $ERR"
-          fi
-          exit $EXIT
-
-      # ── 8. Nettoyage ─────────────────────────────────────────────────────────
-      - name: Clean up API key
-        if: always()
-        env:
-          KEY_ID: ${{ secrets.APP_STORE_KEY_ID }}
-        run: rm -f "/tmp/AuthKey_${KEY_ID}.p8"
+          APP_STORE_KEY_ID: ${{ secrets.APP_STORE_KEY_ID }}
+          APP_STORE_ISSUER_ID: ${{ secrets.APP_STORE_ISSUER_ID }}
+          APP_STORE_API_KEY_PATH: ~/.appstoreconnect/private_keys/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          BUNDLE_ID: ${{ secrets.BUNDLE_ID }}
