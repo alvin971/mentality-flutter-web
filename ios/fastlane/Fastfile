@@ -74,19 +74,33 @@ platform :ios do
     # flutter build ios déjà exécuté par le workflow CI avant cette lane
     # (en local, relancer manuellement : flutter build ios --release --no-codesign)
 
+    key = api_key
+
+    # Télécharger/créer le certificat de distribution via API key
+    cert(
+      api_key:   key,
+      team_id:   ENV["APPLE_TEAM_ID"]
+    )
+
+    # Télécharger/créer le profil de provisionnement App Store
+    sigh(
+      api_key:        key,
+      app_identifier: "com.mentalite.app",
+      team_id:        ENV["APPLE_TEAM_ID"],
+      force:          true
+    )
+
     gym(
       workspace:        "Runner.xcworkspace",
       scheme:           "Runner",
       configuration:    "Release",
       export_method:    "app-store",
       output_directory: "./build",
-      output_name:      "Mental_ET.ipa",
-      xcargs:           "DEVELOPMENT_TEAM=#{ENV['APPLE_TEAM_ID']}",
-      export_xcargs:    "-allowProvisioningUpdates"
+      output_name:      "Mental_ET.ipa"
     )
 
     upload_to_testflight(
-      api_key:                           api_key,
+      api_key:                           key,
       skip_waiting_for_build_processing: true,
       changelog:                         "Nouvelle version — tests cognitifs adaptatifs Mental E.T."
     )
