@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     name: Build & Upload to TestFlight
-    runs-on: macos-latest
+    runs-on: macos-14
 
     steps:
       # ── 1. Checkout ─────────────────────────────────────────────────────────
@@ -19,7 +19,6 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.24.0"
           channel: stable
           cache: true
 
@@ -48,8 +47,16 @@ jobs:
           cp /tmp/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8 ~/.appstoreconnect/private_keys/
 
       # ── 6. Build Flutter iOS ─────────────────────────────────────────────────
+      - name: Diagnostic — environnement
+        run: |
+          echo "## Environnement" >> $GITHUB_STEP_SUMMARY
+          echo "- Xcode: $(xcodebuild -version | tr '\n' ' ')" >> $GITHUB_STEP_SUMMARY
+          echo "- Flutter: $(flutter --version | head -1)" >> $GITHUB_STEP_SUMMARY
+          echo "- CocoaPods: $(pod --version)" >> $GITHUB_STEP_SUMMARY
+          flutter doctor --suppress-analytics 2>&1 | tee -a $GITHUB_STEP_SUMMARY || true
+
       - name: Build Flutter iOS (release)
-        run: flutter build ios --release --no-codesign
+        run: flutter build ios --release --no-codesign 2>&1 | tee /tmp/flutter_build.log; EXIT=${PIPESTATUS[0]}; echo "## Build log" >> $GITHUB_STEP_SUMMARY; tail -50 /tmp/flutter_build.log >> $GITHUB_STEP_SUMMARY; exit $EXIT
 
       # ── 7. Fastlane — signature + upload TestFlight ──────────────────────────
       - name: Upload to TestFlight via Fastlane
