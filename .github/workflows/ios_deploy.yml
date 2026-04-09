@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     name: Build & Upload to TestFlight
-    runs-on: macos-14
+    runs-on: macos-latest
 
     steps:
       # ── 1. Checkout ─────────────────────────────────────────────────────────
@@ -19,6 +19,7 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
+          flutter-version: "3.27.4"
           channel: stable
           cache: true
 
