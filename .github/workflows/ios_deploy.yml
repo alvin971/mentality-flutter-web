@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     name: Build & Upload to TestFlight
-    runs-on: macos-13
+    runs-on: macos-latest
 
     steps:
       # ── 1. Checkout ─────────────────────────────────────────────────────────
@@ -30,7 +30,7 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.1"
+          ruby-version: "3.2"
           bundler-cache: true
           working-directory: ios
 
@@ -46,6 +46,23 @@ jobs:
           echo "${{ secrets.APP_STORE_API_KEY_CONTENT }}" | base64 --decode > /tmp/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8
           mkdir -p ~/.appstoreconnect/private_keys
           cp /tmp/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8 ~/.appstoreconnect/private_keys/
+
+      # ── 5b. Conversion format clé EC (fix ARM64 OpenSSL invalid curve name) ──
+      - name: Convert API key to SEC1 format (ARM64 fix)
+        run: |
+          KEY_FILE="/tmp/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8"
+          echo "Format avant conversion: $(head -1 $KEY_FILE)"
+          # Homebrew OpenSSL (pas LibreSSL) convertit PKCS8 → SEC1 (BEGIN EC PRIVATE KEY)
+          # SEC1 est lisible par OpenSSL::PKey::EC.new sur ARM64
+          OPENSSL_BIN="/opt/homebrew/opt/openssl@3/bin/openssl"
+          if [ ! -f "$OPENSSL_BIN" ]; then
+            brew install openssl@3 --quiet
+          fi
+          $OPENSSL_BIN ec -in "$KEY_FILE" -out "${KEY_FILE}.sec1" 2>/dev/null \
+            && mv "${KEY_FILE}.sec1" "$KEY_FILE" \
+            && cp "$KEY_FILE" ~/.appstoreconnect/private_keys/ \
+            && echo "Format après conversion: $(head -1 $KEY_FILE)" \
+            || echo "Conversion échouée, on garde le format original"
 
       # ── 6. Build Flutter iOS ─────────────────────────────────────────────────
       - name: Diagnostic — environnement
