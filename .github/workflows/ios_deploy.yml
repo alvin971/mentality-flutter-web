@@ -40,46 +40,51 @@ jobs:
           cd ios
           pod install --repo-update
 
-      # ── 5. Clé API App Store Connect ────────────────────────────────────────
+      # ── 5. Clé API App Store Connect ─────────────────────────────────────────
+      # Le secret est passé via env: pour éviter les problèmes de substitution
+      # inline (newlines, caractères spéciaux) avec ${{ secrets.XXX }} dans run:
       - name: Write App Store API key
+        env:
+          KEY_CONTENT: ${{ secrets.APP_STORE_API_KEY_CONTENT }}
+          KEY_ID: ${{ secrets.APP_STORE_KEY_ID }}
         run: |
-          KEY_FILE="/tmp/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8"
-          CONTENT="${{ secrets.APP_STORE_API_KEY_CONTENT }}"
+          KEY_FILE="/tmp/AuthKey_${KEY_ID}.p8"
 
-          # Support les deux formats : PEM brut ou PEM encodé en base64
-          # Si le contenu commence par "-----BEGIN", c'est du PEM brut
-          FIRST_CHARS=$(printf '%s' "$CONTENT" | head -c 5)
+          # Détecte PEM brut vs base64
+          FIRST_CHARS=$(printf '%s' "$KEY_CONTENT" | head -c 5)
           if [ "$FIRST_CHARS" = "-----" ]; then
-            printf '%s' "$CONTENT" > "$KEY_FILE"
-            echo "Clé API : format PEM brut"
+            printf '%s' "$KEY_CONTENT" > "$KEY_FILE"
+            echo "Clé API : PEM brut"
           else
-            printf '%s' "$CONTENT" | base64 --decode > "$KEY_FILE"
-            echo "Clé API : format base64 décodé"
+            printf '%s' "$KEY_CONTENT" | base64 --decode > "$KEY_FILE"
+            echo "Clé API : base64 → décodé"
           fi
 
-          # Diagnostic sans exposer le contenu
-          echo "Taille clé : $(wc -c < $KEY_FILE) octets"
-          echo "Première ligne : $(head -1 $KEY_FILE | cut -c1-40)"
+          echo "Taille : $(wc -c < $KEY_FILE) octets"
+          echo "Ligne 1 : $(head -1 $KEY_FILE | cut -c1-30)"
 
           mkdir -p ~/.appstoreconnect/private_keys
           cp "$KEY_FILE" ~/.appstoreconnect/private_keys/
 
-      # ── 5b. Patch Fastlane spaceship — fix ARM64 invalid curve name ──────────
-      - name: Patch Fastlane spaceship token.rb (ARM64 OpenSSL fix)
+      # ── 5b. Patch Fastlane spaceship token.rb ────────────────────────────────
+      # OpenSSL::PKey::EC.new échoue sur ARM64 macOS avec les clés P-256 Apple
+      # OpenSSL::PKey.read passe par l'API EVP et gère correctement les OIDs
+      - name: Patch Fastlane token.rb (ARM64 OpenSSL fix)
         run: |
-          # OpenSSL::PKey::EC.new échoue sur ARM64 avec les clés Apple P-256 (PKCS8)
-          # OpenSSL::PKey.read fonctionne via l'API EVP qui gère correctement les OIDs
           TOKEN_RB=$(find ios/vendor/bundle -name "token.rb" \
             -path "*/spaceship/connect_api/*" 2>/dev/null | head -1)
-          if [ -n "$TOKEN_RB" ]; then
-            sed -i '' \
-              's/OpenSSL::PKey::EC\.new(private_key)/OpenSSL::PKey.read(private_key)/g' \
-              "$TOKEN_RB"
-            echo "Patched: $TOKEN_RB"
-            grep -n "private_key\s*=" "$TOKEN_RB" | head -3
-          else
-            echo "WARN: token.rb non trouvé dans vendor/bundle — bundle pas encore installé ?"
+          if [ -z "$TOKEN_RB" ]; then
+            echo "WARN: token.rb introuvable"
+            exit 0
           fi
+          echo "=== Lignes 69-73 avant patch ==="
+          sed -n '69,73p' "$TOKEN_RB"
+          # Pattern générique : remplace OpenSSL::PKey::EC.new(QQCH) par PKey.read(QQCH)
+          sed -i '' \
+            's/OpenSSL::PKey::EC\.new(\(.*\))/OpenSSL::PKey.read(\1)/g' \
+            "$TOKEN_RB"
+          echo "=== Lignes 69-73 après patch ==="
+          sed -n '69,73p' "$TOKEN_RB"
 
       # ── 6. Build Flutter iOS ─────────────────────────────────────────────────
       - name: Diagnostic — environnement
@@ -130,4 +135,6 @@ jobs:
       # ── 8. Nettoyage ─────────────────────────────────────────────────────────
       - name: Clean up API key
         if: always()
-        run: rm -f /tmp/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8
+        env:
+          KEY_ID: ${{ secrets.APP_STORE_KEY_ID }}
+        run: rm -f "/tmp/AuthKey_${KEY_ID}.p8"
