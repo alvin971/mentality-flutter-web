@@ -1,0 +1,35 @@
+app_identifier "com.mentalite.app"
+skip_binary_upload true
+skip_screenshots true
+languages ["fr-FR"]
+primary_category "MEDICAL"
+secondary_category "EDUCATION"
+price_tier 0  # Gratuit
+copyright "© 2025 Mental E.T. Tous droits réservés."
+
+# Classification par âge
+app_rating_config_path "./fastlane/metadata/rating_config.json"
+
+# Conformité export + droits + IDFA
+submission_information({
+  # Export compliance — AES-256 local storage est exempt (EAR 740.13, mass market)
+  export_compliance_uses_encryption:                   false,
+  export_compliance_contains_proprietary_cryptography: false,
+  export_compliance_contains_third_party_cryptography: false,
+  export_compliance_is_exempt:                         true,
+  export_compliance_encryption_updated:                false,
+  export_compliance_compliance_required:               false,
+  export_compliance_available_on_french_store:         true,
+  export_compliance_platform:                          "ios",
+
+  # Droits sur le contenu — aucun contenu tiers licencié
+  content_rights_contains_third_party_content:         false,
+  content_rights_has_rights:                           true,
+
+  # Identifiant publicitaire — non utilisé
+  add_id_info_uses_idfa:       false,
+  add_id_info_serves_ads:      false,
+  add_id_info_tracks_install:  false,
+  add_id_info_tracks_action:   false,
+  add_id_info_limits_tracking: true
+})

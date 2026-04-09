@@ -1,0 +1,17 @@
+{
+  "violenceCartoonOrFantasy": "NONE",
+  "violenceRealistic": "NONE",
+  "violenceRealisticProlongedGraphicOrSadistic": "NONE",
+  "profanityOrCrudeHumor": "NONE",
+  "matureOrSuggestiveThemes": "NONE",
+  "horrorOrFearThemes": "NONE",
+  "medicalOrTreatmentInformation": "INFREQUENT_OR_MILD",
+  "alcoholTobaccoOrDrugUseOrReferences": "NONE",
+  "sexualContentOrNudity": "NONE",
+  "sexualContentGraphicAndNudity": "NONE",
+  "gambling": false,
+  "gamblingSimulated": false,
+  "contests": false,
+  "lootBox": false,
+  "unrestrictedWebAccess": false
+}

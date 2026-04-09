@@ -1,0 +1,7 @@
+Première version de Mental E.T.
+
+• Tests cognitifs adaptatifs basés sur le WAIS-IV
+• 5 domaines cognitifs : mémoire, attention, raisonnement fluide, visuo-spatial, vitesse de traitement
+• Algorithme adaptatif CAT — difficulté ajustée en temps réel
+• Export PDF des résultats
+• Interface intuitive et accessible
