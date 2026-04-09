@@ -75,10 +75,11 @@ platform :ios do
 
     key = api_key
 
-    # Télécharger/créer le certificat de distribution via API key
+    # Télécharger le certificat de distribution existant (readonly — max 2 certs atteint)
     cert(
       api_key:   key,
-      team_id:   ENV["APPLE_TEAM_ID"]
+      team_id:   ENV["APPLE_TEAM_ID"],
+      readonly:  true
     )
 
     # Télécharger/créer le profil de provisionnement App Store
