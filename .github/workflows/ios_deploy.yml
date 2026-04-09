@@ -38,8 +38,6 @@ jobs:
         run: |
           cd ios
           gem install bundler
-          bundle init || true
-          bundle add fastlane --skip-install
           bundle install
 
       # ── 4. Clé API App Store Connect ────────────────────────────────────────
