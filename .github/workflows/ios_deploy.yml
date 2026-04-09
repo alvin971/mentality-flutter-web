@@ -1,0 +1,70 @@
+name: iOS Deploy — TestFlight
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:  # Permet de déclencher manuellement depuis GitHub
+
+jobs:
+  deploy:
+    name: Build & Upload to TestFlight
+    runs-on: macos-latest
+
+    steps:
+      # ── 1. Checkout ─────────────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── 2. Flutter setup ────────────────────────────────────────────────────
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.24.0"
+          channel: stable
+          cache: true
+
+      - name: Install Flutter dependencies
+        run: flutter pub get
+
+      # ── 3. Ruby + Fastlane setup ────────────────────────────────────────────
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2"
+          bundler-cache: true
+          working-directory: ios
+
+      - name: Install Fastlane
+        run: |
+          cd ios
+          gem install bundler
+          bundle init || true
+          bundle add fastlane --skip-install
+          bundle install
+
+      # ── 4. Clé API App Store Connect ────────────────────────────────────────
+      - name: Write App Store API key
+        run: |
+          echo "${{ secrets.APP_STORE_API_KEY_CONTENT }}" | base64 --decode > /tmp/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8
+
+      # ── 5. Build Flutter iOS ─────────────────────────────────────────────────
+      - name: Build Flutter iOS (release)
+        run: flutter build ios --release --no-codesign
+
+      # ── 6. Fastlane — signature + upload TestFlight ──────────────────────────
+      - name: Upload to TestFlight via Fastlane
+        env:
+          APP_STORE_KEY_ID:           ${{ secrets.APP_STORE_KEY_ID }}
+          APP_STORE_ISSUER_ID:        ${{ secrets.APP_STORE_ISSUER_ID }}
+          APP_STORE_API_KEY_CONTENT:  ${{ secrets.APP_STORE_API_KEY_CONTENT }}
+          APPLE_TEAM_ID:              ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_ID:                   ${{ secrets.APPLE_ID }}
+          ITC_TEAM_ID:                ${{ secrets.ITC_TEAM_ID }}
+        run: |
+          cd ios
+          bundle exec fastlane beta
+
+      # ── 7. Nettoyage ─────────────────────────────────────────────────────────
+      - name: Clean up API key
+        if: always()
+        run: rm -f /tmp/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8
