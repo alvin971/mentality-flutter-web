@@ -50,18 +50,38 @@ jobs:
         run: |
           KEY_FILE="/tmp/AuthKey_${KEY_ID}.p8"
 
-          # Détecte PEM brut vs base64
+          # ── Diagnostic du secret ────────────────────────────────────────────
+          KEY_LEN=${#KEY_CONTENT}
+          echo "APP_STORE_API_KEY_CONTENT : ${KEY_LEN} caractères"
+          echo "APP_STORE_KEY_ID          : ${#KEY_ID} caractères"
+
+          if [ "$KEY_LEN" -eq 0 ]; then
+            echo "::error::APP_STORE_API_KEY_CONTENT est VIDE — vérifier GitHub Secrets"
+            exit 1
+          fi
+
+          # Premiers octets (hex) pour identifier le format sans exposer le contenu
+          FIRST_HEX=$(printf '%s' "$KEY_CONTENT" | head -c 10 | xxd -p | tr -d '\n')
+          echo "Premiers octets (hex) : $FIRST_HEX"
+
+          # Détecte PEM brut (commence par "-----") vs base64
           FIRST_CHARS=$(printf '%s' "$KEY_CONTENT" | head -c 5)
           if [ "$FIRST_CHARS" = "-----" ]; then
             printf '%s' "$KEY_CONTENT" > "$KEY_FILE"
-            echo "Clé API : PEM brut"
+            echo "Format détecté : PEM brut"
           else
-            printf '%s' "$KEY_CONTENT" | base64 --decode > "$KEY_FILE"
-            echo "Clé API : base64 → décodé"
+            printf '%s' "$KEY_CONTENT" | base64 --decode > "$KEY_FILE" 2>/dev/null
+            DECODE_EXIT=$?
+            echo "Format détecté : base64 (exit decode=$DECODE_EXIT)"
           fi
 
-          echo "Taille : $(wc -c < $KEY_FILE) octets"
-          echo "Ligne 1 : $(head -1 $KEY_FILE | cut -c1-30)"
+          echo "Taille fichier .p8 : $(wc -c < $KEY_FILE) octets"
+          if [ "$(wc -c < $KEY_FILE)" -gt 0 ]; then
+            echo "Première ligne .p8 : $(head -1 $KEY_FILE | cut -c1-40)"
+          else
+            echo "::error::Fichier .p8 vide après écriture — secret mal encodé ?"
+            exit 1
+          fi
 
           mkdir -p ~/.appstoreconnect/private_keys
           cp "$KEY_FILE" ~/.appstoreconnect/private_keys/
