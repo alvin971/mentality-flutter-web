@@ -47,5 +47,7 @@
 	<true/>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Mental E.T. utilise le microphone pour les tests de langage oral.</string>
 </dict>
 </plist>

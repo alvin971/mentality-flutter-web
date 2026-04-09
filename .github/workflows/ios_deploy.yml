@@ -57,7 +57,18 @@ jobs:
           flutter doctor --suppress-analytics 2>&1 | tee -a $GITHUB_STEP_SUMMARY || true
 
       - name: Build Flutter iOS (release)
-        run: flutter build ios --release --no-codesign 2>&1 | tee /tmp/flutter_build.log; EXIT=${PIPESTATUS[0]}; echo "## Build log" >> $GITHUB_STEP_SUMMARY; tail -50 /tmp/flutter_build.log >> $GITHUB_STEP_SUMMARY; exit $EXIT
+        run: |
+          flutter build ios --release --no-codesign 2>&1 | tee /tmp/flutter_build.log
+          EXIT=${PIPESTATUS[0]}
+          echo "## Build log (dernières 80 lignes)" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          tail -80 /tmp/flutter_build.log >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          if [ $EXIT -ne 0 ]; then
+            ERR=$(grep -i "error:" /tmp/flutter_build.log | tail -5 | tr '\n' ' ' | cut -c1-300)
+            echo "::error::Flutter build failed — $ERR"
+          fi
+          exit $EXIT
 
       # ── 7. Fastlane — signature + upload TestFlight ──────────────────────────
       - name: Upload to TestFlight via Fastlane
