@@ -71,7 +71,8 @@ platform :ios do
   # Usage: bundle exec fastlane beta
   # ─────────────────────────────────────────────
   lane :beta do
-    sh("cd #{File.expand_path('../../', __FILE__)} && flutter build ios --release --no-codesign")
+    # flutter build ios déjà exécuté par le workflow CI avant cette lane
+    # (en local, relancer manuellement : flutter build ios --release --no-codesign)
 
     gym(
       workspace:        "Runner.xcworkspace",
@@ -79,7 +80,9 @@ platform :ios do
       configuration:    "Release",
       export_method:    "app-store",
       output_directory: "./build",
-      output_name:      "Mental_ET.ipa"
+      output_name:      "Mental_ET.ipa",
+      xcargs:           "DEVELOPMENT_TEAM=#{ENV['APPLE_TEAM_ID']}",
+      export_xcargs:    "-allowProvisioningUpdates"
     )
 
     upload_to_testflight(

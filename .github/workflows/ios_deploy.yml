@@ -3,7 +3,7 @@ name: iOS Deploy — TestFlight
 on:
   push:
     branches: [main]
-  workflow_dispatch:  # Permet de déclencher manuellement depuis GitHub
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -34,22 +34,24 @@ jobs:
           bundler-cache: true
           working-directory: ios
 
-      - name: Install Fastlane
+      # ── 4. CocoaPods ────────────────────────────────────────────────────────
+      - name: Install CocoaPods dependencies
         run: |
           cd ios
-          gem install bundler
-          bundle install
+          pod install --repo-update
 
-      # ── 4. Clé API App Store Connect ────────────────────────────────────────
+      # ── 5. Clé API App Store Connect ────────────────────────────────────────
       - name: Write App Store API key
         run: |
           echo "${{ secrets.APP_STORE_API_KEY_CONTENT }}" | base64 --decode > /tmp/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8
+          mkdir -p ~/.appstoreconnect/private_keys
+          cp /tmp/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8 ~/.appstoreconnect/private_keys/
 
-      # ── 5. Build Flutter iOS ─────────────────────────────────────────────────
+      # ── 6. Build Flutter iOS ─────────────────────────────────────────────────
       - name: Build Flutter iOS (release)
         run: flutter build ios --release --no-codesign
 
-      # ── 6. Fastlane — signature + upload TestFlight ──────────────────────────
+      # ── 7. Fastlane — signature + upload TestFlight ──────────────────────────
       - name: Upload to TestFlight via Fastlane
         env:
           APP_STORE_KEY_ID:           ${{ secrets.APP_STORE_KEY_ID }}
@@ -62,7 +64,7 @@ jobs:
           cd ios
           bundle exec fastlane beta
 
-      # ── 7. Nettoyage ─────────────────────────────────────────────────────────
+      # ── 8. Nettoyage ─────────────────────────────────────────────────────────
       - name: Clean up API key
         if: always()
         run: rm -f /tmp/AuthKey_${{ secrets.APP_STORE_KEY_ID }}.p8
