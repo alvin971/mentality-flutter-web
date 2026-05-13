@@ -1,4 +1,4 @@
-app_identifier "com.mentalite.mentaliteSiteWeb"
+app_identifier "com.mentalite.app"
 apple_id ENV["APPLE_ID"] # Défini dans GitHub Actions secret ou .env local
 team_id "J7K94W4PUN"
 itc_team_id ENV["ITC_TEAM_ID"] # Récupérable via: fastlane produce --username <email>
