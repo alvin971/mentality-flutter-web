@@ -16,6 +16,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # 1b. Sélectionner Xcode 26+ (Apple exige iOS 26 SDK pour upload TestFlight depuis avril 2026)
+      - name: Select latest Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
       # 2. Installer Flutter
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
