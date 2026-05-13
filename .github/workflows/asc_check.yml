@@ -1,0 +1,66 @@
+name: ASC — Check build status
+
+on:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Query App Store Connect for recent builds
+        env:
+          APP_STORE_KEY_ID: ${{ secrets.APP_STORE_KEY_ID }}
+          APP_STORE_ISSUER_ID: ${{ secrets.APP_STORE_ISSUER_ID }}
+          APP_STORE_API_KEY_CONTENT: ${{ secrets.APP_STORE_API_KEY_CONTENT }}
+          BUNDLE_ID: ${{ secrets.BUNDLE_ID }}
+        run: |
+          pip3 install --break-system-packages --quiet PyJWT cryptography requests
+          python3 << 'PYEOF'
+          import jwt, time, os, json, urllib.request, urllib.parse
+          KEY_ID = os.environ["APP_STORE_KEY_ID"]
+          ISSUER = os.environ["APP_STORE_ISSUER_ID"]
+          PEM    = os.environ["APP_STORE_API_KEY_CONTENT"]
+          BUNDLE = os.environ["BUNDLE_ID"]
+          token = jwt.encode(
+              {"iss": ISSUER, "exp": int(time.time())+1200, "aud": "appstoreconnect-v1"},
+              PEM, algorithm="ES256", headers={"kid": KEY_ID}
+          )
+          BASE = "https://api.appstoreconnect.apple.com"
+          def get(path):
+              req = urllib.request.Request(f"{BASE}{path}",
+                  headers={"Authorization": f"Bearer {token}"})
+              return json.loads(urllib.request.urlopen(req, timeout=30).read())
+
+          apps = get(f"/v1/apps?filter[bundleId]={BUNDLE}")
+          if not apps.get("data"):
+              print(f"NO APP FOUND for {BUNDLE}")
+              raise SystemExit(1)
+          app = apps["data"][0]
+          app_id = app["id"]
+          name = app["attributes"]["name"]
+          print(f"App: {name} ({app_id})  bundle={BUNDLE}")
+          print()
+
+          builds = get(f"/v1/builds?filter[app]={app_id}&limit=10&sort=-uploadedDate&include=preReleaseVersion")
+          print(f"Found {len(builds.get('data', []))} recent build(s):")
+          print()
+          for b in builds.get("data", []):
+              a = b["attributes"]
+              ver = a.get("version", "?")
+              proc = a.get("processingState", "?")
+              uploaded = a.get("uploadedDate", "?")
+              expired = a.get("expired", "?")
+              valid = a.get("usesNonExemptEncryption", "?")
+              print(f"  build {ver}  state={proc}  uploaded={uploaded}  expired={expired}")
+
+          # Check buildUploads (silent errors)
+          try:
+              uploads = get(f"/v1/apps/{app_id}/buildUploads?limit=10")
+              print()
+              print(f"Build uploads ({len(uploads.get('data', []))}):")
+              for u in uploads.get("data", []):
+                  a = u["attributes"]
+                  print(f"  upload state={a.get('state','?')}  errors={a.get('uploadErrorMessages')}")
+          except Exception as e:
+              print(f"buildUploads query failed: {e}")
+          PYEOF
