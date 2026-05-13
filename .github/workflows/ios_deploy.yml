@@ -68,7 +68,7 @@ jobs:
           APP_STORE_ISSUER_ID: ${{ secrets.APP_STORE_ISSUER_ID }}
           APP_STORE_API_KEY_CONTENT: ${{ secrets.APP_STORE_API_KEY_CONTENT }}
         run: |
-          pip3 install PyJWT cryptography --quiet
+          pip3 install --break-system-packages --quiet PyJWT cryptography
           python3 << 'PYEOF'
           import jwt, time, json, subprocess, os, sys
 
