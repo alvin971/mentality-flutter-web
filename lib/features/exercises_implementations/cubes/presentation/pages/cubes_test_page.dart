@@ -291,6 +291,7 @@ class _CubesTestPageState extends State<CubesTestPage> {
     final pattern = _generatedPatterns[currentLevel];
 
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text('Test des Cubes'),
         actions: [

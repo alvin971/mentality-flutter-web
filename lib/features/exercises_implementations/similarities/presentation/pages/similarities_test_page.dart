@@ -328,6 +328,7 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
     final currentItem = _generatedItems[currentLevel];
 
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text('Similitudes'),
         actions: [

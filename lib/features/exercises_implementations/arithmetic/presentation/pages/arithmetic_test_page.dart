@@ -295,6 +295,7 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
 
   Widget _buildIntroScreen() {
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text('Arithmétique'),
       ),
@@ -392,6 +393,7 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
 
   Widget _buildTestScreen() {
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text('Arithmétique'),
         actions: [

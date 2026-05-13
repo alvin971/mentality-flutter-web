@@ -335,6 +335,7 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
     final currentItem = _generatedItems[currentLevel];
 
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text('Vocabulaire'),
         actions: [

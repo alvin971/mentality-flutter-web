@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:uuid/uuid.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_typography.dart';
+import '../../../../core/widgets/kepler_button.dart';
+import '../../../../core/widgets/kepler_card.dart';
+import '../../../../core/widgets/kepler_scaffold.dart';
 import '../../../../core/models/complete_test_session.dart';
 import '../../../../services/session_history_service.dart';
 import '../../../scoring/domain/entities/iq_score.dart';
 import '../../../scoring/domain/services/scoring_service.dart';
 import '../../domain/services/pdf_report_service.dart';
 
-/// Page de résultats du test complet WAIS-IV
 class CompleteTestResultsPage extends StatefulWidget {
   final CompleteTestSession session;
   final int? ageInMonths;
@@ -30,11 +33,10 @@ class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
   @override
   void initState() {
     super.initState();
-    // Try-catch : un score manquant ou hors-table ne doit pas faire crasher
-    // silencieusement la page (qui resterait grise en production).
     try {
       _iqScore = widget.ageInMonths != null
-          ? const ScoringService().computeScore(widget.session, widget.ageInMonths!)
+          ? const ScoringService()
+              .computeScore(widget.session, widget.ageInMonths!)
           : null;
     } catch (_) {
       _iqScore = null;
@@ -48,13 +50,13 @@ class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
       id: const Uuid().v4(),
       date: widget.session.startTime,
       ageInMonths: widget.ageInMonths!,
-      fsiq: _iqScore!.fsiq,
-      vci: _iqScore!.vci,
-      vsi: _iqScore!.vsi,
-      fri: _iqScore!.fri,
-      wmi: _iqScore!.wmi,
-      psi: _iqScore!.psi,
-      classification: _iqScore!.fsiqClassification,
+      fsiq: _iqScore.fsiq,
+      vci: _iqScore.vci,
+      vsi: _iqScore.vsi,
+      fri: _iqScore.fri,
+      wmi: _iqScore.wmi,
+      psi: _iqScore.psi,
+      classification: _iqScore.fsiqClassification,
     );
     await SessionHistoryService.instance.saveEntry(entry);
   }
@@ -64,283 +66,271 @@ class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: Text(
-          'Résultats du Test Complet',
-          style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
-        ),
-        automaticallyImplyLeading: false,
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(24.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader(),
-              SizedBox(height: 24.h),
-              _buildSessionInfo(),
-              SizedBox(height: 24.h),
-
-              if (_iqScore != null) ...[
-                _buildFSIQCard(_iqScore),
-                SizedBox(height: 24.h),
-                _buildIndexProfile(_iqScore),
-                SizedBox(height: 24.h),
-                _buildSubtestDetails(_iqScore),
-                SizedBox(height: 24.h),
-                _buildStrengthsWeaknesses(_iqScore),
-              ] else ...[
-                _buildRawScoresFallback(),
-                SizedBox(height: 16.h),
-                _buildNoScoreNotice(),
-              ],
-
-              SizedBox(height: 32.h),
-              _buildActions(context),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  // ─────────────────────────────────────────────────────────────────────────
-  // EN-TÊTE
-  // ─────────────────────────────────────────────────────────────────────────
-
-  Widget _buildHeader() {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(24.w),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [AppColors.success, AppColors.success.withOpacity(0.7)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(16.r),
-      ),
+    return KeplerScaffold(
+      title: 'Résultats',
+      eyebrow: 'BILAN WAIS-IV',
+      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.emoji_events, size: 64.sp, color: AppColors.white),
-          SizedBox(height: 16.h),
-          Text(
-            'Test Complet Terminé !',
-            style: TextStyle(
-              fontSize: 28.sp,
-              fontWeight: FontWeight.bold,
-              color: AppColors.white,
-            ),
-            textAlign: TextAlign.center,
+          _Header(),
+          SizedBox(height: 24.h),
+          _SessionMeta(
+            date: _formatDate(session.startTime),
+            duration: _formatDuration(session.totalDuration),
+            completed: '${session.completedTestsCount} / ${session.totalTests}',
+            age:
+                ageInMonths != null ? '${(ageInMonths! / 12).floor()} ans' : null,
           ),
-          SizedBox(height: 8.h),
-          Text(
-            'Félicitations pour avoir complété tous les subtests',
-            style: TextStyle(fontSize: 16.sp, color: AppColors.white.withOpacity(0.9)),
-            textAlign: TextAlign.center,
-          ),
+          SizedBox(height: 24.h),
+          if (_iqScore != null) ...[
+            _FSIQCard(iq: _iqScore),
+            SizedBox(height: 20.h),
+            _IndexProfile(iq: _iqScore),
+            SizedBox(height: 20.h),
+            _SubtestDetails(iq: _iqScore, session: session),
+            SizedBox(height: 20.h),
+            _StrengthsWeaknesses(iq: _iqScore),
+          ] else ...[
+            _RawFallback(session: session),
+            SizedBox(height: 16.h),
+            _NoScoreNotice(),
+          ],
+          SizedBox(height: 28.h),
+          _Actions(session: session, iq: _iqScore, ageInMonths: ageInMonths),
+          SizedBox(height: 24.h),
         ],
       ),
     );
   }
 
-  // ─────────────────────────────────────────────────────────────────────────
-  // INFORMATIONS DE SESSION
-  // ─────────────────────────────────────────────────────────────────────────
+  String _formatDate(DateTime d) {
+    return '${d.day.toString().padLeft(2, '0')}.${d.month.toString().padLeft(2, '0')}.${d.year} · '
+        '${d.hour.toString().padLeft(2, '0')}:${d.minute.toString().padLeft(2, '0')}';
+  }
 
-  Widget _buildSessionInfo() {
+  String _formatDuration(Duration? d) {
+    if (d == null) return 'N/A';
+    final h = d.inHours;
+    final m = d.inMinutes.remainder(60);
+    final s = d.inSeconds.remainder(60);
+    if (h > 0) return '${h}h ${m}min ${s}s';
+    if (m > 0) return '${m}min ${s}s';
+    return '${s}s';
+  }
+}
+
+class _Header extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildSectionTitle('Informations de la Session'),
-        _buildInfoRow('Date', _formatDate(session.startTime)),
-        _buildInfoRow('Durée totale', _formatDuration(session.totalDuration)),
-        _buildInfoRow(
-            'Tests complétés', '${session.completedTestsCount} / ${session.totalTests}'),
-        if (ageInMonths != null)
-          _buildInfoRow('Âge du patient', '${(ageInMonths! / 12).floor()} ans'),
+        Text('Bilan', style: AppText.heroDisplay()),
+        Text('terminé.', style: AppText.heroItalic()),
+        SizedBox(height: 12.h),
+        Container(
+            width: 36.w,
+            height: 1,
+            color: AppColors.primary.withValues(alpha: 0.4)),
+        SizedBox(height: 12.h),
+        Text(
+          'Synthèse de vos performances cognitives sur les douze subtests WAIS-IV.',
+          style: AppText.body(),
+        ),
       ],
     );
   }
+}
 
-  // ─────────────────────────────────────────────────────────────────────────
-  // CARTE QI TOTAL
-  // ─────────────────────────────────────────────────────────────────────────
+class _SessionMeta extends StatelessWidget {
+  const _SessionMeta(
+      {required this.date,
+      required this.duration,
+      required this.completed,
+      this.age});
+  final String date;
+  final String duration;
+  final String completed;
+  final String? age;
 
-  Widget _buildFSIQCard(IQScore iq) {
+  @override
+  Widget build(BuildContext context) {
+    return KeplerCard(
+      surface: true,
+      child: Column(
+        children: [
+          _row('DATE', date),
+          _row('DURÉE', duration),
+          _row('SUBTESTS', completed),
+          if (age != null) _row('ÂGE', age!),
+        ],
+      ),
+    );
+  }
+
+  Widget _row(String label, String value) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 6.h),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label,
+              style: AppText.monoLabel(color: AppColors.textTertiary)),
+          Text(value, style: AppText.bodyStrong()),
+        ],
+      ),
+    );
+  }
+}
+
+class _FSIQCard extends StatelessWidget {
+  const _FSIQCard({required this.iq});
+  final IQScore iq;
+
+  String _ordinal(int n) => n == 1 ? 'er' : 'e';
+
+  @override
+  Widget build(BuildContext context) {
     final ci = iq.confidenceIntervals['FSIQ'];
     final percentile = iq.percentiles['FSIQ'] ?? 50;
-    final classification = iq.classifications['FSIQ'] ?? '';
+    final classif = iq.classifications['FSIQ'] ?? '';
 
-    return Container(
-      width: double.infinity,
+    return KeplerCard(
       padding: EdgeInsets.all(24.w),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [AppColors.primary, AppColors.primary.withOpacity(0.75)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(16.r),
-      ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'QI Total (FSIQ)',
-            style: TextStyle(fontSize: 18.sp, color: AppColors.white.withOpacity(0.9)),
+          Text('§ QI TOTAL · FSIQ §',
+              style: AppText.monoLabel(color: AppColors.primary)),
+          SizedBox(height: 16.h),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text('${iq.fsiq}',
+                  style: AppText.monoScore(
+                      color: AppColors.primary, size: 80.sp)),
+              SizedBox(width: 12.w),
+              Padding(
+                padding: EdgeInsets.only(bottom: 12.h),
+                child: Text(classif, style: AppText.h2Italic()),
+              ),
+            ],
           ),
           SizedBox(height: 12.h),
-          Text(
-            '${iq.fsiq}',
-            style: TextStyle(
-              fontSize: 80.sp,
-              fontWeight: FontWeight.bold,
-              color: AppColors.white,
+          Container(
+              width: 36.w,
               height: 1,
-            ),
-          ),
-          SizedBox(height: 8.h),
-          Text(
-            classification,
-            style: TextStyle(
-              fontSize: 22.sp,
-              fontWeight: FontWeight.bold,
-              color: AppColors.white,
-            ),
-          ),
+              color: AppColors.primary.withValues(alpha: 0.4)),
           SizedBox(height: 12.h),
-          if (ci != null) ...[
-            Text(
-              'IC 95% : ${ci.lowerBound} – ${ci.upperBound}',
-              style: TextStyle(fontSize: 15.sp, color: AppColors.white.withOpacity(0.85)),
-            ),
-            SizedBox(height: 4.h),
-          ],
+          if (ci != null)
+            Text('IC 95% · ${ci.lowerBound} – ${ci.upperBound}',
+                style: AppText.monoLabel(color: AppColors.textSecondary)),
+          SizedBox(height: 4.h),
           Text(
-            '$percentile${_ordinal(percentile)} percentile',
-            style: TextStyle(fontSize: 15.sp, color: AppColors.white.withOpacity(0.85)),
-          ),
+              'Percentile · $percentile${_ordinal(percentile)}',
+              style: AppText.monoLabel(color: AppColors.textSecondary)),
+        ],
+      ),
+    );
+  }
+}
+
+class _IndexProfile extends StatelessWidget {
+  const _IndexProfile({required this.iq});
+  final IQScore iq;
+
+  @override
+  Widget build(BuildContext context) {
+    final indices = <(String, String, int?)>[
+      ('VCI', 'Compréhension Verbale', iq.vci),
+      ('VSI', 'Visuo-Spatial', iq.vsi),
+      ('FRI', 'Raisonnement Fluide', iq.fri),
+      ('WMI', 'Mémoire de Travail', iq.wmi),
+      ('PSI', 'Vitesse de Traitement', iq.psi),
+    ];
+
+    return KeplerCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('§ PROFIL DES INDICES §',
+              style: AppText.monoLabel(color: AppColors.primary)),
+          SizedBox(height: 16.h),
+          for (final e in indices) ...[
+            if (e.$3 != null) _row(e.$1, e.$2, e.$3!, iq),
+            if (e.$3 != null) SizedBox(height: 14.h),
+          ],
         ],
       ),
     );
   }
 
-  // ─────────────────────────────────────────────────────────────────────────
-  // PROFIL DES INDICES (barres)
-  // ─────────────────────────────────────────────────────────────────────────
-
-  Widget _buildIndexProfile(IQScore iq) {
-    final indices = [
-      ('VCI', 'Compréhension Verbale', iq.vci, AppColors.indexVCI),
-      ('VSI', 'Visuo-Spatial', iq.vsi, AppColors.indexVSI),
-      ('FRI', 'Raisonnement Fluide', iq.fri, AppColors.indexFRI),
-      ('WMI', 'Mémoire de Travail', iq.wmi, AppColors.indexWMI),
-      ('PSI', 'Vitesse de Traitement', iq.psi, AppColors.indexPSI),
-    ];
+  Widget _row(String code, String label, int score, IQScore iq) {
+    final ci = iq.confidenceIntervals[code];
+    final percentile = iq.percentiles[code] ?? 50;
+    final classif = iq.classifications[code] ?? '';
+    final bar = ((score - 40) / 120).clamp(0.0, 1.0);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildSectionTitle('Profil des Indices Cognitifs'),
-        Container(
-          padding: EdgeInsets.all(16.w),
-          decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.circular(12.r),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                SizedBox(
+                    width: 44.w,
+                    child: Text(code,
+                        style: AppText.monoLabel(color: AppColors.primary))),
+                Text(label, style: AppText.bodyStrong()),
+              ],
+            ),
+            Text('$score',
+                style: AppText.monoScore(
+                    color: AppColors.primary, size: 22.sp)),
+          ],
+        ),
+        SizedBox(height: 6.h),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(2.r),
+          child: LinearProgressIndicator(
+            value: bar,
+            minHeight: 4.h,
+            backgroundColor: AppColors.primary.withValues(alpha: 0.12),
+            valueColor:
+                const AlwaysStoppedAnimation<Color>(AppColors.primary),
           ),
-          child: Column(
-            children: indices.map((entry) {
-              final code = entry.$1;
-              final label = entry.$2;
-              final score = entry.$3;
-              final color = entry.$4;
-              if (score == null) return const SizedBox.shrink();
-
-              final ci = iq.confidenceIntervals[code];
-              final percentile = iq.percentiles[code] ?? 50;
-              final classification = iq.classifications[code] ?? '';
-              final barWidth = ((score - 40) / 120).clamp(0.0, 1.0);
-
-              return Padding(
-                padding: EdgeInsets.only(bottom: 16.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            label,
-                            style: TextStyle(
-                              fontSize: 15.sp,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.grey900,
-                            ),
-                          ),
-                        ),
-                        Text(
-                          '$score',
-                          style: TextStyle(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.bold,
-                            color: color,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 6.h),
-                    // Barre de progression
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(4.r),
-                      child: LinearProgressIndicator(
-                        value: barWidth,
-                        backgroundColor: color.withOpacity(0.15),
-                        valueColor: AlwaysStoppedAnimation<Color>(color),
-                        minHeight: 10.h,
-                      ),
-                    ),
-                    SizedBox(height: 4.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          classification,
-                          style: TextStyle(fontSize: 13.sp, color: color),
-                        ),
-                        Text(
-                          ci != null
-                              ? 'IC 95% : ${ci.lowerBound}–${ci.upperBound}  •  ${percentile}e %ile'
-                              : '${percentile}e percentile',
-                          style: TextStyle(
-                            fontSize: 12.sp,
-                            color: AppColors.grey600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              );
-            }).toList(),
-          ),
+        ),
+        SizedBox(height: 6.h),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(classif, style: AppText.bodySmall()),
+            Text(
+              ci != null
+                  ? 'IC ${ci.lowerBound}–${ci.upperBound} · ${percentile}e %ile'
+                  : '${percentile}e %ile',
+              style: AppText.monoLabel(color: AppColors.textTertiary),
+            ),
+          ],
         ),
       ],
     );
   }
+}
 
-  // ─────────────────────────────────────────────────────────────────────────
-  // NOTES STANDARDISÉES PAR SOUS-TEST
-  // ─────────────────────────────────────────────────────────────────────────
+class _SubtestDetails extends StatelessWidget {
+  const _SubtestDetails({required this.iq, required this.session});
+  final IQScore iq;
+  final CompleteTestSession session;
 
-  Widget _buildSubtestDetails(IQScore iq) {
+  @override
+  Widget build(BuildContext context) {
     final groups = [
       (
-        'Compréhension Verbale',
-        AppColors.indexVCI,
+        'VCI · Verbal',
         [
           ('Similitudes', 'SI', session.similaritiesScore),
           ('Vocabulaire', 'VO', session.vocabularyScore),
@@ -348,24 +338,21 @@ class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
         ]
       ),
       (
-        'Visuo-Spatial',
-        AppColors.indexVSI,
+        'VSI · Visuo-Spatial',
         [
           ('Cubes', 'BD', session.cubesScore),
           ('Puzzles Visuels', 'VP', session.visualPuzzlesScore),
         ]
       ),
       (
-        'Raisonnement Fluide',
-        AppColors.indexFRI,
+        'FRI · Raisonnement',
         [
           ('Matrices', 'MR', session.matricesScore),
           ('Balances', 'FW', session.figureWeightsScore),
         ]
       ),
       (
-        'Mémoire de Travail',
-        AppColors.indexWMI,
+        'WMI · Mémoire',
         [
           ('Mémoire des Chiffres', 'DS', session.digitSpanScore),
           ('Arithmétique', 'AR', session.arithmeticScore),
@@ -373,8 +360,7 @@ class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
         ]
       ),
       (
-        'Vitesse de Traitement',
-        AppColors.indexPSI,
+        'PSI · Vitesse',
         [
           ('Code', 'CD', session.codingScore),
           ('Recherche de Symboles', 'SS', session.symbolSearchScore),
@@ -382,185 +368,232 @@ class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
       ),
     ];
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildSectionTitle('Notes Standardisées par Sous-test'),
-        ...groups.map((group) {
-          final title = group.$1;
-          final color = group.$2;
-          final subtests = group.$3;
-
-          return Container(
-            margin: EdgeInsets.only(bottom: 12.h),
-            padding: EdgeInsets.all(16.w),
-            decoration: BoxDecoration(
-              color: AppColors.surface,
-              borderRadius: BorderRadius.circular(12.r),
-              border: Border.all(color: color.withOpacity(0.3), width: 2),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.bold,
-                    color: color,
-                  ),
-                ),
-                SizedBox(height: 10.h),
-                ...subtests.map((s) {
-                  final name = s.$1;
-                  final code = s.$2;
-                  final rawScore = s.$3;
-                  if (rawScore == null) return const SizedBox.shrink();
-
-                  final scaledScore = iq.percentiles[code]; // note standardisée
-                  final classif = iq.classifications[code] ?? '';
-
-                  return Padding(
-                    padding: EdgeInsets.symmetric(vertical: 5.h),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 3,
-                          child: Text(
-                            name,
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              color: AppColors.grey700,
-                            ),
-                          ),
-                        ),
-                        Text(
-                          'Brut : $rawScore',
-                          style: TextStyle(
-                            fontSize: 13.sp,
-                            color: AppColors.grey500,
-                          ),
-                        ),
-                        SizedBox(width: 16.w),
-                        Container(
-                          width: 36.w,
-                          height: 36.w,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: color.withOpacity(0.15),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Text(
-                            '${scaledScore ?? '-'}',
-                            style: TextStyle(
-                              fontSize: 15.sp,
-                              fontWeight: FontWeight.bold,
-                              color: color,
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 10.w),
-                        Expanded(
-                          flex: 2,
-                          child: Text(
-                            classif,
-                            style: TextStyle(
-                              fontSize: 12.sp,
-                              color: AppColors.grey500,
-                            ),
-                            textAlign: TextAlign.right,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }),
-              ],
-            ),
-          );
-        }),
-      ],
-    );
-  }
-
-  // ─────────────────────────────────────────────────────────────────────────
-  // FORCES ET FAIBLESSES
-  // ─────────────────────────────────────────────────────────────────────────
-
-  Widget _buildStrengthsWeaknesses(IQScore iq) {
-    final strengths = iq.strengths;
-    final weaknesses = iq.weaknesses;
-    final isHomogeneous = iq.isHomogeneousProfile;
-
-    final indexLabels = {
-      'VCI': 'Compréhension Verbale',
-      'VSI': 'Visuo-Spatial',
-      'FRI': 'Raisonnement Fluide',
-      'WMI': 'Mémoire de Travail',
-      'PSI': 'Vitesse de Traitement',
-    };
-
-    return Container(
-      padding: EdgeInsets.all(16.w),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: AppColors.grey200),
-      ),
+    return KeplerCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Profil Cognitif',
-            style: TextStyle(
-              fontSize: 18.sp,
-              fontWeight: FontWeight.bold,
-              color: AppColors.grey900,
+          Text('§ NOTES STANDARDISÉES §',
+              style: AppText.monoLabel(color: AppColors.primary)),
+          SizedBox(height: 16.h),
+          for (var i = 0; i < groups.length; i++) ...[
+            Text(groups[i].$1, style: AppText.bodyStrong()),
+            SizedBox(height: 8.h),
+            for (final s in groups[i].$2)
+              if (s.$3 != null)
+                _subRow(s.$1, s.$2, s.$3!, iq),
+            if (i < groups.length - 1) ...[
+              SizedBox(height: 14.h),
+              Container(
+                  height: 1, color: Colors.black.withValues(alpha: 0.06)),
+              SizedBox(height: 14.h),
+            ],
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _subRow(String name, String code, int raw, IQScore iq) {
+    final scaled = iq.percentiles[code];
+    final classif = iq.classifications[code] ?? '';
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 4.h),
+      child: Row(
+        children: [
+          Expanded(
+              flex: 3,
+              child: Text(name,
+                  style: AppText.body(color: AppColors.textPrimary))),
+          Text('brut $raw',
+              style: AppText.monoLabel(color: AppColors.textTertiary)),
+          SizedBox(width: 12.w),
+          Container(
+            width: 36.w,
+            height: 28.h,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: AppColors.primary.withValues(alpha: 0.08),
+              border: Border.all(
+                  color: AppColors.primary.withValues(alpha: 0.4)),
+              borderRadius: BorderRadius.circular(4.r),
             ),
+            child: Text('${scaled ?? '-'}',
+                style: AppText.monoScore(
+                    color: AppColors.primary, size: 14.sp)),
           ),
+          SizedBox(width: 10.w),
+          Expanded(
+            flex: 2,
+            child: Text(classif,
+                style: AppText.bodySmall(color: AppColors.textTertiary),
+                textAlign: TextAlign.right),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _StrengthsWeaknesses extends StatelessWidget {
+  const _StrengthsWeaknesses({required this.iq});
+  final IQScore iq;
+
+  static const _labels = {
+    'VCI': 'Compréhension Verbale',
+    'VSI': 'Visuo-Spatial',
+    'FRI': 'Raisonnement Fluide',
+    'WMI': 'Mémoire de Travail',
+    'PSI': 'Vitesse de Traitement',
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    final strengths = iq.strengths;
+    final weaknesses = iq.weaknesses;
+    final homogeneous = iq.isHomogeneousProfile;
+
+    return KeplerCard(
+      surface: true,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('§ PROFIL COGNITIF §',
+              style: AppText.monoLabel(color: AppColors.primary)),
           SizedBox(height: 12.h),
           Text(
-            isHomogeneous
-                ? 'Profil homogène — les indices sont cohérents entre eux (écart max : ${iq.maxIndexDiscrepancy} pts)'
-                : 'Profil hétérogène — disparités notables entre indices (écart max : ${iq.maxIndexDiscrepancy} pts)',
-            style: TextStyle(fontSize: 14.sp, color: AppColors.grey600),
+            homogeneous
+                ? 'Profil homogène — les indices sont cohérents entre eux.'
+                : 'Profil hétérogène — disparités notables entre indices.',
+            style: AppText.body(),
           ),
+          SizedBox(height: 4.h),
+          Text('Écart max · ${iq.maxIndexDiscrepancy} pts',
+              style: AppText.monoLabel(color: AppColors.textTertiary)),
           if (strengths.isNotEmpty) ...[
             SizedBox(height: 16.h),
-            _buildProfileTag(
-              label: 'Forces relatives',
-              items: strengths.map((c) => indexLabels[c] ?? c).toList(),
-              color: AppColors.success,
-              icon: Icons.trending_up,
+            Text('Forces relatives',
+                style: AppText.bodyStrong(color: AppColors.success)),
+            SizedBox(height: 6.h),
+            Wrap(
+              spacing: 8.w,
+              runSpacing: 6.h,
+              children: strengths
+                  .map((c) => _chip(_labels[c] ?? c, AppColors.success))
+                  .toList(),
             ),
           ],
           if (weaknesses.isNotEmpty) ...[
-            SizedBox(height: 12.h),
-            _buildProfileTag(
-              label: 'Points de vigilance',
-              items: weaknesses.map((c) => indexLabels[c] ?? c).toList(),
-              color: AppColors.warning,
-              icon: Icons.trending_down,
+            SizedBox(height: 16.h),
+            Text('Points de vigilance',
+                style: AppText.bodyStrong(color: AppColors.warning)),
+            SizedBox(height: 6.h),
+            Wrap(
+              spacing: 8.w,
+              runSpacing: 6.h,
+              children: weaknesses
+                  .map((c) => _chip(_labels[c] ?? c, AppColors.warning))
+                  .toList(),
             ),
           ],
           SizedBox(height: 16.h),
           Container(
             padding: EdgeInsets.all(12.w),
             decoration: BoxDecoration(
-              color: AppColors.warning.withOpacity(0.08),
-              borderRadius: BorderRadius.circular(8.r),
-              border: Border.all(color: AppColors.warning.withOpacity(0.3)),
+              border: Border.all(
+                  color: AppColors.primary.withValues(alpha: 0.2)),
+              borderRadius: BorderRadius.circular(6.r),
             ),
-            child: Row(
+            child: Text(
+              'Résultats indicatifs. Pour une évaluation clinique officielle, '
+              'consultez un neuropsychologue ou un psychologue qualifié.',
+              style: AppText.bodySmall(color: AppColors.textSecondary),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _chip(String label, Color c) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+      decoration: BoxDecoration(
+        color: c.withValues(alpha: 0.12),
+        border: Border.all(color: c.withValues(alpha: 0.3)),
+        borderRadius: BorderRadius.circular(4.r),
+      ),
+      child: Text(label, style: AppText.bodySmall(color: c)),
+    );
+  }
+}
+
+class _RawFallback extends StatelessWidget {
+  const _RawFallback({required this.session});
+  final CompleteTestSession session;
+
+  @override
+  Widget build(BuildContext context) {
+    return KeplerCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('§ SCORES BRUTS §',
+              style: AppText.monoLabel(color: AppColors.primary)),
+          SizedBox(height: 16.h),
+          _row('Similitudes', session.similaritiesScore),
+          _row('Vocabulaire', session.vocabularyScore),
+          _row('Information', session.informationScore),
+          _row('Cubes', session.cubesScore),
+          _row('Matrices', session.matricesScore),
+          _row('Puzzles Visuels', session.visualPuzzlesScore),
+          _row('Mémoire des Chiffres', session.digitSpanScore),
+          _row('Arithmétique', session.arithmeticScore),
+          _row('Mémoire des Images', session.pictureSpanScore),
+          _row('Code', session.codingScore),
+          _row('Recherche de Symboles', session.symbolSearchScore),
+          _row('Balances', session.figureWeightsScore),
+        ],
+      ),
+    );
+  }
+
+  Widget _row(String name, int? score) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 6.h),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(name, style: AppText.body()),
+          Text(score?.toString() ?? '—',
+              style: AppText.monoScore(size: 18.sp)),
+        ],
+      ),
+    );
+  }
+}
+
+class _NoScoreNotice extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return KeplerCard(
+      surface: true,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(width: 3.w, height: 36.h, color: AppColors.warning),
+          SizedBox(width: 14.w),
+          Expanded(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.info_outline, color: AppColors.warning, size: 20.sp),
-                SizedBox(width: 10.w),
-                Expanded(
-                  child: Text(
-                    'Ces résultats sont indicatifs. Pour une évaluation clinique officielle, consultez un neuropsychologue ou psychologue qualifié.',
-                    style: TextStyle(fontSize: 13.sp, color: AppColors.grey600),
-                  ),
+                Text('§ ÂGE MANQUANT §',
+                    style: AppText.monoLabel(color: AppColors.warning)),
+                SizedBox(height: 6.h),
+                Text(
+                  'Sans l\'âge du patient, seuls les scores bruts sont affichés. '
+                  'Relancez le test en renseignant l\'âge pour obtenir le QI standardisé, '
+                  'les percentiles et les intervalles de confiance.',
+                  style: AppText.bodySmall(),
                 ),
               ],
             ),
@@ -569,322 +602,49 @@ class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
       ),
     );
   }
+}
 
-  Widget _buildProfileTag({
-    required String label,
-    required List<String> items,
-    required Color color,
-    required IconData icon,
-  }) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Icon(icon, color: color, size: 18.sp),
-        SizedBox(width: 8.w),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.bold,
-                  color: color,
-                ),
-              ),
-              SizedBox(height: 4.h),
-              Wrap(
-                spacing: 8.w,
-                children: items
-                    .map(
-                      (item) => Chip(
-                        label: Text(item, style: TextStyle(fontSize: 13.sp)),
-                        backgroundColor: color.withOpacity(0.12),
-                        labelStyle: TextStyle(color: color),
-                        visualDensity: VisualDensity.compact,
-                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      ),
-                    )
-                    .toList(),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
+class _Actions extends StatelessWidget {
+  const _Actions(
+      {required this.session, required this.iq, required this.ageInMonths});
+  final CompleteTestSession session;
+  final IQScore? iq;
+  final int? ageInMonths;
 
-  // ─────────────────────────────────────────────────────────────────────────
-  // FALLBACK : SCORES BRUTS (si pas d'âge renseigné)
-  // ─────────────────────────────────────────────────────────────────────────
-
-  Widget _buildRawScoresFallback() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildSectionTitle('Indice de Compréhension Verbale'),
-        _buildScoreCard(
-          color: AppColors.indexVCI,
-          tests: [
-            ('Similitudes', session.similaritiesScore),
-            ('Vocabulaire', session.vocabularyScore),
-            ('Information', session.informationScore),
-          ],
-          totalScore: session.icvRawScore,
-        ),
-        SizedBox(height: 16.h),
-        _buildSectionTitle('Indice Visuo-Spatial / Raisonnement Perceptif'),
-        _buildScoreCard(
-          color: AppColors.indexFRI,
-          tests: [
-            ('Cubes', session.cubesScore),
-            ('Matrices', session.matricesScore),
-            ('Puzzles Visuels', session.visualPuzzlesScore),
-          ],
-          totalScore: session.irpRawScore,
-        ),
-        SizedBox(height: 16.h),
-        _buildSectionTitle('Indice de Mémoire de Travail'),
-        _buildScoreCard(
-          color: AppColors.indexWMI,
-          tests: [
-            ('Mémoire des Chiffres', session.digitSpanScore),
-            ('Arithmétique', session.arithmeticScore),
-          ],
-          totalScore: session.imtRawScore,
-        ),
-        SizedBox(height: 16.h),
-        _buildSectionTitle('Indice de Vitesse de Traitement'),
-        _buildScoreCard(
-          color: AppColors.indexPSI,
-          tests: [
-            ('Code', session.codingScore),
-            ('Recherche de Symboles', session.symbolSearchScore),
-          ],
-          totalScore: session.ivtRawScore,
-        ),
-        if (session.pictureSpanScore != null || session.figureWeightsScore != null) ...[
-          SizedBox(height: 16.h),
-          _buildSectionTitle('Tests Supplémentaires'),
-          if (session.pictureSpanScore != null)
-            _buildScoreRow('Mémoire des Images', session.pictureSpanScore!),
-          if (session.figureWeightsScore != null)
-            _buildScoreRow('Balances', session.figureWeightsScore!),
-        ],
-      ],
-    );
-  }
-
-  Widget _buildNoScoreNotice() {
-    return Container(
-      padding: EdgeInsets.all(16.w),
-      decoration: BoxDecoration(
-        color: AppColors.warning.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: AppColors.warning.withOpacity(0.3)),
-      ),
-      child: Row(
-        children: [
-          Icon(Icons.info_outline, color: AppColors.warning, size: 24.sp),
-          SizedBox(width: 12.w),
-          Expanded(
-            child: Text(
-              'L\'âge n\'a pas été renseigné. Seuls les scores bruts sont affichés. '
-              'Pour obtenir le QI standardisé avec percentiles et intervalles de confiance, '
-              'relancez le test en renseignant l\'âge du patient.',
-              style: TextStyle(fontSize: 14.sp, color: AppColors.grey600),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ─────────────────────────────────────────────────────────────────────────
-  // BOUTONS D'ACTION
-  // ─────────────────────────────────────────────────────────────────────────
-
-  Widget _buildActions(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(
-          width: double.infinity,
-          height: 56.h,
-          child: ElevatedButton.icon(
-            onPressed: () async {
-              try {
-                await const PdfReportService().generateAndPrint(
-                  session: session,
-                  iqScore: _iqScore,
-                  ageInMonths: ageInMonths,
+        KeplerButton(
+          label: 'Exporter en PDF',
+          icon: Icons.picture_as_pdf_outlined,
+          expand: true,
+          onPressed: () async {
+            try {
+              await const PdfReportService().generateAndPrint(
+                session: session,
+                iqScore: iq,
+                ageInMonths: ageInMonths,
+              );
+            } catch (e) {
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Erreur PDF : $e')),
                 );
-              } catch (e) {
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Erreur PDF : $e')),
-                  );
-                }
               }
-            },
-            icon: Icon(Icons.picture_as_pdf, size: 24.sp),
-            label: Text('Exporter en PDF', style: TextStyle(fontSize: 18.sp)),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.r),
-              ),
-            ),
-          ),
+            }
+          },
         ),
-        SizedBox(height: 16.h),
-        SizedBox(
-          width: double.infinity,
-          height: 56.h,
-          child: OutlinedButton.icon(
-            onPressed: () => Navigator.popUntil(context, (route) => route.isFirst),
-            icon: Icon(Icons.home, size: 24.sp),
-            label: Text('Retour à l\'Accueil', style: TextStyle(fontSize: 18.sp)),
-            style: OutlinedButton.styleFrom(
-              side: BorderSide(color: AppColors.primary),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.r),
-              ),
-            ),
-          ),
+        SizedBox(height: 12.h),
+        KeplerButton(
+          label: 'Retour à l\'accueil',
+          variant: KeplerButtonVariant.secondary,
+          icon: Icons.home_outlined,
+          expand: true,
+          onPressed: () =>
+              Navigator.popUntil(context, (route) => route.isFirst),
         ),
       ],
     );
-  }
-
-  // ─────────────────────────────────────────────────────────────────────────
-  // WIDGETS UTILITAIRES
-  // ─────────────────────────────────────────────────────────────────────────
-
-  Widget _buildSectionTitle(String title) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 12.h),
-      child: Text(
-        title,
-        style: TextStyle(
-          fontSize: 20.sp,
-          fontWeight: FontWeight.bold,
-          color: AppColors.grey900,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildInfoRow(String label, String value) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label, style: TextStyle(fontSize: 16.sp, color: AppColors.grey600)),
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 16.sp,
-              fontWeight: FontWeight.bold,
-              color: AppColors.grey900,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildScoreCard({
-    required Color color,
-    required List<(String, int?)> tests,
-    required int? totalScore,
-  }) {
-    return Container(
-      padding: EdgeInsets.all(16.w),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: color.withOpacity(0.3), width: 2),
-      ),
-      child: Column(
-        children: [
-          ...tests.map((test) => _buildScoreRow(test.$1, test.$2)),
-          Divider(height: 24.h, color: color.withOpacity(0.3)),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Score Brut Total',
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.bold,
-                  color: color,
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-                decoration: BoxDecoration(
-                  color: color.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(8.r),
-                ),
-                child: Text(
-                  totalScore?.toString() ?? 'N/A',
-                  style: TextStyle(
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.bold,
-                    color: color,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildScoreRow(String testName, int? score) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(testName, style: TextStyle(fontSize: 16.sp, color: AppColors.grey600)),
-          Text(
-            score?.toString() ?? 'N/A',
-            style: TextStyle(
-              fontSize: 16.sp,
-              fontWeight: FontWeight.bold,
-              color: AppColors.grey900,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ─────────────────────────────────────────────────────────────────────────
-  // HELPERS
-  // ─────────────────────────────────────────────────────────────────────────
-
-  String _formatDate(DateTime date) {
-    return '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year} '
-        'à ${date.hour}:${date.minute.toString().padLeft(2, '0')}';
-  }
-
-  String _formatDuration(Duration? duration) {
-    if (duration == null) return 'N/A';
-    final hours = duration.inHours;
-    final minutes = duration.inMinutes.remainder(60);
-    final seconds = duration.inSeconds.remainder(60);
-    if (hours > 0) return '${hours}h ${minutes}min ${seconds}s';
-    if (minutes > 0) return '${minutes}min ${seconds}s';
-    return '${seconds}s';
-  }
-
-  String _ordinal(int n) {
-    if (n == 1) return 'er';
-    return 'e';
   }
 }

@@ -306,6 +306,7 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
 
   Widget _buildIntroScreen() {
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text('Mémoire des Chiffres'),
       ),
@@ -397,6 +398,7 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
 
   Widget _buildPartIntroScreen() {
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text(_currentItem.typeDescription),
       ),
@@ -450,6 +452,7 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
 
   Widget _buildSequencePresentationScreen() {
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text(_currentItem.typeDescription),
         actions: [
@@ -536,6 +539,7 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
 
   Widget _buildUserInputScreen() {
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text(_currentItem.typeDescription),
         actions: [

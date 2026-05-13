@@ -244,6 +244,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
     final item = _generatedItems[currentLevel];
 
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text('Test des Matrices'),
         actions: [

@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_typography.dart';
+import '../../../../core/widgets/kepler_button.dart';
+import '../../../../core/widgets/kepler_card.dart';
+import '../../../../core/widgets/kepler_progress.dart';
+import '../../../../core/widgets/kepler_scaffold.dart';
 import '../../bloc/complete_test_bloc.dart';
 import '../../bloc/complete_test_event.dart';
 import '../../bloc/complete_test_state.dart';
@@ -19,11 +24,6 @@ import '../../../exercises_implementations/picture_span/presentation/pages/pictu
 import '../../../exercises_implementations/figure_weights/presentation/pages/figure_weights_test_page.dart';
 import 'complete_test_results_page.dart';
 
-/// Orchestrateur du test complet WAIS-IV.
-///
-/// Pilote la séquence des 12 sous-tests via CompleteTestBloc.
-/// Chaque sous-test est lancé dans Navigator.push() et retourne
-/// son score via Navigator.pop(score).
 class CompleteTestOrchestratorPage extends StatelessWidget {
   const CompleteTestOrchestratorPage({super.key});
 
@@ -95,8 +95,9 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
       case 'Balances':
         return const FigureWeightsTestPage();
       default:
-        return Scaffold(
-          body: Center(child: Text('Test non trouvé : $testName')),
+        return KeplerScaffold(
+          title: 'Erreur',
+          child: Center(child: Text('Test non trouvé : $testName')),
         );
     }
   }
@@ -106,15 +107,10 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
     return BlocConsumer<CompleteTestBloc, CompleteTestState>(
       listener: (context, state) {
         if (state is CompleteTestRunningState) {
-          // Lancer le prochain sous-test après 500 ms
           Future.delayed(const Duration(milliseconds: 500), () {
-            if (context.mounted) {
-              _launchTest(context, state.nextTestName);
-            }
+            if (context.mounted) _launchTest(context, state.nextTestName);
           });
         } else if (state is CompleteTestDoneState) {
-          // addPostFrameCallback garantit que la navigation se fait
-          // après la fin du cycle de build (évite l'écran gris).
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (context.mounted) {
               Navigator.pushReplacement(
@@ -131,21 +127,20 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
         }
       },
       builder: (context, state) {
-        if (state is CompleteTestIntroState) {
-          return _buildIntroScreen(context);
-        }
-        // CompleteTestDoneState : afficher un écran d'attente pendant la
-        // navigation (addPostFrameCallback n'est pas encore exécuté).
+        if (state is CompleteTestIntroState) return _buildIntroScreen(context);
         if (state is CompleteTestDoneState) {
-          return Scaffold(
-            body: Center(
+          return KeplerScaffold(
+            title: 'Calcul des résultats',
+            eyebrow: 'BILAN',
+            scroll: false,
+            child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const CircularProgressIndicator(),
-                  SizedBox(height: 24.h),
-                  Text('Chargement des résultats...',
-                      style: TextStyle(fontSize: 16.sp)),
+                  const CircularProgressIndicator(color: AppColors.primary),
+                  SizedBox(height: 20.h),
+                  Text('§ TRAITEMENT §',
+                      style: AppText.monoLabel(color: AppColors.primary)),
                 ],
               ),
             ),
@@ -157,169 +152,121 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
   }
 
   Widget _buildIntroScreen(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Test Complet WAIS-IV',
-            style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold)),
-        backgroundColor: AppColors.primary,
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(24.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // En-tête
-              Container(
-                padding: EdgeInsets.all(20.w),
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(16.r),
-                ),
-                child: Column(children: [
-                  Icon(Icons.psychology, size: 64.sp, color: AppColors.primary),
-                  SizedBox(height: 16.h),
-                  Text('Test Complet WAIS-IV',
-                      style: TextStyle(
-                          fontSize: 24.sp,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.primary),
-                      textAlign: TextAlign.center),
-                  SizedBox(height: 8.h),
-                  Text('Évaluation cognitive complète',
-                      style: TextStyle(fontSize: 16.sp, color: AppColors.grey600),
-                      textAlign: TextAlign.center),
-                ]),
-              ),
-
-              SizedBox(height: 24.h),
-
-              _buildInfoCard(
-                icon: Icons.info_outline,
-                title: 'À propos du test',
-                description:
-                    'Ce test complet évalue 4 indices cognitifs majeurs à travers 12 subtests standardisés.',
-              ),
-              _buildInfoCard(
-                icon: Icons.timer,
-                title: 'Durée estimée',
-                description: '60-90 minutes pour compléter tous les subtests.',
-              ),
-              _buildInfoCard(
-                icon: Icons.list_alt,
-                title: '12 Subtests inclus',
-                description:
-                    '• Cubes • Similitudes • Mémoire des chiffres\n'
-                    '• Matrices • Vocabulaire • Arithmétique\n'
-                    '• Recherche de symboles • Puzzles visuels\n'
-                    '• Information • Code • Mémoire des images • Balances',
-              ),
-              _buildInfoCard(
-                icon: Icons.warning_amber,
-                title: 'Important',
-                description:
-                    'Les tests se lanceront automatiquement l\'un après l\'autre. '
-                    'Assurez-vous d\'avoir suffisamment de temps.',
-                color: AppColors.warning,
-              ),
-
-              SizedBox(height: 32.h),
-
-              // Saisie de l'âge
-              Container(
-                padding: EdgeInsets.all(16.w),
-                decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  borderRadius: BorderRadius.circular(12.r),
-                  border: Border.all(
-                      color: AppColors.primary.withValues(alpha: 0.3)),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Âge du patient (requis pour les normes)',
-                        style: TextStyle(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.grey900)),
-                    SizedBox(height: 12.h),
-                    TextField(
-                      controller: _ageController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        hintText: 'Ex : 35',
-                        suffixText: 'ans',
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.r)),
-                        contentPadding: EdgeInsets.symmetric(
-                            horizontal: 16.w, vertical: 12.h),
-                      ),
-                      onChanged: (v) {
-                        final years = int.tryParse(v);
-                        setState(() {
-                          _ageInMonths = (years != null &&
-                                  years >= 16 &&
-                                  years <= 90)
-                              ? years * 12
-                              : null;
-                        });
-                      },
-                    ),
-                    if (_ageController.text.isNotEmpty && _ageInMonths == null)
-                      Padding(
-                        padding: EdgeInsets.only(top: 8.h),
-                        child: Text('Âge valide : entre 16 et 90 ans',
-                            style: TextStyle(
-                                fontSize: 13.sp, color: AppColors.error)),
-                      ),
-                  ],
-                ),
-              ),
-
-              SizedBox(height: 24.h),
-
-              SizedBox(
-                width: double.infinity,
-                height: 56.h,
-                child: ElevatedButton(
-                  onPressed: _ageInMonths != null
-                      ? () => context.read<CompleteTestBloc>().add(
-                            StartTestEvent(_ageInMonths!),
-                          )
-                      : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.success,
-                    disabledBackgroundColor:
-                        AppColors.success.withValues(alpha: 0.4),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.r)),
-                  ),
-                  child: Text('Commencer le Test Complet',
-                      style: TextStyle(
-                          fontSize: 18.sp, fontWeight: FontWeight.bold)),
-                ),
-              ),
-
-              SizedBox(height: 16.h),
-
-              SizedBox(
-                width: double.infinity,
-                height: 56.h,
-                child: OutlinedButton(
-                  onPressed: () => Navigator.pop(context),
-                  style: OutlinedButton.styleFrom(
-                    side: BorderSide(color: AppColors.error),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.r)),
-                  ),
-                  child: Text('Annuler',
-                      style:
-                          TextStyle(fontSize: 18.sp, color: AppColors.error)),
-                ),
-              ),
-            ],
+    return KeplerScaffold(
+      title: 'Test complet',
+      eyebrow: 'WAIS-IV',
+      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Douze subtests,', style: AppText.heroDisplay()),
+          Text('quatre indices.', style: AppText.heroItalic()),
+          SizedBox(height: 16.h),
+          Container(
+              width: 36.w,
+              height: 1,
+              color: AppColors.primary.withValues(alpha: 0.4)),
+          SizedBox(height: 16.h),
+          Text(
+            'Évaluation cognitive complète standardisée. Les sous-tests s\'enchaînent automatiquement.',
+            style: AppText.body(),
           ),
-        ),
+          SizedBox(height: 24.h),
+          _InfoCard(
+              eyebrow: 'DURÉE',
+              title: '60 à 90 minutes',
+              body: 'Prévoyez une plage de temps continue.'),
+          SizedBox(height: 12.h),
+          _InfoCard(
+              eyebrow: 'CONTENU',
+              title: '12 subtests inclus',
+              body: 'Cubes · Similitudes · Mémoire · Matrices · Vocabulaire · '
+                  'Arithmétique · Symboles · Puzzles · Information · Code · '
+                  'Images · Balances.'),
+          SizedBox(height: 12.h),
+          _InfoCard(
+              eyebrow: 'IMPORTANT',
+              title: 'Enchaînement automatique',
+              body: 'Les tests se lanceront l\'un après l\'autre. Assurez-vous d\'avoir suffisamment de temps.'),
+          SizedBox(height: 24.h),
+          KeplerCard(
+            surface: true,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('§ ÂGE DU PATIENT §',
+                    style: AppText.monoLabel(color: AppColors.primary)),
+                SizedBox(height: 12.h),
+                Text(
+                    'Requis pour les normes (16 à 90 ans)',
+                    style: AppText.bodySmall()),
+                SizedBox(height: 12.h),
+                TextField(
+                  controller: _ageController,
+                  keyboardType: TextInputType.number,
+                  style: AppText.monoScore(size: 22.sp),
+                  decoration: InputDecoration(
+                    hintText: '00',
+                    hintStyle: AppText.monoScore(
+                        color: AppColors.textTertiary, size: 22.sp),
+                    suffixText: 'ANS',
+                    suffixStyle:
+                        AppText.monoLabel(color: AppColors.textTertiary),
+                    filled: true,
+                    fillColor: AppColors.background,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(6.r),
+                      borderSide: BorderSide.none,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(6.r),
+                      borderSide:
+                          BorderSide(color: Colors.black.withValues(alpha: 0.07)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(6.r),
+                      borderSide: const BorderSide(
+                          color: AppColors.primary, width: 2),
+                    ),
+                  ),
+                  onChanged: (v) {
+                    final years = int.tryParse(v);
+                    setState(() {
+                      _ageInMonths = (years != null && years >= 16 && years <= 90)
+                          ? years * 12
+                          : null;
+                    });
+                  },
+                ),
+                if (_ageController.text.isNotEmpty && _ageInMonths == null)
+                  Padding(
+                    padding: EdgeInsets.only(top: 8.h),
+                    child: Text('Âge entre 16 et 90 ans',
+                        style: AppText.bodySmall(color: AppColors.error)),
+                  ),
+              ],
+            ),
+          ),
+          SizedBox(height: 24.h),
+          KeplerButton(
+            label: 'Lancer le test complet',
+            icon: Icons.east,
+            expand: true,
+            onPressed: _ageInMonths != null
+                ? () => context.read<CompleteTestBloc>().add(
+                      StartTestEvent(_ageInMonths!),
+                    )
+                : null,
+          ),
+          SizedBox(height: 12.h),
+          KeplerButton(
+            label: 'Annuler',
+            variant: KeplerButtonVariant.ghost,
+            expand: true,
+            onPressed: () => Navigator.pop(context),
+          ),
+          SizedBox(height: 24.h),
+        ],
       ),
     );
   }
@@ -331,99 +278,80 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
             ? state.session
             : null;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Test en cours',
-            style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold)),
-        backgroundColor: AppColors.primary,
-      ),
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(24.w),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+    final progress = session != null ? session.progressPercentage / 100 : 0.0;
+    final completed = session?.completedTestsCount ?? 0;
+    final total = session?.totalTests ?? 12;
+    final next = state is CompleteTestRunningState ? state.nextTestName : null;
+
+    return KeplerScaffold(
+      title: 'Test en cours',
+      eyebrow: 'WAIS-IV',
+      scroll: false,
+      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          KeplerProgress(
+            value: progress,
+            current: completed,
+            total: total,
+            label: 'PROGRESSION GLOBALE',
+          ),
+          SizedBox(height: 40.h),
+          if (next != null) ...[
+            Text('§ PROCHAIN SUBTEST §',
+                style: AppText.monoLabel(color: AppColors.primary)),
+            SizedBox(height: 8.h),
+            Text(next, style: AppText.h1Italic()),
+            SizedBox(height: 24.h),
+          ],
+          Row(
             children: [
-              Text('Progression du Test',
-                  style:
-                      TextStyle(fontSize: 24.sp, fontWeight: FontWeight.bold)),
-              SizedBox(height: 24.h),
-
-              if (session != null) ...[
-                // Barre de progression globale
-                LinearProgressIndicator(
-                  value: session.progressPercentage / 100,
-                  backgroundColor: AppColors.surfaceVariant,
-                  valueColor:
-                      const AlwaysStoppedAnimation<Color>(AppColors.primary),
-                  minHeight: 12.h,
+              SizedBox(
+                width: 18.w,
+                height: 18.w,
+                child: const CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: AppColors.primary,
                 ),
-                SizedBox(height: 16.h),
-                Text(
-                  '${session.completedTestsCount} / ${session.totalTests} tests complétés',
-                  style:
-                      TextStyle(fontSize: 18.sp, color: AppColors.grey600),
-                ),
-              ],
-
-              SizedBox(height: 48.h),
-              const CircularProgressIndicator(color: AppColors.primary),
-              SizedBox(height: 24.h),
-              Text('Lancement du prochain test...',
-                  style: TextStyle(fontSize: 16.sp, color: AppColors.grey600),
-                  textAlign: TextAlign.center),
-
-              if (state is CompleteTestRunningState) ...[
-                SizedBox(height: 16.h),
-                Text(
-                  'Prochain : ${state.nextTestName}',
-                  style: TextStyle(
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.primary),
-                  textAlign: TextAlign.center,
-                ),
-              ],
+              ),
+              SizedBox(width: 12.w),
+              Text('Lancement…',
+                  style: AppText.monoLabel(color: AppColors.textSecondary)),
             ],
           ),
-        ),
+        ],
       ),
     );
   }
+}
 
-  Widget _buildInfoCard({
-    required IconData icon,
-    required String title,
-    required String description,
-    Color? color,
-  }) {
-    final c = color ?? AppColors.primary;
-    return Container(
-      margin: EdgeInsets.only(bottom: 16.h),
-      padding: EdgeInsets.all(16.w),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12.r),
-        border:
-            Border.all(color: c.withValues(alpha: 0.3)),
-      ),
+class _InfoCard extends StatelessWidget {
+  const _InfoCard(
+      {required this.eyebrow, required this.title, required this.body});
+  final String eyebrow;
+  final String title;
+  final String body;
+
+  @override
+  Widget build(BuildContext context) {
+    return KeplerCard(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: c, size: 24.sp),
-          SizedBox(width: 12.w),
+          Container(width: 3.w, height: 36.h, color: AppColors.primary),
+          SizedBox(width: 14.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title,
-                    style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.bold,
-                        color: c)),
+                Text('§ $eyebrow §',
+                    style: AppText.monoLabel(color: AppColors.primary)),
                 SizedBox(height: 4.h),
-                Text(description,
-                    style:
-                        TextStyle(fontSize: 14.sp, color: AppColors.grey600)),
+                Text(title, style: AppText.bodyStrong()),
+                SizedBox(height: 4.h),
+                Text(body, style: AppText.bodySmall()),
               ],
             ),
           ),

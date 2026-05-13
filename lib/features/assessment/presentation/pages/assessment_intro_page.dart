@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_typography.dart';
+import '../../../../core/widgets/kepler_button.dart';
+import '../../../../core/widgets/kepler_card.dart';
+import '../../../../core/widgets/kepler_scaffold.dart';
 import '../../../complete_test/presentation/pages/complete_test_orchestrator_page.dart';
 import '../../../data_collection/oral_test_flow.dart';
 import '../../../exercises_implementations/cubes/presentation/pages/cubes_test_page.dart';
@@ -16,286 +20,177 @@ import '../../../exercises_implementations/picture_span/presentation/pages/pictu
 import '../../../exercises_implementations/coding/presentation/pages/coding_test_page.dart';
 import '../../../exercises_implementations/symbol_search/presentation/pages/symbol_search_test_page.dart';
 
-/// Page d'introduction à l'évaluation cognitive.
-///
-/// Présente les 5+1 domaines mesurés, puis propose :
-/// - Un bouton "TEST COMPLET WAIS-IV" bien mis en avant
-/// - Des boutons pour chaque sous-test individuel
 class AssessmentIntroPage extends StatelessWidget {
   const AssessmentIntroPage({super.key});
 
+  static const _domains = [
+    ('VCI', 'Compréhension Verbale'),
+    ('VSI', 'Raisonnement Visuo-Spatial'),
+    ('FRI', 'Raisonnement Fluide'),
+    ('WMI', 'Mémoire de Travail'),
+    ('PSI', 'Vitesse de Traitement'),
+    ('LO',  'Langage Oral'),
+  ];
+
   @override
   Widget build(BuildContext context) {
-    final isWide = MediaQuery.sizeOf(context).width >= 800;
-
-    return Scaffold(
-      appBar: AppBar(title: const Text('Nouvelle évaluation')),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(
-            horizontal: isWide ? 80.w : 24.w,
-            vertical: 24.h,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeroSection(context),
-              SizedBox(height: 32.h),
-              _buildDomainsSection(context),
-              SizedBox(height: 24.h),
-              _buildInfoBanner(context),
-              SizedBox(height: 24.h),
-              _buildCompleteTestButton(context),
-              SizedBox(height: 24.h),
-              _buildDivider(context),
-              SizedBox(height: 16.h),
-              _buildIndividualTests(context, isWide),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildHeroSection(BuildContext context) {
-    return Center(
+    return KeplerScaffold(
+      title: 'Nouvelle évaluation',
+      eyebrow: 'BILAN COGNITIF',
+      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text('Cinq indices,', style: AppText.heroDisplay()),
+          Text('une mesure.', style: AppText.heroItalic()),
+          SizedBox(height: 16.h),
           Container(
-            width: 140.w,
-            height: 140.w,
-            decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(Icons.psychology, size: 72.sp, color: AppColors.primary),
-          ),
-          SizedBox(height: 24.h),
+              width: 36.w,
+              height: 1,
+              color: AppColors.primary.withValues(alpha: 0.4)),
+          SizedBox(height: 16.h),
           Text(
-            'Évaluation cognitive',
-            style: Theme.of(context).textTheme.displayMedium,
-            textAlign: TextAlign.center,
+            'Cette évaluation mesure vos capacités cognitives à travers six domaines '
+            'issus du WAIS-IV. Un score global (FSIQ) en est la synthèse.',
+            style: AppText.body(),
           ),
-          SizedBox(height: 12.h),
-          Text(
-            'Cette évaluation mesure vos capacités cognitives à travers 5 domaines :',
-            style: Theme.of(context).textTheme.bodyLarge,
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDomainsSection(BuildContext context) {
-    final domains = [
-      (Icons.chat_bubble_outline, 'Compréhension Verbale', AppColors.indexVCI),
-      (Icons.view_in_ar_outlined, 'Raisonnement Visuo-Spatial', AppColors.indexVSI),
-      (Icons.extension_outlined, 'Raisonnement Fluide', AppColors.indexFRI),
-      (Icons.memory_outlined, 'Mémoire de Travail', AppColors.indexWMI),
-      (Icons.speed_outlined, 'Vitesse de Traitement', AppColors.indexPSI),
-      (Icons.record_voice_over, 'Langage Oral', AppColors.secondary),
-    ];
-
-    return Column(
-      children: domains
-          .map((d) => Padding(
-                padding: EdgeInsets.only(bottom: 12.h),
-                child: _DomainTile(icon: d.$1, title: d.$2, color: d.$3),
-              ))
-          .toList(),
-    );
-  }
-
-  Widget _buildInfoBanner(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(16.w),
-      decoration: BoxDecoration(
-        color: AppColors.info.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: AppColors.info.withOpacity(0.3)),
-      ),
-      child: Row(
-        children: [
-          Icon(Icons.info_outline, color: AppColors.info, size: 24.sp),
-          SizedBox(width: 12.w),
-          Expanded(
-            child: Text(
-              'Durée estimée : 30-45 minutes\nAssurez-vous d\'être dans un environnement calme sans distractions.',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall
-                  ?.copyWith(color: AppColors.info),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCompleteTestButton(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 72.h,
-      child: ElevatedButton(
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const CompleteTestOrchestratorPage()),
-        ),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: AppColors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.r),
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.psychology, size: 28.sp),
-            SizedBox(width: 12.w),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+          SizedBox(height: 28.h),
+          KeplerCard(
+            surface: true,
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'TEST COMPLET WAIS-IV',
-                  style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  'Tous les subtests (60-90 min)',
-                  style: TextStyle(fontSize: 12.sp),
+                Text('§ DOMAINES MESURÉS §',
+                    style: AppText.monoLabel(color: AppColors.primary)),
+                SizedBox(height: 16.h),
+                for (final d in _domains) _DomainRow(code: d.$1, label: d.$2),
+              ],
+            ),
+          ),
+          SizedBox(height: 24.h),
+          KeplerCard(
+            child: Row(
+              children: [
+                Container(width: 3.w, height: 32.h, color: AppColors.primary),
+                SizedBox(width: 14.w),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('§ AVANT DE COMMENCER §',
+                          style: AppText.monoLabel(color: AppColors.primary)),
+                      SizedBox(height: 4.h),
+                      Text(
+                        'Durée estimée 30 à 45 minutes. Calme et concentration requis.',
+                        style: AppText.bodySmall(),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDivider(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(child: Divider(color: AppColors.grey300)),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.w),
-          child: Text(
-            'OU tests individuels',
-            style: TextStyle(fontSize: 14.sp, color: AppColors.grey600),
           ),
-        ),
-        Expanded(child: Divider(color: AppColors.grey300)),
-      ],
-    );
-  }
-
-  Widget _buildIndividualTests(BuildContext context, bool isWide) {
-    final tests = [
-      ('Cubes (Block Design)', AppColors.indexVSI, () => const CubesTestPage()),
-      ('Matrices Progressives', AppColors.indexFRI, () => const MatricesTestPage()),
-      ('Balances Quantitatives', AppColors.indexFRI, () => const FigureWeightsTestPage()),
-      ('Puzzles Visuels', AppColors.indexVSI, () => const VisualPuzzlesTestPage()),
-      ('Similitudes', AppColors.indexVCI, () => const SimilaritiesTestPage()),
-      ('Vocabulaire', AppColors.indexVCI, () => const VocabularyTestPage()),
-      ('Information', AppColors.indexVCI, () => const InformationTestPage()),
-      ('Mémoire des Chiffres', AppColors.indexWMI, () => const DigitSpanTestPage()),
-      ('Arithmétique', AppColors.indexWMI, () => const ArithmeticTestPage()),
-      ('Mémoire des Images', AppColors.indexWMI, () => const PictureSpanTestPage()),
-      ('Code (Coding)', AppColors.indexPSI, () => const CodingTestPage()),
-      ('Recherche de Symboles', AppColors.indexPSI, () => const SymbolSearchTestPage()),
-      ('Compréhension Orale', AppColors.secondary, () => const OralTestFlow()),
-    ];
-
-    if (isWide) {
-      // Grille 2 colonnes sur desktop
-      final rows = <Widget>[];
-      for (int i = 0; i < tests.length; i += 2) {
-        rows.add(
+          SizedBox(height: 28.h),
+          KeplerButton(
+            label: 'Lancer le bilan complet',
+            icon: Icons.east,
+            expand: true,
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => const CompleteTestOrchestratorPage()),
+            ),
+          ),
+          SizedBox(height: 36.h),
           Row(
             children: [
-              Expanded(child: _testButton(context, tests[i])),
-              SizedBox(width: 12.w),
               Expanded(
-                child: i + 1 < tests.length
-                    ? _testButton(context, tests[i + 1])
-                    : const SizedBox(),
+                  child: Container(
+                      height: 1,
+                      color: Colors.black.withValues(alpha: 0.08))),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12.w),
+                child: Text('§ OU SUBTEST INDIVIDUEL §',
+                    style: AppText.monoLabel()),
               ),
+              Expanded(
+                  child: Container(
+                      height: 1,
+                      color: Colors.black.withValues(alpha: 0.08))),
             ],
           ),
-        );
-        rows.add(SizedBox(height: 12.h));
-      }
-      return Column(children: rows);
-    }
-
-    return Column(
-      children: tests.map((t) {
-        return Padding(
-          padding: EdgeInsets.only(bottom: 12.h),
-          child: _testButton(context, t),
-        );
-      }).toList(),
-    );
-  }
-
-  Widget _testButton(
-    BuildContext context,
-    (String, Color, Widget Function()) test,
-  ) {
-    final color = test.$2;
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => test.$3()),
-        ),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: color.withOpacity(0.08),
-          foregroundColor: color,
-          elevation: 0,
-          side: BorderSide(color: color.withOpacity(0.3)),
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.r),
-          ),
-        ),
-        child: Text(
-          test.$1,
-          style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
-        ),
+          SizedBox(height: 20.h),
+          _IndividualTests(),
+          SizedBox(height: 24.h),
+        ],
       ),
     );
   }
 }
 
-class _DomainTile extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final Color color;
-
-  const _DomainTile({
-    required this.icon,
-    required this.title,
-    required this.color,
-  });
+class _DomainRow extends StatelessWidget {
+  const _DomainRow({required this.code, required this.label});
+  final String code;
+  final String label;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 6.h),
+      child: Row(
+        children: [
+          SizedBox(
+              width: 48.w,
+              child: Text(code,
+                  style: AppText.monoLabel(color: AppColors.primary))),
+          Expanded(child: Text(label, style: AppText.body())),
+        ],
+      ),
+    );
+  }
+}
+
+class _IndividualTests extends StatelessWidget {
+  static final _tests = <(String, String, Widget Function())>[
+    ('VSI', 'Cubes (Block Design)', () => const CubesTestPage()),
+    ('FRI', 'Matrices Progressives', () => const MatricesTestPage()),
+    ('FRI', 'Balances Quantitatives', () => const FigureWeightsTestPage()),
+    ('VSI', 'Puzzles Visuels', () => const VisualPuzzlesTestPage()),
+    ('VCI', 'Similitudes', () => const SimilaritiesTestPage()),
+    ('VCI', 'Vocabulaire', () => const VocabularyTestPage()),
+    ('VCI', 'Information', () => const InformationTestPage()),
+    ('WMI', 'Mémoire des Chiffres', () => const DigitSpanTestPage()),
+    ('WMI', 'Arithmétique', () => const ArithmeticTestPage()),
+    ('WMI', 'Mémoire des Images', () => const PictureSpanTestPage()),
+    ('PSI', 'Code', () => const CodingTestPage()),
+    ('PSI', 'Recherche de Symboles', () => const SymbolSearchTestPage()),
+    ('LO',  'Compréhension Orale', () => const OralTestFlow()),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
       children: [
-        Container(
-          width: 40.w,
-          height: 40.w,
-          decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(8.r),
+        for (final t in _tests) ...[
+          KeplerCard(
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => t.$3()),
+            ),
+            child: Row(
+              children: [
+                SizedBox(
+                    width: 40.w,
+                    child: Text(t.$1,
+                        style: AppText.monoLabel(color: AppColors.primary))),
+                Expanded(child: Text(t.$2, style: AppText.bodyStrong())),
+                Icon(Icons.east, size: 16.sp, color: AppColors.primary),
+              ],
+            ),
           ),
-          child: Icon(icon, size: 20.sp, color: color),
-        ),
-        SizedBox(width: 12.w),
-        Text(title, style: Theme.of(context).textTheme.bodyLarge),
+          SizedBox(height: 10.h),
+        ],
       ],
     );
   }

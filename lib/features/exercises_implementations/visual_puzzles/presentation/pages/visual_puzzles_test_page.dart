@@ -273,6 +273,7 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
     final currentItem = _generatedItems[currentLevel];
 
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text('Puzzles Visuels'),
         actions: [

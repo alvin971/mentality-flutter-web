@@ -228,6 +228,7 @@ class _CodingTestPageState extends State<CodingTestPage> {
 
   Widget _buildIntroScreen() {
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text('Code (Digit Symbol)'),
       ),
@@ -327,6 +328,7 @@ class _CodingTestPageState extends State<CodingTestPage> {
         : _digitSequence;
 
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text(_isTraining ? 'Entraînement' : 'Test de Code'),
         actions: [

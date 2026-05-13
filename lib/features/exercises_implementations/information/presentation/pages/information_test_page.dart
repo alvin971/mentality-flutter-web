@@ -321,6 +321,7 @@ class _InformationTestPageState extends State<InformationTestPage> {
     final currentItem = _generatedItems[currentLevel];
 
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text('Information'),
         actions: [

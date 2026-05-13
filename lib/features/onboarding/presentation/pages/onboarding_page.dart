@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_typography.dart';
+import '../../../../core/widgets/kepler_button.dart';
 
-/// Page d'onboarding — présentée au premier lancement.
-///
-/// 3 slides :
-/// 1. Confidentialité des données
-/// 2. Durée et déroulement du test
-/// 3. Explication des 5 indices cognitifs
+/// Onboarding Kepler — 3 slides éditoriales (serif + mono).
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
 
@@ -23,45 +20,40 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   static const _slides = [
     _Slide(
-      icon: Icons.lock_outline,
-      color: AppColors.primary,
-      title: 'Vos données restent privées',
+      eyebrow: 'CONFIDENTIALITÉ',
+      titleA: 'Vos données',
+      titleB: 'vous appartiennent.',
       body:
-          'Toutes vos évaluations sont stockées localement sur votre appareil. '
+          'Les évaluations restent stockées localement et chiffrées. '
           'Aucune donnée n\'est partagée sans votre consentement explicite. '
-          'Les enregistrements audio oraux sont chiffrés et ne quittent '
-          'votre appareil qu\'après votre accord.',
+          'Les enregistrements audio ne quittent l\'appareil qu\'après votre accord.',
     ),
     _Slide(
-      icon: Icons.timer_outlined,
-      color: AppColors.secondary,
-      title: 'Durée et déroulement',
+      eyebrow: 'DURÉE',
+      titleA: '30 à 60 minutes,',
+      titleB: 'à votre rythme.',
       body:
-          'Le test complet dure entre 30 et 60 minutes. '
           'Vous pouvez faire une pause et reprendre à tout moment — '
           'votre progression est sauvegardée automatiquement. '
           'Choisissez un moment calme, sans distractions.',
     ),
     _Slide(
-      icon: Icons.psychology_outlined,
-      color: AppColors.indexFRI,
-      title: 'Ce que mesure Mentality',
+      eyebrow: 'MESURE',
+      titleA: 'Cinq indices,',
+      titleB: 'un score global.',
       body:
-          'L\'application évalue 5 domaines cognitifs issus du WAIS-IV :\n\n'
-          '• VCI — Compréhension Verbale\n'
-          '• VSI — Raisonnement Visuo-Spatial\n'
-          '• FRI — Raisonnement Fluide\n'
-          '• WMI — Mémoire de Travail\n'
-          '• PSI — Vitesse de Traitement\n\n'
-          'Un score global FSIQ est calculé à partir de ces 5 indices.',
+          'Mentality évalue les cinq domaines cognitifs du WAIS-IV : '
+          'compréhension verbale (VCI), raisonnement visuo-spatial (VSI), '
+          'raisonnement fluide (FRI), mémoire de travail (WMI), '
+          'et vitesse de traitement (PSI). Le score FSIQ en est la synthèse.',
     ),
   ];
 
-  void _nextPage() {
+  void _next() {
     if (_currentPage < _slides.length - 1) {
       _controller.nextPage(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
+        duration: const Duration(milliseconds: 350),
+        curve: Curves.easeOutCubic,
       );
     } else {
       context.go(AppConstants.routeHome);
@@ -70,64 +62,60 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isLast = _currentPage == _slides.length - 1;
     return Scaffold(
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           children: [
-            // Skip button
-            Align(
-              alignment: Alignment.topRight,
-              child: TextButton(
-                onPressed: () => context.go(AppConstants.routeHome),
-                child: const Text('Passer'),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '${(_currentPage + 1).toString().padLeft(2, '0')} / ${_slides.length.toString().padLeft(2, '0')}',
+                    style: AppText.monoLabel(color: AppColors.textTertiary),
+                  ),
+                  TextButton(
+                    onPressed: () => context.go(AppConstants.routeHome),
+                    child: Text('Passer',
+                        style: AppText.bodySmall(
+                            color: AppColors.textSecondary)),
+                  ),
+                ],
               ),
             ),
-
-            // Page view
             Expanded(
               child: PageView.builder(
                 controller: _controller,
                 onPageChanged: (i) => setState(() => _currentPage = i),
                 itemCount: _slides.length,
-                itemBuilder: (_, i) => _SlideWidget(slide: _slides[i]),
+                itemBuilder: (_, i) => _SlideView(slide: _slides[i]),
               ),
             ),
-
-            // Indicateurs de page
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
                 _slides.length,
                 (i) => AnimatedContainer(
                   duration: const Duration(milliseconds: 300),
-                  margin: EdgeInsets.symmetric(horizontal: 4.w),
-                  width: _currentPage == i ? 24.w : 8.w,
-                  height: 8.h,
-                  decoration: BoxDecoration(
-                    color: _currentPage == i
-                        ? _slides[_currentPage].color
-                        : AppColors.grey300,
-                    borderRadius: BorderRadius.circular(4.r),
-                  ),
+                  margin: EdgeInsets.symmetric(horizontal: 3.w),
+                  width: _currentPage == i ? 24.w : 6.w,
+                  height: 2.h,
+                  color: _currentPage == i
+                      ? AppColors.primary
+                      : AppColors.primary.withValues(alpha: 0.2),
                 ),
               ),
             ),
             SizedBox(height: 24.h),
-
-            // Bouton suivant / commencer
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 24.w),
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _nextPage,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: _slides[_currentPage].color,
-                  ),
-                  child: Text(
-                    _currentPage < _slides.length - 1 ? 'Suivant' : 'Commencer',
-                  ),
-                ),
+              child: KeplerButton(
+                label: isLast ? 'Commencer' : 'Continuer',
+                onPressed: _next,
+                expand: true,
               ),
             ),
             SizedBox(height: 32.h),
@@ -139,55 +127,43 @@ class _OnboardingPageState extends State<OnboardingPage> {
 }
 
 class _Slide {
-  final IconData icon;
-  final Color color;
-  final String title;
-  final String body;
-
   const _Slide({
-    required this.icon,
-    required this.color,
-    required this.title,
+    required this.eyebrow,
+    required this.titleA,
+    required this.titleB,
     required this.body,
   });
+
+  final String eyebrow;
+  final String titleA;
+  final String titleB;
+  final String body;
 }
 
-class _SlideWidget extends StatelessWidget {
+class _SlideView extends StatelessWidget {
+  const _SlideView({required this.slide});
   final _Slide slide;
-
-  const _SlideWidget({required this.slide});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(32.w),
+      padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 24.h),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Text('§ ${slide.eyebrow} §',
+              style: AppText.monoLabel(color: AppColors.primary)),
+          SizedBox(height: 24.h),
+          Text(slide.titleA, style: AppText.heroDisplay()),
+          Text(slide.titleB, style: AppText.heroItalic()),
+          SizedBox(height: 28.h),
           Container(
-            width: 120.w,
-            height: 120.w,
-            decoration: BoxDecoration(
-              color: slide.color.withOpacity(0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(slide.icon, size: 60.sp, color: slide.color),
-          ),
-          SizedBox(height: 40.h),
-          Text(
-            slide.title,
-            style: Theme.of(context).textTheme.headlineMedium,
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 20.h),
-          Text(
-            slide.body,
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: AppColors.grey600,
-                  height: 1.6,
-                ),
-            textAlign: TextAlign.center,
-          ),
+              width: 40.w,
+              height: 1,
+              color: AppColors.primary.withValues(alpha: 0.4)),
+          SizedBox(height: 28.h),
+          Text(slide.body, style: AppText.body()),
         ],
       ),
     );

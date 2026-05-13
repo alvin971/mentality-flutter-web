@@ -216,6 +216,7 @@ class _SymbolSearchTestPageState extends State<SymbolSearchTestPage> {
 
   Widget _buildIntroScreen() {
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text('Recherche de Symboles'),
       ),
@@ -373,6 +374,7 @@ class _SymbolSearchTestPageState extends State<SymbolSearchTestPage> {
     final maxItems = _isTraining ? _trainingItems.length : _testItems.length;
 
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text(_isTraining ? 'Entraînement' : 'Recherche de Symboles'),
         actions: [

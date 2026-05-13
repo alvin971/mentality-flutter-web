@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'core/theme/app_colors.dart';
+import 'core/theme/app_typography.dart';
 import 'core/theme/theme_notifier.dart';
 import 'core/router/app_router.dart';
 import 'core/constants/app_constants.dart';
@@ -103,31 +104,38 @@ class MentalityApp extends StatelessWidget {
         surface: AppColors.surface,
       ),
       scaffoldBackgroundColor: AppColors.background,
-      appBarTheme: const AppBarTheme(
-        centerTitle: true,
+      appBarTheme: AppBarTheme(
+        centerTitle: false,
         elevation: 0,
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.background,
         foregroundColor: AppColors.textPrimary,
+        surfaceTintColor: Colors.transparent,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
+        titleTextStyle: AppText.h3(),
+        toolbarHeight: 56,
+        iconTheme: const IconThemeData(
+          color: AppColors.textPrimary,
+          size: 20,
+        ),
       ),
-      textTheme: _buildTextTheme(),
+      textTheme: AppText.buildTextTheme(),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF0B1F17), // Bouton sombre Kepler
-          foregroundColor: const Color(0xFFFAF9F6),
+          backgroundColor: AppColors.primary, // Vert sauge Kepler
+          foregroundColor: AppColors.background,
           elevation: 0,
-          padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 16.h),
+          padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 14.h),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4.r), // quasi-carré Kepler
+            borderRadius: BorderRadius.circular(6.r),
           ),
-          textStyle: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
+          textStyle: AppText.button(),
         ),
       ),
       cardTheme: CardThemeData(
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4.r), // quasi-carré Kepler
-          side: BorderSide(color: AppColors.grey200),
+          borderRadius: BorderRadius.circular(12.r),
+          side: BorderSide(color: Colors.black.withValues(alpha: 0.07)),
         ),
         color: AppColors.white,
       ),
@@ -182,23 +190,4 @@ class MentalityApp extends StatelessWidget {
     );
   }
 
-  TextTheme _buildTextTheme() {
-    return TextTheme(
-      displayLarge:   TextStyle(fontSize: 32.sp, fontWeight: FontWeight.w500, color: AppColors.textPrimary, letterSpacing: -1),
-      displayMedium:  TextStyle(fontSize: 28.sp, fontWeight: FontWeight.w500, color: AppColors.textPrimary, letterSpacing: -0.5),
-      displaySmall:   TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w400, color: AppColors.textPrimary),
-      headlineLarge:  TextStyle(fontSize: 22.sp, fontWeight: FontWeight.w400, color: AppColors.textPrimary),
-      headlineMedium: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w400, color: AppColors.textPrimary),
-      headlineSmall:  TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w400, color: AppColors.textPrimary),
-      titleLarge:     TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600, color: AppColors.textPrimary),
-      titleMedium:    TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500, color: AppColors.textPrimary),
-      titleSmall:     TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500, color: AppColors.textPrimary),
-      bodyLarge:      TextStyle(fontSize: 16.sp, color: AppColors.textSecondary),
-      bodyMedium:     TextStyle(fontSize: 14.sp, color: AppColors.textSecondary),
-      bodySmall:      TextStyle(fontSize: 12.sp, color: AppColors.textTertiary),
-      labelLarge:     TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500, color: AppColors.textPrimary),
-      labelMedium:    TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w500, color: AppColors.textSecondary),
-      labelSmall:     TextStyle(fontSize: 10.sp, fontWeight: FontWeight.w500, color: AppColors.textTertiary, letterSpacing: 1.5),
-    );
-  }
 }

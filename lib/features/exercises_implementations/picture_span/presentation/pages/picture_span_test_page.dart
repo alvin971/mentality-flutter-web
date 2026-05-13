@@ -252,6 +252,7 @@ class _PictureSpanTestPageState extends State<PictureSpanTestPage> {
 
   Widget _buildIntroScreen() {
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text('Mémoire des Images'),
       ),
@@ -348,6 +349,7 @@ class _PictureSpanTestPageState extends State<PictureSpanTestPage> {
     final currentImage = currentImageId != null ? _generator.getImageById(currentImageId) : null;
 
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text('Mémorisation'),
         actions: [
@@ -449,6 +451,7 @@ class _PictureSpanTestPageState extends State<PictureSpanTestPage> {
         .toList();
 
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text('Rappel'),
         actions: [

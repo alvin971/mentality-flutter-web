@@ -245,6 +245,7 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
     final currentItem = _generatedItems[currentLevel];
 
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text('Balances Quantitatives'),
         actions: [
