@@ -98,10 +98,15 @@ class MentalityApp extends StatelessWidget {
       colorScheme: ColorScheme.fromSeed(
         seedColor: AppColors.primary,
         primary: AppColors.primary,
+        onPrimary: AppColors.background,
         secondary: AppColors.secondary,
         tertiary: AppColors.tertiary,
         error: AppColors.error,
+        onError: AppColors.white,
         surface: AppColors.surface,
+        onSurface: AppColors.textPrimary,
+        onSurfaceVariant: AppColors.textSecondary,
+        outline: AppColors.textTertiary,
       ),
       scaffoldBackgroundColor: AppColors.background,
       appBarTheme: AppBarTheme(
@@ -167,62 +172,63 @@ class MentalityApp extends StatelessWidget {
   }
 
   ThemeData _buildDarkTheme() {
-    const textPrimaryDark = Color(0xFFF1F4F0);
-    const textSecondaryDark = Color(0xFFB8C5BD);
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
       colorScheme: ColorScheme.fromSeed(
         seedColor: AppColors.primary,
         brightness: Brightness.dark,
-        primary: AppColors.primaryLight,
+        primary: AppColors.primaryLightDark,
         onPrimary: AppColors.backgroundDark,
-        secondary: AppColors.secondaryLight,
-        tertiary: AppColors.tertiaryLight,
-        error: AppColors.errorLight,
+        secondary: AppColors.indexWMIDark,
+        tertiary: AppColors.indexPSIDark,
+        error: AppColors.errorDark,
+        onError: AppColors.backgroundDark,
         surface: AppColors.surfaceDark,
-        onSurface: textPrimaryDark,
+        onSurface: AppColors.textPrimaryDark,
+        onSurfaceVariant: AppColors.textSecondaryDark,
+        outline: AppColors.textTertiaryDark,
       ),
       scaffoldBackgroundColor: AppColors.backgroundDark,
       appBarTheme: AppBarTheme(
         centerTitle: false,
         elevation: 0,
         backgroundColor: AppColors.backgroundDark,
-        foregroundColor: textPrimaryDark,
+        foregroundColor: AppColors.textPrimaryDark,
         surfaceTintColor: Colors.transparent,
         systemOverlayStyle: SystemUiOverlayStyle.light,
-        titleTextStyle: AppText.h3(color: textPrimaryDark),
+        titleTextStyle: AppText.h3(color: AppColors.textPrimaryDark),
         toolbarHeight: 56,
         iconTheme: const IconThemeData(
-          color: textPrimaryDark,
+          color: AppColors.textPrimaryDark,
           size: 20,
         ),
       ),
       textTheme: AppText.buildTextTheme().apply(
-        bodyColor: textPrimaryDark,
-        displayColor: textPrimaryDark,
+        bodyColor: AppColors.textPrimaryDark,
+        displayColor: AppColors.textPrimaryDark,
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primaryLight,
+          backgroundColor: AppColors.primaryLightDark,
           foregroundColor: AppColors.backgroundDark,
           elevation: 0,
           padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 14.h),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(6.r),
           ),
-          textStyle: AppText.button(),
+          textStyle: AppText.button(color: AppColors.backgroundDark),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.primaryLight,
-          side: const BorderSide(color: AppColors.primaryLight, width: 1.5),
+          foregroundColor: AppColors.primaryLightDark,
+          side: const BorderSide(color: AppColors.primaryLightDark, width: 1.5),
           padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(6.r),
           ),
-          textStyle: AppText.button(color: AppColors.primaryLight),
+          textStyle: AppText.button(color: AppColors.primaryLightDark),
         ),
       ),
       cardTheme: CardThemeData(
@@ -231,13 +237,13 @@ class MentalityApp extends StatelessWidget {
           borderRadius: BorderRadius.circular(12.r),
           side: BorderSide(color: Colors.white.withValues(alpha: 0.12)),
         ),
-        color: AppColors.surfaceVariantDark,
+        color: AppColors.cardDark,
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.surfaceDark,
-        hintStyle: AppText.body(color: textSecondaryDark),
-        labelStyle: AppText.body(color: textSecondaryDark),
+        hintStyle: AppText.body(color: AppColors.textSecondaryDark),
+        labelStyle: AppText.body(color: AppColors.textSecondaryDark),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(4.r),
           borderSide: BorderSide.none,
@@ -249,11 +255,11 @@ class MentalityApp extends StatelessWidget {
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(4.r),
           borderSide:
-              const BorderSide(color: AppColors.primaryLight, width: 2),
+              const BorderSide(color: AppColors.primaryLightDark, width: 2),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(4.r),
-          borderSide: const BorderSide(color: AppColors.errorLight),
+          borderSide: const BorderSide(color: AppColors.errorDark),
         ),
       ),
       dividerTheme: DividerThemeData(
@@ -262,11 +268,13 @@ class MentalityApp extends StatelessWidget {
         space: 1,
       ),
       progressIndicatorTheme: ProgressIndicatorThemeData(
-        color: AppColors.primaryLight,
+        color: AppColors.primaryLightDark,
         linearTrackColor: Colors.white.withValues(alpha: 0.12),
       ),
-      dialogTheme: const DialogThemeData(
+      dialogTheme: DialogThemeData(
         backgroundColor: AppColors.surfaceDark,
+        titleTextStyle: AppText.h3(color: AppColors.textPrimaryDark),
+        contentTextStyle: AppText.body(color: AppColors.textPrimaryDark),
       ),
     );
   }

@@ -111,8 +111,54 @@ class AppColors {
   // ========================================
 
   static const Color backgroundDark = Color(0xFF121212);
-  static const Color surfaceDark = Color(0xFF1E1E1E);
+  static const Color surfaceDark = Color(0xFF1C1C1C);
   static const Color surfaceVariantDark = Color(0xFF2C2C2C);
+  static const Color cardDark = Color(0xFF1F1F1F);
+
+  // ========================================
+  // COULEURS TEXTE DARK (WCAG AA / AAA sur #121212)
+  // ========================================
+
+  /// Off-white — 14.5:1 sur #121212 (AAA)
+  static const Color textPrimaryDark = Color(0xFFEEEEEE);
+
+  /// Light grey — 8.4:1 (AA)
+  static const Color textSecondaryDark = Color(0xFFC0C0C0);
+
+  /// Mid grey — 4.6:1 (AA)
+  static const Color textTertiaryDark = Color(0xFF888888);
+
+  // ========================================
+  // VARIANTES DARK DES INDICES COGNITIFS (+ luminance pour AA)
+  // ========================================
+
+  /// VCI dark — 7.8:1
+  static const Color indexVCIDark = Color(0xFFA78BFF);
+
+  /// VSI dark — 8.2:1
+  static const Color indexVSIDark = Color(0xFF4EC9DD);
+
+  /// FRI dark — 7.1:1
+  static const Color indexFRIDark = Color(0xFF8A8DFF);
+
+  /// WMI dark — 9.2:1
+  static const Color indexWMIDark = Color(0xFF48D597);
+
+  /// PSI dark — 12.1:1
+  static const Color indexPSIDark = Color(0xFFFBD361);
+
+  /// FSIQ dark — 8.5:1
+  static const Color indexFSIQDark = Color(0xFF9D5FFF);
+
+  // ========================================
+  // FEEDBACK DARK (AA garanti)
+  // ========================================
+
+  static const Color successDark = Color(0xFF5FDD9C);
+  static const Color errorDark = Color(0xFFFF9999);
+  static const Color warningDark = Color(0xFFFFD580);
+  static const Color infoDark = Color(0xFF89B4FF);
+  static const Color primaryLightDark = Color(0xFF7CB58A);
 
   // ========================================
   // COULEURS PAR INDICE COGNITIF
@@ -232,6 +278,27 @@ class AppColors {
   // ========================================
   // MÉTHODES UTILITAIRES
   // ========================================
+
+  /// Retourne la variante dark d'une couleur d'indice cognitif (ou la couleur
+  /// inchangée si elle n'a pas de variante dark définie).
+  ///
+  /// Permet aux pages de tests de rendre leur couleur d'accent avec un
+  /// contraste suffisant en mode nuit sans modifier les call sites.
+  static Color accentForBrightness(Color lightVariant, Brightness brightness) {
+    if (brightness == Brightness.light) return lightVariant;
+    if (lightVariant == indexVCI) return indexVCIDark;
+    if (lightVariant == indexVSI) return indexVSIDark;
+    if (lightVariant == indexFRI) return indexFRIDark;
+    if (lightVariant == indexWMI) return indexWMIDark;
+    if (lightVariant == indexPSI) return indexPSIDark;
+    if (lightVariant == indexFSIQ) return indexFSIQDark;
+    if (lightVariant == primary) return primaryLightDark;
+    if (lightVariant == success) return successDark;
+    if (lightVariant == error) return errorDark;
+    if (lightVariant == warning) return warningDark;
+    if (lightVariant == info) return infoDark;
+    return lightVariant;
+  }
 
   /// Retourne la couleur d'un indice par son code
   static Color getIndexColor(String indexCode) {

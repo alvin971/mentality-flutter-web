@@ -27,7 +27,7 @@ class _ResultsHistoryPageState extends State<ResultsHistoryPage> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: AppColors.background,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.r)),
         title: Text('Supprimer ce résultat ?', style: AppText.h3()),
@@ -36,7 +36,7 @@ class _ResultsHistoryPageState extends State<ResultsHistoryPage> {
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
             child: Text('Annuler',
-                style: AppText.bodySmall(color: AppColors.textSecondary)),
+                style: AppText.bodySmall(color: Theme.of(context).colorScheme.onSurfaceVariant)),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
@@ -79,7 +79,7 @@ class _ResultsHistoryPageState extends State<ResultsHistoryPage> {
     final age = (e.ageInMonths / 12).floor();
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       isScrollControlled: true,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
@@ -143,7 +143,7 @@ class _EntryCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('FSIQ',
-                    style: AppText.monoLabel(color: AppColors.textTertiary)),
+                    style: AppText.monoLabel(color: Theme.of(context).colorScheme.outline)),
                 SizedBox(height: 4.h),
                 Text('${entry.fsiq}',
                     style: AppText.monoScore(
@@ -165,7 +165,7 @@ class _EntryCard extends StatelessWidget {
           ),
           IconButton(
             icon: Icon(Icons.delete_outline,
-                color: AppColors.textTertiary, size: 18.sp),
+                color: Theme.of(context).colorScheme.outline, size: 18.sp),
             onPressed: onDelete,
           ),
         ],
@@ -231,7 +231,7 @@ class _ScoreRow extends StatelessWidget {
             style: AppText.monoScore(
               color: highlight
                   ? AppColors.primary
-                  : AppColors.textPrimary,
+                  : Theme.of(context).colorScheme.onSurface,
               size: highlight ? 22.sp : 18.sp,
             ),
           ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_typography.dart';
+import '../theme/kepler_colors.dart';
 
 enum KeplerButtonVariant { primary, secondary, ghost }
 
@@ -29,6 +30,8 @@ class KeplerButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final disabled = onPressed == null;
+    final colors = KeplerColors.of(context);
+    final primary = colors.primary;
 
     final Color bg;
     final Color fg;
@@ -36,18 +39,18 @@ class KeplerButton extends StatelessWidget {
 
     switch (variant) {
       case KeplerButtonVariant.primary:
-        bg = disabled ? AppColors.primary.withValues(alpha: 0.4) : AppColors.primary;
-        fg = AppColors.background;
+        bg = disabled ? primary.withValues(alpha: 0.4) : primary;
+        fg = colors.background;
         side = BorderSide.none;
         break;
       case KeplerButtonVariant.secondary:
-        bg = AppColors.background;
-        fg = AppColors.textPrimary;
-        side = BorderSide(color: AppColors.primary.withValues(alpha: 0.5), width: 1);
+        bg = colors.background;
+        fg = colors.textPrimary;
+        side = BorderSide(color: primary.withValues(alpha: 0.5), width: 1);
         break;
       case KeplerButtonVariant.ghost:
         bg = Colors.transparent;
-        fg = AppColors.primary;
+        fg = primary;
         side = BorderSide.none;
         break;
     }

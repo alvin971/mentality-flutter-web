@@ -43,7 +43,7 @@ class _SplashPageState extends State<SplashPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: FadeTransition(
           opacity: _fade,
@@ -67,7 +67,7 @@ class _SplashPageState extends State<SplashPage>
                 SizedBox(height: 14.h),
                 Text('WAIS-IV · WISC-V · WPPSI-IV',
                     style: AppText.monoLabel(
-                        color: AppColors.textTertiary)),
+                        color: Theme.of(context).colorScheme.outline)),
               ],
             ),
           ),

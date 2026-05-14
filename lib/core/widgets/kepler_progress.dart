@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_typography.dart';
+import '../theme/kepler_colors.dart';
 
 /// Indicateur de progression Kepler — barre fine + compteur mono "01 / 12".
 class KeplerProgress extends StatelessWidget {
@@ -27,6 +28,8 @@ class KeplerProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = KeplerColors.of(context);
+    final accent = colors.primary;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
@@ -36,13 +39,13 @@ class KeplerProgress extends StatelessWidget {
           children: [
             if (label != null)
               Text(label!.toUpperCase(),
-                  style: AppText.monoLabel(color: AppColors.primary))
+                  style: AppText.monoLabel(color: accent))
             else
               const SizedBox.shrink(),
             if (current != null && total != null)
               Text(
                 '${current.toString().padLeft(2, '0')} / ${total.toString().padLeft(2, '0')}',
-                style: AppText.monoLabel(color: AppColors.textTertiary),
+                style: AppText.monoLabel(color: colors.textTertiary),
               ),
           ],
         ),
@@ -52,8 +55,8 @@ class KeplerProgress extends StatelessWidget {
           child: LinearProgressIndicator(
             value: value.clamp(0.0, 1.0),
             minHeight: 3.h,
-            backgroundColor: AppColors.primary.withValues(alpha: 0.12),
-            valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
+            backgroundColor: accent.withValues(alpha: 0.12),
+            valueColor: AlwaysStoppedAnimation<Color>(accent),
           ),
         ),
       ],

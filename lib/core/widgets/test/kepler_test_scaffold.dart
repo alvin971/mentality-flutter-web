@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../theme/app_colors.dart';
 import '../../theme/app_typography.dart';
 import '../../theme/kepler_colors.dart';
 import '../et_logo_animated.dart';
@@ -133,6 +134,8 @@ class _TestAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final colors = KeplerColors.of(context);
+    final effectiveAccent = AppColors.accentForBrightness(
+        accentColor, Theme.of(context).brightness);
     return Material(
       color: colors.background,
       child: SafeArea(
@@ -164,7 +167,7 @@ class _TestAppBar extends StatelessWidget implements PreferredSizeWidget {
                       if (eyebrow != null)
                         Text(
                           eyebrow!.toUpperCase(),
-                          style: AppText.monoLabel(color: accentColor),
+                          style: AppText.monoLabel(color: effectiveAccent),
                         ),
                       if (eyebrow != null) SizedBox(height: 2.h),
                       Text(
@@ -178,7 +181,7 @@ class _TestAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ),
                 SizedBox(width: 8.w),
-                EtLogoAnimated(size: 26.w, color: accentColor),
+                EtLogoAnimated(size: 26.w, color: effectiveAccent),
                 if (trailing != null) ...[
                   SizedBox(width: 8.w),
                   ...trailing!,

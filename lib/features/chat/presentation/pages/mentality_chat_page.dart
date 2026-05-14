@@ -61,7 +61,7 @@ class _ChatViewState extends State<_ChatView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: KeplerAppBar(
         leading: Padding(
           padding: EdgeInsets.only(left: 8.w, right: 12.w),
@@ -72,7 +72,7 @@ class _ChatViewState extends State<_ChatView> {
         actions: [
           IconButton(
             icon: Icon(Icons.refresh,
-                size: 20.sp, color: AppColors.textSecondary),
+                size: 20.sp, color: Theme.of(context).colorScheme.onSurfaceVariant),
             tooltip: 'Nouvelle conversation',
             onPressed: () =>
                 context.read<ChatBloc>().add(const ClearConversationEvent()),
@@ -177,7 +177,7 @@ class _MessageBubble extends StatelessWidget {
                   color: err
                       ? AppColors.error
                       : (user
-                          ? AppColors.textTertiary
+                          ? Theme.of(context).colorScheme.outline
                           : AppColors.primary))),
           SizedBox(height: 6.h),
           Container(
@@ -188,7 +188,7 @@ class _MessageBubble extends StatelessWidget {
                   ? AppColors.primary
                   : err
                       ? AppColors.error.withValues(alpha: 0.08)
-                      : AppColors.white,
+                      : Theme.of(context).colorScheme.surface,
               border: user
                   ? null
                   : Border.all(color: Colors.black.withValues(alpha: 0.07)),
@@ -198,16 +198,16 @@ class _MessageBubble extends StatelessWidget {
               message.text,
               style: AppText.body(
                 color: user
-                    ? AppColors.background
+                    ? Theme.of(context).scaffoldBackgroundColor
                     : err
                         ? AppColors.error
-                        : AppColors.textPrimary,
+                        : Theme.of(context).colorScheme.onSurface,
               ),
             ),
           ),
           SizedBox(height: 4.h),
           Text(_ts(message.timestamp),
-              style: AppText.monoLabel(color: AppColors.textTertiary)),
+              style: AppText.monoLabel(color: Theme.of(context).colorScheme.outline)),
         ],
       ),
     );
@@ -228,7 +228,7 @@ class _LoadingBubble extends StatelessWidget {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
             decoration: BoxDecoration(
-              color: AppColors.white,
+              color: Theme.of(context).colorScheme.surface,
               border: Border.all(color: Colors.black.withValues(alpha: 0.07)),
               borderRadius: BorderRadius.circular(8.r),
             ),
@@ -245,7 +245,7 @@ class _LoadingBubble extends StatelessWidget {
                 ),
                 SizedBox(width: 10.w),
                 Text('Réflexion…',
-                    style: AppText.body(color: AppColors.textSecondary)),
+                    style: AppText.body(color: Theme.of(context).colorScheme.onSurfaceVariant)),
               ],
             ),
           ),
@@ -268,7 +268,7 @@ class _InputBar extends StatelessWidget {
         return Container(
           padding: EdgeInsets.fromLTRB(20.w, 12.h, 20.w, 16.h),
           decoration: BoxDecoration(
-            color: AppColors.background,
+            color: Theme.of(context).scaffoldBackgroundColor,
             border: Border(
               top: BorderSide(color: Colors.black.withValues(alpha: 0.07)),
             ),
@@ -282,13 +282,13 @@ class _InputBar extends StatelessWidget {
                   child: TextField(
                     controller: controller,
                     enabled: !isLoading,
-                    style: AppText.body(color: AppColors.textPrimary),
+                    style: AppText.body(color: Theme.of(context).colorScheme.onSurface),
                     decoration: InputDecoration(
                       hintText: 'Écrire un message…',
                       hintStyle:
-                          AppText.body(color: AppColors.textTertiary),
+                          AppText.body(color: Theme.of(context).colorScheme.outline),
                       filled: true,
-                      fillColor: AppColors.white,
+                      fillColor: Theme.of(context).colorScheme.surface,
                       contentPadding: EdgeInsets.symmetric(
                           horizontal: 16.w, vertical: 12.h),
                       border: OutlineInputBorder(
@@ -322,7 +322,7 @@ class _InputBar extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsets.all(12.w),
                       child: Icon(Icons.arrow_upward,
-                          color: AppColors.background, size: 20.sp),
+                          color: Theme.of(context).scaffoldBackgroundColor, size: 20.sp),
                     ),
                   ),
                 ),

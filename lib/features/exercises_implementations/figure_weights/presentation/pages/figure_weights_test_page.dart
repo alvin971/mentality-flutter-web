@@ -313,7 +313,9 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      _buildTokenList(currentItem.question.targetSide),
+                      Flexible(
+                        child: _buildTokenList(currentItem.question.targetSide),
+                      ),
                       Text(
                         ' ?',
                         style: TextStyle(

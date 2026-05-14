@@ -423,7 +423,7 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                         Icon(
                           Icons.star,
                           size: 16.sp,
-                          color: AppColors.white,
+                          color: Theme.of(context).colorScheme.surface,
                         ),
                         SizedBox(width: 6.w),
                         Text(
@@ -431,7 +431,7 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                           style: TextStyle(
                             fontSize: 13.sp,
                             fontWeight: FontWeight.bold,
-                            color: AppColors.white,
+                            color: Theme.of(context).colorScheme.surface,
                           ),
                         ),
                       ],

@@ -44,7 +44,7 @@ class HomePage extends StatelessWidget {
                           ? Icons.light_mode_outlined
                           : Icons.dark_mode_outlined,
                       size: 20.sp,
-                      color: AppColors.textSecondary,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                     onPressed: themeNotifier.toggle,
                   ),
@@ -261,7 +261,7 @@ class _InfoTile extends StatelessWidget {
         SizedBox(
           width: 24.w,
           child: Text(eyebrow,
-              style: AppText.monoLabel(color: AppColors.textTertiary)),
+              style: AppText.monoLabel(color: Theme.of(context).colorScheme.outline)),
         ),
         SizedBox(width: 12.w),
         Expanded(

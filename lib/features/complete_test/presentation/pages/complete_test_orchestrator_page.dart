@@ -208,12 +208,12 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
                   decoration: InputDecoration(
                     hintText: '00',
                     hintStyle: AppText.monoScore(
-                        color: AppColors.textTertiary, size: 22.sp),
+                        color: Theme.of(context).colorScheme.outline, size: 22.sp),
                     suffixText: 'ANS',
                     suffixStyle:
-                        AppText.monoLabel(color: AppColors.textTertiary),
+                        AppText.monoLabel(color: Theme.of(context).colorScheme.outline),
                     filled: true,
-                    fillColor: AppColors.background,
+                    fillColor: Theme.of(context).scaffoldBackgroundColor,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(6.r),
                       borderSide: BorderSide.none,
@@ -318,7 +318,7 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
               ),
               SizedBox(width: 12.w),
               Text('Lancement…',
-                  style: AppText.monoLabel(color: AppColors.textSecondary)),
+                  style: AppText.monoLabel(color: Theme.of(context).colorScheme.onSurfaceVariant)),
             ],
           ),
         ],

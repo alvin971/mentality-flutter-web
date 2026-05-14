@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../theme/app_colors.dart';
 import '../../theme/app_typography.dart';
 import '../../theme/kepler_colors.dart';
 
@@ -24,13 +25,15 @@ class KeplerInstructionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = KeplerColors.of(context);
+    final accent = AppColors.accentForBrightness(
+        accentColor, Theme.of(context).brightness);
     return Container(
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
-        color: accentColor.withValues(alpha: 0.07),
+        color: accent.withValues(alpha: 0.10),
         borderRadius: BorderRadius.circular(12.r),
         border: Border.all(
-          color: accentColor.withValues(alpha: 0.3),
+          color: accent.withValues(alpha: 0.4),
         ),
       ),
       child: Column(
@@ -39,7 +42,7 @@ class KeplerInstructionCard extends StatelessWidget {
         children: [
           if (eyebrow != null) ...[
             Text(eyebrow!.toUpperCase(),
-                style: AppText.monoLabel(color: accentColor)),
+                style: AppText.monoLabel(color: accent)),
             SizedBox(height: 8.h),
           ],
           if (title != null) ...[

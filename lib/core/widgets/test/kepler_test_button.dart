@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../theme/app_colors.dart';
 import '../../theme/app_typography.dart';
 import '../../theme/kepler_colors.dart';
 
@@ -62,6 +63,8 @@ class KeplerTestButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = KeplerColors.of(context);
+    final accent = AppColors.accentForBrightness(
+        accentColor, Theme.of(context).brightness);
     final disabled = onPressed == null;
 
     Color bg;
@@ -70,18 +73,18 @@ class KeplerTestButton extends StatelessWidget {
 
     switch (variant) {
       case KeplerTestButtonVariant.primary:
-        bg = disabled ? accentColor.withValues(alpha: 0.4) : accentColor;
+        bg = disabled ? accent.withValues(alpha: 0.4) : accent;
         fg = colors.background;
         side = BorderSide.none;
         break;
       case KeplerTestButtonVariant.outlined:
         bg = Colors.transparent;
-        fg = accentColor;
-        side = BorderSide(color: accentColor, width: 1.5);
+        fg = accent;
+        side = BorderSide(color: accent, width: 1.5);
         break;
       case KeplerTestButtonVariant.ghost:
         bg = Colors.transparent;
-        fg = accentColor;
+        fg = accent;
         side = BorderSide.none;
         break;
     }

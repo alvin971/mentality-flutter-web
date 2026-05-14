@@ -225,11 +225,11 @@ class _FSIQCard extends StatelessWidget {
           SizedBox(height: 12.h),
           if (ci != null)
             Text('IC 95% · ${ci.lowerBound} – ${ci.upperBound}',
-                style: AppText.monoLabel(color: AppColors.textSecondary)),
+                style: AppText.monoLabel(color: Theme.of(context).colorScheme.onSurfaceVariant)),
           SizedBox(height: 4.h),
           Text(
               'Percentile · $percentile${_ordinal(percentile)}',
-              style: AppText.monoLabel(color: AppColors.textSecondary)),
+              style: AppText.monoLabel(color: Theme.of(context).colorScheme.onSurfaceVariant)),
         ],
       ),
     );
@@ -468,7 +468,7 @@ class _StrengthsWeaknesses extends StatelessWidget {
           ),
           SizedBox(height: 4.h),
           Text('Écart max · ${iq.maxIndexDiscrepancy} pts',
-              style: AppText.monoLabel(color: AppColors.textTertiary)),
+              style: AppText.monoLabel(color: Theme.of(context).colorScheme.outline)),
           if (strengths.isNotEmpty) ...[
             SizedBox(height: 16.h),
             Text('Forces relatives',
@@ -506,7 +506,7 @@ class _StrengthsWeaknesses extends StatelessWidget {
             child: Text(
               'Résultats indicatifs. Pour une évaluation clinique officielle, '
               'consultez un neuropsychologue ou un psychologue qualifié.',
-              style: AppText.bodySmall(color: AppColors.textSecondary),
+              style: AppText.bodySmall(color: Theme.of(context).colorScheme.onSurfaceVariant),
             ),
           ),
         ],

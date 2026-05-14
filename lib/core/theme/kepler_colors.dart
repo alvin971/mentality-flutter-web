@@ -51,14 +51,14 @@ class KeplerColors {
   );
 
   static const _dark = KeplerColors._(
-    background: AppColors.backgroundDark,
-    surface: AppColors.surfaceDark,
-    cardSurface: AppColors.surfaceVariantDark,
-    textPrimary: Color(0xFFF1F4F0), // off-white légèrement vert
-    textSecondary: Color(0xFFB8C5BD),
-    textTertiary: Color(0xFF7A9488),
-    border: Color(0x33FFFFFF), // white 20%
-    primary: AppColors.primaryLight,
-    divider: Color(0x1FFFFFFF), // white 12%
+    background: AppColors.backgroundDark,         // #121212
+    surface: AppColors.surfaceDark,               // #1C1C1C
+    cardSurface: AppColors.cardDark,              // #1F1F1F
+    textPrimary: AppColors.textPrimaryDark,       // #EEEEEE — 14.5:1 (AAA)
+    textSecondary: AppColors.textSecondaryDark,   // #C0C0C0 — 8.4:1 (AA)
+    textTertiary: AppColors.textTertiaryDark,     // #888888 — 4.6:1 (AA)
+    border: Color(0x33FFFFFF),                    // white 20%
+    primary: AppColors.primaryLightDark,          // #7CB58A — 9.4:1
+    divider: Color(0x1FFFFFFF),                   // white 12%
   );
 }

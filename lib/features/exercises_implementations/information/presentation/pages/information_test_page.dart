@@ -353,7 +353,7 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                         style: TextStyle(
                           fontSize: 12.sp,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.white,
+                          color: Theme.of(context).colorScheme.surface,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -372,7 +372,7 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                       style: TextStyle(
                         fontSize: 12.sp,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.white,
+                        color: Theme.of(context).colorScheme.surface,
                       ),
                     ),
                   ),
@@ -401,7 +401,7 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                   style: TextStyle(
                     fontSize: 20.sp,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -447,8 +447,8 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                                 String.fromCharCode(65 + index), // A, B, C, D
                                 style: TextStyle(
                                   color: isSelected
-                                      ? AppColors.white
-                                      : AppColors.textTertiary,
+                                      ? Theme.of(context).colorScheme.surface
+                                      : Theme.of(context).colorScheme.outline,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16.sp,
                                 ),
@@ -466,7 +466,7 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                                     : FontWeight.normal,
                                 color: isSelected
                                     ? AppColors.indexVCI
-                                    : AppColors.textPrimary,
+                                    : Theme.of(context).colorScheme.onSurface,
                               ),
                             ),
                           ),

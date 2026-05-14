@@ -370,7 +370,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
     final maxItems = _isTraining ? _trainingItems.length : _testItems.length;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(_isTraining ? 'Entraînement' : 'Recherche de Symboles'),
         actions: [
@@ -388,14 +388,14 @@ crossAxisAlignment: CrossAxisAlignment.start,
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.timer, size: 20.sp, color: _remainingSeconds <= 10 ? AppColors.error : AppColors.textPrimary),
+                      Icon(Icons.timer, size: 20.sp, color: _remainingSeconds <= 10 ? AppColors.error : Theme.of(context).colorScheme.onSurface),
                       SizedBox(width: 4.w),
                       Text(
                         '$_remainingSeconds s',
                         style: TextStyle(
                           fontSize: 16.sp,
                           fontWeight: FontWeight.bold,
-                          color: _remainingSeconds <= 10 ? AppColors.error : AppColors.textPrimary,
+                          color: _remainingSeconds <= 10 ? AppColors.error : Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
                     ],

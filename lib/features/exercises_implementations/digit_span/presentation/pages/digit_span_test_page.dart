@@ -394,7 +394,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
 
   Widget _buildPartIntroScreen() {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(_currentItem.typeDescription),
       ),
@@ -448,7 +448,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
 
   Widget _buildSequencePresentationScreen() {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(_currentItem.typeDescription),
         actions: [
@@ -535,7 +535,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
 
   Widget _buildUserInputScreen() {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(_currentItem.typeDescription),
         actions: [
@@ -592,7 +592,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                                 style: TextStyle(
                                   fontSize: 24.sp,
                                   fontWeight: FontWeight.bold,
-                                  color: AppColors.white,
+                                  color: Theme.of(context).colorScheme.surface,
                                 ),
                               ),
                             ),

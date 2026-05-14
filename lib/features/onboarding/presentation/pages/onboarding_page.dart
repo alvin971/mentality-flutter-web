@@ -64,7 +64,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   Widget build(BuildContext context) {
     final isLast = _currentPage == _slides.length - 1;
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SafeArea(
         child: Column(
           children: [
@@ -75,13 +75,13 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 children: [
                   Text(
                     '${(_currentPage + 1).toString().padLeft(2, '0')} / ${_slides.length.toString().padLeft(2, '0')}',
-                    style: AppText.monoLabel(color: AppColors.textTertiary),
+                    style: AppText.monoLabel(color: Theme.of(context).colorScheme.outline),
                   ),
                   TextButton(
                     onPressed: () => context.go(AppConstants.routeHome),
                     child: Text('Passer',
                         style: AppText.bodySmall(
-                            color: AppColors.textSecondary)),
+                            color: Theme.of(context).colorScheme.onSurfaceVariant)),
                   ),
                 ],
               ),

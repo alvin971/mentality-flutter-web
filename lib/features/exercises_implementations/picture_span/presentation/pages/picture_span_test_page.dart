@@ -345,7 +345,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
     final currentImage = currentImageId != null ? _generator.getImageById(currentImageId) : null;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('Mémorisation'),
         actions: [
@@ -447,7 +447,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
         .toList();
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('Rappel'),
         actions: [

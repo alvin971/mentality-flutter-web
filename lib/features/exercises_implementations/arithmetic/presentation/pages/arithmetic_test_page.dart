@@ -389,7 +389,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
 
   Widget _buildTestScreen() {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('Arithmétique'),
         actions: [
