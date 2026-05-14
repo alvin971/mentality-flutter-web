@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../../core/theme/app_colors.dart';
 import '../../domain/balance_generator.dart';
 import 'token_widget.dart';
 
-/// Widget pour afficher une balance (équation)
+/// Widget pour afficher une balance (équation visuelle + équation textuelle).
+///
+/// Layout : 2 plateaux colorés + pivot central, puis l'équation mathématique
+/// en dessous. Le widget est theme-aware (light/dark).
 class BalanceWidget extends StatelessWidget {
   final Balance balance;
   final bool showQuestion;
@@ -18,15 +22,16 @@ class BalanceWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: cs.surface,
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: Colors.grey.shade300, width: 2),
+        border: Border.all(color: cs.outlineVariant, width: 1),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -35,91 +40,95 @@ class BalanceWidget extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Plateau du haut (représentation visuelle)
-          _buildBalancePlate(),
-
+          _buildBalancePlate(context),
           SizedBox(height: 12.h),
-
-          // Équation mathématique
-          _buildEquation(),
+          _buildEquation(context),
         ],
       ),
     );
   }
 
-  Widget _buildBalancePlate() {
+  Widget _buildBalancePlate(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final leftTokens = showQuestion && questionTokens != null
+        ? questionTokens!
+        : balance.leftSide;
+    final rightTokens = balance.rightSide;
+    final rightAsQuestion = balance.rightSide.isEmpty && showQuestion;
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        // Côté gauche
         Expanded(
-          child: Container(
-            height: 80.h,
-            decoration: BoxDecoration(
-              color: Colors.blue.shade50,
-              borderRadius: BorderRadius.circular(8.r),
-              border: Border.all(color: Colors.blue.shade200),
-            ),
-            child: Center(
-              child: _buildTokenList(
-                showQuestion && questionTokens != null
-                    ? questionTokens!
-                    : balance.leftSide,
-              ),
-            ),
+          child: _plate(
+            context,
+            tone: AppColors.indexFRI,
+            tokens: leftTokens,
+            showQuestionMark: false,
           ),
         ),
-
-        // Pivot central
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 8.w),
           child: Icon(
             Icons.balance,
             size: 32.sp,
-            color: Colors.grey.shade700,
+            color: cs.onSurfaceVariant,
           ),
         ),
-
-        // Côté droit
         Expanded(
-          child: Container(
-            height: 80.h,
-            decoration: BoxDecoration(
-              color: Colors.green.shade50,
-              borderRadius: BorderRadius.circular(8.r),
-              border: Border.all(color: Colors.green.shade200),
-            ),
-            child: Center(
-              child: balance.rightSide.isEmpty && showQuestion
-                  ? Text(
-                      '?',
-                      style: TextStyle(
-                        fontSize: 36.sp,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey.shade600,
-                      ),
-                    )
-                  : _buildTokenList(balance.rightSide),
-            ),
+          child: _plate(
+            context,
+            tone: AppColors.indexWMI,
+            tokens: rightTokens,
+            showQuestionMark: rightAsQuestion,
           ),
         ),
       ],
     );
   }
 
-  Widget _buildEquation() {
+  Widget _plate(
+    BuildContext context, {
+    required Color tone,
+    required List<Token> tokens,
+    required bool showQuestionMark,
+  }) {
+    return Container(
+      constraints: BoxConstraints(minHeight: 80.h),
+      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
+      decoration: BoxDecoration(
+        color: tone.withValues(alpha: 0.10),
+        borderRadius: BorderRadius.circular(8.r),
+        border: Border.all(color: tone.withValues(alpha: 0.4)),
+      ),
+      child: Center(
+        child: showQuestionMark
+            ? Text(
+                '?',
+                style: TextStyle(
+                  fontSize: 36.sp,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.warning,
+                ),
+              )
+            : _buildTokenList(context, tokens),
+      ),
+    );
+  }
+
+  Widget _buildEquation(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // Côté gauche
-        _buildTokenList(
-          showQuestion && questionTokens != null
-              ? questionTokens!
-              : balance.leftSide,
-          small: true,
+        Flexible(
+          child: _buildTokenList(
+            context,
+            showQuestion && questionTokens != null
+                ? questionTokens!
+                : balance.leftSide,
+            small: true,
+          ),
         ),
-
-        // Signe égal
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 8.w),
           child: Text(
@@ -127,59 +136,56 @@ class BalanceWidget extends StatelessWidget {
             style: TextStyle(
               fontSize: 24.sp,
               fontWeight: FontWeight.bold,
+              color: cs.onSurface,
             ),
           ),
         ),
-
-        // Côté droit
         if (balance.rightSide.isEmpty && showQuestion)
           Text(
             '?',
             style: TextStyle(
               fontSize: 24.sp,
               fontWeight: FontWeight.bold,
-              color: Colors.orange,
+              color: AppColors.warning,
             ),
           )
         else
-          _buildTokenList(balance.rightSide, small: true),
+          Flexible(
+            child: _buildTokenList(context, balance.rightSide, small: true),
+          ),
       ],
     );
   }
 
-  Widget _buildTokenList(List<Token> tokens, {bool small = false}) {
-    if (tokens.isEmpty) {
-      return const SizedBox.shrink();
-    }
-
-    return Flexible(
-      child: Wrap(
-        spacing: small ? 4.w : 8.w,
-        runSpacing: small ? 4.h : 8.h,
-        alignment: WrapAlignment.center,
-        children: tokens.map((token) {
-          return Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TokenWidget(
-                token: token,
-                size: small ? 24 : 32,
-              ),
-              if (tokens.indexOf(token) < tokens.length - 1)
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 4.w),
-                  child: Text(
-                    '+',
-                    style: TextStyle(
-                      fontSize: small ? 16.sp : 20.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+  /// Liste de tokens séparés par des `+`. Retourne un `Wrap` brut (sans
+  /// `Flexible`) — c'est au call site de wrapper en `Flexible` si placé dans
+  /// une `Row`/`Column`.
+  Widget _buildTokenList(BuildContext context, List<Token> tokens,
+      {bool small = false}) {
+    if (tokens.isEmpty) return const SizedBox.shrink();
+    final cs = Theme.of(context).colorScheme;
+    return Wrap(
+      spacing: small ? 4.w : 8.w,
+      runSpacing: small ? 4.h : 8.h,
+      alignment: WrapAlignment.center,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        for (var i = 0; i < tokens.length; i++) ...[
+          TokenWidget(token: tokens[i], size: small ? 24 : 32),
+          if (i < tokens.length - 1)
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 4.w),
+              child: Text(
+                '+',
+                style: TextStyle(
+                  fontSize: small ? 16.sp : 20.sp,
+                  fontWeight: FontWeight.bold,
+                  color: cs.onSurface,
                 ),
-            ],
-          );
-        }).toList(),
-      ),
+              ),
+            ),
+        ],
+      ],
     );
   }
 }

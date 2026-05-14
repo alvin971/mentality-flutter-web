@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../domain/balance_generator.dart';
@@ -25,7 +26,7 @@ class TokenWidget extends StatelessWidget {
             style: TextStyle(
               fontSize: size.sp * 0.6,
               fontWeight: FontWeight.bold,
-              color: Colors.black87,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
           SizedBox(width: 2.w),
@@ -182,13 +183,13 @@ class _TokenPainter extends CustomPainter {
 
   Path _createStarPath(Offset center, double radius, int points) {
     final path = Path();
-    final angle = 3.14159265359 * 2 / points;
+    final step = math.pi / points;
     final innerRadius = radius * 0.5;
 
     for (int i = 0; i < points * 2; i++) {
       final r = i % 2 == 0 ? radius : innerRadius;
-      final x = center.dx + r * Math.cos(i * angle - Math.pi / 2);
-      final y = center.dy + r * Math.sin(i * angle - Math.pi / 2);
+      final x = center.dx + r * math.cos(i * step - math.pi / 2);
+      final y = center.dy + r * math.sin(i * step - math.pi / 2);
 
       if (i == 0) {
         path.moveTo(x, y);
@@ -203,11 +204,11 @@ class _TokenPainter extends CustomPainter {
   Path _createHexagonPath(Offset center, double radius) {
     final path = Path();
     const points = 6;
-    final angle = 3.14159265359 * 2 / points;
+    final angle = math.pi * 2 / points;
 
     for (int i = 0; i < points; i++) {
-      final x = center.dx + radius * Math.cos(i * angle - Math.pi / 2);
-      final y = center.dy + radius * Math.sin(i * angle - Math.pi / 2);
+      final x = center.dx + radius * math.cos(i * angle - math.pi / 2);
+      final y = center.dy + radius * math.sin(i * angle - math.pi / 2);
 
       if (i == 0) {
         path.moveTo(x, y);
@@ -221,30 +222,4 @@ class _TokenPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
-
-// Helper class for math functions
-class Math {
-  static double cos(double radians) => radians.cos();
-  static double sin(double radians) => radians.sin();
-  static const double pi = 3.14159265359;
-}
-
-extension on double {
-  double cos() => this % (2 * Math.pi) < Math.pi
-      ? _cosImpl(this % (2 * Math.pi))
-      : -_cosImpl((this % (2 * Math.pi)) - Math.pi);
-
-  double sin() => (this - Math.pi / 2).cos();
-
-  double _cosImpl(double x) {
-    // Taylor series approximation
-    double result = 1.0;
-    double term = 1.0;
-    for (int i = 1; i <= 10; i++) {
-      term *= -x * x / ((2 * i - 1) * (2 * i));
-      result += term;
-    }
-    return result;
-  }
 }
