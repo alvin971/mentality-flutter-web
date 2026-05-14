@@ -203,7 +203,9 @@ class _ActionCard extends StatelessWidget {
         ],
       ),
     );
-    return comingSoon ? Opacity(opacity: 0.55, child: card) : card;
+    return comingSoon
+        ? IgnorePointer(child: Opacity(opacity: 0.55, child: card))
+        : card;
   }
 }
 

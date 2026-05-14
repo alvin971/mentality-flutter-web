@@ -233,7 +233,7 @@ class _OralTestFlowState extends State<OralTestFlow> {
             onPressed: _declineConsent,
             child: Text(
               'Refuser et revenir en arrière',
-              style: TextStyle(fontSize: 14.sp, color: Colors.grey.shade600),
+              style: TextStyle(fontSize: 14.sp, color: Theme.of(context).colorScheme.onSurfaceVariant),
             ),
           ),
           SizedBox(height: 12.h),
@@ -243,7 +243,7 @@ class _OralTestFlowState extends State<OralTestFlow> {
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontSize: 11.sp,
-                color: Colors.grey.shade500,
+                color: Theme.of(context).colorScheme.outline,
                 fontStyle: FontStyle.italic),
           ),
         ],
@@ -291,7 +291,7 @@ class _OralTestFlowState extends State<OralTestFlow> {
             Text(
               'Texte ${_currentCycle + 1} sur 5',
               style:
-                  TextStyle(fontSize: 14.sp, color: Colors.grey.shade600),
+                  TextStyle(fontSize: 14.sp, color: Theme.of(context).colorScheme.onSurfaceVariant),
             ),
             Text(
               _step == _FlowStep.reading ? 'Lecture' : 'Résumé',
@@ -308,7 +308,7 @@ class _OralTestFlowState extends State<OralTestFlow> {
           child: LinearProgressIndicator(
             value: _progressValue,
             minHeight: 8.h,
-            backgroundColor: Colors.grey.shade200,
+            backgroundColor: Theme.of(context).dividerColor,
             valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
           ),
         ),
@@ -337,13 +337,13 @@ class _OralTestFlowState extends State<OralTestFlow> {
             Text(
               'Maintenant, résumez oralement ce texte.',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16.sp, color: Colors.grey.shade700),
+              style: TextStyle(fontSize: 16.sp, color: Theme.of(context).colorScheme.onSurfaceVariant),
             ),
             SizedBox(height: 32.h),
             Text(
               'Début dans...',
               style:
-                  TextStyle(fontSize: 14.sp, color: Colors.grey.shade500),
+                  TextStyle(fontSize: 14.sp, color: Theme.of(context).colorScheme.outline),
             ),
             SizedBox(height: 8.h),
             Text(
@@ -383,7 +383,7 @@ class _OralTestFlowState extends State<OralTestFlow> {
               'Vos enregistrements contribueront à l\'amélioration\n'
               'de la reconnaissance vocale en français.',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 15.sp, color: Colors.grey.shade700, height: 1.6),
+              style: TextStyle(fontSize: 15.sp, color: Theme.of(context).colorScheme.onSurfaceVariant, height: 1.6),
             ),
             SizedBox(height: 40.h),
             ElevatedButton.icon(
@@ -452,9 +452,9 @@ class _ConsentSection extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(14.w),
       decoration: BoxDecoration(
-        color: Colors.grey.shade50,
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: Theme.of(context).dividerColor),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -471,7 +471,7 @@ class _ConsentSection extends StatelessWidget {
                 SizedBox(height: 4.h),
                 Text(body,
                     style: TextStyle(
-                        fontSize: 13.sp, color: Colors.grey.shade700, height: 1.5)),
+                        fontSize: 13.sp, color: Theme.of(context).colorScheme.onSurfaceVariant, height: 1.5)),
               ],
             ),
           ),

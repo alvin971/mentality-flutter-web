@@ -208,7 +208,7 @@ class _CubesTestPageState extends State<CubesTestPage> {
             Container(
               padding: EdgeInsets.all(12.w),
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
+                color: AppColors.primary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8.r),
               ),
               child: Column(
@@ -349,7 +349,7 @@ class _CubesTestPageState extends State<CubesTestPage> {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.3),
+                  color: Colors.white.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(20.r),
                 ),
                 child: Text(
@@ -368,7 +368,7 @@ class _CubesTestPageState extends State<CubesTestPage> {
             pattern.description,
             style: TextStyle(
               fontSize: 14.sp,
-              color: Colors.white.withOpacity(0.9),
+              color: Colors.white.withValues(alpha: 0.9),
             ),
           ),
           SizedBox(height: 4.h),
@@ -376,7 +376,7 @@ class _CubesTestPageState extends State<CubesTestPage> {
             'Cohésion: ${pattern.cohesionScore}',
             style: TextStyle(
               fontSize: 12.sp,
-              color: Colors.white.withOpacity(0.7),
+              color: Colors.white.withValues(alpha: 0.7),
               fontStyle: FontStyle.italic,
             ),
           ),
@@ -386,7 +386,7 @@ class _CubesTestPageState extends State<CubesTestPage> {
             borderRadius: BorderRadius.circular(10.r),
             child: LinearProgressIndicator(
               value: (currentLevel + 1) / _generatedPatterns.length,
-              backgroundColor: Colors.white.withOpacity(0.3),
+              backgroundColor: Colors.white.withValues(alpha: 0.3),
               valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
               minHeight: 8.h,
             ),

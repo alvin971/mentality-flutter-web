@@ -160,7 +160,7 @@ class _CubesExerciseWidgetState extends State<CubesExerciseWidget> {
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: AppColors.primary.withOpacity(0.1),
+        color: AppColors.primary.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: Column(
@@ -191,8 +191,8 @@ class _CubesExerciseWidgetState extends State<CubesExerciseWidget> {
                   padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
                   decoration: BoxDecoration(
                     color: remainingTime < 10
-                        ? AppColors.error.withOpacity(0.2)
-                        : AppColors.success.withOpacity(0.2),
+                        ? AppColors.error.withValues(alpha: 0.2)
+                        : AppColors.success.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(8.r),
                   ),
                   child: Text(
@@ -270,7 +270,7 @@ class _CubesExerciseWidgetState extends State<CubesExerciseWidget> {
         border: Border.all(color: AppColors.grey800, width: 3),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
+            color: Colors.black.withValues(alpha: 0.3),
             blurRadius: 8,
             offset: const Offset(4, 4),
           ),

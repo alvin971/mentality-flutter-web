@@ -56,7 +56,8 @@ class KeplerButton extends StatelessWidget {
     }
 
     final child = Padding(
-      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 14.h),
+      // 14.h vertical + line-height ≈ 48dp touch target min (a11y mobile)
+      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
       child: Row(
         mainAxisSize: expand ? MainAxisSize.max : MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -70,16 +71,21 @@ class KeplerButton extends StatelessWidget {
       ),
     );
 
-    return Material(
-      color: bg,
-      shape: RoundedRectangleBorder(
-        side: side,
-        borderRadius: BorderRadius.circular(6.r),
-      ),
-      child: InkWell(
-        onTap: onPressed,
-        borderRadius: BorderRadius.circular(6.r),
-        child: expand ? SizedBox(width: double.infinity, child: child) : child,
+    return Semantics(
+      button: true,
+      enabled: !disabled,
+      label: label,
+      child: Material(
+        color: bg,
+        shape: RoundedRectangleBorder(
+          side: side,
+          borderRadius: BorderRadius.circular(6.r),
+        ),
+        child: InkWell(
+          onTap: onPressed,
+          borderRadius: BorderRadius.circular(6.r),
+          child: expand ? SizedBox(width: double.infinity, child: child) : child,
+        ),
       ),
     );
   }

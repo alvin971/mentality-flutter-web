@@ -76,7 +76,7 @@ class _OralReadingTestState extends State<OralReadingTest> {
             Text(
               'Vos enregistrements seront anonymisés et pourront contribuer à l\'amélioration '
               'de la reconnaissance vocale en français.',
-              style: TextStyle(fontSize: 13.sp, color: Colors.grey.shade700),
+              style: TextStyle(fontSize: 13.sp, color: Theme.of(context).colorScheme.onSurfaceVariant),
             ),
             SizedBox(height: 12.h),
             Text(
@@ -84,7 +84,7 @@ class _OralReadingTestState extends State<OralReadingTest> {
               style: TextStyle(
                   fontSize: 13.sp,
                   fontStyle: FontStyle.italic,
-                  color: Colors.grey.shade600),
+                  color: Theme.of(context).colorScheme.onSurfaceVariant),
             ),
           ],
         ),
@@ -222,9 +222,9 @@ class _OralReadingTestState extends State<OralReadingTest> {
     return Container(
       padding: EdgeInsets.all(14.w),
       decoration: BoxDecoration(
-        color: AppColors.primary.withOpacity(0.08),
+        color: AppColors.primary.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -235,7 +235,7 @@ class _OralReadingTestState extends State<OralReadingTest> {
             child: Text(
               'Lisez le texte suivant à voix haute, clairement et à votre rythme naturel. '
               'Appuyez sur "Démarrer" quand vous êtes prêt.',
-              style: TextStyle(fontSize: 14.sp, color: Colors.grey.shade800),
+              style: TextStyle(fontSize: 14.sp, color: Theme.of(context).colorScheme.onSurface),
             ),
           ),
         ],
@@ -269,7 +269,7 @@ class _OralReadingTestState extends State<OralReadingTest> {
                     style: TextStyle(
                       fontSize: 18.sp,
                       height: 1.7,
-                      color: Colors.grey.shade900,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                 ),
@@ -318,14 +318,14 @@ class _OralReadingTestState extends State<OralReadingTest> {
               fontSize: 36.sp,
               fontWeight: FontWeight.bold,
               fontFeatures: const [FontFeature.tabularFigures()],
-              color: Colors.grey.shade800,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
           SizedBox(height: 4.h),
           if (_elapsedSeconds < _minDurationSeconds)
             Text(
               'Continuez encore ${_minDurationSeconds - _elapsedSeconds}s...',
-              style: TextStyle(fontSize: 13.sp, color: Colors.grey.shade500),
+              style: TextStyle(fontSize: 13.sp, color: Theme.of(context).colorScheme.outline),
             ),
           SizedBox(height: 16.h),
         ],
@@ -382,7 +382,7 @@ class _OralReadingTestState extends State<OralReadingTest> {
                 widget.onCompleted(widget.text.id, widget.sessionId),
             child: Text(
               'Passer cette étape',
-              style: TextStyle(fontSize: 13.sp, color: Colors.grey.shade600),
+              style: TextStyle(fontSize: 13.sp, color: Theme.of(context).colorScheme.onSurfaceVariant),
             ),
           ),
         ],

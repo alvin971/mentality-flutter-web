@@ -104,7 +104,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
               Container(
                 padding: EdgeInsets.all(8.w),
                 decoration: BoxDecoration(
-                  color: AppColors.warning.withOpacity(0.1),
+                  color: AppColors.warning.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(4.r),
                 ),
                 child: Text(
@@ -166,7 +166,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
             Container(
               padding: EdgeInsets.all(12.w),
               decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.1),
+                color: AppColors.primary.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8.r),
               ),
               child: Column(
@@ -308,7 +308,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.3),
+                  color: Colors.white.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(20.r),
                 ),
                 child: Text(
@@ -327,7 +327,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
             'Règles : ${item.rules.length} | θ = ${item.thetaValue.toStringAsFixed(1)}',
             style: TextStyle(
               fontSize: 12.sp,
-              color: Colors.white.withOpacity(0.7),
+              color: Colors.white.withValues(alpha: 0.7),
               fontStyle: FontStyle.italic,
             ),
           ),
@@ -337,7 +337,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
             borderRadius: BorderRadius.circular(10.r),
             child: LinearProgressIndicator(
               value: (currentLevel + 1) / _generatedItems.length,
-              backgroundColor: Colors.white.withOpacity(0.3),
+              backgroundColor: Colors.white.withValues(alpha: 0.3),
               valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
               minHeight: 8.h,
             ),
@@ -351,9 +351,9 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
     return Container(
       padding: EdgeInsets.all(12.w),
       decoration: BoxDecoration(
-        color: AppColors.info.withOpacity(0.1),
+        color: AppColors.info.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(color: AppColors.info.withOpacity(0.3)),
+        border: Border.all(color: AppColors.info.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
@@ -380,7 +380,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
           border: Border.all(color: AppColors.grey800, width: 3),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.2),
+              color: Colors.black.withValues(alpha: 0.2),
               blurRadius: 8,
               offset: const Offset(4, 4),
             ),

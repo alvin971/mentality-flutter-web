@@ -77,7 +77,7 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
             Text(
               'Parlez naturellement, comme si vous expliquiez le texte à un ami. '
               'Prenez entre 30 et 60 secondes.',
-              style: TextStyle(fontSize: 13.sp, color: Colors.grey.shade700),
+              style: TextStyle(fontSize: 13.sp, color: Theme.of(context).colorScheme.onSurfaceVariant),
             ),
           ],
         ),
@@ -251,7 +251,7 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
                         'Parlez naturellement, comme si vous l\'expliquiez à un ami.',
                     style: TextStyle(
                       fontSize: 14.sp,
-                      color: Colors.grey.shade800,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                 ],
@@ -267,7 +267,7 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
     return Expanded(
       child: Card(
         elevation: 1,
-        color: Colors.grey.shade50,
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
         child: Padding(
           padding: EdgeInsets.all(20.w),
@@ -277,13 +277,13 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
               Row(
                 children: [
                   Icon(Icons.article_outlined,
-                      size: 16.sp, color: Colors.grey.shade500),
+                      size: 16.sp, color: Theme.of(context).colorScheme.outline),
                   SizedBox(width: 6.w),
                   Text(
                     'Texte de référence',
                     style: TextStyle(
                         fontSize: 12.sp,
-                        color: Colors.grey.shade500,
+                        color: Theme.of(context).colorScheme.outline,
                         fontStyle: FontStyle.italic),
                   ),
                 ],
@@ -296,7 +296,7 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
                     style: TextStyle(
                       fontSize: 15.sp,
                       height: 1.65,
-                      color: Colors.grey.shade500, // grisé = référence non interactive
+                      color: Theme.of(context).colorScheme.outline, // grisé = référence non interactive
                     ),
                   ),
                 ),
@@ -344,14 +344,14 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
               fontSize: 36.sp,
               fontWeight: FontWeight.bold,
               fontFeatures: const [FontFeature.tabularFigures()],
-              color: Colors.grey.shade800,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
           SizedBox(height: 4.h),
           if (_elapsedSeconds < _minDurationSeconds)
             Text(
               'Continuez encore ${_minDurationSeconds - _elapsedSeconds}s...',
-              style: TextStyle(fontSize: 13.sp, color: Colors.grey.shade500),
+              style: TextStyle(fontSize: 13.sp, color: Theme.of(context).colorScheme.outline),
             ),
           SizedBox(height: 16.h),
         ],
@@ -407,7 +407,7 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
                 widget.originalText.id, widget.sessionId),
             child: Text(
               'Passer cette étape',
-              style: TextStyle(fontSize: 13.sp, color: Colors.grey.shade600),
+              style: TextStyle(fontSize: 13.sp, color: Theme.of(context).colorScheme.onSurfaceVariant),
             ),
           ),
         ],
