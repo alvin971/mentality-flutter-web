@@ -53,7 +53,7 @@ class _SplashPageState extends State<SplashPage>
               children: [
                 EtLogoAnimated(size: 140.w),
                 SizedBox(height: 36.h),
-                Text('§ MENTAL E.T. §',
+                Text('MENTAL E.T.',
                     style: AppText.monoLabel(color: AppColors.primary)),
                 SizedBox(height: 14.h),
                 Text('Évaluation', style: AppText.h1()),

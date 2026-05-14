@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:async';
 import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_typography.dart';
+import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/coding_generator.dart';
 
 /// Page du test Code (Coding / Digit Symbol)
@@ -227,16 +229,12 @@ class _CodingTestPageState extends State<CodingTestPage> {
   }
 
   Widget _buildIntroScreen() {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: const Text('Code (Digit Symbol)'),
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(24.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return KeplerTestScaffold(
+      testName: 'Code (Digit Symbol)',
+      eyebrow: 'VITESSE DE TRAITEMENT · PSI',
+      accentColor: AppColors.indexPSI,
+      child: Column(
+crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Icon(
                 Icons.grid_on,
@@ -315,8 +313,6 @@ class _CodingTestPageState extends State<CodingTestPage> {
                 ),
               ),
             ],
-          ),
-        ),
       ),
     );
   }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../theme/app_colors.dart';
+import '../theme/kepler_colors.dart';
 import 'kepler_app_bar.dart';
 
 /// Scaffold pré-configuré pour la charte Kepler — fond crème,
@@ -43,7 +43,7 @@ class KeplerScaffold extends StatelessWidget {
     final body = Padding(padding: p, child: child);
 
     return Scaffold(
-      backgroundColor: background ?? AppColors.background,
+      backgroundColor: background ?? KeplerColors.of(context).background,
       appBar: bar,
       bottomNavigationBar: bottomBar,
       body: scroll

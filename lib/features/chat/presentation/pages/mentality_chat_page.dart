@@ -126,7 +126,7 @@ class _Empty extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('§ MENTALITY §',
+          Text('MENTALITY',
               style: AppText.monoLabel(color: AppColors.primary)),
           SizedBox(height: 16.h),
           Text('Posez', style: AppText.heroDisplay()),
@@ -172,7 +172,7 @@ class _MessageBubble extends StatelessWidget {
         crossAxisAlignment:
             user ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
-          Text(user ? '§ VOUS §' : '§ MENTALITY §',
+          Text(user ? 'VOUS' : 'MENTALITY',
               style: AppText.monoLabel(
                   color: err
                       ? AppColors.error
@@ -222,7 +222,7 @@ class _LoadingBubble extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('§ MENTALITY §',
+          Text('MENTALITY',
               style: AppText.monoLabel(color: AppColors.primary)),
           SizedBox(height: 6.h),
           Container(

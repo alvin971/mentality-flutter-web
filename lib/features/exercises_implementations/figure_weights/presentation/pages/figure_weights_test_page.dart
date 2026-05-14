@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_typography.dart';
+import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/balance_generator.dart';
 import '../widgets/balance_widget.dart';
 import '../widgets/token_widget.dart';
@@ -244,30 +246,14 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
   Widget build(BuildContext context) {
     final currentItem = _generatedItems[currentLevel];
 
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: const Text('Balances Quantitatives'),
-        actions: [
-          Center(
-            child: Padding(
-              padding: EdgeInsets.only(right: 16.w),
-              child: Text(
-                'Item ${currentLevel + 1}/27',
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(16.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+    return KeplerTestScaffold(
+      testName: 'Balances Quantitatives',
+      eyebrow: 'RAISONNEMENT FLUIDE · FRI',
+      accentColor: AppColors.indexFRI,
+      currentItem: currentLevel + 1,
+      totalItems: _generatedItems.length,
+      child: Column(
+crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // Timer et score
               _buildHeader(),
@@ -420,9 +406,7 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
                   ),
                 ),
               ),
-            ],
-          ),
-        ),
+        ],
       ),
     );
   }

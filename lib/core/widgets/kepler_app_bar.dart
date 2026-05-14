@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_typography.dart';
+import '../theme/kepler_colors.dart';
+import 'et_logo_animated.dart';
 
 /// AppBar Kepler — transparente, titre serif italique optionnel,
-/// signature § en eyebrow mono, fine ligne sous le titre.
+/// eyebrow mono, fine ligne sous le titre, logo optionnel à droite.
 class KeplerAppBar extends StatelessWidget implements PreferredSizeWidget {
   const KeplerAppBar({
     super.key,
@@ -13,6 +15,9 @@ class KeplerAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actions,
     this.leading,
     this.elevated = false,
+    this.showLogo = false,
+    this.logoSize = 24,
+    this.logoColor,
   });
 
   final String? title;
@@ -23,19 +28,27 @@ class KeplerAppBar extends StatelessWidget implements PreferredSizeWidget {
   /// Si true, dessine une fine ligne de séparation sous l'app bar.
   final bool elevated;
 
+  /// Si true, affiche le logo animé Mental E.T. en début de la zone actions
+  /// (à droite du titre).
+  final bool showLogo;
+
+  final double logoSize;
+  final Color? logoColor;
+
   @override
   Size get preferredSize => Size.fromHeight(72.h);
 
   @override
   Widget build(BuildContext context) {
+    final colors = KeplerColors.of(context);
     return Material(
-      color: AppColors.background,
+      color: colors.background,
       child: Container(
         decoration: elevated
             ? BoxDecoration(
                 border: Border(
                   bottom: BorderSide(
-                    color: Colors.black.withValues(alpha: 0.07),
+                    color: colors.border,
                   ),
                 ),
               )
@@ -51,7 +64,7 @@ class KeplerAppBar extends StatelessWidget implements PreferredSizeWidget {
                 if (leading == null && Navigator.of(context).canPop())
                   IconButton(
                     icon: Icon(Icons.arrow_back_ios_new,
-                        size: 18.sp, color: AppColors.textPrimary),
+                        size: 18.sp, color: colors.textPrimary),
                     onPressed: () => Navigator.of(context).maybePop(),
                   ),
                 Expanded(
@@ -60,19 +73,27 @@ class KeplerAppBar extends StatelessWidget implements PreferredSizeWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       if (eyebrow != null)
-                        Text('§ ${eyebrow!.toUpperCase()} §',
+                        Text(eyebrow!.toUpperCase(),
                             style: AppText.monoLabel(
                                 color: AppColors.primary)),
                       if (title != null) ...[
                         if (eyebrow != null) SizedBox(height: 2.h),
                         Text(title!,
-                            style: AppText.h2Italic(),
+                            style: AppText.h2Italic()
+                                .copyWith(color: colors.textPrimary),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis),
                       ],
                     ],
                   ),
                 ),
+                if (showLogo) ...[
+                  SizedBox(width: 8.w),
+                  EtLogoAnimated(
+                    size: logoSize,
+                    color: logoColor ?? AppColors.primary,
+                  ),
+                ],
                 if (actions != null) ...actions!,
               ],
             ),

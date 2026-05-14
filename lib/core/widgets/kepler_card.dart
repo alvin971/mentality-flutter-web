@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../theme/app_colors.dart';
+import '../theme/kepler_colors.dart';
 
 /// Card Kepler — fond blanc, bordure subtile, ombre légère, radius 12.
 class KeplerCard extends StatelessWidget {
@@ -29,10 +29,11 @@ class KeplerCard extends StatelessWidget {
       child: child,
     );
 
+    final colors = KeplerColors.of(context);
     final decoration = BoxDecoration(
-      color: surface ? AppColors.surfaceVariant : AppColors.white,
+      color: surface ? colors.surface : colors.cardSurface,
       borderRadius: r,
-      border: Border.all(color: Colors.black.withValues(alpha: 0.07)),
+      border: Border.all(color: colors.border),
       boxShadow: [
         BoxShadow(
           color: Colors.black.withValues(alpha: 0.04),

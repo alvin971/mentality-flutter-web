@@ -152,7 +152,7 @@ class _SlideView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('§ ${slide.eyebrow} §',
+          Text('${slide.eyebrow}',
               style: AppText.monoLabel(color: AppColors.primary)),
           SizedBox(height: 24.h),
           Text(slide.titleA, style: AppText.heroDisplay()),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:async';
 import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_typography.dart';
+import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/digit_span_generator.dart';
 
 /// Page du test Mémoire des Chiffres (Digit Span)
@@ -305,16 +307,12 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
   }
 
   Widget _buildIntroScreen() {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: const Text('Mémoire des Chiffres'),
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(24.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return KeplerTestScaffold(
+      testName: 'Mémoire des Chiffres',
+      eyebrow: 'MÉMOIRE DE TRAVAIL · WMI',
+      accentColor: AppColors.indexWMI,
+      child: Column(
+crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Icon(
                 Icons.memory_outlined,
@@ -390,8 +388,6 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
                 ),
               ),
             ],
-          ),
-        ),
       ),
     );
   }

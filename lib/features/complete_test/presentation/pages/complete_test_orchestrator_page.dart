@@ -139,7 +139,7 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
                 children: [
                   const CircularProgressIndicator(color: AppColors.primary),
                   SizedBox(height: 20.h),
-                  Text('§ TRAITEMENT §',
+                  Text('TRAITEMENT',
                       style: AppText.monoLabel(color: AppColors.primary)),
                 ],
               ),
@@ -194,7 +194,7 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('§ ÂGE DU PATIENT §',
+                Text('ÂGE DU PATIENT',
                     style: AppText.monoLabel(color: AppColors.primary)),
                 SizedBox(height: 12.h),
                 Text(
@@ -300,7 +300,7 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
           ),
           SizedBox(height: 40.h),
           if (next != null) ...[
-            Text('§ PROCHAIN SUBTEST §',
+            Text('PROCHAIN SUBTEST',
                 style: AppText.monoLabel(color: AppColors.primary)),
             SizedBox(height: 8.h),
             Text(next, style: AppText.h1Italic()),
@@ -346,7 +346,7 @@ class _InfoCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('§ $eyebrow §',
+                Text('$eyebrow',
                     style: AppText.monoLabel(color: AppColors.primary)),
                 SizedBox(height: 4.h),
                 Text(title, style: AppText.bodyStrong()),

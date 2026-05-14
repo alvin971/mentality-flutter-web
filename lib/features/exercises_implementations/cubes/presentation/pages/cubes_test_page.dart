@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_typography.dart';
+import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../widgets/cubes_exercise_widget.dart';
 import '../../domain/pattern_generator.dart';
 
@@ -290,31 +292,22 @@ class _CubesTestPageState extends State<CubesTestPage> {
   Widget build(BuildContext context) {
     final pattern = _generatedPatterns[currentLevel];
 
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: const Text('Test des Cubes'),
-        actions: [
-          Center(
-            child: Padding(
-              padding: EdgeInsets.only(right: 16.w),
-              child: Text(
-                'Score: $score',
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(24.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+    return KeplerTestScaffold(
+      testName: 'Test des Cubes',
+      eyebrow: 'RAISONNEMENT FLUIDE · FRI',
+      accentColor: AppColors.indexFRI,
+      currentItem: currentLevel + 1,
+      totalItems: _generatedPatterns.length,
+      trailing: [
+        Padding(
+          padding: EdgeInsets.only(left: 8.w),
+          child: Text('$score pts',
+              style: AppText.monoLabel(color: AppColors.indexFRI)),
+        ),
+      ],
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
               // Niveau et progression
               _buildLevelHeader(pattern),
               SizedBox(height: 24.h),
@@ -327,9 +320,7 @@ class _CubesTestPageState extends State<CubesTestPage> {
                 timeLimitSeconds: pattern.timeLimit,
                 onComplete: _handleComplete,
               ),
-            ],
-          ),
-        ),
+        ],
       ),
     );
   }

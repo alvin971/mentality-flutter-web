@@ -31,10 +31,10 @@ class HomePage extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
             child: Row(
               children: [
-                EtLogoAnimated(size: 28.w),
-                SizedBox(width: 10.w),
-                Text('§ MENTAL E.T. §',
+                Text('MENTAL E.T.',
                     style: AppText.monoLabel(color: AppColors.primary)),
+                SizedBox(width: 10.w),
+                EtLogoAnimated(size: 28.w),
                 const Spacer(),
                 ValueListenableBuilder<ThemeMode>(
                   valueListenable: themeNotifier,
@@ -222,7 +222,7 @@ class _About extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('§ À PROPOS §',
+          Text('À PROPOS',
               style: AppText.monoLabel(color: AppColors.primary)),
           SizedBox(height: 16.h),
           for (var i = 0; i < tiles.length; i++) ...[
@@ -295,7 +295,7 @@ class _ResumeBanner extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('§ TEST EN COURS §',
+                Text('TEST EN COURS',
                     style: AppText.monoLabel(color: AppColors.primary)),
                 SizedBox(height: 4.h),
                 Text('Reprendre votre évaluation', style: AppText.bodyStrong()),

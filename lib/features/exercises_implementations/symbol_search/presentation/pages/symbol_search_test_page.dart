@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:async';
 import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_typography.dart';
+import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/symbol_search_generator.dart';
 
 /// Page du test Recherche de Symboles (Symbol Search)
@@ -215,16 +217,12 @@ class _SymbolSearchTestPageState extends State<SymbolSearchTestPage> {
   }
 
   Widget _buildIntroScreen() {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: const Text('Recherche de Symboles'),
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(24.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return KeplerTestScaffold(
+      testName: 'Recherche de Symboles',
+      eyebrow: 'VITESSE DE TRAITEMENT · PSI',
+      accentColor: AppColors.indexPSI,
+      child: Column(
+crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Icon(
                 Icons.search,
@@ -364,8 +362,6 @@ class _SymbolSearchTestPageState extends State<SymbolSearchTestPage> {
                 ),
               ),
             ],
-          ),
-        ),
       ),
     );
   }

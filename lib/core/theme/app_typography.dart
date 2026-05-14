@@ -8,7 +8,7 @@ import 'app_colors.dart';
 /// Trois familles :
 /// - Source Serif 4 → titres éditoriaux, italiques d'accent
 /// - DM Sans       → corps de texte, UI
-/// - DM Mono       → labels, signature §, scores psychométriques
+/// - DM Mono       → labels mono, scores psychométriques
 class AppText {
   AppText._();
 
@@ -102,7 +102,7 @@ class AppText {
         color: color ?? AppColors.background,
       );
 
-  // ---- DM Mono : labels, §, scores ----
+  // ---- DM Mono : labels mono, scores ----
 
   static TextStyle mono({Color? color, double? size}) => GoogleFonts.robotoMono(
         fontSize: size ?? 11.sp,

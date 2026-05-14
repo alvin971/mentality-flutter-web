@@ -60,7 +60,7 @@ class AssessmentIntroPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('§ DOMAINES MESURÉS §',
+                Text('DOMAINES MESURÉS',
                     style: AppText.monoLabel(color: AppColors.primary)),
                 SizedBox(height: 16.h),
                 for (final d in _domains) _DomainRow(code: d.$1, label: d.$2),
@@ -77,7 +77,7 @@ class AssessmentIntroPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('§ AVANT DE COMMENCER §',
+                      Text('AVANT DE COMMENCER',
                           style: AppText.monoLabel(color: AppColors.primary)),
                       SizedBox(height: 4.h),
                       Text(
@@ -110,7 +110,7 @@ class AssessmentIntroPage extends StatelessWidget {
                       color: Colors.black.withValues(alpha: 0.08))),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12.w),
-                child: Text('§ OU SUBTEST INDIVIDUEL §',
+                child: Text('OU SUBTEST INDIVIDUEL',
                     style: AppText.monoLabel()),
               ),
               Expanded(

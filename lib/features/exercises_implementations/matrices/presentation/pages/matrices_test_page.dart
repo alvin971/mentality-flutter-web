@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/app_typography.dart';
+import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/matrix_generator.dart';
 import '../widgets/matrix_cell_widget.dart';
 
@@ -243,31 +245,22 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
   Widget build(BuildContext context) {
     final item = _generatedItems[currentLevel];
 
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: const Text('Test des Matrices'),
-        actions: [
-          Center(
-            child: Padding(
-              padding: EdgeInsets.only(right: 16.w),
-              child: Text(
-                'Score: $score',
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(24.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+    return KeplerTestScaffold(
+      testName: 'Matrices Progressives',
+      eyebrow: 'TEST DE QI · FSIQ',
+      accentColor: AppColors.indexFSIQ,
+      currentItem: currentLevel + 1,
+      totalItems: _generatedItems.length,
+      trailing: [
+        Padding(
+          padding: EdgeInsets.only(left: 8.w),
+          child: Text('$score pts',
+              style: AppText.monoLabel(color: AppColors.indexFSIQ)),
+        ),
+      ],
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
               // Header avec progression
               _buildLevelHeader(item),
               SizedBox(height: 24.h),
@@ -286,9 +279,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
 
               // Bouton de validation
               _buildSubmitButton(),
-            ],
-          ),
-        ),
+        ],
       ),
     );
   }

@@ -22,7 +22,7 @@ class KeplerProgress extends StatelessWidget {
   /// Total d'items (optionnel).
   final int? total;
 
-  /// Label de section (eyebrow §).
+  /// Label de section (eyebrow mono).
   final String? label;
 
   @override
@@ -35,7 +35,7 @@ class KeplerProgress extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             if (label != null)
-              Text('§ ${label!.toUpperCase()} §',
+              Text(label!.toUpperCase(),
                   style: AppText.monoLabel(color: AppColors.primary))
             else
               const SizedBox.shrink(),

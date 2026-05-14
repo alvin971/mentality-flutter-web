@@ -97,7 +97,7 @@ class _ResultsHistoryPageState extends State<ResultsHistoryPage> {
                   color: AppColors.primary.withValues(alpha: 0.3)),
             ),
             SizedBox(height: 20.h),
-            Text('§ ${_formatDate(e.date).toUpperCase()} §',
+            Text('${_formatDate(e.date).toUpperCase()}',
                 style: AppText.monoLabel(color: AppColors.primary)),
             SizedBox(height: 8.h),
             Text(e.classification, style: AppText.h1Italic()),
@@ -187,7 +187,7 @@ class _EmptyState extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('§ AUCUN RÉSULTAT §',
+            Text('AUCUN RÉSULTAT',
                 style: AppText.monoLabel(color: AppColors.primary)),
             SizedBox(height: 12.h),
             Text('Votre historique', style: AppText.heroDisplay()),

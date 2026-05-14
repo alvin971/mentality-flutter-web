@@ -201,7 +201,7 @@ class _FSIQCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('§ QI TOTAL · FSIQ §',
+          Text('QI TOTAL · FSIQ',
               style: AppText.monoLabel(color: AppColors.primary)),
           SizedBox(height: 16.h),
           Row(
@@ -254,7 +254,7 @@ class _IndexProfile extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('§ PROFIL DES INDICES §',
+          Text('PROFIL DES INDICES',
               style: AppText.monoLabel(color: AppColors.primary)),
           SizedBox(height: 16.h),
           for (final e in indices) ...[
@@ -372,7 +372,7 @@ class _SubtestDetails extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('§ NOTES STANDARDISÉES §',
+          Text('NOTES STANDARDISÉES',
               style: AppText.monoLabel(color: AppColors.primary)),
           SizedBox(height: 16.h),
           for (var i = 0; i < groups.length; i++) ...[
@@ -457,7 +457,7 @@ class _StrengthsWeaknesses extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('§ PROFIL COGNITIF §',
+          Text('PROFIL COGNITIF',
               style: AppText.monoLabel(color: AppColors.primary)),
           SizedBox(height: 12.h),
           Text(
@@ -537,7 +537,7 @@ class _RawFallback extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('§ SCORES BRUTS §',
+          Text('SCORES BRUTS',
               style: AppText.monoLabel(color: AppColors.primary)),
           SizedBox(height: 16.h),
           _row('Similitudes', session.similaritiesScore),
@@ -586,7 +586,7 @@ class _NoScoreNotice extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('§ ÂGE MANQUANT §',
+                Text('ÂGE MANQUANT',
                     style: AppText.monoLabel(color: AppColors.warning)),
                 SizedBox(height: 6.h),
                 Text(

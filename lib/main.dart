@@ -167,6 +167,8 @@ class MentalityApp extends StatelessWidget {
   }
 
   ThemeData _buildDarkTheme() {
+    const textPrimaryDark = Color(0xFFF1F4F0);
+    const textSecondaryDark = Color(0xFFB8C5BD);
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
@@ -174,18 +176,97 @@ class MentalityApp extends StatelessWidget {
         seedColor: AppColors.primary,
         brightness: Brightness.dark,
         primary: AppColors.primaryLight,
+        onPrimary: AppColors.backgroundDark,
         secondary: AppColors.secondaryLight,
         tertiary: AppColors.tertiaryLight,
         error: AppColors.errorLight,
         surface: AppColors.surfaceDark,
+        onSurface: textPrimaryDark,
       ),
       scaffoldBackgroundColor: AppColors.backgroundDark,
-      appBarTheme: const AppBarTheme(
-        centerTitle: true,
+      appBarTheme: AppBarTheme(
+        centerTitle: false,
         elevation: 0,
-        backgroundColor: Colors.transparent,
-        foregroundColor: Colors.white,
+        backgroundColor: AppColors.backgroundDark,
+        foregroundColor: textPrimaryDark,
+        surfaceTintColor: Colors.transparent,
         systemOverlayStyle: SystemUiOverlayStyle.light,
+        titleTextStyle: AppText.h3(color: textPrimaryDark),
+        toolbarHeight: 56,
+        iconTheme: const IconThemeData(
+          color: textPrimaryDark,
+          size: 20,
+        ),
+      ),
+      textTheme: AppText.buildTextTheme().apply(
+        bodyColor: textPrimaryDark,
+        displayColor: textPrimaryDark,
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.primaryLight,
+          foregroundColor: AppColors.backgroundDark,
+          elevation: 0,
+          padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 14.h),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(6.r),
+          ),
+          textStyle: AppText.button(),
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: AppColors.primaryLight,
+          side: const BorderSide(color: AppColors.primaryLight, width: 1.5),
+          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(6.r),
+          ),
+          textStyle: AppText.button(color: AppColors.primaryLight),
+        ),
+      ),
+      cardTheme: CardThemeData(
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.r),
+          side: BorderSide(color: Colors.white.withValues(alpha: 0.12)),
+        ),
+        color: AppColors.surfaceVariantDark,
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: AppColors.surfaceDark,
+        hintStyle: AppText.body(color: textSecondaryDark),
+        labelStyle: AppText.body(color: textSecondaryDark),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(4.r),
+          borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(4.r),
+          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.18)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(4.r),
+          borderSide:
+              const BorderSide(color: AppColors.primaryLight, width: 2),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(4.r),
+          borderSide: const BorderSide(color: AppColors.errorLight),
+        ),
+      ),
+      dividerTheme: DividerThemeData(
+        color: Colors.white.withValues(alpha: 0.12),
+        thickness: 1,
+        space: 1,
+      ),
+      progressIndicatorTheme: ProgressIndicatorThemeData(
+        color: AppColors.primaryLight,
+        linearTrackColor: Colors.white.withValues(alpha: 0.12),
+      ),
+      dialogTheme: const DialogThemeData(
+        backgroundColor: AppColors.surfaceDark,
       ),
     );
   }
