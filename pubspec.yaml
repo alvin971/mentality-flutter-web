@@ -29,6 +29,10 @@ dependencies:
   # ===== NETWORKING =====
   http: ^1.2.0
 
+  # ===== AUTH (Supabase + OTP) =====
+  supabase_flutter: ^2.5.6
+  country_code_picker: ^3.0.0
+
   # ===== AUDIO RECORDING =====
   record: ^5.1.2
 

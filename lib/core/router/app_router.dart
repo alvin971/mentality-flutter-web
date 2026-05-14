@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../theme/app_colors.dart';
+import '../../features/registration/presentation/bloc/registration_bloc.dart';
+import '../../features/registration/presentation/pages/registration_email_page.dart';
 import '../../features/home/presentation/pages/home_page.dart';
 import '../../features/assessment/presentation/pages/assessment_intro_page.dart';
 import '../../features/complete_test/presentation/pages/complete_test_orchestrator_page.dart';
@@ -75,6 +78,16 @@ final GoRouter appRouter = GoRouter(
       path: AppConstants.routeOnboarding,
       name: 'onboarding',
       builder: (_, __) => const OnboardingPage(),
+    ),
+
+    // Inscription par token anonyme (4 étapes)
+    GoRoute(
+      path: AppConstants.routeRegister,
+      name: 'register',
+      builder: (_, __) => BlocProvider(
+        create: (_) => RegistrationBloc()..add(const StartRegistration()),
+        child: const RegistrationEmailPage(),
+      ),
     ),
 
     // Accueil

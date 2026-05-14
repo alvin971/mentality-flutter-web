@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/services/auth_local_store.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/widgets/et_logo_animated.dart';
@@ -29,8 +30,14 @@ class _SplashPageState extends State<SplashPage>
     _fade = CurvedAnimation(parent: _fadeController, curve: Curves.easeOut);
     _fadeController.forward();
 
-    Future.delayed(const Duration(milliseconds: 2600), () {
-      if (mounted) context.go(AppConstants.routeHome);
+    // Gate d'authentification : redirige vers /register si aucun token local
+    Future.delayed(const Duration(milliseconds: 2600), () async {
+      if (!mounted) return;
+      final hasToken = await AuthLocalStore.instance.hasToken();
+      if (!mounted) return;
+      context.go(hasToken
+          ? AppConstants.routeHome
+          : AppConstants.routeRegister);
     });
   }
 

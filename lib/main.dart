@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'core/theme/app_colors.dart';
 import 'core/theme/app_typography.dart';
 import 'core/theme/theme_notifier.dart';
@@ -50,6 +51,16 @@ Future<void> _configureApp() async {
     await SessionHistoryService.instance.initialize(encryptionCipher: cipher);
   } catch (_) {
     // Ne pas bloquer le démarrage si Hive échoue
+  }
+
+  // Initialiser Supabase (auth OTP email + phone)
+  try {
+    await Supabase.initialize(
+      url: AppConstants.supabaseUrl,
+      anonKey: AppConstants.supabaseAnonKey,
+    );
+  } catch (_) {
+    // Ne pas bloquer le démarrage si l'init Supabase échoue
   }
 
   // Charger le thème sauvegardé
