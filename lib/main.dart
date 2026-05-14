@@ -79,7 +79,7 @@ class MentalityApp extends StatelessWidget {
         return ValueListenableBuilder<ThemeMode>(
           valueListenable: themeNotifier,
           builder: (_, themeMode, __) => MaterialApp.router(
-            title: 'Mentality',
+            title: 'Mental E.T.',
             debugShowCheckedModeBanner: false,
             theme: _buildLightTheme(),
             darkTheme: _buildDarkTheme(),

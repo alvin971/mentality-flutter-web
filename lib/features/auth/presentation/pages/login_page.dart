@@ -157,7 +157,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         SizedBox(height: 16.h),
         Text(
-          'Mentality',
+          'Mental E.T.',
           style: Theme.of(context).textTheme.displaySmall?.copyWith(
                 color: AppColors.primary,
                 fontWeight: FontWeight.bold,

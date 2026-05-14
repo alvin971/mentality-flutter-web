@@ -67,7 +67,7 @@ class _ChatViewState extends State<_ChatView> {
           padding: EdgeInsets.only(left: 8.w, right: 12.w),
           child: EtLogoAnimated(size: 32.w),
         ),
-        title: 'Mentality',
+        title: 'Mental E.T.',
         eyebrow: 'ASSISTANT IA',
         actions: [
           IconButton(
@@ -126,7 +126,7 @@ class _Empty extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('MENTALITY',
+          Text('MENTAL E.T.',
               style: AppText.monoLabel(color: AppColors.primary)),
           SizedBox(height: 16.h),
           Text('Posez', style: AppText.heroDisplay()),
@@ -139,7 +139,7 @@ class _Empty extends StatelessWidget {
           ),
           SizedBox(height: 16.h),
           Text(
-            'L\'IA Mentality vous aide à mieux comprendre votre profil cognitif. '
+            'L\'IA Mental E.T. vous aide à mieux comprendre votre profil cognitif. '
             'Discussions confidentielles, accompagnement non-directif.',
             style: AppText.body(),
           ),
@@ -172,7 +172,7 @@ class _MessageBubble extends StatelessWidget {
         crossAxisAlignment:
             user ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
-          Text(user ? 'VOUS' : 'MENTALITY',
+          Text(user ? 'VOUS' : 'MENTAL E.T.',
               style: AppText.monoLabel(
                   color: err
                       ? AppColors.error
@@ -222,7 +222,7 @@ class _LoadingBubble extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('MENTALITY',
+          Text('MENTAL E.T.',
               style: AppText.monoLabel(color: AppColors.primary)),
           SizedBox(height: 6.h),
           Container(

@@ -140,13 +140,11 @@ class _Actions extends StatelessWidget {
         SizedBox(height: 14.h),
         _ActionCard(
           eyebrow: '03',
-          title: 'Parler avec Mentality',
+          title: 'Parler avec Mental E.T.',
           subtitle: 'Assistant IA, questions psychologiques',
           icon: Icons.east,
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const MentalityChatPage()),
-          ),
+          comingSoon: true,
+          onTap: () {},
         ),
       ],
     );
@@ -160,6 +158,7 @@ class _ActionCard extends StatelessWidget {
     required this.subtitle,
     required this.icon,
     required this.onTap,
+    this.comingSoon = false,
   });
 
   final String eyebrow;
@@ -167,11 +166,12 @@ class _ActionCard extends StatelessWidget {
   final String subtitle;
   final IconData icon;
   final VoidCallback onTap;
+  final bool comingSoon;
 
   @override
   Widget build(BuildContext context) {
-    return KeplerCard(
-      onTap: onTap,
+    final card = KeplerCard(
+      onTap: comingSoon ? null : onTap,
       child: Row(
         children: [
           SizedBox(
@@ -184,16 +184,26 @@ class _ActionCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                if (comingSoon) ...[
+                  Text('BIENTÔT DISPONIBLE',
+                      style: AppText.monoLabel(color: AppColors.warning)),
+                  SizedBox(height: 4.h),
+                ],
                 Text(title, style: AppText.h3()),
                 SizedBox(height: 2.h),
                 Text(subtitle, style: AppText.bodySmall()),
               ],
             ),
           ),
-          Icon(icon, size: 18.sp, color: AppColors.primary),
+          Icon(
+            comingSoon ? Icons.schedule_outlined : icon,
+            size: 18.sp,
+            color: comingSoon ? AppColors.warning : AppColors.primary,
+          ),
         ],
       ),
     );
+    return comingSoon ? Opacity(opacity: 0.55, child: card) : card;
   }
 }
 

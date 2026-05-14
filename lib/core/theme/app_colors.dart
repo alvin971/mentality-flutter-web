@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Palette de couleurs de l'application Mentality
+/// Palette de couleurs de l'application Mental E.T.
 ///
 /// Utilise Material Design 3 avec des couleurs accessibles
 /// et adaptées à tous les groupes d'âge

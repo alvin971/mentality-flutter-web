@@ -57,7 +57,7 @@ class PdfReportService {
             pw.Column(
               crossAxisAlignment: pw.CrossAxisAlignment.start,
               children: [
-                pw.Text('MENTALITY',
+                pw.Text('MENTAL E.T.',
                     style: pw.TextStyle(
                         fontSize: 28,
                         fontWeight: pw.FontWeight.bold,

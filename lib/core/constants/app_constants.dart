@@ -8,7 +8,7 @@ class AppConstants {
   // APPLICATION INFO
   // ========================================
 
-  static const String appName = 'Mentality';
+  static const String appName = 'Mental E.T.';
   static const String appVersion = '1.0.0';
   static const String appTagline = 'Évaluation cognitive adaptative par IA';
 

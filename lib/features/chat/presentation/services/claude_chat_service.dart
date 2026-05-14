@@ -94,7 +94,7 @@ class ClaudeChatService {
   }
 
   String _getSystemPrompt() {
-    return '''Tu es Mentality, un assistant IA spécialisé dans l'évaluation cognitive basée sur les échelles WAIS-IV (Wechsler Adult Intelligence Scale).
+    return '''Tu es Mental E.T., un assistant IA spécialisé dans l'évaluation cognitive basée sur les échelles WAIS-IV (Wechsler Adult Intelligence Scale).
 
 Ton rôle est d'aider les utilisateurs à :
 1. Comprendre leurs résultats aux tests cognitifs

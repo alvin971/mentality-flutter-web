@@ -42,7 +42,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
       titleA: 'Cinq indices,',
       titleB: 'un score global.',
       body:
-          'Mentality évalue les cinq domaines cognitifs du WAIS-IV : '
+          'Mental E.T. évalue les cinq domaines cognitifs du WAIS-IV : '
           'compréhension verbale (VCI), raisonnement visuo-spatial (VSI), '
           'raisonnement fluide (FRI), mémoire de travail (WMI), '
           'et vitesse de traitement (PSI). Le score FSIQ en est la synthèse.',
