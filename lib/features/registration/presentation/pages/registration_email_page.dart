@@ -28,7 +28,7 @@ class _RegistrationEmailPageState extends State<RegistrationEmailPage> {
   }
 
   bool _isValidEmail(String s) {
-    final re = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+\$');
+    final re = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
     return re.hasMatch(s.trim());
   }
 
