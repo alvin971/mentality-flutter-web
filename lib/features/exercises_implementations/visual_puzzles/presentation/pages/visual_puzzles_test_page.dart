@@ -1,38 +1,47 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
+import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/puzzle_generator.dart';
 import '../widgets/puzzle_piece_widget.dart';
+import '../widgets/puzzle_slot_indicator.dart';
 import '../widgets/puzzle_target_widget.dart';
 
-/// Page du test des Puzzles Visuels (Visual Puzzles)
-/// WAIS-IV : 26 items
-/// Sélectionner exactement 3 pièces parmi 6 qui reconstituent la forme cible
-/// Notation dichotomique : 1 si les 3 pièces sont correctes, 0 sinon
-/// Temps limite : 20-30s selon difficulté
-/// Règle de discontinuation : 3 échecs consécutifs
+/// Page du test "Puzzles Visuels" (WAIS-IV — VSI).
+///
+/// Flow :
+/// - 26 items générés via PuzzleGenerator (4 niveaux de difficulté)
+/// - Pour chaque item : 1 cible + 6 pièces options, sélectionner exactement 3
+/// - Timer 20-30s selon niveau, auto-submit à 0
+/// - Discontinuation : 3 échecs consécutifs
+/// - Score dichotomique 0/1 par item
 class VisualPuzzlesTestPage extends StatefulWidget {
-  final String? filterLevel;
   const VisualPuzzlesTestPage({super.key, this.filterLevel});
+
+  final String? filterLevel;
 
   @override
   State<VisualPuzzlesTestPage> createState() => _VisualPuzzlesTestPageState();
 }
 
 class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
-  int currentLevel = 0;
-  int score = 0;
-  int totalTime = 0;
+  late List<PuzzleItem> _items;
+  int _currentItemIndex = 0;
+  int _score = 0;
   int _consecutiveFailures = 0;
-  final Set<int> _selectedIndices = {};
-  DateTime? _itemStartTime;
-  Timer? _countdownTimer;
-  int _remainingSeconds = 0;
 
-  late List<PuzzleItem> _generatedItems;
+  final Set<String> _selectedIds = {};
+  int _remainingSeconds = 0;
+  Timer? _timer;
+  DateTime? _itemStartTime;
+  bool _submitted = false; // empêche double-submit
+
+  static const String _label = 'ABCDEF';
 
   @override
   void initState() {
@@ -41,450 +50,330 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
     _startItem();
   }
 
-  @override
-  void dispose() {
-    _countdownTimer?.cancel();
-    super.dispose();
-  }
-
   void _generateItems() {
-    // Génération des 26 items UNIQUES en une seule fois
     final generator = PuzzleGenerator();
     final all = generator.generateComplete26Items();
-    final level = widget.filterLevel;
-    if (level != null) {
-      final filtered = all.where((item) => item.difficulty.name == level).toList();
-      _generatedItems = filtered.isNotEmpty ? filtered : all;
+    final filter = widget.filterLevel;
+    if (filter != null) {
+      final f = all
+          .where((it) => it.level.name == filter || it.level.label.toLowerCase() == filter.toLowerCase())
+          .toList();
+      _items = f.isNotEmpty ? f : all;
     } else {
-      _generatedItems = all;
+      _items = all;
     }
   }
 
-  void _startItem() {
-    _itemStartTime = DateTime.now();
-    _selectedIndices.clear();
-    _remainingSeconds = _generatedItems[currentLevel].timeLimitSeconds;
+  PuzzleItem get _currentItem => _items[_currentItemIndex];
 
-    _startCountdown();
+  void _startItem() {
+    _selectedIds.clear();
+    _submitted = false;
+    _remainingSeconds = _currentItem.timeLimitSeconds;
+    _itemStartTime = DateTime.now();
+    _startTimer();
   }
 
-  void _startCountdown() {
-    _countdownTimer?.cancel();
-    _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+  void _startTimer() {
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (!mounted) {
         timer.cancel();
         return;
       }
-
-      setState(() {
-        _remainingSeconds--;
-      });
-
+      setState(() => _remainingSeconds--);
       if (_remainingSeconds <= 0) {
         timer.cancel();
-        // Temps écoulé = réponse incorrecte
-        _submitAnswer();
+        HapticFeedback.heavyImpact();
+        _submit(autoSubmit: true);
       }
     });
   }
 
-  void _togglePieceSelection(int index) {
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  void _togglePiece(String pieceId) {
+    if (_submitted) return;
     setState(() {
-      if (_selectedIndices.contains(index)) {
-        _selectedIndices.remove(index);
+      if (_selectedIds.contains(pieceId)) {
+        _selectedIds.remove(pieceId);
       } else {
-        if (_selectedIndices.length < 3) {
-          _selectedIndices.add(index);
+        if (_selectedIds.length >= 3) {
+          // Si déjà 3, on remplace la première sélectionnée par la nouvelle.
+          final firstOldest = _selectedIds.first;
+          _selectedIds.remove(firstOldest);
         }
+        _selectedIds.add(pieceId);
       }
     });
+    HapticFeedback.lightImpact();
   }
 
-  void _submitAnswer() {
-    _countdownTimer?.cancel();
+  void _submit({bool autoSubmit = false}) {
+    if (_submitted) return;
+    _timer?.cancel();
+    _submitted = true;
+    HapticFeedback.mediumImpact();
 
-    final timeSeconds = _itemStartTime != null
+    final time = _itemStartTime != null
         ? DateTime.now().difference(_itemStartTime!).inSeconds
-        : 0;
+        : _currentItem.timeLimitSeconds;
 
-    totalTime += timeSeconds;
+    final isCorrect = _selectedIds.length == 3 &&
+        setEquals(_selectedIds, _currentItem.correctIds);
 
-    // Vérifier si les 3 pièces sélectionnées sont exactement les bonnes
-    final correctIndices = _generatedItems[currentLevel].correctIndices.toSet();
-    final isCorrect = _selectedIndices.length == 3 &&
-        _selectedIndices.containsAll(correctIndices) &&
-        correctIndices.containsAll(_selectedIndices);
+    setState(() {
+      if (isCorrect) {
+        _score++;
+        _consecutiveFailures = 0;
+      } else {
+        _consecutiveFailures++;
+      }
+    });
 
-    if (isCorrect) {
-      score++;
-      _consecutiveFailures = 0;
-    } else {
-      _consecutiveFailures++;
-    }
-
-    _showFeedbackDialog(isCorrect, timeSeconds);
+    _showFeedbackDialog(isCorrect, time, autoSubmit);
   }
 
-  void _showFeedbackDialog(bool isCorrect, int timeSeconds) {
-    showDialog(
+  void _showFeedbackDialog(bool isCorrect, int timeSeconds, bool autoSubmit) {
+    final accent = AppColors.indexVSI;
+    showDialog<void>(
       context: context,
       barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: Text(
-          isCorrect ? 'Correct !' : 'Incorrect',
-          style: TextStyle(
-            color: isCorrect ? AppColors.success : AppColors.error,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              isCorrect
-                  ? 'Bonne réponse ! +1 point'
-                  : 'Mauvaise réponse. Les bonnes pièces étaient :',
-            ),
-            if (!isCorrect) ...[
-              SizedBox(height: 12.h),
-              Wrap(
-                spacing: 8.w,
-                children: _generatedItems[currentLevel].correctIndices.map((idx) {
-                  return Text(
-                    String.fromCharCode(65 + idx),
-                    style: TextStyle(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.info,
-                    ),
-                  );
-                }).toList(),
+      builder: (ctx) {
+        final cs = Theme.of(ctx).colorScheme;
+        return AlertDialog(
+          backgroundColor: cs.surface,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+          title: Row(
+            children: [
+              Icon(
+                isCorrect ? Icons.check_circle : Icons.cancel,
+                color: isCorrect ? AppColors.success : AppColors.error,
+                size: 28.sp,
               ),
-            ],
-            SizedBox(height: 12.h),
-            Text('Temps : ${timeSeconds}s'),
-            Text('Score : $score/${currentLevel + 1}'),
-            if (_consecutiveFailures >= 3) ...[
-              SizedBox(height: 8.h),
+              SizedBox(width: 10.w),
               Text(
-                '3 échecs consécutifs - Test terminé (WAIS-IV)',
+                isCorrect ? 'Correct !' : (autoSubmit ? 'Temps écoulé' : 'Incorrect'),
                 style: TextStyle(
-                  color: AppColors.warning,
+                  fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
-                  fontSize: 14.sp,
+                  color: isCorrect ? AppColors.success : AppColors.error,
                 ),
               ),
             ],
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-
-              // Règle de discontinuation : 3 échecs consécutifs (WAIS-IV)
-              if (_consecutiveFailures >= 3 || currentLevel >= _generatedItems.length - 1) {
-                _showFinalResults();
-              } else {
-                setState(() {
-                  currentLevel++;
-                  _startItem();
-                });
-              }
-            },
-            child: Text(
-              _consecutiveFailures >= 3 || currentLevel >= _generatedItems.length - 1
-                  ? 'Voir les résultats'
-                  : 'Continuer',
-            ),
           ),
-        ],
-      ),
-    );
-  }
-
-  void _showFinalResults() {
-    final percentageScore = (score / _generatedItems.length * 100).round();
-
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: const Text(
-          'Test des Puzzles Visuels - Résultats',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Score brut : $score/26 points'),
-            Text('Items complétés : ${currentLevel + 1}/26'),
-            Text('Pourcentage : $percentageScore%'),
-            Text('Temps total : ${totalTime}s'),
-            SizedBox(height: 12.h),
-            Text(
-              _getPerformanceLevel(score),
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: _getPerformanceColor(score),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                isCorrect
+                    ? 'Bonne combinaison de pièces !'
+                    : 'La bonne réponse était :',
+                style: TextStyle(fontSize: 14.sp, color: cs.onSurface),
               ),
-            ),
-            SizedBox(height: 8.h),
-            Text(
-              'Test de rotation mentale et visualisation spatiale',
-              style: TextStyle(
-                fontSize: 12.sp,
-                fontStyle: FontStyle.italic,
-                color: AppColors.grey600,
+              if (!isCorrect) ...[
+                SizedBox(height: 10.h),
+                _CorrectAnswerHint(item: _currentItem, accent: accent),
+              ],
+              SizedBox(height: 12.h),
+              Text('Temps : ${timeSeconds}s',
+                  style: TextStyle(fontSize: 13.sp, color: cs.onSurfaceVariant)),
+              Text('Score : $_score / ${_currentItemIndex + 1}',
+                  style: TextStyle(fontSize: 13.sp, color: cs.onSurfaceVariant)),
+              if (_consecutiveFailures >= 3) ...[
+                SizedBox(height: 8.h),
+                Text(
+                  '3 échecs consécutifs — test terminé',
+                  style: TextStyle(
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.warning,
+                  ),
+                ),
+              ],
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(ctx);
+                _next();
+              },
+              child: Text(
+                _consecutiveFailures >= 3 || _currentItemIndex >= _items.length - 1
+                    ? 'Voir les résultats'
+                    : 'Continuer',
               ),
             ),
           ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pop(score);
-            },
-            child: const Text('Retour'),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 
-  String _getPerformanceLevel(int score) {
-    if (score >= 22) return 'Performance exceptionnelle (θ > +2.0)';
-    if (score >= 17) return 'Performance supérieure (θ > +1.0)';
-    if (score >= 11) return 'Performance moyenne (θ ≈ 0)';
-    if (score >= 6) return 'Performance inférieure (θ < 0)';
-    return 'Performance faible (θ < -1.0)';
+  void _next() {
+    if (_consecutiveFailures >= 3 || _currentItemIndex >= _items.length - 1) {
+      _finish();
+      return;
+    }
+    setState(() {
+      _currentItemIndex++;
+    });
+    _startItem();
   }
 
-  Color _getPerformanceColor(int score) {
-    if (score >= 22) return AppColors.indexFSIQ;
-    if (score >= 17) return AppColors.success;
-    if (score >= 11) return AppColors.info;
-    if (score >= 6) return AppColors.warning;
-    return AppColors.error;
+  void _finish() {
+    Navigator.of(context).pop(_score);
   }
 
   @override
   Widget build(BuildContext context) {
-    final currentItem = _generatedItems[currentLevel];
+    final item = _currentItem;
+    final accent = AppColors.indexVSI;
+    final isMobile = MediaQuery.sizeOf(context).width < 600;
+    final crossAxisCount = isMobile ? 2 : 3;
 
     return KeplerTestScaffold(
       testName: 'Puzzles Visuels',
       eyebrow: 'VISUO-SPATIAL · VSI',
-      accentColor: AppColors.indexVSI,
-      currentItem: currentLevel + 1,
-      totalItems: _generatedItems.length,
+      accentColor: accent,
+      currentItem: _currentItemIndex + 1,
+      totalItems: _items.length,
+      trailing: [_TimerBadge(seconds: _remainingSeconds, accent: accent)],
+      bottomBar: KeplerTestButton.primary(
+        label: _selectedIds.length == 3
+            ? 'Valider'
+            : '${_selectedIds.length} / 3 sélectionnées',
+        accentColor: accent,
+        onPressed: (_selectedIds.length == 3 && !_submitted) ? () => _submit() : null,
+      ),
       child: Column(
-crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Timer et score
-              _buildHeader(),
-
-              SizedBox(height: 16.h),
-
-              // Instructions
-              Container(
-                padding: EdgeInsets.all(12.w),
-                decoration: BoxDecoration(
-                  color: AppColors.infoContainer,
-                  borderRadius: BorderRadius.circular(8.r),
-                  border: Border.all(color: AppColors.infoLight),
-                ),
-                child: Text(
-                  'Sélectionnez exactement 3 pièces qui reconstituent la forme ci-dessous.',
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-
-              SizedBox(height: 20.h),
-
-              // Forme cible
-              Text(
-                'Forme à reconstituer :',
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 8.h),
-              PuzzleTargetWidget(targetPieces: currentItem.targetPieces),
-
-              SizedBox(height: 24.h),
-
-              // Pièces disponibles
-              Text(
-                'Pièces disponibles (sélectionnez 3) :',
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 12.h),
-
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 12.w,
-                  mainAxisSpacing: 12.h,
-                  childAspectRatio: 1,
-                ),
-                itemCount: currentItem.allPieces.length,
-                itemBuilder: (context, index) {
-                  final isSelected = _selectedIndices.contains(index);
-                  return Column(
-                    children: [
-                      Expanded(
-                        child: PuzzlePieceWidget(
-                          piece: currentItem.allPieces[index],
-                          isSelected: isSelected,
-                          onTap: () => _togglePieceSelection(index),
-                        ),
-                      ),
-                      SizedBox(height: 4.h),
-                      Text(
-                        String.fromCharCode(65 + index), // A, B, C...
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
-
-              SizedBox(height: 24.h),
-
-              // Compteur de sélection
-              Container(
-                padding: EdgeInsets.all(12.w),
-                decoration: BoxDecoration(
-                  color: _selectedIndices.length == 3
-                      ? AppColors.successContainer
-                      : AppColors.warningContainer,
-                  borderRadius: BorderRadius.circular(8.r),
-                  border: Border.all(
-                    color: _selectedIndices.length == 3
-                        ? AppColors.successLight
-                        : AppColors.warningLight,
-                  ),
-                ),
-                child: Text(
-                  'Pièces sélectionnées : ${_selectedIndices.length}/3',
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.bold,
-                    color: _selectedIndices.length == 3
-                        ? AppColors.success
-                        : AppColors.warning,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-
-              SizedBox(height: 16.h),
-
-              // Bouton Valider
-              SizedBox(
-                width: double.infinity,
-                height: 50.h,
-                child: ElevatedButton(
-                  onPressed: _selectedIndices.length == 3 ? _submitAnswer : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.indexVSI,
-                    disabledBackgroundColor: AppColors.grey300,
-                  ),
-                  child: Text(
-                    'Valider',
-                    style: TextStyle(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ],
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SizedBox(height: 8.h),
+          PuzzleTargetWidget(item: item),
+          SizedBox(height: 20.h),
+          PuzzleSlotIndicator(filled: _selectedIds.length, total: 3),
+          SizedBox(height: 16.h),
+          Text(
+            'Choisissez les 3 pièces qui forment la cible.',
+            style: AppText.body(),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 16.h),
+          GridView.count(
+            crossAxisCount: crossAxisCount,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            mainAxisSpacing: 12.h,
+            crossAxisSpacing: 12.w,
+            childAspectRatio: 0.85,
+            children: List.generate(item.options.length, (i) {
+              final piece = item.options[i];
+              final isSelected = _selectedIds.contains(piece.id);
+              final showCorrect =
+                  _submitted && _currentItem.correctIds.contains(piece.id);
+              final showIncorrect = _submitted && isSelected && !showCorrect;
+              return PuzzlePieceWidget(
+                piece: piece,
+                label: _label[i],
+                isSelected: isSelected,
+                showCorrect: showCorrect,
+                showIncorrect: showIncorrect,
+                onTap: () => _togglePiece(piece.id),
+              );
+            }),
+          ),
+          SizedBox(height: 24.h),
+        ],
       ),
     );
   }
+}
 
-  Widget _buildHeader() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        // Timer
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-          decoration: BoxDecoration(
-            color: _remainingSeconds <= 5 ? AppColors.errorContainer : AppColors.infoContainer,
-            borderRadius: BorderRadius.circular(20.r),
-            border: Border.all(
-              color: _remainingSeconds <= 5 ? AppColors.errorLight : AppColors.infoLight,
-              width: 2,
-            ),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.timer,
-                size: 20.sp,
-                color: _remainingSeconds <= 5 ? AppColors.error : AppColors.info,
-              ),
-              SizedBox(width: 8.w),
-              Text(
-                '${_remainingSeconds}s',
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.bold,
-                  color: _remainingSeconds <= 5 ? AppColors.error : AppColors.info,
-                ),
-              ),
-            ],
-          ),
-        ),
+// ============================================================
+// SUB-WIDGETS
+// ============================================================
 
-        // Score
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-          decoration: BoxDecoration(
-            color: AppColors.successContainer,
-            borderRadius: BorderRadius.circular(20.r),
-            border: Border.all(color: AppColors.successLight, width: 2),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.star,
-                size: 20.sp,
-                color: AppColors.warning,
-              ),
-              SizedBox(width: 8.w),
-              Text(
-                '$score/${currentLevel + 1}',
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.success,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
+class _TimerBadge extends StatelessWidget {
+  const _TimerBadge({required this.seconds, required this.accent});
+
+  final int seconds;
+  final Color accent;
+
+  @override
+  Widget build(BuildContext context) {
+    final danger = seconds <= 5;
+    final color = danger ? AppColors.error : accent;
+    final mm = (seconds ~/ 60).toString().padLeft(2, '0');
+    final ss = (seconds % 60).toString().padLeft(2, '0');
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(6.r),
+        border: Border.all(color: color.withValues(alpha: 0.4)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.timer_outlined, color: color, size: 14.sp),
+          SizedBox(width: 4.w),
+          Text('$mm:$ss', style: AppText.mono(color: color, size: 12.sp)),
+        ],
+      ),
     );
   }
+}
+
+class _CorrectAnswerHint extends StatelessWidget {
+  const _CorrectAnswerHint({required this.item, required this.accent});
+
+  final PuzzleItem item;
+  final Color accent;
+
+  @override
+  Widget build(BuildContext context) {
+    // Petite vue : 3 pièces correctes en mini, côte à côte
+    final correctPieces = item.options
+        .where((p) => item.correctIds.contains(p.id))
+        .toList();
+    return SizedBox(
+      height: 80.h,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: correctPieces.map((p) {
+          final i = item.options.indexOf(p);
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 4.w),
+            child: SizedBox(
+              width: 70.w,
+              child: PuzzlePieceWidget(
+                piece: p,
+                label: 'ABCDEF'[i],
+                isSelected: true,
+                showCorrect: true,
+                onTap: null,
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+}
+
+/// Utilitaire pour comparer 2 sets (équivalent à setEquals de collection.dart).
+bool setEquals<T>(Set<T> a, Set<T> b) {
+  if (a.length != b.length) return false;
+  for (final e in a) {
+    if (!b.contains(e)) return false;
+  }
+  return true;
 }
