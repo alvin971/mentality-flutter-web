@@ -162,9 +162,92 @@ void main() {
       final shapeCombos = veryEasyItems
           .map((i) => i.targetPieces.map((p) => p.shape.name).join(','))
           .toSet();
-      // 6 items veryEasy — on attend au moins 2 combos différentes
       expect(shapeCombos.length, greaterThanOrEqualTo(2),
           reason: 'veryEasy shapes combos : $shapeCombos');
+    });
+
+    test('aucun item n\'a 2 options visuellement identiques', () {
+      // Signature qui reproduit fidèlement la logique du générateur :
+      // rotation appliquée aux edges, mirror appliqué, symétrie de shape
+      // prise en compte.
+      EdgePattern rotateEdges(EdgePattern e, int steps) {
+        steps = ((steps % 4) + 4) % 4;
+        var c = e;
+        for (int i = 0; i < steps; i++) {
+          c = EdgePattern(top: c.left, right: c.top, bottom: c.right, left: c.bottom);
+        }
+        return c;
+      }
+
+      EdgePattern mirrorEdges(EdgePattern e) =>
+          EdgePattern(top: e.top, right: e.left, bottom: e.bottom, left: e.right);
+
+      String visualSig(PuzzlePiece p) {
+        final rotSteps = ((p.rotationDeg.toInt() % 360) + 360) % 360 ~/ 90;
+        final absEdges = rotateEdges(p.edges, rotSteps);
+        final finalEdges = p.mirrored ? mirrorEdges(absEdges) : absEdges;
+        final sym = switch (p.shape) {
+          PuzzleShape.square => 1,
+          PuzzleShape.rectangleH => 2,
+          PuzzleShape.rectangleV => 2,
+          PuzzleShape.parallelogram => 2,
+          PuzzleShape.zShape => 2,
+          _ => 4,
+        };
+        final canonicalRot = sym > 0 ? rotSteps % sym : rotSteps;
+        return '${p.shape.name}|m${p.mirrored}|s${p.scale.toStringAsFixed(2)}|r$canonicalRot|'
+            '${finalEdges.top.name}-${finalEdges.right.name}-${finalEdges.bottom.name}-${finalEdges.left.name}';
+      }
+
+      int collisions = 0;
+      for (int b = 0; b < 100; b++) {
+        final gen = PuzzleGenerator(seed: b * 17 + 3);
+        final items = gen.generateComplete26Items();
+        for (final item in items) {
+          final sigs = item.options.map(visualSig).toList();
+          if (sigs.toSet().length < sigs.length) collisions++;
+        }
+      }
+      // 100 × 26 = 2600 items. On tolère < 30 collisions (< 1.5%).
+      expect(collisions, lessThan(30),
+          reason: '$collisions items / 2600 ont 2 options identiques');
+    });
+
+    test(
+        'progression de subtilité : niveau hard contient plus souvent '
+        'wrongEdge que niveau veryEasy', () {
+      // Heuristique : "wrongEdge applied" se détecte si la pièce a la même
+      // shape qu'un target et seul 1 des 4 edges diffère (les autres étant
+      // identiques au target le plus proche).
+      // Plus simple : on compte les distracteurs avec EXACTEMENT la même
+      // shape qu'un target ET 0 transformation visible (pas de rot/mirror/
+      // scale). Ces distracteurs sont quasi-exclusivement wrongEdge.
+      int subtleHard = 0;
+      int subtleVeryEasy = 0;
+      for (int seed = 0; seed < 50; seed++) {
+        final gen = PuzzleGenerator(seed: seed);
+        final items = gen.generateComplete26Items();
+        for (final item in items) {
+          final targetShapes = item.targetPieces.map((p) => p.shape).toSet();
+          final distractors = item.options
+              .where((p) => !item.correctIds.contains(p.id))
+              .toList();
+          for (final d in distractors) {
+            final isSubtleEdge = targetShapes.contains(d.shape) &&
+                d.rotationDeg == 0 &&
+                !d.mirrored &&
+                d.scale == 1.0;
+            if (isSubtleEdge) {
+              if (item.level == DifficultyLevel.hard) subtleHard++;
+              if (item.level == DifficultyLevel.veryEasy) subtleVeryEasy++;
+            }
+          }
+        }
+      }
+      expect(subtleHard, greaterThan(subtleVeryEasy),
+          reason:
+              'hard: $subtleHard wrongEdge distractors ; veryEasy: $subtleVeryEasy. '
+              'Progression subtilité inversée');
     });
   });
 }

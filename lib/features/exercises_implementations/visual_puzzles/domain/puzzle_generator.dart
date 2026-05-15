@@ -31,29 +31,12 @@ enum PuzzleShape {
 enum EdgeType { flat, convex, concave, jaggedOut, jaggedIn }
 
 /// Topologie de la cible (comment les 3 pièces sont arrangées).
-///
-/// Chacune définit une grille `gridCols × gridRows` et des positions fixes
-/// pour les 3 pièces. Les **arêtes adjacentes** entre pièces sont contraintes
-/// par le générateur (complémentarité visible).
 enum TargetLayout {
-  /// 3 pièces en rangée 3×1 (horizontal classique).
   rowH3,
-
-  /// 3 pièces en colonne 1×3 (vertical).
   colV3,
-
-  /// 2×2 dont 1 grande pièce 2×1 en haut + 2 pièces 1×1 en bas.
-  /// Pos: (0,0,2×1) + (0,1,1×1) + (1,1,1×1)
   topWideBottomSplit,
-
-  /// 2×2 dont 2 pièces 1×1 en haut + 1 grande 2×1 en bas.
   topSplitBottomWide,
-
-  /// Forme L : 2 pièces verticales 1×1 à gauche + 1 horizontale 2×1 en bas.
-  /// Pos: (0,0,1×1) + (0,1,1×1) + (1,1,1×1)→shifted. On utilisera 2x2 grid.
   lLayout,
-
-  /// 2×2 avec une cellule vide en haut-droite : pos (0,0,1×1) + (0,1,1×1) + (1,1,1×1).
   cornerL,
 }
 
@@ -163,15 +146,17 @@ class PuzzleItem {
 }
 
 // ============================================================
-// GÉNÉRATEUR — diversité combinatoire massive
+// GÉNÉRATEUR
 // ============================================================
 
-/// Espace de combinaisons par item (estimation min) :
-///   layout (3-6) × shapes (9^3 = 729 / pool effective) ×
-///   edges (5^4 contrainte par complémentarité ≈ 50) × rotation cible (4) ×
-///   distracteur types (C(6,3)=20) × choix pièce-cible (3^3=27)
-///   ≈ 3 × 50 × 50 × 4 × 20 × 27 ≈ 16M combinaisons par item
-/// → impossible que 2 utilisateurs aient le même test.
+/// Pool de pièges ordonnés par **subtilité** :
+///   - shapeSwap / extraPiece     : différences ÉNORMES (forme totalement autre)
+///   - rotateWrong180             : rotation 180° (visible sur shapes asymétriques)
+///   - mirrorPiece                : miroir (visible sur shapes asymétriques)
+///   - rotateWrong90              : rotation 90° (moins évidente)
+///   - scaleBig                   : taille 0.8 / 1.2 (visible)
+///   - scaleSubtle                : taille 0.9 / 1.1 (subtil)
+///   - wrongEdge                  : 1 seule arête différente (très subtil)
 class PuzzleGenerator {
   PuzzleGenerator({int? seed})
       : _rng = math.Random(seed ?? DateTime.now().microsecondsSinceEpoch);
@@ -186,18 +171,16 @@ class PuzzleGenerator {
 
   List<PuzzleItem> generateComplete26Items() {
     final items = <PuzzleItem>[];
-
-    void addItems(int count, DifficultyLevel level) {
+    void add(int count, DifficultyLevel level) {
       for (int i = 0; i < count; i++) {
         items.add(_generateItem(items.length + 1, level));
       }
     }
 
-    addItems(6, DifficultyLevel.veryEasy);
-    addItems(8, DifficultyLevel.easy);
-    addItems(6, DifficultyLevel.medium);
-    addItems(6, DifficultyLevel.hard);
-
+    add(6, DifficultyLevel.veryEasy);
+    add(8, DifficultyLevel.easy);
+    add(6, DifficultyLevel.medium);
+    add(6, DifficultyLevel.hard);
     assert(items.length == 26);
     return items;
   }
@@ -210,9 +193,8 @@ class PuzzleGenerator {
     final layout = _pickLayout(level);
     final (targetPieces, cols, rows) = _buildTarget(layout, level);
 
-    // Distracteurs : 3 transformations différentes piochées dans le pool 6
+    // Génère 3 distracteurs DISTINCTS visuellement des targets et entre eux.
     final distractors = _buildDistractors(targetPieces, level);
-
     final options = [...targetPieces, ...distractors]..shuffle(_rng);
 
     return PuzzleItem(
@@ -229,7 +211,7 @@ class PuzzleGenerator {
   }
 
   // ============================================================
-  // LAYOUTS — varier la topologie de la cible
+  // LAYOUTS
   // ============================================================
 
   TargetLayout _pickLayout(DifficultyLevel level) {
@@ -247,42 +229,23 @@ class PuzzleGenerator {
     return pool[_rng.nextInt(pool.length)];
   }
 
-  /// Définit la grille (cols × rows) et les cellules (gridX, gridY, gridW, gridH)
-  /// pour chaque pièce selon le layout.
-  List<(int gx, int gy, int gw, int gh)> _slotsForLayout(TargetLayout layout) {
-    switch (layout) {
-      case TargetLayout.rowH3:
-        return [(0, 0, 1, 1), (1, 0, 1, 1), (2, 0, 1, 1)];
-      case TargetLayout.colV3:
-        return [(0, 0, 1, 1), (0, 1, 1, 1), (0, 2, 1, 1)];
-      case TargetLayout.topWideBottomSplit:
-        return [(0, 0, 2, 1), (0, 1, 1, 1), (1, 1, 1, 1)];
-      case TargetLayout.topSplitBottomWide:
-        return [(0, 0, 1, 1), (1, 0, 1, 1), (0, 1, 2, 1)];
-      case TargetLayout.lLayout:
-        return [(0, 0, 1, 1), (0, 1, 1, 1), (1, 1, 1, 1)];
-      case TargetLayout.cornerL:
-        return [(0, 0, 1, 1), (0, 1, 1, 1), (1, 1, 1, 1)];
-    }
-  }
+  List<(int, int, int, int)> _slotsForLayout(TargetLayout l) => switch (l) {
+        TargetLayout.rowH3 => [(0, 0, 1, 1), (1, 0, 1, 1), (2, 0, 1, 1)],
+        TargetLayout.colV3 => [(0, 0, 1, 1), (0, 1, 1, 1), (0, 2, 1, 1)],
+        TargetLayout.topWideBottomSplit => [(0, 0, 2, 1), (0, 1, 1, 1), (1, 1, 1, 1)],
+        TargetLayout.topSplitBottomWide => [(0, 0, 1, 1), (1, 0, 1, 1), (0, 1, 2, 1)],
+        TargetLayout.lLayout => [(0, 0, 1, 1), (0, 1, 1, 1), (1, 1, 1, 1)],
+        TargetLayout.cornerL => [(0, 0, 1, 1), (0, 1, 1, 1), (1, 1, 1, 1)],
+      };
 
-  /// Renvoie (cols, rows) de la grille pour un layout.
-  (int, int) _gridSizeForLayout(TargetLayout layout) {
-    switch (layout) {
-      case TargetLayout.rowH3:
-        return (3, 1);
-      case TargetLayout.colV3:
-        return (1, 3);
-      case TargetLayout.topWideBottomSplit:
-      case TargetLayout.topSplitBottomWide:
-      case TargetLayout.lLayout:
-      case TargetLayout.cornerL:
-        return (2, 2);
-    }
-  }
+  (int, int) _gridSizeForLayout(TargetLayout l) => switch (l) {
+        TargetLayout.rowH3 => (3, 1),
+        TargetLayout.colV3 => (1, 3),
+        _ => (2, 2),
+      };
 
   // ============================================================
-  // BUILD TARGET — 3 pièces qui s'emboîtent
+  // CIBLE
   // ============================================================
 
   (List<PuzzlePiece>, int, int) _buildTarget(
@@ -291,30 +254,22 @@ class PuzzleGenerator {
     final slots = _slotsForLayout(layout);
     final shapes = _pickShapes(slots, level);
 
-    final pieces = <PuzzlePiece>[];
-    // Map d'arêtes assignées par cellule pour gérer la complémentarité
-    // adjacent. Clé : (gx,gy) ; valeur : EdgePattern partiel.
     final edgesByPiece = <int, EdgePattern>{
       for (int i = 0; i < slots.length; i++) i: const EdgePattern(),
     };
 
-    // Pour chaque paire de pièces adjacentes, choisir un type d'arête et
-    // attribuer le complément à la pièce voisine.
-    // Adjacence détectée si une cellule de A et une cellule de B partagent
-    // un bord (cellules consécutives en x ou y).
     for (int i = 0; i < slots.length; i++) {
       for (int j = i + 1; j < slots.length; j++) {
         final adj = _findAdjacency(slots[i], slots[j]);
         if (adj == null) continue;
         final edgeType = _randomEdge(level);
         final compl = _complementOf(edgeType);
-        // Side pour i ; opposite pour j
         edgesByPiece[i] = _setEdge(edgesByPiece[i]!, adj.sideOnA, edgeType);
         edgesByPiece[j] = _setEdge(edgesByPiece[j]!, adj.sideOnB, compl);
       }
     }
 
-    // Génère les pièces effectives
+    final pieces = <PuzzlePiece>[];
     for (int i = 0; i < slots.length; i++) {
       final (gx, gy, gw, gh) = slots[i];
       pieces.add(PuzzlePiece(
@@ -330,13 +285,9 @@ class PuzzleGenerator {
         gridH: gh,
       ));
     }
-
     return (pieces, cols, rows);
   }
 
-  /// Pool de shapes pour chaque pièce selon le niveau, en respectant la taille
-  /// (gw, gh) du slot : un slot 2×1 ne peut pas être un triangle équilatéral
-  /// par exemple — on filtre.
   List<PuzzleShape> _pickShapes(
       List<(int, int, int, int)> slots, DifficultyLevel level) {
     final basePool = switch (level) {
@@ -364,68 +315,56 @@ class PuzzleGenerator {
       DifficultyLevel.hard => PuzzleShape.values,
     };
 
-    return List.generate(slots.length, (i) {
-      final (_, _, gw, gh) = slots[i];
-      // Filtre selon dimensions du slot
-      final filtered = basePool.where((s) => _shapeFitsSlot(s, gw, gh)).toList();
-      final pool = filtered.isEmpty ? [PuzzleShape.square] : filtered;
-      return pool[_rng.nextInt(pool.length)];
-    });
-  }
-
-  bool _shapeFitsSlot(PuzzleShape shape, int gw, int gh) {
-    // Les formes "rectangleH" préfèrent gw>=gh, etc. Mais on accepte tout
-    // pour ne pas trop restreindre la diversité.
-    if (shape == PuzzleShape.rectangleV && gw > gh && gw == gh + 1) return false;
-    if (shape == PuzzleShape.rectangleH && gh > gw && gh == gw + 1) return false;
-    return true;
+    // On essaie d'avoir des shapes différentes entre les 3 pièces de la cible
+    // (au moins 2 shapes distinctes parmi les 3).
+    final picked = <PuzzleShape>[];
+    for (int i = 0; i < slots.length; i++) {
+      final filtered = basePool.toList();
+      // À partir de la 2e pièce, on essaie de différer des précédentes
+      if (i > 0 && picked.length < basePool.length) {
+        filtered.removeWhere((s) => picked.contains(s));
+      }
+      final pool = filtered.isEmpty ? basePool : filtered;
+      picked.add(pool[_rng.nextInt(pool.length)]);
+    }
+    return picked;
   }
 
   // ============================================================
-  // ADJACENCE — détection de bords partagés entre 2 slots
+  // ADJACENCE
   // ============================================================
 
-  /// Détecte si 2 slots partagent un bord et renvoie quel côté.
   _Adjacency? _findAdjacency(
       (int, int, int, int) a, (int, int, int, int) b) {
     final (ax, ay, aw, ah) = a;
     final (bx, by, bw, bh) = b;
-    // A right ↔ B left
-    if (ax + aw == bx && _verticalOverlap(ay, ah, by, bh)) {
+    if (ax + aw == bx && _vOverlap(ay, ah, by, bh)) {
       return _Adjacency(sideOnA: _Side.right, sideOnB: _Side.left);
     }
-    // A left ↔ B right
-    if (bx + bw == ax && _verticalOverlap(ay, ah, by, bh)) {
+    if (bx + bw == ax && _vOverlap(ay, ah, by, bh)) {
       return _Adjacency(sideOnA: _Side.left, sideOnB: _Side.right);
     }
-    // A bottom ↔ B top
-    if (ay + ah == by && _horizontalOverlap(ax, aw, bx, bw)) {
+    if (ay + ah == by && _hOverlap(ax, aw, bx, bw)) {
       return _Adjacency(sideOnA: _Side.bottom, sideOnB: _Side.top);
     }
-    // A top ↔ B bottom
-    if (by + bh == ay && _horizontalOverlap(ax, aw, bx, bw)) {
+    if (by + bh == ay && _hOverlap(ax, aw, bx, bw)) {
       return _Adjacency(sideOnA: _Side.top, sideOnB: _Side.bottom);
     }
     return null;
   }
 
-  bool _verticalOverlap(int ay, int ah, int by, int bh) =>
+  bool _vOverlap(int ay, int ah, int by, int bh) =>
       ay < by + bh && by < ay + ah;
-  bool _horizontalOverlap(int ax, int aw, int bx, int bw) =>
+  bool _hOverlap(int ax, int aw, int bx, int bw) =>
       ax < bx + bw && bx < ax + aw;
 
-  EdgePattern _setEdge(EdgePattern p, _Side side, EdgeType type) {
-    switch (side) {
-      case _Side.top:
-        return p.copyWith(top: type);
-      case _Side.right:
-        return p.copyWith(right: type);
-      case _Side.bottom:
-        return p.copyWith(bottom: type);
-      case _Side.left:
-        return p.copyWith(left: type);
-    }
-  }
+  EdgePattern _setEdge(EdgePattern p, _Side side, EdgeType type) =>
+      switch (side) {
+        _Side.top => p.copyWith(top: type),
+        _Side.right => p.copyWith(right: type),
+        _Side.bottom => p.copyWith(bottom: type),
+        _Side.left => p.copyWith(left: type),
+      };
 
   // ============================================================
   // EDGES
@@ -454,56 +393,147 @@ class PuzzleGenerator {
     return pool[_rng.nextInt(pool.length)];
   }
 
+  EdgeType _flipEdge(EdgeType e) => switch (e) {
+        EdgeType.flat => EdgeType.convex,
+        EdgeType.convex => EdgeType.jaggedOut,
+        EdgeType.concave => EdgeType.jaggedIn,
+        EdgeType.jaggedOut => EdgeType.concave,
+        EdgeType.jaggedIn => EdgeType.convex,
+      };
+
   // ============================================================
-  // DISTRACTEURS — randomisés massivement
+  // DISTRACTEURS
+  //   - Pool ordonné par subtilité selon le niveau
+  //   - Vérification de distinctness : aucun distracteur ne doit être
+  //     visuellement identique à un target ni à un autre distracteur
   // ============================================================
+
+  List<_DistractorType> _distractorPoolFor(DifficultyLevel level) =>
+      switch (level) {
+        DifficultyLevel.veryEasy => [
+            _DistractorType.shapeSwap,
+            _DistractorType.shapeSwap,
+            _DistractorType.extraPiece,
+            _DistractorType.extraPiece,
+            _DistractorType.rotateWrong180, // visible si asymétrique
+          ],
+        DifficultyLevel.easy => [
+            _DistractorType.shapeSwap,
+            _DistractorType.rotateWrong180,
+            _DistractorType.mirrorPiece,
+            _DistractorType.extraPiece,
+            _DistractorType.scaleBig,
+          ],
+        DifficultyLevel.medium => [
+            _DistractorType.rotateWrong90,
+            _DistractorType.mirrorPiece,
+            _DistractorType.scaleBig,
+            _DistractorType.shapeSwap,
+            _DistractorType.wrongEdge,
+          ],
+        DifficultyLevel.hard => [
+            _DistractorType.wrongEdge,
+            _DistractorType.wrongEdge,
+            _DistractorType.scaleSubtle,
+            _DistractorType.rotateWrong90,
+            _DistractorType.mirrorPiece,
+          ],
+      };
 
   List<PuzzlePiece> _buildDistractors(
       List<PuzzlePiece> correct, DifficultyLevel level) {
-    final pool = _DistractorType.values.toList()..shuffle(_rng);
-    final chosen = pool.take(3).toList();
+    final pool = _distractorPoolFor(level).toList()..shuffle(_rng);
+    final existingSignatures = correct.map(_visualSig).toSet();
+    final distractors = <PuzzlePiece>[];
 
-    return chosen
-        .map((type) =>
-            _applyDistractor(type, correct[_rng.nextInt(correct.length)], level))
-        .toList();
+    int attempts = 0;
+    int poolIdx = 0;
+    while (distractors.length < 3 && attempts < 50) {
+      attempts++;
+      final type = pool[poolIdx % pool.length];
+      poolIdx++;
+      final base = correct[_rng.nextInt(correct.length)];
+      final candidate = _applyDistractor(type, base, level);
+
+      final sig = _visualSig(candidate);
+      if (existingSignatures.contains(sig)) {
+        // Collision visuelle — on essaie un autre type
+        continue;
+      }
+      // Vérifie aussi que la pièce candidate n'est pas RIDICULE
+      // (ex: mirror sur square symétrique = identique au target)
+      if (_isSymmetricallyIdentical(candidate, base)) {
+        continue;
+      }
+      existingSignatures.add(sig);
+      distractors.add(candidate);
+    }
+
+    // Fallback si on n'a pas trouvé 3 distracteurs distincts : on force avec
+    // extraPiece (qui est aléatoire complet, faible chance de collision)
+    while (distractors.length < 3) {
+      final candidate = _applyDistractor(
+          _DistractorType.extraPiece, correct[0], level);
+      final sig = _visualSig(candidate);
+      if (!existingSignatures.contains(sig)) {
+        existingSignatures.add(sig);
+        distractors.add(candidate);
+      }
+    }
+    return distractors;
   }
 
   PuzzlePiece _applyDistractor(
       _DistractorType type, PuzzlePiece base, DifficultyLevel level) {
     switch (type) {
+      case _DistractorType.shapeSwap:
+        final pool = PuzzleShape.values.where((s) => s != base.shape).toList();
+        return base.copyWith(
+          id: _uuid(),
+          shape: pool[_rng.nextInt(pool.length)],
+        );
+      case _DistractorType.rotateWrong180:
+        return base.copyWith(id: _uuid(), rotationDeg: 180);
+      case _DistractorType.rotateWrong90:
+        return base.copyWith(
+          id: _uuid(),
+          rotationDeg: _rng.nextBool() ? 90.0 : 270.0,
+        );
       case _DistractorType.mirrorPiece:
         return base.copyWith(id: _uuid(), mirrored: !base.mirrored);
-      case _DistractorType.rotateWrong:
-        final rot = [90.0, 180.0, 270.0][_rng.nextInt(3)];
-        return base.copyWith(id: _uuid(), rotationDeg: rot);
-      case _DistractorType.scaleOff:
-        final sc = [0.75, 0.85, 1.15, 1.25][_rng.nextInt(4)];
+      case _DistractorType.scaleBig:
+        final sc = _rng.nextBool() ? 0.78 : 1.22;
+        return base.copyWith(id: _uuid(), scale: sc);
+      case _DistractorType.scaleSubtle:
+        final sc = _rng.nextBool() ? 0.90 : 1.10;
         return base.copyWith(id: _uuid(), scale: sc);
       case _DistractorType.wrongEdge:
-        // Flip une arête au hasard (top/right/bottom/left)
-        final side = _Side.values[_rng.nextInt(_Side.values.length)];
+        // Choisir un côté qui n'est pas flat, le flip
+        final sides = _Side.values
+            .where((s) => _readEdge(base.edges, s) != EdgeType.flat)
+            .toList();
+        final side = sides.isEmpty
+            ? _Side.values[_rng.nextInt(4)]
+            : sides[_rng.nextInt(sides.length)];
         final current = _readEdge(base.edges, side);
         final flipped = _flipEdge(current);
         return base.copyWith(
             id: _uuid(), edges: _setEdge(base.edges, side, flipped));
-      case _DistractorType.shapeSwap:
-        final pool = PuzzleShape.values.where((s) => s != base.shape).toList();
-        return base.copyWith(
-            id: _uuid(), shape: pool[_rng.nextInt(pool.length)]);
       case _DistractorType.extraPiece:
         return PuzzlePiece(
           id: _uuid(),
           shape: PuzzleShape.values[_rng.nextInt(PuzzleShape.values.length)],
           rotationDeg: [0.0, 90.0, 180.0, 270.0][_rng.nextInt(4)],
           mirrored: _rng.nextBool(),
-          scale: [0.9, 1.0, 1.1][_rng.nextInt(3)],
+          scale: [0.85, 1.0, 1.15][_rng.nextInt(3)],
           edges: EdgePattern(
             top: _randomEdge(level),
             right: _randomEdge(level),
             bottom: _randomEdge(level),
             left: _randomEdge(level),
           ),
+          gridW: base.gridW,
+          gridH: base.gridH,
         );
     }
   }
@@ -515,12 +545,94 @@ class PuzzleGenerator {
         _Side.left => p.left,
       };
 
-  EdgeType _flipEdge(EdgeType e) => switch (e) {
-        EdgeType.flat => EdgeType.convex,
-        EdgeType.convex => EdgeType.jaggedOut,
-        EdgeType.concave => EdgeType.jaggedIn,
-        EdgeType.jaggedOut => EdgeType.concave,
-        EdgeType.jaggedIn => EdgeType.convex,
+  // ============================================================
+  // DISTINCTNESS — signature visuelle d'une pièce
+  //
+  // On prend en compte la symétrie de la forme :
+  //   - square : 4-fold (rot 0/90/180/270 identiques SI edges symétriques)
+  //   - rectangleH/V/parallelogram/zShape : 2-fold (rot 0/180 = identique)
+  //   - autres : pas de symétrie rotationnelle
+  // On calcule donc une "rotation canonique" + on applique la rotation aux edges
+  // pour comparer dans une orientation absolue.
+  // ============================================================
+
+  String _visualSig(PuzzlePiece p) {
+    final rotSteps = ((p.rotationDeg.toInt() % 360) + 360) % 360 ~/ 90;
+    final edgesAbsolute = _rotateEdgesNTimes(p.edges, rotSteps);
+    final edgesAfterMirror =
+        p.mirrored ? _mirrorEdges(edgesAbsolute) : edgesAbsolute;
+
+    // Symétrie rotationnelle de la shape : on quotiente rotation par la symétrie
+    final sym = _rotationalSymmetrySteps(p.shape);
+    final canonicalRot = sym > 0 ? rotSteps % sym : rotSteps;
+
+    return [
+      p.shape.name,
+      'm${p.mirrored}',
+      's${p.scale.toStringAsFixed(2)}',
+      'r$canonicalRot',
+      '${edgesAfterMirror.top.name}_${edgesAfterMirror.right.name}_'
+          '${edgesAfterMirror.bottom.name}_${edgesAfterMirror.left.name}',
+    ].join('|');
+  }
+
+  /// Pour les shapes parfaitement symétriques sous rotation N : si
+  /// les edges sont aussi symétriques, alors la pièce est strictement
+  /// identique. Cette fonction détecte ces cas trop évidents.
+  bool _isSymmetricallyIdentical(PuzzlePiece candidate, PuzzlePiece base) {
+    // Cas : square + rotation X + edges all flat ou tous identiques → identique
+    if (candidate.shape == PuzzleShape.square &&
+        candidate.scale == base.scale &&
+        candidate.mirrored == base.mirrored &&
+        _allEdgesEqual(candidate.edges)) {
+      return true;
+    }
+    return false;
+  }
+
+  bool _allEdgesEqual(EdgePattern e) =>
+      e.top == e.right && e.right == e.bottom && e.bottom == e.left;
+
+  /// Rotation horaire des edges de N×90°
+  EdgePattern _rotateEdgesNTimes(EdgePattern e, int n) {
+    n = ((n % 4) + 4) % 4;
+    var current = e;
+    for (int i = 0; i < n; i++) {
+      // 90° horaire : top → right → bottom → left → top
+      current = EdgePattern(
+        top: current.left,
+        right: current.top,
+        bottom: current.right,
+        left: current.bottom,
+      );
+    }
+    return current;
+  }
+
+  EdgePattern _mirrorEdges(EdgePattern e) {
+    // Miroir horizontal : left ↔ right
+    return EdgePattern(
+      top: e.top,
+      right: e.left,
+      bottom: e.bottom,
+      left: e.right,
+    );
+  }
+
+  /// Nombre de "steps" (90°) après lesquels la shape revient à elle-même.
+  /// - square : 1 (revient à elle-même à chaque rotation 90°)
+  /// - rectangleH/V/parallelogram/zShape : 2
+  /// - autres : 4 (pas de symétrie)
+  int _rotationalSymmetrySteps(PuzzleShape s) => switch (s) {
+        PuzzleShape.square => 1,
+        PuzzleShape.rectangleH => 2,
+        PuzzleShape.rectangleV => 2,
+        PuzzleShape.parallelogram => 2,
+        PuzzleShape.zShape => 2,
+        PuzzleShape.triangle => 4,
+        PuzzleShape.trapezoid => 4,
+        PuzzleShape.lShape => 4,
+        PuzzleShape.tShape => 4,
       };
 
   int _timeLimitFor(DifficultyLevel level) => switch (level) {
@@ -536,12 +648,14 @@ class PuzzleGenerator {
 // ============================================================
 
 enum _DistractorType {
-  mirrorPiece,
-  rotateWrong,
-  scaleOff,
-  wrongEdge,
-  shapeSwap,
-  extraPiece,
+  shapeSwap,        // forme totalement différente — TRÈS visible
+  extraPiece,       // pièce totalement aléatoire — TRÈS visible
+  rotateWrong180,   // rotation 180° — visible sur shape asymétrique
+  mirrorPiece,      // miroir — visible sur shape asymétrique
+  rotateWrong90,    // rotation 90° — visible
+  scaleBig,         // scale 0.78 / 1.22 — visible
+  scaleSubtle,      // scale 0.90 / 1.10 — subtil
+  wrongEdge,        // 1 arête différente — très subtil
 }
 
 enum _Side { top, right, bottom, left }

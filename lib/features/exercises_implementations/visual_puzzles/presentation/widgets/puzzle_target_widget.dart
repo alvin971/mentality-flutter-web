@@ -94,16 +94,23 @@ class _TargetPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final cols = item.gridCols;
     final rows = item.gridRows;
-    final cellW = size.width / cols;
-    final cellH = size.height / rows;
+    // Cellules CARRÉES centrées dans l'espace disponible (évite la distortion
+    // quand la zone n'a pas exactement le ratio cols:rows).
+    final cell = (size.width / cols).clamp(0.0, size.height / rows);
+    final gridW = cell * cols;
+    final gridH = cell * rows;
+    final offsetX = (size.width - gridW) / 2;
+    final offsetY = (size.height - gridH) / 2;
 
-    // Pour la silhouette globale, on dessine chaque pièce dans sa cellule.
-    // Les arêtes complémentaires entre pièces adjacentes créent l'illusion
-    // de pièces qui s'emboîtent.
     for (final piece in item.targetPieces) {
-      final dx = piece.gridX * cellW;
-      final dy = piece.gridY * cellH;
-      final pieceRect = Rect.fromLTWH(dx, dy, cellW * piece.gridW, cellH * piece.gridH);
+      final dx = offsetX + piece.gridX * cell;
+      final dy = offsetY + piece.gridY * cell;
+      final pieceRect = Rect.fromLTWH(
+        dx,
+        dy,
+        cell * piece.gridW,
+        cell * piece.gridH,
+      );
       canvas.save();
       canvas.translate(pieceRect.left, pieceRect.top);
       PuzzlePiecePainterFacade.paintPiece(
@@ -112,7 +119,6 @@ class _TargetPainter extends CustomPainter {
         size: pieceRect.size,
         fillColor: fillColor,
         strokeColor: strokeColor,
-        // Pour la cible, on étire la pièce à toute la cellule (pas de scale individuel)
         forceFullCell: true,
       );
       canvas.restore();
