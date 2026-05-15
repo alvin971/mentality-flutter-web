@@ -315,13 +315,23 @@ class PuzzleGenerator {
       DifficultyLevel.hard => PuzzleShape.values,
     };
 
-    // On essaie d'avoir des shapes différentes entre les 3 pièces de la cible
-    // (au moins 2 shapes distinctes parmi les 3).
+    // STRICT : aux niveaux veryEasy/easy, les 3 targets doivent avoir 3 shapes
+    // DIFFÉRENTES (combiné avec les distractors shapeSwap → 6 shapes uniques).
+    // Aux niveaux medium/hard, on tente la diversité mais on accepte les
+    // collisions car les distractors deviennent subtils (rotation/edge).
+    final mustBeDistinct = level == DifficultyLevel.veryEasy ||
+        level == DifficultyLevel.easy;
     final picked = <PuzzleShape>[];
     for (int i = 0; i < slots.length; i++) {
       final filtered = basePool.toList();
-      // À partir de la 2e pièce, on essaie de différer des précédentes
-      if (i > 0 && picked.length < basePool.length) {
+      if (mustBeDistinct) {
+        filtered.removeWhere((s) => picked.contains(s));
+        if (filtered.isEmpty) {
+          // Si on a épuisé le pool, on prend dans basePool quand même (rare,
+          // se produit si slots.length > basePool.length).
+          filtered.addAll(basePool);
+        }
+      } else if (i > 0 && picked.length < basePool.length) {
         filtered.removeWhere((s) => picked.contains(s));
       }
       final pool = filtered.isEmpty ? basePool : filtered;
@@ -442,10 +452,54 @@ class PuzzleGenerator {
 
   List<PuzzlePiece> _buildDistractors(
       List<PuzzlePiece> correct, DifficultyLevel level) {
-    final pool = _distractorPoolFor(level).toList()..shuffle(_rng);
     final existingSignatures = correct.map(_visualSig).toSet();
+    final targetShapes = correct.map((p) => p.shape).toSet();
     final distractors = <PuzzlePiece>[];
 
+    // STRICT veryEasy/easy : tous les distracteurs ont une SHAPE différente
+    // des targets ET entre eux → 6 shapes uniques au total dans les options.
+    // L'utilisateur peut résoudre l'exercice par reconnaissance de forme.
+    final mustHaveDistinctShape = level == DifficultyLevel.veryEasy ||
+        level == DifficultyLevel.easy;
+
+    if (mustHaveDistinctShape) {
+      final usedShapes = Set<PuzzleShape>.from(targetShapes);
+      while (distractors.length < 3) {
+        final remaining = PuzzleShape.values
+            .where((s) => !usedShapes.contains(s))
+            .toList();
+        if (remaining.isEmpty) break; // sécurité
+        final newShape = remaining[_rng.nextInt(remaining.length)];
+        usedShapes.add(newShape);
+        // Crée la pièce avec cette shape distincte, dimensions de la
+        // première target pour rester cohérent.
+        final base = correct[_rng.nextInt(correct.length)];
+        final candidate = PuzzlePiece(
+          id: _uuid(),
+          shape: newShape,
+          rotationDeg: 0,
+          mirrored: false,
+          scale: 1.0,
+          edges: EdgePattern(
+            top: _randomEdge(level),
+            right: _randomEdge(level),
+            bottom: _randomEdge(level),
+            left: _randomEdge(level),
+          ),
+          gridX: base.gridX,
+          gridY: base.gridY,
+          gridW: base.gridW,
+          gridH: base.gridH,
+        );
+        existingSignatures.add(_visualSig(candidate));
+        distractors.add(candidate);
+      }
+      // Si pour une raison quelconque on n'a pas atteint 3, on complète
+      // ci-dessous avec le pool standard.
+    }
+
+    // Niveaux medium/hard OU fallback : pool standard avec dedup par signature
+    final pool = _distractorPoolFor(level).toList()..shuffle(_rng);
     int attempts = 0;
     int poolIdx = 0;
     while (distractors.length < 3 && attempts < 50) {
@@ -456,21 +510,13 @@ class PuzzleGenerator {
       final candidate = _applyDistractor(type, base, level);
 
       final sig = _visualSig(candidate);
-      if (existingSignatures.contains(sig)) {
-        // Collision visuelle — on essaie un autre type
-        continue;
-      }
-      // Vérifie aussi que la pièce candidate n'est pas RIDICULE
-      // (ex: mirror sur square symétrique = identique au target)
-      if (_isSymmetricallyIdentical(candidate, base)) {
-        continue;
-      }
+      if (existingSignatures.contains(sig)) continue;
+      if (_isSymmetricallyIdentical(candidate, base)) continue;
       existingSignatures.add(sig);
       distractors.add(candidate);
     }
 
-    // Fallback si on n'a pas trouvé 3 distracteurs distincts : on force avec
-    // extraPiece (qui est aléatoire complet, faible chance de collision)
+    // Fallback final : extraPiece aléatoire
     while (distractors.length < 3) {
       final candidate = _applyDistractor(
           _DistractorType.extraPiece, correct[0], level);

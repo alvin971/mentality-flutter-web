@@ -166,6 +166,33 @@ void main() {
           reason: 'veryEasy shapes combos : $shapeCombos');
     });
 
+    test(
+        'veryEasy/easy : les 6 options ont 6 shapes différentes '
+        '(évite la confusion visuelle)', () {
+      // Test critique : à ces niveaux faciles, l'utilisateur résout par
+      // reconnaissance de forme. Aucune ambiguïté possible.
+      int totalChecked = 0;
+      int violations = 0;
+      for (int seed = 0; seed < 50; seed++) {
+        final gen = PuzzleGenerator(seed: seed);
+        final items = gen.generateComplete26Items();
+        for (final item in items) {
+          if (item.level == DifficultyLevel.veryEasy ||
+              item.level == DifficultyLevel.easy) {
+            totalChecked++;
+            final shapes = item.options.map((p) => p.shape).toSet();
+            if (shapes.length < 6) {
+              violations++;
+            }
+          }
+        }
+      }
+      // Tolère < 2% de violations (cas où le pool de formes est épuisé)
+      expect(violations / totalChecked, lessThan(0.02),
+          reason:
+              '$violations / $totalChecked items veryEasy/easy ont moins de 6 shapes uniques');
+    });
+
     test('aucun item n\'a 2 options visuellement identiques', () {
       // Signature qui reproduit fidèlement la logique du générateur :
       // rotation appliquée aux edges, mirror appliqué, symétrie de shape
