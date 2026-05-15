@@ -167,30 +167,30 @@ void main() {
     });
 
     test(
-        'veryEasy/easy : les 6 options ont 6 shapes différentes '
-        '(évite la confusion visuelle)', () {
-      // Test critique : à ces niveaux faciles, l'utilisateur résout par
-      // reconnaissance de forme. Aucune ambiguïté possible.
+        'TOUS niveaux : les 6 options ont 6 shapes différentes '
+        '(garantit zéro confusion visuelle)', () {
+      // Règle critique : l'utilisateur ne doit JAMAIS voir 2 pièces qui
+      // se ressemblent. Chaque option a une forme géométrique distincte.
       int totalChecked = 0;
       int violations = 0;
-      for (int seed = 0; seed < 50; seed++) {
+      final violationsByLevel = <DifficultyLevel, int>{};
+      for (int seed = 0; seed < 100; seed++) {
         final gen = PuzzleGenerator(seed: seed);
         final items = gen.generateComplete26Items();
         for (final item in items) {
-          if (item.level == DifficultyLevel.veryEasy ||
-              item.level == DifficultyLevel.easy) {
-            totalChecked++;
-            final shapes = item.options.map((p) => p.shape).toSet();
-            if (shapes.length < 6) {
-              violations++;
-            }
+          totalChecked++;
+          final shapes = item.options.map((p) => p.shape).toSet();
+          if (shapes.length < 6) {
+            violations++;
+            violationsByLevel.update(item.level, (v) => v + 1,
+                ifAbsent: () => 1);
           }
         }
       }
-      // Tolère < 2% de violations (cas où le pool de formes est épuisé)
-      expect(violations / totalChecked, lessThan(0.02),
+      expect(violations / totalChecked, lessThan(0.01),
           reason:
-              '$violations / $totalChecked items veryEasy/easy ont moins de 6 shapes uniques');
+              '$violations / $totalChecked items ont moins de 6 shapes uniques. '
+              'Par niveau : $violationsByLevel');
     });
 
     test('aucun item n\'a 2 options visuellement identiques', () {
@@ -241,16 +241,10 @@ void main() {
     });
 
     test(
-        'progression de subtilité : niveau hard contient plus souvent '
-        'wrongEdge que niveau veryEasy', () {
-      // Heuristique : "wrongEdge applied" se détecte si la pièce a la même
-      // shape qu'un target et seul 1 des 4 edges diffère (les autres étant
-      // identiques au target le plus proche).
-      // Plus simple : on compte les distracteurs avec EXACTEMENT la même
-      // shape qu'un target ET 0 transformation visible (pas de rot/mirror/
-      // scale). Ces distracteurs sont quasi-exclusivement wrongEdge.
-      int subtleHard = 0;
-      int subtleVeryEasy = 0;
+        'distractors n\'ont JAMAIS la même shape qu\'un target '
+        '(invariant fort, tous niveaux)', () {
+      // Avec la règle stricte de 6 shapes uniques, un distractor ne doit
+      // jamais partager sa shape avec une pièce correcte.
       for (int seed = 0; seed < 50; seed++) {
         final gen = PuzzleGenerator(seed: seed);
         final items = gen.generateComplete26Items();
@@ -260,21 +254,12 @@ void main() {
               .where((p) => !item.correctIds.contains(p.id))
               .toList();
           for (final d in distractors) {
-            final isSubtleEdge = targetShapes.contains(d.shape) &&
-                d.rotationDeg == 0 &&
-                !d.mirrored &&
-                d.scale == 1.0;
-            if (isSubtleEdge) {
-              if (item.level == DifficultyLevel.hard) subtleHard++;
-              if (item.level == DifficultyLevel.veryEasy) subtleVeryEasy++;
-            }
+            expect(targetShapes.contains(d.shape), false,
+                reason:
+                    'seed=$seed item=${item.index} : distractor ${d.shape.name} partage la shape avec un target');
           }
         }
       }
-      expect(subtleHard, greaterThan(subtleVeryEasy),
-          reason:
-              'hard: $subtleHard wrongEdge distractors ; veryEasy: $subtleVeryEasy. '
-              'Progression subtilité inversée');
     });
   });
 }
