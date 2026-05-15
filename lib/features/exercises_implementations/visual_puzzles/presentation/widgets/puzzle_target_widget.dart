@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/theme/app_colors.dart';
@@ -20,10 +21,16 @@ class PuzzleTargetWidget extends StatelessWidget {
     final accent = AppColors.accentForBrightness(
         AppColors.indexVSI, Theme.of(context).brightness);
 
+    // Ratio adaptatif selon le layout : rangée 3×1 → 3:1.4, colonne 1×3 → 1:2.2,
+    // carré 2×2 → 1:1. On compresse les ratios extrêmes pour éviter une cible
+    // trop fine sur mobile.
+    final rawRatio = item.gridCols / item.gridRows;
+    final aspect = rawRatio >= 1 ? math.min(rawRatio, 2.0) : math.max(rawRatio, 0.5);
+
     return Semantics(
       label: 'Silhouette cible — niveau ${item.level.label}, item ${item.index} sur 26',
       child: AspectRatio(
-        aspectRatio: 1.0,
+        aspectRatio: aspect,
         child: Container(
           decoration: BoxDecoration(
             color: cs.surfaceContainerHighest,

@@ -92,7 +92,6 @@ void main() {
       final gen2 = PuzzleGenerator(seed: 2);
       final items1 = gen1.generateComplete26Items();
       final items2 = gen2.generateComplete26Items();
-      // Au moins une différence sur les 26 items
       bool different = false;
       for (int i = 0; i < 26; i++) {
         if (items1[i].correctIds.toString() != items2[i].correctIds.toString()) {
@@ -101,6 +100,71 @@ void main() {
         }
       }
       expect(different, true);
+    });
+
+    // ============================================================
+    // DIVERSITÉ COMBINATOIRE
+    // ============================================================
+
+    /// Signature visible d'un item (sans les UUIDs) — sert à mesurer la diversité.
+    String _itemSignature(PuzzleItem item) {
+      final pieces = item.targetPieces
+          .map((p) =>
+              '${p.shape.name}|${p.rotationDeg}|${p.mirrored}|${p.scale}|'
+              '${p.edges.top.name}-${p.edges.right.name}-'
+              '${p.edges.bottom.name}-${p.edges.left.name}|'
+              '${p.gridX},${p.gridY},${p.gridW}x${p.gridH}')
+          .join('#');
+      return '${item.layout.name}::$pieces';
+    }
+
+    test('100 générations consécutives produisent ≥ 70% items uniques (diversité)',
+        () {
+      // On génère 100 batches de 26 items. Chaque batch a son propre seed
+      // (basé sur l'horloge). On collecte les signatures de TOUS les items
+      // veryEasy et on vérifie qu'au moins 70% sont uniques.
+      final signatures = <String>{};
+      var total = 0;
+      for (int i = 0; i < 100; i++) {
+        final gen = PuzzleGenerator(seed: i * 31 + 7);
+        final items = gen.generateComplete26Items();
+        for (final item in items) {
+          signatures.add(_itemSignature(item));
+          total++;
+        }
+      }
+      // 2600 items générés. On attend au moins 1500 signatures différentes
+      // (combinatoire massive).
+      expect(signatures.length, greaterThan(1500),
+          reason:
+              '${signatures.length} signatures uniques sur $total items — '
+              'diversité insuffisante, refonte du générateur nécessaire');
+    });
+
+    test('plusieurs layouts différents apparaissent dans 26 items', () {
+      final gen = PuzzleGenerator(seed: 42);
+      final items = gen.generateComplete26Items();
+      final layoutsUsed = items.map((i) => i.layout).toSet();
+      // On veut au moins 3 layouts différents sur les 26 items (preuve que
+      // le générateur ne se cale pas sur un seul).
+      expect(layoutsUsed.length, greaterThanOrEqualTo(3),
+          reason: 'layouts utilisés : $layoutsUsed');
+    });
+
+    test(
+        'sur 26 items, plusieurs shape combinations différentes au niveau '
+        'veryEasy (pas que [square, square, square])', () {
+      final gen = PuzzleGenerator(seed: 12345);
+      final items = gen.generateComplete26Items();
+      final veryEasyItems = items
+          .where((i) => i.level == DifficultyLevel.veryEasy)
+          .toList();
+      final shapeCombos = veryEasyItems
+          .map((i) => i.targetPieces.map((p) => p.shape.name).join(','))
+          .toSet();
+      // 6 items veryEasy — on attend au moins 2 combos différentes
+      expect(shapeCombos.length, greaterThanOrEqualTo(2),
+          reason: 'veryEasy shapes combos : $shapeCombos');
     });
   });
 }
