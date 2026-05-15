@@ -12,8 +12,17 @@ import '../widgets/puzzle_piece_widget.dart';
 import '../widgets/puzzle_slot_indicator.dart';
 import '../widgets/puzzle_target_widget.dart';
 
+/// Page du test "Puzzles Visuels" (WAIS-IV — VSI).
+///
+/// Flow :
+/// - 26 items générés via PuzzleGenerator (4 niveaux de difficulté)
+/// - Pour chaque item : 1 cible + 6 pièces options, sélectionner exactement 3
+/// - Timer 20-30s selon niveau, auto-submit à 0
+/// - Discontinuation : 3 échecs consécutifs
+/// - Score dichotomique 0/1 par item
 class VisualPuzzlesTestPage extends StatefulWidget {
   const VisualPuzzlesTestPage({super.key, this.filterLevel});
+
   final String? filterLevel;
 
   @override
@@ -30,7 +39,7 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
   int _remainingSeconds = 0;
   Timer? _timer;
   DateTime? _itemStartTime;
-  bool _submitted = false;
+  bool _submitted = false; // empêche double-submit
 
   static const String _label = 'ABCDEF';
 
@@ -47,9 +56,7 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
     final filter = widget.filterLevel;
     if (filter != null) {
       final f = all
-          .where((it) =>
-              it.level.name == filter ||
-              it.level.label.toLowerCase() == filter.toLowerCase())
+          .where((it) => it.level.name == filter || it.level.label.toLowerCase() == filter.toLowerCase())
           .toList();
       _items = f.isNotEmpty ? f : all;
     } else {
@@ -96,21 +103,14 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
         _selectedIds.remove(pieceId);
       } else {
         if (_selectedIds.length >= 3) {
-          final oldest = _selectedIds.first;
-          _selectedIds.remove(oldest);
+          // Si déjà 3, on remplace la première sélectionnée par la nouvelle.
+          final firstOldest = _selectedIds.first;
+          _selectedIds.remove(firstOldest);
         }
         _selectedIds.add(pieceId);
       }
     });
     HapticFeedback.lightImpact();
-  }
-
-  bool _setEqualsLocal(Set<String> a, Set<String> b) {
-    if (a.length != b.length) return false;
-    for (final e in a) {
-      if (!b.contains(e)) return false;
-    }
-    return true;
   }
 
   void _submit({bool autoSubmit = false}) {
@@ -124,7 +124,7 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
         : _currentItem.timeLimitSeconds;
 
     final isCorrect = _selectedIds.length == 3 &&
-        _setEqualsLocal(_selectedIds, _currentItem.correctIds);
+        setEquals(_selectedIds, _currentItem.correctIds);
 
     setState(() {
       if (isCorrect) {
@@ -157,9 +157,7 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
               ),
               SizedBox(width: 10.w),
               Text(
-                isCorrect
-                    ? 'Correct !'
-                    : (autoSubmit ? 'Temps écoulé' : 'Incorrect'),
+                isCorrect ? 'Correct !' : (autoSubmit ? 'Temps écoulé' : 'Incorrect'),
                 style: TextStyle(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
@@ -175,7 +173,7 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
               Text(
                 isCorrect
                     ? 'Bonne combinaison de pièces !'
-                    : 'Les 3 pièces correctes étaient :',
+                    : 'La bonne réponse était :',
                 style: TextStyle(fontSize: 14.sp, color: cs.onSurface),
               ),
               if (!isCorrect) ...[
@@ -185,9 +183,6 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
               SizedBox(height: 12.h),
               Text('Temps : ${timeSeconds}s',
                   style: TextStyle(fontSize: 13.sp, color: cs.onSurfaceVariant)),
-              Text(
-                  'Difficulté distracteurs : ${(_currentItem.distractorSimilarity * 100).round()}%',
-                  style: TextStyle(fontSize: 12.sp, color: cs.outline)),
               Text('Score : $_score / ${_currentItemIndex + 1}',
                   style: TextStyle(fontSize: 13.sp, color: cs.onSurfaceVariant)),
               if (_consecutiveFailures >= 3) ...[
@@ -210,8 +205,7 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
                 _next();
               },
               child: Text(
-                _consecutiveFailures >= 3 ||
-                        _currentItemIndex >= _items.length - 1
+                _consecutiveFailures >= 3 || _currentItemIndex >= _items.length - 1
                     ? 'Voir les résultats'
                     : 'Continuer',
               ),
@@ -223,15 +217,18 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
   }
 
   void _next() {
-    if (_consecutiveFailures >= 3 ||
-        _currentItemIndex >= _items.length - 1) {
-      Navigator.of(context).pop(_score);
+    if (_consecutiveFailures >= 3 || _currentItemIndex >= _items.length - 1) {
+      _finish();
       return;
     }
     setState(() {
       _currentItemIndex++;
     });
     _startItem();
+  }
+
+  void _finish() {
+    Navigator.of(context).pop(_score);
   }
 
   @override
@@ -264,7 +261,7 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
           PuzzleSlotIndicator(filled: _selectedIds.length, total: 3),
           SizedBox(height: 16.h),
           Text(
-            'Choisissez les 3 pièces qui reconstituent la cible.',
+            'Choisissez les 3 pièces qui forment la cible.',
             style: AppText.body(),
             textAlign: TextAlign.center,
           ),
@@ -275,14 +272,13 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
             physics: const NeverScrollableScrollPhysics(),
             mainAxisSpacing: 12.h,
             crossAxisSpacing: 12.w,
-            childAspectRatio: 0.95,
+            childAspectRatio: 0.85,
             children: List.generate(item.options.length, (i) {
               final piece = item.options[i];
               final isSelected = _selectedIds.contains(piece.id);
               final showCorrect =
                   _submitted && _currentItem.correctIds.contains(piece.id);
-              final showIncorrect =
-                  _submitted && isSelected && !showCorrect;
+              final showIncorrect = _submitted && isSelected && !showCorrect;
               return PuzzlePieceWidget(
                 piece: piece,
                 label: _label[i],
@@ -300,8 +296,13 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
   }
 }
 
+// ============================================================
+// SUB-WIDGETS
+// ============================================================
+
 class _TimerBadge extends StatelessWidget {
   const _TimerBadge({required this.seconds, required this.accent});
+
   final int seconds;
   final Color accent;
 
@@ -333,13 +334,16 @@ class _TimerBadge extends StatelessWidget {
 
 class _CorrectAnswerHint extends StatelessWidget {
   const _CorrectAnswerHint({required this.item, required this.accent});
+
   final PuzzleItem item;
   final Color accent;
 
   @override
   Widget build(BuildContext context) {
-    final correctPieces =
-        item.options.where((p) => item.correctIds.contains(p.id)).toList();
+    // Petite vue : 3 pièces correctes en mini, côte à côte
+    final correctPieces = item.options
+        .where((p) => item.correctIds.contains(p.id))
+        .toList();
     return SizedBox(
       height: 80.h,
       child: Row(
@@ -363,4 +367,13 @@ class _CorrectAnswerHint extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Utilitaire pour comparer 2 sets (équivalent à setEquals de collection.dart).
+bool setEquals<T>(Set<T> a, Set<T> b) {
+  if (a.length != b.length) return false;
+  for (final e in a) {
+    if (!b.contains(e)) return false;
+  }
+  return true;
 }
