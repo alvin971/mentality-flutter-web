@@ -248,6 +248,12 @@ class AppConstants {
   // ========================================
 
   static const bool enableAIGeneration = true;
+
+  /// Bypass temporaire du flow d'inscription par token (en attendant config SMTP).
+  /// `true` = le splash route directement vers /home (accès libre).
+  /// `false` = vérifie le token en local, route vers /register si absent.
+  /// À repasser à `false` quand SMTP réel configuré (Resend / Gmail / etc.).
+  static const bool kSkipRegistrationGate = true;
   static const bool enableVoiceRecognition = true;
   static const bool enable3DCubes = true;
   static const bool enableAnalytics = true;

@@ -33,6 +33,11 @@ class _SplashPageState extends State<SplashPage>
     // Gate d'authentification : redirige vers /register si aucun token local
     Future.delayed(const Duration(milliseconds: 2600), () async {
       if (!mounted) return;
+      if (AppConstants.kSkipRegistrationGate) {
+        // Mode bypass temporaire (config SMTP non finalisée)
+        context.go(AppConstants.routeHome);
+        return;
+      }
       final hasToken = await AuthLocalStore.instance.hasToken();
       if (!mounted) return;
       context.go(hasToken
