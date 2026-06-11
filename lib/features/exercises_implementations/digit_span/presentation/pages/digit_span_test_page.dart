@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:async';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
+import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/digit_span_generator.dart';
 
@@ -311,6 +312,12 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
       testName: 'Mémoire des Chiffres',
       eyebrow: 'MÉMOIRE DE TRAVAIL · WMI',
       accentColor: AppColors.indexWMI,
+      // Bouton de démarrage sticky : visible sans scroller.
+      bottomBar: KeplerTestButton.primary(
+        label: 'Commencer le test',
+        accentColor: AppColors.indexWMI,
+        onPressed: _startTest,
+      ),
       child: Column(
 crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -370,21 +377,6 @@ crossAxisAlignment: CrossAxisAlignment.start,
                       ),
                     ),
                   ],
-                ),
-              ),
-              SizedBox(height: 32.h),
-              SizedBox(
-                width: double.infinity,
-                height: 50.h,
-                child: ElevatedButton(
-                  onPressed: _startTest,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.indexWMI,
-                  ),
-                  child: Text(
-                    'Commencer le test',
-                    style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
-                  ),
                 ),
               ),
             ],
@@ -601,16 +593,29 @@ crossAxisAlignment: CrossAxisAlignment.start,
                 ),
               ),
               SizedBox(height: 32.h),
-              // Clavier numérique
+              // Clavier numérique — les 9 touches tiennent toujours dans la
+              // hauteur disponible (pas de scroll interne).
               Expanded(
-                child: GridView.count(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 12.h,
-                  crossAxisSpacing: 12.w,
-                  children: [
-                    for (int i = 1; i <= 9; i++)
-                      _buildNumberButton(i),
-                  ],
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final tileW =
+                        (constraints.maxWidth - 2 * 12.w) / 3;
+                    final tileH =
+                        (constraints.maxHeight - 2 * 12.h) / 3;
+                    final aspectRatio =
+                        (tileW / tileH).clamp(0.6, 4.0).toDouble();
+                    return GridView.count(
+                      crossAxisCount: 3,
+                      mainAxisSpacing: 12.h,
+                      crossAxisSpacing: 12.w,
+                      childAspectRatio: aspectRatio,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: [
+                        for (int i = 1; i <= 9; i++)
+                          _buildNumberButton(i),
+                      ],
+                    );
+                  },
                 ),
               ),
               SizedBox(height: 16.h),

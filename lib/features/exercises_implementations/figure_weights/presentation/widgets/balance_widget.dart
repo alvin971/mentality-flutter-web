@@ -24,7 +24,7 @@ class BalanceWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     return Container(
-      padding: EdgeInsets.all(16.w),
+      padding: EdgeInsets.all(10.w),
       decoration: BoxDecoration(
         color: cs.surface,
         borderRadius: BorderRadius.circular(12.r),
@@ -41,7 +41,7 @@ class BalanceWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           _buildBalancePlate(context),
-          SizedBox(height: 12.h),
+          SizedBox(height: 8.h),
           _buildEquation(context),
         ],
       ),

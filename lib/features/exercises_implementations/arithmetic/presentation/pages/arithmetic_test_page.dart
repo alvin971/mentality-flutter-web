@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:async';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
+import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/arithmetic_generator.dart';
 
@@ -300,6 +301,12 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
       testName: 'Arithmétique',
       eyebrow: 'MÉMOIRE DE TRAVAIL · WMI',
       accentColor: AppColors.indexWMI,
+      // Bouton de démarrage sticky : visible sans scroller.
+      bottomBar: KeplerTestButton.primary(
+        label: 'Commencer le test',
+        accentColor: AppColors.indexWMI,
+        onPressed: _startItem,
+      ),
       child: Column(
 crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -365,21 +372,6 @@ crossAxisAlignment: CrossAxisAlignment.start,
                       ),
                     ),
                   ],
-                ),
-              ),
-              SizedBox(height: 32.h),
-              SizedBox(
-                width: double.infinity,
-                height: 50.h,
-                child: ElevatedButton(
-                  onPressed: _startItem,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.indexWMI,
-                  ),
-                  child: Text(
-                    'Commencer le test',
-                    style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
-                  ),
                 ),
               ),
             ],

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
+import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/similarities_generator.dart';
 
@@ -335,17 +336,27 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
       accentColor: AppColors.indexVCI,
       currentItem: currentLevel + 1,
       totalItems: _generatedItems.length,
+      // Timer + score dans l'AppBar et bouton Valider sticky en bas :
+      // visible sans scroller, et il reste au-dessus du clavier.
+      trailing: [
+        Padding(
+          padding: EdgeInsets.only(left: 8.w),
+          child: Text('${_elapsedSeconds}s · $score pts',
+              style: AppText.monoLabel(color: AppColors.indexVCI)),
+        ),
+      ],
+      bottomBar: KeplerTestButton.primary(
+        label: 'Valider',
+        accentColor: AppColors.indexVCI,
+        onPressed:
+            _answerController.text.trim().isNotEmpty ? _submitAnswer : null,
+      ),
       child: Column(
 crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Timer et score
-              _buildHeader(),
-
-              SizedBox(height: 24.h),
-
               // Instructions
               Container(
-                padding: EdgeInsets.all(12.w),
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
                 decoration: BoxDecoration(
                   color: AppColors.infoContainer,
                   borderRadius: BorderRadius.circular(8.r),
@@ -354,18 +365,18 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                 child: Text(
                   'En quoi ces deux mots sont-ils similaires ?',
                   style: TextStyle(
-                    fontSize: 14.sp,
+                    fontSize: 13.sp,
                     fontWeight: FontWeight.w500,
                   ),
                   textAlign: TextAlign.center,
                 ),
               ),
 
-              SizedBox(height: 32.h),
+              SizedBox(height: 12.h),
 
               // Les deux mots
               Container(
-                padding: EdgeInsets.all(24.w),
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
@@ -378,37 +389,43 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                 ),
                 child: Column(
                   children: [
-                    Text(
-                      currentItem.word1,
-                      style: TextStyle(
-                        fontSize: 32.sp,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.indexVCI,
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        currentItem.word1,
+                        style: TextStyle(
+                          fontSize: 26.sp,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.indexVCI,
+                        ),
                       ),
                     ),
-                    SizedBox(height: 16.h),
+                    SizedBox(height: 6.h),
                     Text(
                       '&',
                       style: TextStyle(
-                        fontSize: 24.sp,
+                        fontSize: 18.sp,
                         fontWeight: FontWeight.w300,
                         color: Theme.of(context).colorScheme.outline,
                       ),
                     ),
-                    SizedBox(height: 16.h),
-                    Text(
-                      currentItem.word2,
-                      style: TextStyle(
-                        fontSize: 32.sp,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.indexVCI,
+                    SizedBox(height: 6.h),
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        currentItem.word2,
+                        style: TextStyle(
+                          fontSize: 26.sp,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.indexVCI,
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
 
-              SizedBox(height: 24.h),
+              SizedBox(height: 12.h),
 
               // Niveau d'abstraction
               Container(
@@ -428,20 +445,22 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                 ),
               ),
 
-              SizedBox(height: 24.h),
+              SizedBox(height: 12.h),
 
               // Champ de réponse
               Text(
                 'Votre réponse :',
                 style: TextStyle(
-                  fontSize: 16.sp,
+                  fontSize: 15.sp,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 8.h),
+              SizedBox(height: 6.h),
               TextField(
                 controller: _answerController,
                 maxLines: 3,
+                // Met à jour l'état du bouton Valider à chaque frappe.
+                onChanged: (_) => setState(() {}),
                 decoration: InputDecoration(
                   hintText: 'Expliquez en quoi ils sont similaires...',
                   border: OutlineInputBorder(
@@ -486,98 +505,11 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                 ),
               ),
 
-              SizedBox(height: 24.h),
-
-              // Bouton Valider
-              SizedBox(
-                width: double.infinity,
-                height: 50.h,
-                child: ElevatedButton(
-                  onPressed: _answerController.text.trim().isNotEmpty
-                      ? _submitAnswer
-                      : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.indexVCI,
-                    disabledBackgroundColor: AppColors.grey300,
-                  ),
-                  child: Text(
-                    'Valider',
-                    style: TextStyle(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
             ],
       ),
     );
   }
 
-  Widget _buildHeader() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        // Timer
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-          decoration: BoxDecoration(
-            color: AppColors.infoContainer,
-            borderRadius: BorderRadius.circular(20.r),
-            border: Border.all(color: AppColors.infoLight, width: 2),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.timer,
-                size: 20.sp,
-                color: AppColors.info,
-              ),
-              SizedBox(width: 8.w),
-              Text(
-                '${_elapsedSeconds}s',
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.info,
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        // Score
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-          decoration: BoxDecoration(
-            color: AppColors.successContainer,
-            borderRadius: BorderRadius.circular(20.r),
-            border: Border.all(color: AppColors.successLight, width: 2),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.star,
-                size: 20.sp,
-                color: AppColors.warning,
-              ),
-              SizedBox(width: 8.w),
-              Text(
-                '$score pts',
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.success,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
 
   Color _getLevelColor(AbstractionLevel level) {
     switch (level) {

@@ -64,6 +64,12 @@ class KeplerTestScaffold extends StatelessWidget {
     final colors = KeplerColors.of(context);
     final hasProgress = currentItem != null && totalItems != null;
 
+    final content = Padding(
+      padding:
+          padding ?? EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
+      child: child,
+    );
+
     final body = Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -77,11 +83,9 @@ class KeplerTestScaffold extends StatelessWidget {
               label: eyebrow,
             ),
           ),
-        Padding(
-          padding:
-              padding ?? EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
-          child: child,
-        ),
+        // En mode non-scrollable, le contenu occupe toute la hauteur restante
+        // (permet aux pages d'utiliser Expanded/FittedBox pour tenir à l'écran).
+        if (scrollable) content else Expanded(child: content),
       ],
     );
 
@@ -160,34 +164,44 @@ class _TestAppBar extends StatelessWidget implements PreferredSizeWidget {
                 else
                   SizedBox(width: 12.w),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (eyebrow != null)
-                        Text(
-                          eyebrow!.toUpperCase(),
-                          style: AppText.monoLabel(color: effectiveAccent),
-                        ),
-                      if (eyebrow != null) SizedBox(height: 2.h),
-                      // FittedBox borné en hauteur : ne peut que RÉDUIRE le
-                      // titre — corrige l'overflow vertical de l'AppBar sur
-                      // desktop sans changer le rendu mobile (où le titre
-                      // reste sous 34 px).
-                      ConstrainedBox(
-                        constraints: const BoxConstraints(maxHeight: 34),
-                        child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            title,
-                            style:
-                                AppText.h2Italic(color: colors.textPrimary),
-                            maxLines: 1,
+                  // FittedBox global borné par la hauteur de l'AppBar :
+                  // eyebrow + titre se réduisent ensemble au lieu de
+                  // déborder de quelques pixels sur les petits écrans.
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (eyebrow != null)
+                            Text(
+                              eyebrow!.toUpperCase(),
+                              style: AppText.monoLabel(color: effectiveAccent),
+                            ),
+                          if (eyebrow != null) SizedBox(height: 2.h),
+                          // FittedBox borné en hauteur : ne peut que RÉDUIRE
+                          // le titre — corrige l'overflow vertical de
+                          // l'AppBar sur desktop sans changer le rendu mobile
+                          // (où le titre reste sous 34 px).
+                          ConstrainedBox(
+                            constraints: const BoxConstraints(maxHeight: 34),
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                title,
+                                style: AppText.h2Italic(
+                                    color: colors.textPrimary),
+                                maxLines: 1,
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
                 SizedBox(width: 8.w),

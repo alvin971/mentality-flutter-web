@@ -171,6 +171,9 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
       accentColor: accent,
       currentItem: _currentItemIndex + 1,
       totalItems: _items.length,
+      // Aucun défilement : cible et pièces se redimensionnent pour tenir
+      // dans la hauteur de n'importe quel écran (test chronométré).
+      scrollable: false,
       trailing: [_TimerBadge(seconds: _remainingSeconds, accent: accent)],
       bottomBar: KeplerTestButton.primary(
         label: _submitted
@@ -188,52 +191,79 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
     );
   }
 
-  /// Mobile / fenêtre étroite : tout en colonne.
+  /// Mobile / fenêtre étroite : tout en colonne, dimensionné pour tenir
+  /// dans la hauteur disponible (cible flexible + grille bornée).
   Widget _buildNarrow(PuzzleItem item) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        const SizedBox(height: 8),
-        PuzzleTargetWidget(item: item),
-        const SizedBox(height: 12),
-        PuzzleSlotIndicator(filled: _selectedIds.length, total: 3),
-        const SizedBox(height: 8),
-        _instruction(),
-        const SizedBox(height: 12),
-        Center(child: _optionsGrid(item, maxWidth: 470)),
-        const SizedBox(height: 24),
-      ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Hauteur consommée par les éléments fixes (slots + consigne + gaps).
+        const fixedChrome = 110.0;
+        // Hauteur minimale réservée à la cible.
+        const minTarget = 120.0;
+        // Budget hauteur pour la grille d'options (2 rangées de 3).
+        final gridHeightBudget =
+            (constraints.maxHeight - fixedChrome - minTarget)
+                .clamp(150.0, 320.0);
+        // Largeur de grille correspondante : 2 rangées + espacement 10.
+        final gridWidth = ((gridHeightBudget - 10) / 2) * 3 + 20;
+        final effectiveGridWidth =
+            gridWidth.clamp(210.0, constraints.maxWidth).toDouble();
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const SizedBox(height: 4),
+            // La cible absorbe l'espace restant et se réduit si besoin.
+            Expanded(
+              child: PuzzleTargetWidget(item: item, maxWidth: 400),
+            ),
+            const SizedBox(height: 8),
+            PuzzleSlotIndicator(filled: _selectedIds.length, total: 3),
+            const SizedBox(height: 6),
+            _instruction(),
+            const SizedBox(height: 8),
+            Center(child: _optionsGrid(item, maxWidth: effectiveGridWidth)),
+            const SizedBox(height: 4),
+          ],
+        );
+      },
     );
   }
 
   /// Desktop / fenêtre large : cible à gauche, pièces à droite —
   /// tout visible sans défilement (important pour un test chronométré).
+  /// FittedBox : sur fenêtre basse, l'ensemble est réduit plutôt que coupé.
   Widget _buildWide(PuzzleItem item) {
     return Center(
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 980),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    PuzzleTargetWidget(
-                        item: item, maxWidth: 400, maxHeight: 320),
-                    const SizedBox(height: 16),
-                    PuzzleSlotIndicator(
-                        filled: _selectedIds.length, total: 3),
-                    const SizedBox(height: 12),
-                    _instruction(),
-                  ],
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 980),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 430,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      PuzzleTargetWidget(
+                          item: item, maxWidth: 400, maxHeight: 320),
+                      const SizedBox(height: 16),
+                      PuzzleSlotIndicator(
+                          filled: _selectedIds.length, total: 3),
+                      const SizedBox(height: 12),
+                      _instruction(),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(width: 32),
-              _optionsGrid(item, maxWidth: 470),
-            ],
+                const SizedBox(width: 32),
+                SizedBox(width: 470, child: _optionsGrid(item, maxWidth: 470)),
+              ],
+            ),
           ),
         ),
       ),

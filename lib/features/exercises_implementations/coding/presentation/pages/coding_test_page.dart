@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:async';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
+import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/coding_generator.dart';
 
@@ -233,6 +234,12 @@ class _CodingTestPageState extends State<CodingTestPage> {
       testName: 'Code (Digit Symbol)',
       eyebrow: 'VITESSE DE TRAITEMENT · PSI',
       accentColor: AppColors.indexPSI,
+      // Bouton de démarrage sticky : visible sans scroller.
+      bottomBar: KeplerTestButton.primary(
+        label: 'Commencer l\'entraînement',
+        accentColor: AppColors.indexPSI,
+        onPressed: _startTraining,
+      ),
       child: Column(
 crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -296,21 +303,6 @@ crossAxisAlignment: CrossAxisAlignment.start,
                 'Scoring',
                 '1 point par case correcte, pas de pénalité pour les erreurs',
                 Icons.stars_outlined,
-              ),
-              SizedBox(height: 24.h),
-              SizedBox(
-                width: double.infinity,
-                height: 50.h,
-                child: ElevatedButton(
-                  onPressed: _startTraining,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.indexPSI,
-                  ),
-                  child: Text(
-                    'Commencer l\'entraînement',
-                    style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
-                  ),
-                ),
               ),
             ],
       ),

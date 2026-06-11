@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
+import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/information_generator.dart';
 
@@ -328,14 +329,23 @@ class _InformationTestPageState extends State<InformationTestPage> {
       accentColor: AppColors.indexVCI,
       currentItem: currentLevel + 1,
       totalItems: _generatedItems.length,
+      // Timer + score dans l'AppBar et bouton Valider sticky en bas :
+      // question + 4 options + validation visibles sans scroller.
+      trailing: [
+        Padding(
+          padding: EdgeInsets.only(left: 8.w),
+          child: Text('${_elapsedSeconds}s · $score/${currentLevel + 1}',
+              style: AppText.monoLabel(color: AppColors.indexVCI)),
+        ),
+      ],
+      bottomBar: KeplerTestButton.primary(
+        label: 'Valider',
+        accentColor: AppColors.indexVCI,
+        onPressed: _selectedAnswer != null ? _submitAnswer : null,
+      ),
       child: Column(
 crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Timer et score
-              _buildHeader(),
-
-              SizedBox(height: 24.h),
-
               // Domaine et difficulté
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -379,11 +389,11 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                 ],
               ),
 
-              SizedBox(height: 24.h),
+              SizedBox(height: 12.h),
 
               // Question
               Container(
-                padding: EdgeInsets.all(20.w),
+                padding: EdgeInsets.all(14.w),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
@@ -407,18 +417,19 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                 ),
               ),
 
-              SizedBox(height: 28.h),
+              SizedBox(height: 14.h),
 
               // Options (QCM)
               ...List.generate(4, (index) {
                 final isSelected = _selectedAnswer == index;
                 return Padding(
-                  padding: EdgeInsets.only(bottom: 12.h),
+                  padding: EdgeInsets.only(bottom: 8.h),
                   child: InkWell(
                     onTap: () => _selectAnswer(index),
                     borderRadius: BorderRadius.circular(12.r),
                     child: Container(
-                      padding: EdgeInsets.all(16.w),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 12.w, vertical: 10.h),
                       decoration: BoxDecoration(
                         color: isSelected
                             ? AppColors.indexVCI.withValues(alpha: 0.15)
@@ -477,101 +488,11 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                 );
               }),
 
-              SizedBox(height: 24.h),
-
-              // Bouton Valider
-              SizedBox(
-                width: double.infinity,
-                height: 54.h,
-                child: ElevatedButton(
-                  onPressed: _selectedAnswer != null ? _submitAnswer : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.indexVCI,
-                    disabledBackgroundColor: AppColors.grey300,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.r),
-                    ),
-                    elevation: 4,
-                  ),
-                  child: Text(
-                    'Valider',
-                    style: TextStyle(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1,
-                    ),
-                  ),
-                ),
-              ),
         ],
       ),
     );
   }
 
-  Widget _buildHeader() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        // Timer
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
-          decoration: BoxDecoration(
-            color: AppColors.infoContainer,
-            borderRadius: BorderRadius.circular(24.r),
-            border: Border.all(color: AppColors.infoLight, width: 2),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.timer_outlined,
-                size: 22.sp,
-                color: AppColors.info,
-              ),
-              SizedBox(width: 8.w),
-              Text(
-                '${_elapsedSeconds}s',
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.info,
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        // Score
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
-          decoration: BoxDecoration(
-            color: AppColors.successContainer,
-            borderRadius: BorderRadius.circular(24.r),
-            border: Border.all(color: AppColors.successLight, width: 2),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.stars_rounded,
-                size: 22.sp,
-                color: AppColors.warning,
-              ),
-              SizedBox(width: 8.w),
-              Text(
-                '$score/${currentLevel + 1}',
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.success,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
 
   Color _getDomainColor(KnowledgeDomain domain) {
     switch (domain) {

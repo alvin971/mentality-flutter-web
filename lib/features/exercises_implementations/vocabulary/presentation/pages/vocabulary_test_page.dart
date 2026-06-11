@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
+import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/vocabulary_generator.dart';
 
@@ -342,17 +343,27 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
       accentColor: AppColors.indexVCI,
       currentItem: currentLevel + 1,
       totalItems: _generatedItems.length,
+      // Timer + score dans l'AppBar et bouton Valider sticky en bas :
+      // visible sans scroller, et il reste au-dessus du clavier.
+      trailing: [
+        Padding(
+          padding: EdgeInsets.only(left: 8.w),
+          child: Text('${_elapsedSeconds}s · $score pts',
+              style: AppText.monoLabel(color: AppColors.indexVCI)),
+        ),
+      ],
+      bottomBar: KeplerTestButton.primary(
+        label: 'Valider',
+        accentColor: AppColors.indexVCI,
+        onPressed:
+            _answerController.text.trim().isNotEmpty ? _submitAnswer : null,
+      ),
       child: Column(
 crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Timer et score
-              _buildHeader(),
-
-              SizedBox(height: 24.h),
-
               // Instructions
               Container(
-                padding: EdgeInsets.all(12.w),
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
                 decoration: BoxDecoration(
                   color: AppColors.infoContainer,
                   borderRadius: BorderRadius.circular(8.r),
@@ -361,18 +372,18 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                 child: Text(
                   'Définissez le mot suivant',
                   style: TextStyle(
-                    fontSize: 14.sp,
+                    fontSize: 13.sp,
                     fontWeight: FontWeight.w500,
                   ),
                   textAlign: TextAlign.center,
                 ),
               ),
 
-              SizedBox(height: 32.h),
+              SizedBox(height: 12.h),
 
               // Le mot à définir
               Container(
-                padding: EdgeInsets.all(32.w),
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 18.h),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
@@ -393,19 +404,24 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                   ],
                 ),
                 child: Center(
-                  child: Text(
-                    currentItem.word,
-                    style: TextStyle(
-                      fontSize: 42.sp,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.indexVCI,
-                      letterSpacing: 1.5,
+                  // FittedBox : les mots longs se réduisent au lieu de
+                  // déborder sur les écrans étroits.
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      currentItem.word,
+                      style: TextStyle(
+                        fontSize: 34.sp,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.indexVCI,
+                        letterSpacing: 1.5,
+                      ),
                     ),
                   ),
                 ),
               ),
 
-              SizedBox(height: 24.h),
+              SizedBox(height: 12.h),
 
               // Fréquence du mot
               Row(
@@ -440,20 +456,22 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                 ],
               ),
 
-              SizedBox(height: 28.h),
+              SizedBox(height: 12.h),
 
               // Champ de réponse
               Text(
                 'Votre définition :',
                 style: TextStyle(
-                  fontSize: 16.sp,
+                  fontSize: 15.sp,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 8.h),
+              SizedBox(height: 6.h),
               TextField(
                 controller: _answerController,
-                maxLines: 4,
+                maxLines: 3,
+                // Met à jour l'état du bouton Valider à chaque frappe.
+                onChanged: (_) => setState(() {}),
                 decoration: InputDecoration(
                   hintText: 'Écrivez la définition du mot...',
                   border: OutlineInputBorder(
@@ -472,11 +490,11 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                 style: TextStyle(fontSize: 15.sp),
               ),
 
-              SizedBox(height: 20.h),
+              SizedBox(height: 12.h),
 
               // Aide au scoring
               Container(
-                padding: EdgeInsets.all(14.w),
+                padding: EdgeInsets.all(10.w),
                 decoration: BoxDecoration(
                   color: AppColors.warningContainer,
                   borderRadius: BorderRadius.circular(12.r),
@@ -493,12 +511,14 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                           size: 20.sp,
                         ),
                         SizedBox(width: 8.w),
-                        Text(
-                          'Conseils pour obtenir 2 points :',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14.sp,
-                            color: AppColors.tertiary,
+                        Expanded(
+                          child: Text(
+                            'Conseils pour obtenir 2 points :',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14.sp,
+                              color: AppColors.tertiary,
+                            ),
                           ),
                         ),
                       ],
@@ -520,101 +540,8 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                 ),
               ),
 
-              SizedBox(height: 24.h),
-
-              // Bouton Valider
-              SizedBox(
-                width: double.infinity,
-                height: 54.h,
-                child: ElevatedButton(
-                  onPressed: _answerController.text.trim().isNotEmpty
-                      ? _submitAnswer
-                      : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.indexVCI,
-                    disabledBackgroundColor: AppColors.grey300,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.r),
-                    ),
-                    elevation: 4,
-                  ),
-                  child: Text(
-                    'Valider',
-                    style: TextStyle(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1,
-                    ),
-                  ),
-                ),
-              ),
             ],
       ),
-    );
-  }
-
-  Widget _buildHeader() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        // Timer
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
-          decoration: BoxDecoration(
-            color: AppColors.infoContainer,
-            borderRadius: BorderRadius.circular(24.r),
-            border: Border.all(color: AppColors.infoLight, width: 2),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.timer_outlined,
-                size: 22.sp,
-                color: AppColors.info,
-              ),
-              SizedBox(width: 8.w),
-              Text(
-                '${_elapsedSeconds}s',
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.info,
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        // Score
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
-          decoration: BoxDecoration(
-            color: AppColors.successContainer,
-            borderRadius: BorderRadius.circular(24.r),
-            border: Border.all(color: AppColors.successLight, width: 2),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.stars_rounded,
-                size: 22.sp,
-                color: AppColors.warning,
-              ),
-              SizedBox(width: 8.w),
-              Text(
-                '$score pts',
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.success,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 
