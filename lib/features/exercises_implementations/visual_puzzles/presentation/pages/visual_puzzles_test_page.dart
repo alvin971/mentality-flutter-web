@@ -47,6 +47,24 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
 
   static const String _labels = '123456';
 
+  /// Palette de 6 couleurs vives — une par option.
+  /// La même couleur est utilisée pour la pièce ET sa section dans la cible.
+  static const List<Color> _pieceColors = [
+    Color(0xFF4A90D9), // 1 — bleu
+    Color(0xFFE8824A), // 2 — orange
+    Color(0xFF5DBD6E), // 3 — vert
+    Color(0xFF8B5CF6), // 4 — violet
+    Color(0xFFEC4899), // 5 — rose
+    Color(0xFF14B8A6), // 6 — teal
+  ];
+
+  List<Color> _sectionColorsForItem(PuzzleItem item) {
+    return item.correctPieces.map((cp) {
+      final idx = item.options.indexWhere((o) => o.id == cp.id);
+      return idx >= 0 ? _pieceColors[idx] : _pieceColors[0];
+    }).toList();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -194,7 +212,9 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         const SizedBox(height: 8),
-        PuzzleTargetWidget(item: item),
+        PuzzleTargetWidget(
+            item: item,
+            sectionColors: _sectionColorsForItem(item)),
         const SizedBox(height: 12),
         PuzzleSlotIndicator(filled: _selectedIds.length, total: 3),
         const SizedBox(height: 8),
@@ -222,7 +242,10 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     PuzzleTargetWidget(
-                        item: item, maxWidth: 400, maxHeight: 320),
+                        item: item,
+                        sectionColors: _sectionColorsForItem(item),
+                        maxWidth: 400,
+                        maxHeight: 320),
                     const SizedBox(height: 16),
                     PuzzleSlotIndicator(
                         filled: _selectedIds.length, total: 3),
@@ -272,6 +295,7 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
             piece: piece,
             label: _labels[i],
             unitsPerTile: item.maxPieceExtent,
+            pieceColor: _pieceColors[i],
             isSelected: isSelected,
             showCorrect: showCorrect,
             showIncorrect: showIncorrect,

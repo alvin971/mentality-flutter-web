@@ -8,6 +8,8 @@ import 'polygon_painter.dart';
 /// de l'item (`item.maxPieceExtent`) — les tailles relatives des 6 pièces
 /// sont fidèles, condition indispensable pour repérer les pièges de taille.
 ///
+/// Chaque pièce a une [pieceColor] unique pour être visuellement distincte.
+///
 /// NOTE : dimensionné en pixels logiques (pas de ScreenUtil) pour rester
 /// stable sur desktop comme sur mobile.
 class PuzzlePieceWidget extends StatelessWidget {
@@ -16,6 +18,7 @@ class PuzzlePieceWidget extends StatelessWidget {
     required this.piece,
     required this.label,
     required this.unitsPerTile,
+    required this.pieceColor,
     this.isSelected = false,
     this.showCorrect = false,
     this.showIncorrect = false,
@@ -28,6 +31,9 @@ class PuzzlePieceWidget extends StatelessWidget {
   /// Échelle commune : plus grande dimension affichée parmi les 6 options.
   final double unitsPerTile;
 
+  /// Couleur unique de cette pièce (chaque option a une teinte distincte).
+  final Color pieceColor;
+
   final bool isSelected;
   final bool showCorrect;
   final bool showIncorrect;
@@ -36,8 +42,6 @@ class PuzzlePieceWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-    final accent = AppColors.accentForBrightness(
-        AppColors.indexVSI, Theme.of(context).brightness);
 
     Color borderColor;
     double borderWidth;
@@ -48,7 +52,7 @@ class PuzzlePieceWidget extends StatelessWidget {
       borderColor = AppColors.error;
       borderWidth = 3;
     } else if (isSelected) {
-      borderColor = accent;
+      borderColor = pieceColor;
       borderWidth = 3;
     } else {
       borderColor = cs.outline.withValues(alpha: 0.3);
@@ -69,14 +73,14 @@ class PuzzlePieceWidget extends StatelessWidget {
             padding: const EdgeInsets.all(4),
             decoration: BoxDecoration(
               color: isSelected
-                  ? accent.withValues(alpha: 0.12)
+                  ? pieceColor.withValues(alpha: 0.14)
                   : cs.surfaceContainerHighest,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: borderColor, width: borderWidth),
               boxShadow: isSelected
                   ? [
                       BoxShadow(
-                        color: accent.withValues(alpha: 0.30),
+                        color: pieceColor.withValues(alpha: 0.30),
                         blurRadius: 12,
                         spreadRadius: 1,
                       ),
@@ -91,8 +95,8 @@ class PuzzlePieceWidget extends StatelessWidget {
                     size: Size.infinite,
                     painter: PolygonPainter(
                       polygon: piece.displayPolygon,
-                      fillColor: accent.withValues(alpha: 0.22),
-                      strokeColor: accent,
+                      fillColor: pieceColor.withValues(alpha: 0.60),
+                      strokeColor: pieceColor,
                       strokeWidth: 2.2,
                       unitsPerTile: unitsPerTile,
                     ),
@@ -105,11 +109,11 @@ class PuzzlePieceWidget extends StatelessWidget {
                     height: 20,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: accent.withValues(alpha: 0.14),
+                      color: pieceColor.withValues(alpha: 0.20),
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(label,
-                        style: AppText.mono(color: accent, size: 11)),
+                        style: AppText.mono(color: pieceColor, size: 11)),
                   ),
                 ),
               ],
