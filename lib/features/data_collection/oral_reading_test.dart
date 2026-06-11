@@ -37,7 +37,6 @@ class _OralReadingTestState extends State<OralReadingTest> {
   bool _isRecording = false;
   bool _blinkVisible = true;
   bool _isSaving = false;
-  bool _permissionGranted = false;
   bool _permissionDenied = false;
 
   static const int _minDurationSeconds = 10;
@@ -112,31 +111,51 @@ class _OralReadingTestState extends State<OralReadingTest> {
   }
 
   Future<void> _requestPermissionAndStart() async {
-    final granted = await _recorder.hasPermission();
-    if (!mounted) return;
-    if (granted) {
-      setState(() {
-        _permissionGranted = true;
-        _permissionDenied = false;
-      });
-      await _startRecording();
-    } else {
-      setState(() => _permissionDenied = true);
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text(
-                'Microphone refusé. Vous pouvez passer à l\'étape suivante.'),
-            backgroundColor: AppColors.error,
-            action: SnackBarAction(
-              label: 'Passer',
-              textColor: Colors.white,
-              onPressed: () => widget.onCompleted(widget.text.id, widget.sessionId),
-            ),
-          ),
-        );
-      }
+    bool granted;
+    try {
+      granted = await _recorder.hasPermission();
+    } catch (_) {
+      granted = false;
     }
+    if (!mounted) return;
+
+    if (!granted) {
+      _handleRecordingUnavailable('Microphone refusé ou indisponible.');
+      return;
+    }
+
+    setState(() => _permissionDenied = false);
+
+    try {
+      await _startRecording();
+    } catch (_) {
+      if (!mounted) return;
+      _handleRecordingUnavailable(
+          'Impossible de démarrer l\'enregistrement sur ce navigateur.');
+    }
+  }
+
+  /// Affiche un message d'erreur et débloque l'utilisateur en lui permettant
+  /// de passer à l'étape suivante (le micro ne doit jamais bloquer le parcours).
+  void _handleRecordingUnavailable(String message) {
+    if (!mounted) return;
+    setState(() {
+      _permissionDenied = true;
+      _isRecording = false;
+      _isSaving = false;
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('$message Vous pouvez passer à l\'étape suivante.'),
+        backgroundColor: AppColors.error,
+        duration: const Duration(seconds: 5),
+        action: SnackBarAction(
+          label: 'Passer',
+          textColor: Colors.white,
+          onPressed: () => widget.onCompleted(widget.text.id, widget.sessionId),
+        ),
+      ),
+    );
   }
 
   // ─── Enregistrement ───────────────────────────────────────────────────────────
@@ -144,9 +163,10 @@ class _OralReadingTestState extends State<OralReadingTest> {
   Future<void> _startRecording() async {
     // Sur Flutter Web, le paramètre path est symbolique.
     // recorder.stop() retourne un blob URL (blob:https://...).
+    final encoder = await _resolveSupportedEncoder();
     await _recorder.start(
-      const RecordConfig(
-        encoder: AudioEncoder.opus, // webm/opus : seul format fiable sur Chrome/FF/Safari
+      RecordConfig(
+        encoder: encoder,
         sampleRate: 16000,
         numChannels: 1,
       ),
@@ -157,26 +177,46 @@ class _OralReadingTestState extends State<OralReadingTest> {
     _startTimers();
   }
 
+  /// Choisit un encodeur réellement supporté par le navigateur courant.
+  /// opus (webm) : Chrome/Firefox/Edge — aacLc (mp4) : Safari — wav : secours.
+  Future<AudioEncoder> _resolveSupportedEncoder() async {
+    for (final enc in const [
+      AudioEncoder.opus,
+      AudioEncoder.aacLc,
+      AudioEncoder.wav,
+    ]) {
+      try {
+        if (await _recorder.isEncoderSupported(enc)) return enc;
+      } catch (_) {
+        // Encodeur non disponible : on essaie le suivant.
+      }
+    }
+    return AudioEncoder.opus;
+  }
+
   Future<void> _stopRecording() async {
     _timer?.cancel();
     _blinkTimer?.cancel();
     setState(() => _isSaving = true);
 
-    final blobUrl = await _recorder.stop();
-    if (!mounted) return;
+    try {
+      final blobUrl = await _recorder.stop();
 
-    final record = <String, dynamic>{
-      'session_id': widget.sessionId,
-      'text_id': widget.text.id,
-      'audio_path': blobUrl ?? '',
-      'duration_seconds': _elapsedSeconds,
-      'timestamp': DateTime.now().toIso8601String(),
-      'language': 'fr',
-      'layer': 'C',
-      'anonymized': true,
-    };
+      final record = <String, dynamic>{
+        'session_id': widget.sessionId,
+        'text_id': widget.text.id,
+        'audio_path': blobUrl ?? '',
+        'duration_seconds': _elapsedSeconds,
+        'timestamp': DateTime.now().toIso8601String(),
+        'language': 'fr',
+        'layer': 'C',
+        'anonymized': true,
+      };
 
-    await DataCollectionService.instance.saveAudioRecord(record);
+      await DataCollectionService.instance.saveAudioRecord(record);
+    } catch (_) {
+      // L'échec de sauvegarde ne doit pas bloquer le parcours.
+    }
     if (!mounted) return;
 
     setState(() {
