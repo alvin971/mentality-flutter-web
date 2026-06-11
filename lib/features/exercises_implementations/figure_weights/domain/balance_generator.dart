@@ -417,17 +417,19 @@ class BalanceGenerator {
 
     final answer = [Token(shape: shapeB, count: 1, fraction: numerator / denominator)];
 
-    final options = _generateOptions(
-      correct: answer,
-      baseShape: shapeB,
-      correctCount: 1,
-      difficulty: 2,
-      context: BalanceContext(
-        questionType: QuestionType.findEquivalent,
-        ratio: totalRatio,
-        multiplier: partRatio,
-      ),
-    );
+    // Distracteurs cohérents : autres fractions de B avec le même dénominateur
+    // (la bonne réponse ne doit pas être la seule option fractionnaire)
+    final fracCandidates = [
+      for (int k = 1; k < denominator; k++)
+        if (k != numerator) k,
+    ]..shuffle(_random);
+
+    final options = <List<Token>>[
+      answer,
+      [Token(shape: shapeB, count: 1, fraction: fracCandidates[0] / denominator)],
+      [Token(shape: shapeB, count: 1, fraction: fracCandidates[1] / denominator)],
+      [Token(shape: shapeB, count: 1)], // erreur : 1 B entier (ignore le ratio)
+    ];
 
     return BalanceItem(
       balances: [balance],
@@ -779,16 +781,16 @@ class BalanceGenerator {
 
     final answer = [Token(shape: shapeC, count: 1, fraction: numerator / denominator)];
 
-    final options = _generateOptions(
-      correct: answer,
-      baseShape: shapeC,
-      correctCount: 1,
-      difficulty: 4,
-      context: BalanceContext(
-        questionType: QuestionType.findEquivalent,
-        chainRatios: [ratioAB, ratioBC],
-      ),
-    );
+    // Distracteurs cohérents : erreurs de chaîne plausibles, en fractions
+    final options = <List<Token>>[
+      answer, // 1/6 C (correct)
+      // Erreur : ignorer la 2e balance (A = B/3 → 1/3 C)
+      [Token(shape: shapeC, count: 1, fraction: 1 / ratioAB)],
+      // Erreur : ignorer la 1re balance (B = C/2 → 1/2 C)
+      [Token(shape: shapeC, count: 1, fraction: 1 / ratioBC)],
+      // Erreur : inversion du ratio (C = 6A → répondre 6 C)
+      [Token(shape: shapeC, count: denominator)],
+    ];
 
     return BalanceItem(
       balances: [balance1, balance2],
@@ -1085,12 +1087,12 @@ class BalanceGenerator {
     final shapeD = shapes[3];
     final shapeE = shapes[4];
 
-    // Système circulaire avec valeurs fixes pour cohérence
-    // A = 2, B = 3, C = 5, D = 7, E = 9
-    final valueA = 2;
-    final valueB = 3;
-
-    // A + B = C (implicite, C vaut 5)
+    // Système circulaire RÉSOLUBLE par substitution pure (sans connaître
+    // les valeurs individuelles de A et B) :
+    //   A + B = C
+    //   B + C = D
+    //   A + D = E
+    // => E = A + D = A + (B + C) = (A + B) + C = C + C = 2C
     final balance1 = Balance(
       leftSide: [
         Token(shape: shapeA, count: 1),
@@ -1098,11 +1100,6 @@ class BalanceGenerator {
       ],
       rightSide: [Token(shape: shapeC, count: 1)],
     );
-
-    // B + C = D  (3 + 5 = 8, mais on va utiliser ratio)
-    // Pour rendre aléatoire, on utilise: valueB + valueC = valueD
-    final valueC = valueA + valueB; // 5
-    final valueD = valueB + valueC; // 8
 
     final balance2 = Balance(
       leftSide: [
@@ -1112,9 +1109,6 @@ class BalanceGenerator {
       rightSide: [Token(shape: shapeD, count: 1)],
     );
 
-    // A + D = E  (2 + 8 = 10)
-    final valueE = valueA + valueD;
-
     final balance3 = Balance(
       leftSide: [
         Token(shape: shapeA, count: 1),
@@ -1123,23 +1117,21 @@ class BalanceGenerator {
       rightSide: [Token(shape: shapeE, count: 1)],
     );
 
-    // Question: E = ? (en combinaison de formes de base, convertir en unités A)
-    // Comme nous n'avons pas de forme de base, utilisons un token neutre
-    // Alternative: Question: E = combien si A=2 et B=3?
-    // Simplifions: E = ? A
-    final ratioEtoA = valueE ~/ valueA; // 10/2 = 5
+    // Question: (1-2)E = ? C — chaque E vaut exactement 2C par substitution
+    final questionCountE = _random.nextInt(2) + 1; // 1-2 E
+    final answerCount = 2 * questionCountE;
 
-    final answer = [Token(shape: shapeA, count: ratioEtoA)];
+    final answer = [Token(shape: shapeC, count: answerCount)];
 
     final options = _generateOptions(
       correct: answer,
-      baseShape: shapeA,
-      correctCount: ratioEtoA,
+      baseShape: shapeC,
+      correctCount: answerCount,
       difficulty: 5,
       context: BalanceContext(
         questionType: QuestionType.findEquivalent,
-        addend1: valueA,
-        addend2: valueB,
+        addend1: answerCount,     // → erreur "système partiel" : answerCount/2 (E = C)
+        addend2: answerCount + 2, // → erreurs circulaire et additive distinctes
       ),
     );
 
@@ -1147,7 +1139,7 @@ class BalanceGenerator {
       balances: [balance1, balance2, balance3],
       question: BalanceQuestion(
         type: QuestionType.findEquivalent,
-        targetSide: [Token(shape: shapeE, count: 1)],
+        targetSide: [Token(shape: shapeE, count: questionCountE)],
       ),
       correctAnswer: answer,
       options: options..shuffle(_random),
@@ -1166,8 +1158,10 @@ class BalanceGenerator {
     final shapeY = shapes[2];
 
     final ratioX = _random.nextInt(2) + 3; // X = 3-4 Z
-    final totalZ = _random.nextInt(3) + 10; // Total = 10-12 Z
     final multiplierX = _random.nextInt(2) + 2; // 2-3 X
+    final ratioY = _random.nextInt(4) + 1; // Y = 1-4 Z (toujours > 0)
+    // totalZ dérivé pour garantir la cohérence : mX*rX + rY (7-16 Z)
+    final totalZ = (multiplierX * ratioX) + ratioY;
 
     // Balance 1: X = ratioX * Z
     final balance1 = Balance(
@@ -1177,7 +1171,6 @@ class BalanceGenerator {
 
     // Balance 2: multiplierX*X + Y = totalZ*Z
     // Donc Y = totalZ*Z - multiplierX*ratioX*Z
-    final ratioY = totalZ - (multiplierX * ratioX);
 
     final balance2 = Balance(
       leftSide: [
