@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
 import '../../../../../core/widgets/test/kepler_test_button.dart';
@@ -12,14 +11,19 @@ import '../widgets/puzzle_piece_widget.dart';
 import '../widgets/puzzle_slot_indicator.dart';
 import '../widgets/puzzle_target_widget.dart';
 
-/// Page du test "Puzzles Visuels" (WAIS-IV — VSI).
+/// Page du test "Puzzles Visuels" (inspiré du subtest VP, indice VSI).
 ///
-/// Flow :
-/// - 26 items générés via PuzzleGenerator (4 niveaux de difficulté)
-/// - Pour chaque item : 1 cible + 6 pièces options, sélectionner exactement 3
-/// - Timer 20-30s selon niveau, auto-submit à 0
-/// - Discontinuation : 3 échecs consécutifs
-/// - Score dichotomique 0/1 par item
+/// Déroulement fidèle au protocole :
+/// - 26 items à difficulté croissante (générés aléatoirement → banque
+///   virtuellement illimitée) ;
+/// - pour chaque item : 1 figure cible pleine + 6 pièces numérotées,
+///   sélectionner exactement les 3 qui la reconstituent (rotations mentales
+///   permises, retournements interdits) ;
+/// - temps limite : 20 s (items 1-7) puis 30 s (items 8-26), auto-validation
+///   à 0 ;
+/// - arrêt après 3 échecs consécutifs (règle de discontinuation) ;
+/// - score dichotomique 0/1 par item, pas de feedback détaillé pendant le
+///   test (bref indicateur visuel puis item suivant).
 class VisualPuzzlesTestPage extends StatefulWidget {
   const VisualPuzzlesTestPage({super.key, this.filterLevel});
 
@@ -38,10 +42,10 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
   final Set<String> _selectedIds = {};
   int _remainingSeconds = 0;
   Timer? _timer;
-  DateTime? _itemStartTime;
-  bool _submitted = false; // empêche double-submit
+  Timer? _advanceTimer;
+  bool _submitted = false;
 
-  static const String _label = 'ABCDEF';
+  static const String _labels = '123456';
 
   @override
   void initState() {
@@ -56,7 +60,9 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
     final filter = widget.filterLevel;
     if (filter != null) {
       final f = all
-          .where((it) => it.level.name == filter || it.level.label.toLowerCase() == filter.toLowerCase())
+          .where((it) =>
+              it.level.name == filter ||
+              it.level.label.toLowerCase() == filter.toLowerCase())
           .toList();
       _items = f.isNotEmpty ? f : all;
     } else {
@@ -70,7 +76,6 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
     _selectedIds.clear();
     _submitted = false;
     _remainingSeconds = _currentItem.timeLimitSeconds;
-    _itemStartTime = DateTime.now();
     _startTimer();
   }
 
@@ -93,6 +98,7 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
   @override
   void dispose() {
     _timer?.cancel();
+    _advanceTimer?.cancel();
     super.dispose();
   }
 
@@ -103,9 +109,8 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
         _selectedIds.remove(pieceId);
       } else {
         if (_selectedIds.length >= 3) {
-          // Si déjà 3, on remplace la première sélectionnée par la nouvelle.
-          final firstOldest = _selectedIds.first;
-          _selectedIds.remove(firstOldest);
+          // Déjà 3 : on remplace la plus ancienne sélection.
+          _selectedIds.remove(_selectedIds.first);
         }
         _selectedIds.add(pieceId);
       }
@@ -116,17 +121,13 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
   void _submit({bool autoSubmit = false}) {
     if (_submitted) return;
     _timer?.cancel();
-    _submitted = true;
     HapticFeedback.mediumImpact();
-
-    final time = _itemStartTime != null
-        ? DateTime.now().difference(_itemStartTime!).inSeconds
-        : _currentItem.timeLimitSeconds;
 
     final isCorrect = _selectedIds.length == 3 &&
         setEquals(_selectedIds, _currentItem.correctIds);
 
     setState(() {
+      _submitted = true;
       if (isCorrect) {
         _score++;
         _consecutiveFailures = 0;
@@ -135,85 +136,12 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
       }
     });
 
-    _showFeedbackDialog(isCorrect, time, autoSubmit);
-  }
-
-  void _showFeedbackDialog(bool isCorrect, int timeSeconds, bool autoSubmit) {
-    final accent = AppColors.indexVSI;
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (ctx) {
-        final cs = Theme.of(ctx).colorScheme;
-        return AlertDialog(
-          backgroundColor: cs.surface,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
-          title: Row(
-            children: [
-              Icon(
-                isCorrect ? Icons.check_circle : Icons.cancel,
-                color: isCorrect ? AppColors.success : AppColors.error,
-                size: 28.sp,
-              ),
-              SizedBox(width: 10.w),
-              Text(
-                isCorrect ? 'Correct !' : (autoSubmit ? 'Temps écoulé' : 'Incorrect'),
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.bold,
-                  color: isCorrect ? AppColors.success : AppColors.error,
-                ),
-              ),
-            ],
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                isCorrect
-                    ? 'Bonne combinaison de pièces !'
-                    : 'La bonne réponse était :',
-                style: TextStyle(fontSize: 14.sp, color: cs.onSurface),
-              ),
-              if (!isCorrect) ...[
-                SizedBox(height: 10.h),
-                _CorrectAnswerHint(item: _currentItem, accent: accent),
-              ],
-              SizedBox(height: 12.h),
-              Text('Temps : ${timeSeconds}s',
-                  style: TextStyle(fontSize: 13.sp, color: cs.onSurfaceVariant)),
-              Text('Score : $_score / ${_currentItemIndex + 1}',
-                  style: TextStyle(fontSize: 13.sp, color: cs.onSurfaceVariant)),
-              if (_consecutiveFailures >= 3) ...[
-                SizedBox(height: 8.h),
-                Text(
-                  '3 échecs consécutifs — test terminé',
-                  style: TextStyle(
-                    fontSize: 13.sp,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.warning,
-                  ),
-                ),
-              ],
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(ctx);
-                _next();
-              },
-              child: Text(
-                _consecutiveFailures >= 3 || _currentItemIndex >= _items.length - 1
-                    ? 'Voir les résultats'
-                    : 'Continuer',
-              ),
-            ),
-          ],
-        );
-      },
-    );
+    // Bref retour visuel (bordures vert/rouge) puis item suivant — pas de
+    // dialog révélant la réponse, comme dans le protocole réel.
+    _advanceTimer = Timer(const Duration(milliseconds: 1100), () {
+      if (!mounted) return;
+      _next();
+    });
   }
 
   void _next() {
@@ -235,8 +163,7 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
   Widget build(BuildContext context) {
     final item = _currentItem;
     final accent = AppColors.indexVSI;
-    final isMobile = MediaQuery.sizeOf(context).width < 600;
-    final crossAxisCount = isMobile ? 2 : 3;
+    final isWide = MediaQuery.sizeOf(context).width >= 900;
 
     return KeplerTestScaffold(
       testName: 'Puzzles Visuels',
@@ -246,51 +173,111 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
       totalItems: _items.length,
       trailing: [_TimerBadge(seconds: _remainingSeconds, accent: accent)],
       bottomBar: KeplerTestButton.primary(
-        label: _selectedIds.length == 3
-            ? 'Valider'
-            : '${_selectedIds.length} / 3 sélectionnées',
+        label: _submitted
+            ? (setEquals(_selectedIds, item.correctIds)
+                ? 'Correct'
+                : 'Incorrect')
+            : (_selectedIds.length == 3
+                ? 'Valider'
+                : '${_selectedIds.length} / 3 sélectionnées'),
         accentColor: accent,
-        onPressed: (_selectedIds.length == 3 && !_submitted) ? () => _submit() : null,
+        onPressed:
+            (_selectedIds.length == 3 && !_submitted) ? () => _submit() : null,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          SizedBox(height: 8.h),
-          PuzzleTargetWidget(item: item),
-          SizedBox(height: 20.h),
-          PuzzleSlotIndicator(filled: _selectedIds.length, total: 3),
-          SizedBox(height: 16.h),
-          Text(
-            'Choisissez les 3 pièces qui forment la cible.',
-            style: AppText.body(),
-            textAlign: TextAlign.center,
+      child: isWide ? _buildWide(item) : _buildNarrow(item),
+    );
+  }
+
+  /// Mobile / fenêtre étroite : tout en colonne.
+  Widget _buildNarrow(PuzzleItem item) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const SizedBox(height: 8),
+        PuzzleTargetWidget(item: item),
+        const SizedBox(height: 12),
+        PuzzleSlotIndicator(filled: _selectedIds.length, total: 3),
+        const SizedBox(height: 8),
+        _instruction(),
+        const SizedBox(height: 12),
+        Center(child: _optionsGrid(item, maxWidth: 470)),
+        const SizedBox(height: 24),
+      ],
+    );
+  }
+
+  /// Desktop / fenêtre large : cible à gauche, pièces à droite —
+  /// tout visible sans défilement (important pour un test chronométré).
+  Widget _buildWide(PuzzleItem item) {
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 980),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    PuzzleTargetWidget(
+                        item: item, maxWidth: 400, maxHeight: 320),
+                    const SizedBox(height: 16),
+                    PuzzleSlotIndicator(
+                        filled: _selectedIds.length, total: 3),
+                    const SizedBox(height: 12),
+                    _instruction(),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 32),
+              _optionsGrid(item, maxWidth: 470),
+            ],
           ),
-          SizedBox(height: 16.h),
-          GridView.count(
-            crossAxisCount: crossAxisCount,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            mainAxisSpacing: 12.h,
-            crossAxisSpacing: 12.w,
-            childAspectRatio: 0.85,
-            children: List.generate(item.options.length, (i) {
-              final piece = item.options[i];
-              final isSelected = _selectedIds.contains(piece.id);
-              final showCorrect =
-                  _submitted && _currentItem.correctIds.contains(piece.id);
-              final showIncorrect = _submitted && isSelected && !showCorrect;
-              return PuzzlePieceWidget(
-                piece: piece,
-                label: _label[i],
-                isSelected: isSelected,
-                showCorrect: showCorrect,
-                showIncorrect: showIncorrect,
-                onTap: () => _togglePiece(piece.id),
-              );
-            }),
-          ),
-          SizedBox(height: 24.h),
-        ],
+        ),
+      ),
+    );
+  }
+
+  Widget _instruction() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: Text(
+        'Choisissez les 3 pièces qui forment la figure '
+        '(rotations permises, retournements interdits).',
+        style: AppText.body().copyWith(fontSize: 13.5),
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+
+  Widget _optionsGrid(PuzzleItem item, {required double maxWidth}) {
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: maxWidth),
+      child: GridView.count(
+        crossAxisCount: 3,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        mainAxisSpacing: 10,
+        crossAxisSpacing: 10,
+        childAspectRatio: 1.0,
+        children: List.generate(item.options.length, (i) {
+          final piece = item.options[i];
+          final isSelected = _selectedIds.contains(piece.id);
+          final showCorrect =
+              _submitted && item.correctIds.contains(piece.id);
+          final showIncorrect = _submitted && isSelected && !showCorrect;
+          return PuzzlePieceWidget(
+            piece: piece,
+            label: _labels[i],
+            unitsPerTile: item.maxPieceExtent,
+            isSelected: isSelected,
+            showCorrect: showCorrect,
+            showIncorrect: showIncorrect,
+            onTap: () => _togglePiece(piece.id),
+          );
+        }),
       ),
     );
   }
@@ -314,56 +301,19 @@ class _TimerBadge extends StatelessWidget {
     final ss = (seconds % 60).toString().padLeft(2, '0');
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(6.r),
+        borderRadius: BorderRadius.circular(6),
         border: Border.all(color: color.withValues(alpha: 0.4)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.timer_outlined, color: color, size: 14.sp),
-          SizedBox(width: 4.w),
-          Text('$mm:$ss', style: AppText.mono(color: color, size: 12.sp)),
+          Icon(Icons.timer_outlined, color: color, size: 14),
+          const SizedBox(width: 4),
+          Text('$mm:$ss', style: AppText.mono(color: color, size: 12)),
         ],
-      ),
-    );
-  }
-}
-
-class _CorrectAnswerHint extends StatelessWidget {
-  const _CorrectAnswerHint({required this.item, required this.accent});
-
-  final PuzzleItem item;
-  final Color accent;
-
-  @override
-  Widget build(BuildContext context) {
-    // Petite vue : 3 pièces correctes en mini, côte à côte
-    final correctPieces = item.options
-        .where((p) => item.correctIds.contains(p.id))
-        .toList();
-    return SizedBox(
-      height: 80.h,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: correctPieces.map((p) {
-          final i = item.options.indexOf(p);
-          return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 4.w),
-            child: SizedBox(
-              width: 70.w,
-              child: PuzzlePieceWidget(
-                piece: p,
-                label: 'ABCDEF'[i],
-                isSelected: true,
-                showCorrect: true,
-                onTap: null,
-              ),
-            ),
-          );
-        }).toList(),
       ),
     );
   }

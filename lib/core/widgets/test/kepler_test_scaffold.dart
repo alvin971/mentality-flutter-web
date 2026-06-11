@@ -170,12 +170,22 @@ class _TestAppBar extends StatelessWidget implements PreferredSizeWidget {
                           style: AppText.monoLabel(color: effectiveAccent),
                         ),
                       if (eyebrow != null) SizedBox(height: 2.h),
-                      Text(
-                        title,
-                        style:
-                            AppText.h2Italic(color: colors.textPrimary),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                      // FittedBox borné en hauteur : ne peut que RÉDUIRE le
+                      // titre — corrige l'overflow vertical de l'AppBar sur
+                      // desktop sans changer le rendu mobile (où le titre
+                      // reste sous 34 px).
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(maxHeight: 34),
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            title,
+                            style:
+                                AppText.h2Italic(color: colors.textPrimary),
+                            maxLines: 1,
+                          ),
+                        ),
                       ),
                     ],
                   ),

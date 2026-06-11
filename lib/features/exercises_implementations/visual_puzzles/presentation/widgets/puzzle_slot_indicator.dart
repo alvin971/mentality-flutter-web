@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
 
@@ -7,6 +6,9 @@ import '../../../../../core/theme/app_typography.dart';
 ///
 /// Affiche `total` petites pastilles : pleines pour les `filled` premières,
 /// vides pour les autres. UX explicite "il faut 3 pièces".
+///
+/// NOTE : dimensionné en pixels logiques (pas de ScreenUtil) pour rester
+/// stable sur desktop comme sur mobile.
 class PuzzleSlotIndicator extends StatelessWidget {
   const PuzzleSlotIndicator({
     super.key,
@@ -28,28 +30,28 @@ class PuzzleSlotIndicator extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('SÉLECTION',
-              style: AppText.monoLabel(color: cs.outline)),
-          SizedBox(width: 12.w),
+          Text('SÉLECTION', style: AppText.mono(color: cs.outline, size: 11)),
+          const SizedBox(width: 12),
           for (int i = 0; i < total; i++) ...[
             AnimatedContainer(
               duration: const Duration(milliseconds: 200),
-              width: 18.w,
-              height: 18.w,
-              margin: EdgeInsets.symmetric(horizontal: 3.w),
+              width: 16,
+              height: 16,
+              margin: const EdgeInsets.symmetric(horizontal: 3),
               decoration: BoxDecoration(
                 color: i < filled ? accent : Colors.transparent,
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: i < filled ? accent : cs.outline.withValues(alpha: 0.4),
+                  color:
+                      i < filled ? accent : cs.outline.withValues(alpha: 0.4),
                   width: 2,
                 ),
               ),
             ),
           ],
-          SizedBox(width: 10.w),
+          const SizedBox(width: 10),
           Text('$filled / $total',
-              style: AppText.monoLabel(color: accent)),
+              style: AppText.mono(color: accent, size: 11)),
         ],
       ),
     );
