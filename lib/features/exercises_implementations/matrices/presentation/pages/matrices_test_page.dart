@@ -99,7 +99,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
             Text('Temps de réponse : ${timeSeconds}s'),
             SizedBox(height: 8.h),
             Text('Score : $score/${currentLevel + 1}'),
-            if (_consecutiveFailures >= 4) ...[
+            if (_consecutiveFailures >= 3) ...[
               SizedBox(height: 12.h),
               Container(
                 padding: EdgeInsets.all(8.w),
@@ -108,7 +108,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
                   borderRadius: BorderRadius.circular(4.r),
                 ),
                 child: Text(
-                  '4 échecs consécutifs - Test terminé (WAIS-IV)',
+                  '3 échecs consécutifs - Test terminé (WAIS-IV)',
                   style: TextStyle(
                     color: AppColors.warning,
                     fontWeight: FontWeight.bold,
@@ -123,8 +123,8 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
             onPressed: () {
               Navigator.pop(context);
 
-              // Règle de discontinuation : 4 échecs consécutifs (WAIS-IV)
-              if (_consecutiveFailures >= 4 || currentLevel >= _generatedItems.length - 1) {
+              // Règle de discontinuation WAIS-IV : 3 scores 0 consécutifs
+              if (_consecutiveFailures >= 3 || currentLevel >= _generatedItems.length - 1) {
                 _showFinalResults();
               } else {
                 setState(() {
@@ -135,7 +135,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
               }
             },
             child: Text(
-              _consecutiveFailures >= 4
+              _consecutiveFailures >= 3
                   ? 'Voir résultats (test terminé)'
                   : (currentLevel < _generatedItems.length - 1 ? 'Item suivant' : 'Voir résultats'),
             ),

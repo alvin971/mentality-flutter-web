@@ -94,46 +94,106 @@ class MatrixGenerator {
     return buffer.toString();
   }
 
-  /// S'assure que toutes les options sont uniques (pas de duplications)
+  /// Signature VISUELLE d'une cellule : deux cellules avec la même signature
+  /// sont indiscernables à l'écran, même si leurs attributs diffèrent
+  /// (ex: cercle tourné de 45°, carré tourné de 90°, losange = carré à 45°,
+  /// toute cellule vide). Sert à garantir des options réellement discernables.
+  static String visualSignature(MatrixCell cell) {
+    if (cell.isEmpty) return 'EMPTY';
+
+    var shape = cell.shape;
+    var rotation = cell.rotation % 360;
+    if (rotation < 0) rotation += 360;
+
+    // Un losange est un carré tourné de 45° : même rendu visuel
+    if (shape == MatrixShape.diamond) {
+      shape = MatrixShape.square;
+      rotation += 45;
+    }
+
+    rotation = rotation % _rotationalSymmetryDegrees(shape);
+
+    return '${shape.index}:${cell.size}:${cell.count}:${cell.color.index}:${rotation.round()}';
+  }
+
+  /// Période de symétrie rotationnelle (en degrés) de chaque forme
+  static double _rotationalSymmetryDegrees(MatrixShape shape) {
+    switch (shape) {
+      case MatrixShape.circle:
+        return 1; // invariant par toute rotation
+      case MatrixShape.square:
+      case MatrixShape.diamond:
+        return 90;
+      case MatrixShape.triangle:
+        return 120;
+      case MatrixShape.star:
+        return 72;
+      case MatrixShape.hexagon:
+        return 60;
+    }
+  }
+
+  /// S'assure que toutes les options sont VISUELLEMENT uniques et visibles
+  /// (jamais de cellule vide en option, jamais deux rendus identiques)
   List<MatrixCell> _ensureUniqueOptions(MatrixCell correct, List<MatrixCell> distractors) {
-    final uniqueOptions = <MatrixCell>[correct];
-    final maxAttempts = 20;  // Limite de tentatives pour éviter boucle infinie
+    const targetDistractors = 4; // 5 options au total, comme le WAIS-IV
+    const maxAttempts = 20;
+    final seenSignatures = <String>{visualSignature(correct)};
+    final uniqueDistractors = <MatrixCell>[];
 
     for (var distractor in distractors) {
-      var currentDistractor = distractor;
+      var current = distractor;
       var attempts = 0;
 
-      // Vérifier si le distracteur est unique
-      while (_isDuplicate(currentDistractor, uniqueOptions) && attempts < maxAttempts) {
-        // Générer une variation légère pour éviter le duplicate
-        currentDistractor = _generateAlternativeDistractor(currentDistractor);
+      while ((current.isEmpty || _isDuplicate(current, seenSignatures)) && attempts < maxAttempts) {
+        current = _generateAlternativeDistractor(current.isEmpty ? correct : current);
         attempts++;
       }
 
-      if (attempts < maxAttempts) {
-        uniqueOptions.add(currentDistractor);
+      if (!current.isEmpty && !_isDuplicate(current, seenSignatures)) {
+        seenSignatures.add(visualSignature(current));
+        uniqueDistractors.add(current);
+      }
+
+      if (uniqueDistractors.length >= targetDistractors) break;
+    }
+
+    // Compléter jusqu'à 4 distracteurs (fallback déterministe garanti :
+    // 6 formes × 3 tailles × 3 couleurs = 54 rendus distincts possibles)
+    while (uniqueDistractors.length < targetDistractors) {
+      var candidate = _generateAlternativeDistractor(correct);
+      if (candidate.isEmpty || _isDuplicate(candidate, seenSignatures)) {
+        candidate = _forcedDistinctCell(seenSignatures);
+      }
+      if (!candidate.isEmpty && !_isDuplicate(candidate, seenSignatures)) {
+        seenSignatures.add(visualSignature(candidate));
+        uniqueDistractors.add(candidate);
       }
     }
 
-    // S'assurer qu'on a exactement 4 options (1 correcte + 3 distracteurs)
-    while (uniqueOptions.length < 4) {
-      final newDistractor = _generateAlternativeDistractor(correct);
-      if (!_isDuplicate(newDistractor, uniqueOptions)) {
-        uniqueOptions.add(newDistractor);
-      }
-    }
-
-    return uniqueOptions.sublist(1);  // Retourner seulement les 3 distracteurs
+    return uniqueDistractors;
   }
 
-  /// Vérifie si une option est un duplicate
-  bool _isDuplicate(MatrixCell cell, List<MatrixCell> existingOptions) {
-    for (var option in existingOptions) {
-      if (cell == option) {
-        return true;
+  /// Vérifie si une option est un duplicate VISUEL d'une option existante
+  bool _isDuplicate(MatrixCell cell, Set<String> seenSignatures) {
+    return seenSignatures.contains(visualSignature(cell));
+  }
+
+  /// Fallback déterministe : énumère les combinaisons jusqu'à trouver
+  /// un rendu jamais vu (termine toujours : 54 combinaisons > 5 options)
+  MatrixCell _forcedDistinctCell(Set<String> seenSignatures) {
+    for (final shape in MatrixShape.values) {
+      for (var size = 1; size <= 3; size++) {
+        for (final color in CellColor.values) {
+          final candidate = MatrixCell(shape: shape, size: size, color: color);
+          if (!seenSignatures.contains(visualSignature(candidate))) {
+            return candidate;
+          }
+        }
       }
     }
-    return false;
+    // Théoriquement inatteignable
+    return MatrixCell(shape: MatrixShape.star, size: 3, color: CellColor.gray);
   }
 
   /// Génère un distracteur alternatif en modifiant légèrement les attributs
@@ -422,7 +482,10 @@ class MatrixGenerator {
     final allColors = [CellColor.black, CellColor.white, CellColor.gray];
     allColors.shuffle(_random);
 
-    final variant = _random.nextInt(3);
+    // variant ∈ {1, 2} uniquement : avec variant = 0, la case manquante (2,2)
+    // tombe sur une cellule vide → réponse correcte invisible et distracteurs
+    // dérivés tous vides = 4 options blanches indiscernables (bug historique).
+    final variant = 1 + _random.nextInt(2);
 
     final matrix = List.generate(3, (row) {
       return List.generate(3, (col) {
@@ -443,20 +506,15 @@ class MatrixGenerator {
       });
     });
 
+    // Toujours visible : variant ∈ {1, 2} ⇒ (8 + variant) % 3 ∈ {0, 1}
     final correctShapeIndex = (2 * 3 + 2 + variant) % 3;
-    final MatrixCell answer;
-
-    if (correctShapeIndex >= 2) {
-      answer = MatrixCell.empty();
-    } else {
-      answer = MatrixCell(
-        shape: shapes[correctShapeIndex],
-        size: ((2 + 2) % 3) + 1,
-        color: allColors[(2 * 2 + variant) % 3],
-        rotation: ((2 + variant) * 45).toDouble(),
-        count: ((2 + 2 + variant) % 2) + 1,
-      );
-    }
+    final answer = MatrixCell(
+      shape: shapes[correctShapeIndex],
+      size: ((2 + 2) % 3) + 1,
+      color: allColors[(2 * 2 + variant) % 3],
+      rotation: ((2 + variant) * 45).toDouble(),
+      count: ((2 + 2 + variant) % 2) + 1,
+    );
 
     final context = MatrixContext(
       rules: [MatrixRule.distribution2, MatrixRule.quantitativeProgression, MatrixRule.additionSubtraction],
@@ -482,33 +540,38 @@ class MatrixGenerator {
   // ========== GÉNÉRATEURS DE DISTRACTEURS ==========
 
   /// Génère des distracteurs contextuels basés sur erreurs cognitives documentées
+  /// (4 distracteurs + 1 réponse correcte = 5 options, comme le WAIS-IV)
   List<MatrixCell> _generateContextualDistractors(MatrixContext context) {
     final distractors = <MatrixCell>[];
 
     // Stratégie selon règles actives et niveau de difficulté
     if (context.rules.contains(MatrixRule.constantRow) && context.matrix.length == 2) {
-      // Niveau 1: REP, WP, DIF
+      // Niveau 1: REP, WP, DIF, CE
       distractors.add(_repetitionError(context));
       distractors.add(_wrongPrincipleAlternation(context));
       distractors.add(_differenceError(context));
+      distractors.add(_combinedError(context));
     } else if (context.rules.contains(MatrixRule.quantitativeProgression) && context.matrix.length == 2) {
-      // Niveau 2: WP, DIF, REP
+      // Niveau 2: WP, DIF, REP, CE
       distractors.add(_wrongMagnitude(context));
       distractors.add(_reverseDifference(context));
       distractors.add(_repetitionError(context));
+      distractors.add(_combinedError(context));
     } else if (context.rules.contains(MatrixRule.distribution3)) {
-      // Niveau 3+: IC (prioritaire), IC, REP
+      // Niveau 3+: IC (prioritaire), IC, REP, CE
       distractors.add(_incompleteCorrelate(context, ignoreAttribute: 'size'));
       distractors.add(_incompleteCorrelate(context, ignoreAttribute: 'shape'));
       distractors.add(_repetitionError(context));
+      distractors.add(_combinedError(context));
     } else {
       // Fallback pour items complexes
       distractors.add(_incompleteCorrelate(context, ignoreAttribute: 'color'));
       distractors.add(_incompleteCorrelate(context, ignoreAttribute: 'size'));
       distractors.add(_wrongPrincipleError(context));
+      distractors.add(_repetitionError(context));
     }
 
-    // S'assurer que tous les distracteurs sont uniques (pas de duplications)
+    // S'assurer que tous les distracteurs sont visibles et discernables
     return _ensureUniqueOptions(context.correct, distractors);
   }
 
@@ -595,6 +658,20 @@ class MatrixGenerator {
     );
   }
 
+  /// COMBINED ERROR (CE) - Deux attributs faux à la fois (forme + taille)
+  /// Distracteur classique de Raven : plausible mais doublement incorrect
+  MatrixCell _combinedError(MatrixContext context) {
+    final correct = context.correct;
+
+    return MatrixCell(
+      shape: context.alternateShape ?? _cycleShape(correct.shape),
+      size: (correct.size % 3) + 1,
+      color: correct.color,
+      rotation: correct.rotation,
+      count: correct.count,
+    );
+  }
+
   /// WRONG PRINCIPLE - Règle incorrecte générique
   MatrixCell _wrongPrincipleError(MatrixContext context) {
     final correct = context.correct;
@@ -613,9 +690,10 @@ class MatrixGenerator {
   MatrixCell _wrongMagnitude(MatrixContext context) {
     final correct = context.correct;
 
-    // Si progression correcte = +1, erreur = +2 ou 0
+    // Si progression correcte = +1, erreur = continuer la progression
+    // ou répéter le précédent (jamais 0 : une taille nulle = cellule invisible)
     final errorSize = _random.nextBool()
-      ? ((correct.size + 1) % 4)  // +2 au lieu de +1
+      ? (correct.size >= 3 ? 1 : correct.size + 1)
       : context.previousSize ?? 1;  // Répète précédent
 
     return MatrixCell(
