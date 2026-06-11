@@ -196,8 +196,8 @@ class PuzzleGenerator {
         .toList();
 
     // 4. Distracteurs
-    final distractors =
-        _buildDistractors(cuts, targetPolygon, level, subtlety, rotationPool);
+    final distractors = _buildDistractors(
+        cuts, targetPolygon, level, subtlety, rotationPool, baseShape);
     if (distractors == null) return null;
 
     // 5. Mélange + échelle commune
@@ -222,55 +222,83 @@ class PuzzleGenerator {
     );
   }
 
+  /// Génère les 3 distracteurs pour un item.
+  ///
+  /// Logique par niveau (ordre prioritaire des types de pièges) :
+  /// - veryEasy  → foreignShape + foreignShape + scaled
+  ///   Deux pièces clairement étrangères (courbes sur cible angulaire) +
+  ///   une pièce vraie mais trop petite (~44 % taille réelle). Trivial à éliminer.
+  /// - easy       → foreignShape + scaled + mirrored
+  ///   Une étrangère évidente, une petite, une en miroir (rotation mentale 0).
+  /// - medium     → scaled + mirrored + alternativeCut
+  ///   Taille modérément fausse, miroir, puis découpe alternative.
+  /// - hard       → mirrored + alternativeCut + stretched
+  ///   Tous les pièges subtils ; le joueur doit analyser finement.
   List<PuzzlePiece>? _buildDistractors(
     List<Polygon> truePieces,
     Polygon target,
     DifficultyLevel level,
     double subtlety,
     List<double> rotationPool,
+    BaseShape baseShape,
   ) {
-    final kindQueue = _trapKindsFor(level)..shuffle(_rng);
+    // Chaque slot a une liste ordonnée de types à essayer (fallbacks inclus).
+    final slots = _trapSlotsFor(level);
     final result = <PuzzlePiece>[];
     final produced = <Polygon>[];
 
-    int kindCursor = 0;
-    int guard = 0;
-    while (result.length < 3 && guard < 40) {
-      guard++;
-      final kind = kindQueue[kindCursor % kindQueue.length];
-      kindCursor++;
-      final source = truePieces[_rng.nextInt(truePieces.length)];
-      final trap = _trapEngine.tryTrap(
-        kind: kind,
-        source: source,
-        target: target,
-        truePieces: truePieces,
-        subtlety: subtlety,
-      );
-      if (trap == null) continue;
+    for (int slot = 0; slot < 3; slot++) {
+      Polygon? trap;
+      TrapKind? usedKind;
 
-      // Validation finale : jamais congruent à une vraie pièce (miroir
-      // compris) ni à un piège déjà retenu.
-      bool clash = false;
-      for (final tp in truePieces) {
-        if (congruent(trap, tp, allowMirror: true)) {
-          // Exception : le piège "miroir" est PAR DESIGN le miroir d'une
-          // vraie pièce — il est valide précisément parce que les pièces ne
-          // peuvent pas être retournées. On ne rejette que s'il est
-          // congruent par simple ROTATION.
-          if (kind == TrapKind.mirrored && !congruent(trap, tp)) continue;
-          clash = true;
-          break;
+      outer:
+      for (final kind in slots[slot]) {
+        for (int attempt = 0; attempt < 6; attempt++) {
+          final source = truePieces[_rng.nextInt(truePieces.length)];
+          final candidate = _trapEngine.tryTrap(
+            kind: kind,
+            source: source,
+            target: target,
+            truePieces: truePieces,
+            subtlety: subtlety,
+            targetShape: baseShape,
+          );
+          if (candidate == null) continue;
+
+          // Validation : pas congruent aux vraies pièces ni aux distracteurs
+          // déjà retenus (miroir compris, sauf pour TrapKind.mirrored).
+          bool clash = false;
+          for (final tp in truePieces) {
+            if (congruent(candidate, tp, allowMirror: true)) {
+              if (kind == TrapKind.mirrored && !congruent(candidate, tp)) {
+                continue; // miroir d'une vraie pièce → valide par définition
+              }
+              clash = true;
+              break;
+            }
+          }
+          if (clash) continue;
+          for (final d in produced) {
+            if (congruent(candidate, d, allowMirror: true)) {
+              clash = true;
+              break;
+            }
+          }
+          if (clash) continue;
+
+          trap = candidate;
+          usedKind = kind;
+          break outer;
         }
       }
-      if (clash) continue;
-      for (final d in produced) {
-        if (congruent(trap, d, allowMirror: true)) {
-          clash = true;
-          break;
-        }
+
+      // Fallback garanti : pièce réduite à une taille distincte par slot.
+      if (trap == null) {
+        final fallbackFactors = [0.42, 0.50, 0.58];
+        final source = truePieces[slot % truePieces.length];
+        trap = source.transform(scale: fallbackFactors[slot]);
+        usedKind = TrapKind.scaled;
       }
-      if (clash) continue;
 
       produced.add(trap);
       result.add(PuzzlePiece(
@@ -278,7 +306,7 @@ class PuzzleGenerator {
         polygon: trap,
         displayRotationDeg: rotationPool[_rng.nextInt(rotationPool.length)],
         isCorrect: false,
-        trapKind: kind,
+        trapKind: usedKind,
       ));
     }
     return result.length == 3 ? result : null;
@@ -370,29 +398,47 @@ class PuzzleGenerator {
           ],
       };
 
-  List<TrapKind> _trapKindsFor(DifficultyLevel level) => switch (level) {
+  /// Slots ordonnés de types de pièges par niveau de difficulté.
+  ///
+  /// Chaque slot est une liste PRIORITAIRE : le premier type est essayé en
+  /// premier ; si tryTrap retourne null, on essaie le suivant.
+  ///
+  /// Règle cardinale :
+  ///   - veryEasy / easy → PAS d'alternativeCut (trop dur à distinguer)
+  ///   - medium / hard   → alternativeCut autorisé en complément
+  List<List<TrapKind>> _trapSlotsFor(DifficultyLevel level) => switch (level) {
         DifficultyLevel.veryEasy => [
-            TrapKind.foreignShape,
-            TrapKind.scaled,
-            TrapKind.alternativeCut,
+            // Slot 0 : forme clairement étrangère (arc courbe vs cible angulaire)
+            [TrapKind.foreignShape, TrapKind.scaled],
+            // Slot 1 : deuxième forme étrangère contrastante
+            [TrapKind.foreignShape, TrapKind.scaled],
+            // Slot 2 : pièce vraie mais clairement trop petite (~44 % taille)
+            [TrapKind.scaled],
           ],
         DifficultyLevel.easy => [
-            TrapKind.scaled,
-            TrapKind.alternativeCut,
-            TrapKind.stretched,
-            TrapKind.mirrored,
+            // Slot 0 : forme étrangère évidente (1 piège trivial garanti)
+            [TrapKind.foreignShape, TrapKind.scaled],
+            // Slot 1 : pièce trop petite (~55 % taille)
+            [TrapKind.scaled, TrapKind.stretched],
+            // Slot 2 : miroir si asymétrique, sinon étirement (évite doublon
+            // scaled quand la pièce est symétrique comme un rectangle)
+            [TrapKind.mirrored, TrapKind.stretched, TrapKind.foreignShape],
           ],
         DifficultyLevel.medium => [
-            TrapKind.alternativeCut,
-            TrapKind.mirrored,
-            TrapKind.scaled,
-            TrapKind.stretched,
+            // Slot 0 : taille modérément différente (~70 %)
+            [TrapKind.scaled, TrapKind.alternativeCut],
+            // Slot 1 : miroir ou découpe alternative
+            [TrapKind.mirrored, TrapKind.alternativeCut],
+            // Slot 2 : découpe alternative (même cible, autre décomposition)
+            [TrapKind.alternativeCut, TrapKind.stretched],
           ],
         DifficultyLevel.hard => [
-            TrapKind.mirrored,
-            TrapKind.alternativeCut,
-            TrapKind.stretched,
-            TrapKind.scaled,
+            // Slot 0 : miroir subtil
+            [TrapKind.mirrored, TrapKind.alternativeCut],
+            // Slot 1 : découpe alternative indétectable
+            [TrapKind.alternativeCut, TrapKind.stretched],
+            // Slot 2 : étirement à aire constante (piège le plus fin)
+            [TrapKind.stretched, TrapKind.alternativeCut],
           ],
       };
 }
