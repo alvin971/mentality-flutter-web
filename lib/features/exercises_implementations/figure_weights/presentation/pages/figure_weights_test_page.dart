@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
+import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/balance_generator.dart';
 import '../widgets/balance_widget.dart';
@@ -252,17 +253,30 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
       accentColor: AppColors.indexFRI,
       currentItem: currentLevel + 1,
       totalItems: _generatedItems.length,
+      // Timer + score dans l'AppBar (gain de hauteur) et bouton Valider
+      // sticky en bas : plus jamais besoin de scroller pour valider.
+      trailing: [
+        Padding(
+          padding: EdgeInsets.only(left: 8.w),
+          child: _buildTimerBadge(),
+        ),
+        Padding(
+          padding: EdgeInsets.only(left: 6.w),
+          child: Text('$score/${currentLevel + 1}',
+              style: AppText.monoLabel(color: AppColors.indexFRI)),
+        ),
+      ],
+      bottomBar: KeplerTestButton.primary(
+        label: 'Valider',
+        accentColor: AppColors.indexFRI,
+        onPressed: _selectedAnswer != null ? _submitAnswer : null,
+      ),
       child: Column(
 crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Timer et score
-              _buildHeader(),
-
-              SizedBox(height: 16.h),
-
               // Instructions
               Container(
-                padding: EdgeInsets.all(12.w),
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
                 decoration: BoxDecoration(
                   color: AppColors.infoContainer,
                   borderRadius: BorderRadius.circular(8.r),
@@ -271,19 +285,19 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                 child: Text(
                   'Trouvez la valeur manquante qui équilibre la balance.',
                   style: TextStyle(
-                    fontSize: 14.sp,
+                    fontSize: 13.sp,
                     fontWeight: FontWeight.w500,
                   ),
                   textAlign: TextAlign.center,
                 ),
               ),
 
-              SizedBox(height: 20.h),
+              SizedBox(height: 10.h),
 
               // Balances connues (équations) - TOUJOURS montrer les balances de référence
               ...currentItem.balances.map((balance) {
                 return Padding(
-                  padding: EdgeInsets.only(bottom: 16.h),
+                  padding: EdgeInsets.only(bottom: 10.h),
                   child: BalanceWidget(
                     balance: balance,
                     showQuestion: false, // Ne jamais modifier la balance de référence
@@ -292,12 +306,12 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                 );
               }),
 
-              SizedBox(height: 20.h),
+              SizedBox(height: 6.h),
 
               // Question
               if (currentItem.question.targetSide.isNotEmpty) ...[
                 Container(
-                  padding: EdgeInsets.all(12.w),
+                  padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
                   decoration: BoxDecoration(
                     color: AppColors.warningContainer,
                     borderRadius: BorderRadius.circular(8.r),
@@ -309,7 +323,7 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                       Text(
                         'Que vaut ',
                         style: TextStyle(
-                          fontSize: 16.sp,
+                          fontSize: 15.sp,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -319,25 +333,25 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                       Text(
                         ' ?',
                         style: TextStyle(
-                          fontSize: 16.sp,
+                          fontSize: 15.sp,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(height: 20.h),
+                SizedBox(height: 10.h),
               ],
 
               // Options de réponse
               Text(
                 'Choisissez la réponse :',
                 style: TextStyle(
-                  fontSize: 16.sp,
+                  fontSize: 14.sp,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 12.h),
+              SizedBox(height: 8.h),
 
               ...currentItem.options.asMap().entries.map((entry) {
                 final index = entry.key;
@@ -346,7 +360,7 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                     _listsEqual(_selectedAnswer!, option);
 
                 return Padding(
-                  padding: EdgeInsets.only(bottom: 12.h),
+                  padding: EdgeInsets.only(bottom: 8.h),
                   child: InkWell(
                     onTap: () {
                       setState(() {
@@ -354,7 +368,8 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                       });
                     },
                     child: Container(
-                      padding: EdgeInsets.all(16.w),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 12.w, vertical: 8.h),
                       decoration: BoxDecoration(
                         color: isSelected
                             ? AppColors.infoContainer
@@ -372,11 +387,11 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                           Text(
                             '${String.fromCharCode(65 + index)}. ',
                             style: TextStyle(
-                              fontSize: 18.sp,
+                              fontSize: 16.sp,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(width: 12.w),
+                          SizedBox(width: 8.w),
                           Expanded(
                             child: _buildTokenList(option),
                           ),
@@ -386,98 +401,36 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                   ),
                 );
               }),
-
-              SizedBox(height: 24.h),
-
-              // Bouton Valider
-              SizedBox(
-                width: double.infinity,
-                height: 50.h,
-                child: ElevatedButton(
-                  onPressed: _selectedAnswer != null ? _submitAnswer : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.indexFRI,
-                    disabledBackgroundColor: AppColors.grey300,
-                  ),
-                  child: Text(
-                    'Valider',
-                    style: TextStyle(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
         ],
       ),
     );
   }
 
-  Widget _buildHeader() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        // Timer
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-          decoration: BoxDecoration(
-            color: _remainingSeconds <= 5 ? AppColors.errorContainer : AppColors.infoContainer,
-            borderRadius: BorderRadius.circular(20.r),
-            border: Border.all(
-              color: _remainingSeconds <= 5 ? AppColors.errorLight : AppColors.infoLight,
-              width: 2,
+  Widget _buildTimerBadge() {
+    final danger = _remainingSeconds <= 5;
+    final color = danger ? AppColors.error : AppColors.info;
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(6.r),
+        border: Border.all(color: color.withValues(alpha: 0.4)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.timer_outlined, size: 14.sp, color: color),
+          SizedBox(width: 4.w),
+          Text(
+            '${_remainingSeconds}s',
+            style: TextStyle(
+              fontSize: 13.sp,
+              fontWeight: FontWeight.bold,
+              color: color,
             ),
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.timer,
-                size: 20.sp,
-                color: _remainingSeconds <= 5 ? AppColors.error : AppColors.info,
-              ),
-              SizedBox(width: 8.w),
-              Text(
-                '${_remainingSeconds}s',
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.bold,
-                  color: _remainingSeconds <= 5 ? AppColors.error : AppColors.info,
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        // Score
-        Container(
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-          decoration: BoxDecoration(
-            color: AppColors.successContainer,
-            borderRadius: BorderRadius.circular(20.r),
-            border: Border.all(color: AppColors.successLight, width: 2),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.star,
-                size: 20.sp,
-                color: AppColors.warning,
-              ),
-              SizedBox(width: 8.w),
-              Text(
-                '$score/${currentLevel + 1}',
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.success,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

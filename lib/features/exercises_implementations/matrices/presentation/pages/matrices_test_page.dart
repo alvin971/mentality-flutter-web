@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
+import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/matrix_generator.dart';
 import '../widgets/matrix_cell_widget.dart';
@@ -251,6 +252,9 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
       accentColor: AppColors.indexFSIQ,
       currentItem: currentLevel + 1,
       totalItems: _generatedItems.length,
+      // Tout tient à l'écran : matrice redimensionnée à la hauteur disponible,
+      // bouton Valider sticky en bas (jamais besoin de scroller).
+      scrollable: false,
       trailing: [
         Padding(
           padding: EdgeInsets.only(left: 8.w),
@@ -258,98 +262,80 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
               style: AppText.monoLabel(color: AppColors.indexFSIQ)),
         ),
       ],
+      bottomBar: KeplerTestButton.primary(
+        label: 'Valider la réponse',
+        accentColor: AppColors.indexFSIQ,
+        onPressed: _selectedAnswer == null ? null : _handleSubmit,
+      ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-              // Header avec progression
-              _buildLevelHeader(item),
-              SizedBox(height: 24.h),
+          // Infos item (difficulté) — version compacte
+          _buildLevelHeader(item),
+          SizedBox(height: 8.h),
 
-              // Consigne
-              _buildInstructions(),
-              SizedBox(height: 24.h),
+          // Consigne
+          _buildInstructions(),
 
-              // Matrice
-              _buildMatrix(item),
-              SizedBox(height: 32.h),
+          // Matrice — occupe l'espace restant, réduite si nécessaire
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 10.h),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: _buildMatrix(item),
+              ),
+            ),
+          ),
 
-              // Options de réponse
-              _buildOptions(item),
-              SizedBox(height: 24.h),
-
-              // Bouton de validation
-              _buildSubmitButton(),
+          // Options de réponse — une seule ligne adaptée à la largeur
+          _buildOptions(item),
+          SizedBox(height: 4.h),
         ],
       ),
     );
   }
 
+  // Version compacte : la progression d'items est déjà affichée par le
+  // scaffold (KeplerProgress) — on ne garde ici que la difficulté et les
+  // métadonnées de l'item, sur une seule ligne.
   Widget _buildLevelHeader(MatrixItem item) {
-    return Container(
-      padding: EdgeInsets.all(16.w),
-      decoration: BoxDecoration(
-        gradient: AppColors.primaryGradient,
-        borderRadius: BorderRadius.circular(12.r),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Item ${currentLevel + 1}/${_generatedItems.length}',
-                style: TextStyle(
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.3),
-                  borderRadius: BorderRadius.circular(20.r),
-                ),
-                child: Text(
-                  _getDifficultyLabel(item.difficulty),
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ],
+    return Row(
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+          decoration: BoxDecoration(
+            gradient: AppColors.primaryGradient,
+            borderRadius: BorderRadius.circular(20.r),
           ),
-          SizedBox(height: 8.h),
-          Text(
-            'Règles : ${item.rules.length} | θ = ${item.thetaValue.toStringAsFixed(1)}',
+          child: Text(
+            _getDifficultyLabel(item.difficulty),
             style: TextStyle(
               fontSize: 12.sp,
-              color: Colors.white.withValues(alpha: 0.7),
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        SizedBox(width: 8.w),
+        Expanded(
+          child: Text(
+            'Règles : ${item.rules.length} | θ = ${item.thetaValue.toStringAsFixed(1)}',
+            style: TextStyle(
+              fontSize: 11.sp,
+              color: AppColors.grey600,
               fontStyle: FontStyle.italic,
             ),
+            overflow: TextOverflow.ellipsis,
           ),
-          SizedBox(height: 12.h),
-          // Barre de progression
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10.r),
-            child: LinearProgressIndicator(
-              value: (currentLevel + 1) / _generatedItems.length,
-              backgroundColor: Colors.white.withValues(alpha: 0.3),
-              valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
-              minHeight: 8.h,
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
   Widget _buildInstructions() {
     return Container(
-      padding: EdgeInsets.all(12.w),
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
       decoration: BoxDecoration(
         color: AppColors.info.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8.r),
@@ -357,12 +343,12 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
       ),
       child: Row(
         children: [
-          Icon(Icons.info_outline, color: AppColors.info, size: 24.sp),
-          SizedBox(width: 12.w),
+          Icon(Icons.info_outline, color: AppColors.info, size: 18.sp),
+          SizedBox(width: 8.w),
           Expanded(
             child: Text(
               'Trouvez la pièce manquante qui complète logiquement la matrice',
-              style: TextStyle(fontSize: 13.sp),
+              style: TextStyle(fontSize: 12.sp),
             ),
           ),
         ],
@@ -414,44 +400,37 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
         Text(
           'Choisissez la réponse :',
           style: TextStyle(
-            fontSize: 16.sp,
+            fontSize: 14.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(height: 12.h),
-        Wrap(
-          spacing: 12.w,
-          runSpacing: 12.h,
-          children: item.options.map((option) {
-            final isSelected = _selectedAnswer == option;
-            return MatrixCellWidget(
-              cell: option,
-              size: 70,
-              isOption: true,
-              isSelected: isSelected,
-              onTap: () => _handleAnswerSelected(option),
+        SizedBox(height: 8.h),
+        // Une seule ligne : la taille des options s'adapte à la largeur de
+        // l'écran (jamais de retour à la ligne ni de scroll horizontal).
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final n = item.options.length;
+            const gap = 8.0;
+            final cellSize =
+                ((constraints.maxWidth - gap * (n - 1)) / n).clamp(36.0, 70.0);
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                for (int i = 0; i < n; i++) ...[
+                  if (i > 0) const SizedBox(width: gap),
+                  MatrixCellWidget(
+                    cell: item.options[i],
+                    size: cellSize,
+                    isOption: true,
+                    isSelected: _selectedAnswer == item.options[i],
+                    onTap: () => _handleAnswerSelected(item.options[i]),
+                  ),
+                ],
+              ],
             );
-          }).toList(),
+          },
         ),
       ],
-    );
-  }
-
-  Widget _buildSubmitButton() {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: _selectedAnswer == null ? null : _handleSubmit,
-        style: ElevatedButton.styleFrom(
-          padding: EdgeInsets.symmetric(vertical: 16.h),
-          backgroundColor: AppColors.primary,
-          disabledBackgroundColor: AppColors.grey300,
-        ),
-        child: Text(
-          'Valider la réponse',
-          style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
-        ),
-      ),
     );
   }
 

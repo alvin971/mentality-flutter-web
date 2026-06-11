@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:async';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
+import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/symbol_search_generator.dart';
 
@@ -221,6 +222,12 @@ class _SymbolSearchTestPageState extends State<SymbolSearchTestPage> {
       testName: 'Recherche de Symboles',
       eyebrow: 'VITESSE DE TRAITEMENT · PSI',
       accentColor: AppColors.indexPSI,
+      // Bouton de démarrage sticky : visible sans scroller.
+      bottomBar: KeplerTestButton.primary(
+        label: 'Commencer l\'entraînement',
+        accentColor: AppColors.indexPSI,
+        onPressed: _startTraining,
+      ),
       child: Column(
 crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -345,21 +352,6 @@ crossAxisAlignment: CrossAxisAlignment.start,
                 'Temps limité',
                 '120 secondes pour 60 items',
                 Icons.timer_outlined,
-              ),
-              SizedBox(height: 24.h),
-              SizedBox(
-                width: double.infinity,
-                height: 50.h,
-                child: ElevatedButton(
-                  onPressed: _startTraining,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.indexPSI,
-                  ),
-                  child: Text(
-                    'Commencer l\'entraînement',
-                    style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
-                  ),
-                ),
               ),
             ],
       ),

@@ -38,15 +38,23 @@ class KeplerProgress extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             if (label != null)
-              Text(label!.toUpperCase(),
-                  style: AppText.monoLabel(color: accent))
+              // Flexible + ellipsis : les eyebrows longs ne débordent pas
+              // sur les écrans étroits.
+              Flexible(
+                child: Text(label!.toUpperCase(),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppText.monoLabel(color: accent)),
+              )
             else
               const SizedBox.shrink(),
-            if (current != null && total != null)
+            if (current != null && total != null) ...[
+              SizedBox(width: 8.w),
               Text(
                 '${current.toString().padLeft(2, '0')} / ${total.toString().padLeft(2, '0')}',
                 style: AppText.monoLabel(color: colors.textTertiary),
               ),
+            ],
           ],
         ),
         SizedBox(height: 8.h),

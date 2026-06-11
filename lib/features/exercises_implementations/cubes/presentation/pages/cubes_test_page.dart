@@ -298,6 +298,9 @@ class _CubesTestPageState extends State<CubesTestPage> {
       accentColor: AppColors.indexFRI,
       currentItem: currentLevel + 1,
       totalItems: _generatedPatterns.length,
+      // Tout tient à l'écran : les deux grilles se redimensionnent à la
+      // hauteur disponible, les boutons restent toujours visibles.
+      scrollable: false,
       trailing: [
         Padding(
           padding: EdgeInsets.only(left: 8.w),
@@ -306,93 +309,61 @@ class _CubesTestPageState extends State<CubesTestPage> {
         ),
       ],
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-              // Niveau et progression
-              _buildLevelHeader(pattern),
-              SizedBox(height: 24.h),
+          // Niveau — version compacte (la progression est déjà dans le scaffold)
+          _buildLevelHeader(pattern),
+          SizedBox(height: 8.h),
 
-              // Exercice
-              CubesExerciseWidget(
-                key: ValueKey(currentLevel),
-                gridSize: pattern.gridSize,
-                targetPattern: pattern.pattern,
-                timeLimitSeconds: pattern.timeLimit,
-                onComplete: _handleComplete,
-              ),
+          // Exercice — occupe toute la hauteur restante
+          Expanded(
+            child: CubesExerciseWidget(
+              key: ValueKey(currentLevel),
+              gridSize: pattern.gridSize,
+              targetPattern: pattern.pattern,
+              timeLimitSeconds: pattern.timeLimit,
+              onComplete: _handleComplete,
+            ),
+          ),
         ],
       ),
     );
   }
 
+  // Version compacte : la progression d'items est déjà affichée par le
+  // scaffold (KeplerProgress) — on ne garde que difficulté + description.
   Widget _buildLevelHeader(CubePattern pattern) {
-    return Container(
-      padding: EdgeInsets.all(16.w),
-      decoration: BoxDecoration(
-        gradient: AppColors.primaryGradient,
-        borderRadius: BorderRadius.circular(12.r),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Niveau ${currentLevel + 1}/${_generatedPatterns.length}',
-                style: TextStyle(
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.3),
-                  borderRadius: BorderRadius.circular(20.r),
-                ),
-                child: Text(
-                  _getDifficultyLabel(pattern.difficulty),
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ],
+    return Row(
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+          decoration: BoxDecoration(
+            gradient: AppColors.primaryGradient,
+            borderRadius: BorderRadius.circular(20.r),
           ),
-          SizedBox(height: 8.h),
-          Text(
-            pattern.description,
-            style: TextStyle(
-              fontSize: 14.sp,
-              color: Colors.white.withValues(alpha: 0.9),
-            ),
-          ),
-          SizedBox(height: 4.h),
-          Text(
-            'Cohésion: ${pattern.cohesionScore}',
+          child: Text(
+            _getDifficultyLabel(pattern.difficulty),
             style: TextStyle(
               fontSize: 12.sp,
-              color: Colors.white.withValues(alpha: 0.7),
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        SizedBox(width: 8.w),
+        Expanded(
+          child: Text(
+            '${pattern.description} · Cohésion: ${pattern.cohesionScore}',
+            style: TextStyle(
+              fontSize: 11.sp,
+              color: AppColors.grey600,
               fontStyle: FontStyle.italic,
             ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
-          SizedBox(height: 12.h),
-          // Barre de progression
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10.r),
-            child: LinearProgressIndicator(
-              value: (currentLevel + 1) / _generatedPatterns.length,
-              backgroundColor: Colors.white.withValues(alpha: 0.3),
-              valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
-              minHeight: 8.h,
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

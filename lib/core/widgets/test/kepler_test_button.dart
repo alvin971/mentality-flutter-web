@@ -99,7 +99,14 @@ class KeplerTestButton extends StatelessWidget {
             Icon(icon, color: fg, size: 18.sp),
             SizedBox(width: 8.w),
           ],
-          Text(label, style: AppText.button(color: fg)),
+          // Flexible + FittedBox : les labels longs se réduisent au lieu
+          // de déborder sur les écrans étroits.
+          Flexible(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(label, style: AppText.button(color: fg)),
+            ),
+          ),
         ],
       ),
     );

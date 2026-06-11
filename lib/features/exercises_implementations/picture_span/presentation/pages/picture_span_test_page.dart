@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:async';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
+import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/picture_span_generator.dart';
 
@@ -257,6 +258,12 @@ class _PictureSpanTestPageState extends State<PictureSpanTestPage> {
       testName: 'Mémoire des Images',
       eyebrow: 'MÉMOIRE DE TRAVAIL · WMI',
       accentColor: AppColors.indexWMI,
+      // Bouton de démarrage sticky : visible sans scroller.
+      bottomBar: KeplerTestButton.primary(
+        label: 'Commencer le test',
+        accentColor: AppColors.indexWMI,
+        onPressed: _startTest,
+      ),
       child: Column(
 crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -316,21 +323,6 @@ crossAxisAlignment: CrossAxisAlignment.start,
                       ),
                     ),
                   ],
-                ),
-              ),
-              SizedBox(height: 24.h),
-              SizedBox(
-                width: double.infinity,
-                height: 50.h,
-                child: ElevatedButton(
-                  onPressed: _startTest,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.indexWMI,
-                  ),
-                  child: Text(
-                    'Commencer le test',
-                    style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
-                  ),
                 ),
               ),
             ],
@@ -525,14 +517,32 @@ crossAxisAlignment: CrossAxisAlignment.start,
               ),
             ),
             SizedBox(height: 16.h),
-            // Grille d'images
+            // Grille d'images — toutes les images tiennent à l'écran sans
+            // scroll interne (ratio des tuiles calculé selon la hauteur).
             Expanded(
-              child: GridView.builder(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  const crossCount = 3;
+                  final rowCount =
+                      (gridImages.length / crossCount).ceil().clamp(1, 99);
+                  final tileW = (constraints.maxWidth -
+                          32.w -
+                          12.w * (crossCount - 1)) /
+                      crossCount;
+                  final tileH = (constraints.maxHeight -
+                          32.w -
+                          12.h * (rowCount - 1)) /
+                      rowCount;
+                  final aspectRatio =
+                      (tileW / tileH).clamp(0.5, 2.5).toDouble();
+                  return GridView.builder(
                 padding: EdgeInsets.all(16.w),
+                physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
+                  crossAxisCount: crossCount,
                   crossAxisSpacing: 12.w,
                   mainAxisSpacing: 12.h,
+                  childAspectRatio: aspectRatio,
                 ),
                 itemCount: gridImages.length,
                 itemBuilder: (context, index) {
@@ -552,30 +562,39 @@ crossAxisAlignment: CrossAxisAlignment.start,
                           width: isSelected ? 3 : 2,
                         ),
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            image.icon,
-                            size: 48.sp,
-                            color: isSelected ? AppColors.indexWMI : AppColors.grey600,
+                      child: Padding(
+                        padding: EdgeInsets.all(6.w),
+                        // FittedBox : le contenu se réduit au lieu de
+                        // déborder quand les tuiles sont petites.
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                image.icon,
+                                size: 48.sp,
+                                color: isSelected ? AppColors.indexWMI : AppColors.grey600,
+                              ),
+                              SizedBox(height: 6.h),
+                              Text(
+                                image.name,
+                                style: TextStyle(
+                                  fontSize: 12.sp,
+                                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                                  color: isSelected ? AppColors.indexWMI : AppColors.grey700,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
                           ),
-                          SizedBox(height: 8.h),
-                          Text(
-                            image.name,
-                            style: TextStyle(
-                              fontSize: 12.sp,
-                              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                              color: isSelected ? AppColors.indexWMI : AppColors.grey700,
-                            ),
-                            textAlign: TextAlign.center,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   );
+                },
+              );
                 },
               ),
             ),

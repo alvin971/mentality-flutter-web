@@ -140,17 +140,18 @@ class _CubesExerciseWidgetState extends State<CubesExerciseWidget> {
       children: [
         // Timer et instructions
         _buildHeader(remainingTime),
-        SizedBox(height: 24.h),
+        SizedBox(height: 12.h),
 
-        // Pattern cible
-        _buildTargetPattern(),
-        SizedBox(height: 32.h),
+        // Pattern cible — partage la hauteur restante avec la grille
+        // utilisateur ; chaque grille est réduite si l'écran est petit.
+        Expanded(child: _buildTargetPattern()),
+        SizedBox(height: 12.h),
 
         // Grille utilisateur
-        _buildUserGrid(),
-        SizedBox(height: 32.h),
+        Expanded(child: _buildUserGrid()),
+        SizedBox(height: 12.h),
 
-        // Boutons d'action
+        // Boutons d'action — toujours visibles en bas
         _buildActionButtons(),
       ],
     );
@@ -158,7 +159,7 @@ class _CubesExerciseWidgetState extends State<CubesExerciseWidget> {
 
   Widget _buildHeader(int? remainingTime) {
     return Container(
-      padding: EdgeInsets.all(16.w),
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
       decoration: BoxDecoration(
         color: AppColors.primary.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12.r),
@@ -173,13 +174,13 @@ class _CubesExerciseWidgetState extends State<CubesExerciseWidget> {
                   Icon(
                     Icons.timer_outlined,
                     color: AppColors.primary,
-                    size: 24.sp,
+                    size: 20.sp,
                   ),
-                  SizedBox(width: 8.w),
+                  SizedBox(width: 6.w),
                   Text(
                     _formatTime(elapsedSeconds),
                     style: TextStyle(
-                      fontSize: 18.sp,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
                       color: AppColors.primary,
                     ),
@@ -188,7 +189,7 @@ class _CubesExerciseWidgetState extends State<CubesExerciseWidget> {
               ),
               if (remainingTime != null) ...[
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                  padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
                   decoration: BoxDecoration(
                     color: remainingTime < 10
                         ? AppColors.error.withValues(alpha: 0.2)
@@ -198,7 +199,7 @@ class _CubesExerciseWidgetState extends State<CubesExerciseWidget> {
                   child: Text(
                     'Reste: ${_formatTime(remainingTime)}',
                     style: TextStyle(
-                      fontSize: 14.sp,
+                      fontSize: 13.sp,
                       fontWeight: FontWeight.w600,
                       color: remainingTime < 10 ? AppColors.error : AppColors.success,
                     ),
@@ -207,12 +208,12 @@ class _CubesExerciseWidgetState extends State<CubesExerciseWidget> {
               ],
             ],
           ),
-          SizedBox(height: 12.h),
+          SizedBox(height: 6.h),
           Text(
             'Reproduisez le pattern ci-dessous en tapant sur les cubes',
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 14.sp,
+              fontSize: 12.sp,
               color: AppColors.grey700,
             ),
           ),
@@ -222,40 +223,47 @@ class _CubesExerciseWidgetState extends State<CubesExerciseWidget> {
   }
 
   Widget _buildTargetPattern() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Pattern à reproduire :',
-          style: TextStyle(
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w600,
-            color: AppColors.grey900,
-          ),
-        ),
-        SizedBox(height: 12.h),
-        Center(
-          child: _buildGrid(widget.targetPattern, isTarget: true),
-        ),
-      ],
+    return _buildGridSection(
+      label: 'Pattern à reproduire :',
+      grid: widget.targetPattern,
+      isTarget: true,
     );
   }
 
   Widget _buildUserGrid() {
+    return _buildGridSection(
+      label: 'Votre réponse :',
+      grid: userGrid,
+      isTarget: false,
+    );
+  }
+
+  /// Section label + grille : la grille est réduite (FittedBox) pour tenir
+  /// dans la hauteur allouée — aucun scroll nécessaire, quel que soit l'écran.
+  Widget _buildGridSection({
+    required String label,
+    required List<List<CubeFace>> grid,
+    required bool isTarget,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Votre réponse :',
+          label,
           style: TextStyle(
-            fontSize: 16.sp,
+            fontSize: 14.sp,
             fontWeight: FontWeight.w600,
             color: AppColors.grey900,
           ),
         ),
-        SizedBox(height: 12.h),
-        Center(
-          child: _buildGrid(userGrid, isTarget: false),
+        SizedBox(height: 6.h),
+        Expanded(
+          child: Center(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: _buildGrid(grid, isTarget: isTarget),
+            ),
+          ),
         ),
       ],
     );

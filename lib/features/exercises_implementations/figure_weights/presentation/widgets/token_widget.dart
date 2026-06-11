@@ -37,13 +37,18 @@ class TokenWidget extends StatelessWidget {
 
     // Afficher plusieurs formes si count 2-4
     if (token.count > 1) {
-      return Row(
-        mainAxisSize: MainAxisSize.min,
-        children: List.generate(
-          token.count,
-          (index) => Padding(
-            padding: EdgeInsets.only(right: index < token.count - 1 ? 4.w : 0),
-            child: _buildSingleToken(),
+      // FittedBox : la rangée de jetons se réduit au lieu de déborder
+      // quand le plateau est étroit (petits écrans).
+      return FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: List.generate(
+            token.count,
+            (index) => Padding(
+              padding: EdgeInsets.only(right: index < token.count - 1 ? 4.w : 0),
+              child: _buildSingleToken(),
+            ),
           ),
         ),
       );
