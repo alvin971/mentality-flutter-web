@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'package:flutter/material.dart';
 import 'base_shapes.dart';
 import 'cut_engine.dart';
 import 'geometry.dart';
@@ -27,6 +28,20 @@ enum TrapKind {
   /// Pièce d'une forme visuellement CONTRASTANTE (courbe vs angulaire) —
   /// piège évident, réservé aux items faciles.
   foreignShape,
+
+  /// GÉOMÉTRIE EXACTE d'une vraie pièce mais COULEURS FAUSSES (permutation
+  /// de la palette). Le piège classique des premiers items du subtest réel :
+  /// bonne forme, mauvaise couleur. Nécessite un item multicolore.
+  wrongColors,
+}
+
+/// Résultat d'un piège : la silhouette + ses régions colorées (même espace
+/// de coordonnées que le polygone).
+@immutable
+class TrapResult {
+  const TrapResult(this.polygon, this.regions);
+  final Polygon polygon;
+  final List<ColoredRegion> regions;
 }
 
 /// Fabrique de distracteurs.
@@ -45,13 +60,21 @@ class TrapEngine {
 
   /// Tente de produire un piège de type `kind`.
   ///
+  /// [sourceRegions] : régions colorées de la pièce source (même espace que
+  /// [source]) — transformées avec la même matrice que le polygone du piège.
+  /// [zones] : zones de couleur de la cible (pour colorer les pièces créées
+  /// en espace cible : alternativeCut).
+  /// [paletteSize] : nombre de couleurs de l'item (1 = monochrome).
   /// [targetShape] est utilisé par [TrapKind.foreignShape] pour choisir une
   /// forme visuellement contrastante (courbe pour cible angulaire, etc.).
-  Polygon? tryTrap({
+  TrapResult? tryTrap({
     required TrapKind kind,
     required Polygon source,
+    required List<ColoredRegion> sourceRegions,
     required Polygon target,
     required List<Polygon> truePieces,
+    required List<ColoredRegion> zones,
+    required int paletteSize,
     required double subtlety,
     BaseShape? targetShape,
   }) {
@@ -66,12 +89,18 @@ class TrapEngine {
         final factor = t < 0.5
             ? 1.0 - mag
             : (_rng.nextBool() ? 1.0 + mag : 1.0 - mag);
-        return source.transform(scale: factor);
+        return TrapResult(
+          source.transform(scale: factor),
+          _transformRegions(sourceRegions, source.centroid(), scale: factor),
+        );
 
       case TrapKind.mirrored:
         final m = source.transform(mirrored: true);
         if (congruent(m, source)) return null;
-        return m;
+        return TrapResult(
+          m,
+          _transformRegions(sourceRegions, source.centroid(), mirrored: true),
+        );
 
       case TrapKind.stretched:
         // Amplitude bien plus grande qu'avant : visible dès les items moyens.
@@ -79,11 +108,16 @@ class TrapEngine {
         final fx = _rng.nextBool() ? 1 + mag : 1 / (1 + mag);
         // En mode subtil : étirement à aire constante (fy = 1/fx).
         final fy = t > 0.55 ? 1 / fx : 1.0;
-        final s = _rng.nextBool()
-            ? source.transform(scaleX: fx, scaleY: fy)
-            : source.transform(scaleX: fy, scaleY: fx);
+        final swap = _rng.nextBool();
+        final sx = swap ? fy : fx;
+        final sy = swap ? fx : fy;
+        final s = source.transform(scaleX: sx, scaleY: sy);
         if (congruent(s, source)) return null;
-        return s;
+        return TrapResult(
+          s,
+          _transformRegions(sourceRegions, source.centroid(),
+              scaleX: sx, scaleY: sy),
+        );
 
       case TrapKind.alternativeCut:
         for (int attempt = 0; attempt < 6; attempt++) {
@@ -103,7 +137,9 @@ class TrapEngine {
             return true;
           }).toList();
           if (candidates.isNotEmpty) {
-            return candidates[_rng.nextInt(candidates.length)];
+            final pick = candidates[_rng.nextInt(candidates.length)];
+            // La pièce vit dans l'espace cible → elle hérite du motif réel.
+            return TrapResult(pick, clipToZones(pick, zones));
           }
         }
         return null;
@@ -125,8 +161,92 @@ class TrapEngine {
         for (final tp in truePieces) {
           if (congruent(pick, tp, allowMirror: true)) return null;
         }
-        return pick;
+        return TrapResult(pick, _plausibleColoring(pick, paletteSize));
+
+      case TrapKind.wrongColors:
+        // Géométrie inchangée, couleurs permutées (décalage cyclique sans
+        // point fixe → AUCUNE région ne garde sa couleur d'origine).
+        //
+        // GARDE-FOU anti-ambiguïté : l'histogramme aire-par-couleur doit
+        // changer nettement. Une rotation préserve cet histogramme ; s'il
+        // était inchangé (ex. pièce symétrique 50/50 aux couleurs échangées),
+        // une rotation pourrait faire coïncider le piège avec la vraie pièce
+        // → deux réponses valides. On refuse ces cas.
+        if (paletteSize < 2 || sourceRegions.isEmpty) return null;
+        final histo = <int, double>{};
+        for (final r in sourceRegions) {
+          histo[r.colorIndex] =
+              (histo[r.colorIndex] ?? 0) + r.polygon.area();
+        }
+        final shifts = [for (int s = 1; s < paletteSize; s++) s]
+          ..shuffle(_rng);
+        for (final shift in shifts) {
+          final shifted = <int, double>{};
+          histo.forEach(
+              (k, v) => shifted[(k + shift) % paletteSize] = v);
+          double diff = 0, total = 0;
+          for (final k in {...histo.keys, ...shifted.keys}) {
+            diff += ((histo[k] ?? 0) - (shifted[k] ?? 0)).abs();
+            total += (histo[k] ?? 0) + (shifted[k] ?? 0);
+          }
+          if (total > kGeomEps && diff / total > 0.10) {
+            return TrapResult(
+              source,
+              sourceRegions
+                  .map((r) => ColoredRegion(
+                      r.polygon, (r.colorIndex + shift) % paletteSize))
+                  .toList(),
+            );
+          }
+        }
+        return null;
     }
+  }
+
+  // ---------- Couleurs ----------
+
+  /// Applique aux régions la MÊME transformation que la pièce entière
+  /// (pivot = centroïde de la pièce source, pas celui de chaque région).
+  List<ColoredRegion> _transformRegions(
+    List<ColoredRegion> regions,
+    Offset center, {
+    double scale = 1.0,
+    double scaleX = 1.0,
+    double scaleY = 1.0,
+    bool mirrored = false,
+  }) {
+    return regions
+        .map((r) => ColoredRegion(
+              r.polygon.transform(
+                scale: scale,
+                scaleX: scaleX,
+                scaleY: scaleY,
+                mirrored: mirrored,
+                center: center,
+              ),
+              r.colorIndex,
+            ))
+        .toList();
+  }
+
+  /// Coloration plausible d'une pièce étrangère : même palette que l'item,
+  /// motif bicolore (coupe oblique aléatoire) ou uni si item monochrome.
+  List<ColoredRegion> _plausibleColoring(Polygon piece, int paletteSize) {
+    if (paletteSize < 2) return [ColoredRegion(piece, 0)];
+    final c1 = _rng.nextInt(paletteSize);
+    // Une chance sur trois : pièce unie (existe aussi dans les vrais items).
+    if (_rng.nextInt(3) == 0) return [ColoredRegion(piece, c1)];
+    var c2 = _rng.nextInt(paletteSize - 1);
+    if (c2 >= c1) c2++;
+    final centroid = piece.centroid();
+    final ang = _rng.nextDouble() * math.pi;
+    final d = Offset(math.cos(ang), math.sin(ang));
+    final parts =
+        cutPolygonByLine(piece, CutLine(centroid - d * 3, centroid + d * 3));
+    if (parts[0].vertices.length < 3 || parts[1].vertices.length < 3) {
+      return [ColoredRegion(piece, c1)];
+    }
+    return [ColoredRegion(parts[0], c1), ColoredRegion(parts[1], c2)];
   }
 
   // ---------- Shapes contrastantes ----------

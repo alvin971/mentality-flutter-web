@@ -94,8 +94,12 @@ class Polygon {
     return inside;
   }
 
-  /// Transformation autour du centroïde : miroir (axe vertical), puis
-  /// étirement (scaleX/scaleY), puis rotation, puis translation.
+  /// Transformation autour du centroïde (ou de [center] si fourni) :
+  /// miroir (axe vertical), puis étirement (scaleX/scaleY), puis rotation,
+  /// puis translation.
+  ///
+  /// [center] sert à transformer une RÉGION d'une pièce avec le même pivot
+  /// que la pièce entière (sinon chaque région tournerait sur elle-même).
   Polygon transform({
     double rotationDeg = 0,
     bool mirrored = false,
@@ -103,8 +107,9 @@ class Polygon {
     double scaleX = 1.0,
     double scaleY = 1.0,
     Offset translation = Offset.zero,
+    Offset? center,
   }) {
-    final c = centroid();
+    final c = center ?? centroid();
     final rad = rotationDeg * math.pi / 180;
     final cosR = math.cos(rad);
     final sinR = math.sin(rad);
@@ -211,6 +216,55 @@ List<Polygon> cutPolygonByLine(Polygon poly, CutLine line) {
     }
   }
   return [Polygon(pos).cleaned(), Polygon(neg).cleaned()];
+}
+
+/// Région colorée : un sous-polygone + un index dans la palette de l'item.
+///
+/// Sert à deux choses :
+/// - zones de couleur de la figure CIBLE (le "motif" du dessin) ;
+/// - fragments de couleur portés par chaque pièce (une pièce peut être
+///   bicolore si la frontière de couleur traverse sa découpe).
+@immutable
+class ColoredRegion {
+  const ColoredRegion(this.polygon, this.colorIndex);
+  final Polygon polygon;
+  final int colorIndex;
+}
+
+/// Intersection de deux polygones CONVEXES (clipping de Sutherland-Hodgman :
+/// on rogne `subject` successivement par chaque arête de `clip`).
+Polygon intersectConvex(Polygon subject, Polygon clip) {
+  if (subject.vertices.length < 3 || clip.vertices.length < 3) {
+    return const Polygon([]);
+  }
+  final interior = clip.centroid();
+  var cur = subject;
+  final n = clip.vertices.length;
+  for (int i = 0; i < n; i++) {
+    if (cur.vertices.length < 3) return const Polygon([]);
+    final line = CutLine(clip.vertices[i], clip.vertices[(i + 1) % n]);
+    final parts = cutPolygonByLine(cur, line);
+    cur = line.sideOf(interior) >= 0 ? parts[0] : parts[1];
+  }
+  return cur.cleaned();
+}
+
+/// Colorie une pièce en la découpant par les zones de couleur de la cible.
+///
+/// Chaque zone qui recouvre ≥ 2 % de l'aire de la pièce produit une région.
+/// Si rien ne recouvre (pièce hors cible, ex. forme étrangère), la pièce
+/// entière prend la couleur de la première zone.
+List<ColoredRegion> clipToZones(Polygon piece, List<ColoredRegion> zones) {
+  final out = <ColoredRegion>[];
+  final pieceArea = piece.area();
+  if (pieceArea < kGeomEps) return out;
+  for (final z in zones) {
+    final inter = intersectConvex(piece, z.polygon);
+    if (inter.vertices.length >= 3 && inter.area() > pieceArea * 0.02) {
+      out.add(ColoredRegion(inter, z.colorIndex));
+    }
+  }
+  return out.isEmpty ? [ColoredRegion(piece, zones.first.colorIndex)] : out;
 }
 
 /// Vérifie que `pieces` reconstituent `target` :

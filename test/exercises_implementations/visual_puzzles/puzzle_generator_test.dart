@@ -1,6 +1,26 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mentality/features/exercises_implementations/visual_puzzles/domain/puzzle_generator.dart';
 
+/// Histogramme aire-par-couleur d'une liste de régions.
+Map<int, double> _colorHistogram(List<ColoredRegion> regions) {
+  final m = <int, double>{};
+  for (final r in regions) {
+    m[r.colorIndex] = (m[r.colorIndex] ?? 0) + r.polygon.area();
+  }
+  return m;
+}
+
+/// Vrai si les deux motifs diffèrent nettement (> 5 % de variation totale).
+bool _patternsDiffer(Map<int, double> a, Map<int, double> b) {
+  final keys = {...a.keys, ...b.keys};
+  double diff = 0, total = 0;
+  for (final k in keys) {
+    diff += ((a[k] ?? 0) - (b[k] ?? 0)).abs();
+    total += (a[k] ?? 0) + (b[k] ?? 0);
+  }
+  return total > 0 && diff / total > 0.05;
+}
+
 void main() {
   group('PuzzleGenerator — structure du test', () {
     test('génère exactement 26 items avec la bonne répartition de niveaux',
@@ -72,14 +92,28 @@ void main() {
 
     test(
         'aucun distracteur congruent à une vraie pièce par rotation '
-        '(sinon 2 réponses valides)', () {
+        '(sinon 2 réponses valides) — sauf wrongColors qui doit alors '
+        'différer par son MOTIF', () {
       for (final item in allItems) {
         final correct = item.correctPieces;
         for (final o in item.options.where((o) => !o.isCorrect)) {
           for (final c in correct) {
-            expect(congruent(o.polygon, c.polygon), isFalse,
-                reason: 'item ${item.index} : piège ${o.trapKind} congruent '
-                    'à une vraie pièce');
+            if (o.trapKind == TrapKind.wrongColors) {
+              // Géométrie identique AUTORISÉE : la différence est la couleur.
+              if (congruent(o.polygon, c.polygon)) {
+                expect(
+                  _patternsDiffer(
+                      _colorHistogram(o.regions), _colorHistogram(c.regions)),
+                  isTrue,
+                  reason: 'item ${item.index} : piège wrongColors avec le '
+                      'MÊME motif qu\'une vraie pièce → 2 réponses valides',
+                );
+              }
+            } else {
+              expect(congruent(o.polygon, c.polygon), isFalse,
+                  reason: 'item ${item.index} : piège ${o.trapKind} congruent '
+                      'à une vraie pièce');
+            }
           }
         }
       }
@@ -103,6 +137,64 @@ void main() {
           expect(bb.width, lessThanOrEqualTo(item.maxPieceExtent + 1e-6));
           expect(bb.height, lessThanOrEqualTo(item.maxPieceExtent + 1e-6));
         }
+      }
+    });
+
+    // ---------- Système de couleurs (motif indépendant des découpes) ----------
+
+    test('les zones de couleur recouvrent exactement la cible', () {
+      for (final item in allItems) {
+        final zoneArea =
+            item.colorZones.fold<double>(0, (s, z) => s + z.polygon.area());
+        expect(zoneArea / item.targetPolygon.area(), closeTo(1.0, 0.03),
+            reason: 'item ${item.index}');
+        for (final z in item.colorZones) {
+          expect(z.colorIndex, lessThan(item.palette.length),
+              reason: 'item ${item.index} : index de couleur hors palette');
+        }
+      }
+    });
+
+    test('chaque option porte des régions qui couvrent sa silhouette', () {
+      for (final item in allItems) {
+        for (final o in item.options) {
+          expect(o.regions, isNotEmpty,
+              reason: 'item ${item.index}, piège ${o.trapKind}');
+          final regionArea =
+              o.regions.fold<double>(0, (s, r) => s + r.polygon.area());
+          expect(regionArea / o.polygon.area(), closeTo(1.0, 0.08),
+              reason: 'item ${item.index}, piège ${o.trapKind} : régions ne '
+                  'couvrent pas la pièce');
+          for (final r in o.regions) {
+            expect(r.colorIndex, lessThan(item.palette.length));
+          }
+        }
+      }
+    });
+
+    test(
+        'items multicolores : au moins une vraie pièce BICOLORE '
+        '(la couleur ne suffit jamais à identifier les pièces)', () {
+      for (final item in allItems) {
+        if (item.palette.length < 2) continue; // monochrome (hard) : exempt
+        final hasBicolor = item.correctPieces.any((p) {
+          final colors = p.regions
+              .where((r) => r.polygon.area() / p.polygon.area() >= 0.15)
+              .map((r) => r.colorIndex)
+              .toSet();
+          return colors.length >= 2;
+        });
+        expect(hasBicolor, isTrue,
+            reason: 'item ${item.index} : motif aligné sur les découpes → '
+                'résoluble par correspondance de couleurs');
+      }
+    });
+
+    test('palette : couleurs distinctes par item', () {
+      for (final item in allItems) {
+        expect(item.palette.toSet().length, item.palette.length,
+            reason: 'item ${item.index}');
+        expect(item.palette.length, inInclusiveRange(1, 3));
       }
     });
   });

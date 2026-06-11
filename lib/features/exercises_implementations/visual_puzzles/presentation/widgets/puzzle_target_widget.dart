@@ -5,27 +5,21 @@ import '../../../../../core/theme/app_typography.dart';
 import '../../domain/geometry.dart';
 import '../../domain/puzzle_generator.dart';
 
-/// Silhouette cible colorée par sections.
+/// Figure cible : le MOTIF coloré complet, SANS lignes de découpe.
 ///
-/// Affiche la figure DÉCOUPÉE en 3 zones colorées (couleur de la pièce
-/// correspondante) séparées par des lignes blanches. L'apprenant voit
-/// exactement comment la figure est découpée ; la difficulté vient de
-/// devoir trouver LAQUELLE parmi les 6 options correspond à chaque zone
-/// (surtout quand les pièces sont pivotées aux niveaux difficiles).
+/// Comme dans le subtest réel : la figure est montrée intacte (zones de
+/// couleur du dessin visibles, frontières de découpe invisibles) — c'est au
+/// sujet de décomposer mentalement la figure et de retrouver les 3 pièces,
+/// en vérifiant à la fois la GÉOMÉTRIE et la CONTINUITÉ DU MOTIF.
 class PuzzleTargetWidget extends StatelessWidget {
   const PuzzleTargetWidget({
     super.key,
     required this.item,
-    required this.sectionColors,
     this.maxWidth = 330,
     this.maxHeight = 250,
   });
 
   final PuzzleItem item;
-
-  /// Couleur de chaque pièce correcte (même ordre que item.correctPieces).
-  final List<Color> sectionColors;
-
   final double maxWidth;
   final double maxHeight;
 
@@ -63,13 +57,11 @@ class PuzzleTargetWidget extends StatelessWidget {
                     padding: const EdgeInsets.fromLTRB(18, 28, 18, 14),
                     child: CustomPaint(
                       size: Size.infinite,
-                      painter: _SectionsPainter(
+                      painter: _TargetPainter(
                         target: item.targetPolygon,
-                        sections: item.correctPieces
-                            .map((p) => p.polygon)
-                            .toList(),
-                        sectionColors: sectionColors,
-                        borderColor: accent,
+                        zones: item.colorZones,
+                        palette: item.palette,
+                        outlineColor: cs.outline.withValues(alpha: 0.55),
                       ),
                     ),
                   ),
@@ -83,23 +75,20 @@ class PuzzleTargetWidget extends StatelessWidget {
   }
 }
 
-/// Dessine la figure cible découpée en sections colorées.
-///
-/// Toutes les pièces sont dans l'espace normalisé [0,1]² de la cible —
-/// le même transform (scale + offset centré) est appliqué à toutes pour
-/// qu'elles s'assemblent parfaitement.
-class _SectionsPainter extends CustomPainter {
-  const _SectionsPainter({
+/// Dessine le motif coloré de la cible : zones pleines (couleurs franches),
+/// AUCUNE ligne interne, fin contour extérieur.
+class _TargetPainter extends CustomPainter {
+  const _TargetPainter({
     required this.target,
-    required this.sections,
-    required this.sectionColors,
-    required this.borderColor,
+    required this.zones,
+    required this.palette,
+    required this.outlineColor,
   });
 
   final Polygon target;
-  final List<Polygon> sections;
-  final List<Color> sectionColors;
-  final Color borderColor;
+  final List<ColoredRegion> zones;
+  final List<Color> palette;
+  final Color outlineColor;
 
   static const double _padding = 0.09;
 
@@ -120,11 +109,10 @@ class _SectionsPainter extends CustomPainter {
     final ox = size.width / 2 - (bbox.left + bbox.right) / 2 * scale;
     final oy = size.height / 2 - (bbox.top + bbox.bottom) / 2 * scale;
 
-    Offset t(Offset p) => Offset(p.dx * scale + ox, p.dy * scale + oy);
-
     Path makePath(Polygon poly) {
       final path = Path();
       if (poly.vertices.isEmpty) return path;
+      Offset t(Offset p) => Offset(p.dx * scale + ox, p.dy * scale + oy);
       final first = t(poly.vertices.first);
       path.moveTo(first.dx, first.dy);
       for (int i = 1; i < poly.vertices.length; i++) {
@@ -135,43 +123,35 @@ class _SectionsPainter extends CustomPainter {
       return path;
     }
 
-    // ---- 1. Sections colorées (fill + ligne de découpe) ----
-    for (int i = 0; i < sections.length && i < sectionColors.length; i++) {
-      final path = makePath(sections[i]);
-      final color = sectionColors[i];
-
+    // ---- Zones du motif : aplats pleins, jointures scellées par un léger
+    // stroke de la même couleur (évite les fines coutures d'anti-aliasing).
+    for (final z in zones) {
+      if (z.polygon.vertices.length < 3) continue;
+      final color = palette[z.colorIndex % palette.length];
+      final path = makePath(z.polygon);
+      canvas.drawPath(path, Paint()..color = color);
       canvas.drawPath(
         path,
         Paint()
-          ..color = color.withValues(alpha: 0.72)
-          ..style = PaintingStyle.fill,
-      );
-
-      // Ligne de découpe visible entre les sections
-      canvas.drawPath(
-        path,
-        Paint()
-          ..color = Colors.white.withValues(alpha: 0.92)
+          ..color = color
           ..style = PaintingStyle.stroke
-          ..strokeWidth = 2.2
+          ..strokeWidth = 1.0
           ..strokeJoin = StrokeJoin.round,
       );
     }
 
-    // ---- 2. Contour extérieur de la figure ----
+    // ---- Fin contour extérieur (bord "imprimé") ----
     canvas.drawPath(
       makePath(target),
       Paint()
-        ..color = borderColor.withValues(alpha: 0.90)
+        ..color = outlineColor
         ..style = PaintingStyle.stroke
-        ..strokeWidth = 3.0
+        ..strokeWidth = 1.6
         ..strokeJoin = StrokeJoin.round,
     );
   }
 
   @override
-  bool shouldRepaint(_SectionsPainter old) =>
-      old.target != target ||
-      old.sections != sections ||
-      old.sectionColors != sectionColors;
+  bool shouldRepaint(_TargetPainter old) =>
+      old.target != target || old.zones != zones || old.palette != palette;
 }
