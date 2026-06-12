@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:async';
+import '../../../../../core/l10n/l10n_ext.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
 import '../../../../../core/widgets/test/kepler_test_button.dart';
@@ -74,6 +75,30 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
   }
 
   DigitSpanItem get _currentItem => _currentItems[_currentItemIndex];
+
+  /// Libellé localisé du type d'empan (remplace [DigitSpanItem.typeDescription]).
+  String _typeLabel(SpanType type) {
+    switch (type) {
+      case SpanType.forward:
+        return context.l10n.dsTypeForward;
+      case SpanType.backward:
+        return context.l10n.dsTypeBackward;
+      case SpanType.sequencing:
+        return context.l10n.dsTypeSequencing;
+    }
+  }
+
+  /// Consigne localisée du type d'empan (remplace [DigitSpanItem.instruction]).
+  String _typeInstruction(SpanType type) {
+    switch (type) {
+      case SpanType.forward:
+        return context.l10n.dsForwardInstruction;
+      case SpanType.backward:
+        return context.l10n.dsBackwardInstruction;
+      case SpanType.sequencing:
+        return context.l10n.dsSequencingInstruction;
+    }
+  }
 
   void _startTest() {
     setState(() {
@@ -179,17 +204,17 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
               size: 32.sp,
             ),
             SizedBox(width: 12.w),
-            Text(isCorrect ? 'Correct !' : 'Incorrect'),
+            Text(isCorrect ? context.l10n.dsCorrect : context.l10n.dsIncorrect),
           ],
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Points gagnés : $points'),
+            Text(context.l10n.dsPointsEarned(points)),
             SizedBox(height: 8.h),
-            Text('Réponse correcte : ${_currentItem.getCorrectAnswer().join(' - ')}'),
-            Text('Votre réponse : ${_userAnswer.join(' - ')}'),
+            Text(context.l10n.dsCorrectAnswer(_currentItem.getCorrectAnswer().join(' - '))),
+            Text(context.l10n.dsYourAnswer(_userAnswer.join(' - '))),
           ],
         ),
         actions: [
@@ -198,7 +223,7 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
               Navigator.pop(context);
               _nextItem();
             },
-            child: const Text('Continuer'),
+            child: Text(context.l10n.commonContinue),
           ),
         ],
       ),
@@ -255,22 +280,22 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: const Text('Test terminé !'),
+        title: Text(context.l10n.codingTestDoneTitle),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Résultats par partie :',
+              context.l10n.dsResultsByPart,
               style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 12.h),
-            Text('Empan Direct : $_forwardScore points'),
-            Text('Empan Inverse : $_backwardScore points'),
-            Text('Séquençage : $_sequencingScore points'),
+            Text(context.l10n.dsForwardScore(_forwardScore)),
+            Text(context.l10n.dsBackwardScore(_backwardScore)),
+            Text(context.l10n.dsSequencingScore(_sequencingScore)),
             SizedBox(height: 16.h),
             Text(
-              'Score Total : $totalScore points',
+              context.l10n.dsTotalScore(totalScore),
               style: TextStyle(
                 fontSize: 18.sp,
                 fontWeight: FontWeight.bold,
@@ -286,7 +311,7 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
               Navigator.pop(context);
               Navigator.pop(context, totalScore);
             },
-            child: const Text('Retour'),
+            child: Text(context.l10n.commonBack),
           ),
         ],
       ),
@@ -309,12 +334,12 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
 
   Widget _buildIntroScreen() {
     return KeplerTestScaffold(
-      testName: 'Mémoire des Chiffres',
-      eyebrow: 'MÉMOIRE DE TRAVAIL · WMI',
+      testName: context.l10n.dsTestName,
+      eyebrow: context.l10n.dsEyebrow,
       accentColor: AppColors.indexWMI,
       // Bouton de démarrage sticky : visible sans scroller.
       bottomBar: KeplerTestButton.primary(
-        label: 'Commencer le test',
+        label: context.l10n.codingStartTest,
         accentColor: AppColors.indexWMI,
         onPressed: _startTest,
       ),
@@ -328,7 +353,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
               ),
               SizedBox(height: 24.h),
               Text(
-                'Mémoire des Chiffres',
+                context.l10n.dsTestName,
                 style: TextStyle(
                   fontSize: 28.sp,
                   fontWeight: FontWeight.bold,
@@ -337,25 +362,25 @@ crossAxisAlignment: CrossAxisAlignment.start,
               ),
               SizedBox(height: 16.h),
               Text(
-                'Ce test mesure votre mémoire de travail à travers 3 parties distinctes :',
+                context.l10n.dsDescription,
                 style: TextStyle(fontSize: 16.sp),
               ),
               SizedBox(height: 24.h),
               _buildInfoCard(
-                'Partie 1 : Empan Direct',
-                'Répétez les chiffres dans le même ordre',
+                context.l10n.dsForwardTitle,
+                context.l10n.dsForwardInstruction,
                 Icons.arrow_forward,
               ),
               SizedBox(height: 12.h),
               _buildInfoCard(
-                'Partie 2 : Empan Inverse',
-                'Répétez les chiffres en ordre inverse',
+                context.l10n.dsBackwardTitle,
+                context.l10n.dsBackwardInstruction,
                 Icons.swap_horiz,
               ),
               SizedBox(height: 12.h),
               _buildInfoCard(
-                'Partie 3 : Séquençage',
-                'Répétez les chiffres en ordre croissant',
+                context.l10n.dsSequencingTitle,
+                context.l10n.dsSequencingInstruction,
                 Icons.sort,
               ),
               SizedBox(height: 24.h),
@@ -372,7 +397,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                     SizedBox(width: 12.w),
                     Expanded(
                       child: Text(
-                        'Les chiffres seront présentés à raison de 1 chiffre par seconde.',
+                        context.l10n.dsPresentationInfo,
                         style: TextStyle(color: AppColors.info, fontSize: 14.sp),
                       ),
                     ),
@@ -388,7 +413,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: Text(_currentItem.typeDescription),
+        title: Text(_typeLabel(_currentItem.type)),
       ),
       body: SafeArea(
         child: Padding(
@@ -403,7 +428,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
               ),
               SizedBox(height: 24.h),
               Text(
-                _currentItem.typeDescription,
+                _typeLabel(_currentItem.type),
                 style: TextStyle(
                   fontSize: 28.sp,
                   fontWeight: FontWeight.bold,
@@ -412,7 +437,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
               ),
               SizedBox(height: 16.h),
               Text(
-                _currentItem.instruction,
+                _typeInstruction(_currentItem.type),
                 style: TextStyle(fontSize: 18.sp),
                 textAlign: TextAlign.center,
               ),
@@ -426,7 +451,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                     backgroundColor: AppColors.indexWMI,
                   ),
                   child: Text(
-                    'Commencer',
+                    context.l10n.dsStartPart,
                     style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -442,13 +467,13 @@ crossAxisAlignment: CrossAxisAlignment.start,
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: Text(_currentItem.typeDescription),
+        title: Text(_typeLabel(_currentItem.type)),
         actions: [
           Center(
             child: Padding(
               padding: EdgeInsets.only(right: 16.w),
               child: Text(
-                'Longueur ${_currentItem.length} - Essai ${_currentItem.trial}',
+                context.l10n.dsLengthTrial(_currentItem.length, _currentItem.trial),
                 style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
               ),
             ),
@@ -461,7 +486,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Écoutez attentivement',
+                context.l10n.dsListenCarefully,
                 style: TextStyle(fontSize: 20.sp, color: AppColors.grey600),
               ),
               SizedBox(height: 48.h),
@@ -529,13 +554,13 @@ crossAxisAlignment: CrossAxisAlignment.start,
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: Text(_currentItem.typeDescription),
+        title: Text(_typeLabel(_currentItem.type)),
         actions: [
           Center(
             child: Padding(
               padding: EdgeInsets.only(right: 16.w),
               child: Text(
-                'Longueur ${_currentItem.length} - Essai ${_currentItem.trial}',
+                context.l10n.dsLengthTrial(_currentItem.length, _currentItem.trial),
                 style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
               ),
             ),
@@ -548,7 +573,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
           child: Column(
             children: [
               Text(
-                _currentItem.instruction,
+                _typeInstruction(_currentItem.type),
                 style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
@@ -566,7 +591,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                   children: _userAnswer.isEmpty
                       ? [
                           Text(
-                            'Saisissez votre réponse...',
+                            context.l10n.dsEnterAnswer,
                             style: TextStyle(fontSize: 18.sp, color: AppColors.grey500),
                           )
                         ]
@@ -636,7 +661,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Icon(Icons.backspace, size: 20.sp),
                             SizedBox(width: 8.w),
-                            Text('Effacer', style: TextStyle(fontSize: 16.sp)),
+                            Text(context.l10n.codingClear, style: TextStyle(fontSize: 16.sp)),
                           ],
                         ),
                       ),
@@ -656,7 +681,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                           disabledBackgroundColor: AppColors.grey300,
                         ),
                         child: Text(
-                          'Valider (${_userAnswer.length}/${_currentItem.length})',
+                          context.l10n.dsValidateProgress(_userAnswer.length, _currentItem.length),
                           style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
                         ),
                       ),

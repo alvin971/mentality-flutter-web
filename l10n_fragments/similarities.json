@@ -1,0 +1,217 @@
+{
+  "simTestName": {
+    "fr": "Similitudes",
+    "en": "Similarities",
+    "desc": "Similitudes — nom du test affiché dans le scaffold"
+  },
+  "simEyebrow": {
+    "fr": "COMPRÉHENSION VERBALE · VCI",
+    "en": "VERBAL COMPREHENSION · VCI",
+    "desc": "Similitudes — sur-titre (catégorie d'indice) dans le scaffold"
+  },
+  "simStatusBar": {
+    "fr": "{seconds} s · {score} pts",
+    "en": "{seconds}s · {score} pts",
+    "desc": "Similitudes — barre d'état (temps écoulé + score) dans l'AppBar",
+    "placeholders": {"seconds": "int", "score": "int"}
+  },
+  "simQuestionPrompt": {
+    "fr": "En quoi ces deux mots sont-ils similaires ?",
+    "en": "How are these two words alike?",
+    "desc": "Similitudes — consigne affichée au-dessus de la paire de mots"
+  },
+  "simLevelLabel": {
+    "fr": "Niveau : {level}",
+    "en": "Level: {level}",
+    "desc": "Similitudes — badge indiquant le niveau d'abstraction de l'item",
+    "placeholders": {"level": "String"}
+  },
+  "simLevelConcrete": {
+    "fr": "Concret",
+    "en": "Concrete",
+    "desc": "Similitudes — nom du niveau d'abstraction concret"
+  },
+  "simLevelFunctional": {
+    "fr": "Fonctionnel",
+    "en": "Functional",
+    "desc": "Similitudes — nom du niveau d'abstraction fonctionnel"
+  },
+  "simLevelCategorical": {
+    "fr": "Catégoriel",
+    "en": "Categorical",
+    "desc": "Similitudes — nom du niveau d'abstraction catégoriel"
+  },
+  "simLevelAbstract": {
+    "fr": "Abstrait",
+    "en": "Abstract",
+    "desc": "Similitudes — nom du niveau d'abstraction abstrait"
+  },
+  "simAnswerLabel": {
+    "fr": "Votre réponse :",
+    "en": "Your answer:",
+    "desc": "Similitudes — libellé au-dessus du champ de saisie de la réponse"
+  },
+  "simAnswerHint": {
+    "fr": "Expliquez en quoi ils sont similaires...",
+    "en": "Explain how they are alike...",
+    "desc": "Similitudes — texte d'invite (hint) du champ de réponse"
+  },
+  "simTipsTitle": {
+    "fr": "Conseils pour obtenir 2 points :",
+    "en": "Tips for getting 2 points:",
+    "desc": "Similitudes — titre du bloc d'aide au scoring"
+  },
+  "simTipsLine1": {
+    "fr": "• Donnez une catégorie abstraite ou superordonnée",
+    "en": "• Give an abstract or superordinate category",
+    "desc": "Similitudes — premier conseil d'aide au scoring"
+  },
+  "simTipsLine2": {
+    "fr": "• Ex: \"Ce sont des...\", \"Formes de...\", \"Types de...\"",
+    "en": "• E.g. \"They are...\", \"Forms of...\", \"Types of...\"",
+    "desc": "Similitudes — deuxième conseil d'aide au scoring (exemples)"
+  },
+  "simFeedbackExcellent": {
+    "fr": "Excellent !",
+    "en": "Excellent!",
+    "desc": "Similitudes — titre du dialogue de feedback pour une réponse à 2 points"
+  },
+  "simFeedbackCorrect": {
+    "fr": "Correct",
+    "en": "Correct",
+    "desc": "Similitudes — titre du dialogue de feedback pour une réponse à 1 point"
+  },
+  "simFeedbackIncomplete": {
+    "fr": "Réponse incomplète",
+    "en": "Incomplete answer",
+    "desc": "Similitudes — titre du dialogue de feedback pour une réponse à 0 point"
+  },
+  "simFeedbackMsg2pts": {
+    "fr": "Réponse abstraite/catégorielle ! +2 points",
+    "en": "Abstract/categorical answer! +2 points",
+    "desc": "Similitudes — message de feedback pour une réponse à 2 points"
+  },
+  "simFeedbackMsg1pt": {
+    "fr": "Réponse fonctionnelle/propriété. +1 point",
+    "en": "Functional/property answer. +1 point",
+    "desc": "Similitudes — message de feedback pour une réponse à 1 point"
+  },
+  "simFeedbackMsg0pt": {
+    "fr": "Réponse incorrecte ou trop vague. 0 point",
+    "en": "Incorrect or too vague answer. 0 points",
+    "desc": "Similitudes — message de feedback pour une réponse à 0 point"
+  },
+  "simYourAnswerQuoted": {
+    "fr": "Votre réponse : \"{answer}\"",
+    "en": "Your answer: \"{answer}\"",
+    "desc": "Similitudes — rappel de la réponse saisie par l'utilisateur",
+    "placeholders": {"answer": "String"}
+  },
+  "simExamples2pts": {
+    "fr": "Exemples de réponses à 2 points :",
+    "en": "Examples of 2-point answers:",
+    "desc": "Similitudes — titre de la liste d'exemples de réponses à 2 points"
+  },
+  "simExamples1pt": {
+    "fr": "Exemples de réponses à 1 point :",
+    "en": "Examples of 1-point answers:",
+    "desc": "Similitudes — titre de la liste d'exemples de réponses à 1 point"
+  },
+  "simTimeSeconds": {
+    "fr": "Temps : {seconds} s",
+    "en": "Time: {seconds}s",
+    "desc": "Similitudes — temps passé sur l'item dans le dialogue de feedback",
+    "placeholders": {"seconds": "int"}
+  },
+  "simTotalScore": {
+    "fr": "Score total : {score} points",
+    "en": "Total score: {score} points",
+    "desc": "Similitudes — score total dans le dialogue de feedback",
+    "placeholders": {"score": "int"}
+  },
+  "simDiscontinue": {
+    "fr": "3 scores de 0 consécutifs - Test terminé (WAIS-IV)",
+    "en": "3 consecutive scores of 0 - Test ended (WAIS-IV)",
+    "desc": "Similitudes — message de règle de discontinuation après 3 échecs"
+  },
+  "simSeeResults": {
+    "fr": "Voir les résultats",
+    "en": "See results",
+    "desc": "Similitudes — bouton du dialogue de feedback lorsque le test est terminé"
+  },
+  "simResultsTitle": {
+    "fr": "Test des Similitudes - Résultats",
+    "en": "Similarities Test - Results",
+    "desc": "Similitudes — titre du dialogue de résultats finaux"
+  },
+  "simRawScore": {
+    "fr": "Score brut : {score}/{max} points",
+    "en": "Raw score: {score}/{max} points",
+    "desc": "Similitudes — score brut dans le dialogue de résultats",
+    "placeholders": {"score": "int", "max": "int"}
+  },
+  "simItemsCompleted": {
+    "fr": "Items complétés : {completed}/{total}",
+    "en": "Items completed: {completed}/{total}",
+    "desc": "Similitudes — nombre d'items complétés dans le dialogue de résultats",
+    "placeholders": {"completed": "int", "total": "int"}
+  },
+  "simPercentage": {
+    "fr": "Pourcentage : {percent}%",
+    "en": "Percentage: {percent}%",
+    "desc": "Similitudes — pourcentage de réussite dans le dialogue de résultats",
+    "placeholders": {"percent": "int"}
+  },
+  "simTotalTime": {
+    "fr": "Temps total : {seconds} s",
+    "en": "Total time: {seconds}s",
+    "desc": "Similitudes — temps total dans le dialogue de résultats",
+    "placeholders": {"seconds": "int"}
+  },
+  "simSubtitle": {
+    "fr": "Test de raisonnement verbal et abstraction conceptuelle",
+    "en": "Test of verbal reasoning and conceptual abstraction",
+    "desc": "Similitudes — sous-titre descriptif dans le dialogue de résultats"
+  },
+  "simBreakdownTitle": {
+    "fr": "Répartition par niveau :",
+    "en": "Breakdown by level:",
+    "desc": "Similitudes — titre de la répartition des scores par niveau"
+  },
+  "simBreakdownLine": {
+    "fr": "{level}: {total}/{max} points",
+    "en": "{level}: {total}/{max} points",
+    "desc": "Similitudes — ligne de répartition du score pour un niveau",
+    "placeholders": {"level": "String", "total": "int", "max": "int"}
+  },
+  "simPerfExceptional": {
+    "fr": "Performance exceptionnelle (θ > +2.0)",
+    "en": "Exceptional performance (θ > +2.0)",
+    "desc": "Similitudes — niveau de performance exceptionnel"
+  },
+  "simPerfSuperior": {
+    "fr": "Performance supérieure (θ > +1.0)",
+    "en": "Superior performance (θ > +1.0)",
+    "desc": "Similitudes — niveau de performance supérieur"
+  },
+  "simPerfAverage": {
+    "fr": "Performance moyenne (θ ≈ 0)",
+    "en": "Average performance (θ ≈ 0)",
+    "desc": "Similitudes — niveau de performance moyen"
+  },
+  "simPerfBelow": {
+    "fr": "Performance inférieure (θ < 0)",
+    "en": "Below-average performance (θ < 0)",
+    "desc": "Similitudes — niveau de performance inférieur"
+  },
+  "simPerfLow": {
+    "fr": "Performance faible (θ < -1.0)",
+    "en": "Low performance (θ < -1.0)",
+    "desc": "Similitudes — niveau de performance faible"
+  },
+  "simBack": {
+    "fr": "Retour",
+    "en": "Back",
+    "desc": "Similitudes — bouton de retour du dialogue de résultats"
+  }
+}

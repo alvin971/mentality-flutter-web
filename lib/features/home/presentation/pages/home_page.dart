@@ -3,8 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/theme/theme_notifier.dart';
+import '../../../../core/l10n/l10n_ext.dart';
 import '../../../../core/widgets/et_logo_animated.dart';
 import '../../../../core/widgets/kepler_button.dart';
+import '../../../../core/widgets/language_switcher_button.dart';
 import '../../../../core/widgets/kepler_card.dart';
 import '../../../../core/widgets/kepler_scaffold.dart';
 import '../../../../services/session_persistence_service.dart';
@@ -36,6 +38,8 @@ class HomePage extends StatelessWidget {
                 SizedBox(width: 10.w),
                 EtLogoAnimated(size: 28.w),
                 const Spacer(),
+                const LanguageSwitcherButton(),
+                SizedBox(width: 4.w),
                 ValueListenableBuilder<ThemeMode>(
                   valueListenable: themeNotifier,
                   builder: (_, mode, __) => IconButton(
@@ -92,8 +96,8 @@ class _Hero extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Découvrez', style: AppText.heroDisplay()),
-        Text('votre profil cognitif.', style: AppText.heroItalic()),
+        Text(context.l10n.homeHeroTitle, style: AppText.heroDisplay()),
+        Text(context.l10n.homeHeroTitleItalic, style: AppText.heroItalic()),
         SizedBox(height: 16.h),
         Container(
           width: 36.w,
@@ -102,8 +106,7 @@ class _Hero extends StatelessWidget {
         ),
         SizedBox(height: 16.h),
         Text(
-          'Une évaluation scientifique adaptative, inspirée des échelles Wechsler. '
-          '12 sous-tests, 5 indices, un score global.',
+          context.l10n.homeHeroBody,
           style: AppText.body(),
         ),
       ],
@@ -118,8 +121,8 @@ class _Actions extends StatelessWidget {
       children: [
         _ActionCard(
           eyebrow: '01',
-          title: 'Commencer une évaluation',
-          subtitle: 'Durée : 30 – 45 minutes',
+          title: context.l10n.homeActionStartTitle,
+          subtitle: context.l10n.homeActionStartSubtitle,
           icon: Icons.east,
           onTap: () => Navigator.push(
             context,
@@ -129,8 +132,8 @@ class _Actions extends StatelessWidget {
         SizedBox(height: 14.h),
         _ActionCard(
           eyebrow: '02',
-          title: 'Mes résultats',
-          subtitle: 'Historique des évaluations',
+          title: context.l10n.homeActionResultsTitle,
+          subtitle: context.l10n.homeActionResultsSubtitle,
           icon: Icons.east,
           onTap: () => Navigator.push(
             context,
@@ -140,8 +143,8 @@ class _Actions extends StatelessWidget {
         SizedBox(height: 14.h),
         _ActionCard(
           eyebrow: '03',
-          title: 'Parler avec Mental E.T.',
-          subtitle: 'Assistant IA, questions psychologiques',
+          title: context.l10n.homeActionChatTitle,
+          subtitle: context.l10n.homeActionChatSubtitle,
           icon: Icons.east,
           comingSoon: true,
           onTap: () {},
@@ -185,7 +188,7 @@ class _ActionCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (comingSoon) ...[
-                  Text('BIENTÔT DISPONIBLE',
+                  Text(context.l10n.homeComingSoon,
                       style: AppText.monoLabel(color: AppColors.warning)),
                   SizedBox(height: 4.h),
                 ],
@@ -215,18 +218,18 @@ class _About extends StatelessWidget {
     final tiles = [
       _InfoTile(
         eyebrow: 'I',
-        title: '12 sous-tests',
-        body: 'Évaluation complète des cinq indices cognitifs WAIS-IV.',
+        title: context.l10n.homeAboutSubtestsTitle,
+        body: context.l10n.homeAboutSubtestsBody,
       ),
       _InfoTile(
         eyebrow: 'II',
-        title: 'IA adaptative',
-        body: 'Difficulté ajustée en temps réel via inférence IRT.',
+        title: context.l10n.homeAboutAdaptiveTitle,
+        body: context.l10n.homeAboutAdaptiveBody,
       ),
       _InfoTile(
         eyebrow: 'III',
-        title: 'Validation scientifique',
-        body: 'Items inspirés des échelles Wechsler (WPPSI / WISC / WAIS).',
+        title: context.l10n.homeAboutValidationTitle,
+        body: context.l10n.homeAboutValidationBody,
       ),
     ];
     return KeplerCard(
@@ -234,7 +237,7 @@ class _About extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('À PROPOS',
+          Text(context.l10n.homeAboutEyebrow,
               style: AppText.monoLabel(color: AppColors.primary)),
           SizedBox(height: 16.h),
           for (var i = 0; i < tiles.length; i++) ...[
@@ -307,15 +310,15 @@ class _ResumeBanner extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('TEST EN COURS',
+                Text(context.l10n.homeResumeEyebrow,
                     style: AppText.monoLabel(color: AppColors.primary)),
                 SizedBox(height: 4.h),
-                Text('Reprendre votre évaluation', style: AppText.bodyStrong()),
+                Text(context.l10n.homeResumeTitle, style: AppText.bodyStrong()),
               ],
             ),
           ),
           KeplerButton(
-            label: 'Reprendre',
+            label: context.l10n.homeResumeButton,
             variant: KeplerButtonVariant.secondary,
             onPressed: () => Navigator.push(
               context,

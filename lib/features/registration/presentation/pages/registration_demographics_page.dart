@@ -9,6 +9,7 @@ import '../../../../core/theme/app_typography.dart';
 import '../../../../core/widgets/kepler_button.dart';
 import '../../../../core/widgets/kepler_card.dart';
 import '../../../../core/widgets/kepler_scaffold.dart';
+import '../../../../core/l10n/l10n_ext.dart';
 import '../../data/datasources/registration_remote_datasource.dart';
 import '../../data/repositories/registration_repository.dart';
 import '../../domain/entities/registration_form.dart';
@@ -75,20 +76,18 @@ class _RegistrationDemographicsPageState
       },
       builder: (context, state) {
         return KeplerScaffold(
-          title: 'Vos données démographiques',
-          eyebrow: 'ÉTAPE 3 / 4',
+          title: context.l10n.regDemoTitle,
+          eyebrow: context.l10n.regStepEyebrow(3),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 12.h),
               Text(
-                'Ces informations seront chiffrées dans votre token. '
-                'Aucune valeur exacte n\'est stockée (ni âge précis, '
-                'ni adresse précise).',
+                context.l10n.regDemoIntro,
                 style: AppText.body(),
               ),
               SizedBox(height: 24.h),
-              _sectionLabel('SEXE'),
+              _sectionLabel(context.l10n.regSectionSex),
               SizedBox(height: 8.h),
               KeplerCard(
                 child: Column(
@@ -96,7 +95,8 @@ class _RegistrationDemographicsPageState
                       .map((s) => RadioListTile<Sex>(
                             value: s,
                             groupValue: _sex,
-                            title: Text(s.label, style: AppText.bodyStrong()),
+                            title: Text(s.label(context.l10n),
+                                style: AppText.bodyStrong()),
                             activeColor: AppColors.primary,
                             onChanged: (v) => setState(() => _sex = v),
                           ))
@@ -104,7 +104,7 @@ class _RegistrationDemographicsPageState
                 ),
               ),
               SizedBox(height: 20.h),
-              _sectionLabel('TRANCHE D\'ÂGE'),
+              _sectionLabel(context.l10n.regSectionAgeBucket),
               SizedBox(height: 8.h),
               KeplerCard(
                 child: Wrap(
@@ -112,7 +112,7 @@ class _RegistrationDemographicsPageState
                   runSpacing: 8.h,
                   children: AgeBucket.values
                       .map((a) => ChoiceChip(
-                            label: Text(a.label),
+                            label: Text(a.label(context.l10n)),
                             selected: _ageBucket == a,
                             selectedColor:
                                 AppColors.primary.withValues(alpha: 0.2),
@@ -123,7 +123,7 @@ class _RegistrationDemographicsPageState
                 ),
               ),
               SizedBox(height: 20.h),
-              _sectionLabel('PAYS ET CODE POSTAL'),
+              _sectionLabel(context.l10n.regSectionCountryPostal),
               SizedBox(height: 8.h),
               KeplerCard(
                 child: Row(
@@ -141,8 +141,8 @@ class _RegistrationDemographicsPageState
                     Expanded(
                       child: TextField(
                         controller: _postalController,
-                        decoration: const InputDecoration(
-                          hintText: 'Code postal',
+                        decoration: InputDecoration(
+                          hintText: context.l10n.regPostalCodeHint,
                           border: InputBorder.none,
                         ),
                         onChanged: _onPostalChanged,
@@ -183,8 +183,8 @@ class _RegistrationDemographicsPageState
               SizedBox(height: 24.h),
               KeplerButton(
                 label: state.busy
-                    ? 'Génération du token…'
-                    : 'Générer mon token',
+                    ? context.l10n.regGeneratingToken
+                    : context.l10n.regGenerateMyToken,
                 expand: true,
                 onPressed: (!_isValid || state.busy)
                     ? null

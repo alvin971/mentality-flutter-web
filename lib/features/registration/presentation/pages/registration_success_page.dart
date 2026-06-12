@@ -7,6 +7,7 @@ import '../../../../core/widgets/kepler_button.dart';
 import '../../../../core/widgets/kepler_card.dart';
 import '../../../../core/widgets/kepler_scaffold.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/l10n/l10n_ext.dart';
 
 class RegistrationSuccessPage extends StatelessWidget {
   const RegistrationSuccessPage({super.key});
@@ -14,8 +15,8 @@ class RegistrationSuccessPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return KeplerScaffold(
-      eyebrow: 'ÉTAPE 4 / 4 · SUCCÈS',
-      title: 'Bienvenue dans Mental E.T.',
+      eyebrow: context.l10n.regStepEyebrowSuccess,
+      title: context.l10n.regSuccessTitle,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -23,16 +24,13 @@ class RegistrationSuccessPage extends StatelessWidget {
           Center(child: EtLogoAnimated(size: 140.w)),
           SizedBox(height: 24.h),
           Text(
-            'Votre token anonyme a été généré et sauvegardé sur cet appareil.',
+            context.l10n.regSuccessTokenSaved,
             style: AppText.bodyStrong(),
             textAlign: TextAlign.center,
           ),
           SizedBox(height: 12.h),
           Text(
-            'Il ne contient ni votre email, ni votre numéro de téléphone, '
-            'ni votre nom. Uniquement votre sexe, votre tranche d\'âge et '
-            'votre zone géographique (chiffrés). Vous pouvez maintenant '
-            'commencer votre évaluation cognitive.',
+            context.l10n.regSuccessTokenDetails,
             style: AppText.body(),
             textAlign: TextAlign.center,
           ),
@@ -42,15 +40,11 @@ class RegistrationSuccessPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('IMPORTANT',
+                Text(context.l10n.regImportantLabel,
                     style: AppText.monoLabel(color: AppColors.warning)),
                 SizedBox(height: 8.h),
                 Text(
-                  'Ne désinstallez pas l\'application sans avoir terminé '
-                  'votre évaluation : votre token est uniquement stocké '
-                  'sur cet appareil. Si vous le perdez, vous ne pourrez '
-                  'plus créer de nouveau compte avec le même email ou '
-                  'téléphone.',
+                  context.l10n.regSuccessWarning,
                   style: AppText.bodySmall(),
                 ),
               ],
@@ -58,7 +52,7 @@ class RegistrationSuccessPage extends StatelessWidget {
           ),
           SizedBox(height: 32.h),
           KeplerButton(
-            label: 'Commencer',
+            label: context.l10n.commonStart,
             expand: true,
             onPressed: () {
               Navigator.of(context)

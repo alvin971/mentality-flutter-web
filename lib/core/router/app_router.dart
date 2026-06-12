@@ -24,6 +24,7 @@ import '../../features/exercises_implementations/picture_span/presentation/pages
 import '../../features/exercises_implementations/coding/presentation/pages/coding_test_page.dart';
 import '../../features/exercises_implementations/symbol_search/presentation/pages/symbol_search_test_page.dart';
 import '../constants/app_constants.dart';
+import '../l10n/l10n_ext.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
 
 /// Mapping des clés admin (English slugs) vers les routes Flutter.
@@ -197,7 +198,7 @@ final GoRouter appRouter = GoRouter(
   errorBuilder: (context, state) => Scaffold(
     body: Center(
       child: Text(
-        'Page introuvable : ${state.uri.path}',
+        context.l10n.coreRouteNotFound(state.uri.path),
         style: Theme.of(context).textTheme.bodyLarge,
       ),
     ),

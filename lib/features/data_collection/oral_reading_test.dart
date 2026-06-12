@@ -8,6 +8,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:record/record.dart';
+import '../../core/l10n/l10n_ext.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/reading_texts.dart';
 import '../../services/data_collection_service.dart';
@@ -60,7 +61,7 @@ class _OralReadingTestState extends State<OralReadingTest> {
           children: [
             Icon(Icons.mic, color: AppColors.primary, size: 24.sp),
             SizedBox(width: 8.w),
-            const Text('Accès au microphone'),
+            Text(context.l10n.oralMicAccessTitle),
           ],
         ),
         content: Column(
@@ -68,18 +69,19 @@ class _OralReadingTestState extends State<OralReadingTest> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Cette activité enregistre votre voix pendant que vous lisez le texte à voix haute.',
+              context.l10n.oralReadingPermissionBody1,
               style: TextStyle(fontSize: 14.sp),
             ),
             SizedBox(height: 12.h),
             Text(
-              'Vos enregistrements seront anonymisés et pourront contribuer à l\'amélioration '
-              'de la reconnaissance vocale en français.',
-              style: TextStyle(fontSize: 13.sp, color: Theme.of(context).colorScheme.onSurfaceVariant),
+              context.l10n.oralReadingPermissionBody2,
+              style: TextStyle(
+                  fontSize: 13.sp,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant),
             ),
             SizedBox(height: 12.h),
             Text(
-              'Votre navigateur vous demandera ensuite d\'autoriser le microphone.',
+              context.l10n.oralBrowserWillAskMic,
               style: TextStyle(
                   fontSize: 13.sp,
                   fontStyle: FontStyle.italic,
@@ -90,12 +92,12 @@ class _OralReadingTestState extends State<OralReadingTest> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Annuler'),
+            child: Text(context.l10n.oralCancel),
           ),
           ElevatedButton.icon(
             onPressed: () => Navigator.pop(context, true),
             icon: const Icon(Icons.mic),
-            label: const Text('Autoriser le microphone'),
+            label: Text(context.l10n.oralAllowMicrophone),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
               foregroundColor: Colors.white,
@@ -120,7 +122,7 @@ class _OralReadingTestState extends State<OralReadingTest> {
     if (!mounted) return;
 
     if (!granted) {
-      _handleRecordingUnavailable('Microphone refusé ou indisponible.');
+      _handleRecordingUnavailable(context.l10n.oralMicDeniedOrUnavailable);
       return;
     }
 
@@ -130,8 +132,7 @@ class _OralReadingTestState extends State<OralReadingTest> {
       await _startRecording();
     } catch (_) {
       if (!mounted) return;
-      _handleRecordingUnavailable(
-          'Impossible de démarrer l\'enregistrement sur ce navigateur.');
+      _handleRecordingUnavailable(context.l10n.oralCannotStartRecording);
     }
   }
 
@@ -146,11 +147,11 @@ class _OralReadingTestState extends State<OralReadingTest> {
     });
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('$message Vous pouvez passer à l\'étape suivante.'),
+        content: Text(context.l10n.oralCanSkipToNextStep(message)),
         backgroundColor: AppColors.error,
         duration: const Duration(seconds: 5),
         action: SnackBarAction(
-          label: 'Passer',
+          label: context.l10n.oralSkip,
           textColor: Colors.white,
           onPressed: () => widget.onCompleted(widget.text.id, widget.sessionId),
         ),
@@ -273,9 +274,10 @@ class _OralReadingTestState extends State<OralReadingTest> {
           SizedBox(width: 10.w),
           Expanded(
             child: Text(
-              'Lisez le texte suivant à voix haute, clairement et à votre rythme naturel. '
-              'Appuyez sur "Démarrer" quand vous êtes prêt.',
-              style: TextStyle(fontSize: 14.sp, color: Theme.of(context).colorScheme.onSurface),
+              context.l10n.oralReadingInstructions,
+              style: TextStyle(
+                  fontSize: 14.sp,
+                  color: Theme.of(context).colorScheme.onSurface),
             ),
           ),
         ],
@@ -287,7 +289,8 @@ class _OralReadingTestState extends State<OralReadingTest> {
     return Expanded(
       child: Card(
         elevation: 2,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
         child: Padding(
           padding: EdgeInsets.all(20.w),
           child: Column(
@@ -343,7 +346,7 @@ class _OralReadingTestState extends State<OralReadingTest> {
               ),
               SizedBox(width: 8.w),
               Text(
-                'Enregistrement en cours',
+                context.l10n.oralRecordingInProgress,
                 style: TextStyle(
                     fontSize: 14.sp,
                     color: Colors.red,
@@ -364,8 +367,11 @@ class _OralReadingTestState extends State<OralReadingTest> {
           SizedBox(height: 4.h),
           if (_elapsedSeconds < _minDurationSeconds)
             Text(
-              'Continuez encore ${_minDurationSeconds - _elapsedSeconds}s...',
-              style: TextStyle(fontSize: 13.sp, color: Theme.of(context).colorScheme.outline),
+              context.l10n
+                  .oralKeepGoingSeconds(_minDurationSeconds - _elapsedSeconds),
+              style: TextStyle(
+                  fontSize: 13.sp,
+                  color: Theme.of(context).colorScheme.outline),
             ),
           SizedBox(height: 16.h),
         ],
@@ -378,7 +384,7 @@ class _OralReadingTestState extends State<OralReadingTest> {
               ElevatedButton.icon(
                 onPressed: _showPermissionDialog,
                 icon: const Icon(Icons.mic),
-                label: const Text('Démarrer la lecture'),
+                label: Text(context.l10n.oralStartReading),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   foregroundColor: Colors.white,
@@ -402,7 +408,9 @@ class _OralReadingTestState extends State<OralReadingTest> {
                             strokeWidth: 2, color: Colors.white),
                       )
                     : const Icon(Icons.stop_circle),
-                label: Text(_isSaving ? 'Sauvegarde...' : 'Terminer'),
+                label: Text(_isSaving
+                    ? context.l10n.oralSaving
+                    : context.l10n.oralFinish),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,
                   foregroundColor: Colors.white,
@@ -421,8 +429,10 @@ class _OralReadingTestState extends State<OralReadingTest> {
             onPressed: () =>
                 widget.onCompleted(widget.text.id, widget.sessionId),
             child: Text(
-              'Passer cette étape',
-              style: TextStyle(fontSize: 13.sp, color: Theme.of(context).colorScheme.onSurfaceVariant),
+              context.l10n.oralSkipThisStep,
+              style: TextStyle(
+                  fontSize: 13.sp,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant),
             ),
           ),
         ],

@@ -14,6 +14,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../core/l10n/l10n_ext.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/reading_texts.dart';
 import '../../services/session_manager.dart';
@@ -150,7 +151,7 @@ class _OralTestFlowState extends State<OralTestFlow> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Collecte audio'),
+          title: Text(context.l10n.oralFlowTitle),
           backgroundColor: AppColors.primary,
           foregroundColor: Colors.white,
           elevation: 0,
@@ -164,7 +165,8 @@ class _OralTestFlowState extends State<OralTestFlow> {
 
   Widget _buildBody() {
     return switch (_step) {
-      _FlowStep.checkingConsent => const Center(child: CircularProgressIndicator()),
+      _FlowStep.checkingConsent =>
+        const Center(child: CircularProgressIndicator()),
       _FlowStep.noConsent => _buildConsentScreen(),
       _FlowStep.reading => _buildActiveStep(),
       _FlowStep.pause => _buildPauseScreen(),
@@ -185,41 +187,33 @@ class _OralTestFlowState extends State<OralTestFlow> {
           Icon(Icons.record_voice_over, size: 64.sp, color: AppColors.primary),
           SizedBox(height: 24.h),
           Text(
-            'Test de Compréhension Orale',
+            context.l10n.oralConsentTitle,
             textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 20.sp, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 16.h),
           _ConsentSection(
             icon: Icons.mic_none,
-            title: 'Ce que nous enregistrons',
-            body:
-                'Votre voix pendant la lecture de 5 courts textes (environ 1 min chacun) '
-                'et votre résumé oral (environ 40 secondes par texte).',
+            title: context.l10n.oralConsentRecordTitle,
+            body: context.l10n.oralConsentRecordBody,
           ),
           SizedBox(height: 12.h),
           _ConsentSection(
             icon: Icons.lock_outline,
-            title: 'Anonymisation',
-            body:
-                'Aucun nom, aucune information personnelle n\'est associé aux '
-                'enregistrements. Un identifiant de session aléatoire est utilisé.',
+            title: context.l10n.oralConsentAnonTitle,
+            body: context.l10n.oralConsentAnonBody,
           ),
           SizedBox(height: 12.h),
           _ConsentSection(
             icon: Icons.science_outlined,
-            title: 'Utilisation',
-            body:
-                'Ces enregistrements pourront contribuer à l\'amélioration de la '
-                'reconnaissance vocale du français, notamment pour des modèles '
-                'comme Whisper ou Speechmatics.',
+            title: context.l10n.oralConsentUsageTitle,
+            body: context.l10n.oralConsentUsageBody,
           ),
           SizedBox(height: 32.h),
           ElevatedButton.icon(
             onPressed: _grantConsent,
             icon: const Icon(Icons.check_circle_outline),
-            label: const Text('J\'accepte et je commence'),
+            label: Text(context.l10n.oralAcceptAndStart),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
               foregroundColor: Colors.white,
@@ -232,14 +226,15 @@ class _OralTestFlowState extends State<OralTestFlow> {
           TextButton(
             onPressed: _declineConsent,
             child: Text(
-              'Refuser et revenir en arrière',
-              style: TextStyle(fontSize: 14.sp, color: Theme.of(context).colorScheme.onSurfaceVariant),
+              context.l10n.oralDeclineAndGoBack,
+              style: TextStyle(
+                  fontSize: 14.sp,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant),
             ),
           ),
           SizedBox(height: 12.h),
           Text(
-            'Vous pouvez retirer votre consentement à tout moment depuis les '
-            'paramètres de l\'application.',
+            context.l10n.oralWithdrawConsentNote,
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontSize: 11.sp,
@@ -289,12 +284,15 @@ class _OralTestFlowState extends State<OralTestFlow> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Texte ${_currentCycle + 1} sur 5',
-              style:
-                  TextStyle(fontSize: 14.sp, color: Theme.of(context).colorScheme.onSurfaceVariant),
+              context.l10n.oralTextProgress(_currentCycle + 1),
+              style: TextStyle(
+                  fontSize: 14.sp,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant),
             ),
             Text(
-              _step == _FlowStep.reading ? 'Lecture' : 'Résumé',
+              _step == _FlowStep.reading
+                  ? context.l10n.oralStepReading
+                  : context.l10n.oralStepSummary,
               style: TextStyle(
                   fontSize: 14.sp,
                   color: AppColors.primary,
@@ -329,21 +327,23 @@ class _OralTestFlowState extends State<OralTestFlow> {
                 size: 56.sp, color: AppColors.primary),
             SizedBox(height: 24.h),
             Text(
-              'Bien !',
-              style: TextStyle(
-                  fontSize: 24.sp, fontWeight: FontWeight.bold),
+              context.l10n.oralPauseWellDone,
+              style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 12.h),
             Text(
-              'Maintenant, résumez oralement ce texte.',
+              context.l10n.oralPauseNowSummarize,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16.sp, color: Theme.of(context).colorScheme.onSurfaceVariant),
+              style: TextStyle(
+                  fontSize: 16.sp,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant),
             ),
             SizedBox(height: 32.h),
             Text(
-              'Début dans...',
-              style:
-                  TextStyle(fontSize: 14.sp, color: Theme.of(context).colorScheme.outline),
+              context.l10n.oralPauseStartingIn,
+              style: TextStyle(
+                  fontSize: 14.sp,
+                  color: Theme.of(context).colorScheme.outline),
             ),
             SizedBox(height: 8.h),
             Text(
@@ -373,28 +373,27 @@ class _OralTestFlowState extends State<OralTestFlow> {
                 size: 72.sp, color: AppColors.success),
             SizedBox(height: 24.h),
             Text(
-              'Merci !',
-              style: TextStyle(
-                  fontSize: 26.sp, fontWeight: FontWeight.bold),
+              context.l10n.oralCompletedThanks,
+              style: TextStyle(fontSize: 26.sp, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 16.h),
             Text(
-              'Vous avez complété les 5 textes.\n'
-              'Vos enregistrements contribueront à l\'amélioration\n'
-              'de la reconnaissance vocale en français.',
+              context.l10n.oralCompletedBody,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 15.sp, color: Theme.of(context).colorScheme.onSurfaceVariant, height: 1.6),
+              style: TextStyle(
+                  fontSize: 15.sp,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  height: 1.6),
             ),
             SizedBox(height: 40.h),
             ElevatedButton.icon(
               onPressed: () => Navigator.of(context).pop(),
               icon: const Icon(Icons.home_outlined),
-              label: const Text('Retour à l\'accueil'),
+              label: Text(context.l10n.oralBackToHome),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.white,
-                padding:
-                    EdgeInsets.symmetric(horizontal: 32.w, vertical: 14.h),
+                padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 14.h),
                 textStyle: TextStyle(fontSize: 15.sp),
               ),
             ),
@@ -411,19 +410,17 @@ class _OralTestFlowState extends State<OralTestFlow> {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: const Text('Quitter ?'),
-        content: const Text(
-            'Un enregistrement est en cours. Si vous quittez maintenant, '
-            'il ne sera pas sauvegardé.'),
+        title: Text(context.l10n.oralExitDialogTitle),
+        content: Text(context.l10n.oralExitDialogBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Continuer'),
+            child: Text(context.l10n.oralContinue),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
             style: TextButton.styleFrom(foregroundColor: AppColors.error),
-            child: const Text('Quitter'),
+            child: Text(context.l10n.oralQuit),
           ),
         ],
       ),
@@ -471,7 +468,9 @@ class _ConsentSection extends StatelessWidget {
                 SizedBox(height: 4.h),
                 Text(body,
                     style: TextStyle(
-                        fontSize: 13.sp, color: Theme.of(context).colorScheme.onSurfaceVariant, height: 1.5)),
+                        fontSize: 13.sp,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        height: 1.5)),
               ],
             ),
           ),

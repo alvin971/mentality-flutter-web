@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mentality/core/l10n/gen/app_localizations.dart';
 
 import 'package:mentality/features/exercises_implementations/arithmetic/presentation/pages/arithmetic_test_page.dart';
 import 'package:mentality/features/exercises_implementations/coding/presentation/pages/coding_test_page.dart';
@@ -33,6 +35,17 @@ Widget _wrap(Widget page) {
     splitScreenMode: true,
     builder: (context, child) => MaterialApp(
       theme: ThemeData(brightness: Brightness.light, useMaterial3: true),
+      // Les pages utilisent context.l10n : on fournit les delegates et on
+      // épingle le français pour que les libellés testés ("Valider",
+      // "Commencer") restent ceux d'avant l'internationalisation.
+      locale: const Locale('fr'),
+      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       home: page,
     ),
   );

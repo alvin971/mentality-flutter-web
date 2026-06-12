@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../../core/l10n/l10n_ext.dart';
+import '../../../../../core/l10n/locale_notifier.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
 import '../../../../../core/widgets/test/kepler_test_button.dart';
@@ -49,7 +51,8 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
 
   void _generateItems() {
     // Génération des 30 items UNIQUES en une seule fois
-    final generator = VocabularyGenerator();
+    final generator =
+        VocabularyGenerator(languageCode: localeNotifier.languageCode);
     _generatedItems = generator.generateComplete30Items();
   }
 
@@ -111,16 +114,17 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
   }
 
   void _showFeedbackDialog(int itemScore, int timeSeconds, VocabularyItem item) {
+    final l10n = context.l10n;
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
         title: Text(
           itemScore == 2
-              ? 'Excellent !'
+              ? l10n.vocabFeedbackExcellent
               : itemScore == 1
-                  ? 'Correct'
-                  : 'Réponse incomplète',
+                  ? l10n.vocabFeedbackCorrect
+                  : l10n.vocabFeedbackIncomplete,
           style: TextStyle(
             color: itemScore == 2
                 ? AppColors.success
@@ -137,14 +141,14 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
             children: [
               Text(
                 itemScore == 2
-                    ? 'Définition complète et précise ! +2 points'
+                    ? l10n.vocabFeedbackTwoPoints
                     : itemScore == 1
-                        ? 'Définition partielle mais correcte. +1 point'
-                        : 'Réponse incorrecte ou trop vague. 0 point',
+                        ? l10n.vocabFeedbackOnePoint
+                        : l10n.vocabFeedbackZeroPoint,
               ),
               SizedBox(height: 12.h),
               Text(
-                'Mot : "${item.word}"',
+                l10n.vocabWordLabel(item.word),
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
@@ -152,13 +156,17 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
               ),
               SizedBox(height: 8.h),
               Text(
-                'Votre réponse : "${_answerController.text.isEmpty ? "(vide)" : _answerController.text}"',
+                l10n.vocabYourAnswerLabel(
+                  _answerController.text.isEmpty
+                      ? l10n.vocabEmptyAnswer
+                      : _answerController.text,
+                ),
                 style: const TextStyle(fontStyle: FontStyle.italic),
               ),
               SizedBox(height: 12.h),
               if (itemScore < 2) ...[
                 Text(
-                  'Exemples de réponses à 2 points :',
+                  l10n.vocabTwoPointExamples,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: AppColors.success,
@@ -172,7 +180,7 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
               if (itemScore == 0) ...[
                 SizedBox(height: 8.h),
                 Text(
-                  'Exemples de réponses à 1 point :',
+                  l10n.vocabOnePointExamples,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: AppColors.warning,
@@ -184,12 +192,12 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
                     )),
               ],
               SizedBox(height: 12.h),
-              Text('Temps : ${timeSeconds}s'),
-              Text('Score total : $score points'),
+              Text(l10n.vocabTimeSeconds(timeSeconds)),
+              Text(l10n.vocabTotalScore(score)),
               if (_consecutiveZeros >= 3) ...[
                 SizedBox(height: 8.h),
                 Text(
-                  '3 scores de 0 consécutifs - Test terminé (WAIS-IV)',
+                  l10n.vocabDiscontinued,
                   style: TextStyle(
                     color: AppColors.warning,
                     fontWeight: FontWeight.bold,
@@ -216,9 +224,10 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
               }
             },
             child: Text(
-              _consecutiveZeros >= 3 || currentLevel >= _generatedItems.length - 1
-                  ? 'Voir les résultats'
-                  : 'Continuer',
+              _consecutiveZeros >= 3 ||
+                      currentLevel >= _generatedItems.length - 1
+                  ? l10n.vocabViewResults
+                  : l10n.commonContinue,
             ),
           ),
         ],
@@ -227,6 +236,7 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
   }
 
   void _showFinalResults() {
+    final l10n = context.l10n;
     final maxScore = _generatedItems.length * 2; // 30 items × 2 points = 60 max
     final percentageScore = (score / maxScore * 100).round();
 
@@ -234,19 +244,20 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: const Text(
-          'Test de Vocabulaire - Résultats',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        title: Text(
+          l10n.vocabResultsTitle,
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Score brut : $score/$maxScore points'),
-              Text('Items complétés : ${currentLevel + 1}/30'),
-              Text('Pourcentage : $percentageScore%'),
-              Text('Temps total : ${totalTime}s'),
+              Text(l10n.vocabRawScore(score, maxScore)),
+              Text(l10n.vocabItemsCompleted(
+                  currentLevel + 1, _generatedItems.length)),
+              Text(l10n.vocabPercentage(percentageScore)),
+              Text(l10n.vocabTotalTime(totalTime)),
               SizedBox(height: 12.h),
               Text(
                 _getPerformanceLevel(score),
@@ -257,7 +268,7 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
               ),
               SizedBox(height: 8.h),
               Text(
-                'Test de connaissance lexicale et compréhension verbale',
+                l10n.vocabTestCaption,
                 style: TextStyle(
                   fontSize: 12.sp,
                   fontStyle: FontStyle.italic,
@@ -266,7 +277,7 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
               ),
               SizedBox(height: 16.h),
               Text(
-                'Répartition par fréquence :',
+                l10n.vocabFrequencyBreakdownTitle,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 14.sp,
@@ -283,7 +294,7 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
               Navigator.of(context).pop();
               Navigator.of(context).pop(score);
             },
-            child: const Text('Retour'),
+            child: Text(l10n.commonBack),
           ),
         ],
       ),
@@ -303,26 +314,42 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
     return frequencyScores.entries.map((entry) {
       final total = entry.value.fold(0, (sum, score) => sum + score);
       final max = entry.value.length * 2;
-      final frequencyName = _generatedItems
-          .firstWhere((item) => item.frequency == entry.key)
-          .frequencyName;
+      final frequencyName = _frequencyName(entry.key);
 
       return Padding(
         padding: EdgeInsets.only(bottom: 4.h),
         child: Text(
-          '$frequencyName: $total/$max points',
+          context.l10n.vocabFrequencyBreakdownRow(frequencyName, total, max),
           style: TextStyle(fontSize: 13.sp),
         ),
       );
     }).toList();
   }
 
+  /// Nom localisé du niveau de fréquence (FR/EN selon la locale courante).
+  String _frequencyName(WordFrequency frequency) {
+    final l10n = context.l10n;
+    switch (frequency) {
+      case WordFrequency.veryHigh:
+        return l10n.vocabFreqVeryHigh;
+      case WordFrequency.high:
+        return l10n.vocabFreqHigh;
+      case WordFrequency.medium:
+        return l10n.vocabFreqMedium;
+      case WordFrequency.low:
+        return l10n.vocabFreqLow;
+      case WordFrequency.veryLow:
+        return l10n.vocabFreqVeryLow;
+    }
+  }
+
   String _getPerformanceLevel(int score) {
-    if (score >= 50) return 'Performance exceptionnelle (θ > +2.0)';
-    if (score >= 40) return 'Performance supérieure (θ > +1.0)';
-    if (score >= 28) return 'Performance moyenne (θ ≈ 0)';
-    if (score >= 18) return 'Performance inférieure (θ < 0)';
-    return 'Performance faible (θ < -1.0)';
+    final l10n = context.l10n;
+    if (score >= 50) return l10n.vocabPerfExceptional;
+    if (score >= 40) return l10n.vocabPerfSuperior;
+    if (score >= 28) return l10n.vocabPerfAverage;
+    if (score >= 18) return l10n.vocabPerfBelowAverage;
+    return l10n.vocabPerfLow;
   }
 
   Color _getPerformanceColor(int score) {
@@ -335,11 +362,12 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final currentItem = _generatedItems[currentLevel];
 
     return KeplerTestScaffold(
-      testName: 'Vocabulaire',
-      eyebrow: 'COMPRÉHENSION VERBALE · VCI',
+      testName: l10n.vocabTestName,
+      eyebrow: l10n.vocabEyebrow,
       accentColor: AppColors.indexVCI,
       currentItem: currentLevel + 1,
       totalItems: _generatedItems.length,
@@ -348,12 +376,12 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
       trailing: [
         Padding(
           padding: EdgeInsets.only(left: 8.w),
-          child: Text('${_elapsedSeconds}s · $score pts',
+          child: Text(l10n.vocabTimerScore(_elapsedSeconds, score),
               style: AppText.monoLabel(color: AppColors.indexVCI)),
         ),
       ],
       bottomBar: KeplerTestButton.primary(
-        label: 'Valider',
+        label: l10n.commonValidate,
         accentColor: AppColors.indexVCI,
         onPressed:
             _answerController.text.trim().isNotEmpty ? _submitAnswer : null,
@@ -370,7 +398,7 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                   border: Border.all(color: AppColors.infoLight),
                 ),
                 child: Text(
-                  'Définissez le mot suivant',
+                  l10n.vocabInstruction,
                   style: TextStyle(
                     fontSize: 13.sp,
                     fontWeight: FontWeight.w500,
@@ -443,7 +471,7 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                         ),
                         SizedBox(width: 6.w),
                         Text(
-                          currentItem.frequencyName,
+                          _frequencyName(currentItem.frequency),
                           style: TextStyle(
                             fontSize: 13.sp,
                             fontWeight: FontWeight.bold,
@@ -460,7 +488,7 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
 
               // Champ de réponse
               Text(
-                'Votre définition :',
+                l10n.vocabYourDefinitionLabel,
                 style: TextStyle(
                   fontSize: 15.sp,
                   fontWeight: FontWeight.bold,
@@ -473,7 +501,7 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                 // Met à jour l'état du bouton Valider à chaque frappe.
                 onChanged: (_) => setState(() {}),
                 decoration: InputDecoration(
-                  hintText: 'Écrivez la définition du mot...',
+                  hintText: l10n.vocabDefinitionHint,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.r),
                     borderSide: BorderSide(color: AppColors.grey300, width: 2),
@@ -513,7 +541,7 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                         SizedBox(width: 8.w),
                         Expanded(
                           child: Text(
-                            'Conseils pour obtenir 2 points :',
+                            l10n.vocabTipsTitle,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 14.sp,
@@ -525,15 +553,15 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                     ),
                     SizedBox(height: 8.h),
                     Text(
-                      '• Donnez une définition complète et précise',
+                      l10n.vocabTipComplete,
                       style: TextStyle(fontSize: 13.sp),
                     ),
                     Text(
-                      '• Utilisez des synonymes exacts',
+                      l10n.vocabTipSynonyms,
                       style: TextStyle(fontSize: 13.sp),
                     ),
                     Text(
-                      '• Expliquez le sens avec contexte',
+                      l10n.vocabTipContext,
                       style: TextStyle(fontSize: 13.sp),
                     ),
                   ],

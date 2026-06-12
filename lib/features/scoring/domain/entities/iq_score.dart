@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../../core/l10n/l10n_ext.dart';
+
 /// Entité représentant un score de QI complet avec tous les indices
 ///
 /// Cette classe encapsule le QI Total et les 5 indices primaires,
@@ -160,30 +162,45 @@ class IQScore extends Equatable {
 
   /// Génère un résumé textuel du profil
   String generateProfileSummary() {
+    final l10n = appL10n;
     final buffer = StringBuffer();
 
-    buffer.writeln('QI Total: $fsiq (${fsiqClassification})');
-    buffer.writeln('Percentile: ${fsiqPercentile}e');
-    buffer.writeln('Intervalle de confiance 95%: ${fsiqCI.lowerBound} - ${fsiqCI.upperBound}');
+    buffer.writeln(l10n.scoringSummaryFullScaleIq(fsiq, fsiqClassification));
+    buffer.writeln(l10n.scoringSummaryPercentile(fsiqPercentile));
+    buffer.writeln(l10n.scoringSummaryConfidenceInterval(
+        fsiqCI.lowerBound, fsiqCI.upperBound));
 
-    if (vci != null) buffer.writeln('Compréhension Verbale: $vci');
-    if (vsi != null) buffer.writeln('Visuo-Spatial: $vsi');
-    if (fri != null) buffer.writeln('Raisonnement Fluide: $fri');
-    if (wmi != null) buffer.writeln('Mémoire de Travail: $wmi');
-    if (psi != null) buffer.writeln('Vitesse de Traitement: $psi');
+    if (vci != null) {
+      buffer.writeln('${l10n.scoringIndexVerbalComprehension}: $vci');
+    }
+    if (vsi != null) {
+      buffer.writeln('${l10n.scoringIndexVisualSpatial}: $vsi');
+    }
+    if (fri != null) {
+      buffer.writeln('${l10n.scoringIndexFluidReasoning}: $fri');
+    }
+    if (wmi != null) {
+      buffer.writeln('${l10n.scoringIndexWorkingMemory}: $wmi');
+    }
+    if (psi != null) {
+      buffer.writeln('${l10n.scoringIndexProcessingSpeed}: $psi');
+    }
 
     if (strengths.isNotEmpty) {
-      buffer.writeln('\nForces relatives: ${strengths.join(', ')}');
+      buffer.writeln(
+          '\n${l10n.scoringSummaryRelativeStrengths(strengths.join(', '))}');
     }
 
     if (weaknesses.isNotEmpty) {
-      buffer.writeln('Faiblesses relatives: ${weaknesses.join(', ')}');
+      buffer.writeln(
+          l10n.scoringSummaryRelativeWeaknesses(weaknesses.join(', ')));
     }
 
     if (isHomogeneousProfile) {
-      buffer.writeln('\nProfil cognitif homogène');
+      buffer.writeln('\n${l10n.scoringSummaryHomogeneousProfile}');
     } else {
-      buffer.writeln('\nProfil cognitif hétérogène (écart max: $maxIndexDiscrepancy points)');
+      buffer.writeln(
+          '\n${l10n.scoringSummaryHeterogeneousProfile(maxIndexDiscrepancy)}');
     }
 
     return buffer.toString();
@@ -342,13 +359,13 @@ class ScaledScore extends Equatable {
 
   /// Classification descriptive
   String get classification {
-    if (scaledScore >= 16) return 'Très supérieur';
-    if (scaledScore >= 13) return 'Supérieur';
-    if (scaledScore >= 11) return 'Moyen fort';
-    if (scaledScore >= 8) return 'Moyen';
-    if (scaledScore >= 6) return 'Moyen faible';
-    if (scaledScore >= 4) return 'Limite';
-    return 'Extrêmement bas';
+    if (scaledScore >= 16) return appL10n.scoringClassificationVerySuperior;
+    if (scaledScore >= 13) return appL10n.scoringClassificationSuperior;
+    if (scaledScore >= 11) return appL10n.scoringClassificationHighAverage;
+    if (scaledScore >= 8) return appL10n.scoringClassificationAverage;
+    if (scaledScore >= 6) return appL10n.scoringClassificationLowAverage;
+    if (scaledScore >= 4) return appL10n.scoringClassificationBorderline;
+    return appL10n.scoringClassificationExtremelyLow;
   }
 
   @override

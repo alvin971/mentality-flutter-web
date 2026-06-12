@@ -10,6 +10,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:record/record.dart';
+import '../../core/l10n/l10n_ext.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/reading_texts.dart';
 import '../../services/data_collection_service.dart';
@@ -62,7 +63,7 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
           children: [
             Icon(Icons.mic, color: AppColors.primary, size: 24.sp),
             SizedBox(width: 8.w),
-            const Text('Accès au microphone'),
+            Text(context.l10n.oralMicAccessTitle),
           ],
         ),
         content: Column(
@@ -70,26 +71,27 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Vous allez maintenant enregistrer votre résumé oral du texte.',
+              context.l10n.oralSummaryPermissionBody1,
               style: TextStyle(fontSize: 14.sp),
             ),
             SizedBox(height: 12.h),
             Text(
-              'Parlez naturellement, comme si vous expliquiez le texte à un ami. '
-              'Prenez entre 30 et 60 secondes.',
-              style: TextStyle(fontSize: 13.sp, color: Theme.of(context).colorScheme.onSurfaceVariant),
+              context.l10n.oralSummaryPermissionBody2,
+              style: TextStyle(
+                  fontSize: 13.sp,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant),
             ),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Annuler'),
+            child: Text(context.l10n.oralCancel),
           ),
           ElevatedButton.icon(
             onPressed: () => Navigator.pop(context, true),
             icon: const Icon(Icons.mic),
-            label: const Text('Démarrer le résumé'),
+            label: Text(context.l10n.oralStartSummary),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
               foregroundColor: Colors.white,
@@ -114,7 +116,7 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
     if (!mounted) return;
 
     if (!granted) {
-      _handleRecordingUnavailable('Microphone refusé ou indisponible.');
+      _handleRecordingUnavailable(context.l10n.oralMicDeniedOrUnavailable);
       return;
     }
 
@@ -122,8 +124,7 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
       await _startRecording();
     } catch (_) {
       if (!mounted) return;
-      _handleRecordingUnavailable(
-          'Impossible de démarrer l\'enregistrement sur ce navigateur.');
+      _handleRecordingUnavailable(context.l10n.oralCannotStartRecording);
     }
   }
 
@@ -138,11 +139,11 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
     });
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('$message Vous pouvez passer à l\'étape suivante.'),
+        content: Text(context.l10n.oralCanSkipToNextStep(message)),
         backgroundColor: AppColors.error,
         duration: const Duration(seconds: 5),
         action: SnackBarAction(
-          label: 'Passer',
+          label: context.l10n.oralSkip,
           textColor: Colors.white,
           onPressed: () =>
               widget.onCompleted(widget.originalText.id, widget.sessionId),
@@ -273,14 +274,15 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.chat_bubble_outline, color: Colors.teal.shade700, size: 22.sp),
+          Icon(Icons.chat_bubble_outline,
+              color: Colors.teal.shade700, size: 22.sp),
           SizedBox(width: 10.w),
           Expanded(
             child: Text.rich(
               TextSpan(
                 children: [
                   TextSpan(
-                    text: 'Vous venez de lire ce texte. ',
+                    text: context.l10n.oralSummaryInstructionLead,
                     style: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.bold,
@@ -288,9 +290,7 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
                     ),
                   ),
                   TextSpan(
-                    text: 'Résumez ce que vous avez compris avec vos propres mots. '
-                        'Prenez entre 30 et 60 secondes. '
-                        'Parlez naturellement, comme si vous l\'expliquiez à un ami.',
+                    text: context.l10n.oralSummaryInstructionBody,
                     style: TextStyle(
                       fontSize: 14.sp,
                       color: Theme.of(context).colorScheme.onSurface,
@@ -310,7 +310,8 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
       child: Card(
         elevation: 1,
         color: Theme.of(context).colorScheme.surfaceContainerHighest,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
         child: Padding(
           padding: EdgeInsets.all(20.w),
           child: Column(
@@ -319,10 +320,11 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
               Row(
                 children: [
                   Icon(Icons.article_outlined,
-                      size: 16.sp, color: Theme.of(context).colorScheme.outline),
+                      size: 16.sp,
+                      color: Theme.of(context).colorScheme.outline),
                   SizedBox(width: 6.w),
                   Text(
-                    'Texte de référence',
+                    context.l10n.oralReferenceText,
                     style: TextStyle(
                         fontSize: 12.sp,
                         color: Theme.of(context).colorScheme.outline,
@@ -338,7 +340,9 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
                     style: TextStyle(
                       fontSize: 15.sp,
                       height: 1.65,
-                      color: Theme.of(context).colorScheme.outline, // grisé = référence non interactive
+                      color: Theme.of(context)
+                          .colorScheme
+                          .outline, // grisé = référence non interactive
                     ),
                   ),
                 ),
@@ -371,7 +375,7 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
               ),
               SizedBox(width: 8.w),
               Text(
-                'Enregistrement en cours',
+                context.l10n.oralRecordingInProgress,
                 style: TextStyle(
                     fontSize: 14.sp,
                     color: Colors.red,
@@ -392,12 +396,14 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
           SizedBox(height: 4.h),
           if (_elapsedSeconds < _minDurationSeconds)
             Text(
-              'Continuez encore ${_minDurationSeconds - _elapsedSeconds}s...',
-              style: TextStyle(fontSize: 13.sp, color: Theme.of(context).colorScheme.outline),
+              context.l10n
+                  .oralKeepGoingSeconds(_minDurationSeconds - _elapsedSeconds),
+              style: TextStyle(
+                  fontSize: 13.sp,
+                  color: Theme.of(context).colorScheme.outline),
             ),
           SizedBox(height: 16.h),
         ],
-
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -405,7 +411,7 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
               ElevatedButton.icon(
                 onPressed: _showPermissionDialog,
                 icon: const Icon(Icons.mic),
-                label: const Text('Démarrer le résumé'),
+                label: Text(context.l10n.oralStartSummary),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.teal,
                   foregroundColor: Colors.white,
@@ -429,7 +435,9 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
                             strokeWidth: 2, color: Colors.white),
                       )
                     : const Icon(Icons.stop_circle),
-                label: Text(_isSaving ? 'Sauvegarde...' : 'Terminer le résumé'),
+                label: Text(_isSaving
+                    ? context.l10n.oralSaving
+                    : context.l10n.oralFinishSummary),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,
                   foregroundColor: Colors.white,
@@ -441,15 +449,16 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
             ],
           ],
         ),
-
         if (_permissionDenied) ...[
           SizedBox(height: 12.h),
           TextButton(
-            onPressed: () => widget.onCompleted(
-                widget.originalText.id, widget.sessionId),
+            onPressed: () =>
+                widget.onCompleted(widget.originalText.id, widget.sessionId),
             child: Text(
-              'Passer cette étape',
-              style: TextStyle(fontSize: 13.sp, color: Theme.of(context).colorScheme.onSurfaceVariant),
+              context.l10n.oralSkipThisStep,
+              style: TextStyle(
+                  fontSize: 13.sp,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant),
             ),
           ),
         ],

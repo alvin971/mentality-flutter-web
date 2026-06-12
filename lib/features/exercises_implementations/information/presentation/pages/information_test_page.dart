@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../../core/l10n/l10n_ext.dart';
+import '../../../../../core/l10n/locale_notifier.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
 import '../../../../../core/widgets/test/kepler_test_button.dart';
@@ -48,7 +50,8 @@ class _InformationTestPageState extends State<InformationTestPage> {
 
   void _generateItems() {
     // Génération des 28 items UNIQUES en une seule fois
-    final generator = InformationGenerator();
+    final generator =
+        InformationGenerator(languageCode: localeNotifier.languageCode);
     final all = generator.generateComplete28Items();
     final level = widget.filterLevel;
     if (level != null) {
@@ -127,7 +130,7 @@ class _InformationTestPageState extends State<InformationTestPage> {
       barrierDismissible: false,
       builder: (context) => AlertDialog(
         title: Text(
-          isCorrect ? 'Correct !' : 'Incorrect',
+          isCorrect ? context.l10n.infoCorrect : context.l10n.infoIncorrect,
           style: TextStyle(
             color: isCorrect ? AppColors.success : AppColors.error,
             fontWeight: FontWeight.bold,
@@ -140,18 +143,19 @@ class _InformationTestPageState extends State<InformationTestPage> {
             children: [
               Text(
                 isCorrect
-                    ? 'Bonne réponse ! +1 point'
-                    : 'Mauvaise réponse. 0 point',
+                    ? context.l10n.infoFeedbackRight
+                    : context.l10n.infoFeedbackWrong,
               ),
               SizedBox(height: 12.h),
               Text(
-                'Question : ${item.question}',
+                context.l10n.infoQuestionLabel(item.question),
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 8.h),
               if (!isCorrect) ...[
                 Text(
-                  'Bonne réponse : ${item.options[item.correctAnswer]}',
+                  context.l10n.infoCorrectAnswerLabel(
+                      item.options[item.correctAnswer]),
                   style: TextStyle(
                     color: AppColors.success,
                     fontWeight: FontWeight.bold,
@@ -159,11 +163,11 @@ class _InformationTestPageState extends State<InformationTestPage> {
                 ),
                 SizedBox(height: 8.h),
               ],
-              Text('Temps : ${timeSeconds}s'),
-              Text('Score : $score/${currentLevel + 1}'),
+              Text(context.l10n.infoTimeLabel(timeSeconds)),
+              Text(context.l10n.infoScoreLabel(score, currentLevel + 1)),
               SizedBox(height: 8.h),
               Text(
-                'Domaine : ${item.domainName}',
+                context.l10n.infoDomainLabel(_domainName(item.domain)),
                 style: TextStyle(
                   fontSize: 12.sp,
                   fontStyle: FontStyle.italic,
@@ -173,7 +177,7 @@ class _InformationTestPageState extends State<InformationTestPage> {
               if (_consecutiveFailures >= 3) ...[
                 SizedBox(height: 8.h),
                 Text(
-                  '3 échecs consécutifs - Test terminé (WAIS-IV)',
+                  context.l10n.infoDiscontinue3,
                   style: TextStyle(
                     color: AppColors.warning,
                     fontWeight: FontWeight.bold,
@@ -203,8 +207,8 @@ class _InformationTestPageState extends State<InformationTestPage> {
             child: Text(
               _consecutiveFailures >= 3 ||
                       currentLevel >= _generatedItems.length - 1
-                  ? 'Voir les résultats'
-                  : 'Continuer',
+                  ? context.l10n.infoSeeResults
+                  : context.l10n.commonContinue,
             ),
           ),
         ],
@@ -220,19 +224,20 @@ class _InformationTestPageState extends State<InformationTestPage> {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: const Text(
-          'Test d\'Information - Résultats',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        title: Text(
+          context.l10n.infoResultsTitle,
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Score brut : $score/$maxScore points'),
-              Text('Items complétés : ${currentLevel + 1}/28'),
-              Text('Pourcentage : $percentageScore%'),
-              Text('Temps total : ${totalTime}s'),
+              Text(context.l10n.infoRawScore(score, maxScore)),
+              Text(context.l10n
+                  .infoItemsCompleted(currentLevel + 1, _generatedItems.length)),
+              Text(context.l10n.infoPercentage(percentageScore)),
+              Text(context.l10n.infoTotalTime(totalTime)),
               SizedBox(height: 12.h),
               Text(
                 _getPerformanceLevel(score),
@@ -243,7 +248,7 @@ class _InformationTestPageState extends State<InformationTestPage> {
               ),
               SizedBox(height: 8.h),
               Text(
-                'Test de connaissances générales acquises',
+                context.l10n.infoTestSubtitle,
                 style: TextStyle(
                   fontSize: 12.sp,
                   fontStyle: FontStyle.italic,
@@ -252,7 +257,7 @@ class _InformationTestPageState extends State<InformationTestPage> {
               ),
               SizedBox(height: 16.h),
               Text(
-                'Répartition par domaine :',
+                context.l10n.infoDomainBreakdownTitle,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 14.sp,
@@ -269,7 +274,7 @@ class _InformationTestPageState extends State<InformationTestPage> {
               Navigator.of(context).pop();
               Navigator.of(context).pop(score);
             },
-            child: const Text('Retour'),
+            child: Text(context.l10n.commonBack),
           ),
         ],
       ),
@@ -289,26 +294,52 @@ class _InformationTestPageState extends State<InformationTestPage> {
     return domainScores.entries.map((entry) {
       final correctCount = entry.value.where((isCorrect) => isCorrect).length;
       final total = entry.value.length;
-      final domainName = _generatedItems
-          .firstWhere((item) => item.domain == entry.key)
-          .domainName;
+      final domainName = _domainName(entry.key);
 
       return Padding(
         padding: EdgeInsets.only(bottom: 4.h),
         child: Text(
-          '$domainName: $correctCount/$total',
+          context.l10n.infoDomainBreakdownRow(domainName, correctCount, total),
           style: TextStyle(fontSize: 13.sp),
         ),
       );
     }).toList();
   }
 
+  /// Nom localisé du domaine de connaissance.
+  String _domainName(KnowledgeDomain domain) {
+    switch (domain) {
+      case KnowledgeDomain.science:
+        return context.l10n.infoDomainScience;
+      case KnowledgeDomain.historyGeography:
+        return context.l10n.infoDomainHistoryGeography;
+      case KnowledgeDomain.generalCulture:
+        return context.l10n.infoDomainGeneralCulture;
+      case KnowledgeDomain.mathLogic:
+        return context.l10n.infoDomainMathLogic;
+      case KnowledgeDomain.artsLiterature:
+        return context.l10n.infoDomainArtsLiterature;
+    }
+  }
+
+  /// Nom localisé du niveau de difficulté.
+  String _difficultyName(DifficultyLevel difficulty) {
+    switch (difficulty) {
+      case DifficultyLevel.easy:
+        return context.l10n.infoDifficultyEasy;
+      case DifficultyLevel.medium:
+        return context.l10n.infoDifficultyMedium;
+      case DifficultyLevel.hard:
+        return context.l10n.infoDifficultyHard;
+    }
+  }
+
   String _getPerformanceLevel(int score) {
-    if (score >= 24) return 'Performance exceptionnelle (θ > +2.0)';
-    if (score >= 20) return 'Performance supérieure (θ > +1.0)';
-    if (score >= 14) return 'Performance moyenne (θ ≈ 0)';
-    if (score >= 8) return 'Performance inférieure (θ < 0)';
-    return 'Performance faible (θ < -1.0)';
+    if (score >= 24) return context.l10n.infoPerfExceptional;
+    if (score >= 20) return context.l10n.infoPerfSuperior;
+    if (score >= 14) return context.l10n.infoPerfAverage;
+    if (score >= 8) return context.l10n.infoPerfBelow;
+    return context.l10n.infoPerfLow;
   }
 
   Color _getPerformanceColor(int score) {
@@ -324,8 +355,8 @@ class _InformationTestPageState extends State<InformationTestPage> {
     final currentItem = _generatedItems[currentLevel];
 
     return KeplerTestScaffold(
-      testName: 'Information',
-      eyebrow: 'COMPRÉHENSION VERBALE · VCI',
+      testName: context.l10n.infoTestName,
+      eyebrow: context.l10n.infoEyebrow,
       accentColor: AppColors.indexVCI,
       currentItem: currentLevel + 1,
       totalItems: _generatedItems.length,
@@ -334,12 +365,14 @@ class _InformationTestPageState extends State<InformationTestPage> {
       trailing: [
         Padding(
           padding: EdgeInsets.only(left: 8.w),
-          child: Text('${_elapsedSeconds}s · $score/${currentLevel + 1}',
+          child: Text(
+              context.l10n.infoTrailingStatus(
+                  _elapsedSeconds, score, currentLevel + 1),
               style: AppText.monoLabel(color: AppColors.indexVCI)),
         ),
       ],
       bottomBar: KeplerTestButton.primary(
-        label: 'Valider',
+        label: context.l10n.commonValidate,
         accentColor: AppColors.indexVCI,
         onPressed: _selectedAnswer != null ? _submitAnswer : null,
       ),
@@ -359,7 +392,7 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                         borderRadius: BorderRadius.circular(20.r),
                       ),
                       child: Text(
-                        currentItem.domainName,
+                        _domainName(currentItem.domain),
                         style: TextStyle(
                           fontSize: 12.sp,
                           fontWeight: FontWeight.bold,
@@ -378,7 +411,7 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                       borderRadius: BorderRadius.circular(20.r),
                     ),
                     child: Text(
-                      currentItem.difficultyName,
+                      _difficultyName(currentItem.difficulty),
                       style: TextStyle(
                         fontSize: 12.sp,
                         fontWeight: FontWeight.bold,

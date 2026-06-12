@@ -1,16 +1,26 @@
+import 'arithmetic_items_en.dart';
+
 /// Générateur de 22 problèmes d'Arithmétique (WAIS-IV)
 /// Mesure la mémoire de travail, le raisonnement numérique et l'attention
 /// Résolution mentale sous contrainte de temps
 class ArithmeticGenerator {
   final List<ArithmeticItem> _preGeneratedItems = [];
 
-  ArithmeticGenerator() {
+  /// Langue de la banque d'items ('fr' par défaut, 'en' disponible).
+  final String languageCode;
+
+  ArithmeticGenerator({this.languageCode = 'fr'}) {
     _initializeAllItems();
   }
 
   /// Initialise TOUS les 22 items uniques
   void _initializeAllItems() {
     _preGeneratedItems.clear();
+
+    if (languageCode == 'en') {
+      _preGeneratedItems.addAll(buildArithmeticItemsEn());
+      return;
+    }
 
     // Items 1-4 : Facile (addition/soustraction simple)
     _preGeneratedItems.addAll(_createEasyItems());

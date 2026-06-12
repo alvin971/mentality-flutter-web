@@ -1,0 +1,3557 @@
+{
+  "@@locale": "fr",
+  "appTitle": "Mental E.T.",
+  "languageSwitcherTooltip": "Changer de langue",
+  "commonValidate": "Valider",
+  "commonNext": "Suivant",
+  "commonBack": "Retour",
+  "commonContinue": "Continuer",
+  "commonStart": "Commencer",
+  "commonSkip": "Passer",
+  "commonCancel": "Annuler",
+  "commonClose": "Fermer",
+  "commonRetry": "Réessayer",
+  "commonLoading": "Chargement...",
+  "commonError": "Une erreur est survenue",
+  "commonYes": "Oui",
+  "commonNo": "Non",
+  "commonOk": "OK",
+  "commonFinish": "Terminer",
+  "commonSeconds": "{count} s",
+  "@commonSeconds": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatEyebrow": "ASSISTANT IA",
+  "@chatEyebrow": {
+    "description": "App bar eyebrow on chat screen"
+  },
+  "chatNewConversation": "Nouvelle conversation",
+  "@chatNewConversation": {
+    "description": "Tooltip to clear the chat"
+  },
+  "chatAssistantLabel": "MENTAL E.T.",
+  "@chatAssistantLabel": {
+    "description": "Label above assistant messages (brand)"
+  },
+  "chatUserLabel": "VOUS",
+  "@chatUserLabel": {
+    "description": "Label above user messages"
+  },
+  "chatHeroTitle1": "Posez",
+  "@chatHeroTitle1": {
+    "description": "Empty-state hero, line 1"
+  },
+  "chatHeroTitle2": "vos questions.",
+  "@chatHeroTitle2": {
+    "description": "Empty-state hero, line 2 (italic)"
+  },
+  "chatEmptyIntro": "L'IA Mental E.T. vous aide à mieux comprendre votre profil cognitif. Discussions confidentielles, accompagnement non-directif.",
+  "chatThinking": "Réflexion…",
+  "@chatThinking": {
+    "description": "Loading bubble label"
+  },
+  "chatInputHint": "Écrire un message…",
+  "@chatInputHint": {
+    "description": "Chat input placeholder"
+  },
+  "chatTimeJustNow": "à l'instant",
+  "@chatTimeJustNow": {
+    "description": "Message timestamp, under 1 min"
+  },
+  "chatTimeMinutes": "{count} min",
+  "@chatTimeMinutes": {
+    "description": "Message timestamp in minutes",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatTimeHours": "{count}h",
+  "@chatTimeHours": {
+    "description": "Message timestamp in hours",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatErrorMessage": "Désolé, une erreur s'est produite. Veuillez réessayer.",
+  "@chatErrorMessage": {
+    "description": "Generic chat error bubble"
+  },
+  "chatErrorEmptyResponse": "Réponse vide du worker",
+  "@chatErrorEmptyResponse": {
+    "description": "Network error (not user-facing prose)"
+  },
+  "chatErrorAccessDenied": "Accès refusé par le worker (origine non autorisée).",
+  "@chatErrorAccessDenied": {
+    "description": "403 network error"
+  },
+  "chatErrorRateLimit": "Limite de requêtes atteinte. Réessayez dans quelques instants.",
+  "@chatErrorRateLimit": {
+    "description": "429 network error"
+  },
+  "coreSplashTitleLine1": "Évaluation",
+  "@coreSplashTitleLine1": {
+    "description": "Splash title, line 1"
+  },
+  "coreSplashTitleLine2": "cognitive",
+  "@coreSplashTitleLine2": {
+    "description": "Splash title, line 2 (italic)"
+  },
+  "homeHeroTitle": "Découvrez",
+  "@homeHeroTitle": {
+    "description": "Home hero, line 1"
+  },
+  "homeHeroTitleItalic": "votre profil cognitif.",
+  "@homeHeroTitleItalic": {
+    "description": "Home hero, line 2 (italic)"
+  },
+  "homeHeroBody": "Une évaluation scientifique adaptative, inspirée des échelles Wechsler. 12 sous-tests, 5 indices, un score global.",
+  "homeActionStartTitle": "Commencer une évaluation",
+  "@homeActionStartTitle": {
+    "description": "Home action card 1 title"
+  },
+  "homeActionStartSubtitle": "Durée : 30 – 45 minutes",
+  "@homeActionStartSubtitle": {
+    "description": "Home action card 1 subtitle"
+  },
+  "homeActionResultsTitle": "Mes résultats",
+  "@homeActionResultsTitle": {
+    "description": "Home action card 2 title"
+  },
+  "homeActionResultsSubtitle": "Historique des évaluations",
+  "@homeActionResultsSubtitle": {
+    "description": "Home action card 2 subtitle"
+  },
+  "homeActionChatTitle": "Parler avec Mental E.T.",
+  "@homeActionChatTitle": {
+    "description": "Home action card 3 title"
+  },
+  "homeActionChatSubtitle": "Assistant IA, questions psychologiques",
+  "@homeActionChatSubtitle": {
+    "description": "Home action card 3 subtitle"
+  },
+  "homeComingSoon": "BIENTÔT DISPONIBLE",
+  "@homeComingSoon": {
+    "description": "Badge on disabled action"
+  },
+  "homeAboutEyebrow": "À PROPOS",
+  "@homeAboutEyebrow": {
+    "description": "About section eyebrow"
+  },
+  "homeAboutSubtestsTitle": "12 sous-tests",
+  "@homeAboutSubtestsTitle": {
+    "description": "About tile 1 title"
+  },
+  "homeAboutSubtestsBody": "Évaluation complète des cinq indices cognitifs WAIS-IV.",
+  "homeAboutAdaptiveTitle": "IA adaptative",
+  "@homeAboutAdaptiveTitle": {
+    "description": "About tile 2 title"
+  },
+  "homeAboutAdaptiveBody": "Difficulté ajustée en temps réel via inférence IRT.",
+  "homeAboutValidationTitle": "Validation scientifique",
+  "@homeAboutValidationTitle": {
+    "description": "About tile 3 title"
+  },
+  "homeAboutValidationBody": "Items inspirés des échelles Wechsler (WPPSI / WISC / WAIS).",
+  "homeResumeEyebrow": "TEST EN COURS",
+  "@homeResumeEyebrow": {
+    "description": "Resume banner eyebrow"
+  },
+  "homeResumeTitle": "Reprendre votre évaluation",
+  "@homeResumeTitle": {
+    "description": "Resume banner title"
+  },
+  "homeResumeButton": "Reprendre",
+  "@homeResumeButton": {
+    "description": "Resume banner button"
+  },
+  "oralMicAccessTitle": "Accès au microphone",
+  "@oralMicAccessTitle": {
+    "description": "Titre du dialogue de permission micro (lecture et résumé)"
+  },
+  "oralReadingPermissionBody1": "Cette activité enregistre votre voix pendant que vous lisez le texte à voix haute.",
+  "@oralReadingPermissionBody1": {
+    "description": "Dialogue permission micro — test de lecture, paragraphe 1"
+  },
+  "oralReadingPermissionBody2": "Vos enregistrements seront anonymisés et pourront contribuer à l'amélioration de la reconnaissance vocale en français.",
+  "@oralReadingPermissionBody2": {
+    "description": "Dialogue permission micro — test de lecture, paragraphe 2. EN omet volontairement « en français » (les textes lus sont dans la langue de l'app)"
+  },
+  "oralBrowserWillAskMic": "Votre navigateur vous demandera ensuite d'autoriser le microphone.",
+  "@oralBrowserWillAskMic": {
+    "description": "Dialogue permission micro — note italique sur la demande navigateur"
+  },
+  "oralCancel": "Annuler",
+  "@oralCancel": {
+    "description": "Bouton annuler des dialogues de permission micro"
+  },
+  "oralAllowMicrophone": "Autoriser le microphone",
+  "@oralAllowMicrophone": {
+    "description": "Bouton de confirmation du dialogue de permission micro (lecture)"
+  },
+  "oralMicDeniedOrUnavailable": "Microphone refusé ou indisponible.",
+  "@oralMicDeniedOrUnavailable": {
+    "description": "Message d'erreur quand la permission micro est refusée"
+  },
+  "oralCannotStartRecording": "Impossible de démarrer l'enregistrement sur ce navigateur.",
+  "@oralCannotStartRecording": {
+    "description": "Message d'erreur quand le démarrage de l'enregistrement échoue"
+  },
+  "oralCanSkipToNextStep": "{message} Vous pouvez passer à l'étape suivante.",
+  "@oralCanSkipToNextStep": {
+    "description": "Contenu du SnackBar d'erreur micro ; message = erreur déjà localisée",
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "oralSkip": "Passer",
+  "@oralSkip": {
+    "description": "Action du SnackBar d'erreur micro pour passer l'étape"
+  },
+  "oralRecordingInProgress": "Enregistrement en cours",
+  "@oralRecordingInProgress": {
+    "description": "Indicateur clignotant rouge pendant l'enregistrement"
+  },
+  "oralKeepGoingSeconds": "Continuez encore {seconds}s...",
+  "@oralKeepGoingSeconds": {
+    "description": "Compte à rebours avant que le bouton Terminer ne s'active",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "oralSaving": "Sauvegarde...",
+  "@oralSaving": {
+    "description": "Libellé du bouton pendant la sauvegarde de l'audio"
+  },
+  "oralReadingInstructions": "Lisez le texte suivant à voix haute, clairement et à votre rythme naturel. Appuyez sur \"Démarrer\" quand vous êtes prêt.",
+  "@oralReadingInstructions": {
+    "description": "Bandeau d'instructions du test de lecture à voix haute"
+  },
+  "oralStartReading": "Démarrer la lecture",
+  "@oralStartReading": {
+    "description": "Bouton principal pour démarrer l'enregistrement de la lecture"
+  },
+  "oralFinish": "Terminer",
+  "@oralFinish": {
+    "description": "Bouton pour arrêter l'enregistrement de la lecture"
+  },
+  "oralSkipThisStep": "Passer cette étape",
+  "@oralSkipThisStep": {
+    "description": "Bouton texte affiché si le micro est refusé"
+  },
+  "oralSummaryPermissionBody1": "Vous allez maintenant enregistrer votre résumé oral du texte.",
+  "@oralSummaryPermissionBody1": {
+    "description": "Dialogue permission micro — test de résumé, paragraphe 1"
+  },
+  "oralSummaryPermissionBody2": "Parlez naturellement, comme si vous expliquiez le texte à un ami. Prenez entre 30 et 60 secondes.",
+  "@oralSummaryPermissionBody2": {
+    "description": "Dialogue permission micro — test de résumé, paragraphe 2"
+  },
+  "oralStartSummary": "Démarrer le résumé",
+  "@oralStartSummary": {
+    "description": "Bouton pour démarrer l'enregistrement du résumé (dialogue et écran)"
+  },
+  "oralSummaryInstructionLead": "Vous venez de lire ce texte. ",
+  "@oralSummaryInstructionLead": {
+    "description": "Début (en gras) du bandeau d'instructions du résumé — l'espace final est volontaire"
+  },
+  "oralSummaryInstructionBody": "Résumez ce que vous avez compris avec vos propres mots. Prenez entre 30 et 60 secondes. Parlez naturellement, comme si vous l'expliquiez à un ami.",
+  "@oralSummaryInstructionBody": {
+    "description": "Suite du bandeau d'instructions du résumé"
+  },
+  "oralReferenceText": "Texte de référence",
+  "@oralReferenceText": {
+    "description": "Étiquette de la carte grisée montrant le texte original pendant le résumé"
+  },
+  "oralFinishSummary": "Terminer le résumé",
+  "@oralFinishSummary": {
+    "description": "Bouton pour arrêter l'enregistrement du résumé"
+  },
+  "oralFlowTitle": "Collecte audio",
+  "@oralFlowTitle": {
+    "description": "Titre de l'AppBar du flux de test oral"
+  },
+  "oralConsentTitle": "Test de Compréhension Orale",
+  "@oralConsentTitle": {
+    "description": "Titre de l'écran de consentement"
+  },
+  "oralConsentRecordTitle": "Ce que nous enregistrons",
+  "@oralConsentRecordTitle": {
+    "description": "Écran de consentement — titre de la section enregistrements"
+  },
+  "oralConsentRecordBody": "Votre voix pendant la lecture de 5 courts textes (environ 1 min chacun) et votre résumé oral (environ 40 secondes par texte).",
+  "@oralConsentRecordBody": {
+    "description": "Écran de consentement — corps de la section enregistrements"
+  },
+  "oralConsentAnonTitle": "Anonymisation",
+  "@oralConsentAnonTitle": {
+    "description": "Écran de consentement — titre de la section anonymisation"
+  },
+  "oralConsentAnonBody": "Aucun nom, aucune information personnelle n'est associé aux enregistrements. Un identifiant de session aléatoire est utilisé.",
+  "@oralConsentAnonBody": {
+    "description": "Écran de consentement — corps de la section anonymisation"
+  },
+  "oralConsentUsageTitle": "Utilisation",
+  "@oralConsentUsageTitle": {
+    "description": "Écran de consentement — titre de la section utilisation"
+  },
+  "oralConsentUsageBody": "Ces enregistrements pourront contribuer à l'amélioration de la reconnaissance vocale du français, notamment pour des modèles comme Whisper ou Speechmatics.",
+  "@oralConsentUsageBody": {
+    "description": "Écran de consentement — corps de la section utilisation. EN omet volontairement « du français »"
+  },
+  "oralAcceptAndStart": "J'accepte et je commence",
+  "@oralAcceptAndStart": {
+    "description": "Bouton principal de l'écran de consentement"
+  },
+  "oralDeclineAndGoBack": "Refuser et revenir en arrière",
+  "@oralDeclineAndGoBack": {
+    "description": "Bouton texte de refus du consentement"
+  },
+  "oralWithdrawConsentNote": "Vous pouvez retirer votre consentement à tout moment depuis les paramètres de l'application.",
+  "@oralWithdrawConsentNote": {
+    "description": "Note légale en bas de l'écran de consentement"
+  },
+  "oralTextProgress": "Texte {current} sur 5",
+  "@oralTextProgress": {
+    "description": "En-tête de progression du flux (5 textes au total)",
+    "placeholders": {
+      "current": {
+        "type": "int"
+      }
+    }
+  },
+  "oralStepReading": "Lecture",
+  "@oralStepReading": {
+    "description": "Étiquette d'étape courante dans l'en-tête de progression"
+  },
+  "oralStepSummary": "Résumé",
+  "@oralStepSummary": {
+    "description": "Étiquette d'étape courante dans l'en-tête de progression"
+  },
+  "oralPauseWellDone": "Bien !",
+  "@oralPauseWellDone": {
+    "description": "Titre de l'écran de pause entre lecture et résumé"
+  },
+  "oralPauseNowSummarize": "Maintenant, résumez oralement ce texte.",
+  "@oralPauseNowSummarize": {
+    "description": "Consigne de l'écran de pause"
+  },
+  "oralPauseStartingIn": "Début dans...",
+  "@oralPauseStartingIn": {
+    "description": "Libellé au-dessus du compte à rebours de la pause"
+  },
+  "oralCompletedThanks": "Merci !",
+  "@oralCompletedThanks": {
+    "description": "Titre de l'écran de fin"
+  },
+  "oralCompletedBody": "Vous avez complété les 5 textes.\nVos enregistrements contribueront à l'amélioration\nde la reconnaissance vocale en français.",
+  "@oralCompletedBody": {
+    "description": "Corps de l'écran de fin (retours à la ligne volontaires). EN omet volontairement « en français »"
+  },
+  "oralBackToHome": "Retour à l'accueil",
+  "@oralBackToHome": {
+    "description": "Bouton de l'écran de fin"
+  },
+  "oralExitDialogTitle": "Quitter ?",
+  "@oralExitDialogTitle": {
+    "description": "Titre du dialogue de confirmation de sortie pendant un enregistrement"
+  },
+  "oralExitDialogBody": "Un enregistrement est en cours. Si vous quittez maintenant, il ne sera pas sauvegardé.",
+  "@oralExitDialogBody": {
+    "description": "Corps du dialogue de confirmation de sortie"
+  },
+  "oralContinue": "Continuer",
+  "@oralContinue": {
+    "description": "Bouton pour rester dans le test (dialogue de sortie)"
+  },
+  "oralQuit": "Quitter",
+  "@oralQuit": {
+    "description": "Bouton pour quitter le test (dialogue de sortie)"
+  },
+  "regStepEyebrow": "ÉTAPE {step} / 4",
+  "@regStepEyebrow": {
+    "description": "Eyebrow label showing the current registration step out of 4",
+    "placeholders": {
+      "step": {
+        "type": "int"
+      }
+    }
+  },
+  "regStepEyebrowSuccess": "ÉTAPE 4 / 4 · SUCCÈS",
+  "@regStepEyebrowSuccess": {
+    "description": "Eyebrow label on the registration success page"
+  },
+  "regEmailTitle": "Créer mon token",
+  "@regEmailTitle": {
+    "description": "Title of the email entry page (step 1 of registration)"
+  },
+  "regEmailHeading": "Votre email",
+  "@regEmailHeading": {
+    "description": "Heading next to the logo on the email entry page"
+  },
+  "regEmailIntro": "Nous vous envoyons un code de vérification à 6 chiffres. Votre email n'est pas lié à votre token et reste privé.",
+  "@regEmailIntro": {
+    "description": "Introductory text on the email entry page"
+  },
+  "regEmailFieldLabel": "Adresse email",
+  "@regEmailFieldLabel": {
+    "description": "Label of the email text field"
+  },
+  "regEmailInvalid": "Email invalide",
+  "@regEmailInvalid": {
+    "description": "Validation error when the email format is invalid"
+  },
+  "regSendingCode": "Envoi du code…",
+  "@regSendingCode": {
+    "description": "Button label while the email OTP is being sent"
+  },
+  "regReceiveCode": "Recevoir le code",
+  "@regReceiveCode": {
+    "description": "Button to request the email verification code"
+  },
+  "regEmailPrivacyNote": "Aucun nom, prénom ou adresse précise ne sera stocké. Seuls votre sexe, tranche d'âge et code postal sont encodés (chiffrés) dans votre token anonyme.",
+  "@regEmailPrivacyNote": {
+    "description": "Privacy note at the bottom of the email entry page"
+  },
+  "regEmailOtpTitle": "Vérifier mon email",
+  "@regEmailOtpTitle": {
+    "description": "Title of the email OTP verification page"
+  },
+  "regCodeSentTo": "Code envoyé à",
+  "@regCodeSentTo": {
+    "description": "Label above the email address the OTP was sent to"
+  },
+  "regVerifying": "Vérification…",
+  "@regVerifying": {
+    "description": "Button label while an OTP code is being verified"
+  },
+  "regResendCode": "Renvoyer le code",
+  "@regResendCode": {
+    "description": "Button to resend the email verification code"
+  },
+  "regPhoneTitle": "Votre téléphone",
+  "@regPhoneTitle": {
+    "description": "Title of the phone entry page (step 2 of registration)"
+  },
+  "regPhoneIntro": "Un code SMS à 6 chiffres sera envoyé pour vérifier votre numéro. Aucun lien entre votre numéro et votre token.",
+  "@regPhoneIntro": {
+    "description": "Introductory text on the phone entry page"
+  },
+  "regPhoneFieldHint": "Numéro",
+  "@regPhoneFieldHint": {
+    "description": "Hint of the phone number text field"
+  },
+  "regSendingSms": "Envoi du SMS…",
+  "@regSendingSms": {
+    "description": "Button label while the SMS OTP is being sent"
+  },
+  "regReceiveSms": "Recevoir le SMS",
+  "@regReceiveSms": {
+    "description": "Button to request the SMS verification code"
+  },
+  "regPhoneOtpTitle": "Vérifier mon téléphone",
+  "@regPhoneOtpTitle": {
+    "description": "Title of the phone OTP verification page"
+  },
+  "regSmsSentTo": "SMS envoyé au",
+  "@regSmsSentTo": {
+    "description": "Label above the phone number the SMS OTP was sent to"
+  },
+  "regResendSms": "Renvoyer le SMS",
+  "@regResendSms": {
+    "description": "Button to resend the SMS verification code"
+  },
+  "regDemoTitle": "Vos données démographiques",
+  "@regDemoTitle": {
+    "description": "Title of the demographics page (step 3 of registration)"
+  },
+  "regDemoIntro": "Ces informations seront chiffrées dans votre token. Aucune valeur exacte n'est stockée (ni âge précis, ni adresse précise).",
+  "@regDemoIntro": {
+    "description": "Introductory text on the demographics page"
+  },
+  "regSectionSex": "SEXE",
+  "@regSectionSex": {
+    "description": "Section label (uppercase) for the sex selection"
+  },
+  "regSectionAgeBucket": "TRANCHE D'ÂGE",
+  "@regSectionAgeBucket": {
+    "description": "Section label (uppercase) for the age range selection"
+  },
+  "regSectionCountryPostal": "PAYS ET CODE POSTAL",
+  "@regSectionCountryPostal": {
+    "description": "Section label (uppercase) for the country and postal code inputs"
+  },
+  "regPostalCodeHint": "Code postal",
+  "@regPostalCodeHint": {
+    "description": "Hint of the postal code text field"
+  },
+  "regGeneratingToken": "Génération du token…",
+  "@regGeneratingToken": {
+    "description": "Button label while the anonymous token is being generated"
+  },
+  "regGenerateMyToken": "Générer mon token",
+  "@regGenerateMyToken": {
+    "description": "Button to submit demographics and generate the anonymous token"
+  },
+  "regSuccessTitle": "Bienvenue dans Mental E.T.",
+  "@regSuccessTitle": {
+    "description": "Title of the registration success page"
+  },
+  "regSuccessTokenSaved": "Votre token anonyme a été généré et sauvegardé sur cet appareil.",
+  "@regSuccessTokenSaved": {
+    "description": "Confirmation message on the success page"
+  },
+  "regSuccessTokenDetails": "Il ne contient ni votre email, ni votre numéro de téléphone, ni votre nom. Uniquement votre sexe, votre tranche d'âge et votre zone géographique (chiffrés). Vous pouvez maintenant commencer votre évaluation cognitive.",
+  "@regSuccessTokenDetails": {
+    "description": "Details about the token content on the success page"
+  },
+  "regImportantLabel": "IMPORTANT",
+  "@regImportantLabel": {
+    "description": "Uppercase warning label on the success page"
+  },
+  "regSuccessWarning": "Ne désinstallez pas l'application sans avoir terminé votre évaluation : votre token est uniquement stocké sur cet appareil. Si vous le perdez, vous ne pourrez plus créer de nouveau compte avec le même email ou téléphone.",
+  "@regSuccessWarning": {
+    "description": "Warning about token being stored only on the device"
+  },
+  "regEmailAlreadyRegistered": "Cet email a déjà un compte. Si c'est le vôtre, vous avez déjà un token.",
+  "@regEmailAlreadyRegistered": {
+    "description": "Error when the email is already linked to an account"
+  },
+  "regEmailUnavailable": "Email indisponible.",
+  "@regEmailUnavailable": {
+    "description": "Generic error when the email cannot be used"
+  },
+  "regOtpIncorrectOrExpired": "Code incorrect ou expiré.",
+  "@regOtpIncorrectOrExpired": {
+    "description": "Error when an OTP code (email or SMS) is wrong or expired"
+  },
+  "regPhoneAlreadyRegistered": "Ce numéro a déjà un compte.",
+  "@regPhoneAlreadyRegistered": {
+    "description": "Error when the phone number is already linked to an account"
+  },
+  "regPhoneUnavailable": "Numéro indisponible.",
+  "@regPhoneUnavailable": {
+    "description": "Generic error when the phone number cannot be used"
+  },
+  "regEmailAlreadyHasToken": "Cet email a déjà un token.",
+  "@regEmailAlreadyHasToken": {
+    "description": "Error at token generation when the email already has a token"
+  },
+  "regPhoneAlreadyHasToken": "Ce numéro a déjà un token.",
+  "@regPhoneAlreadyHasToken": {
+    "description": "Error at token generation when the phone already has a token"
+  },
+  "regPostalNotFound": "Code postal introuvable. Vérifiez le pays et le code.",
+  "@regPostalNotFound": {
+    "description": "Error when the submitted postal code is unknown"
+  },
+  "regNoInternet": "Pas de connexion internet.",
+  "@regNoInternet": {
+    "description": "Error when the network is unreachable"
+  },
+  "regGenericRetryError": "Erreur — merci de réessayer.",
+  "@regGenericRetryError": {
+    "description": "Generic fallback error during registration"
+  },
+  "regSexMale": "Masculin",
+  "@regSexMale": {
+    "description": "Displayed label for the male sex option"
+  },
+  "regSexFemale": "Féminin",
+  "@regSexFemale": {
+    "description": "Displayed label for the female sex option"
+  },
+  "regSexUndisclosed": "Préfère ne pas dire",
+  "@regSexUndisclosed": {
+    "description": "Displayed label for the undisclosed sex option"
+  },
+  "regAge1825": "18 – 25 ans",
+  "@regAge1825": {
+    "description": "Displayed label for the 18-25 age range"
+  },
+  "regAge2635": "26 – 35 ans",
+  "@regAge2635": {
+    "description": "Displayed label for the 26-35 age range"
+  },
+  "regAge3645": "36 – 45 ans",
+  "@regAge3645": {
+    "description": "Displayed label for the 36-45 age range"
+  },
+  "regAge4655": "46 – 55 ans",
+  "@regAge4655": {
+    "description": "Displayed label for the 46-55 age range"
+  },
+  "regAge5665": "56 – 65 ans",
+  "@regAge5665": {
+    "description": "Displayed label for the 56-65 age range"
+  },
+  "regAge66plus": "66 ans et plus",
+  "@regAge66plus": {
+    "description": "Displayed label for the 66+ age range"
+  },
+  "scoringClassificationVerySuperior": "Très supérieur",
+  "@scoringClassificationVerySuperior": {
+    "description": "Classification Wechsler pour un score composite >= 130 ou note standard >= 16"
+  },
+  "scoringClassificationSuperior": "Supérieur",
+  "@scoringClassificationSuperior": {
+    "description": "Classification Wechsler pour un score composite 120-129 ou note standard 13-15"
+  },
+  "scoringClassificationHighAverage": "Moyen fort",
+  "@scoringClassificationHighAverage": {
+    "description": "Classification Wechsler pour un score composite 110-119 ou note standard 11-12"
+  },
+  "scoringClassificationAverage": "Moyen",
+  "@scoringClassificationAverage": {
+    "description": "Classification Wechsler pour un score composite 90-109 ou note standard 8-10"
+  },
+  "scoringClassificationLowAverage": "Moyen faible",
+  "@scoringClassificationLowAverage": {
+    "description": "Classification Wechsler pour un score composite 80-89 ou note standard 6-7"
+  },
+  "scoringClassificationBorderline": "Limite",
+  "@scoringClassificationBorderline": {
+    "description": "Classification Wechsler pour un score composite 70-79 ou note standard 4-5"
+  },
+  "scoringClassificationExtremelyLow": "Extrêmement bas",
+  "@scoringClassificationExtremelyLow": {
+    "description": "Classification Wechsler pour un score composite < 70 ou note standard < 4"
+  },
+  "scoringNotAvailable": "N/A",
+  "@scoringNotAvailable": {
+    "description": "Classification affichée quand la note standardisée d'un sous-test est absente"
+  },
+  "scoringSummaryFullScaleIq": "QI Total: {score} ({classification})",
+  "@scoringSummaryFullScaleIq": {
+    "description": "Ligne du résumé de profil : QI total avec sa classification",
+    "placeholders": {
+      "score": {
+        "type": "int"
+      },
+      "classification": {
+        "type": "String"
+      }
+    }
+  },
+  "scoringSummaryPercentile": "Percentile: {rank}e",
+  "@scoringSummaryPercentile": {
+    "description": "Ligne du résumé de profil : rang percentile du QI total (suffixe ordinal 'e' en FR)",
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      }
+    }
+  },
+  "scoringSummaryConfidenceInterval": "Intervalle de confiance 95%: {lower} - {upper}",
+  "@scoringSummaryConfidenceInterval": {
+    "description": "Ligne du résumé de profil : intervalle de confiance à 95% du QI total",
+    "placeholders": {
+      "lower": {
+        "type": "int"
+      },
+      "upper": {
+        "type": "int"
+      }
+    }
+  },
+  "scoringIndexVerbalComprehension": "Compréhension Verbale",
+  "@scoringIndexVerbalComprehension": {
+    "description": "Nom affiché de l'indice VCI (WAIS-IV)"
+  },
+  "scoringIndexVisualSpatial": "Visuo-Spatial",
+  "@scoringIndexVisualSpatial": {
+    "description": "Nom affiché de l'indice VSI (WAIS-IV)"
+  },
+  "scoringIndexFluidReasoning": "Raisonnement Fluide",
+  "@scoringIndexFluidReasoning": {
+    "description": "Nom affiché de l'indice FRI (WAIS-IV)"
+  },
+  "scoringIndexWorkingMemory": "Mémoire de Travail",
+  "@scoringIndexWorkingMemory": {
+    "description": "Nom affiché de l'indice WMI (WAIS-IV)"
+  },
+  "scoringIndexProcessingSpeed": "Vitesse de Traitement",
+  "@scoringIndexProcessingSpeed": {
+    "description": "Nom affiché de l'indice PSI (WAIS-IV)"
+  },
+  "scoringSummaryRelativeStrengths": "Forces relatives: {list}",
+  "@scoringSummaryRelativeStrengths": {
+    "description": "Ligne du résumé de profil : liste des indices significativement au-dessus du QI total",
+    "placeholders": {
+      "list": {
+        "type": "String"
+      }
+    }
+  },
+  "scoringSummaryRelativeWeaknesses": "Faiblesses relatives: {list}",
+  "@scoringSummaryRelativeWeaknesses": {
+    "description": "Ligne du résumé de profil : liste des indices significativement en dessous du QI total",
+    "placeholders": {
+      "list": {
+        "type": "String"
+      }
+    }
+  },
+  "scoringSummaryHomogeneousProfile": "Profil cognitif homogène",
+  "@scoringSummaryHomogeneousProfile": {
+    "description": "Conclusion du résumé de profil quand les indices sont homogènes (écarts < 1 écart-type)"
+  },
+  "scoringSummaryHeterogeneousProfile": "Profil cognitif hétérogène (écart max: {points} points)",
+  "@scoringSummaryHeterogeneousProfile": {
+    "description": "Conclusion du résumé de profil quand les indices sont hétérogènes, avec l'écart maximal en points",
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "assessIntroTitle": "Nouvelle évaluation",
+  "@assessIntroTitle": {
+    "description": "Titre de la page d'introduction au bilan cognitif"
+  },
+  "assessIntroEyebrow": "BILAN COGNITIF",
+  "@assessIntroEyebrow": {
+    "description": "Eyebrow (sur-titre) de la page d'introduction au bilan"
+  },
+  "assessIntroHero1": "Cinq indices,",
+  "@assessIntroHero1": {
+    "description": "Titre hero ligne 1 de la page d'intro évaluation"
+  },
+  "assessIntroHero2": "une mesure.",
+  "@assessIntroHero2": {
+    "description": "Titre hero ligne 2 (italique) de la page d'intro évaluation"
+  },
+  "assessIntroDescription": "Cette évaluation mesure vos capacités cognitives à travers six domaines issus du WAIS-IV. Un score global (FSIQ) en est la synthèse.",
+  "@assessIntroDescription": {
+    "description": "Paragraphe descriptif de l'intro évaluation"
+  },
+  "assessDomainsHeader": "DOMAINES MESURÉS",
+  "@assessDomainsHeader": {
+    "description": "En-tête de la carte listant les domaines mesurés"
+  },
+  "assessDomainVci": "Compréhension Verbale",
+  "@assessDomainVci": {
+    "description": "Libellé du domaine VCI"
+  },
+  "assessDomainVsi": "Raisonnement Visuo-Spatial",
+  "@assessDomainVsi": {
+    "description": "Libellé du domaine VSI"
+  },
+  "assessDomainFri": "Raisonnement Fluide",
+  "@assessDomainFri": {
+    "description": "Libellé du domaine FRI"
+  },
+  "assessDomainWmi": "Mémoire de Travail",
+  "@assessDomainWmi": {
+    "description": "Libellé du domaine WMI"
+  },
+  "assessDomainPsi": "Vitesse de Traitement",
+  "@assessDomainPsi": {
+    "description": "Libellé du domaine PSI"
+  },
+  "assessDomainLo": "Langage Oral",
+  "@assessDomainLo": {
+    "description": "Libellé du domaine Langage Oral (LO)"
+  },
+  "assessBeforeStartHeader": "AVANT DE COMMENCER",
+  "@assessBeforeStartHeader": {
+    "description": "En-tête de la carte de consignes avant le bilan"
+  },
+  "assessBeforeStartBody": "Durée estimée 30 à 45 minutes. Calme et concentration requis.",
+  "@assessBeforeStartBody": {
+    "description": "Texte de consigne avant le bilan"
+  },
+  "assessLaunchFullAssessment": "Lancer le bilan complet",
+  "@assessLaunchFullAssessment": {
+    "description": "Bouton pour lancer le bilan complet"
+  },
+  "assessOrIndividualSubtest": "OU SUBTEST INDIVIDUEL",
+  "@assessOrIndividualSubtest": {
+    "description": "Séparateur entre bilan complet et subtests individuels"
+  },
+  "assessSubtestCubes": "Cubes (Block Design)",
+  "@assessSubtestCubes": {
+    "description": "Libellé du subtest Cubes dans la liste des tests individuels"
+  },
+  "assessSubtestMatrices": "Matrices Progressives",
+  "@assessSubtestMatrices": {
+    "description": "Libellé du subtest Matrices dans la liste des tests individuels"
+  },
+  "assessSubtestFigureWeights": "Balances Quantitatives",
+  "@assessSubtestFigureWeights": {
+    "description": "Libellé du subtest Balances dans la liste des tests individuels"
+  },
+  "assessSubtestVisualPuzzles": "Puzzles Visuels",
+  "@assessSubtestVisualPuzzles": {
+    "description": "Libellé du subtest Puzzles Visuels"
+  },
+  "assessSubtestSimilarities": "Similitudes",
+  "@assessSubtestSimilarities": {
+    "description": "Libellé du subtest Similitudes"
+  },
+  "assessSubtestVocabulary": "Vocabulaire",
+  "@assessSubtestVocabulary": {
+    "description": "Libellé du subtest Vocabulaire"
+  },
+  "assessSubtestInformation": "Information",
+  "@assessSubtestInformation": {
+    "description": "Libellé du subtest Information"
+  },
+  "assessSubtestDigitSpan": "Mémoire des Chiffres",
+  "@assessSubtestDigitSpan": {
+    "description": "Libellé du subtest Mémoire des Chiffres"
+  },
+  "assessSubtestArithmetic": "Arithmétique",
+  "@assessSubtestArithmetic": {
+    "description": "Libellé du subtest Arithmétique"
+  },
+  "assessSubtestPictureSpan": "Mémoire des Images",
+  "@assessSubtestPictureSpan": {
+    "description": "Libellé du subtest Mémoire des Images"
+  },
+  "assessSubtestCoding": "Code",
+  "@assessSubtestCoding": {
+    "description": "Libellé du subtest Code"
+  },
+  "assessSubtestSymbolSearch": "Recherche de Symboles",
+  "@assessSubtestSymbolSearch": {
+    "description": "Libellé du subtest Recherche de Symboles"
+  },
+  "assessSubtestOralComprehension": "Compréhension Orale",
+  "@assessSubtestOralComprehension": {
+    "description": "Libellé du subtest Compréhension Orale"
+  },
+  "authLoginTitle": "Connexion",
+  "@authLoginTitle": {
+    "description": "Titre AppBar de la page de connexion (mode connexion)"
+  },
+  "authCreateAccount": "Créer un compte",
+  "@authCreateAccount": {
+    "description": "Titre/bouton mode création de compte"
+  },
+  "authSignIn": "Se connecter",
+  "@authSignIn": {
+    "description": "Bouton de soumission en mode connexion"
+  },
+  "authHeaderSubtitleRegister": "Créez un compte pour sauvegarder vos résultats",
+  "@authHeaderSubtitleRegister": {
+    "description": "Sous-titre d'en-tête en mode inscription"
+  },
+  "authHeaderSubtitleLogin": "Connectez-vous pour accéder à votre historique",
+  "@authHeaderSubtitleLogin": {
+    "description": "Sous-titre d'en-tête en mode connexion"
+  },
+  "authEmailLabel": "Adresse e-mail",
+  "@authEmailLabel": {
+    "description": "Libellé du champ e-mail"
+  },
+  "authPasswordLabel": "Mot de passe",
+  "@authPasswordLabel": {
+    "description": "Libellé du champ mot de passe"
+  },
+  "authFieldRequired": "Champ obligatoire",
+  "@authFieldRequired": {
+    "description": "Message de validation pour un champ vide"
+  },
+  "authEmailInvalid": "Adresse e-mail invalide",
+  "@authEmailInvalid": {
+    "description": "Message de validation pour e-mail invalide"
+  },
+  "authPasswordMinLength": "Minimum 8 caractères",
+  "@authPasswordMinLength": {
+    "description": "Message de validation pour mot de passe trop court"
+  },
+  "authOrDivider": "ou",
+  "@authOrDivider": {
+    "description": "Séparateur 'ou' entre connexion email et Google"
+  },
+  "authContinueWithGoogle": "Continuer avec Google",
+  "@authContinueWithGoogle": {
+    "description": "Bouton de connexion via Google"
+  },
+  "authToggleToLogin": "Déjà un compte ? Se connecter",
+  "@authToggleToLogin": {
+    "description": "Lien pour basculer vers le mode connexion"
+  },
+  "authToggleToRegister": "Pas encore de compte ? S'inscrire",
+  "@authToggleToRegister": {
+    "description": "Lien pour basculer vers le mode inscription"
+  },
+  "authFirebaseNotConfiguredFull": "Firebase n'est pas encore configuré. Suivez les instructions dans firebase_config.dart.",
+  "@authFirebaseNotConfiguredFull": {
+    "description": "Message d'erreur quand Firebase n'est pas configuré (formulaire e-mail)"
+  },
+  "authFirebaseNotConfigured": "Firebase n'est pas encore configuré.",
+  "@authFirebaseNotConfigured": {
+    "description": "Message d'erreur court quand Firebase n'est pas configuré (Google)"
+  },
+  "histTitle": "Mes résultats",
+  "@histTitle": {
+    "description": "Titre de la page d'historique des résultats"
+  },
+  "histEyebrow": "HISTORIQUE",
+  "@histEyebrow": {
+    "description": "Eyebrow de la page d'historique"
+  },
+  "histDeleteResultTitle": "Supprimer ce résultat ?",
+  "@histDeleteResultTitle": {
+    "description": "Titre du dialogue de confirmation de suppression"
+  },
+  "histDeleteResultBody": "Cette action est irréversible.",
+  "@histDeleteResultBody": {
+    "description": "Corps du dialogue de confirmation de suppression"
+  },
+  "histDelete": "Supprimer",
+  "@histDelete": {
+    "description": "Bouton de confirmation de suppression"
+  },
+  "histAgeYears": "{age} ans",
+  "@histAgeYears": {
+    "description": "Âge en années affiché dans l'historique",
+    "placeholders": {
+      "age": {
+        "type": "int"
+      }
+    }
+  },
+  "histScoreFsiq": "QI Total (FSIQ)",
+  "@histScoreFsiq": {
+    "description": "Libellé de la ligne du QI total dans le détail d'un résultat"
+  },
+  "histScoreVci": "VCI — Verbal",
+  "@histScoreVci": {
+    "description": "Libellé de la ligne VCI dans le détail d'un résultat"
+  },
+  "histScoreVsi": "VSI — Visuo-Spatial",
+  "@histScoreVsi": {
+    "description": "Libellé de la ligne VSI dans le détail d'un résultat"
+  },
+  "histScoreFri": "FRI — Raisonnement",
+  "@histScoreFri": {
+    "description": "Libellé de la ligne FRI dans le détail d'un résultat"
+  },
+  "histScoreWmi": "WMI — Mémoire",
+  "@histScoreWmi": {
+    "description": "Libellé de la ligne WMI dans le détail d'un résultat"
+  },
+  "histScorePsi": "PSI — Vitesse",
+  "@histScorePsi": {
+    "description": "Libellé de la ligne PSI dans le détail d'un résultat"
+  },
+  "histEmptyEyebrow": "AUCUN RÉSULTAT",
+  "@histEmptyEyebrow": {
+    "description": "Eyebrow de l'état vide de l'historique"
+  },
+  "histEmptyHero1": "Votre historique",
+  "@histEmptyHero1": {
+    "description": "Titre hero ligne 1 de l'état vide"
+  },
+  "histEmptyHero2": "vous attend.",
+  "@histEmptyHero2": {
+    "description": "Titre hero ligne 2 (italique) de l'état vide"
+  },
+  "histEmptyDescription": "Complétez votre première évaluation WAIS-IV pour voir vos résultats apparaître ici.",
+  "@histEmptyDescription": {
+    "description": "Texte descriptif de l'état vide de l'historique"
+  },
+  "histStartAssessment": "Commencer une évaluation",
+  "@histStartAssessment": {
+    "description": "Bouton pour démarrer une évaluation depuis l'état vide"
+  },
+  "ctIntroTitle": "Test complet",
+  "@ctIntroTitle": {
+    "description": "Titre de l'écran d'introduction au test complet"
+  },
+  "ctIntroHero1": "Douze subtests,",
+  "@ctIntroHero1": {
+    "description": "Titre hero ligne 1 de l'intro test complet"
+  },
+  "ctIntroHero2": "quatre indices.",
+  "@ctIntroHero2": {
+    "description": "Titre hero ligne 2 (italique) de l'intro test complet"
+  },
+  "ctIntroDescription": "Évaluation cognitive complète standardisée. Les sous-tests s'enchaînent automatiquement.",
+  "@ctIntroDescription": {
+    "description": "Paragraphe descriptif de l'intro test complet"
+  },
+  "ctIntroDurationEyebrow": "DURÉE",
+  "@ctIntroDurationEyebrow": {
+    "description": "Eyebrow de la carte durée"
+  },
+  "ctIntroDurationTitle": "60 à 90 minutes",
+  "@ctIntroDurationTitle": {
+    "description": "Titre de la carte durée"
+  },
+  "ctIntroDurationBody": "Prévoyez une plage de temps continue.",
+  "@ctIntroDurationBody": {
+    "description": "Corps de la carte durée"
+  },
+  "ctIntroContentEyebrow": "CONTENU",
+  "@ctIntroContentEyebrow": {
+    "description": "Eyebrow de la carte contenu"
+  },
+  "ctIntroContentTitle": "12 subtests inclus",
+  "@ctIntroContentTitle": {
+    "description": "Titre de la carte contenu"
+  },
+  "ctIntroContentBody": "Cubes · Similitudes · Mémoire · Matrices · Vocabulaire · Arithmétique · Symboles · Puzzles · Information · Code · Images · Balances.",
+  "@ctIntroContentBody": {
+    "description": "Liste des subtests dans la carte contenu"
+  },
+  "ctIntroImportantEyebrow": "IMPORTANT",
+  "@ctIntroImportantEyebrow": {
+    "description": "Eyebrow de la carte avertissement"
+  },
+  "ctIntroImportantTitle": "Enchaînement automatique",
+  "@ctIntroImportantTitle": {
+    "description": "Titre de la carte avertissement"
+  },
+  "ctIntroImportantBody": "Les tests se lanceront l'un après l'autre. Assurez-vous d'avoir suffisamment de temps.",
+  "@ctIntroImportantBody": {
+    "description": "Corps de la carte avertissement"
+  },
+  "ctPatientAgeHeader": "ÂGE DU PATIENT",
+  "@ctPatientAgeHeader": {
+    "description": "En-tête de la carte de saisie de l'âge"
+  },
+  "ctPatientAgeHint": "Requis pour les normes (16 à 90 ans)",
+  "@ctPatientAgeHint": {
+    "description": "Indication sous le champ d'âge"
+  },
+  "ctAgeSuffix": "ANS",
+  "@ctAgeSuffix": {
+    "description": "Suffixe du champ de saisie de l'âge"
+  },
+  "ctAgeRangeError": "Âge entre 16 et 90 ans",
+  "@ctAgeRangeError": {
+    "description": "Message d'erreur quand l'âge saisi est hors plage"
+  },
+  "ctLaunchFullTest": "Lancer le test complet",
+  "@ctLaunchFullTest": {
+    "description": "Bouton pour lancer le test complet"
+  },
+  "ctRunningTitle": "Test en cours",
+  "@ctRunningTitle": {
+    "description": "Titre de l'écran de progression du test complet"
+  },
+  "ctGlobalProgress": "PROGRESSION GLOBALE",
+  "@ctGlobalProgress": {
+    "description": "Libellé de la barre de progression globale"
+  },
+  "ctNextSubtest": "PROCHAIN SUBTEST",
+  "@ctNextSubtest": {
+    "description": "Libellé indiquant le prochain subtest"
+  },
+  "ctLaunching": "Lancement…",
+  "@ctLaunching": {
+    "description": "Texte affiché pendant le lancement du prochain subtest"
+  },
+  "ctComputingResultsTitle": "Calcul des résultats",
+  "@ctComputingResultsTitle": {
+    "description": "Titre de l'écran de calcul des résultats"
+  },
+  "ctComputingResultsEyebrow": "BILAN",
+  "@ctComputingResultsEyebrow": {
+    "description": "Eyebrow de l'écran de calcul des résultats"
+  },
+  "ctProcessing": "TRAITEMENT",
+  "@ctProcessing": {
+    "description": "Texte affiché pendant le traitement des résultats"
+  },
+  "ctTestNotFound": "Test non trouvé : {testName}",
+  "@ctTestNotFound": {
+    "description": "Message d'erreur quand un subtest n'est pas reconnu",
+    "placeholders": {
+      "testName": {
+        "type": "String"
+      }
+    }
+  },
+  "ctTestCubes": "Cubes",
+  "@ctTestCubes": {
+    "description": "Nom affiché du subtest Cubes"
+  },
+  "ctTestSimilarities": "Similitudes",
+  "@ctTestSimilarities": {
+    "description": "Nom affiché du subtest Similitudes"
+  },
+  "ctTestDigitSpan": "Mémoire des Chiffres",
+  "@ctTestDigitSpan": {
+    "description": "Nom affiché du subtest Mémoire des Chiffres"
+  },
+  "ctTestMatrices": "Matrices",
+  "@ctTestMatrices": {
+    "description": "Nom affiché du subtest Matrices"
+  },
+  "ctTestVocabulary": "Vocabulaire",
+  "@ctTestVocabulary": {
+    "description": "Nom affiché du subtest Vocabulaire"
+  },
+  "ctTestArithmetic": "Arithmétique",
+  "@ctTestArithmetic": {
+    "description": "Nom affiché du subtest Arithmétique"
+  },
+  "ctTestSymbolSearch": "Recherche de Symboles",
+  "@ctTestSymbolSearch": {
+    "description": "Nom affiché du subtest Recherche de Symboles"
+  },
+  "ctTestVisualPuzzles": "Puzzles Visuels",
+  "@ctTestVisualPuzzles": {
+    "description": "Nom affiché du subtest Puzzles Visuels"
+  },
+  "ctTestInformation": "Information",
+  "@ctTestInformation": {
+    "description": "Nom affiché du subtest Information"
+  },
+  "ctTestCoding": "Code",
+  "@ctTestCoding": {
+    "description": "Nom affiché du subtest Code"
+  },
+  "ctTestPictureSpan": "Mémoire des Images",
+  "@ctTestPictureSpan": {
+    "description": "Nom affiché du subtest Mémoire des Images"
+  },
+  "ctTestFigureWeights": "Balances",
+  "@ctTestFigureWeights": {
+    "description": "Nom affiché du subtest Balances"
+  },
+  "ctResultsTitle": "Résultats",
+  "@ctResultsTitle": {
+    "description": "Titre de la page de résultats du test complet"
+  },
+  "ctResultsEyebrow": "BILAN WAIS-IV",
+  "@ctResultsEyebrow": {
+    "description": "Eyebrow de la page de résultats"
+  },
+  "ctResultsHero1": "Bilan",
+  "@ctResultsHero1": {
+    "description": "Titre hero ligne 1 de la page de résultats"
+  },
+  "ctResultsHero2": "terminé.",
+  "@ctResultsHero2": {
+    "description": "Titre hero ligne 2 (italique) de la page de résultats"
+  },
+  "ctResultsSummary": "Synthèse de vos performances cognitives sur les douze subtests WAIS-IV.",
+  "@ctResultsSummary": {
+    "description": "Paragraphe de synthèse en tête de page de résultats"
+  },
+  "ctAgeYears": "{age} ans",
+  "@ctAgeYears": {
+    "description": "Âge en années affiché dans les résultats",
+    "placeholders": {
+      "age": {
+        "type": "int"
+      }
+    }
+  },
+  "ctMetaDate": "DATE",
+  "@ctMetaDate": {
+    "description": "Libellé méta : date de la session"
+  },
+  "ctMetaDuration": "DURÉE",
+  "@ctMetaDuration": {
+    "description": "Libellé méta : durée de la session"
+  },
+  "ctMetaSubtests": "SUBTESTS",
+  "@ctMetaSubtests": {
+    "description": "Libellé méta : nombre de subtests complétés"
+  },
+  "ctMetaAge": "ÂGE",
+  "@ctMetaAge": {
+    "description": "Libellé méta : âge du patient"
+  },
+  "ctFsiqCardLabel": "QI TOTAL · FSIQ",
+  "@ctFsiqCardLabel": {
+    "description": "Libellé de la carte du QI total"
+  },
+  "ctConfidenceInterval95": "IC 95% · {lower} – {upper}",
+  "@ctConfidenceInterval95": {
+    "description": "Intervalle de confiance à 95% du QI total",
+    "placeholders": {
+      "lower": {
+        "type": "int"
+      },
+      "upper": {
+        "type": "int"
+      }
+    }
+  },
+  "ctPercentileLabel": "Percentile · {rank}e",
+  "@ctPercentileLabel": {
+    "description": "Rang percentile du QI total (suffixe ordinal 'e' en FR)",
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      }
+    }
+  },
+  "ctIndexProfileHeader": "PROFIL DES INDICES",
+  "@ctIndexProfileHeader": {
+    "description": "En-tête de la carte profil des indices"
+  },
+  "ctIndexVci": "Compréhension Verbale",
+  "@ctIndexVci": {
+    "description": "Libellé complet de l'indice VCI"
+  },
+  "ctIndexVsi": "Visuo-Spatial",
+  "@ctIndexVsi": {
+    "description": "Libellé complet de l'indice VSI"
+  },
+  "ctIndexFri": "Raisonnement Fluide",
+  "@ctIndexFri": {
+    "description": "Libellé complet de l'indice FRI"
+  },
+  "ctIndexWmi": "Mémoire de Travail",
+  "@ctIndexWmi": {
+    "description": "Libellé complet de l'indice WMI"
+  },
+  "ctIndexPsi": "Vitesse de Traitement",
+  "@ctIndexPsi": {
+    "description": "Libellé complet de l'indice PSI"
+  },
+  "ctIndexCiPercentile": "IC {lower}–{upper} · {rank}e %ile",
+  "@ctIndexCiPercentile": {
+    "description": "Intervalle de confiance et percentile d'un indice",
+    "placeholders": {
+      "lower": {
+        "type": "int"
+      },
+      "upper": {
+        "type": "int"
+      },
+      "rank": {
+        "type": "int"
+      }
+    }
+  },
+  "ctIndexPercentile": "{rank}e %ile",
+  "@ctIndexPercentile": {
+    "description": "Percentile d'un indice (sans IC)",
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      }
+    }
+  },
+  "ctStandardizedScoresHeader": "NOTES STANDARDISÉES",
+  "@ctStandardizedScoresHeader": {
+    "description": "En-tête de la carte des notes standardisées par subtest"
+  },
+  "ctGroupVciVerbal": "VCI · Verbal",
+  "@ctGroupVciVerbal": {
+    "description": "Titre du groupe VCI dans le détail des subtests"
+  },
+  "ctGroupVsiVisuoSpatial": "VSI · Visuo-Spatial",
+  "@ctGroupVsiVisuoSpatial": {
+    "description": "Titre du groupe VSI dans le détail des subtests"
+  },
+  "ctGroupFriReasoning": "FRI · Raisonnement",
+  "@ctGroupFriReasoning": {
+    "description": "Titre du groupe FRI dans le détail des subtests"
+  },
+  "ctGroupWmiMemory": "WMI · Mémoire",
+  "@ctGroupWmiMemory": {
+    "description": "Titre du groupe WMI dans le détail des subtests"
+  },
+  "ctGroupPsiSpeed": "PSI · Vitesse",
+  "@ctGroupPsiSpeed": {
+    "description": "Titre du groupe PSI dans le détail des subtests"
+  },
+  "ctRawScore": "brut {raw}",
+  "@ctRawScore": {
+    "description": "Note brute d'un subtest dans le détail",
+    "placeholders": {
+      "raw": {
+        "type": "int"
+      }
+    }
+  },
+  "ctCognitiveProfileHeader": "PROFIL COGNITIF",
+  "@ctCognitiveProfileHeader": {
+    "description": "En-tête de la carte profil cognitif (forces/faiblesses)"
+  },
+  "ctProfileHomogeneous": "Profil homogène — les indices sont cohérents entre eux.",
+  "@ctProfileHomogeneous": {
+    "description": "Description d'un profil cognitif homogène"
+  },
+  "ctProfileHeterogeneous": "Profil hétérogène — disparités notables entre indices.",
+  "@ctProfileHeterogeneous": {
+    "description": "Description d'un profil cognitif hétérogène"
+  },
+  "ctMaxDiscrepancy": "Écart max · {points} pts",
+  "@ctMaxDiscrepancy": {
+    "description": "Écart maximal entre indices, en points",
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "ctRelativeStrengths": "Forces relatives",
+  "@ctRelativeStrengths": {
+    "description": "En-tête de la liste des forces relatives"
+  },
+  "ctVigilancePoints": "Points de vigilance",
+  "@ctVigilancePoints": {
+    "description": "En-tête de la liste des faiblesses relatives"
+  },
+  "ctIndicativeDisclaimer": "Résultats indicatifs. Pour une évaluation clinique officielle, consultez un neuropsychologue ou un psychologue qualifié.",
+  "@ctIndicativeDisclaimer": {
+    "description": "Avertissement sous le profil cognitif"
+  },
+  "ctRawScoresHeader": "SCORES BRUTS",
+  "@ctRawScoresHeader": {
+    "description": "En-tête de la carte de repli affichant les scores bruts (âge manquant)"
+  },
+  "ctMissingAgeHeader": "ÂGE MANQUANT",
+  "@ctMissingAgeHeader": {
+    "description": "En-tête de l'avis 'âge manquant'"
+  },
+  "ctMissingAgeBody": "Sans l'âge du patient, seuls les scores bruts sont affichés. Relancez le test en renseignant l'âge pour obtenir le QI standardisé, les percentiles et les intervalles de confiance.",
+  "@ctMissingAgeBody": {
+    "description": "Corps de l'avis 'âge manquant'"
+  },
+  "ctExportPdf": "Exporter en PDF",
+  "@ctExportPdf": {
+    "description": "Bouton d'export PDF des résultats"
+  },
+  "ctPdfError": "Erreur PDF : {error}",
+  "@ctPdfError": {
+    "description": "Message d'erreur affiché si la génération du PDF échoue",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "ctBackToHome": "Retour à l'accueil",
+  "@ctBackToHome": {
+    "description": "Bouton de retour à l'accueil depuis les résultats"
+  },
+  "ctPdfSubtitle": "Rapport d'évaluation cognitive WAIS-IV",
+  "@ctPdfSubtitle": {
+    "description": "Sous-titre du rapport PDF (sous le titre de marque)"
+  },
+  "ctPdfNotProvided": "Non renseigné",
+  "@ctPdfNotProvided": {
+    "description": "Valeur affichée dans le PDF quand l'âge n'est pas renseigné"
+  },
+  "ctPdfDurationMinSec": "{min} min {sec} sec",
+  "@ctPdfDurationMinSec": {
+    "description": "Durée de la session dans le PDF (minutes et secondes)",
+    "placeholders": {
+      "min": {
+        "type": "int"
+      },
+      "sec": {
+        "type": "int"
+      }
+    }
+  },
+  "ctPdfAge": "Âge",
+  "@ctPdfAge": {
+    "description": "Libellé 'Âge' dans le bandeau d'info du PDF"
+  },
+  "ctPdfDuration": "Durée",
+  "@ctPdfDuration": {
+    "description": "Libellé 'Durée' dans le bandeau d'info du PDF"
+  },
+  "ctPdfDate": "Date",
+  "@ctPdfDate": {
+    "description": "Libellé 'Date' dans le bandeau d'info du PDF"
+  },
+  "ctPdfFsiqLabel": "SCORE QI GLOBAL (FSIQ)",
+  "@ctPdfFsiqLabel": {
+    "description": "Libellé du bloc FSIQ dans le PDF"
+  },
+  "ctPdfConfidenceInterval95": "Intervalle de confiance 95%",
+  "@ctPdfConfidenceInterval95": {
+    "description": "Libellé de l'intervalle de confiance dans le PDF"
+  },
+  "ctPdfPercentile": "Percentile",
+  "@ctPdfPercentile": {
+    "description": "Libellé 'Percentile' dans le PDF"
+  },
+  "ctPercentileValue": "{rank}e",
+  "@ctPercentileValue": {
+    "description": "Valeur du percentile avec suffixe ordinal dans le PDF",
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      }
+    }
+  },
+  "ctPdfIndexProfileHeader": "PROFIL DES INDICES COGNITIFS",
+  "@ctPdfIndexProfileHeader": {
+    "description": "En-tête du tableau des indices dans le PDF"
+  },
+  "ctPdfIndexVci": "VCI — Compréhension Verbale",
+  "@ctPdfIndexVci": {
+    "description": "Libellé de l'indice VCI dans le tableau PDF"
+  },
+  "ctPdfIndexVsi": "VSI — Visuo-Spatial",
+  "@ctPdfIndexVsi": {
+    "description": "Libellé de l'indice VSI dans le tableau PDF"
+  },
+  "ctPdfIndexFri": "FRI — Raisonnement Fluide",
+  "@ctPdfIndexFri": {
+    "description": "Libellé de l'indice FRI dans le tableau PDF"
+  },
+  "ctPdfIndexWmi": "WMI — Mémoire de Travail",
+  "@ctPdfIndexWmi": {
+    "description": "Libellé de l'indice WMI dans le tableau PDF"
+  },
+  "ctPdfIndexPsi": "PSI — Vitesse de Traitement",
+  "@ctPdfIndexPsi": {
+    "description": "Libellé de l'indice PSI dans le tableau PDF"
+  },
+  "ctPdfColIndex": "Indice",
+  "@ctPdfColIndex": {
+    "description": "En-tête de colonne 'Indice' dans le tableau PDF des indices"
+  },
+  "ctPdfColScore": "Score",
+  "@ctPdfColScore": {
+    "description": "En-tête de colonne 'Score' dans le tableau PDF des indices"
+  },
+  "ctPdfColClassification": "Classification",
+  "@ctPdfColClassification": {
+    "description": "En-tête de colonne 'Classification' dans le tableau PDF des indices"
+  },
+  "ctPdfRawScoresHeader": "SCORES BRUTS DES SUBTESTS",
+  "@ctPdfRawScoresHeader": {
+    "description": "En-tête du tableau des scores bruts par subtest dans le PDF"
+  },
+  "ctPdfColSubtest": "Subtest",
+  "@ctPdfColSubtest": {
+    "description": "En-tête de colonne 'Subtest' dans le tableau PDF des scores bruts"
+  },
+  "ctPdfColRawScore": "Score brut",
+  "@ctPdfColRawScore": {
+    "description": "En-tête de colonne 'Score brut' dans le tableau PDF des scores bruts"
+  },
+  "ctPdfDisclaimer": "AVERTISSEMENT : Ce rapport est généré par une application d'aide à l'évaluation et ne constitue pas un diagnostic clinique officiel. Il doit être interprété par un professionnel de santé qualifié. Ne pas utiliser à des fins médicales ou légales sans évaluation professionnelle complémentaire.",
+  "@ctPdfDisclaimer": {
+    "description": "Avertissement en bas du rapport PDF"
+  },
+  "coreRouteNotFound": "Page introuvable : {path}",
+  "@coreRouteNotFound": {
+    "description": "Message affiché par le routeur quand une route demandée n'existe pas. {path} est le chemin de l'URL.",
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "infoTestName": "Information",
+  "@infoTestName": {
+    "description": "Information — nom du test affiché dans le scaffold"
+  },
+  "infoEyebrow": "COMPRÉHENSION VERBALE · VCI",
+  "@infoEyebrow": {
+    "description": "Information — sur-titre (indice mesuré)"
+  },
+  "infoTrailingStatus": "{seconds}s · {score}/{attempted}",
+  "@infoTrailingStatus": {
+    "description": "Information — statut en AppBar : temps écoulé · score/items tentés",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      },
+      "score": {
+        "type": "int"
+      },
+      "attempted": {
+        "type": "int"
+      }
+    }
+  },
+  "infoCorrect": "Correct !",
+  "@infoCorrect": {
+    "description": "Information — titre du dialogue de feedback quand la réponse est juste"
+  },
+  "infoIncorrect": "Incorrect",
+  "@infoIncorrect": {
+    "description": "Information — titre du dialogue de feedback quand la réponse est fausse"
+  },
+  "infoFeedbackRight": "Bonne réponse ! +1 point",
+  "@infoFeedbackRight": {
+    "description": "Information — corps du feedback quand la réponse est juste"
+  },
+  "infoFeedbackWrong": "Mauvaise réponse. 0 point",
+  "@infoFeedbackWrong": {
+    "description": "Information — corps du feedback quand la réponse est fausse"
+  },
+  "infoQuestionLabel": "Question : {question}",
+  "@infoQuestionLabel": {
+    "description": "Information — rappel de l'énoncé dans le feedback",
+    "placeholders": {
+      "question": {
+        "type": "String"
+      }
+    }
+  },
+  "infoCorrectAnswerLabel": "Bonne réponse : {answer}",
+  "@infoCorrectAnswerLabel": {
+    "description": "Information — affiche la bonne réponse après un échec",
+    "placeholders": {
+      "answer": {
+        "type": "String"
+      }
+    }
+  },
+  "infoTimeLabel": "Temps : {seconds}s",
+  "@infoTimeLabel": {
+    "description": "Information — temps passé sur l'item",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "infoScoreLabel": "Score : {score}/{attempted}",
+  "@infoScoreLabel": {
+    "description": "Information — score courant",
+    "placeholders": {
+      "score": {
+        "type": "int"
+      },
+      "attempted": {
+        "type": "int"
+      }
+    }
+  },
+  "infoDomainLabel": "Domaine : {domain}",
+  "@infoDomainLabel": {
+    "description": "Information — domaine de connaissance de l'item",
+    "placeholders": {
+      "domain": {
+        "type": "String"
+      }
+    }
+  },
+  "infoDiscontinue3": "3 échecs consécutifs - Test terminé (WAIS-IV)",
+  "@infoDiscontinue3": {
+    "description": "Information — message de règle de discontinuation après 3 échecs"
+  },
+  "infoSeeResults": "Voir les résultats",
+  "@infoSeeResults": {
+    "description": "Information — bouton qui ouvre l'écran de résultats final"
+  },
+  "infoResultsTitle": "Test d'Information - Résultats",
+  "@infoResultsTitle": {
+    "description": "Information — titre du dialogue de résultats final"
+  },
+  "infoRawScore": "Score brut : {score}/{max} points",
+  "@infoRawScore": {
+    "description": "Information — score brut final",
+    "placeholders": {
+      "score": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "infoItemsCompleted": "Items complétés : {completed}/{total}",
+  "@infoItemsCompleted": {
+    "description": "Information — nombre d'items complétés",
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "infoPercentage": "Pourcentage : {percent}%",
+  "@infoPercentage": {
+    "description": "Information — pourcentage de réussite",
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "infoTotalTime": "Temps total : {seconds}s",
+  "@infoTotalTime": {
+    "description": "Information — temps total du test",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "infoTestSubtitle": "Test de connaissances générales acquises",
+  "@infoTestSubtitle": {
+    "description": "Information — sous-titre descriptif sous le niveau de performance"
+  },
+  "infoDomainBreakdownTitle": "Répartition par domaine :",
+  "@infoDomainBreakdownTitle": {
+    "description": "Information — titre de la section répartition par domaine"
+  },
+  "infoDomainBreakdownRow": "{domain}: {correct}/{total}",
+  "@infoDomainBreakdownRow": {
+    "description": "Information — ligne de répartition par domaine",
+    "placeholders": {
+      "domain": {
+        "type": "String"
+      },
+      "correct": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "infoPerfExceptional": "Performance exceptionnelle (θ > +2.0)",
+  "@infoPerfExceptional": {
+    "description": "Information — niveau de performance exceptionnel"
+  },
+  "infoPerfSuperior": "Performance supérieure (θ > +1.0)",
+  "@infoPerfSuperior": {
+    "description": "Information — niveau de performance supérieur"
+  },
+  "infoPerfAverage": "Performance moyenne (θ ≈ 0)",
+  "@infoPerfAverage": {
+    "description": "Information — niveau de performance moyen"
+  },
+  "infoPerfBelow": "Performance inférieure (θ < 0)",
+  "@infoPerfBelow": {
+    "description": "Information — niveau de performance inférieur"
+  },
+  "infoPerfLow": "Performance faible (θ < -1.0)",
+  "@infoPerfLow": {
+    "description": "Information — niveau de performance faible"
+  },
+  "infoDomainScience": "Sciences naturelles",
+  "@infoDomainScience": {
+    "description": "Information — domaine : sciences naturelles"
+  },
+  "infoDomainHistoryGeography": "Histoire/Géographie",
+  "@infoDomainHistoryGeography": {
+    "description": "Information — domaine : histoire/géographie"
+  },
+  "infoDomainGeneralCulture": "Culture générale",
+  "@infoDomainGeneralCulture": {
+    "description": "Information — domaine : culture générale"
+  },
+  "infoDomainMathLogic": "Mathématiques/Logique",
+  "@infoDomainMathLogic": {
+    "description": "Information — domaine : mathématiques/logique"
+  },
+  "infoDomainArtsLiterature": "Arts/Littérature",
+  "@infoDomainArtsLiterature": {
+    "description": "Information — domaine : arts/littérature"
+  },
+  "infoDifficultyEasy": "Facile",
+  "@infoDifficultyEasy": {
+    "description": "Information — difficulté : facile"
+  },
+  "infoDifficultyMedium": "Moyen",
+  "@infoDifficultyMedium": {
+    "description": "Information — difficulté : moyen"
+  },
+  "infoDifficultyHard": "Difficile",
+  "@infoDifficultyHard": {
+    "description": "Information — difficulté : difficile"
+  },
+  "arithTestName": "Arithmétique",
+  "@arithTestName": {
+    "description": "Arithmétique — nom du test affiché dans le scaffold/AppBar"
+  },
+  "arithEyebrow": "MÉMOIRE DE TRAVAIL · WMI",
+  "@arithEyebrow": {
+    "description": "Arithmétique — sur-titre (indice mesuré)"
+  },
+  "arithStartTest": "Commencer le test",
+  "@arithStartTest": {
+    "description": "Arithmétique — bouton de démarrage du test"
+  },
+  "arithIntroTitle": "Test d'Arithmétique",
+  "@arithIntroTitle": {
+    "description": "Arithmétique — titre de l'écran d'introduction"
+  },
+  "arithIntroDescription": "Ce test mesure votre mémoire de travail et votre raisonnement numérique.",
+  "@arithIntroDescription": {
+    "description": "Arithmétique — description sur l'écran d'introduction"
+  },
+  "arithInfoMentalTitle": "Calcul mental uniquement",
+  "@arithInfoMentalTitle": {
+    "description": "Arithmétique — carte info : titre calcul mental"
+  },
+  "arithInfoMentalSubtitle": "Résolvez les problèmes sans papier ni calculatrice",
+  "@arithInfoMentalSubtitle": {
+    "description": "Arithmétique — carte info : sous-titre calcul mental"
+  },
+  "arithInfoTimeTitle": "Temps limité",
+  "@arithInfoTimeTitle": {
+    "description": "Arithmétique — carte info : titre temps limité"
+  },
+  "arithInfoTimeSubtitle": "Chaque problème a une limite de temps (15-60 secondes)",
+  "@arithInfoTimeSubtitle": {
+    "description": "Arithmétique — carte info : sous-titre temps limité"
+  },
+  "arithInfoBonusTitle": "Bonus de rapidité",
+  "@arithInfoBonusTitle": {
+    "description": "Arithmétique — carte info : titre bonus rapidité"
+  },
+  "arithInfoBonusSubtitle": "Réponses rapides sur certains items = points bonus",
+  "@arithInfoBonusSubtitle": {
+    "description": "Arithmétique — carte info : sous-titre bonus rapidité"
+  },
+  "arithInfoRepeatTitle": "Répétition possible",
+  "@arithInfoRepeatTitle": {
+    "description": "Arithmétique — carte info : titre répétition"
+  },
+  "arithInfoRepeatSubtitle": "Vous pouvez demander de répéter UNE fois (chrono continue)",
+  "@arithInfoRepeatSubtitle": {
+    "description": "Arithmétique — carte info : sous-titre répétition"
+  },
+  "arithIntroDiscontinueNote": "22 problèmes au total. Le test s'arrête après 3 échecs consécutifs.",
+  "@arithIntroDiscontinueNote": {
+    "description": "Arithmétique — note d'information sur la discontinuation"
+  },
+  "arithProblemCounter": "Problème {current}/{total}",
+  "@arithProblemCounter": {
+    "description": "Arithmétique — compteur de problème en AppBar",
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "arithRepeatTitle": "Répétition du problème",
+  "@arithRepeatTitle": {
+    "description": "Arithmétique — titre du dialogue de répétition"
+  },
+  "arithUnderstood": "Compris",
+  "@arithUnderstood": {
+    "description": "Arithmétique — bouton de fermeture du dialogue de répétition"
+  },
+  "arithTimeUp": "Temps écoulé !",
+  "@arithTimeUp": {
+    "description": "Arithmétique — titre du dialogue de temps écoulé"
+  },
+  "arithCorrectAnswerLabel": "Réponse correcte : {answer}",
+  "@arithCorrectAnswerLabel": {
+    "description": "Arithmétique — affiche la bonne réponse",
+    "placeholders": {
+      "answer": {
+        "type": "int"
+      }
+    }
+  },
+  "arithCorrect": "Correct !",
+  "@arithCorrect": {
+    "description": "Arithmétique — titre du feedback quand la réponse est juste"
+  },
+  "arithIncorrect": "Incorrect",
+  "@arithIncorrect": {
+    "description": "Arithmétique — titre du feedback quand la réponse est fausse"
+  },
+  "arithTimeSpent": "Temps : {seconds} secondes",
+  "@arithTimeSpent": {
+    "description": "Arithmétique — temps passé sur l'item",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "arithSpeedBonus": "🎉 Bonus de rapidité ! (+1 point)",
+  "@arithSpeedBonus": {
+    "description": "Arithmétique — message de bonus de rapidité"
+  },
+  "arithTestEnded": "Test terminé !",
+  "@arithTestEnded": {
+    "description": "Arithmétique — titre du dialogue de résultats final"
+  },
+  "arithItemsCompleted": "Items complétés : {completed}/{total}",
+  "@arithItemsCompleted": {
+    "description": "Arithmétique — nombre d'items complétés",
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "arithBaseScore": "Score de base : {score} points",
+  "@arithBaseScore": {
+    "description": "Arithmétique — score de base",
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "arithBonusScore": "Bonus de rapidité : {bonus} points",
+  "@arithBonusScore": {
+    "description": "Arithmétique — points de bonus",
+    "placeholders": {
+      "bonus": {
+        "type": "int"
+      }
+    }
+  },
+  "arithTotalScore": "Score Total : {total} points",
+  "@arithTotalScore": {
+    "description": "Arithmétique — score total final",
+    "placeholders": {
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "arithRepeat": "Répéter",
+  "@arithRepeat": {
+    "description": "Arithmétique — bouton de répétition de l'énoncé"
+  },
+  "arithAnswerHint": "Votre réponse",
+  "@arithAnswerHint": {
+    "description": "Arithmétique — hint du champ de réponse"
+  },
+  "arithDifficultyEasy": "Facile",
+  "@arithDifficultyEasy": {
+    "description": "Arithmétique — difficulté : facile"
+  },
+  "arithDifficultyMedium": "Moyen",
+  "@arithDifficultyMedium": {
+    "description": "Arithmétique — difficulté : moyen"
+  },
+  "arithDifficultyHard": "Difficile",
+  "@arithDifficultyHard": {
+    "description": "Arithmétique — difficulté : difficile"
+  },
+  "arithDifficultyVeryHard": "Très difficile",
+  "@arithDifficultyVeryHard": {
+    "description": "Arithmétique — difficulté : très difficile"
+  },
+  "simTestName": "Similitudes",
+  "@simTestName": {
+    "description": "Similitudes — nom du test affiché dans le scaffold"
+  },
+  "simEyebrow": "COMPRÉHENSION VERBALE · VCI",
+  "@simEyebrow": {
+    "description": "Similitudes — sur-titre (catégorie d'indice) dans le scaffold"
+  },
+  "simStatusBar": "{seconds} s · {score} pts",
+  "@simStatusBar": {
+    "description": "Similitudes — barre d'état (temps écoulé + score) dans l'AppBar",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      },
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "simQuestionPrompt": "En quoi ces deux mots sont-ils similaires ?",
+  "@simQuestionPrompt": {
+    "description": "Similitudes — consigne affichée au-dessus de la paire de mots"
+  },
+  "simLevelLabel": "Niveau : {level}",
+  "@simLevelLabel": {
+    "description": "Similitudes — badge indiquant le niveau d'abstraction de l'item",
+    "placeholders": {
+      "level": {
+        "type": "String"
+      }
+    }
+  },
+  "simLevelConcrete": "Concret",
+  "@simLevelConcrete": {
+    "description": "Similitudes — nom du niveau d'abstraction concret"
+  },
+  "simLevelFunctional": "Fonctionnel",
+  "@simLevelFunctional": {
+    "description": "Similitudes — nom du niveau d'abstraction fonctionnel"
+  },
+  "simLevelCategorical": "Catégoriel",
+  "@simLevelCategorical": {
+    "description": "Similitudes — nom du niveau d'abstraction catégoriel"
+  },
+  "simLevelAbstract": "Abstrait",
+  "@simLevelAbstract": {
+    "description": "Similitudes — nom du niveau d'abstraction abstrait"
+  },
+  "simAnswerLabel": "Votre réponse :",
+  "@simAnswerLabel": {
+    "description": "Similitudes — libellé au-dessus du champ de saisie de la réponse"
+  },
+  "simAnswerHint": "Expliquez en quoi ils sont similaires...",
+  "@simAnswerHint": {
+    "description": "Similitudes — texte d'invite (hint) du champ de réponse"
+  },
+  "simTipsTitle": "Conseils pour obtenir 2 points :",
+  "@simTipsTitle": {
+    "description": "Similitudes — titre du bloc d'aide au scoring"
+  },
+  "simTipsLine1": "• Donnez une catégorie abstraite ou superordonnée",
+  "@simTipsLine1": {
+    "description": "Similitudes — premier conseil d'aide au scoring"
+  },
+  "simTipsLine2": "• Ex: \"Ce sont des...\", \"Formes de...\", \"Types de...\"",
+  "@simTipsLine2": {
+    "description": "Similitudes — deuxième conseil d'aide au scoring (exemples)"
+  },
+  "simFeedbackExcellent": "Excellent !",
+  "@simFeedbackExcellent": {
+    "description": "Similitudes — titre du dialogue de feedback pour une réponse à 2 points"
+  },
+  "simFeedbackCorrect": "Correct",
+  "@simFeedbackCorrect": {
+    "description": "Similitudes — titre du dialogue de feedback pour une réponse à 1 point"
+  },
+  "simFeedbackIncomplete": "Réponse incomplète",
+  "@simFeedbackIncomplete": {
+    "description": "Similitudes — titre du dialogue de feedback pour une réponse à 0 point"
+  },
+  "simFeedbackMsg2pts": "Réponse abstraite/catégorielle ! +2 points",
+  "@simFeedbackMsg2pts": {
+    "description": "Similitudes — message de feedback pour une réponse à 2 points"
+  },
+  "simFeedbackMsg1pt": "Réponse fonctionnelle/propriété. +1 point",
+  "@simFeedbackMsg1pt": {
+    "description": "Similitudes — message de feedback pour une réponse à 1 point"
+  },
+  "simFeedbackMsg0pt": "Réponse incorrecte ou trop vague. 0 point",
+  "@simFeedbackMsg0pt": {
+    "description": "Similitudes — message de feedback pour une réponse à 0 point"
+  },
+  "simYourAnswerQuoted": "Votre réponse : \"{answer}\"",
+  "@simYourAnswerQuoted": {
+    "description": "Similitudes — rappel de la réponse saisie par l'utilisateur",
+    "placeholders": {
+      "answer": {
+        "type": "String"
+      }
+    }
+  },
+  "simExamples2pts": "Exemples de réponses à 2 points :",
+  "@simExamples2pts": {
+    "description": "Similitudes — titre de la liste d'exemples de réponses à 2 points"
+  },
+  "simExamples1pt": "Exemples de réponses à 1 point :",
+  "@simExamples1pt": {
+    "description": "Similitudes — titre de la liste d'exemples de réponses à 1 point"
+  },
+  "simTimeSeconds": "Temps : {seconds} s",
+  "@simTimeSeconds": {
+    "description": "Similitudes — temps passé sur l'item dans le dialogue de feedback",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "simTotalScore": "Score total : {score} points",
+  "@simTotalScore": {
+    "description": "Similitudes — score total dans le dialogue de feedback",
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "simDiscontinue": "3 scores de 0 consécutifs - Test terminé (WAIS-IV)",
+  "@simDiscontinue": {
+    "description": "Similitudes — message de règle de discontinuation après 3 échecs"
+  },
+  "simSeeResults": "Voir les résultats",
+  "@simSeeResults": {
+    "description": "Similitudes — bouton du dialogue de feedback lorsque le test est terminé"
+  },
+  "simResultsTitle": "Test des Similitudes - Résultats",
+  "@simResultsTitle": {
+    "description": "Similitudes — titre du dialogue de résultats finaux"
+  },
+  "simRawScore": "Score brut : {score}/{max} points",
+  "@simRawScore": {
+    "description": "Similitudes — score brut dans le dialogue de résultats",
+    "placeholders": {
+      "score": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "simItemsCompleted": "Items complétés : {completed}/{total}",
+  "@simItemsCompleted": {
+    "description": "Similitudes — nombre d'items complétés dans le dialogue de résultats",
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "simPercentage": "Pourcentage : {percent}%",
+  "@simPercentage": {
+    "description": "Similitudes — pourcentage de réussite dans le dialogue de résultats",
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "simTotalTime": "Temps total : {seconds} s",
+  "@simTotalTime": {
+    "description": "Similitudes — temps total dans le dialogue de résultats",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "simSubtitle": "Test de raisonnement verbal et abstraction conceptuelle",
+  "@simSubtitle": {
+    "description": "Similitudes — sous-titre descriptif dans le dialogue de résultats"
+  },
+  "simBreakdownTitle": "Répartition par niveau :",
+  "@simBreakdownTitle": {
+    "description": "Similitudes — titre de la répartition des scores par niveau"
+  },
+  "simBreakdownLine": "{level}: {total}/{max} points",
+  "@simBreakdownLine": {
+    "description": "Similitudes — ligne de répartition du score pour un niveau",
+    "placeholders": {
+      "level": {
+        "type": "String"
+      },
+      "total": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "simPerfExceptional": "Performance exceptionnelle (θ > +2.0)",
+  "@simPerfExceptional": {
+    "description": "Similitudes — niveau de performance exceptionnel"
+  },
+  "simPerfSuperior": "Performance supérieure (θ > +1.0)",
+  "@simPerfSuperior": {
+    "description": "Similitudes — niveau de performance supérieur"
+  },
+  "simPerfAverage": "Performance moyenne (θ ≈ 0)",
+  "@simPerfAverage": {
+    "description": "Similitudes — niveau de performance moyen"
+  },
+  "simPerfBelow": "Performance inférieure (θ < 0)",
+  "@simPerfBelow": {
+    "description": "Similitudes — niveau de performance inférieur"
+  },
+  "simPerfLow": "Performance faible (θ < -1.0)",
+  "@simPerfLow": {
+    "description": "Similitudes — niveau de performance faible"
+  },
+  "simBack": "Retour",
+  "@simBack": {
+    "description": "Similitudes — bouton de retour du dialogue de résultats"
+  },
+  "matTestName": "Matrices Progressives",
+  "@matTestName": {
+    "description": "Matrices — nom du test affiché dans le scaffold"
+  },
+  "matEyebrow": "TEST DE QI · FSIQ",
+  "@matEyebrow": {
+    "description": "Matrices — sur-titre (catégorie d'indice) dans le scaffold"
+  },
+  "matCorrect": "Correct !",
+  "@matCorrect": {
+    "description": "Matrices — titre du dialogue de feedback quand la réponse est juste"
+  },
+  "matIncorrect": "Incorrect",
+  "@matIncorrect": {
+    "description": "Matrices/Balances — titre du dialogue de feedback quand la réponse est fausse"
+  },
+  "matResponseTime": "Temps de réponse : {seconds} s",
+  "@matResponseTime": {
+    "description": "Matrices — temps de réponse à l'item",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "matScoreFraction": "Score : {score}/{total}",
+  "@matScoreFraction": {
+    "description": "Matrices/Balances — score courant (réussites sur items tentés)",
+    "placeholders": {
+      "score": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "matDiscontinue4": "4 échecs consécutifs - Test terminé (WAIS-IV)",
+  "@matDiscontinue4": {
+    "description": "Matrices — message de règle de discontinuation après 4 échecs"
+  },
+  "matSeeResultsEnded": "Voir résultats (test terminé)",
+  "@matSeeResultsEnded": {
+    "description": "Matrices/Cubes — bouton dialogue lorsque le test est terminé par discontinuation"
+  },
+  "matNextItem": "Item suivant",
+  "@matNextItem": {
+    "description": "Matrices/Cubes — bouton dialogue pour passer à l'item suivant"
+  },
+  "matSeeResults": "Voir résultats",
+  "@matSeeResults": {
+    "description": "Matrices/Cubes — bouton dialogue pour voir les résultats au dernier item"
+  },
+  "matFinishedTitle": "Test des Matrices terminé !",
+  "@matFinishedTitle": {
+    "description": "Matrices — titre du dialogue de résultats finaux"
+  },
+  "matRawScore": "Score brut",
+  "@matRawScore": {
+    "description": "Matrices — libellé ligne résultat : score brut"
+  },
+  "matSuccessRate": "Taux de réussite",
+  "@matSuccessRate": {
+    "description": "Matrices/Cubes — libellé ligne résultat : taux de réussite"
+  },
+  "matAvgTimePerItem": "Temps moyen/item",
+  "@matAvgTimePerItem": {
+    "description": "Matrices — libellé ligne résultat : temps moyen par item"
+  },
+  "matEvaluation": "Évaluation :",
+  "@matEvaluation": {
+    "description": "Matrices/Cubes — en-tête du bloc d'évaluation de performance"
+  },
+  "matPerfExcellent": "Excellent ! Raisonnement fluide très supérieur.",
+  "@matPerfExcellent": {
+    "description": "Matrices — niveau de performance ≥ 90%"
+  },
+  "matPerfVeryGood": "Très bien ! Bonnes capacités d'analyse logique.",
+  "@matPerfVeryGood": {
+    "description": "Matrices — niveau de performance ≥ 75%"
+  },
+  "matPerfGood": "Bien. Capacités moyennes à bonnes.",
+  "@matPerfGood": {
+    "description": "Matrices/Cubes — niveau de performance ≥ 60%"
+  },
+  "matPerfAverage": "Moyen. Des améliorations sont possibles.",
+  "@matPerfAverage": {
+    "description": "Matrices/Cubes — niveau de performance ≥ 40%"
+  },
+  "matPerfBelowAverage": "Résultats en-dessous de la moyenne. Entraînement recommandé.",
+  "@matPerfBelowAverage": {
+    "description": "Matrices/Cubes — niveau de performance < 40%"
+  },
+  "matPoints": "{score} pts",
+  "@matPoints": {
+    "description": "Matrices/Cubes — badge de score en pts dans l'AppBar",
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "matValidateAnswer": "Valider la réponse",
+  "@matValidateAnswer": {
+    "description": "Matrices — libellé du bouton de validation"
+  },
+  "matRestart": "Recommencer",
+  "@matRestart": {
+    "description": "Matrices/Cubes — bouton pour relancer le test depuis le début"
+  },
+  "matRulesTheta": "Règles : {rules} | θ = {theta}",
+  "@matRulesTheta": {
+    "description": "Matrices — métadonnées techniques de l'item (nombre de règles et thêta IRT)",
+    "placeholders": {
+      "rules": {
+        "type": "int"
+      },
+      "theta": {
+        "type": "String"
+      }
+    }
+  },
+  "matInstruction": "Trouvez la pièce manquante qui complète logiquement la matrice",
+  "@matInstruction": {
+    "description": "Matrices — consigne au-dessus de la grille"
+  },
+  "matChooseAnswer": "Choisissez la réponse :",
+  "@matChooseAnswer": {
+    "description": "Matrices/Balances — libellé au-dessus des options de réponse"
+  },
+  "matDiffEasy": "Facile",
+  "@matDiffEasy": {
+    "description": "Matrices/Cubes — étiquette de difficulté : facile"
+  },
+  "matDiffMediumEasy": "Moyen-Facile",
+  "@matDiffMediumEasy": {
+    "description": "Matrices — étiquette de difficulté : moyen-facile"
+  },
+  "matDiffMedium": "Moyen",
+  "@matDiffMedium": {
+    "description": "Matrices/Cubes — étiquette de difficulté : moyen"
+  },
+  "matDiffMediumHard": "Moyen-Difficile",
+  "@matDiffMediumHard": {
+    "description": "Matrices — étiquette de difficulté : moyen-difficile"
+  },
+  "matDiffHard": "Difficile",
+  "@matDiffHard": {
+    "description": "Matrices/Cubes — étiquette de difficulté : difficile"
+  },
+  "cubesTestName": "Test des Cubes",
+  "@cubesTestName": {
+    "description": "Cubes — nom du test affiché dans le scaffold"
+  },
+  "cubesBravo": "Bravo !",
+  "@cubesBravo": {
+    "description": "Cubes — titre du dialogue de feedback quand la réponse est juste"
+  },
+  "cubesElapsedTime": "Temps écoulé : {time}",
+  "@cubesElapsedTime": {
+    "description": "Cubes — temps écoulé (format mm:ss)",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "cubesPointsEarned": "Points gagnés : {points}",
+  "@cubesPointsEarned": {
+    "description": "Cubes — points gagnés sur l'item",
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "cubesTotalScore": "Score total : {score}",
+  "@cubesTotalScore": {
+    "description": "Cubes — score total dans le dialogue de feedback",
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "cubesFinishedTitle": "Test terminé !",
+  "@cubesFinishedTitle": {
+    "description": "Cubes — titre du dialogue de résultats finaux"
+  },
+  "cubesTotalScoreLabel": "Score total",
+  "@cubesTotalScoreLabel": {
+    "description": "Cubes — libellé ligne résultat : score total"
+  },
+  "cubesTotalScoreValue": "{score}/{max} pts",
+  "@cubesTotalScoreValue": {
+    "description": "Cubes — valeur du score total sur le maximum",
+    "placeholders": {
+      "score": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "cubesItemsCompletedLabel": "Items complétés",
+  "@cubesItemsCompletedLabel": {
+    "description": "Cubes — libellé ligne résultat : items complétés"
+  },
+  "cubesItemsCompletedValue": "{count}/14",
+  "@cubesItemsCompletedValue": {
+    "description": "Cubes — valeur items complétés sur 14",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cubesAvgTime": "Temps moyen",
+  "@cubesAvgTime": {
+    "description": "Cubes — libellé ligne résultat : temps moyen"
+  },
+  "cubesPerfExcellent": "Excellent ! Capacités visuospatiales très supérieures.",
+  "@cubesPerfExcellent": {
+    "description": "Cubes — niveau de performance ≥ 90%"
+  },
+  "cubesPerfVeryGood": "Très bien ! Bonnes capacités d'analyse visuelle.",
+  "@cubesPerfVeryGood": {
+    "description": "Cubes — niveau de performance ≥ 75%"
+  },
+  "cubesDiffExample": "Exemple",
+  "@cubesDiffExample": {
+    "description": "Cubes — étiquette de difficulté : item exemple"
+  },
+  "cubesDiffVeryHard": "Très difficile",
+  "@cubesDiffVeryHard": {
+    "description": "Cubes — étiquette de difficulté : très difficile"
+  },
+  "cubesDescExample": "Item exemple - Ne compte pas pour le score",
+  "@cubesDescExample": {
+    "description": "Cubes — description métadonnée de l'item exemple"
+  },
+  "cubesDesc2x2": "Pattern 2×2 simple",
+  "@cubesDesc2x2": {
+    "description": "Cubes — description métadonnée : pattern 2×2 simple"
+  },
+  "cubesDesc3x3Diagonals": "Pattern 3×3 avec diagonales",
+  "@cubesDesc3x3Diagonals": {
+    "description": "Cubes — description métadonnée : pattern 3×3 avec diagonales"
+  },
+  "cubesDesc3x3Complex": "Pattern 3×3 complexe - Haute cohésion",
+  "@cubesDesc3x3Complex": {
+    "description": "Cubes — description métadonnée : pattern 3×3 complexe haute cohésion"
+  },
+  "cubesCohesion": "Cohésion: {score}",
+  "@cubesCohesion": {
+    "description": "Cubes — métadonnée score de cohésion de l'item",
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "cubesRemaining": "Reste: {time}",
+  "@cubesRemaining": {
+    "description": "Cubes — temps restant dans l'en-tête de l'exercice (format mm:ss)",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "cubesReproduceInstruction": "Reproduisez le pattern ci-dessous en tapant sur les cubes",
+  "@cubesReproduceInstruction": {
+    "description": "Cubes — consigne de l'exercice"
+  },
+  "cubesPatternToReproduce": "Pattern à reproduire :",
+  "@cubesPatternToReproduce": {
+    "description": "Cubes — libellé de la grille cible"
+  },
+  "cubesYourAnswer": "Votre réponse :",
+  "@cubesYourAnswer": {
+    "description": "Cubes — libellé de la grille de l'utilisateur"
+  },
+  "cubesReset": "Réinitialiser",
+  "@cubesReset": {
+    "description": "Cubes — bouton de réinitialisation de la grille"
+  },
+  "fwTestName": "Balances Quantitatives",
+  "@fwTestName": {
+    "description": "Balances — nom du test affiché dans le scaffold"
+  },
+  "fwEyebrow": "RAISONNEMENT FLUIDE · FRI",
+  "@fwEyebrow": {
+    "description": "Balances/Cubes — sur-titre (catégorie d'indice FRI) dans le scaffold"
+  },
+  "fwCorrectAnswerPoint": "Bonne réponse ! +1 point",
+  "@fwCorrectAnswerPoint": {
+    "description": "Balances — message de feedback réponse juste"
+  },
+  "fwWrongAnswer": "Mauvaise réponse. La bonne réponse était :",
+  "@fwWrongAnswer": {
+    "description": "Balances — message de feedback réponse fausse"
+  },
+  "fwTime": "Temps : {seconds} s",
+  "@fwTime": {
+    "description": "Balances — temps passé sur l'item",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "fwDiscontinue3": "3 échecs consécutifs - Test terminé (WAIS-IV)",
+  "@fwDiscontinue3": {
+    "description": "Balances — message de règle de discontinuation après 3 échecs"
+  },
+  "fwSeeResults": "Voir les résultats",
+  "@fwSeeResults": {
+    "description": "Balances — bouton dialogue pour voir les résultats"
+  },
+  "fwResultsTitle": "Test des Balances Quantitatives - Résultats",
+  "@fwResultsTitle": {
+    "description": "Balances — titre du dialogue de résultats finaux"
+  },
+  "fwRawScorePoints": "Score brut : {score}/27 points",
+  "@fwRawScorePoints": {
+    "description": "Balances — score brut sur 27",
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "fwItemsCompleted": "Items complétés : {count}/27",
+  "@fwItemsCompleted": {
+    "description": "Balances — items complétés sur 27",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "fwPercentage": "Pourcentage : {percent}%",
+  "@fwPercentage": {
+    "description": "Balances — pourcentage de réussite",
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "fwTotalTime": "Temps total : {seconds} s",
+  "@fwTotalTime": {
+    "description": "Balances — temps total",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "fwGLoading": "g-loading : 0.78 (le plus élevé du WAIS-IV)",
+  "@fwGLoading": {
+    "description": "Balances — note technique sur la saturation en facteur g"
+  },
+  "fwPerfExceptional": "Performance exceptionnelle (θ > +2.0)",
+  "@fwPerfExceptional": {
+    "description": "Balances — niveau de performance score ≥ 23"
+  },
+  "fwPerfSuperior": "Performance supérieure (θ > +1.0)",
+  "@fwPerfSuperior": {
+    "description": "Balances — niveau de performance score ≥ 18"
+  },
+  "fwPerfAverage": "Performance moyenne (θ ≈ 0)",
+  "@fwPerfAverage": {
+    "description": "Balances — niveau de performance score ≥ 12"
+  },
+  "fwPerfInferior": "Performance inférieure (θ < 0)",
+  "@fwPerfInferior": {
+    "description": "Balances — niveau de performance score ≥ 7"
+  },
+  "fwPerfLow": "Performance faible (θ < -1.0)",
+  "@fwPerfLow": {
+    "description": "Balances — niveau de performance score < 7"
+  },
+  "fwScoreFraction": "{score}/{total}",
+  "@fwScoreFraction": {
+    "description": "Balances — badge score/total dans l'AppBar",
+    "placeholders": {
+      "score": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "fwInstruction": "Trouvez la valeur manquante qui équilibre la balance.",
+  "@fwInstruction": {
+    "description": "Balances — consigne en haut de l'écran"
+  },
+  "fwWhatIs": "Que vaut ",
+  "@fwWhatIs": {
+    "description": "Balances — début de la question (suivi des jetons cibles puis « ? »)"
+  },
+  "fwSeconds": "{seconds} s",
+  "@fwSeconds": {
+    "description": "Balances — badge de compte à rebours du timer",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "vpTestName": "Puzzles Visuels",
+  "@vpTestName": {
+    "description": "Puzzles visuels — nom du test affiché dans le scaffold"
+  },
+  "vpEyebrow": "VISUO-SPATIAL · VSI",
+  "@vpEyebrow": {
+    "description": "Puzzles visuels — sur-titre (catégorie d'indice VSI) dans le scaffold"
+  },
+  "vpCorrect": "Correct",
+  "@vpCorrect": {
+    "description": "Puzzles visuels — état du bouton après validation correcte"
+  },
+  "vpIncorrect": "Incorrect",
+  "@vpIncorrect": {
+    "description": "Puzzles visuels — état du bouton après validation incorrecte"
+  },
+  "vpValidate": "Valider",
+  "@vpValidate": {
+    "description": "Puzzles visuels — libellé du bouton de validation (3 pièces sélectionnées)"
+  },
+  "vpSelectedCount": "{count} / 3 sélectionnées",
+  "@vpSelectedCount": {
+    "description": "Puzzles visuels — libellé du bouton tant que moins de 3 pièces sont sélectionnées",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "vpInstruction": "Choisissez les 3 pièces qui forment la figure (rotations permises, retournements interdits).",
+  "@vpInstruction": {
+    "description": "Puzzles visuels — consigne sous la figure cible"
+  },
+  "vpSelectionSemantics": "Sélection : {filled} sur {total} pièces",
+  "@vpSelectionSemantics": {
+    "description": "Puzzles visuels — étiquette d'accessibilité de l'indicateur de sélection",
+    "placeholders": {
+      "filled": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "vpSelectionLabel": "SÉLECTION",
+  "@vpSelectionLabel": {
+    "description": "Puzzles visuels — libellé en capitales de l'indicateur de sélection"
+  },
+  "vpPieceSemantics": "Pièce {label}",
+  "@vpPieceSemantics": {
+    "description": "Puzzles visuels — étiquette d'accessibilité d'une pièce (le label est un chiffre)",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "vpTargetTitle": "FIGURE À RECONSTITUER",
+  "@vpTargetTitle": {
+    "description": "Puzzles visuels — titre en capitales au-dessus de la figure cible"
+  },
+  "codingTestName": "Code (Digit Symbol)",
+  "@codingTestName": {
+    "description": "Coding test name (scaffold header)"
+  },
+  "codingEyebrow": "VITESSE DE TRAITEMENT · PSI",
+  "@codingEyebrow": {
+    "description": "Coding test eyebrow label"
+  },
+  "codingStartTraining": "Commencer l'entraînement",
+  "@codingStartTraining": {
+    "description": "Coding/Symbol Search start training button"
+  },
+  "codingTitle": "Test de Code",
+  "@codingTitle": {
+    "description": "Coding intro title"
+  },
+  "codingDescription": "Ce test mesure votre vitesse de traitement et votre coordination visuomotrice.",
+  "@codingDescription": {
+    "description": "Coding intro description"
+  },
+  "codingReferenceKey": "Clé de référence :",
+  "@codingReferenceKey": {
+    "description": "Coding reference key label (intro)"
+  },
+  "codingTaskTitle": "Votre tâche",
+  "@codingTaskTitle": {
+    "description": "Coding info card title - task"
+  },
+  "codingTaskDesc": "Pour chaque chiffre affiché, sélectionnez le symbole correspondant",
+  "@codingTaskDesc": {
+    "description": "Coding info card subtitle - task"
+  },
+  "codingTimeLimitTitle": "Temps limité",
+  "@codingTimeLimitTitle": {
+    "description": "Coding info card title - time limit"
+  },
+  "codingTimeLimitDesc": "120 secondes pour compléter le maximum de cases (135 au total)",
+  "@codingTimeLimitDesc": {
+    "description": "Coding info card subtitle - time limit"
+  },
+  "codingScoringTitle": "Scoring",
+  "@codingScoringTitle": {
+    "description": "Coding info card title - scoring"
+  },
+  "codingScoringDesc": "1 point par case correcte, pas de pénalité pour les erreurs",
+  "@codingScoringDesc": {
+    "description": "Coding info card subtitle - scoring"
+  },
+  "codingTrainingDoneTitle": "Entraînement terminé",
+  "@codingTrainingDoneTitle": {
+    "description": "Coding training-finished dialog title"
+  },
+  "codingTrainingDoneBody": "Vous êtes prêt à commencer le test. Vous aurez 120 secondes pour compléter le maximum de cases.",
+  "@codingTrainingDoneBody": {
+    "description": "Coding training-finished dialog body"
+  },
+  "codingStartTest": "Commencer le test",
+  "@codingStartTest": {
+    "description": "Coding/Symbol Search/Digit Span start test button"
+  },
+  "codingTestDoneTitle": "Test terminé !",
+  "@codingTestDoneTitle": {
+    "description": "Test finished dialog title (Coding/Symbol Search/Digit Span/Picture Span)"
+  },
+  "codingTimeElapsed": "Temps écoulé : 120 secondes",
+  "@codingTimeElapsed": {
+    "description": "Coding result - time elapsed"
+  },
+  "codingCellsCompleted": "Cases complétées : {count}/135",
+  "@codingCellsCompleted": {
+    "description": "Coding result - completed cells",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "codingCellsCorrect": "Cases correctes : {count}",
+  "@codingCellsCorrect": {
+    "description": "Coding result - correct cells",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "codingScorePoints": "Score : {count} points",
+  "@codingScorePoints": {
+    "description": "Coding result - score points",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "codingPerfExceptional": "Performance exceptionnelle !",
+  "@codingPerfExceptional": {
+    "description": "Coding/Symbol Search performance message - exceptional"
+  },
+  "codingPerfVeryGood": "Très bonne performance",
+  "@codingPerfVeryGood": {
+    "description": "Coding/Symbol Search performance message - very good"
+  },
+  "codingPerfAboveAverage": "Performance moyenne-haute",
+  "@codingPerfAboveAverage": {
+    "description": "Coding performance message - above average"
+  },
+  "codingPerfAverage": "Performance moyenne",
+  "@codingPerfAverage": {
+    "description": "Coding/Symbol Search performance message - average"
+  },
+  "codingPerfBelowAverage": "Performance en-dessous de la moyenne",
+  "@codingPerfBelowAverage": {
+    "description": "Coding/Symbol Search performance message - below average"
+  },
+  "codingTrainingTab": "Entraînement",
+  "@codingTrainingTab": {
+    "description": "Coding/Symbol Search app bar title in training mode"
+  },
+  "codingReferenceShort": "Référence :",
+  "@codingReferenceShort": {
+    "description": "Coding reference key label (test screen)"
+  },
+  "codingCellProgress": "Case {current}/{total}",
+  "@codingCellProgress": {
+    "description": "Coding cell progress",
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "codingCompletedProgress": "Complétées : {count}/{total}",
+  "@codingCompletedProgress": {
+    "description": "Coding completed-cells progress",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "codingSelectSymbol": "Sélectionnez un symbole :",
+  "@codingSelectSymbol": {
+    "description": "Coding palette label"
+  },
+  "codingClear": "Effacer",
+  "@codingClear": {
+    "description": "Coding clear-cell button"
+  },
+  "codingFinishTraining": "Terminer l'entraînement",
+  "@codingFinishTraining": {
+    "description": "Coding finish-training button"
+  },
+  "ssTestName": "Recherche de Symboles",
+  "@ssTestName": {
+    "description": "Symbol Search test name / title / app bar title"
+  },
+  "ssDescription": "Ce test mesure votre vitesse de traitement visuelle et votre capacité de discrimination.",
+  "@ssDescription": {
+    "description": "Symbol Search intro description"
+  },
+  "ssExampleLabel": "Exemple d'item :",
+  "@ssExampleLabel": {
+    "description": "Symbol Search example label"
+  },
+  "ssTargets": "CIBLES",
+  "@ssTargets": {
+    "description": "Symbol Search targets label (example)"
+  },
+  "ssGroup": "GROUPE",
+  "@ssGroup": {
+    "description": "Symbol Search group label (example)"
+  },
+  "ssExampleAnswer": "→ Réponse : OUI (┴ est présent)",
+  "@ssExampleAnswer": {
+    "description": "Symbol Search example answer line"
+  },
+  "ssTaskTitle": "Votre tâche",
+  "@ssTaskTitle": {
+    "description": "Symbol Search info card title - task"
+  },
+  "ssTaskDesc": "Cherchez si l'un des symboles cibles apparaît dans le groupe",
+  "@ssTaskDesc": {
+    "description": "Symbol Search info card subtitle - task"
+  },
+  "ssQuickAnswerTitle": "Réponse rapide",
+  "@ssQuickAnswerTitle": {
+    "description": "Symbol Search info card title - quick answer"
+  },
+  "ssQuickAnswerDesc": "Cliquez OUI ou NON aussi vite que possible",
+  "@ssQuickAnswerDesc": {
+    "description": "Symbol Search info card subtitle - quick answer"
+  },
+  "ssScoringPenaltyTitle": "Scoring avec pénalité",
+  "@ssScoringPenaltyTitle": {
+    "description": "Symbol Search info card title - scoring"
+  },
+  "ssScoringPenaltyDesc": "Score = Réponses correctes - Réponses incorrectes",
+  "@ssScoringPenaltyDesc": {
+    "description": "Symbol Search scoring formula"
+  },
+  "ssTimeLimitTitle": "Temps limité",
+  "@ssTimeLimitTitle": {
+    "description": "Symbol Search info card title - time limit"
+  },
+  "ssTimeLimitDesc": "120 secondes pour 60 items",
+  "@ssTimeLimitDesc": {
+    "description": "Symbol Search info card subtitle - time limit"
+  },
+  "ssTrainingDoneBody": "Vous êtes prêt ! Vous aurez 120 secondes pour compléter le maximum d'items.\n\nRappel : Score = Réponses correctes - Réponses incorrectes",
+  "@ssTrainingDoneBody": {
+    "description": "Symbol Search training-finished dialog body"
+  },
+  "ssItemsAnswered": "Items répondus : {count}/60",
+  "@ssItemsAnswered": {
+    "description": "Symbol Search result - items answered",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "ssCorrectAnswers": "Réponses correctes : {count}",
+  "@ssCorrectAnswers": {
+    "description": "Symbol Search result - correct answers",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "ssIncorrectAnswers": "Réponses incorrectes : {count}",
+  "@ssIncorrectAnswers": {
+    "description": "Symbol Search result - incorrect answers",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "ssNotAnswered": "Non répondus : {count}",
+  "@ssNotAnswered": {
+    "description": "Symbol Search result - not answered",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "ssRawScore": "Score brut : {count}",
+  "@ssRawScore": {
+    "description": "Symbol Search result - raw score",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "ssScoreFormulaShort": "(Corrects - Incorrects)",
+  "@ssScoreFormulaShort": {
+    "description": "Symbol Search raw-score formula caption"
+  },
+  "ssPerfGood": "Bonne performance",
+  "@ssPerfGood": {
+    "description": "Symbol Search performance message - good"
+  },
+  "ssItemProgress": "Item {current}/{total}",
+  "@ssItemProgress": {
+    "description": "Symbol Search item progress",
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "ssAnsweredProgress": "Répondus : {count}/60",
+  "@ssAnsweredProgress": {
+    "description": "Symbol Search answered progress",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "ssTargetSymbols": "SYMBOLES CIBLES",
+  "@ssTargetSymbols": {
+    "description": "Symbol Search target symbols section label"
+  },
+  "ssSearchGroup": "GROUPE DE RECHERCHE",
+  "@ssSearchGroup": {
+    "description": "Symbol Search search group section label"
+  },
+  "ssNo": "NON",
+  "@ssNo": {
+    "description": "Symbol Search NO answer button"
+  },
+  "ssYes": "OUI",
+  "@ssYes": {
+    "description": "Symbol Search YES answer button"
+  },
+  "dsTestName": "Mémoire des Chiffres",
+  "@dsTestName": {
+    "description": "Digit Span test name / title"
+  },
+  "dsEyebrow": "MÉMOIRE DE TRAVAIL · WMI",
+  "@dsEyebrow": {
+    "description": "Digit Span / Picture Span eyebrow label"
+  },
+  "dsDescription": "Ce test mesure votre mémoire de travail à travers 3 parties distinctes :",
+  "@dsDescription": {
+    "description": "Digit Span intro description"
+  },
+  "dsForwardTitle": "Partie 1 : Empan Direct",
+  "@dsForwardTitle": {
+    "description": "Digit Span intro card - forward title"
+  },
+  "dsForwardInstruction": "Répétez les chiffres dans le même ordre",
+  "@dsForwardInstruction": {
+    "description": "Digit Span forward instruction"
+  },
+  "dsBackwardTitle": "Partie 2 : Empan Inverse",
+  "@dsBackwardTitle": {
+    "description": "Digit Span intro card - backward title"
+  },
+  "dsBackwardInstruction": "Répétez les chiffres en ordre inverse",
+  "@dsBackwardInstruction": {
+    "description": "Digit Span backward instruction"
+  },
+  "dsSequencingTitle": "Partie 3 : Séquençage",
+  "@dsSequencingTitle": {
+    "description": "Digit Span intro card - sequencing title"
+  },
+  "dsSequencingInstruction": "Répétez les chiffres en ordre croissant",
+  "@dsSequencingInstruction": {
+    "description": "Digit Span sequencing instruction"
+  },
+  "dsPresentationInfo": "Les chiffres seront présentés à raison de 1 chiffre par seconde.",
+  "@dsPresentationInfo": {
+    "description": "Digit Span presentation rate info"
+  },
+  "dsTypeForward": "Empan Direct",
+  "@dsTypeForward": {
+    "description": "Digit Span type label - forward (app bar / part title)"
+  },
+  "dsTypeBackward": "Empan Inverse",
+  "@dsTypeBackward": {
+    "description": "Digit Span type label - backward"
+  },
+  "dsTypeSequencing": "Séquençage",
+  "@dsTypeSequencing": {
+    "description": "Digit Span type label - sequencing"
+  },
+  "dsStartPart": "Commencer",
+  "@dsStartPart": {
+    "description": "Digit Span start-part button"
+  },
+  "dsLengthTrial": "Longueur {length} - Essai {trial}",
+  "@dsLengthTrial": {
+    "description": "Digit Span length/trial header",
+    "placeholders": {
+      "length": {
+        "type": "int"
+      },
+      "trial": {
+        "type": "int"
+      }
+    }
+  },
+  "dsListenCarefully": "Écoutez attentivement",
+  "@dsListenCarefully": {
+    "description": "Digit Span presentation prompt"
+  },
+  "dsCorrect": "Correct !",
+  "@dsCorrect": {
+    "description": "Digit Span / Picture Span feedback - correct"
+  },
+  "dsIncorrect": "Incorrect",
+  "@dsIncorrect": {
+    "description": "Digit Span / Picture Span feedback - incorrect"
+  },
+  "dsPointsEarned": "Points gagnés : {count}",
+  "@dsPointsEarned": {
+    "description": "Digit Span feedback - points earned",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dsCorrectAnswer": "Réponse correcte : {answer}",
+  "@dsCorrectAnswer": {
+    "description": "Digit Span feedback - correct answer",
+    "placeholders": {
+      "answer": {
+        "type": "String"
+      }
+    }
+  },
+  "dsYourAnswer": "Votre réponse : {answer}",
+  "@dsYourAnswer": {
+    "description": "Digit Span feedback - your answer",
+    "placeholders": {
+      "answer": {
+        "type": "String"
+      }
+    }
+  },
+  "dsResultsByPart": "Résultats par partie :",
+  "@dsResultsByPart": {
+    "description": "Digit Span final results header"
+  },
+  "dsForwardScore": "Empan Direct : {count} points",
+  "@dsForwardScore": {
+    "description": "Digit Span final - forward score",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dsBackwardScore": "Empan Inverse : {count} points",
+  "@dsBackwardScore": {
+    "description": "Digit Span final - backward score",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dsSequencingScore": "Séquençage : {count} points",
+  "@dsSequencingScore": {
+    "description": "Digit Span final - sequencing score",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dsTotalScore": "Score Total : {count} points",
+  "@dsTotalScore": {
+    "description": "Digit Span / Picture Span final - total score",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dsEnterAnswer": "Saisissez votre réponse...",
+  "@dsEnterAnswer": {
+    "description": "Digit Span input placeholder"
+  },
+  "dsValidateProgress": "Valider ({count}/{total})",
+  "@dsValidateProgress": {
+    "description": "Digit Span submit button with progress",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "psTestName": "Mémoire des Images",
+  "@psTestName": {
+    "description": "Picture Span test name / title"
+  },
+  "psDescription": "Ce test mesure votre mémoire de travail visuelle et votre attention sélective.",
+  "@psDescription": {
+    "description": "Picture Span intro description"
+  },
+  "psPhase1Title": "Phase 1 : Mémorisation",
+  "@psPhase1Title": {
+    "description": "Picture Span intro card - phase 1 title"
+  },
+  "psPhase1Desc": "Des images seront présentées une par une (3 secondes chacune)",
+  "@psPhase1Desc": {
+    "description": "Picture Span intro card - phase 1 subtitle"
+  },
+  "psPhase2Title": "Phase 2 : Rappel",
+  "@psPhase2Title": {
+    "description": "Picture Span intro card - phase 2 title"
+  },
+  "psPhase2Desc": "Sélectionnez les images dans l'ordre exact de présentation",
+  "@psPhase2Desc": {
+    "description": "Picture Span intro card - phase 2 subtitle"
+  },
+  "psProgressionTitle": "Progression",
+  "@psProgressionTitle": {
+    "description": "Picture Span intro card - progression title"
+  },
+  "psProgressionDesc": "La difficulté augmente : 1 à 6 images à mémoriser",
+  "@psProgressionDesc": {
+    "description": "Picture Span intro card - progression subtitle"
+  },
+  "psTrialsInfo": "12 essais au total. Le test s'arrête après 2 échecs au même niveau.",
+  "@psTrialsInfo": {
+    "description": "Picture Span trials info"
+  },
+  "psMemorizationTab": "Mémorisation",
+  "@psMemorizationTab": {
+    "description": "Picture Span presentation app bar title"
+  },
+  "psRecallTab": "Rappel",
+  "@psRecallTab": {
+    "description": "Picture Span recall app bar title"
+  },
+  "psLevelTrial": "Niveau {level} - Essai {trial}",
+  "@psLevelTrial": {
+    "description": "Picture Span level/trial header",
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "trial": {
+        "type": "int"
+      }
+    }
+  },
+  "psMemorizeImages": "Mémorisez les images",
+  "@psMemorizeImages": {
+    "description": "Picture Span presentation prompt"
+  },
+  "psImageProgress": "Image {current} / {total}",
+  "@psImageProgress": {
+    "description": "Picture Span image progress",
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "psSelectInOrder": "Sélectionnez les {count} images dans l'ordre",
+  "@psSelectInOrder": {
+    "description": "Picture Span recall instruction",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "psNoSelection": "Aucune sélection",
+  "@psNoSelection": {
+    "description": "Picture Span recall - empty selection"
+  },
+  "psClearLast": "Effacer la dernière sélection",
+  "@psClearLast": {
+    "description": "Picture Span clear-last-selection button"
+  },
+  "psCorrectOrder": "Ordre correct : {names}",
+  "@psCorrectOrder": {
+    "description": "Picture Span feedback - correct order",
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "psYourOrder": "Votre ordre : {names}",
+  "@psYourOrder": {
+    "description": "Picture Span feedback - your order",
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
+  },
+  "psTrialsCompleted": "Essais complétés : {count}/12",
+  "@psTrialsCompleted": {
+    "description": "Picture Span final - trials completed",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "psScorePoints": "Score Total : {count} points",
+  "@psScorePoints": {
+    "description": "Picture Span final - total score",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "psMaxLevel": "Niveau maximal atteint : Niveau {level}",
+  "@psMaxLevel": {
+    "description": "Picture Span final - max level",
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "psImgChat": "Chat",
+  "@psImgChat": {
+    "description": "Picture Span image name - cat"
+  },
+  "psImgInsecte": "Insecte",
+  "@psImgInsecte": {
+    "description": "Picture Span image name - insect"
+  },
+  "psImgLapin": "Lapin",
+  "@psImgLapin": {
+    "description": "Picture Span image name - rabbit"
+  },
+  "psImgOiseau": "Oiseau",
+  "@psImgOiseau": {
+    "description": "Picture Span image name - bird"
+  },
+  "psImgPoisson": "Poisson",
+  "@psImgPoisson": {
+    "description": "Picture Span image name - fish"
+  },
+  "psImgTortue": "Tortue",
+  "@psImgTortue": {
+    "description": "Picture Span image name - turtle"
+  },
+  "psImgPapillon": "Papillon",
+  "@psImgPapillon": {
+    "description": "Picture Span image name - butterfly"
+  },
+  "psImgCoccinelle": "Coccinelle",
+  "@psImgCoccinelle": {
+    "description": "Picture Span image name - ladybug"
+  },
+  "psImgChaise": "Chaise",
+  "@psImgChaise": {
+    "description": "Picture Span image name - chair"
+  },
+  "psImgLampe": "Lampe",
+  "@psImgLampe": {
+    "description": "Picture Span image name - lamp"
+  },
+  "psImgMontre": "Montre",
+  "@psImgMontre": {
+    "description": "Picture Span image name - watch"
+  },
+  "psImgParapluie": "Parapluie",
+  "@psImgParapluie": {
+    "description": "Picture Span image name - umbrella"
+  },
+  "psImgSac": "Sac",
+  "@psImgSac": {
+    "description": "Picture Span image name - bag"
+  },
+  "psImgLit": "Lit",
+  "@psImgLit": {
+    "description": "Picture Span image name - bed"
+  },
+  "psImgPorte": "Porte",
+  "@psImgPorte": {
+    "description": "Picture Span image name - door"
+  },
+  "psImgFenetre": "Fenêtre",
+  "@psImgFenetre": {
+    "description": "Picture Span image name - window"
+  },
+  "psImgGateau": "Gâteau",
+  "@psImgGateau": {
+    "description": "Picture Span image name - cake"
+  },
+  "psImgCafe": "Café",
+  "@psImgCafe": {
+    "description": "Picture Span image name - coffee"
+  },
+  "psImgPizza": "Pizza",
+  "@psImgPizza": {
+    "description": "Picture Span image name - pizza"
+  },
+  "psImgPomme": "Pomme",
+  "@psImgPomme": {
+    "description": "Picture Span image name - apple"
+  },
+  "psImgGlace": "Glace",
+  "@psImgGlace": {
+    "description": "Picture Span image name - ice cream"
+  },
+  "psImgBurger": "Burger",
+  "@psImgBurger": {
+    "description": "Picture Span image name - burger"
+  },
+  "psImgSandwich": "Sandwich",
+  "@psImgSandwich": {
+    "description": "Picture Span image name - sandwich"
+  },
+  "psImgOeuf": "Œuf",
+  "@psImgOeuf": {
+    "description": "Picture Span image name - egg"
+  },
+  "psImgMarteau": "Marteau",
+  "@psImgMarteau": {
+    "description": "Picture Span image name - hammer"
+  },
+  "psImgCle": "Clé",
+  "@psImgCle": {
+    "description": "Picture Span image name - wrench"
+  },
+  "psImgCiseaux": "Ciseaux",
+  "@psImgCiseaux": {
+    "description": "Picture Span image name - scissors"
+  },
+  "psImgPinceau": "Pinceau",
+  "@psImgPinceau": {
+    "description": "Picture Span image name - brush"
+  },
+  "psImgCrayon": "Crayon",
+  "@psImgCrayon": {
+    "description": "Picture Span image name - pencil"
+  },
+  "psImgCouteau": "Couteau",
+  "@psImgCouteau": {
+    "description": "Picture Span image name - knife"
+  },
+  "psImgTournevis": "Tournevis",
+  "@psImgTournevis": {
+    "description": "Picture Span image name - screwdriver"
+  },
+  "psImgEngrenage": "Engrenage",
+  "@psImgEngrenage": {
+    "description": "Picture Span image name - gear"
+  },
+  "psImgVoiture": "Voiture",
+  "@psImgVoiture": {
+    "description": "Picture Span image name - car"
+  },
+  "psImgVelo": "Vélo",
+  "@psImgVelo": {
+    "description": "Picture Span image name - bike"
+  },
+  "psImgAvion": "Avion",
+  "@psImgAvion": {
+    "description": "Picture Span image name - plane"
+  },
+  "psImgTrain": "Train",
+  "@psImgTrain": {
+    "description": "Picture Span image name - train"
+  },
+  "psImgBateau": "Bateau",
+  "@psImgBateau": {
+    "description": "Picture Span image name - boat"
+  },
+  "psImgBus": "Bus",
+  "@psImgBus": {
+    "description": "Picture Span image name - bus"
+  },
+  "psImgMoto": "Moto",
+  "@psImgMoto": {
+    "description": "Picture Span image name - motorcycle"
+  },
+  "psImgFusee": "Fusée",
+  "@psImgFusee": {
+    "description": "Picture Span image name - rocket"
+  },
+  "vocabTestName": "Vocabulaire",
+  "@vocabTestName": {
+    "description": "Vocabulaire — nom du test affiché dans le scaffold"
+  },
+  "vocabEyebrow": "COMPRÉHENSION VERBALE · VCI",
+  "@vocabEyebrow": {
+    "description": "Vocabulaire — sur-titre (catégorie d'indice) dans le scaffold"
+  },
+  "vocabTimerScore": "{seconds} s · {score} pts",
+  "@vocabTimerScore": {
+    "description": "Vocabulaire — chrono et score affichés dans l'AppBar",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      },
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "vocabFeedbackExcellent": "Excellent !",
+  "@vocabFeedbackExcellent": {
+    "description": "Vocabulaire — titre du feedback pour une réponse à 2 points"
+  },
+  "vocabFeedbackCorrect": "Correct",
+  "@vocabFeedbackCorrect": {
+    "description": "Vocabulaire — titre du feedback pour une réponse à 1 point"
+  },
+  "vocabFeedbackIncomplete": "Réponse incomplète",
+  "@vocabFeedbackIncomplete": {
+    "description": "Vocabulaire — titre du feedback pour une réponse à 0 point"
+  },
+  "vocabFeedbackTwoPoints": "Définition complète et précise ! +2 points",
+  "@vocabFeedbackTwoPoints": {
+    "description": "Vocabulaire — message de feedback pour 2 points"
+  },
+  "vocabFeedbackOnePoint": "Définition partielle mais correcte. +1 point",
+  "@vocabFeedbackOnePoint": {
+    "description": "Vocabulaire — message de feedback pour 1 point"
+  },
+  "vocabFeedbackZeroPoint": "Réponse incorrecte ou trop vague. 0 point",
+  "@vocabFeedbackZeroPoint": {
+    "description": "Vocabulaire — message de feedback pour 0 point"
+  },
+  "vocabWordLabel": "Mot : « {word} »",
+  "@vocabWordLabel": {
+    "description": "Vocabulaire — rappel du mot évalué dans le feedback",
+    "placeholders": {
+      "word": {
+        "type": "String"
+      }
+    }
+  },
+  "vocabYourAnswerLabel": "Votre réponse : « {answer} »",
+  "@vocabYourAnswerLabel": {
+    "description": "Vocabulaire — rappel de la réponse de l'utilisateur dans le feedback",
+    "placeholders": {
+      "answer": {
+        "type": "String"
+      }
+    }
+  },
+  "vocabEmptyAnswer": "(vide)",
+  "@vocabEmptyAnswer": {
+    "description": "Vocabulaire — placeholder quand la réponse de l'utilisateur est vide"
+  },
+  "vocabTwoPointExamples": "Exemples de réponses à 2 points :",
+  "@vocabTwoPointExamples": {
+    "description": "Vocabulaire — en-tête de la liste d'exemples de réponses à 2 points"
+  },
+  "vocabOnePointExamples": "Exemples de réponses à 1 point :",
+  "@vocabOnePointExamples": {
+    "description": "Vocabulaire — en-tête de la liste d'exemples de réponses à 1 point"
+  },
+  "vocabTimeSeconds": "Temps : {seconds} s",
+  "@vocabTimeSeconds": {
+    "description": "Vocabulaire — temps passé sur l'item dans le feedback",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "vocabTotalScore": "Score total : {score} points",
+  "@vocabTotalScore": {
+    "description": "Vocabulaire — score cumulé affiché dans le feedback",
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "vocabDiscontinued": "3 scores de 0 consécutifs - Test terminé (WAIS-IV)",
+  "@vocabDiscontinued": {
+    "description": "Vocabulaire — message de règle d'arrêt après 3 échecs consécutifs"
+  },
+  "vocabViewResults": "Voir les résultats",
+  "@vocabViewResults": {
+    "description": "Vocabulaire — bouton du feedback qui mène à l'écran de résultats"
+  },
+  "vocabResultsTitle": "Test de Vocabulaire - Résultats",
+  "@vocabResultsTitle": {
+    "description": "Vocabulaire — titre du dialogue de résultats finaux"
+  },
+  "vocabRawScore": "Score brut : {score}/{max} points",
+  "@vocabRawScore": {
+    "description": "Vocabulaire — score brut dans les résultats",
+    "placeholders": {
+      "score": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "vocabItemsCompleted": "Items complétés : {completed}/{total}",
+  "@vocabItemsCompleted": {
+    "description": "Vocabulaire — nombre d'items complétés dans les résultats",
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "vocabPercentage": "Pourcentage : {percent}%",
+  "@vocabPercentage": {
+    "description": "Vocabulaire — pourcentage de réussite dans les résultats",
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "vocabTotalTime": "Temps total : {seconds} s",
+  "@vocabTotalTime": {
+    "description": "Vocabulaire — temps total dans les résultats",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "vocabTestCaption": "Test de connaissance lexicale et compréhension verbale",
+  "@vocabTestCaption": {
+    "description": "Vocabulaire — légende sous le niveau de performance dans les résultats"
+  },
+  "vocabFrequencyBreakdownTitle": "Répartition par fréquence :",
+  "@vocabFrequencyBreakdownTitle": {
+    "description": "Vocabulaire — en-tête de la répartition des scores par fréquence"
+  },
+  "vocabFrequencyBreakdownRow": "{name} : {score}/{max} points",
+  "@vocabFrequencyBreakdownRow": {
+    "description": "Vocabulaire — ligne de répartition score par niveau de fréquence",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "score": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "vocabPerfExceptional": "Performance exceptionnelle (θ > +2.0)",
+  "@vocabPerfExceptional": {
+    "description": "Vocabulaire — niveau de performance le plus élevé"
+  },
+  "vocabPerfSuperior": "Performance supérieure (θ > +1.0)",
+  "@vocabPerfSuperior": {
+    "description": "Vocabulaire — niveau de performance supérieur"
+  },
+  "vocabPerfAverage": "Performance moyenne (θ ≈ 0)",
+  "@vocabPerfAverage": {
+    "description": "Vocabulaire — niveau de performance moyen"
+  },
+  "vocabPerfBelowAverage": "Performance inférieure (θ < 0)",
+  "@vocabPerfBelowAverage": {
+    "description": "Vocabulaire — niveau de performance inférieur"
+  },
+  "vocabPerfLow": "Performance faible (θ < -1.0)",
+  "@vocabPerfLow": {
+    "description": "Vocabulaire — niveau de performance le plus faible"
+  },
+  "vocabFreqVeryHigh": "Très fréquent",
+  "@vocabFreqVeryHigh": {
+    "description": "Vocabulaire — nom du niveau de fréquence : très fréquent (Top 1000)"
+  },
+  "vocabFreqHigh": "Fréquent",
+  "@vocabFreqHigh": {
+    "description": "Vocabulaire — nom du niveau de fréquence : fréquent (Top 5000)"
+  },
+  "vocabFreqMedium": "Moyen",
+  "@vocabFreqMedium": {
+    "description": "Vocabulaire — nom du niveau de fréquence : moyen (Top 10 000)"
+  },
+  "vocabFreqLow": "Rare",
+  "@vocabFreqLow": {
+    "description": "Vocabulaire — nom du niveau de fréquence : rare (Top 20 000)"
+  },
+  "vocabFreqVeryLow": "Très rare",
+  "@vocabFreqVeryLow": {
+    "description": "Vocabulaire — nom du niveau de fréquence : très rare (>20 000)"
+  },
+  "vocabInstruction": "Définissez le mot suivant",
+  "@vocabInstruction": {
+    "description": "Vocabulaire — instruction au-dessus du mot à définir"
+  },
+  "vocabYourDefinitionLabel": "Votre définition :",
+  "@vocabYourDefinitionLabel": {
+    "description": "Vocabulaire — libellé au-dessus du champ de saisie"
+  },
+  "vocabDefinitionHint": "Écrivez la définition du mot...",
+  "@vocabDefinitionHint": {
+    "description": "Vocabulaire — texte indicatif dans le champ de définition"
+  },
+  "vocabTipsTitle": "Conseils pour obtenir 2 points :",
+  "@vocabTipsTitle": {
+    "description": "Vocabulaire — en-tête de l'encart de conseils de scoring"
+  },
+  "vocabTipComplete": "• Donnez une définition complète et précise",
+  "@vocabTipComplete": {
+    "description": "Vocabulaire — conseil 1 de l'encart"
+  },
+  "vocabTipSynonyms": "• Utilisez des synonymes exacts",
+  "@vocabTipSynonyms": {
+    "description": "Vocabulaire — conseil 2 de l'encart"
+  },
+  "vocabTipContext": "• Expliquez le sens avec contexte",
+  "@vocabTipContext": {
+    "description": "Vocabulaire — conseil 3 de l'encart"
+  }
+}

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../../core/l10n/l10n_ext.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
 import '../../../../../core/widgets/test/kepler_test_button.dart';
@@ -86,7 +87,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
             ),
             SizedBox(width: 12.w),
             Text(
-              isCorrect ? 'Correct !' : 'Incorrect',
+              isCorrect ? context.l10n.matCorrect : context.l10n.matIncorrect,
               style: TextStyle(
                 color: isCorrect ? AppColors.success : AppColors.error,
               ),
@@ -97,9 +98,9 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Temps de réponse : ${timeSeconds}s'),
+            Text(context.l10n.matResponseTime(timeSeconds)),
             SizedBox(height: 8.h),
-            Text('Score : $score/${currentLevel + 1}'),
+            Text(context.l10n.matScoreFraction(score, currentLevel + 1)),
             if (_consecutiveFailures >= 4) ...[
               SizedBox(height: 12.h),
               Container(
@@ -109,7 +110,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
                   borderRadius: BorderRadius.circular(4.r),
                 ),
                 child: Text(
-                  '4 échecs consécutifs - Test terminé (WAIS-IV)',
+                  context.l10n.matDiscontinue4,
                   style: TextStyle(
                     color: AppColors.warning,
                     fontWeight: FontWeight.bold,
@@ -137,8 +138,10 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
             },
             child: Text(
               _consecutiveFailures >= 4
-                  ? 'Voir résultats (test terminé)'
-                  : (currentLevel < _generatedItems.length - 1 ? 'Item suivant' : 'Voir résultats'),
+                  ? context.l10n.matSeeResultsEnded
+                  : (currentLevel < _generatedItems.length - 1
+                      ? context.l10n.matNextItem
+                      : context.l10n.matSeeResults),
             ),
           ),
         ],
@@ -155,14 +158,14 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: const Text('Test des Matrices terminé !'),
+        title: Text(context.l10n.matFinishedTitle),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _resultRow('Score brut', '$score/$completedItems'),
-            _resultRow('Taux de réussite', '$percentageCorrect%'),
-            _resultRow('Temps moyen/item', '${avgTime}s'),
+            _resultRow(context.l10n.matRawScore, '$score/$completedItems'),
+            _resultRow(context.l10n.matSuccessRate, '$percentageCorrect%'),
+            _resultRow(context.l10n.matAvgTimePerItem, '${avgTime}s'),
             SizedBox(height: 16.h),
             Container(
               padding: EdgeInsets.all(12.w),
@@ -174,7 +177,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Évaluation :',
+                    context.l10n.matEvaluation,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14.sp,
@@ -182,7 +185,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
                   ),
                   SizedBox(height: 4.h),
                   Text(
-                    _getPerformanceLevel(percentageCorrect),
+                    _getPerformanceLevel(context, percentageCorrect),
                     style: TextStyle(fontSize: 13.sp),
                   ),
                 ],
@@ -196,7 +199,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
               Navigator.pop(context);
               Navigator.pop(context, score); // Retourne le score final
             },
-            child: const Text('Terminer'),
+            child: Text(context.l10n.commonFinish),
           ),
           ElevatedButton(
             onPressed: () {
@@ -211,7 +214,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
                 _itemStartTime = DateTime.now();
               });
             },
-            child: const Text('Recommencer'),
+            child: Text(context.l10n.matRestart),
           ),
         ],
       ),
@@ -234,12 +237,13 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
     );
   }
 
-  String _getPerformanceLevel(int percentage) {
-    if (percentage >= 90) return 'Excellent ! Raisonnement fluide très supérieur.';
-    if (percentage >= 75) return 'Très bien ! Bonnes capacités d\'analyse logique.';
-    if (percentage >= 60) return 'Bien. Capacités moyennes à bonnes.';
-    if (percentage >= 40) return 'Moyen. Des améliorations sont possibles.';
-    return 'Résultats en-dessous de la moyenne. Entraînement recommandé.';
+  String _getPerformanceLevel(BuildContext context, int percentage) {
+    final l10n = context.l10n;
+    if (percentage >= 90) return l10n.matPerfExcellent;
+    if (percentage >= 75) return l10n.matPerfVeryGood;
+    if (percentage >= 60) return l10n.matPerfGood;
+    if (percentage >= 40) return l10n.matPerfAverage;
+    return l10n.matPerfBelowAverage;
   }
 
   @override
@@ -247,8 +251,8 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
     final item = _generatedItems[currentLevel];
 
     return KeplerTestScaffold(
-      testName: 'Matrices Progressives',
-      eyebrow: 'TEST DE QI · FSIQ',
+      testName: context.l10n.matTestName,
+      eyebrow: context.l10n.matEyebrow,
       accentColor: AppColors.indexFSIQ,
       currentItem: currentLevel + 1,
       totalItems: _generatedItems.length,
@@ -258,12 +262,12 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
       trailing: [
         Padding(
           padding: EdgeInsets.only(left: 8.w),
-          child: Text('$score pts',
+          child: Text(context.l10n.matPoints(score),
               style: AppText.monoLabel(color: AppColors.indexFSIQ)),
         ),
       ],
       bottomBar: KeplerTestButton.primary(
-        label: 'Valider la réponse',
+        label: context.l10n.matValidateAnswer,
         accentColor: AppColors.indexFSIQ,
         onPressed: _selectedAnswer == null ? null : _handleSubmit,
       ),
@@ -271,11 +275,11 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // Infos item (difficulté) — version compacte
-          _buildLevelHeader(item),
+          _buildLevelHeader(context, item),
           SizedBox(height: 8.h),
 
           // Consigne
-          _buildInstructions(),
+          _buildInstructions(context),
 
           // Matrice — occupe l'espace restant, réduite si nécessaire
           Expanded(
@@ -289,7 +293,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
           ),
 
           // Options de réponse — une seule ligne adaptée à la largeur
-          _buildOptions(item),
+          _buildOptions(context, item),
           SizedBox(height: 4.h),
         ],
       ),
@@ -299,7 +303,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
   // Version compacte : la progression d'items est déjà affichée par le
   // scaffold (KeplerProgress) — on ne garde ici que la difficulté et les
   // métadonnées de l'item, sur une seule ligne.
-  Widget _buildLevelHeader(MatrixItem item) {
+  Widget _buildLevelHeader(BuildContext context, MatrixItem item) {
     return Row(
       children: [
         Container(
@@ -309,7 +313,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
             borderRadius: BorderRadius.circular(20.r),
           ),
           child: Text(
-            _getDifficultyLabel(item.difficulty),
+            _getDifficultyLabel(context, item.difficulty),
             style: TextStyle(
               fontSize: 12.sp,
               fontWeight: FontWeight.w600,
@@ -320,7 +324,8 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
         SizedBox(width: 8.w),
         Expanded(
           child: Text(
-            'Règles : ${item.rules.length} | θ = ${item.thetaValue.toStringAsFixed(1)}',
+            context.l10n.matRulesTheta(
+                item.rules.length, item.thetaValue.toStringAsFixed(1)),
             style: TextStyle(
               fontSize: 11.sp,
               color: AppColors.grey600,
@@ -333,7 +338,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
     );
   }
 
-  Widget _buildInstructions() {
+  Widget _buildInstructions(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
       decoration: BoxDecoration(
@@ -347,7 +352,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
           SizedBox(width: 8.w),
           Expanded(
             child: Text(
-              'Trouvez la pièce manquante qui complète logiquement la matrice',
+              context.l10n.matInstruction,
               style: TextStyle(fontSize: 12.sp),
             ),
           ),
@@ -393,12 +398,12 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
     );
   }
 
-  Widget _buildOptions(MatrixItem item) {
+  Widget _buildOptions(BuildContext context, MatrixItem item) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Choisissez la réponse :',
+          context.l10n.matChooseAnswer,
           style: TextStyle(
             fontSize: 14.sp,
             fontWeight: FontWeight.bold,
@@ -434,18 +439,19 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
     );
   }
 
-  String _getDifficultyLabel(DifficultyLevel difficulty) {
+  String _getDifficultyLabel(BuildContext context, DifficultyLevel difficulty) {
+    final l10n = context.l10n;
     switch (difficulty) {
       case DifficultyLevel.veryEasy:
-        return 'Facile';
+        return l10n.matDiffEasy;
       case DifficultyLevel.easy:
-        return 'Moyen-Facile';
+        return l10n.matDiffMediumEasy;
       case DifficultyLevel.medium:
-        return 'Moyen';
+        return l10n.matDiffMedium;
       case DifficultyLevel.mediumHard:
-        return 'Moyen-Difficile';
+        return l10n.matDiffMediumHard;
       case DifficultyLevel.hard:
-        return 'Difficile';
+        return l10n.matDiffHard;
     }
   }
 }

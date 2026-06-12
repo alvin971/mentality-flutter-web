@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:async';
+import '../../../../../core/l10n/l10n_ext.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
 import '../../../../../core/widgets/test/kepler_test_button.dart';
@@ -128,18 +129,15 @@ class _SymbolSearchTestPageState extends State<SymbolSearchTestPage> {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: const Text('Entraînement terminé'),
-        content: const Text(
-          'Vous êtes prêt ! Vous aurez 120 secondes pour compléter le maximum d\'items.\n\n'
-          'Rappel : Score = Réponses correctes - Réponses incorrectes',
-        ),
+        title: Text(context.l10n.codingTrainingDoneTitle),
+        content: Text(context.l10n.ssTrainingDoneBody),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.pop(context);
               _startTest();
             },
-            child: const Text('Commencer le test'),
+            child: Text(context.l10n.codingStartTest),
           ),
         ],
       ),
@@ -155,19 +153,19 @@ class _SymbolSearchTestPageState extends State<SymbolSearchTestPage> {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: const Text('Test terminé !'),
+        title: Text(context.l10n.codingTestDoneTitle),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Items répondus : ${score.totalAnswered}/60', style: TextStyle(fontSize: 16.sp)),
+            Text(context.l10n.ssItemsAnswered(score.totalAnswered), style: TextStyle(fontSize: 16.sp)),
             SizedBox(height: 8.h),
-            Text('Réponses correctes : ${score.correct}'),
-            Text('Réponses incorrectes : ${score.incorrect}', style: TextStyle(color: AppColors.error)),
-            Text('Non répondus : ${score.notAnswered}', style: TextStyle(color: AppColors.grey600)),
+            Text(context.l10n.ssCorrectAnswers(score.correct)),
+            Text(context.l10n.ssIncorrectAnswers(score.incorrect), style: TextStyle(color: AppColors.error)),
+            Text(context.l10n.ssNotAnswered(score.notAnswered), style: TextStyle(color: AppColors.grey600)),
             SizedBox(height: 16.h),
             Text(
-              'Score brut : ${score.rawScore}',
+              context.l10n.ssRawScore(score.rawScore),
               style: TextStyle(
                 fontSize: 20.sp,
                 fontWeight: FontWeight.bold,
@@ -176,12 +174,12 @@ class _SymbolSearchTestPageState extends State<SymbolSearchTestPage> {
             ),
             SizedBox(height: 4.h),
             Text(
-              '(Corrects - Incorrects)',
+              context.l10n.ssScoreFormulaShort,
               style: TextStyle(fontSize: 12.sp, color: AppColors.grey600),
             ),
             SizedBox(height: 12.h),
             Text(
-              _getPerformanceMessage(score.rawScore),
+              _getPerformanceMessage(context, score.rawScore),
               style: TextStyle(fontSize: 14.sp, color: AppColors.grey700),
             ),
           ],
@@ -192,19 +190,19 @@ class _SymbolSearchTestPageState extends State<SymbolSearchTestPage> {
               Navigator.pop(context);
               Navigator.pop(context, score.rawScore);
             },
-            child: const Text('Retour'),
+            child: Text(context.l10n.commonBack),
           ),
         ],
       ),
     );
   }
 
-  String _getPerformanceMessage(int score) {
-    if (score >= 58) return 'Performance exceptionnelle !';
-    if (score >= 50) return 'Très bonne performance';
-    if (score >= 40) return 'Bonne performance';
-    if (score >= 30) return 'Performance moyenne';
-    return 'Performance en-dessous de la moyenne';
+  String _getPerformanceMessage(BuildContext context, int score) {
+    if (score >= 58) return context.l10n.codingPerfExceptional;
+    if (score >= 50) return context.l10n.codingPerfVeryGood;
+    if (score >= 40) return context.l10n.ssPerfGood;
+    if (score >= 30) return context.l10n.codingPerfAverage;
+    return context.l10n.codingPerfBelowAverage;
   }
 
   @override
@@ -219,12 +217,12 @@ class _SymbolSearchTestPageState extends State<SymbolSearchTestPage> {
 
   Widget _buildIntroScreen() {
     return KeplerTestScaffold(
-      testName: 'Recherche de Symboles',
-      eyebrow: 'VITESSE DE TRAITEMENT · PSI',
+      testName: context.l10n.ssTestName,
+      eyebrow: context.l10n.codingEyebrow,
       accentColor: AppColors.indexPSI,
       // Bouton de démarrage sticky : visible sans scroller.
       bottomBar: KeplerTestButton.primary(
-        label: 'Commencer l\'entraînement',
+        label: context.l10n.codingStartTraining,
         accentColor: AppColors.indexPSI,
         onPressed: _startTraining,
       ),
@@ -238,7 +236,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
               ),
               SizedBox(height: 24.h),
               Text(
-                'Recherche de Symboles',
+                context.l10n.ssTestName,
                 style: TextStyle(
                   fontSize: 28.sp,
                   fontWeight: FontWeight.bold,
@@ -247,7 +245,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
               ),
               SizedBox(height: 16.h),
               Text(
-                'Ce test mesure votre vitesse de traitement visuelle et votre capacité de discrimination.',
+                context.l10n.ssDescription,
                 style: TextStyle(fontSize: 16.sp),
               ),
               SizedBox(height: 24.h),
@@ -262,7 +260,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Exemple d\'item :',
+                      context.l10n.ssExampleLabel,
                       style: TextStyle(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.bold,
@@ -282,7 +280,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                           ),
                           child: Column(
                             children: [
-                              Text('CIBLES', style: TextStyle(fontSize: 10.sp, fontWeight: FontWeight.bold)),
+                              Text(context.l10n.ssTargets, style: TextStyle(fontSize: 10.sp, fontWeight: FontWeight.bold)),
                               SizedBox(height: 8.h),
                               Row(
                                 children: [
@@ -307,7 +305,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                             ),
                             child: Column(
                               children: [
-                                Text('GROUPE', style: TextStyle(fontSize: 10.sp, fontWeight: FontWeight.bold)),
+                                Text(context.l10n.ssGroup, style: TextStyle(fontSize: 10.sp, fontWeight: FontWeight.bold)),
                                 SizedBox(height: 8.h),
                                 Wrap(
                                   spacing: 8.w,
@@ -323,7 +321,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                     ),
                     SizedBox(height: 12.h),
                     Text(
-                      '→ Réponse : OUI (┴ est présent)',
+                      context.l10n.ssExampleAnswer,
                       style: TextStyle(fontSize: 14.sp, color: AppColors.success, fontWeight: FontWeight.bold),
                     ),
                   ],
@@ -331,26 +329,26 @@ crossAxisAlignment: CrossAxisAlignment.start,
               ),
               SizedBox(height: 24.h),
               _buildInfoCard(
-                'Votre tâche',
-                'Cherchez si l\'un des symboles cibles apparaît dans le groupe',
+                context.l10n.ssTaskTitle,
+                context.l10n.ssTaskDesc,
                 Icons.visibility_outlined,
               ),
               SizedBox(height: 12.h),
               _buildInfoCard(
-                'Réponse rapide',
-                'Cliquez OUI ou NON aussi vite que possible',
+                context.l10n.ssQuickAnswerTitle,
+                context.l10n.ssQuickAnswerDesc,
                 Icons.touch_app_outlined,
               ),
               SizedBox(height: 12.h),
               _buildInfoCard(
-                'Scoring avec pénalité',
-                'Score = Réponses correctes - Réponses incorrectes',
+                context.l10n.ssScoringPenaltyTitle,
+                context.l10n.ssScoringPenaltyDesc,
                 Icons.calculate_outlined,
               ),
               SizedBox(height: 12.h),
               _buildInfoCard(
-                'Temps limité',
-                '120 secondes pour 60 items',
+                context.l10n.ssTimeLimitTitle,
+                context.l10n.ssTimeLimitDesc,
                 Icons.timer_outlined,
               ),
             ],
@@ -364,7 +362,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: Text(_isTraining ? 'Entraînement' : 'Recherche de Symboles'),
+        title: Text(_isTraining ? context.l10n.codingTrainingTab : context.l10n.ssTestName),
         actions: [
           if (!_isTraining)
             Center(
@@ -383,7 +381,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                       Icon(Icons.timer, size: 20.sp, color: _remainingSeconds <= 10 ? AppColors.error : Theme.of(context).colorScheme.onSurface),
                       SizedBox(width: 4.w),
                       Text(
-                        '$_remainingSeconds s',
+                        context.l10n.commonSeconds(_remainingSeconds),
                         style: TextStyle(
                           fontSize: 16.sp,
                           fontWeight: FontWeight.bold,
@@ -408,12 +406,12 @@ crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Item ${_currentItemIndex + 1}/$maxItems',
+                    context.l10n.ssItemProgress(_currentItemIndex + 1, maxItems),
                     style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
                   ),
                   if (!_isTraining)
                     Text(
-                      'Répondus : ${_userAnswers.where((a) => a != null).length}/60',
+                      context.l10n.ssAnsweredProgress(_userAnswers.where((a) => a != null).length),
                       style: TextStyle(fontSize: 14.sp, color: AppColors.grey600),
                     ),
                 ],
@@ -428,7 +426,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
               child: Column(
                 children: [
                   Text(
-                    'SYMBOLES CIBLES',
+                    context.l10n.ssTargetSymbols,
                     style: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.bold,
@@ -481,7 +479,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
               child: Column(
                 children: [
                   Text(
-                    'GROUPE DE RECHERCHE',
+                    context.l10n.ssSearchGroup,
                     style: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.bold,
@@ -533,7 +531,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                           ),
                         ),
                         child: Text(
-                          'NON',
+                          context.l10n.ssNo,
                           style: TextStyle(
                             fontSize: 24.sp,
                             fontWeight: FontWeight.bold,
@@ -555,7 +553,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                           ),
                         ),
                         child: Text(
-                          'OUI',
+                          context.l10n.ssYes,
                           style: TextStyle(
                             fontSize: 24.sp,
                             fontWeight: FontWeight.bold,

@@ -1,3 +1,5 @@
+import '../../../core/l10n/l10n_ext.dart';
+
 /// Tables de conversion pour scores composites et QI Total
 /// Basé sur les paramètres psychométriques du WAIS-IV
 ///
@@ -160,12 +162,12 @@ class CompositeScoreTables {
 
   /// Retourne la classification descriptive pour un score composite
   static String classify(int compositeScore) {
-    if (compositeScore >= 130) return 'Très supérieur';
-    if (compositeScore >= 120) return 'Supérieur';
-    if (compositeScore >= 110) return 'Moyen fort';
-    if (compositeScore >= 90) return 'Moyen';
-    if (compositeScore >= 80) return 'Moyen faible';
-    if (compositeScore >= 70) return 'Limite';
-    return 'Extrêmement bas';
+    if (compositeScore >= 130) return appL10n.scoringClassificationVerySuperior;
+    if (compositeScore >= 120) return appL10n.scoringClassificationSuperior;
+    if (compositeScore >= 110) return appL10n.scoringClassificationHighAverage;
+    if (compositeScore >= 90) return appL10n.scoringClassificationAverage;
+    if (compositeScore >= 80) return appL10n.scoringClassificationLowAverage;
+    if (compositeScore >= 70) return appL10n.scoringClassificationBorderline;
+    return appL10n.scoringClassificationExtremelyLow;
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:math' as math;
+import '../../../../../core/l10n/l10n_ext.dart';
 import '../../../../../core/theme/app_colors.dart';
 
 /// Widget d'exercice des Cubes (Block Design)
@@ -139,25 +140,25 @@ class _CubesExerciseWidgetState extends State<CubesExerciseWidget> {
     return Column(
       children: [
         // Timer et instructions
-        _buildHeader(remainingTime),
+        _buildHeader(context, remainingTime),
         SizedBox(height: 12.h),
 
         // Pattern cible — partage la hauteur restante avec la grille
         // utilisateur ; chaque grille est réduite si l'écran est petit.
-        Expanded(child: _buildTargetPattern()),
+        Expanded(child: _buildTargetPattern(context)),
         SizedBox(height: 12.h),
 
         // Grille utilisateur
-        Expanded(child: _buildUserGrid()),
+        Expanded(child: _buildUserGrid(context)),
         SizedBox(height: 12.h),
 
         // Boutons d'action — toujours visibles en bas
-        _buildActionButtons(),
+        _buildActionButtons(context),
       ],
     );
   }
 
-  Widget _buildHeader(int? remainingTime) {
+  Widget _buildHeader(BuildContext context, int? remainingTime) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
       decoration: BoxDecoration(
@@ -197,7 +198,7 @@ class _CubesExerciseWidgetState extends State<CubesExerciseWidget> {
                     borderRadius: BorderRadius.circular(8.r),
                   ),
                   child: Text(
-                    'Reste: ${_formatTime(remainingTime)}',
+                    context.l10n.cubesRemaining(_formatTime(remainingTime)),
                     style: TextStyle(
                       fontSize: 13.sp,
                       fontWeight: FontWeight.w600,
@@ -210,7 +211,7 @@ class _CubesExerciseWidgetState extends State<CubesExerciseWidget> {
           ),
           SizedBox(height: 6.h),
           Text(
-            'Reproduisez le pattern ci-dessous en tapant sur les cubes',
+            context.l10n.cubesReproduceInstruction,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 12.sp,
@@ -222,17 +223,17 @@ class _CubesExerciseWidgetState extends State<CubesExerciseWidget> {
     );
   }
 
-  Widget _buildTargetPattern() {
+  Widget _buildTargetPattern(BuildContext context) {
     return _buildGridSection(
-      label: 'Pattern à reproduire :',
+      label: context.l10n.cubesPatternToReproduce,
       grid: widget.targetPattern,
       isTarget: true,
     );
   }
 
-  Widget _buildUserGrid() {
+  Widget _buildUserGrid(BuildContext context) {
     return _buildGridSection(
-      label: 'Votre réponse :',
+      label: context.l10n.cubesYourAnswer,
       grid: userGrid,
       isTarget: false,
     );
@@ -316,14 +317,14 @@ class _CubesExerciseWidgetState extends State<CubesExerciseWidget> {
     );
   }
 
-  Widget _buildActionButtons() {
+  Widget _buildActionButtons(BuildContext context) {
     return Row(
       children: [
         Expanded(
           child: OutlinedButton.icon(
             onPressed: isCompleted ? null : _resetGrid,
             icon: const Icon(Icons.refresh),
-            label: const Text('Réinitialiser'),
+            label: Text(context.l10n.cubesReset),
             style: OutlinedButton.styleFrom(
               padding: EdgeInsets.symmetric(vertical: 16.h),
               side: BorderSide(color: AppColors.grey400),
@@ -336,7 +337,7 @@ class _CubesExerciseWidgetState extends State<CubesExerciseWidget> {
           child: ElevatedButton.icon(
             onPressed: isCompleted ? null : _submitAnswer,
             icon: const Icon(Icons.check),
-            label: const Text('Valider'),
+            label: Text(context.l10n.commonValidate),
             style: ElevatedButton.styleFrom(
               padding: EdgeInsets.symmetric(vertical: 16.h),
             ),

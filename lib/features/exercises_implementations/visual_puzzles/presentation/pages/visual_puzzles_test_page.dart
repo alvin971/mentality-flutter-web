@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../../../../core/l10n/l10n_ext.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
 import '../../../../../core/widgets/test/kepler_test_button.dart';
@@ -166,8 +167,8 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
     final isWide = MediaQuery.sizeOf(context).width >= 900;
 
     return KeplerTestScaffold(
-      testName: 'Puzzles Visuels',
-      eyebrow: 'VISUO-SPATIAL · VSI',
+      testName: context.l10n.vpTestName,
+      eyebrow: context.l10n.vpEyebrow,
       accentColor: accent,
       currentItem: _currentItemIndex + 1,
       totalItems: _items.length,
@@ -178,22 +179,22 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
       bottomBar: KeplerTestButton.primary(
         label: _submitted
             ? (setEquals(_selectedIds, item.correctIds)
-                ? 'Correct'
-                : 'Incorrect')
+                ? context.l10n.vpCorrect
+                : context.l10n.vpIncorrect)
             : (_selectedIds.length == 3
-                ? 'Valider'
-                : '${_selectedIds.length} / 3 sélectionnées'),
+                ? context.l10n.vpValidate
+                : context.l10n.vpSelectedCount(_selectedIds.length)),
         accentColor: accent,
         onPressed:
             (_selectedIds.length == 3 && !_submitted) ? () => _submit() : null,
       ),
-      child: isWide ? _buildWide(item) : _buildNarrow(item),
+      child: isWide ? _buildWide(context, item) : _buildNarrow(context, item),
     );
   }
 
   /// Mobile / fenêtre étroite : tout en colonne, dimensionné pour tenir
   /// dans la hauteur disponible (cible flexible + grille bornée).
-  Widget _buildNarrow(PuzzleItem item) {
+  Widget _buildNarrow(BuildContext context, PuzzleItem item) {
     return LayoutBuilder(
       builder: (context, constraints) {
         // Hauteur consommée par les éléments fixes (slots + consigne + gaps).
@@ -220,7 +221,7 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
             const SizedBox(height: 8),
             PuzzleSlotIndicator(filled: _selectedIds.length, total: 3),
             const SizedBox(height: 6),
-            _instruction(),
+            _instruction(context),
             const SizedBox(height: 8),
             Center(child: _optionsGrid(item, maxWidth: effectiveGridWidth)),
             const SizedBox(height: 4),
@@ -233,7 +234,7 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
   /// Desktop / fenêtre large : cible à gauche, pièces à droite —
   /// tout visible sans défilement (important pour un test chronométré).
   /// FittedBox : sur fenêtre basse, l'ensemble est réduit plutôt que coupé.
-  Widget _buildWide(PuzzleItem item) {
+  Widget _buildWide(BuildContext context, PuzzleItem item) {
     return Center(
       child: FittedBox(
         fit: BoxFit.scaleDown,
@@ -256,7 +257,7 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
                       PuzzleSlotIndicator(
                           filled: _selectedIds.length, total: 3),
                       const SizedBox(height: 12),
-                      _instruction(),
+                      _instruction(context),
                     ],
                   ),
                 ),
@@ -270,12 +271,11 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
     );
   }
 
-  Widget _instruction() {
+  Widget _instruction(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: Text(
-        'Choisissez les 3 pièces qui forment la figure '
-        '(rotations permises, retournements interdits).',
+        context.l10n.vpInstruction,
         style: AppText.body().copyWith(fontSize: 13.5),
         textAlign: TextAlign.center,
       ),

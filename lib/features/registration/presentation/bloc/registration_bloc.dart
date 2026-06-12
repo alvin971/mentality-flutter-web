@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import '../../../../core/l10n/l10n_ext.dart';
 import '../../data/datasources/registration_remote_datasource.dart';
 import '../../data/repositories/registration_repository.dart';
 import '../../domain/entities/registration_form.dart';
@@ -155,8 +156,8 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
       emit(state.copyWith(
         busy: false,
         errorMessage: err.reason == 'email_taken'
-            ? 'Cet email a déjà un compte. Si c\'est le vôtre, vous avez déjà un token.'
-            : 'Email indisponible.',
+            ? appL10n.regEmailAlreadyRegistered
+            : appL10n.regEmailUnavailable,
       ));
     } catch (err) {
       emit(state.copyWith(busy: false, errorMessage: _friendly(err)));
@@ -177,7 +178,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     } catch (err) {
       emit(state.copyWith(
         busy: false,
-        errorMessage: 'Code incorrect ou expiré.',
+        errorMessage: appL10n.regOtpIncorrectOrExpired,
       ));
     }
   }
@@ -197,8 +198,8 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
       emit(state.copyWith(
         busy: false,
         errorMessage: err.reason == 'phone_taken'
-            ? 'Ce numéro a déjà un compte.'
-            : 'Numéro indisponible.',
+            ? appL10n.regPhoneAlreadyRegistered
+            : appL10n.regPhoneUnavailable,
       ));
     } catch (err) {
       emit(state.copyWith(busy: false, errorMessage: _friendly(err)));
@@ -219,7 +220,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     } catch (err) {
       emit(state.copyWith(
         busy: false,
-        errorMessage: 'Code incorrect ou expiré.',
+        errorMessage: appL10n.regOtpIncorrectOrExpired,
       ));
     }
   }
@@ -250,8 +251,8 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
         step: RegistrationStep.failure,
         busy: false,
         errorMessage: err.reason == 'email_taken'
-            ? 'Cet email a déjà un token.'
-            : 'Ce numéro a déjà un token.',
+            ? appL10n.regEmailAlreadyHasToken
+            : appL10n.regPhoneAlreadyHasToken,
       ));
     } catch (err) {
       emit(state.copyWith(
@@ -265,11 +266,11 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
   String _friendly(Object err) {
     final s = err.toString();
     if (s.contains('invalid_postal')) {
-      return 'Code postal introuvable. Vérifiez le pays et le code.';
+      return appL10n.regPostalNotFound;
     }
     if (s.contains('SocketException') || s.contains('Failed host lookup')) {
-      return 'Pas de connexion internet.';
+      return appL10n.regNoInternet;
     }
-    return 'Erreur — merci de réessayer.';
+    return appL10n.regGenericRetryError;
   }
 }

@@ -7,6 +7,7 @@ import '../../../../core/widgets/kepler_button.dart';
 import '../../../../core/widgets/kepler_card.dart';
 import '../../../../core/widgets/kepler_scaffold.dart';
 import '../../../../core/widgets/et_logo_animated.dart';
+import '../../../../core/l10n/l10n_ext.dart';
 import '../bloc/registration_bloc.dart';
 import 'registration_email_otp_page.dart';
 
@@ -44,8 +45,8 @@ class _RegistrationEmailPageState extends State<RegistrationEmailPage> {
       },
       builder: (context, state) {
         return KeplerScaffold(
-          title: 'Créer mon token',
-          eyebrow: 'ÉTAPE 1 / 4',
+          title: context.l10n.regEmailTitle,
+          eyebrow: context.l10n.regStepEyebrow(1),
           child: Form(
             key: _formKey,
             child: Column(
@@ -56,14 +57,13 @@ class _RegistrationEmailPageState extends State<RegistrationEmailPage> {
                   children: [
                     EtLogoAnimated(size: 32.w),
                     SizedBox(width: 12.w),
-                    Text('Votre email',
+                    Text(context.l10n.regEmailHeading,
                         style: AppText.h2Italic(color: AppColors.primary)),
                   ],
                 ),
                 SizedBox(height: 8.h),
                 Text(
-                  'Nous vous envoyons un code de vérification à 6 chiffres. '
-                  'Votre email n\'est pas lié à votre token et reste privé.',
+                  context.l10n.regEmailIntro,
                   style: AppText.body(),
                 ),
                 SizedBox(height: 20.h),
@@ -72,13 +72,13 @@ class _RegistrationEmailPageState extends State<RegistrationEmailPage> {
                     controller: _controller,
                     keyboardType: TextInputType.emailAddress,
                     autofocus: true,
-                    decoration: const InputDecoration(
-                      labelText: 'Adresse email',
+                    decoration: InputDecoration(
+                      labelText: context.l10n.regEmailFieldLabel,
                       border: InputBorder.none,
                     ),
                     validator: (v) {
                       if (v == null || !_isValidEmail(v)) {
-                        return 'Email invalide';
+                        return context.l10n.regEmailInvalid;
                       }
                       return null;
                     },
@@ -91,7 +91,9 @@ class _RegistrationEmailPageState extends State<RegistrationEmailPage> {
                 ],
                 SizedBox(height: 24.h),
                 KeplerButton(
-                  label: state.busy ? 'Envoi du code…' : 'Recevoir le code',
+                  label: state.busy
+                      ? context.l10n.regSendingCode
+                      : context.l10n.regReceiveCode,
                   expand: true,
                   onPressed: state.busy
                       ? null
@@ -105,9 +107,7 @@ class _RegistrationEmailPageState extends State<RegistrationEmailPage> {
                 ),
                 SizedBox(height: 16.h),
                 Text(
-                  'Aucun nom, prénom ou adresse précise ne sera stocké. '
-                  'Seuls votre sexe, tranche d\'âge et code postal sont '
-                  'encodés (chiffrés) dans votre token anonyme.',
+                  context.l10n.regEmailPrivacyNote,
                   style: AppText.bodySmall(color: AppColors.textTertiary),
                 ),
               ],

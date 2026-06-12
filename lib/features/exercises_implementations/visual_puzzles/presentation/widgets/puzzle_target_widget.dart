@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import '../../../../../core/l10n/l10n_ext.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
 import '../../domain/geometry.dart';
@@ -50,7 +51,7 @@ class PuzzleTargetWidget extends StatelessWidget {
                   Positioned(
                     top: 8,
                     left: 12,
-                    child: Text('FIGURE À RECONSTITUER',
+                    child: Text(context.l10n.vpTargetTitle,
                         style: AppText.mono(color: accent, size: 10)),
                   ),
                   Padding(

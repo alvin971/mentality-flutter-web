@@ -3,6 +3,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import '../../../../core/models/complete_test_session.dart';
 import '../../../scoring/domain/entities/iq_score.dart';
+import '../../../../core/l10n/l10n_ext.dart';
 
 /// Service de génération et d'impression du rapport PDF WAIS-IV.
 ///
@@ -62,7 +63,7 @@ class PdfReportService {
                         fontSize: 28,
                         fontWeight: pw.FontWeight.bold,
                         color: PdfColors.indigo700)),
-                pw.Text('Rapport d\'évaluation cognitive WAIS-IV',
+                pw.Text(appL10n.ctPdfSubtitle,
                     style: const pw.TextStyle(
                         fontSize: 12, color: PdfColors.grey700)),
               ],
@@ -80,10 +81,12 @@ class PdfReportService {
   pw.Widget _buildSessionInfo(
       CompleteTestSession session, int? ageInMonths) {
     final duration = session.totalDuration;
-    final age =
-        ageInMonths != null ? '${ageInMonths ~/ 12} ans' : 'Non renseigné';
+    final age = ageInMonths != null
+        ? appL10n.ctAgeYears(ageInMonths ~/ 12)
+        : appL10n.ctPdfNotProvided;
     final dur = duration != null
-        ? '${duration.inMinutes} min ${duration.inSeconds % 60} sec'
+        ? appL10n.ctPdfDurationMinSec(
+            duration.inMinutes, duration.inSeconds % 60)
         : 'N/A';
 
     return pw.Container(
@@ -94,11 +97,11 @@ class PdfReportService {
       ),
       child: pw.Row(
         children: [
-          _infoItem('Âge', age),
+          _infoItem(appL10n.ctPdfAge, age),
           pw.SizedBox(width: 40),
-          _infoItem('Durée', dur),
+          _infoItem(appL10n.ctPdfDuration, dur),
           pw.SizedBox(width: 40),
-          _infoItem('Date', _dateString()),
+          _infoItem(appL10n.ctPdfDate, _dateString()),
         ],
       ),
     );
@@ -134,7 +137,7 @@ class PdfReportService {
           pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
             children: [
-              pw.Text('SCORE QI GLOBAL (FSIQ)',
+              pw.Text(appL10n.ctPdfFsiqLabel,
                   style: pw.TextStyle(
                       fontSize: 11,
                       color: PdfColors.white,
@@ -152,7 +155,7 @@ class PdfReportService {
           pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.end,
             children: [
-              pw.Text('Intervalle de confiance 95%',
+              pw.Text(appL10n.ctPdfConfidenceInterval95,
                   style: pw.TextStyle(
                       fontSize: 9, color: PdfColors.white)),
               pw.Text('${ci.lowerBound} — ${ci.upperBound}',
@@ -161,10 +164,10 @@ class PdfReportService {
                       color: PdfColors.white,
                       fontWeight: pw.FontWeight.bold)),
               pw.SizedBox(height: 8),
-              pw.Text('Percentile',
+              pw.Text(appL10n.ctPdfPercentile,
                   style: pw.TextStyle(
                       fontSize: 9, color: PdfColors.white)),
-              pw.Text('${iqScore.fsiqPercentile}e',
+              pw.Text(appL10n.ctPercentileValue(iqScore.fsiqPercentile),
                   style: pw.TextStyle(
                       fontSize: 20,
                       color: PdfColors.white,
@@ -177,18 +180,18 @@ class PdfReportService {
   }
 
   pw.Widget _buildIndexTable(IQScore iqScore) {
-    final rows = [
-      ('VCI — Compréhension Verbale', iqScore.vci),
-      ('VSI — Visuo-Spatial', iqScore.vsi),
-      ('FRI — Raisonnement Fluide', iqScore.fri),
-      ('WMI — Mémoire de Travail', iqScore.wmi),
-      ('PSI — Vitesse de Traitement', iqScore.psi),
+    final rows = <(String, String, int?)>[
+      ('VCI', appL10n.ctPdfIndexVci, iqScore.vci),
+      ('VSI', appL10n.ctPdfIndexVsi, iqScore.vsi),
+      ('FRI', appL10n.ctPdfIndexFri, iqScore.fri),
+      ('WMI', appL10n.ctPdfIndexWmi, iqScore.wmi),
+      ('PSI', appL10n.ctPdfIndexPsi, iqScore.psi),
     ];
 
     return pw.Column(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
-        pw.Text('PROFIL DES INDICES COGNITIFS',
+        pw.Text(appL10n.ctPdfIndexProfileHeader,
             style: pw.TextStyle(
                 fontSize: 12,
                 fontWeight: pw.FontWeight.bold,
@@ -205,19 +208,19 @@ class PdfReportService {
             pw.TableRow(
               decoration: const pw.BoxDecoration(color: PdfColors.grey100),
               children: [
-                _tableHeader('Indice'),
-                _tableHeader('Score'),
-                _tableHeader('Classification'),
+                _tableHeader(appL10n.ctPdfColIndex),
+                _tableHeader(appL10n.ctPdfColScore),
+                _tableHeader(appL10n.ctPdfColClassification),
               ],
             ),
             ...rows.map((r) {
-              final score = r.$2;
-              final key = r.$1.substring(0, 3);
+              final score = r.$3;
+              final key = r.$1;
               final classif = score != null
                   ? (iqScore.classifications[key] ?? '')
                   : 'N/A';
               return pw.TableRow(children: [
-                _tableCell(r.$1),
+                _tableCell(r.$2),
                 _tableCell(score != null ? '$score' : 'N/A', centered: true),
                 _tableCell(classif),
               ]);
@@ -230,24 +233,24 @@ class PdfReportService {
 
   pw.Widget _buildSubtestTable(CompleteTestSession session) {
     final subtests = [
-      ('Cubes (BD)', session.cubesScore),
-      ('Similitudes (SI)', session.similaritiesScore),
-      ('Mémoire Chiffres (DS)', session.digitSpanScore),
-      ('Matrices (MR)', session.matricesScore),
-      ('Vocabulaire (VO)', session.vocabularyScore),
-      ('Arithmétique (AR)', session.arithmeticScore),
-      ('Rech. Symboles (SS)', session.symbolSearchScore),
-      ('Puzzles Visuels (VP)', session.visualPuzzlesScore),
-      ('Information (IN)', session.informationScore),
-      ('Code (CD)', session.codingScore),
-      ('Mémoire Images (PS)', session.pictureSpanScore),
-      ('Balances (FW)', session.figureWeightsScore),
+      ('${appL10n.ctTestCubes} (BD)', session.cubesScore),
+      ('${appL10n.ctTestSimilarities} (SI)', session.similaritiesScore),
+      ('${appL10n.ctTestDigitSpan} (DS)', session.digitSpanScore),
+      ('${appL10n.ctTestMatrices} (MR)', session.matricesScore),
+      ('${appL10n.ctTestVocabulary} (VO)', session.vocabularyScore),
+      ('${appL10n.ctTestArithmetic} (AR)', session.arithmeticScore),
+      ('${appL10n.ctTestSymbolSearch} (SS)', session.symbolSearchScore),
+      ('${appL10n.ctTestVisualPuzzles} (VP)', session.visualPuzzlesScore),
+      ('${appL10n.ctTestInformation} (IN)', session.informationScore),
+      ('${appL10n.ctTestCoding} (CD)', session.codingScore),
+      ('${appL10n.ctTestPictureSpan} (PS)', session.pictureSpanScore),
+      ('${appL10n.ctTestFigureWeights} (FW)', session.figureWeightsScore),
     ];
 
     return pw.Column(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: [
-        pw.Text('SCORES BRUTS DES SUBTESTS',
+        pw.Text(appL10n.ctPdfRawScoresHeader,
             style: pw.TextStyle(
                 fontSize: 12,
                 fontWeight: pw.FontWeight.bold,
@@ -263,8 +266,8 @@ class PdfReportService {
             pw.TableRow(
               decoration: const pw.BoxDecoration(color: PdfColors.grey100),
               children: [
-                _tableHeader('Subtest'),
-                _tableHeader('Score brut'),
+                _tableHeader(appL10n.ctPdfColSubtest),
+                _tableHeader(appL10n.ctPdfColRawScore),
               ],
             ),
             ...subtests.map((s) => pw.TableRow(children: [
@@ -289,10 +292,7 @@ class PdfReportService {
         borderRadius: pw.BorderRadius.circular(6),
       ),
       child: pw.Text(
-        'AVERTISSEMENT : Ce rapport est généré par une application d\'aide à l\'évaluation '
-        'et ne constitue pas un diagnostic clinique officiel. Il doit être interprété '
-        'par un professionnel de santé qualifié. Ne pas utiliser à des fins médicales '
-        'ou légales sans évaluation professionnelle complémentaire.',
+        appL10n.ctPdfDisclaimer,
         style: const pw.TextStyle(fontSize: 8, color: PdfColors.orange900),
       ),
     );

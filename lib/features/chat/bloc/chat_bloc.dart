@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../core/l10n/l10n_ext.dart';
 import '../presentation/pages/mentality_chat_page.dart';
 import '../presentation/services/claude_chat_service.dart';
 import 'chat_event.dart';
@@ -46,7 +47,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       emit(ChatIdleState([...updatedMessages, assistantMessage]));
     } catch (e) {
       final errorMessage = ChatMessage(
-        text: 'Désolé, une erreur s\'est produite. Veuillez réessayer.',
+        text: appL10n.chatErrorMessage,
         isUser: false,
         timestamp: DateTime.now(),
         isError: true,

@@ -1,0 +1,273 @@
+{
+  "regStepEyebrow": {
+    "fr": "ÉTAPE {step} / 4",
+    "en": "STEP {step} / 4",
+    "desc": "Eyebrow label showing the current registration step out of 4",
+    "placeholders": {"step": "int"}
+  },
+  "regStepEyebrowSuccess": {
+    "fr": "ÉTAPE 4 / 4 · SUCCÈS",
+    "en": "STEP 4 / 4 · SUCCESS",
+    "desc": "Eyebrow label on the registration success page"
+  },
+  "regEmailTitle": {
+    "fr": "Créer mon token",
+    "en": "Create my token",
+    "desc": "Title of the email entry page (step 1 of registration)"
+  },
+  "regEmailHeading": {
+    "fr": "Votre email",
+    "en": "Your email",
+    "desc": "Heading next to the logo on the email entry page"
+  },
+  "regEmailIntro": {
+    "fr": "Nous vous envoyons un code de vérification à 6 chiffres. Votre email n'est pas lié à votre token et reste privé.",
+    "en": "We will send you a 6-digit verification code. Your email is not linked to your token and remains private.",
+    "desc": "Introductory text on the email entry page"
+  },
+  "regEmailFieldLabel": {
+    "fr": "Adresse email",
+    "en": "Email address",
+    "desc": "Label of the email text field"
+  },
+  "regEmailInvalid": {
+    "fr": "Email invalide",
+    "en": "Invalid email",
+    "desc": "Validation error when the email format is invalid"
+  },
+  "regSendingCode": {
+    "fr": "Envoi du code…",
+    "en": "Sending code…",
+    "desc": "Button label while the email OTP is being sent"
+  },
+  "regReceiveCode": {
+    "fr": "Recevoir le code",
+    "en": "Get the code",
+    "desc": "Button to request the email verification code"
+  },
+  "regEmailPrivacyNote": {
+    "fr": "Aucun nom, prénom ou adresse précise ne sera stocké. Seuls votre sexe, tranche d'âge et code postal sont encodés (chiffrés) dans votre token anonyme.",
+    "en": "No first name, last name or exact address will be stored. Only your sex, age range and postal code are encoded (encrypted) in your anonymous token.",
+    "desc": "Privacy note at the bottom of the email entry page"
+  },
+  "regEmailOtpTitle": {
+    "fr": "Vérifier mon email",
+    "en": "Verify my email",
+    "desc": "Title of the email OTP verification page"
+  },
+  "regCodeSentTo": {
+    "fr": "Code envoyé à",
+    "en": "Code sent to",
+    "desc": "Label above the email address the OTP was sent to"
+  },
+  "regVerifying": {
+    "fr": "Vérification…",
+    "en": "Verifying…",
+    "desc": "Button label while an OTP code is being verified"
+  },
+  "regResendCode": {
+    "fr": "Renvoyer le code",
+    "en": "Resend the code",
+    "desc": "Button to resend the email verification code"
+  },
+  "regPhoneTitle": {
+    "fr": "Votre téléphone",
+    "en": "Your phone",
+    "desc": "Title of the phone entry page (step 2 of registration)"
+  },
+  "regPhoneIntro": {
+    "fr": "Un code SMS à 6 chiffres sera envoyé pour vérifier votre numéro. Aucun lien entre votre numéro et votre token.",
+    "en": "A 6-digit SMS code will be sent to verify your number. Your number is never linked to your token.",
+    "desc": "Introductory text on the phone entry page"
+  },
+  "regPhoneFieldHint": {
+    "fr": "Numéro",
+    "en": "Phone number",
+    "desc": "Hint of the phone number text field"
+  },
+  "regSendingSms": {
+    "fr": "Envoi du SMS…",
+    "en": "Sending SMS…",
+    "desc": "Button label while the SMS OTP is being sent"
+  },
+  "regReceiveSms": {
+    "fr": "Recevoir le SMS",
+    "en": "Get the SMS",
+    "desc": "Button to request the SMS verification code"
+  },
+  "regPhoneOtpTitle": {
+    "fr": "Vérifier mon téléphone",
+    "en": "Verify my phone",
+    "desc": "Title of the phone OTP verification page"
+  },
+  "regSmsSentTo": {
+    "fr": "SMS envoyé au",
+    "en": "SMS sent to",
+    "desc": "Label above the phone number the SMS OTP was sent to"
+  },
+  "regResendSms": {
+    "fr": "Renvoyer le SMS",
+    "en": "Resend the SMS",
+    "desc": "Button to resend the SMS verification code"
+  },
+  "regDemoTitle": {
+    "fr": "Vos données démographiques",
+    "en": "Your demographic data",
+    "desc": "Title of the demographics page (step 3 of registration)"
+  },
+  "regDemoIntro": {
+    "fr": "Ces informations seront chiffrées dans votre token. Aucune valeur exacte n'est stockée (ni âge précis, ni adresse précise).",
+    "en": "This information will be encrypted in your token. No exact value is stored (neither your precise age nor your precise address).",
+    "desc": "Introductory text on the demographics page"
+  },
+  "regSectionSex": {
+    "fr": "SEXE",
+    "en": "SEX",
+    "desc": "Section label (uppercase) for the sex selection"
+  },
+  "regSectionAgeBucket": {
+    "fr": "TRANCHE D'ÂGE",
+    "en": "AGE RANGE",
+    "desc": "Section label (uppercase) for the age range selection"
+  },
+  "regSectionCountryPostal": {
+    "fr": "PAYS ET CODE POSTAL",
+    "en": "COUNTRY AND POSTAL CODE",
+    "desc": "Section label (uppercase) for the country and postal code inputs"
+  },
+  "regPostalCodeHint": {
+    "fr": "Code postal",
+    "en": "Postal code",
+    "desc": "Hint of the postal code text field"
+  },
+  "regGeneratingToken": {
+    "fr": "Génération du token…",
+    "en": "Generating token…",
+    "desc": "Button label while the anonymous token is being generated"
+  },
+  "regGenerateMyToken": {
+    "fr": "Générer mon token",
+    "en": "Generate my token",
+    "desc": "Button to submit demographics and generate the anonymous token"
+  },
+  "regSuccessTitle": {
+    "fr": "Bienvenue dans Mental E.T.",
+    "en": "Welcome to Mental E.T.",
+    "desc": "Title of the registration success page"
+  },
+  "regSuccessTokenSaved": {
+    "fr": "Votre token anonyme a été généré et sauvegardé sur cet appareil.",
+    "en": "Your anonymous token has been generated and saved on this device.",
+    "desc": "Confirmation message on the success page"
+  },
+  "regSuccessTokenDetails": {
+    "fr": "Il ne contient ni votre email, ni votre numéro de téléphone, ni votre nom. Uniquement votre sexe, votre tranche d'âge et votre zone géographique (chiffrés). Vous pouvez maintenant commencer votre évaluation cognitive.",
+    "en": "It contains neither your email, nor your phone number, nor your name. Only your sex, age range and geographic area (encrypted). You can now start your cognitive assessment.",
+    "desc": "Details about the token content on the success page"
+  },
+  "regImportantLabel": {
+    "fr": "IMPORTANT",
+    "en": "IMPORTANT",
+    "desc": "Uppercase warning label on the success page"
+  },
+  "regSuccessWarning": {
+    "fr": "Ne désinstallez pas l'application sans avoir terminé votre évaluation : votre token est uniquement stocké sur cet appareil. Si vous le perdez, vous ne pourrez plus créer de nouveau compte avec le même email ou téléphone.",
+    "en": "Do not uninstall the app before completing your assessment: your token is only stored on this device. If you lose it, you will not be able to create a new account with the same email or phone number.",
+    "desc": "Warning about token being stored only on the device"
+  },
+  "regEmailAlreadyRegistered": {
+    "fr": "Cet email a déjà un compte. Si c'est le vôtre, vous avez déjà un token.",
+    "en": "This email already has an account. If it is yours, you already have a token.",
+    "desc": "Error when the email is already linked to an account"
+  },
+  "regEmailUnavailable": {
+    "fr": "Email indisponible.",
+    "en": "Email unavailable.",
+    "desc": "Generic error when the email cannot be used"
+  },
+  "regOtpIncorrectOrExpired": {
+    "fr": "Code incorrect ou expiré.",
+    "en": "Incorrect or expired code.",
+    "desc": "Error when an OTP code (email or SMS) is wrong or expired"
+  },
+  "regPhoneAlreadyRegistered": {
+    "fr": "Ce numéro a déjà un compte.",
+    "en": "This number already has an account.",
+    "desc": "Error when the phone number is already linked to an account"
+  },
+  "regPhoneUnavailable": {
+    "fr": "Numéro indisponible.",
+    "en": "Number unavailable.",
+    "desc": "Generic error when the phone number cannot be used"
+  },
+  "regEmailAlreadyHasToken": {
+    "fr": "Cet email a déjà un token.",
+    "en": "This email already has a token.",
+    "desc": "Error at token generation when the email already has a token"
+  },
+  "regPhoneAlreadyHasToken": {
+    "fr": "Ce numéro a déjà un token.",
+    "en": "This number already has a token.",
+    "desc": "Error at token generation when the phone already has a token"
+  },
+  "regPostalNotFound": {
+    "fr": "Code postal introuvable. Vérifiez le pays et le code.",
+    "en": "Postal code not found. Check the country and the code.",
+    "desc": "Error when the submitted postal code is unknown"
+  },
+  "regNoInternet": {
+    "fr": "Pas de connexion internet.",
+    "en": "No internet connection.",
+    "desc": "Error when the network is unreachable"
+  },
+  "regGenericRetryError": {
+    "fr": "Erreur — merci de réessayer.",
+    "en": "Error — please try again.",
+    "desc": "Generic fallback error during registration"
+  },
+  "regSexMale": {
+    "fr": "Masculin",
+    "en": "Male",
+    "desc": "Displayed label for the male sex option"
+  },
+  "regSexFemale": {
+    "fr": "Féminin",
+    "en": "Female",
+    "desc": "Displayed label for the female sex option"
+  },
+  "regSexUndisclosed": {
+    "fr": "Préfère ne pas dire",
+    "en": "Prefer not to say",
+    "desc": "Displayed label for the undisclosed sex option"
+  },
+  "regAge1825": {
+    "fr": "18 – 25 ans",
+    "en": "18 – 25 years",
+    "desc": "Displayed label for the 18-25 age range"
+  },
+  "regAge2635": {
+    "fr": "26 – 35 ans",
+    "en": "26 – 35 years",
+    "desc": "Displayed label for the 26-35 age range"
+  },
+  "regAge3645": {
+    "fr": "36 – 45 ans",
+    "en": "36 – 45 years",
+    "desc": "Displayed label for the 36-45 age range"
+  },
+  "regAge4655": {
+    "fr": "46 – 55 ans",
+    "en": "46 – 55 years",
+    "desc": "Displayed label for the 46-55 age range"
+  },
+  "regAge5665": {
+    "fr": "56 – 65 ans",
+    "en": "56 – 65 years",
+    "desc": "Displayed label for the 56-65 age range"
+  },
+  "regAge66plus": {
+    "fr": "66 ans et plus",
+    "en": "66 years and over",
+    "desc": "Displayed label for the 66+ age range"
+  }
+}

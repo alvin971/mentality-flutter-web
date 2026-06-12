@@ -1,0 +1,471 @@
+{
+  "matTestName": {
+    "fr": "Matrices Progressives",
+    "en": "Progressive Matrices",
+    "desc": "Matrices — nom du test affiché dans le scaffold"
+  },
+  "matEyebrow": {
+    "fr": "TEST DE QI · FSIQ",
+    "en": "IQ TEST · FSIQ",
+    "desc": "Matrices — sur-titre (catégorie d'indice) dans le scaffold"
+  },
+  "matCorrect": {
+    "fr": "Correct !",
+    "en": "Correct!",
+    "desc": "Matrices — titre du dialogue de feedback quand la réponse est juste"
+  },
+  "matIncorrect": {
+    "fr": "Incorrect",
+    "en": "Incorrect",
+    "desc": "Matrices/Balances — titre du dialogue de feedback quand la réponse est fausse"
+  },
+  "matResponseTime": {
+    "fr": "Temps de réponse : {seconds} s",
+    "en": "Response time: {seconds}s",
+    "desc": "Matrices — temps de réponse à l'item",
+    "placeholders": {"seconds": "int"}
+  },
+  "matScoreFraction": {
+    "fr": "Score : {score}/{total}",
+    "en": "Score: {score}/{total}",
+    "desc": "Matrices/Balances — score courant (réussites sur items tentés)",
+    "placeholders": {"score": "int", "total": "int"}
+  },
+  "matDiscontinue4": {
+    "fr": "4 échecs consécutifs - Test terminé (WAIS-IV)",
+    "en": "4 consecutive failures - Test ended (WAIS-IV)",
+    "desc": "Matrices — message de règle de discontinuation après 4 échecs"
+  },
+  "matSeeResultsEnded": {
+    "fr": "Voir résultats (test terminé)",
+    "en": "See results (test ended)",
+    "desc": "Matrices/Cubes — bouton dialogue lorsque le test est terminé par discontinuation"
+  },
+  "matNextItem": {
+    "fr": "Item suivant",
+    "en": "Next item",
+    "desc": "Matrices/Cubes — bouton dialogue pour passer à l'item suivant"
+  },
+  "matSeeResults": {
+    "fr": "Voir résultats",
+    "en": "See results",
+    "desc": "Matrices/Cubes — bouton dialogue pour voir les résultats au dernier item"
+  },
+  "matFinishedTitle": {
+    "fr": "Test des Matrices terminé !",
+    "en": "Matrix test completed!",
+    "desc": "Matrices — titre du dialogue de résultats finaux"
+  },
+  "matRawScore": {
+    "fr": "Score brut",
+    "en": "Raw score",
+    "desc": "Matrices — libellé ligne résultat : score brut"
+  },
+  "matSuccessRate": {
+    "fr": "Taux de réussite",
+    "en": "Success rate",
+    "desc": "Matrices/Cubes — libellé ligne résultat : taux de réussite"
+  },
+  "matAvgTimePerItem": {
+    "fr": "Temps moyen/item",
+    "en": "Avg time/item",
+    "desc": "Matrices — libellé ligne résultat : temps moyen par item"
+  },
+  "matEvaluation": {
+    "fr": "Évaluation :",
+    "en": "Evaluation:",
+    "desc": "Matrices/Cubes — en-tête du bloc d'évaluation de performance"
+  },
+  "matPerfExcellent": {
+    "fr": "Excellent ! Raisonnement fluide très supérieur.",
+    "en": "Excellent! Very superior fluid reasoning.",
+    "desc": "Matrices — niveau de performance ≥ 90%"
+  },
+  "matPerfVeryGood": {
+    "fr": "Très bien ! Bonnes capacités d'analyse logique.",
+    "en": "Very good! Strong logical analysis skills.",
+    "desc": "Matrices — niveau de performance ≥ 75%"
+  },
+  "matPerfGood": {
+    "fr": "Bien. Capacités moyennes à bonnes.",
+    "en": "Good. Average to good abilities.",
+    "desc": "Matrices/Cubes — niveau de performance ≥ 60%"
+  },
+  "matPerfAverage": {
+    "fr": "Moyen. Des améliorations sont possibles.",
+    "en": "Average. Improvements are possible.",
+    "desc": "Matrices/Cubes — niveau de performance ≥ 40%"
+  },
+  "matPerfBelowAverage": {
+    "fr": "Résultats en-dessous de la moyenne. Entraînement recommandé.",
+    "en": "Below-average results. Practice recommended.",
+    "desc": "Matrices/Cubes — niveau de performance < 40%"
+  },
+  "matPoints": {
+    "fr": "{score} pts",
+    "en": "{score} pts",
+    "desc": "Matrices/Cubes — badge de score en pts dans l'AppBar",
+    "placeholders": {"score": "int"}
+  },
+  "matValidateAnswer": {
+    "fr": "Valider la réponse",
+    "en": "Submit answer",
+    "desc": "Matrices — libellé du bouton de validation"
+  },
+  "matRestart": {
+    "fr": "Recommencer",
+    "en": "Restart",
+    "desc": "Matrices/Cubes — bouton pour relancer le test depuis le début"
+  },
+  "matRulesTheta": {
+    "fr": "Règles : {rules} | θ = {theta}",
+    "en": "Rules: {rules} | θ = {theta}",
+    "desc": "Matrices — métadonnées techniques de l'item (nombre de règles et thêta IRT)",
+    "placeholders": {"rules": "int", "theta": "String"}
+  },
+  "matInstruction": {
+    "fr": "Trouvez la pièce manquante qui complète logiquement la matrice",
+    "en": "Find the missing piece that logically completes the matrix",
+    "desc": "Matrices — consigne au-dessus de la grille"
+  },
+  "matChooseAnswer": {
+    "fr": "Choisissez la réponse :",
+    "en": "Choose your answer:",
+    "desc": "Matrices/Balances — libellé au-dessus des options de réponse"
+  },
+  "matDiffEasy": {
+    "fr": "Facile",
+    "en": "Easy",
+    "desc": "Matrices/Cubes — étiquette de difficulté : facile"
+  },
+  "matDiffMediumEasy": {
+    "fr": "Moyen-Facile",
+    "en": "Medium-Easy",
+    "desc": "Matrices — étiquette de difficulté : moyen-facile"
+  },
+  "matDiffMedium": {
+    "fr": "Moyen",
+    "en": "Medium",
+    "desc": "Matrices/Cubes — étiquette de difficulté : moyen"
+  },
+  "matDiffMediumHard": {
+    "fr": "Moyen-Difficile",
+    "en": "Medium-Hard",
+    "desc": "Matrices — étiquette de difficulté : moyen-difficile"
+  },
+  "matDiffHard": {
+    "fr": "Difficile",
+    "en": "Hard",
+    "desc": "Matrices/Cubes — étiquette de difficulté : difficile"
+  },
+
+  "cubesTestName": {
+    "fr": "Test des Cubes",
+    "en": "Block Design",
+    "desc": "Cubes — nom du test affiché dans le scaffold"
+  },
+  "cubesBravo": {
+    "fr": "Bravo !",
+    "en": "Well done!",
+    "desc": "Cubes — titre du dialogue de feedback quand la réponse est juste"
+  },
+  "cubesElapsedTime": {
+    "fr": "Temps écoulé : {time}",
+    "en": "Elapsed time: {time}",
+    "desc": "Cubes — temps écoulé (format mm:ss)",
+    "placeholders": {"time": "String"}
+  },
+  "cubesPointsEarned": {
+    "fr": "Points gagnés : {points}",
+    "en": "Points earned: {points}",
+    "desc": "Cubes — points gagnés sur l'item",
+    "placeholders": {"points": "int"}
+  },
+  "cubesTotalScore": {
+    "fr": "Score total : {score}",
+    "en": "Total score: {score}",
+    "desc": "Cubes — score total dans le dialogue de feedback",
+    "placeholders": {"score": "int"}
+  },
+  "cubesFinishedTitle": {
+    "fr": "Test terminé !",
+    "en": "Test completed!",
+    "desc": "Cubes — titre du dialogue de résultats finaux"
+  },
+  "cubesTotalScoreLabel": {
+    "fr": "Score total",
+    "en": "Total score",
+    "desc": "Cubes — libellé ligne résultat : score total"
+  },
+  "cubesTotalScoreValue": {
+    "fr": "{score}/{max} pts",
+    "en": "{score}/{max} pts",
+    "desc": "Cubes — valeur du score total sur le maximum",
+    "placeholders": {"score": "int", "max": "int"}
+  },
+  "cubesItemsCompletedLabel": {
+    "fr": "Items complétés",
+    "en": "Items completed",
+    "desc": "Cubes — libellé ligne résultat : items complétés"
+  },
+  "cubesItemsCompletedValue": {
+    "fr": "{count}/14",
+    "en": "{count}/14",
+    "desc": "Cubes — valeur items complétés sur 14",
+    "placeholders": {"count": "int"}
+  },
+  "cubesAvgTime": {
+    "fr": "Temps moyen",
+    "en": "Avg time",
+    "desc": "Cubes — libellé ligne résultat : temps moyen"
+  },
+  "cubesPerfExcellent": {
+    "fr": "Excellent ! Capacités visuospatiales très supérieures.",
+    "en": "Excellent! Very superior visuospatial abilities.",
+    "desc": "Cubes — niveau de performance ≥ 90%"
+  },
+  "cubesPerfVeryGood": {
+    "fr": "Très bien ! Bonnes capacités d'analyse visuelle.",
+    "en": "Very good! Strong visual analysis skills.",
+    "desc": "Cubes — niveau de performance ≥ 75%"
+  },
+  "cubesDiffExample": {
+    "fr": "Exemple",
+    "en": "Example",
+    "desc": "Cubes — étiquette de difficulté : item exemple"
+  },
+  "cubesDiffVeryHard": {
+    "fr": "Très difficile",
+    "en": "Very hard",
+    "desc": "Cubes — étiquette de difficulté : très difficile"
+  },
+  "cubesDescExample": {
+    "fr": "Item exemple - Ne compte pas pour le score",
+    "en": "Example item - Does not count toward the score",
+    "desc": "Cubes — description métadonnée de l'item exemple"
+  },
+  "cubesDesc2x2": {
+    "fr": "Pattern 2×2 simple",
+    "en": "Simple 2×2 pattern",
+    "desc": "Cubes — description métadonnée : pattern 2×2 simple"
+  },
+  "cubesDesc3x3Diagonals": {
+    "fr": "Pattern 3×3 avec diagonales",
+    "en": "3×3 pattern with diagonals",
+    "desc": "Cubes — description métadonnée : pattern 3×3 avec diagonales"
+  },
+  "cubesDesc3x3Complex": {
+    "fr": "Pattern 3×3 complexe - Haute cohésion",
+    "en": "Complex 3×3 pattern - High cohesion",
+    "desc": "Cubes — description métadonnée : pattern 3×3 complexe haute cohésion"
+  },
+  "cubesCohesion": {
+    "fr": "Cohésion: {score}",
+    "en": "Cohesion: {score}",
+    "desc": "Cubes — métadonnée score de cohésion de l'item",
+    "placeholders": {"score": "int"}
+  },
+  "cubesRemaining": {
+    "fr": "Reste: {time}",
+    "en": "Left: {time}",
+    "desc": "Cubes — temps restant dans l'en-tête de l'exercice (format mm:ss)",
+    "placeholders": {"time": "String"}
+  },
+  "cubesReproduceInstruction": {
+    "fr": "Reproduisez le pattern ci-dessous en tapant sur les cubes",
+    "en": "Reproduce the pattern below by tapping on the cubes",
+    "desc": "Cubes — consigne de l'exercice"
+  },
+  "cubesPatternToReproduce": {
+    "fr": "Pattern à reproduire :",
+    "en": "Pattern to reproduce:",
+    "desc": "Cubes — libellé de la grille cible"
+  },
+  "cubesYourAnswer": {
+    "fr": "Votre réponse :",
+    "en": "Your answer:",
+    "desc": "Cubes — libellé de la grille de l'utilisateur"
+  },
+  "cubesReset": {
+    "fr": "Réinitialiser",
+    "en": "Reset",
+    "desc": "Cubes — bouton de réinitialisation de la grille"
+  },
+
+  "fwTestName": {
+    "fr": "Balances Quantitatives",
+    "en": "Figure Weights",
+    "desc": "Balances — nom du test affiché dans le scaffold"
+  },
+  "fwEyebrow": {
+    "fr": "RAISONNEMENT FLUIDE · FRI",
+    "en": "FLUID REASONING · FRI",
+    "desc": "Balances/Cubes — sur-titre (catégorie d'indice FRI) dans le scaffold"
+  },
+  "fwCorrectAnswerPoint": {
+    "fr": "Bonne réponse ! +1 point",
+    "en": "Correct answer! +1 point",
+    "desc": "Balances — message de feedback réponse juste"
+  },
+  "fwWrongAnswer": {
+    "fr": "Mauvaise réponse. La bonne réponse était :",
+    "en": "Wrong answer. The correct answer was:",
+    "desc": "Balances — message de feedback réponse fausse"
+  },
+  "fwTime": {
+    "fr": "Temps : {seconds} s",
+    "en": "Time: {seconds}s",
+    "desc": "Balances — temps passé sur l'item",
+    "placeholders": {"seconds": "int"}
+  },
+  "fwDiscontinue3": {
+    "fr": "3 échecs consécutifs - Test terminé (WAIS-IV)",
+    "en": "3 consecutive failures - Test ended (WAIS-IV)",
+    "desc": "Balances — message de règle de discontinuation après 3 échecs"
+  },
+  "fwSeeResults": {
+    "fr": "Voir les résultats",
+    "en": "See results",
+    "desc": "Balances — bouton dialogue pour voir les résultats"
+  },
+  "fwResultsTitle": {
+    "fr": "Test des Balances Quantitatives - Résultats",
+    "en": "Figure Weights Test - Results",
+    "desc": "Balances — titre du dialogue de résultats finaux"
+  },
+  "fwRawScorePoints": {
+    "fr": "Score brut : {score}/27 points",
+    "en": "Raw score: {score}/27 points",
+    "desc": "Balances — score brut sur 27",
+    "placeholders": {"score": "int"}
+  },
+  "fwItemsCompleted": {
+    "fr": "Items complétés : {count}/27",
+    "en": "Items completed: {count}/27",
+    "desc": "Balances — items complétés sur 27",
+    "placeholders": {"count": "int"}
+  },
+  "fwPercentage": {
+    "fr": "Pourcentage : {percent}%",
+    "en": "Percentage: {percent}%",
+    "desc": "Balances — pourcentage de réussite",
+    "placeholders": {"percent": "int"}
+  },
+  "fwTotalTime": {
+    "fr": "Temps total : {seconds} s",
+    "en": "Total time: {seconds}s",
+    "desc": "Balances — temps total",
+    "placeholders": {"seconds": "int"}
+  },
+  "fwGLoading": {
+    "fr": "g-loading : 0.78 (le plus élevé du WAIS-IV)",
+    "en": "g-loading: 0.78 (the highest in WAIS-IV)",
+    "desc": "Balances — note technique sur la saturation en facteur g"
+  },
+  "fwPerfExceptional": {
+    "fr": "Performance exceptionnelle (θ > +2.0)",
+    "en": "Exceptional performance (θ > +2.0)",
+    "desc": "Balances — niveau de performance score ≥ 23"
+  },
+  "fwPerfSuperior": {
+    "fr": "Performance supérieure (θ > +1.0)",
+    "en": "Superior performance (θ > +1.0)",
+    "desc": "Balances — niveau de performance score ≥ 18"
+  },
+  "fwPerfAverage": {
+    "fr": "Performance moyenne (θ ≈ 0)",
+    "en": "Average performance (θ ≈ 0)",
+    "desc": "Balances — niveau de performance score ≥ 12"
+  },
+  "fwPerfInferior": {
+    "fr": "Performance inférieure (θ < 0)",
+    "en": "Below-average performance (θ < 0)",
+    "desc": "Balances — niveau de performance score ≥ 7"
+  },
+  "fwPerfLow": {
+    "fr": "Performance faible (θ < -1.0)",
+    "en": "Low performance (θ < -1.0)",
+    "desc": "Balances — niveau de performance score < 7"
+  },
+  "fwScoreFraction": {
+    "fr": "{score}/{total}",
+    "en": "{score}/{total}",
+    "desc": "Balances — badge score/total dans l'AppBar",
+    "placeholders": {"score": "int", "total": "int"}
+  },
+  "fwInstruction": {
+    "fr": "Trouvez la valeur manquante qui équilibre la balance.",
+    "en": "Find the missing value that balances the scale.",
+    "desc": "Balances — consigne en haut de l'écran"
+  },
+  "fwWhatIs": {
+    "fr": "Que vaut ",
+    "en": "What is ",
+    "desc": "Balances — début de la question (suivi des jetons cibles puis « ? »)"
+  },
+  "fwSeconds": {
+    "fr": "{seconds} s",
+    "en": "{seconds}s",
+    "desc": "Balances — badge de compte à rebours du timer",
+    "placeholders": {"seconds": "int"}
+  },
+
+  "vpTestName": {
+    "fr": "Puzzles Visuels",
+    "en": "Visual Puzzles",
+    "desc": "Puzzles visuels — nom du test affiché dans le scaffold"
+  },
+  "vpEyebrow": {
+    "fr": "VISUO-SPATIAL · VSI",
+    "en": "VISUOSPATIAL · VSI",
+    "desc": "Puzzles visuels — sur-titre (catégorie d'indice VSI) dans le scaffold"
+  },
+  "vpCorrect": {
+    "fr": "Correct",
+    "en": "Correct",
+    "desc": "Puzzles visuels — état du bouton après validation correcte"
+  },
+  "vpIncorrect": {
+    "fr": "Incorrect",
+    "en": "Incorrect",
+    "desc": "Puzzles visuels — état du bouton après validation incorrecte"
+  },
+  "vpValidate": {
+    "fr": "Valider",
+    "en": "Submit",
+    "desc": "Puzzles visuels — libellé du bouton de validation (3 pièces sélectionnées)"
+  },
+  "vpSelectedCount": {
+    "fr": "{count} / 3 sélectionnées",
+    "en": "{count} / 3 selected",
+    "desc": "Puzzles visuels — libellé du bouton tant que moins de 3 pièces sont sélectionnées",
+    "placeholders": {"count": "int"}
+  },
+  "vpInstruction": {
+    "fr": "Choisissez les 3 pièces qui forment la figure (rotations permises, retournements interdits).",
+    "en": "Choose the 3 pieces that form the figure (rotations allowed, flips not allowed).",
+    "desc": "Puzzles visuels — consigne sous la figure cible"
+  },
+  "vpSelectionSemantics": {
+    "fr": "Sélection : {filled} sur {total} pièces",
+    "en": "Selection: {filled} of {total} pieces",
+    "desc": "Puzzles visuels — étiquette d'accessibilité de l'indicateur de sélection",
+    "placeholders": {"filled": "int", "total": "int"}
+  },
+  "vpSelectionLabel": {
+    "fr": "SÉLECTION",
+    "en": "SELECTION",
+    "desc": "Puzzles visuels — libellé en capitales de l'indicateur de sélection"
+  },
+  "vpPieceSemantics": {
+    "fr": "Pièce {label}",
+    "en": "Piece {label}",
+    "desc": "Puzzles visuels — étiquette d'accessibilité d'une pièce (le label est un chiffre)",
+    "placeholders": {"label": "String"}
+  },
+  "vpTargetTitle": {
+    "fr": "FIGURE À RECONSTITUER",
+    "en": "FIGURE TO REBUILD",
+    "desc": "Puzzles visuels — titre en capitales au-dessus de la figure cible"
+  }
+}

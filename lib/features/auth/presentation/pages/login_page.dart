@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/config/firebase_config.dart';
+import '../../../../core/l10n/l10n_ext.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -37,8 +38,7 @@ class _LoginPageState extends State<LoginPage> {
 
     if (!FirebaseConfig.isConfigured) {
       setState(() {
-        _errorMessage =
-            'Firebase n\'est pas encore configuré. Suivez les instructions dans firebase_config.dart.';
+        _errorMessage = context.l10n.authFirebaseNotConfiguredFull;
       });
       return;
     }
@@ -74,8 +74,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _signInWithGoogle() async {
     if (!FirebaseConfig.isConfigured) {
       setState(() {
-        _errorMessage =
-            'Firebase n\'est pas encore configuré.';
+        _errorMessage = context.l10n.authFirebaseNotConfigured;
       });
       return;
     }
@@ -109,7 +108,9 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_isRegistering ? 'Créer un compte' : 'Connexion'),
+        title: Text(_isRegistering
+            ? context.l10n.authCreateAccount
+            : context.l10n.authLoginTitle),
       ),
       body: SafeArea(
         child: Center(
@@ -166,8 +167,8 @@ class _LoginPageState extends State<LoginPage> {
         SizedBox(height: 8.h),
         Text(
           _isRegistering
-              ? 'Créez un compte pour sauvegarder vos résultats'
-              : 'Connectez-vous pour accéder à votre historique',
+              ? context.l10n.authHeaderSubtitleRegister
+              : context.l10n.authHeaderSubtitleLogin,
           style: Theme.of(context).textTheme.bodyMedium,
           textAlign: TextAlign.center,
         ),
@@ -180,13 +181,13 @@ class _LoginPageState extends State<LoginPage> {
       controller: _emailController,
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
-      decoration: const InputDecoration(
-        labelText: 'Adresse e-mail',
-        prefixIcon: Icon(Icons.email_outlined),
+      decoration: InputDecoration(
+        labelText: context.l10n.authEmailLabel,
+        prefixIcon: const Icon(Icons.email_outlined),
       ),
       validator: (v) {
-        if (v == null || v.isEmpty) return 'Champ obligatoire';
-        if (!v.contains('@')) return 'Adresse e-mail invalide';
+        if (v == null || v.isEmpty) return context.l10n.authFieldRequired;
+        if (!v.contains('@')) return context.l10n.authEmailInvalid;
         return null;
       },
     );
@@ -198,14 +199,14 @@ class _LoginPageState extends State<LoginPage> {
       obscureText: true,
       textInputAction: TextInputAction.done,
       onFieldSubmitted: (_) => _submit(),
-      decoration: const InputDecoration(
-        labelText: 'Mot de passe',
-        prefixIcon: Icon(Icons.lock_outlined),
+      decoration: InputDecoration(
+        labelText: context.l10n.authPasswordLabel,
+        prefixIcon: const Icon(Icons.lock_outlined),
       ),
       validator: (v) {
-        if (v == null || v.isEmpty) return 'Champ obligatoire';
+        if (v == null || v.isEmpty) return context.l10n.authFieldRequired;
         if (_isRegistering && v.length < 8) {
-          return 'Minimum 8 caractères';
+          return context.l10n.authPasswordMinLength;
         }
         return null;
       },
@@ -235,7 +236,9 @@ class _LoginPageState extends State<LoginPage> {
                 color: Colors.white,
               ),
             )
-          : Text(_isRegistering ? 'Créer un compte' : 'Se connecter'),
+          : Text(_isRegistering
+              ? context.l10n.authCreateAccount
+              : context.l10n.authSignIn),
     );
   }
 
@@ -245,7 +248,8 @@ class _LoginPageState extends State<LoginPage> {
         const Expanded(child: Divider()),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 12.w),
-          child: Text('ou', style: TextStyle(color: AppColors.grey500, fontSize: 13.sp)),
+          child: Text(context.l10n.authOrDivider,
+              style: TextStyle(color: AppColors.grey500, fontSize: 13.sp)),
         ),
         const Expanded(child: Divider()),
       ],
@@ -256,7 +260,7 @@ class _LoginPageState extends State<LoginPage> {
     return OutlinedButton.icon(
       onPressed: _isLoading ? null : _signInWithGoogle,
       icon: const Icon(Icons.g_mobiledata_rounded, size: 24),
-      label: const Text('Continuer avec Google'),
+      label: Text(context.l10n.authContinueWithGoogle),
       style: OutlinedButton.styleFrom(
         padding: EdgeInsets.symmetric(vertical: 14.h),
         shape: RoundedRectangleBorder(
@@ -274,8 +278,8 @@ class _LoginPageState extends State<LoginPage> {
       }),
       child: Text(
         _isRegistering
-            ? 'Déjà un compte ? Se connecter'
-            : 'Pas encore de compte ? S\'inscrire',
+            ? context.l10n.authToggleToLogin
+            : context.l10n.authToggleToRegister,
       ),
     );
   }

@@ -1,16 +1,26 @@
+import 'information_items_en.dart';
+
 /// Générateur de 28 items UNIQUES d'Information (Connaissances générales - WAIS-IV)
 /// Tous les items créés en UNE SEULE FOIS au démarrage
 /// Mesure les connaissances générales acquises à long terme
 class InformationGenerator {
   final List<InformationItem> _preGeneratedItems = [];
 
-  InformationGenerator() {
+  /// Langue de la banque d'items ('fr' par défaut, 'en' disponible).
+  final String languageCode;
+
+  InformationGenerator({this.languageCode = 'fr'}) {
     _initializeAllItems();
   }
 
   /// Initialise TOUS les 28 items uniques dès la création du générateur
   void _initializeAllItems() {
     _preGeneratedItems.clear();
+
+    if (languageCode == 'en') {
+      _preGeneratedItems.addAll(buildInformationItemsEn());
+      return;
+    }
 
     // Items 1-6 : Sciences naturelles
     _preGeneratedItems.addAll(_createScienceItems());

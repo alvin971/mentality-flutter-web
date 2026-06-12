@@ -4,13 +4,33 @@
 class SimilaritiesGenerator {
   final List<SimilarityItem> _preGeneratedItems = [];
 
-  SimilaritiesGenerator() {
+  /// Langue de la banque d'items ('fr' par défaut, 'en' pour l'anglais).
+  /// N'affecte QUE le contenu des items (paires + réponses acceptées) ;
+  /// la structure, le scoring, les thetaValue et le nombre d'items restent
+  /// strictement identiques entre les deux banques.
+  final String languageCode;
+
+  SimilaritiesGenerator({this.languageCode = 'fr'}) {
     _initializeAllItems();
   }
+
+  bool get _isEn => languageCode == 'en';
 
   /// Initialise TOUS les 21 items uniques dès la création du générateur
   void _initializeAllItems() {
     _preGeneratedItems.clear();
+
+    if (_isEn) {
+      // Items 1-4 : Niveau CONCRET (objets physiques tangibles)
+      _preGeneratedItems.addAll(_createConcreteItemsEn());
+      // Items 5-10 : Niveau FONCTIONNEL (usage commun)
+      _preGeneratedItems.addAll(_createFunctionalItemsEn());
+      // Items 11-16 : Niveau CATÉGORIEL (catégorie abstraite)
+      _preGeneratedItems.addAll(_createCategoricalItemsEn());
+      // Items 17-21 : Niveau ABSTRAIT (concepts non tangibles)
+      _preGeneratedItems.addAll(_createAbstractItemsEn());
+      return;
+    }
 
     // Items 1-4 : Niveau CONCRET (objets physiques tangibles)
     _preGeneratedItems.addAll(_createConcreteItems());
@@ -474,6 +494,458 @@ class SimilaritiesGenerator {
           'Pour créer des idées',
           'Activités mentales',
           'Ce qu\'on fait avec notre cerveau',
+        ],
+        thetaValue: 2.5,
+      ),
+    ];
+  }
+
+  // ============================================================
+  // ============== BANQUE ANGLAISE (EN) ========================
+  // Psychométriquement équivalente : même nombre d'items (21),
+  // mêmes thetaValue/difficulté par position, mêmes niveaux.
+  // ============================================================
+
+  // ========== LEVEL 1: CONCRETE (Items 1-4) ==========
+  List<SimilarityItem> _createConcreteItemsEn() {
+    return [
+      // Item 1: Very common fruits
+      SimilarityItem(
+        word1: 'Orange',
+        word2: 'Banana',
+        level: AbstractionLevel.concrete,
+        twoPointAnswers: [
+          'They are fruits',
+          'Fruits',
+          'They are food',
+          'Natural foods',
+        ],
+        onePointAnswers: [
+          'You eat them',
+          'They are edible',
+          'They are sweet',
+          'They have a peel',
+          'They grow on trees',
+          'Food',
+        ],
+        thetaValue: -1.5,
+      ),
+
+      // Item 2: Familiar animals
+      SimilarityItem(
+        word1: 'Dog',
+        word2: 'Cat',
+        level: AbstractionLevel.concrete,
+        twoPointAnswers: [
+          'They are animals',
+          'Domestic animals',
+          'Animals',
+          'Mammals',
+          'Pets',
+        ],
+        onePointAnswers: [
+          'They have four legs',
+          'You keep them at home',
+          'They have fur',
+          'They are companions',
+          'They are cute',
+        ],
+        thetaValue: -1.3,
+      ),
+
+      // Item 3: Clothing items
+      SimilarityItem(
+        word1: 'Shoe',
+        word2: 'Hat',
+        level: AbstractionLevel.concrete,
+        twoPointAnswers: [
+          'They are clothing',
+          'They are clothes',
+          'Clothing',
+          'Garments',
+          'Items of clothing',
+        ],
+        onePointAnswers: [
+          'You wear them',
+          'They protect you',
+          'You put them on',
+          'They cover you',
+        ],
+        thetaValue: -1.1,
+      ),
+
+      // Item 4: Furniture
+      SimilarityItem(
+        word1: 'Table',
+        word2: 'Chair',
+        level: AbstractionLevel.concrete,
+        twoPointAnswers: [
+          'They are furniture',
+          'Furniture',
+          'Pieces of furniture',
+          'Household objects',
+        ],
+        onePointAnswers: [
+          'You use them to eat',
+          'They are made of wood',
+          'You sit near them',
+          'They are in the house',
+        ],
+        thetaValue: -0.9,
+      ),
+    ];
+  }
+
+  // ========== LEVEL 2: FUNCTIONAL (Items 5-10) ==========
+  List<SimilarityItem> _createFunctionalItemsEn() {
+    return [
+      // Item 5: Tools
+      SimilarityItem(
+        word1: 'Hammer',
+        word2: 'Screwdriver',
+        level: AbstractionLevel.functional,
+        twoPointAnswers: [
+          'They are tools',
+          'Tools',
+          'Work instruments',
+          'Hardware tools',
+        ],
+        onePointAnswers: [
+          'You use them to repair',
+          'They are used to build',
+          'You hold them in your hand',
+          'For DIY',
+        ],
+        thetaValue: -0.7,
+      ),
+
+      // Item 6: Writing instruments
+      SimilarityItem(
+        word1: 'Pencil',
+        word2: 'Pen',
+        level: AbstractionLevel.functional,
+        twoPointAnswers: [
+          'They are writing instruments',
+          'Writing tools',
+          'School supplies',
+          'Instruments for writing',
+        ],
+        onePointAnswers: [
+          'You write with them',
+          'They leave a mark',
+          'For drawing',
+          'They contain ink or graphite',
+        ],
+        thetaValue: -0.5,
+      ),
+
+      // Item 7: Means of transport
+      SimilarityItem(
+        word1: 'Car',
+        word2: 'Train',
+        level: AbstractionLevel.functional,
+        twoPointAnswers: [
+          'They are means of transport',
+          'Vehicles',
+          'Transportation',
+          'Ways of getting around',
+        ],
+        onePointAnswers: [
+          'They move us around',
+          'You travel with them',
+          'They have wheels',
+          'To go from one place to another',
+        ],
+        thetaValue: -0.3,
+      ),
+
+      // Item 8: Eating utensils
+      SimilarityItem(
+        word1: 'Fork',
+        word2: 'Spoon',
+        level: AbstractionLevel.functional,
+        twoPointAnswers: [
+          'They are cutlery',
+          'Kitchen utensils',
+          'Utensils',
+          'Instruments for eating',
+        ],
+        onePointAnswers: [
+          'You eat with them',
+          'To pick up food',
+          'They are made of metal',
+          'On the table',
+        ],
+        thetaValue: -0.1,
+      ),
+
+      // Item 9: Timekeeping instruments
+      SimilarityItem(
+        word1: 'Watch',
+        word2: 'Clock',
+        level: AbstractionLevel.functional,
+        twoPointAnswers: [
+          'They are timekeeping instruments',
+          'They measure time',
+          'Timepieces',
+          'Instruments for telling time',
+        ],
+        onePointAnswers: [
+          'They show the time',
+          'To know the time',
+          'They have hands',
+          'So you are not late',
+        ],
+        thetaValue: 0.1,
+      ),
+
+      // Item 10: Communication devices
+      SimilarityItem(
+        word1: 'Telephone',
+        word2: 'Radio',
+        level: AbstractionLevel.functional,
+        twoPointAnswers: [
+          'They are means of communication',
+          'Communication devices',
+          'Communication technologies',
+          'Means of information',
+        ],
+        onePointAnswers: [
+          'You listen with them',
+          'They transmit sounds',
+          'They are electronic',
+          'To receive messages',
+        ],
+        thetaValue: 0.3,
+      ),
+    ];
+  }
+
+  // ========== LEVEL 3: CATEGORICAL (Items 11-16) ==========
+  List<SimilarityItem> _createCategoricalItemsEn() {
+    return [
+      // Item 11: Works of art
+      SimilarityItem(
+        word1: 'Poem',
+        word2: 'Statue',
+        level: AbstractionLevel.categorical,
+        twoPointAnswers: [
+          'They are works of art',
+          'Forms of art',
+          'Artistic creations',
+          'Art',
+        ],
+        onePointAnswers: [
+          'You admire them',
+          'Made by artists',
+          'They are beautiful',
+          'To express something',
+        ],
+        thetaValue: 0.5,
+      ),
+
+      // Item 12: Professions
+      SimilarityItem(
+        word1: 'Doctor',
+        word2: 'Teacher',
+        level: AbstractionLevel.categorical,
+        twoPointAnswers: [
+          'They are professions',
+          'Occupations',
+          'Jobs',
+          'Careers',
+        ],
+        onePointAnswers: [
+          'They help people',
+          'They have studied',
+          'They are services',
+          'They work with others',
+        ],
+        thetaValue: 0.7,
+      ),
+
+      // Item 13: Emotions
+      SimilarityItem(
+        word1: 'Joy',
+        word2: 'Sadness',
+        level: AbstractionLevel.categorical,
+        twoPointAnswers: [
+          'They are emotions',
+          'Feelings',
+          'Emotional states',
+          'Affects',
+        ],
+        onePointAnswers: [
+          'You feel them',
+          'They are moods',
+          'They change',
+          'What you experience',
+        ],
+        thetaValue: 0.9,
+      ),
+
+      // Item 14: Biological senses
+      SimilarityItem(
+        word1: 'Sight',
+        word2: 'Hearing',
+        level: AbstractionLevel.categorical,
+        twoPointAnswers: [
+          'They are senses',
+          'Biological senses',
+          'Sensory abilities',
+          'Sensory perceptions',
+        ],
+        onePointAnswers: [
+          'You perceive with them',
+          'To detect the world',
+          'They inform us',
+          'Senses of the body',
+        ],
+        thetaValue: 1.1,
+      ),
+
+      // Item 15: Sciences
+      SimilarityItem(
+        word1: 'Biology',
+        word2: 'Physics',
+        level: AbstractionLevel.categorical,
+        twoPointAnswers: [
+          'They are sciences',
+          'Scientific disciplines',
+          'Scientific fields',
+          'Branches of science',
+        ],
+        onePointAnswers: [
+          'You study them',
+          'To understand the world',
+          'They use experiments',
+          'School subjects',
+        ],
+        thetaValue: 1.3,
+      ),
+
+      // Item 16: Forms of government
+      SimilarityItem(
+        word1: 'Democracy',
+        word2: 'Monarchy',
+        level: AbstractionLevel.categorical,
+        twoPointAnswers: [
+          'They are political systems',
+          'Forms of government',
+          'Political regimes',
+          'Systems of governance',
+        ],
+        onePointAnswers: [
+          'Ways of running a country',
+          'They organize society',
+          'Systems of power',
+          'To govern',
+        ],
+        thetaValue: 1.5,
+      ),
+    ];
+  }
+
+  // ========== LEVEL 4: ABSTRACT (Items 17-21) ==========
+  List<SimilarityItem> _createAbstractItemsEn() {
+    return [
+      // Item 17: Moral values
+      SimilarityItem(
+        word1: 'Freedom',
+        word2: 'Justice',
+        level: AbstractionLevel.abstract,
+        twoPointAnswers: [
+          'They are values',
+          'Moral principles',
+          'Ideals',
+          'Democratic values',
+          'Fundamental rights',
+        ],
+        onePointAnswers: [
+          'Important for society',
+          'What we defend',
+          'Principles',
+          'Good things',
+        ],
+        thetaValue: 1.7,
+      ),
+
+      // Item 18: Intellectual concepts
+      SimilarityItem(
+        word1: 'Wisdom',
+        word2: 'Intelligence',
+        level: AbstractionLevel.abstract,
+        twoPointAnswers: [
+          'They are intellectual capacities',
+          'Mental qualities',
+          'Cognitive abilities',
+          'Faculties of the mind',
+        ],
+        onePointAnswers: [
+          'They help you think',
+          'To solve problems',
+          'Positive qualities',
+          'What makes you smart',
+        ],
+        thetaValue: 1.9,
+      ),
+
+      // Item 19: Temporal concepts
+      SimilarityItem(
+        word1: 'Past',
+        word2: 'Future',
+        level: AbstractionLevel.abstract,
+        twoPointAnswers: [
+          'They are periods of time',
+          'Dimensions of time',
+          'Eras',
+          'Time',
+        ],
+        onePointAnswers: [
+          'Different moments',
+          'Parts of time',
+          'What was and what will be',
+          'The passing of time',
+        ],
+        thetaValue: 2.1,
+      ),
+
+      // Item 20: Philosophical concepts
+      SimilarityItem(
+        word1: 'Truth',
+        word2: 'Beauty',
+        level: AbstractionLevel.abstract,
+        twoPointAnswers: [
+          'They are philosophical concepts',
+          'Abstract ideals',
+          'Aesthetic and epistemic values',
+          'Universal concepts',
+        ],
+        onePointAnswers: [
+          'Things we seek',
+          'Important for humanity',
+          'Subjective',
+          'Abstract qualities',
+        ],
+        thetaValue: 2.3,
+      ),
+
+      // Item 21: Mental processes
+      SimilarityItem(
+        word1: 'Thought',
+        word2: 'Imagination',
+        level: AbstractionLevel.abstract,
+        twoPointAnswers: [
+          'They are mental processes',
+          'Cognitive functions',
+          'Activities of the mind',
+          'Intellectual capacities',
+        ],
+        onePointAnswers: [
+          'They happen in the head',
+          'To create ideas',
+          'Mental activities',
+          'What we do with our brain',
         ],
         thetaValue: 2.5,
       ),

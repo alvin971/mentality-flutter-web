@@ -7,6 +7,7 @@ import '../../../../core/theme/app_typography.dart';
 import '../../../../core/widgets/kepler_button.dart';
 import '../../../../core/widgets/kepler_card.dart';
 import '../../../../core/widgets/kepler_scaffold.dart';
+import '../../../../core/l10n/l10n_ext.dart';
 import '../bloc/registration_bloc.dart';
 import 'registration_demographics_page.dart';
 
@@ -40,13 +41,13 @@ class _RegistrationPhoneOtpPageState extends State<RegistrationPhoneOtpPage> {
       builder: (context, state) {
         final phone = state.form.phoneE164 ?? '';
         return KeplerScaffold(
-          title: 'Vérifier mon téléphone',
-          eyebrow: 'ÉTAPE 2 / 4',
+          title: context.l10n.regPhoneOtpTitle,
+          eyebrow: context.l10n.regStepEyebrow(2),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 12.h),
-              Text('SMS envoyé au',
+              Text(context.l10n.regSmsSentTo,
                   style: AppText.monoLabel(color: AppColors.primary)),
               SizedBox(height: 4.h),
               Text(phone, style: AppText.h3()),
@@ -78,7 +79,9 @@ class _RegistrationPhoneOtpPageState extends State<RegistrationPhoneOtpPage> {
               ],
               SizedBox(height: 24.h),
               KeplerButton(
-                label: state.busy ? 'Vérification…' : 'Valider',
+                label: state.busy
+                    ? context.l10n.regVerifying
+                    : context.l10n.commonValidate,
                 expand: true,
                 onPressed: state.busy
                     ? null
@@ -98,7 +101,7 @@ class _RegistrationPhoneOtpPageState extends State<RegistrationPhoneOtpPage> {
                       : () => context
                           .read<RegistrationBloc>()
                           .add(SubmitPhone(phone)),
-                  child: const Text('Renvoyer le SMS'),
+                  child: Text(context.l10n.regResendSms),
                 ),
               ),
             ],

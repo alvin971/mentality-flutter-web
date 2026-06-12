@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/l10n/l10n_ext.dart';
 import '../../../../core/services/auth_local_store.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
@@ -68,8 +69,9 @@ class _SplashPageState extends State<SplashPage>
                 Text('MENTAL E.T.',
                     style: AppText.monoLabel(color: AppColors.primary)),
                 SizedBox(height: 14.h),
-                Text('Évaluation', style: AppText.h1()),
-                Text('cognitive', style: AppText.h1Italic()),
+                Text(context.l10n.coreSplashTitleLine1, style: AppText.h1()),
+                Text(context.l10n.coreSplashTitleLine2,
+                    style: AppText.h1Italic()),
                 SizedBox(height: 28.h),
                 Container(
                   width: 32.w,

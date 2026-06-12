@@ -23,6 +23,41 @@ import '../../../exercises_implementations/coding/presentation/pages/coding_test
 import '../../../exercises_implementations/picture_span/presentation/pages/picture_span_test_page.dart';
 import '../../../exercises_implementations/figure_weights/presentation/pages/figure_weights_test_page.dart';
 import 'complete_test_results_page.dart';
+import '../../../../core/l10n/l10n_ext.dart';
+
+/// Traduit la clé technique d'un sous-test (français, issue de
+/// [CompleteTestSession.testSequence]) en libellé localisé pour l'affichage.
+/// La clé elle-même reste inchangée (elle sert d'identifiant dans les `switch`).
+String _localizedTestName(BuildContext context, String key) {
+  switch (key) {
+    case 'Cubes':
+      return context.l10n.ctTestCubes;
+    case 'Similitudes':
+      return context.l10n.ctTestSimilarities;
+    case 'Mémoire des Chiffres':
+      return context.l10n.ctTestDigitSpan;
+    case 'Matrices':
+      return context.l10n.ctTestMatrices;
+    case 'Vocabulaire':
+      return context.l10n.ctTestVocabulary;
+    case 'Arithmétique':
+      return context.l10n.ctTestArithmetic;
+    case 'Recherche de Symboles':
+      return context.l10n.ctTestSymbolSearch;
+    case 'Puzzles Visuels':
+      return context.l10n.ctTestVisualPuzzles;
+    case 'Information':
+      return context.l10n.ctTestInformation;
+    case 'Code':
+      return context.l10n.ctTestCoding;
+    case 'Mémoire des Images':
+      return context.l10n.ctTestPictureSpan;
+    case 'Balances':
+      return context.l10n.ctTestFigureWeights;
+    default:
+      return key;
+  }
+}
 
 class CompleteTestOrchestratorPage extends StatelessWidget {
   const CompleteTestOrchestratorPage({super.key});
@@ -54,7 +89,7 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
   }
 
   void _launchTest(BuildContext context, String testName) {
-    final page = _getTestPage(testName);
+    final page = _getTestPage(context, testName);
     Navigator.push<int>(
       context,
       MaterialPageRoute(builder: (_) => page),
@@ -68,7 +103,7 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
     });
   }
 
-  Widget _getTestPage(String testName) {
+  Widget _getTestPage(BuildContext context, String testName) {
     switch (testName) {
       case 'Cubes':
         return const CubesTestPage();
@@ -96,8 +131,8 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
         return const FigureWeightsTestPage();
       default:
         return KeplerScaffold(
-          title: 'Erreur',
-          child: Center(child: Text('Test non trouvé : $testName')),
+          title: context.l10n.commonError,
+          child: Center(child: Text(context.l10n.ctTestNotFound(testName))),
         );
     }
   }
@@ -130,8 +165,8 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
         if (state is CompleteTestIntroState) return _buildIntroScreen(context);
         if (state is CompleteTestDoneState) {
           return KeplerScaffold(
-            title: 'Calcul des résultats',
-            eyebrow: 'BILAN',
+            title: context.l10n.ctComputingResultsTitle,
+            eyebrow: context.l10n.ctComputingResultsEyebrow,
             scroll: false,
             child: Center(
               child: Column(
@@ -139,7 +174,7 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
                 children: [
                   const CircularProgressIndicator(color: AppColors.primary),
                   SizedBox(height: 20.h),
-                  Text('TRAITEMENT',
+                  Text(context.l10n.ctProcessing,
                       style: AppText.monoLabel(color: AppColors.primary)),
                 ],
               ),
@@ -153,14 +188,14 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
 
   Widget _buildIntroScreen(BuildContext context) {
     return KeplerScaffold(
-      title: 'Test complet',
+      title: context.l10n.ctIntroTitle,
       eyebrow: 'WAIS-IV',
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Douze subtests,', style: AppText.heroDisplay()),
-          Text('quatre indices.', style: AppText.heroItalic()),
+          Text(context.l10n.ctIntroHero1, style: AppText.heroDisplay()),
+          Text(context.l10n.ctIntroHero2, style: AppText.heroItalic()),
           SizedBox(height: 16.h),
           Container(
               width: 36.w,
@@ -168,37 +203,35 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
               color: AppColors.primary.withValues(alpha: 0.4)),
           SizedBox(height: 16.h),
           Text(
-            'Évaluation cognitive complète standardisée. Les sous-tests s\'enchaînent automatiquement.',
+            context.l10n.ctIntroDescription,
             style: AppText.body(),
           ),
           SizedBox(height: 24.h),
           _InfoCard(
-              eyebrow: 'DURÉE',
-              title: '60 à 90 minutes',
-              body: 'Prévoyez une plage de temps continue.'),
+              eyebrow: context.l10n.ctIntroDurationEyebrow,
+              title: context.l10n.ctIntroDurationTitle,
+              body: context.l10n.ctIntroDurationBody),
           SizedBox(height: 12.h),
           _InfoCard(
-              eyebrow: 'CONTENU',
-              title: '12 subtests inclus',
-              body: 'Cubes · Similitudes · Mémoire · Matrices · Vocabulaire · '
-                  'Arithmétique · Symboles · Puzzles · Information · Code · '
-                  'Images · Balances.'),
+              eyebrow: context.l10n.ctIntroContentEyebrow,
+              title: context.l10n.ctIntroContentTitle,
+              body: context.l10n.ctIntroContentBody),
           SizedBox(height: 12.h),
           _InfoCard(
-              eyebrow: 'IMPORTANT',
-              title: 'Enchaînement automatique',
-              body: 'Les tests se lanceront l\'un après l\'autre. Assurez-vous d\'avoir suffisamment de temps.'),
+              eyebrow: context.l10n.ctIntroImportantEyebrow,
+              title: context.l10n.ctIntroImportantTitle,
+              body: context.l10n.ctIntroImportantBody),
           SizedBox(height: 24.h),
           KeplerCard(
             surface: true,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('ÂGE DU PATIENT',
+                Text(context.l10n.ctPatientAgeHeader,
                     style: AppText.monoLabel(color: AppColors.primary)),
                 SizedBox(height: 12.h),
                 Text(
-                    'Requis pour les normes (16 à 90 ans)',
+                    context.l10n.ctPatientAgeHint,
                     style: AppText.bodySmall()),
                 SizedBox(height: 12.h),
                 TextField(
@@ -209,7 +242,7 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
                     hintText: '00',
                     hintStyle: AppText.monoScore(
                         color: Theme.of(context).colorScheme.outline, size: 22.sp),
-                    suffixText: 'ANS',
+                    suffixText: context.l10n.ctAgeSuffix,
                     suffixStyle:
                         AppText.monoLabel(color: Theme.of(context).colorScheme.outline),
                     filled: true,
@@ -241,7 +274,7 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
                 if (_ageController.text.isNotEmpty && _ageInMonths == null)
                   Padding(
                     padding: EdgeInsets.only(top: 8.h),
-                    child: Text('Âge entre 16 et 90 ans',
+                    child: Text(context.l10n.ctAgeRangeError,
                         style: AppText.bodySmall(color: AppColors.error)),
                   ),
               ],
@@ -249,7 +282,7 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
           ),
           SizedBox(height: 24.h),
           KeplerButton(
-            label: 'Lancer le test complet',
+            label: context.l10n.ctLaunchFullTest,
             icon: Icons.east,
             expand: true,
             onPressed: _ageInMonths != null
@@ -260,7 +293,7 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
           ),
           SizedBox(height: 12.h),
           KeplerButton(
-            label: 'Annuler',
+            label: context.l10n.commonCancel,
             variant: KeplerButtonVariant.ghost,
             expand: true,
             onPressed: () => Navigator.pop(context),
@@ -284,7 +317,7 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
     final next = state is CompleteTestRunningState ? state.nextTestName : null;
 
     return KeplerScaffold(
-      title: 'Test en cours',
+      title: context.l10n.ctRunningTitle,
       eyebrow: 'WAIS-IV',
       scroll: false,
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
@@ -296,14 +329,14 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
             value: progress,
             current: completed,
             total: total,
-            label: 'PROGRESSION GLOBALE',
+            label: context.l10n.ctGlobalProgress,
           ),
           SizedBox(height: 40.h),
           if (next != null) ...[
-            Text('PROCHAIN SUBTEST',
+            Text(context.l10n.ctNextSubtest,
                 style: AppText.monoLabel(color: AppColors.primary)),
             SizedBox(height: 8.h),
-            Text(next, style: AppText.h1Italic()),
+            Text(_localizedTestName(context, next), style: AppText.h1Italic()),
             SizedBox(height: 24.h),
           ],
           Row(
@@ -317,7 +350,7 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
                 ),
               ),
               SizedBox(width: 12.w),
-              Text('Lancement…',
+              Text(context.l10n.ctLaunching,
                   style: AppText.monoLabel(color: Theme.of(context).colorScheme.onSurfaceVariant)),
             ],
           ),

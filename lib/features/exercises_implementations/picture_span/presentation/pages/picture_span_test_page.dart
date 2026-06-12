@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:async';
+import '../../../../../core/l10n/l10n_ext.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
 import '../../../../../core/widgets/test/kepler_test_button.dart';
@@ -51,6 +52,97 @@ class _PictureSpanTestPageState extends State<PictureSpanTestPage> {
   }
 
   PictureSpanItem get _currentItem => _generatedItems[_currentItemIndex];
+
+  /// Résout le nom localisé d'une image à partir de sa clé l10n stable.
+  /// Repli sur le nom français du stimulus si la clé est inconnue.
+  String _imageName(ImageStimulus? img) {
+    if (img == null) return '';
+    final l = context.l10n;
+    switch (img.nameKey) {
+      case 'psImgChat':
+        return l.psImgChat;
+      case 'psImgInsecte':
+        return l.psImgInsecte;
+      case 'psImgLapin':
+        return l.psImgLapin;
+      case 'psImgOiseau':
+        return l.psImgOiseau;
+      case 'psImgPoisson':
+        return l.psImgPoisson;
+      case 'psImgTortue':
+        return l.psImgTortue;
+      case 'psImgPapillon':
+        return l.psImgPapillon;
+      case 'psImgCoccinelle':
+        return l.psImgCoccinelle;
+      case 'psImgChaise':
+        return l.psImgChaise;
+      case 'psImgLampe':
+        return l.psImgLampe;
+      case 'psImgMontre':
+        return l.psImgMontre;
+      case 'psImgParapluie':
+        return l.psImgParapluie;
+      case 'psImgSac':
+        return l.psImgSac;
+      case 'psImgLit':
+        return l.psImgLit;
+      case 'psImgPorte':
+        return l.psImgPorte;
+      case 'psImgFenetre':
+        return l.psImgFenetre;
+      case 'psImgGateau':
+        return l.psImgGateau;
+      case 'psImgCafe':
+        return l.psImgCafe;
+      case 'psImgPizza':
+        return l.psImgPizza;
+      case 'psImgPomme':
+        return l.psImgPomme;
+      case 'psImgGlace':
+        return l.psImgGlace;
+      case 'psImgBurger':
+        return l.psImgBurger;
+      case 'psImgSandwich':
+        return l.psImgSandwich;
+      case 'psImgOeuf':
+        return l.psImgOeuf;
+      case 'psImgMarteau':
+        return l.psImgMarteau;
+      case 'psImgCle':
+        return l.psImgCle;
+      case 'psImgCiseaux':
+        return l.psImgCiseaux;
+      case 'psImgPinceau':
+        return l.psImgPinceau;
+      case 'psImgCrayon':
+        return l.psImgCrayon;
+      case 'psImgCouteau':
+        return l.psImgCouteau;
+      case 'psImgTournevis':
+        return l.psImgTournevis;
+      case 'psImgEngrenage':
+        return l.psImgEngrenage;
+      case 'psImgVoiture':
+        return l.psImgVoiture;
+      case 'psImgVelo':
+        return l.psImgVelo;
+      case 'psImgAvion':
+        return l.psImgAvion;
+      case 'psImgTrain':
+        return l.psImgTrain;
+      case 'psImgBateau':
+        return l.psImgBateau;
+      case 'psImgBus':
+        return l.psImgBus;
+      case 'psImgMoto':
+        return l.psImgMoto;
+      case 'psImgFusee':
+        return l.psImgFusee;
+      default:
+        return img.name;
+    }
+  }
 
   void _startTest() {
     setState(() {
@@ -132,7 +224,10 @@ class _PictureSpanTestPageState extends State<PictureSpanTestPage> {
 
   void _showFeedback(bool isCorrect) {
     final targetImages = _currentItem.targetImageIds
-        .map((id) => _generator.getImageById(id)?.name ?? '')
+        .map((id) => _imageName(_generator.getImageById(id)))
+        .join(', ');
+    final userImages = _userSelectedImageIds
+        .map((id) => _imageName(_generator.getImageById(id)))
         .join(', ');
 
     showDialog(
@@ -147,19 +242,17 @@ class _PictureSpanTestPageState extends State<PictureSpanTestPage> {
               size: 32.sp,
             ),
             SizedBox(width: 12.w),
-            Text(isCorrect ? 'Correct !' : 'Incorrect'),
+            Text(isCorrect ? context.l10n.dsCorrect : context.l10n.dsIncorrect),
           ],
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Ordre correct : $targetImages'),
+            Text(context.l10n.psCorrectOrder(targetImages)),
             if (!isCorrect) ...[
               SizedBox(height: 8.h),
-              Text(
-                'Votre ordre : ${_userSelectedImageIds.map((id) => _generator.getImageById(id)?.name ?? '').join(', ')}',
-              ),
+              Text(context.l10n.psYourOrder(userImages)),
             ],
           ],
         ),
@@ -169,7 +262,7 @@ class _PictureSpanTestPageState extends State<PictureSpanTestPage> {
               Navigator.pop(context);
               _nextItem();
             },
-            child: const Text('Continuer'),
+            child: Text(context.l10n.commonContinue),
           ),
         ],
       ),
@@ -206,18 +299,18 @@ class _PictureSpanTestPageState extends State<PictureSpanTestPage> {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: const Text('Test terminé !'),
+        title: Text(context.l10n.codingTestDoneTitle),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Essais complétés : ${_currentItemIndex + 1}/12',
+              context.l10n.psTrialsCompleted(_currentItemIndex + 1),
               style: TextStyle(fontSize: 16.sp),
             ),
             SizedBox(height: 12.h),
             Text(
-              'Score Total : $_score points',
+              context.l10n.psScorePoints(_score),
               style: TextStyle(
                 fontSize: 20.sp,
                 fontWeight: FontWeight.bold,
@@ -225,7 +318,7 @@ class _PictureSpanTestPageState extends State<PictureSpanTestPage> {
               ),
             ),
             SizedBox(height: 12.h),
-            Text('Niveau maximal atteint : Niveau $_currentLevel'),
+            Text(context.l10n.psMaxLevel(_currentLevel)),
           ],
         ),
         actions: [
@@ -234,7 +327,7 @@ class _PictureSpanTestPageState extends State<PictureSpanTestPage> {
               Navigator.pop(context);
               Navigator.pop(context, _score);
             },
-            child: const Text('Retour'),
+            child: Text(context.l10n.commonBack),
           ),
         ],
       ),
@@ -255,12 +348,12 @@ class _PictureSpanTestPageState extends State<PictureSpanTestPage> {
 
   Widget _buildIntroScreen() {
     return KeplerTestScaffold(
-      testName: 'Mémoire des Images',
-      eyebrow: 'MÉMOIRE DE TRAVAIL · WMI',
+      testName: context.l10n.psTestName,
+      eyebrow: context.l10n.dsEyebrow,
       accentColor: AppColors.indexWMI,
       // Bouton de démarrage sticky : visible sans scroller.
       bottomBar: KeplerTestButton.primary(
-        label: 'Commencer le test',
+        label: context.l10n.codingStartTest,
         accentColor: AppColors.indexWMI,
         onPressed: _startTest,
       ),
@@ -274,7 +367,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
               ),
               SizedBox(height: 24.h),
               Text(
-                'Mémoire des Images',
+                context.l10n.psTestName,
                 style: TextStyle(
                   fontSize: 28.sp,
                   fontWeight: FontWeight.bold,
@@ -283,25 +376,25 @@ crossAxisAlignment: CrossAxisAlignment.start,
               ),
               SizedBox(height: 16.h),
               Text(
-                'Ce test mesure votre mémoire de travail visuelle et votre attention sélective.',
+                context.l10n.psDescription,
                 style: TextStyle(fontSize: 16.sp),
               ),
               SizedBox(height: 24.h),
               _buildInfoCard(
-                'Phase 1 : Mémorisation',
-                'Des images seront présentées une par une (3 secondes chacune)',
+                context.l10n.psPhase1Title,
+                context.l10n.psPhase1Desc,
                 Icons.visibility_outlined,
               ),
               SizedBox(height: 12.h),
               _buildInfoCard(
-                'Phase 2 : Rappel',
-                'Sélectionnez les images dans l\'ordre exact de présentation',
+                context.l10n.psPhase2Title,
+                context.l10n.psPhase2Desc,
                 Icons.touch_app_outlined,
               ),
               SizedBox(height: 12.h),
               _buildInfoCard(
-                'Progression',
-                'La difficulté augmente : 1 à 6 images à mémoriser',
+                context.l10n.psProgressionTitle,
+                context.l10n.psProgressionDesc,
                 Icons.trending_up_outlined,
               ),
               SizedBox(height: 24.h),
@@ -318,7 +411,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                     SizedBox(width: 12.w),
                     Expanded(
                       child: Text(
-                        '12 essais au total. Le test s\'arrête après 2 échecs au même niveau.',
+                        context.l10n.psTrialsInfo,
                         style: TextStyle(color: AppColors.info, fontSize: 14.sp),
                       ),
                     ),
@@ -339,13 +432,13 @@ crossAxisAlignment: CrossAxisAlignment.start,
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('Mémorisation'),
+        title: Text(context.l10n.psMemorizationTab),
         actions: [
           Center(
             child: Padding(
               padding: EdgeInsets.only(right: 16.w),
               child: Text(
-                'Niveau ${_currentItem.level} - Essai ${_currentItem.trial}',
+                context.l10n.psLevelTrial(_currentItem.level, _currentItem.trial),
                 style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
               ),
             ),
@@ -358,12 +451,12 @@ crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Mémorisez les images',
+                context.l10n.psMemorizeImages,
                 style: TextStyle(fontSize: 20.sp, color: AppColors.grey600),
               ),
               SizedBox(height: 16.h),
               Text(
-                'Image $_currentImageIndex / ${_currentItem.numberOfImages}',
+                context.l10n.psImageProgress(_currentImageIndex, _currentItem.numberOfImages),
                 style: TextStyle(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
@@ -396,7 +489,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                             ),
                             SizedBox(height: 12.h),
                             Text(
-                              currentImage.name,
+                              _imageName(currentImage),
                               style: TextStyle(
                                 fontSize: 20.sp,
                                 fontWeight: FontWeight.bold,
@@ -441,13 +534,13 @@ crossAxisAlignment: CrossAxisAlignment.start,
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('Rappel'),
+        title: Text(context.l10n.psRecallTab),
         actions: [
           Center(
             child: Padding(
               padding: EdgeInsets.only(right: 16.w),
               child: Text(
-                'Niveau ${_currentItem.level} - Essai ${_currentItem.trial}',
+                context.l10n.psLevelTrial(_currentItem.level, _currentItem.trial),
                 style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
               ),
             ),
@@ -463,7 +556,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
               child: Column(
                 children: [
                   Text(
-                    'Sélectionnez les ${_currentItem.numberOfImages} images dans l\'ordre',
+                    context.l10n.psSelectInOrder(_currentItem.numberOfImages),
                     style: TextStyle(
                       fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
@@ -478,7 +571,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                     child: _userSelectedImageIds.isEmpty
                         ? Center(
                             child: Text(
-                              'Aucune sélection',
+                              context.l10n.psNoSelection,
                               style: TextStyle(fontSize: 14.sp, color: AppColors.grey500),
                             ),
                           )
@@ -579,7 +672,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                               ),
                               SizedBox(height: 6.h),
                               Text(
-                                image.name,
+                                _imageName(image),
                                 style: TextStyle(
                                   fontSize: 12.sp,
                                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
@@ -608,7 +701,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                   onPressed: _userSelectedImageIds.isNotEmpty ? _removeLastSelection : null,
                   icon: Icon(Icons.backspace, size: 20.sp),
                   label: Text(
-                    'Effacer la dernière sélection',
+                    context.l10n.psClearLast,
                     style: TextStyle(fontSize: 16.sp),
                   ),
                   style: ElevatedButton.styleFrom(
