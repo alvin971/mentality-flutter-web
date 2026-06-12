@@ -16,6 +16,7 @@ import '../../core/l10n/locale_notifier.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/reading_texts.dart';
 import '../../services/data_collection_service.dart';
+import '../../services/r2_upload_service.dart';
 
 class OralSummaryTest extends StatefulWidget {
   final ReadingText originalText;
@@ -35,6 +36,9 @@ class OralSummaryTest extends StatefulWidget {
 
 class _OralSummaryTestState extends State<OralSummaryTest> {
   final AudioRecorder _recorder = AudioRecorder();
+
+  /// Encodeur réellement retenu (détermine le type MIME pour l'upload R2).
+  AudioEncoder _encoder = AudioEncoder.opus;
 
   Timer? _timer;
   Timer? _blinkTimer;
@@ -157,10 +161,10 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
   // ─── Enregistrement ───────────────────────────────────────────────────────────
 
   Future<void> _startRecording() async {
-    final encoder = await _resolveSupportedEncoder();
+    _encoder = await _resolveSupportedEncoder();
     await _recorder.start(
       RecordConfig(
-        encoder: encoder,
+        encoder: _encoder,
         sampleRate: 16000,
         numChannels: 1,
         // 32 kbps : qualité voix/NLU largement suffisante à 16 kHz mono.
@@ -191,6 +195,14 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
     return AudioEncoder.opus;
   }
 
+  /// Type MIME correspondant à l'encodeur retenu (pour l'upload R2).
+  String _contentTypeFor(AudioEncoder enc) => switch (enc) {
+        AudioEncoder.opus => 'audio/webm',
+        AudioEncoder.aacLc => 'audio/mp4',
+        AudioEncoder.wav => 'audio/wav',
+        _ => 'audio/webm',
+      };
+
   Future<void> _stopRecording() async {
     _timer?.cancel();
     _blinkTimer?.cancel();
@@ -203,11 +215,30 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
       // savoir à l'upload si le fichier est cessible commercialement.
       final consent = ConsentService.instance.current;
 
+      // Upload de l'audio du résumé vers R2 (no-op si worker non configuré).
+      // La même clé R2 référence les deux records (C audio + D paire NLU).
+      final upload = await R2UploadService.instance.uploadBlob(
+        blobUrl: blobUrl ?? '',
+        contentType: _contentTypeFor(_encoder),
+        meta: {
+          'session_id': widget.sessionId,
+          'text_id': widget.originalText.id,
+          'layer': 'C',
+          'record_type': 'summary',
+          'consent_version': consent?.version ?? '',
+          'commercial_reuse': '${consent?.commercialReuse ?? false}',
+          'duration_seconds': '$_elapsedSeconds',
+          'language': localeNotifier.languageCode,
+        },
+      );
+      final r2Key = upload?.key;
+
       // Record 1 — Layer C : audio du résumé
       await DataCollectionService.instance.saveAudioRecord({
         'session_id': widget.sessionId,
         'text_id': widget.originalText.id,
         'audio_summary_path': blobUrl ?? '',
+        if (r2Key != null) 'r2_key': r2Key,
         'duration_seconds': _elapsedSeconds,
         'timestamp': timestamp,
         'language': localeNotifier.languageCode,
@@ -223,6 +254,7 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
         'text_id': widget.originalText.id,
         'original_text': widget.originalText.body,
         'summary_audio_path': blobUrl ?? '',
+        if (r2Key != null) 'r2_key': r2Key,
         'summary_transcription': '',
         'timestamp': timestamp,
         'layer': 'D',

@@ -14,6 +14,7 @@ import '../../core/l10n/locale_notifier.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/reading_texts.dart';
 import '../../services/data_collection_service.dart';
+import '../../services/r2_upload_service.dart';
 
 class OralReadingTest extends StatefulWidget {
   final ReadingText text;
@@ -33,6 +34,9 @@ class OralReadingTest extends StatefulWidget {
 
 class _OralReadingTestState extends State<OralReadingTest> {
   final AudioRecorder _recorder = AudioRecorder();
+
+  /// Encodeur réellement retenu (détermine le type MIME pour l'upload R2).
+  AudioEncoder _encoder = AudioEncoder.opus;
 
   Timer? _timer;
   Timer? _blinkTimer;
@@ -166,10 +170,10 @@ class _OralReadingTestState extends State<OralReadingTest> {
   Future<void> _startRecording() async {
     // Sur Flutter Web, le paramètre path est symbolique.
     // recorder.stop() retourne un blob URL (blob:https://...).
-    final encoder = await _resolveSupportedEncoder();
+    _encoder = await _resolveSupportedEncoder();
     await _recorder.start(
       RecordConfig(
-        encoder: encoder,
+        encoder: _encoder,
         sampleRate: 16000,
         numChannels: 1,
         // 32 kbps : qualité voix/NLU largement suffisante à 16 kHz mono.
@@ -200,6 +204,14 @@ class _OralReadingTestState extends State<OralReadingTest> {
     return AudioEncoder.opus;
   }
 
+  /// Type MIME correspondant à l'encodeur retenu (pour l'upload R2).
+  String _contentTypeFor(AudioEncoder enc) => switch (enc) {
+        AudioEncoder.opus => 'audio/webm',
+        AudioEncoder.aacLc => 'audio/mp4',
+        AudioEncoder.wav => 'audio/wav',
+        _ => 'audio/webm',
+      };
+
   Future<void> _stopRecording() async {
     _timer?.cancel();
     _blinkTimer?.cancel();
@@ -221,6 +233,24 @@ class _OralReadingTestState extends State<OralReadingTest> {
         'consent_version': consent?.version,
         'commercial_reuse': consent?.commercialReuse ?? false,
       };
+
+      // Upload vers R2 (no-op si worker non configuré). On stocke la clé R2
+      // renvoyée, plus durable que le blob URL éphémère du navigateur.
+      final upload = await R2UploadService.instance.uploadBlob(
+        blobUrl: blobUrl ?? '',
+        contentType: _contentTypeFor(_encoder),
+        meta: {
+          'session_id': widget.sessionId,
+          'text_id': widget.text.id,
+          'layer': 'C',
+          'record_type': 'reading',
+          'consent_version': consent?.version ?? '',
+          'commercial_reuse': '${consent?.commercialReuse ?? false}',
+          'duration_seconds': '$_elapsedSeconds',
+          'language': localeNotifier.languageCode,
+        },
+      );
+      if (upload != null) record['r2_key'] = upload.key;
 
       await DataCollectionService.instance.saveAudioRecord(record);
     } catch (_) {

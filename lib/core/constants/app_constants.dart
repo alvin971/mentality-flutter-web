@@ -61,6 +61,13 @@ class AppConstants {
   /// Déployer workers/claude-proxy/ et remplacer cette valeur.
   static const String claudeWorkerUrl =
       'https://claude-proxy.YOUR_SUBDOMAIN.workers.dev';
+
+  /// URL du Cloudflare Worker qui écrit les enregistrements audio dans R2.
+  /// Déployer workers/r2-upload/ et remplacer cette valeur. Tant que l'URL
+  /// reste le placeholder, l'upload est désactivé (no-op) et l'app fonctionne
+  /// normalement en stockage local seulement.
+  static const String r2UploadWorkerUrl =
+      'https://mentality-r2-upload.YOUR_SUBDOMAIN.workers.dev';
   static const String endpointAuth = '/auth';
   static const String endpointUsers = '/users';
   static const String endpointAssessments = '/assessments';

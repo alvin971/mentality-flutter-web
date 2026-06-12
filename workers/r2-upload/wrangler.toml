@@ -1,0 +1,27 @@
+name = "mentality-r2-upload"
+main = "index.js"
+compatibility_date = "2025-01-01"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Binding R2 — le bucket est résolu côté serveur, aucune clé n'atteint le client.
+# ─────────────────────────────────────────────────────────────────────────────
+[[r2_buckets]]
+binding = "AUDIO_BUCKET"
+bucket_name = "mentality-audio"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Mise en place (RGPD : résidence des données dans l'UE)
+#
+#   1. Créer le bucket en JURIDICTION EU (obligatoire pour la conformité) :
+#        wrangler r2 bucket create mentality-audio --jurisdiction eu
+#      Puis dans le dashboard, vérifier que la juridiction affichée est « EU ».
+#
+#   2. Déployer le worker :
+#        cd workers/r2-upload
+#        wrangler deploy
+#
+#   3. Copier l'URL du worker dans :
+#        lib/core/constants/app_constants.dart → r2UploadWorkerUrl
+#
+#   4. Ajouter le domaine Pages de l'app dans ALLOWED_ORIGINS (index.js).
+# ─────────────────────────────────────────────────────────────────────────────
