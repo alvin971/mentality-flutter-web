@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../../core/l10n/l10n_ext.dart';
+import '../../../../../core/l10n/locale_notifier.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
 import '../../../../../core/widgets/test/kepler_test_button.dart';
@@ -49,7 +51,8 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
 
   void _generateItems() {
     // Génération des 21 items UNIQUES en une seule fois
-    final generator = SimilaritiesGenerator();
+    final generator =
+        SimilaritiesGenerator(languageCode: localeNotifier.languageCode);
     _generatedItems = generator.generateComplete21Items();
   }
 
@@ -118,10 +121,10 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
       builder: (context) => AlertDialog(
         title: Text(
           itemScore == 2
-              ? 'Excellent !'
+              ? context.l10n.simFeedbackExcellent
               : itemScore == 1
-                  ? 'Correct'
-                  : 'Réponse incomplète',
+                  ? context.l10n.simFeedbackCorrect
+                  : context.l10n.simFeedbackIncomplete,
           style: TextStyle(
             color: itemScore == 2
                 ? AppColors.success
@@ -138,20 +141,20 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
             children: [
               Text(
                 itemScore == 2
-                    ? 'Réponse abstraite/catégorielle ! +2 points'
+                    ? context.l10n.simFeedbackMsg2pts
                     : itemScore == 1
-                        ? 'Réponse fonctionnelle/propriété. +1 point'
-                        : 'Réponse incorrecte ou trop vague. 0 point',
+                        ? context.l10n.simFeedbackMsg1pt
+                        : context.l10n.simFeedbackMsg0pt,
               ),
               SizedBox(height: 12.h),
               Text(
-                'Votre réponse : "${_answerController.text}"',
+                context.l10n.simYourAnswerQuoted(_answerController.text),
                 style: const TextStyle(fontStyle: FontStyle.italic),
               ),
               SizedBox(height: 12.h),
               if (itemScore < 2) ...[
                 Text(
-                  'Exemples de réponses à 2 points :',
+                  context.l10n.simExamples2pts,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: AppColors.success,
@@ -165,7 +168,7 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
               if (itemScore == 0) ...[
                 SizedBox(height: 8.h),
                 Text(
-                  'Exemples de réponses à 1 point :',
+                  context.l10n.simExamples1pt,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: AppColors.warning,
@@ -177,12 +180,12 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
                     )),
               ],
               SizedBox(height: 12.h),
-              Text('Temps : ${timeSeconds}s'),
-              Text('Score total : $score points'),
+              Text(context.l10n.simTimeSeconds(timeSeconds)),
+              Text(context.l10n.simTotalScore(score)),
               if (_consecutiveZeros >= 3) ...[
                 SizedBox(height: 8.h),
                 Text(
-                  '3 scores de 0 consécutifs - Test terminé (WAIS-IV)',
+                  context.l10n.simDiscontinue,
                   style: TextStyle(
                     color: AppColors.warning,
                     fontWeight: FontWeight.bold,
@@ -209,9 +212,10 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
               }
             },
             child: Text(
-              _consecutiveZeros >= 3 || currentLevel >= _generatedItems.length - 1
-                  ? 'Voir les résultats'
-                  : 'Continuer',
+              _consecutiveZeros >= 3 ||
+                      currentLevel >= _generatedItems.length - 1
+                  ? context.l10n.simSeeResults
+                  : context.l10n.commonContinue,
             ),
           ),
         ],
@@ -227,19 +231,20 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: const Text(
-          'Test des Similitudes - Résultats',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        title: Text(
+          context.l10n.simResultsTitle,
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Score brut : $score/$maxScore points'),
-              Text('Items complétés : ${currentLevel + 1}/21'),
-              Text('Pourcentage : $percentageScore%'),
-              Text('Temps total : ${totalTime}s'),
+              Text(context.l10n.simRawScore(score, maxScore)),
+              Text(context.l10n
+                  .simItemsCompleted(currentLevel + 1, _generatedItems.length)),
+              Text(context.l10n.simPercentage(percentageScore)),
+              Text(context.l10n.simTotalTime(totalTime)),
               SizedBox(height: 12.h),
               Text(
                 _getPerformanceLevel(score),
@@ -250,7 +255,7 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
               ),
               SizedBox(height: 8.h),
               Text(
-                'Test de raisonnement verbal et abstraction conceptuelle',
+                context.l10n.simSubtitle,
                 style: TextStyle(
                   fontSize: 12.sp,
                   fontStyle: FontStyle.italic,
@@ -259,7 +264,7 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
               ),
               SizedBox(height: 16.h),
               Text(
-                'Répartition par niveau :',
+                context.l10n.simBreakdownTitle,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 14.sp,
@@ -276,7 +281,7 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
               Navigator.of(context).pop();
               Navigator.of(context).pop(score);
             },
-            child: const Text('Retour'),
+            child: Text(context.l10n.simBack),
           ),
         ],
       ),
@@ -296,26 +301,39 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
     return levelScores.entries.map((entry) {
       final total = entry.value.fold(0, (sum, score) => sum + score);
       final max = entry.value.length * 2;
-      final levelName = _generatedItems
-          .firstWhere((item) => item.level == entry.key)
-          .levelName;
+      final levelName = _levelName(entry.key);
 
       return Padding(
         padding: EdgeInsets.only(bottom: 4.h),
         child: Text(
-          '$levelName: $total/$max points',
+          context.l10n.simBreakdownLine(levelName, total, max),
           style: TextStyle(fontSize: 13.sp),
         ),
       );
     }).toList();
   }
 
+  /// Nom localisé du niveau d'abstraction (remplace [SimilarityItem.levelName]
+  /// qui est figé en français).
+  String _levelName(AbstractionLevel level) {
+    switch (level) {
+      case AbstractionLevel.concrete:
+        return context.l10n.simLevelConcrete;
+      case AbstractionLevel.functional:
+        return context.l10n.simLevelFunctional;
+      case AbstractionLevel.categorical:
+        return context.l10n.simLevelCategorical;
+      case AbstractionLevel.abstract:
+        return context.l10n.simLevelAbstract;
+    }
+  }
+
   String _getPerformanceLevel(int score) {
-    if (score >= 36) return 'Performance exceptionnelle (θ > +2.0)';
-    if (score >= 28) return 'Performance supérieure (θ > +1.0)';
-    if (score >= 20) return 'Performance moyenne (θ ≈ 0)';
-    if (score >= 12) return 'Performance inférieure (θ < 0)';
-    return 'Performance faible (θ < -1.0)';
+    if (score >= 36) return context.l10n.simPerfExceptional;
+    if (score >= 28) return context.l10n.simPerfSuperior;
+    if (score >= 20) return context.l10n.simPerfAverage;
+    if (score >= 12) return context.l10n.simPerfBelow;
+    return context.l10n.simPerfLow;
   }
 
   Color _getPerformanceColor(int score) {
@@ -331,8 +349,8 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
     final currentItem = _generatedItems[currentLevel];
 
     return KeplerTestScaffold(
-      testName: 'Similitudes',
-      eyebrow: 'COMPRÉHENSION VERBALE · VCI',
+      testName: context.l10n.simTestName,
+      eyebrow: context.l10n.simEyebrow,
       accentColor: AppColors.indexVCI,
       currentItem: currentLevel + 1,
       totalItems: _generatedItems.length,
@@ -341,12 +359,12 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
       trailing: [
         Padding(
           padding: EdgeInsets.only(left: 8.w),
-          child: Text('${_elapsedSeconds}s · $score pts',
+          child: Text(context.l10n.simStatusBar(_elapsedSeconds, score),
               style: AppText.monoLabel(color: AppColors.indexVCI)),
         ),
       ],
       bottomBar: KeplerTestButton.primary(
-        label: 'Valider',
+        label: context.l10n.commonValidate,
         accentColor: AppColors.indexVCI,
         onPressed:
             _answerController.text.trim().isNotEmpty ? _submitAnswer : null,
@@ -363,7 +381,7 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                   border: Border.all(color: AppColors.infoLight),
                 ),
                 child: Text(
-                  'En quoi ces deux mots sont-ils similaires ?',
+                  context.l10n.simQuestionPrompt,
                   style: TextStyle(
                     fontSize: 13.sp,
                     fontWeight: FontWeight.w500,
@@ -435,7 +453,7 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                   borderRadius: BorderRadius.circular(20.r),
                 ),
                 child: Text(
-                  'Niveau : ${currentItem.levelName}',
+                  context.l10n.simLevelLabel(_levelName(currentItem.level)),
                   style: TextStyle(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.bold,
@@ -449,7 +467,7 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
 
               // Champ de réponse
               Text(
-                'Votre réponse :',
+                context.l10n.simAnswerLabel,
                 style: TextStyle(
                   fontSize: 15.sp,
                   fontWeight: FontWeight.bold,
@@ -462,7 +480,7 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                 // Met à jour l'état du bouton Valider à chaque frappe.
                 onChanged: (_) => setState(() {}),
                 decoration: InputDecoration(
-                  hintText: 'Expliquez en quoi ils sont similaires...',
+                  hintText: context.l10n.simAnswerHint,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.r),
                   ),
@@ -486,7 +504,7 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Conseils pour obtenir 2 points :',
+                      context.l10n.simTipsTitle,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 13.sp,
@@ -494,11 +512,11 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                     ),
                     SizedBox(height: 4.h),
                     Text(
-                      '• Donnez une catégorie abstraite ou superordonnée',
+                      context.l10n.simTipsLine1,
                       style: TextStyle(fontSize: 12.sp),
                     ),
                     Text(
-                      '• Ex: "Ce sont des...", "Formes de...", "Types de..."',
+                      context.l10n.simTipsLine2,
                       style: TextStyle(fontSize: 12.sp),
                     ),
                   ],

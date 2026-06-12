@@ -11,6 +11,7 @@ import '../../../../services/session_history_service.dart';
 import '../../../scoring/domain/entities/iq_score.dart';
 import '../../../scoring/domain/services/scoring_service.dart';
 import '../../domain/services/pdf_report_service.dart';
+import '../../../../core/l10n/l10n_ext.dart';
 
 class CompleteTestResultsPage extends StatefulWidget {
   final CompleteTestSession session;
@@ -67,8 +68,8 @@ class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
   @override
   Widget build(BuildContext context) {
     return KeplerScaffold(
-      title: 'Résultats',
-      eyebrow: 'BILAN WAIS-IV',
+      title: context.l10n.ctResultsTitle,
+      eyebrow: context.l10n.ctResultsEyebrow,
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,8 +80,9 @@ class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
             date: _formatDate(session.startTime),
             duration: _formatDuration(session.totalDuration),
             completed: '${session.completedTestsCount} / ${session.totalTests}',
-            age:
-                ageInMonths != null ? '${(ageInMonths! / 12).floor()} ans' : null,
+            age: ageInMonths != null
+                ? context.l10n.ctAgeYears((ageInMonths! / 12).floor())
+                : null,
           ),
           SizedBox(height: 24.h),
           if (_iqScore != null) ...[
@@ -126,8 +128,8 @@ class _Header extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Bilan', style: AppText.heroDisplay()),
-        Text('terminé.', style: AppText.heroItalic()),
+        Text(context.l10n.ctResultsHero1, style: AppText.heroDisplay()),
+        Text(context.l10n.ctResultsHero2, style: AppText.heroItalic()),
         SizedBox(height: 12.h),
         Container(
             width: 36.w,
@@ -135,7 +137,7 @@ class _Header extends StatelessWidget {
             color: AppColors.primary.withValues(alpha: 0.4)),
         SizedBox(height: 12.h),
         Text(
-          'Synthèse de vos performances cognitives sur les douze subtests WAIS-IV.',
+          context.l10n.ctResultsSummary,
           style: AppText.body(),
         ),
       ],
@@ -160,10 +162,10 @@ class _SessionMeta extends StatelessWidget {
       surface: true,
       child: Column(
         children: [
-          _row('DATE', date),
-          _row('DURÉE', duration),
-          _row('SUBTESTS', completed),
-          if (age != null) _row('ÂGE', age!),
+          _row(context.l10n.ctMetaDate, date),
+          _row(context.l10n.ctMetaDuration, duration),
+          _row(context.l10n.ctMetaSubtests, completed),
+          if (age != null) _row(context.l10n.ctMetaAge, age!),
         ],
       ),
     );
@@ -188,8 +190,6 @@ class _FSIQCard extends StatelessWidget {
   const _FSIQCard({required this.iq});
   final IQScore iq;
 
-  String _ordinal(int n) => n == 1 ? 'er' : 'e';
-
   @override
   Widget build(BuildContext context) {
     final ci = iq.confidenceIntervals['FSIQ'];
@@ -201,7 +201,7 @@ class _FSIQCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('QI TOTAL · FSIQ',
+          Text(context.l10n.ctFsiqCardLabel,
               style: AppText.monoLabel(color: AppColors.primary)),
           SizedBox(height: 16.h),
           Row(
@@ -224,11 +224,13 @@ class _FSIQCard extends StatelessWidget {
               color: AppColors.primary.withValues(alpha: 0.4)),
           SizedBox(height: 12.h),
           if (ci != null)
-            Text('IC 95% · ${ci.lowerBound} – ${ci.upperBound}',
+            Text(
+                context.l10n
+                    .ctConfidenceInterval95(ci.lowerBound, ci.upperBound),
                 style: AppText.monoLabel(color: Theme.of(context).colorScheme.onSurfaceVariant)),
           SizedBox(height: 4.h),
           Text(
-              'Percentile · $percentile${_ordinal(percentile)}',
+              context.l10n.ctPercentileLabel(percentile),
               style: AppText.monoLabel(color: Theme.of(context).colorScheme.onSurfaceVariant)),
         ],
       ),
@@ -243,22 +245,22 @@ class _IndexProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final indices = <(String, String, int?)>[
-      ('VCI', 'Compréhension Verbale', iq.vci),
-      ('VSI', 'Visuo-Spatial', iq.vsi),
-      ('FRI', 'Raisonnement Fluide', iq.fri),
-      ('WMI', 'Mémoire de Travail', iq.wmi),
-      ('PSI', 'Vitesse de Traitement', iq.psi),
+      ('VCI', context.l10n.ctIndexVci, iq.vci),
+      ('VSI', context.l10n.ctIndexVsi, iq.vsi),
+      ('FRI', context.l10n.ctIndexFri, iq.fri),
+      ('WMI', context.l10n.ctIndexWmi, iq.wmi),
+      ('PSI', context.l10n.ctIndexPsi, iq.psi),
     ];
 
     return KeplerCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('PROFIL DES INDICES',
+          Text(context.l10n.ctIndexProfileHeader,
               style: AppText.monoLabel(color: AppColors.primary)),
           SizedBox(height: 16.h),
           for (final e in indices) ...[
-            if (e.$3 != null) _row(e.$1, e.$2, e.$3!, iq),
+            if (e.$3 != null) _row(context, e.$1, e.$2, e.$3!, iq),
             if (e.$3 != null) SizedBox(height: 14.h),
           ],
         ],
@@ -266,7 +268,8 @@ class _IndexProfile extends StatelessWidget {
     );
   }
 
-  Widget _row(String code, String label, int score, IQScore iq) {
+  Widget _row(
+      BuildContext context, String code, String label, int score, IQScore iq) {
     final ci = iq.confidenceIntervals[code];
     final percentile = iq.percentiles[code] ?? 50;
     final classif = iq.classifications[code] ?? '';
@@ -310,8 +313,9 @@ class _IndexProfile extends StatelessWidget {
             Text(classif, style: AppText.bodySmall()),
             Text(
               ci != null
-                  ? 'IC ${ci.lowerBound}–${ci.upperBound} · ${percentile}e %ile'
-                  : '${percentile}e %ile',
+                  ? context.l10n.ctIndexCiPercentile(
+                      ci.lowerBound, ci.upperBound, percentile)
+                  : context.l10n.ctIndexPercentile(percentile),
               style: AppText.monoLabel(color: AppColors.textTertiary),
             ),
           ],
@@ -330,40 +334,40 @@ class _SubtestDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     final groups = [
       (
-        'VCI · Verbal',
+        context.l10n.ctGroupVciVerbal,
         [
-          ('Similitudes', 'SI', session.similaritiesScore),
-          ('Vocabulaire', 'VO', session.vocabularyScore),
-          ('Information', 'IN', session.informationScore),
+          (context.l10n.ctTestSimilarities, 'SI', session.similaritiesScore),
+          (context.l10n.ctTestVocabulary, 'VO', session.vocabularyScore),
+          (context.l10n.ctTestInformation, 'IN', session.informationScore),
         ]
       ),
       (
-        'VSI · Visuo-Spatial',
+        context.l10n.ctGroupVsiVisuoSpatial,
         [
-          ('Cubes', 'BD', session.cubesScore),
-          ('Puzzles Visuels', 'VP', session.visualPuzzlesScore),
+          (context.l10n.ctTestCubes, 'BD', session.cubesScore),
+          (context.l10n.ctTestVisualPuzzles, 'VP', session.visualPuzzlesScore),
         ]
       ),
       (
-        'FRI · Raisonnement',
+        context.l10n.ctGroupFriReasoning,
         [
-          ('Matrices', 'MR', session.matricesScore),
-          ('Balances', 'FW', session.figureWeightsScore),
+          (context.l10n.ctTestMatrices, 'MR', session.matricesScore),
+          (context.l10n.ctTestFigureWeights, 'FW', session.figureWeightsScore),
         ]
       ),
       (
-        'WMI · Mémoire',
+        context.l10n.ctGroupWmiMemory,
         [
-          ('Mémoire des Chiffres', 'DS', session.digitSpanScore),
-          ('Arithmétique', 'AR', session.arithmeticScore),
-          ('Mémoire des Images', 'PM', session.pictureSpanScore),
+          (context.l10n.ctTestDigitSpan, 'DS', session.digitSpanScore),
+          (context.l10n.ctTestArithmetic, 'AR', session.arithmeticScore),
+          (context.l10n.ctTestPictureSpan, 'PM', session.pictureSpanScore),
         ]
       ),
       (
-        'PSI · Vitesse',
+        context.l10n.ctGroupPsiSpeed,
         [
-          ('Code', 'CD', session.codingScore),
-          ('Recherche de Symboles', 'SS', session.symbolSearchScore),
+          (context.l10n.ctTestCoding, 'CD', session.codingScore),
+          (context.l10n.ctTestSymbolSearch, 'SS', session.symbolSearchScore),
         ]
       ),
     ];
@@ -372,7 +376,7 @@ class _SubtestDetails extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('NOTES STANDARDISÉES',
+          Text(context.l10n.ctStandardizedScoresHeader,
               style: AppText.monoLabel(color: AppColors.primary)),
           SizedBox(height: 16.h),
           for (var i = 0; i < groups.length; i++) ...[
@@ -380,7 +384,7 @@ class _SubtestDetails extends StatelessWidget {
             SizedBox(height: 8.h),
             for (final s in groups[i].$2)
               if (s.$3 != null)
-                _subRow(s.$1, s.$2, s.$3!, iq),
+                _subRow(context, s.$1, s.$2, s.$3!, iq),
             if (i < groups.length - 1) ...[
               SizedBox(height: 14.h),
               Container(
@@ -393,7 +397,8 @@ class _SubtestDetails extends StatelessWidget {
     );
   }
 
-  Widget _subRow(String name, String code, int raw, IQScore iq) {
+  Widget _subRow(
+      BuildContext context, String name, String code, int raw, IQScore iq) {
     final scaled = iq.percentiles[code];
     final classif = iq.classifications[code] ?? '';
     return Padding(
@@ -404,7 +409,7 @@ class _SubtestDetails extends StatelessWidget {
               flex: 3,
               child: Text(name,
                   style: AppText.body(color: AppColors.textPrimary))),
-          Text('brut $raw',
+          Text(context.l10n.ctRawScore(raw),
               style: AppText.monoLabel(color: AppColors.textTertiary)),
           SizedBox(width: 12.w),
           Container(
@@ -438,13 +443,22 @@ class _StrengthsWeaknesses extends StatelessWidget {
   const _StrengthsWeaknesses({required this.iq});
   final IQScore iq;
 
-  static const _labels = {
-    'VCI': 'Compréhension Verbale',
-    'VSI': 'Visuo-Spatial',
-    'FRI': 'Raisonnement Fluide',
-    'WMI': 'Mémoire de Travail',
-    'PSI': 'Vitesse de Traitement',
-  };
+  String _indexLabel(BuildContext context, String code) {
+    switch (code) {
+      case 'VCI':
+        return context.l10n.ctIndexVci;
+      case 'VSI':
+        return context.l10n.ctIndexVsi;
+      case 'FRI':
+        return context.l10n.ctIndexFri;
+      case 'WMI':
+        return context.l10n.ctIndexWmi;
+      case 'PSI':
+        return context.l10n.ctIndexPsi;
+      default:
+        return code;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -457,41 +471,43 @@ class _StrengthsWeaknesses extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('PROFIL COGNITIF',
+          Text(context.l10n.ctCognitiveProfileHeader,
               style: AppText.monoLabel(color: AppColors.primary)),
           SizedBox(height: 12.h),
           Text(
             homogeneous
-                ? 'Profil homogène — les indices sont cohérents entre eux.'
-                : 'Profil hétérogène — disparités notables entre indices.',
+                ? context.l10n.ctProfileHomogeneous
+                : context.l10n.ctProfileHeterogeneous,
             style: AppText.body(),
           ),
           SizedBox(height: 4.h),
-          Text('Écart max · ${iq.maxIndexDiscrepancy} pts',
+          Text(context.l10n.ctMaxDiscrepancy(iq.maxIndexDiscrepancy),
               style: AppText.monoLabel(color: Theme.of(context).colorScheme.outline)),
           if (strengths.isNotEmpty) ...[
             SizedBox(height: 16.h),
-            Text('Forces relatives',
+            Text(context.l10n.ctRelativeStrengths,
                 style: AppText.bodyStrong(color: AppColors.success)),
             SizedBox(height: 6.h),
             Wrap(
               spacing: 8.w,
               runSpacing: 6.h,
               children: strengths
-                  .map((c) => _chip(_labels[c] ?? c, AppColors.success))
+                  .map((c) =>
+                      _chip(_indexLabel(context, c), AppColors.success))
                   .toList(),
             ),
           ],
           if (weaknesses.isNotEmpty) ...[
             SizedBox(height: 16.h),
-            Text('Points de vigilance',
+            Text(context.l10n.ctVigilancePoints,
                 style: AppText.bodyStrong(color: AppColors.warning)),
             SizedBox(height: 6.h),
             Wrap(
               spacing: 8.w,
               runSpacing: 6.h,
               children: weaknesses
-                  .map((c) => _chip(_labels[c] ?? c, AppColors.warning))
+                  .map((c) =>
+                      _chip(_indexLabel(context, c), AppColors.warning))
                   .toList(),
             ),
           ],
@@ -504,8 +520,7 @@ class _StrengthsWeaknesses extends StatelessWidget {
               borderRadius: BorderRadius.circular(6.r),
             ),
             child: Text(
-              'Résultats indicatifs. Pour une évaluation clinique officielle, '
-              'consultez un neuropsychologue ou un psychologue qualifié.',
+              context.l10n.ctIndicativeDisclaimer,
               style: AppText.bodySmall(color: Theme.of(context).colorScheme.onSurfaceVariant),
             ),
           ),
@@ -537,21 +552,21 @@ class _RawFallback extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('SCORES BRUTS',
+          Text(context.l10n.ctRawScoresHeader,
               style: AppText.monoLabel(color: AppColors.primary)),
           SizedBox(height: 16.h),
-          _row('Similitudes', session.similaritiesScore),
-          _row('Vocabulaire', session.vocabularyScore),
-          _row('Information', session.informationScore),
-          _row('Cubes', session.cubesScore),
-          _row('Matrices', session.matricesScore),
-          _row('Puzzles Visuels', session.visualPuzzlesScore),
-          _row('Mémoire des Chiffres', session.digitSpanScore),
-          _row('Arithmétique', session.arithmeticScore),
-          _row('Mémoire des Images', session.pictureSpanScore),
-          _row('Code', session.codingScore),
-          _row('Recherche de Symboles', session.symbolSearchScore),
-          _row('Balances', session.figureWeightsScore),
+          _row(context.l10n.ctTestSimilarities, session.similaritiesScore),
+          _row(context.l10n.ctTestVocabulary, session.vocabularyScore),
+          _row(context.l10n.ctTestInformation, session.informationScore),
+          _row(context.l10n.ctTestCubes, session.cubesScore),
+          _row(context.l10n.ctTestMatrices, session.matricesScore),
+          _row(context.l10n.ctTestVisualPuzzles, session.visualPuzzlesScore),
+          _row(context.l10n.ctTestDigitSpan, session.digitSpanScore),
+          _row(context.l10n.ctTestArithmetic, session.arithmeticScore),
+          _row(context.l10n.ctTestPictureSpan, session.pictureSpanScore),
+          _row(context.l10n.ctTestCoding, session.codingScore),
+          _row(context.l10n.ctTestSymbolSearch, session.symbolSearchScore),
+          _row(context.l10n.ctTestFigureWeights, session.figureWeightsScore),
         ],
       ),
     );
@@ -586,13 +601,11 @@ class _NoScoreNotice extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('ÂGE MANQUANT',
+                Text(context.l10n.ctMissingAgeHeader,
                     style: AppText.monoLabel(color: AppColors.warning)),
                 SizedBox(height: 6.h),
                 Text(
-                  'Sans l\'âge du patient, seuls les scores bruts sont affichés. '
-                  'Relancez le test en renseignant l\'âge pour obtenir le QI standardisé, '
-                  'les percentiles et les intervalles de confiance.',
+                  context.l10n.ctMissingAgeBody,
                   style: AppText.bodySmall(),
                 ),
               ],
@@ -616,7 +629,7 @@ class _Actions extends StatelessWidget {
     return Column(
       children: [
         KeplerButton(
-          label: 'Exporter en PDF',
+          label: context.l10n.ctExportPdf,
           icon: Icons.picture_as_pdf_outlined,
           expand: true,
           onPressed: () async {
@@ -629,7 +642,7 @@ class _Actions extends StatelessWidget {
             } catch (e) {
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Erreur PDF : $e')),
+                  SnackBar(content: Text(context.l10n.ctPdfError('$e'))),
                 );
               }
             }
@@ -637,7 +650,7 @@ class _Actions extends StatelessWidget {
         ),
         SizedBox(height: 12.h),
         KeplerButton(
-          label: 'Retour à l\'accueil',
+          label: context.l10n.ctBackToHome,
           variant: KeplerButtonVariant.secondary,
           icon: Icons.home_outlined,
           expand: true,

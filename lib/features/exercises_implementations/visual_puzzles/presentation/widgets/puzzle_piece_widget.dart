@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../../core/l10n/l10n_ext.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
 import '../../domain/puzzle_generator.dart';
@@ -64,7 +65,7 @@ class PuzzlePieceWidget extends StatelessWidget {
 
     return Semantics(
       button: true,
-      label: 'Pièce $label',
+      label: context.l10n.vpPieceSemantics(label),
       selected: isSelected,
       child: Material(
         color: Colors.transparent,

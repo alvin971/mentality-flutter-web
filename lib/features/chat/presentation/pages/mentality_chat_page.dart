@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../core/l10n/l10n_ext.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/widgets/et_logo_animated.dart';
@@ -67,13 +68,13 @@ class _ChatViewState extends State<_ChatView> {
           padding: EdgeInsets.only(left: 8.w, right: 12.w),
           child: EtLogoAnimated(size: 32.w),
         ),
-        title: 'Mental E.T.',
-        eyebrow: 'ASSISTANT IA',
+        title: context.l10n.appTitle,
+        eyebrow: context.l10n.chatEyebrow,
         actions: [
           IconButton(
             icon: Icon(Icons.refresh,
                 size: 20.sp, color: Theme.of(context).colorScheme.onSurfaceVariant),
-            tooltip: 'Nouvelle conversation',
+            tooltip: context.l10n.chatNewConversation,
             onPressed: () =>
                 context.read<ChatBloc>().add(const ClearConversationEvent()),
           ),
@@ -126,11 +127,11 @@ class _Empty extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('MENTAL E.T.',
+          Text(context.l10n.chatAssistantLabel,
               style: AppText.monoLabel(color: AppColors.primary)),
           SizedBox(height: 16.h),
-          Text('Posez', style: AppText.heroDisplay()),
-          Text('vos questions.', style: AppText.heroItalic()),
+          Text(context.l10n.chatHeroTitle1, style: AppText.heroDisplay()),
+          Text(context.l10n.chatHeroTitle2, style: AppText.heroItalic()),
           SizedBox(height: 16.h),
           Container(
             width: 40.w,
@@ -139,8 +140,7 @@ class _Empty extends StatelessWidget {
           ),
           SizedBox(height: 16.h),
           Text(
-            'L\'IA Mental E.T. vous aide à mieux comprendre votre profil cognitif. '
-            'Discussions confidentielles, accompagnement non-directif.',
+            context.l10n.chatEmptyIntro,
             style: AppText.body(),
           ),
         ],
@@ -153,11 +153,11 @@ class _MessageBubble extends StatelessWidget {
   const _MessageBubble({required this.message});
   final ChatMessage message;
 
-  String _ts(DateTime t) {
+  String _ts(BuildContext context, DateTime t) {
     final d = DateTime.now().difference(t);
-    if (d.inMinutes < 1) return 'à l\'instant';
-    if (d.inHours < 1) return '${d.inMinutes} min';
-    if (d.inDays < 1) return '${d.inHours}h';
+    if (d.inMinutes < 1) return context.l10n.chatTimeJustNow;
+    if (d.inHours < 1) return context.l10n.chatTimeMinutes(d.inMinutes);
+    if (d.inDays < 1) return context.l10n.chatTimeHours(d.inHours);
     return '${t.day.toString().padLeft(2, '0')}.${t.month.toString().padLeft(2, '0')}';
   }
 
@@ -172,7 +172,7 @@ class _MessageBubble extends StatelessWidget {
         crossAxisAlignment:
             user ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
-          Text(user ? 'VOUS' : 'MENTAL E.T.',
+          Text(user ? context.l10n.chatUserLabel : context.l10n.chatAssistantLabel,
               style: AppText.monoLabel(
                   color: err
                       ? AppColors.error
@@ -206,7 +206,7 @@ class _MessageBubble extends StatelessWidget {
             ),
           ),
           SizedBox(height: 4.h),
-          Text(_ts(message.timestamp),
+          Text(_ts(context, message.timestamp),
               style: AppText.monoLabel(color: Theme.of(context).colorScheme.outline)),
         ],
       ),
@@ -222,7 +222,7 @@ class _LoadingBubble extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('MENTAL E.T.',
+          Text(context.l10n.chatAssistantLabel,
               style: AppText.monoLabel(color: AppColors.primary)),
           SizedBox(height: 6.h),
           Container(
@@ -244,7 +244,7 @@ class _LoadingBubble extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: 10.w),
-                Text('Réflexion…',
+                Text(context.l10n.chatThinking,
                     style: AppText.body(color: Theme.of(context).colorScheme.onSurfaceVariant)),
               ],
             ),
@@ -284,7 +284,7 @@ class _InputBar extends StatelessWidget {
                     enabled: !isLoading,
                     style: AppText.body(color: Theme.of(context).colorScheme.onSurface),
                     decoration: InputDecoration(
-                      hintText: 'Écrire un message…',
+                      hintText: context.l10n.chatInputHint,
                       hintStyle:
                           AppText.body(color: Theme.of(context).colorScheme.outline),
                       filled: true,

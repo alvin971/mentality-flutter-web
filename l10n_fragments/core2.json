@@ -1,0 +1,10 @@
+{
+  "coreRouteNotFound": {
+    "fr": "Page introuvable : {path}",
+    "en": "Page not found: {path}",
+    "desc": "Message affiché par le routeur quand une route demandée n'existe pas. {path} est le chemin de l'URL.",
+    "placeholders": {
+      "path": "String"
+    }
+  }
+}

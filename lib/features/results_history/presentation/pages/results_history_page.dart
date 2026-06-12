@@ -6,6 +6,7 @@ import '../../../../core/widgets/kepler_button.dart';
 import '../../../../core/widgets/kepler_card.dart';
 import '../../../../core/widgets/kepler_scaffold.dart';
 import '../../../../services/session_history_service.dart';
+import '../../../../core/l10n/l10n_ext.dart';
 
 class ResultsHistoryPage extends StatefulWidget {
   const ResultsHistoryPage({super.key});
@@ -30,17 +31,18 @@ class _ResultsHistoryPageState extends State<ResultsHistoryPage> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.r)),
-        title: Text('Supprimer ce résultat ?', style: AppText.h3()),
-        content: Text('Cette action est irréversible.', style: AppText.body()),
+        title: Text(context.l10n.histDeleteResultTitle, style: AppText.h3()),
+        content:
+            Text(context.l10n.histDeleteResultBody, style: AppText.body()),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text('Annuler',
+            child: Text(context.l10n.commonCancel,
                 style: AppText.bodySmall(color: Theme.of(context).colorScheme.onSurfaceVariant)),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: Text('Supprimer',
+            child: Text(context.l10n.histDelete,
                 style: AppText.bodySmall(color: AppColors.error)),
           ),
         ],
@@ -56,8 +58,8 @@ class _ResultsHistoryPageState extends State<ResultsHistoryPage> {
   @override
   Widget build(BuildContext context) {
     return KeplerScaffold(
-      title: 'Mes résultats',
-      eyebrow: 'HISTORIQUE',
+      title: context.l10n.histTitle,
+      eyebrow: context.l10n.histEyebrow,
       scroll: false,
       padding: EdgeInsets.zero,
       child: _entries.isEmpty
@@ -102,14 +104,22 @@ class _ResultsHistoryPageState extends State<ResultsHistoryPage> {
             SizedBox(height: 8.h),
             Text(e.classification, style: AppText.h1Italic()),
             SizedBox(height: 6.h),
-            Text('$age ans', style: AppText.bodySmall()),
+            Text(context.l10n.histAgeYears(age), style: AppText.bodySmall()),
             SizedBox(height: 24.h),
-            _ScoreRow(label: 'QI Total (FSIQ)', value: e.fsiq, highlight: true),
-            if (e.vci != null) _ScoreRow(label: 'VCI — Verbal', value: e.vci!),
-            if (e.vsi != null) _ScoreRow(label: 'VSI — Visuo-Spatial', value: e.vsi!),
-            if (e.fri != null) _ScoreRow(label: 'FRI — Raisonnement', value: e.fri!),
-            if (e.wmi != null) _ScoreRow(label: 'WMI — Mémoire', value: e.wmi!),
-            if (e.psi != null) _ScoreRow(label: 'PSI — Vitesse', value: e.psi!),
+            _ScoreRow(
+                label: context.l10n.histScoreFsiq,
+                value: e.fsiq,
+                highlight: true),
+            if (e.vci != null)
+              _ScoreRow(label: context.l10n.histScoreVci, value: e.vci!),
+            if (e.vsi != null)
+              _ScoreRow(label: context.l10n.histScoreVsi, value: e.vsi!),
+            if (e.fri != null)
+              _ScoreRow(label: context.l10n.histScoreFri, value: e.fri!),
+            if (e.wmi != null)
+              _ScoreRow(label: context.l10n.histScoreWmi, value: e.wmi!),
+            if (e.psi != null)
+              _ScoreRow(label: context.l10n.histScorePsi, value: e.psi!),
           ],
         ),
       ),
@@ -158,7 +168,7 @@ class _EntryCard extends StatelessWidget {
               children: [
                 Text(entry.classification, style: AppText.bodyStrong()),
                 SizedBox(height: 2.h),
-                Text('${_formatDate(entry.date)} · $age ans',
+                Text('${_formatDate(entry.date)} · ${context.l10n.histAgeYears(age)}',
                     style: AppText.bodySmall()),
               ],
             ),
@@ -187,19 +197,19 @@ class _EmptyState extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('AUCUN RÉSULTAT',
+            Text(context.l10n.histEmptyEyebrow,
                 style: AppText.monoLabel(color: AppColors.primary)),
             SizedBox(height: 12.h),
-            Text('Votre historique', style: AppText.heroDisplay()),
-            Text('vous attend.', style: AppText.heroItalic()),
+            Text(context.l10n.histEmptyHero1, style: AppText.heroDisplay()),
+            Text(context.l10n.histEmptyHero2, style: AppText.heroItalic()),
             SizedBox(height: 16.h),
             Text(
-              'Complétez votre première évaluation WAIS-IV pour voir vos résultats apparaître ici.',
+              context.l10n.histEmptyDescription,
               style: AppText.body(),
             ),
             SizedBox(height: 28.h),
             KeplerButton(
-                label: 'Commencer une évaluation',
+                label: context.l10n.histStartAssessment,
                 icon: Icons.east,
                 onPressed: onStart),
           ],

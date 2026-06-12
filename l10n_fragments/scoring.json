@@ -1,0 +1,108 @@
+{
+  "scoringClassificationVerySuperior": {
+    "fr": "Très supérieur",
+    "en": "Very Superior",
+    "desc": "Classification Wechsler pour un score composite >= 130 ou note standard >= 16"
+  },
+  "scoringClassificationSuperior": {
+    "fr": "Supérieur",
+    "en": "Superior",
+    "desc": "Classification Wechsler pour un score composite 120-129 ou note standard 13-15"
+  },
+  "scoringClassificationHighAverage": {
+    "fr": "Moyen fort",
+    "en": "High Average",
+    "desc": "Classification Wechsler pour un score composite 110-119 ou note standard 11-12"
+  },
+  "scoringClassificationAverage": {
+    "fr": "Moyen",
+    "en": "Average",
+    "desc": "Classification Wechsler pour un score composite 90-109 ou note standard 8-10"
+  },
+  "scoringClassificationLowAverage": {
+    "fr": "Moyen faible",
+    "en": "Low Average",
+    "desc": "Classification Wechsler pour un score composite 80-89 ou note standard 6-7"
+  },
+  "scoringClassificationBorderline": {
+    "fr": "Limite",
+    "en": "Borderline",
+    "desc": "Classification Wechsler pour un score composite 70-79 ou note standard 4-5"
+  },
+  "scoringClassificationExtremelyLow": {
+    "fr": "Extrêmement bas",
+    "en": "Extremely Low",
+    "desc": "Classification Wechsler pour un score composite < 70 ou note standard < 4"
+  },
+  "scoringNotAvailable": {
+    "fr": "N/A",
+    "en": "N/A",
+    "desc": "Classification affichée quand la note standardisée d'un sous-test est absente"
+  },
+  "scoringSummaryFullScaleIq": {
+    "fr": "QI Total: {score} ({classification})",
+    "en": "Full Scale IQ: {score} ({classification})",
+    "desc": "Ligne du résumé de profil : QI total avec sa classification",
+    "placeholders": {"score": "int", "classification": "String"}
+  },
+  "scoringSummaryPercentile": {
+    "fr": "Percentile: {rank}e",
+    "en": "Percentile: {rank}",
+    "desc": "Ligne du résumé de profil : rang percentile du QI total (suffixe ordinal 'e' en FR)",
+    "placeholders": {"rank": "int"}
+  },
+  "scoringSummaryConfidenceInterval": {
+    "fr": "Intervalle de confiance 95%: {lower} - {upper}",
+    "en": "95% confidence interval: {lower} - {upper}",
+    "desc": "Ligne du résumé de profil : intervalle de confiance à 95% du QI total",
+    "placeholders": {"lower": "int", "upper": "int"}
+  },
+  "scoringIndexVerbalComprehension": {
+    "fr": "Compréhension Verbale",
+    "en": "Verbal Comprehension",
+    "desc": "Nom affiché de l'indice VCI (WAIS-IV)"
+  },
+  "scoringIndexVisualSpatial": {
+    "fr": "Visuo-Spatial",
+    "en": "Visual Spatial",
+    "desc": "Nom affiché de l'indice VSI (WAIS-IV)"
+  },
+  "scoringIndexFluidReasoning": {
+    "fr": "Raisonnement Fluide",
+    "en": "Fluid Reasoning",
+    "desc": "Nom affiché de l'indice FRI (WAIS-IV)"
+  },
+  "scoringIndexWorkingMemory": {
+    "fr": "Mémoire de Travail",
+    "en": "Working Memory",
+    "desc": "Nom affiché de l'indice WMI (WAIS-IV)"
+  },
+  "scoringIndexProcessingSpeed": {
+    "fr": "Vitesse de Traitement",
+    "en": "Processing Speed",
+    "desc": "Nom affiché de l'indice PSI (WAIS-IV)"
+  },
+  "scoringSummaryRelativeStrengths": {
+    "fr": "Forces relatives: {list}",
+    "en": "Relative strengths: {list}",
+    "desc": "Ligne du résumé de profil : liste des indices significativement au-dessus du QI total",
+    "placeholders": {"list": "String"}
+  },
+  "scoringSummaryRelativeWeaknesses": {
+    "fr": "Faiblesses relatives: {list}",
+    "en": "Relative weaknesses: {list}",
+    "desc": "Ligne du résumé de profil : liste des indices significativement en dessous du QI total",
+    "placeholders": {"list": "String"}
+  },
+  "scoringSummaryHomogeneousProfile": {
+    "fr": "Profil cognitif homogène",
+    "en": "Homogeneous cognitive profile",
+    "desc": "Conclusion du résumé de profil quand les indices sont homogènes (écarts < 1 écart-type)"
+  },
+  "scoringSummaryHeterogeneousProfile": {
+    "fr": "Profil cognitif hétérogène (écart max: {points} points)",
+    "en": "Heterogeneous cognitive profile (max discrepancy: {points} points)",
+    "desc": "Conclusion du résumé de profil quand les indices sont hétérogènes, avec l'écart maximal en points",
+    "placeholders": {"points": "int"}
+  }
+}

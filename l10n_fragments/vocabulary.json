@@ -1,0 +1,227 @@
+{
+  "vocabTestName": {
+    "fr": "Vocabulaire",
+    "en": "Vocabulary",
+    "desc": "Vocabulaire — nom du test affiché dans le scaffold"
+  },
+  "vocabEyebrow": {
+    "fr": "COMPRÉHENSION VERBALE · VCI",
+    "en": "VERBAL COMPREHENSION · VCI",
+    "desc": "Vocabulaire — sur-titre (catégorie d'indice) dans le scaffold"
+  },
+  "vocabTimerScore": {
+    "fr": "{seconds} s · {score} pts",
+    "en": "{seconds}s · {score} pts",
+    "desc": "Vocabulaire — chrono et score affichés dans l'AppBar",
+    "placeholders": {"seconds": "int", "score": "int"}
+  },
+  "vocabFeedbackExcellent": {
+    "fr": "Excellent !",
+    "en": "Excellent!",
+    "desc": "Vocabulaire — titre du feedback pour une réponse à 2 points"
+  },
+  "vocabFeedbackCorrect": {
+    "fr": "Correct",
+    "en": "Correct",
+    "desc": "Vocabulaire — titre du feedback pour une réponse à 1 point"
+  },
+  "vocabFeedbackIncomplete": {
+    "fr": "Réponse incomplète",
+    "en": "Incomplete answer",
+    "desc": "Vocabulaire — titre du feedback pour une réponse à 0 point"
+  },
+  "vocabFeedbackTwoPoints": {
+    "fr": "Définition complète et précise ! +2 points",
+    "en": "Complete and precise definition! +2 points",
+    "desc": "Vocabulaire — message de feedback pour 2 points"
+  },
+  "vocabFeedbackOnePoint": {
+    "fr": "Définition partielle mais correcte. +1 point",
+    "en": "Partial but correct definition. +1 point",
+    "desc": "Vocabulaire — message de feedback pour 1 point"
+  },
+  "vocabFeedbackZeroPoint": {
+    "fr": "Réponse incorrecte ou trop vague. 0 point",
+    "en": "Incorrect or too vague an answer. 0 points",
+    "desc": "Vocabulaire — message de feedback pour 0 point"
+  },
+  "vocabWordLabel": {
+    "fr": "Mot : « {word} »",
+    "en": "Word: “{word}”",
+    "desc": "Vocabulaire — rappel du mot évalué dans le feedback",
+    "placeholders": {"word": "String"}
+  },
+  "vocabYourAnswerLabel": {
+    "fr": "Votre réponse : « {answer} »",
+    "en": "Your answer: “{answer}”",
+    "desc": "Vocabulaire — rappel de la réponse de l'utilisateur dans le feedback",
+    "placeholders": {"answer": "String"}
+  },
+  "vocabEmptyAnswer": {
+    "fr": "(vide)",
+    "en": "(empty)",
+    "desc": "Vocabulaire — placeholder quand la réponse de l'utilisateur est vide"
+  },
+  "vocabTwoPointExamples": {
+    "fr": "Exemples de réponses à 2 points :",
+    "en": "Examples of 2-point answers:",
+    "desc": "Vocabulaire — en-tête de la liste d'exemples de réponses à 2 points"
+  },
+  "vocabOnePointExamples": {
+    "fr": "Exemples de réponses à 1 point :",
+    "en": "Examples of 1-point answers:",
+    "desc": "Vocabulaire — en-tête de la liste d'exemples de réponses à 1 point"
+  },
+  "vocabTimeSeconds": {
+    "fr": "Temps : {seconds} s",
+    "en": "Time: {seconds}s",
+    "desc": "Vocabulaire — temps passé sur l'item dans le feedback",
+    "placeholders": {"seconds": "int"}
+  },
+  "vocabTotalScore": {
+    "fr": "Score total : {score} points",
+    "en": "Total score: {score} points",
+    "desc": "Vocabulaire — score cumulé affiché dans le feedback",
+    "placeholders": {"score": "int"}
+  },
+  "vocabDiscontinued": {
+    "fr": "3 scores de 0 consécutifs - Test terminé (WAIS-IV)",
+    "en": "3 consecutive zero scores - Test ended (WAIS-IV)",
+    "desc": "Vocabulaire — message de règle d'arrêt après 3 échecs consécutifs"
+  },
+  "vocabViewResults": {
+    "fr": "Voir les résultats",
+    "en": "View results",
+    "desc": "Vocabulaire — bouton du feedback qui mène à l'écran de résultats"
+  },
+  "vocabResultsTitle": {
+    "fr": "Test de Vocabulaire - Résultats",
+    "en": "Vocabulary Test - Results",
+    "desc": "Vocabulaire — titre du dialogue de résultats finaux"
+  },
+  "vocabRawScore": {
+    "fr": "Score brut : {score}/{max} points",
+    "en": "Raw score: {score}/{max} points",
+    "desc": "Vocabulaire — score brut dans les résultats",
+    "placeholders": {"score": "int", "max": "int"}
+  },
+  "vocabItemsCompleted": {
+    "fr": "Items complétés : {completed}/{total}",
+    "en": "Items completed: {completed}/{total}",
+    "desc": "Vocabulaire — nombre d'items complétés dans les résultats",
+    "placeholders": {"completed": "int", "total": "int"}
+  },
+  "vocabPercentage": {
+    "fr": "Pourcentage : {percent}%",
+    "en": "Percentage: {percent}%",
+    "desc": "Vocabulaire — pourcentage de réussite dans les résultats",
+    "placeholders": {"percent": "int"}
+  },
+  "vocabTotalTime": {
+    "fr": "Temps total : {seconds} s",
+    "en": "Total time: {seconds}s",
+    "desc": "Vocabulaire — temps total dans les résultats",
+    "placeholders": {"seconds": "int"}
+  },
+  "vocabTestCaption": {
+    "fr": "Test de connaissance lexicale et compréhension verbale",
+    "en": "Test of lexical knowledge and verbal comprehension",
+    "desc": "Vocabulaire — légende sous le niveau de performance dans les résultats"
+  },
+  "vocabFrequencyBreakdownTitle": {
+    "fr": "Répartition par fréquence :",
+    "en": "Breakdown by frequency:",
+    "desc": "Vocabulaire — en-tête de la répartition des scores par fréquence"
+  },
+  "vocabFrequencyBreakdownRow": {
+    "fr": "{name} : {score}/{max} points",
+    "en": "{name}: {score}/{max} points",
+    "desc": "Vocabulaire — ligne de répartition score par niveau de fréquence",
+    "placeholders": {"name": "String", "score": "int", "max": "int"}
+  },
+  "vocabPerfExceptional": {
+    "fr": "Performance exceptionnelle (θ > +2.0)",
+    "en": "Exceptional performance (θ > +2.0)",
+    "desc": "Vocabulaire — niveau de performance le plus élevé"
+  },
+  "vocabPerfSuperior": {
+    "fr": "Performance supérieure (θ > +1.0)",
+    "en": "Superior performance (θ > +1.0)",
+    "desc": "Vocabulaire — niveau de performance supérieur"
+  },
+  "vocabPerfAverage": {
+    "fr": "Performance moyenne (θ ≈ 0)",
+    "en": "Average performance (θ ≈ 0)",
+    "desc": "Vocabulaire — niveau de performance moyen"
+  },
+  "vocabPerfBelowAverage": {
+    "fr": "Performance inférieure (θ < 0)",
+    "en": "Below-average performance (θ < 0)",
+    "desc": "Vocabulaire — niveau de performance inférieur"
+  },
+  "vocabPerfLow": {
+    "fr": "Performance faible (θ < -1.0)",
+    "en": "Low performance (θ < -1.0)",
+    "desc": "Vocabulaire — niveau de performance le plus faible"
+  },
+  "vocabFreqVeryHigh": {
+    "fr": "Très fréquent",
+    "en": "Very frequent",
+    "desc": "Vocabulaire — nom du niveau de fréquence : très fréquent (Top 1000)"
+  },
+  "vocabFreqHigh": {
+    "fr": "Fréquent",
+    "en": "Frequent",
+    "desc": "Vocabulaire — nom du niveau de fréquence : fréquent (Top 5000)"
+  },
+  "vocabFreqMedium": {
+    "fr": "Moyen",
+    "en": "Medium",
+    "desc": "Vocabulaire — nom du niveau de fréquence : moyen (Top 10 000)"
+  },
+  "vocabFreqLow": {
+    "fr": "Rare",
+    "en": "Rare",
+    "desc": "Vocabulaire — nom du niveau de fréquence : rare (Top 20 000)"
+  },
+  "vocabFreqVeryLow": {
+    "fr": "Très rare",
+    "en": "Very rare",
+    "desc": "Vocabulaire — nom du niveau de fréquence : très rare (>20 000)"
+  },
+  "vocabInstruction": {
+    "fr": "Définissez le mot suivant",
+    "en": "Define the following word",
+    "desc": "Vocabulaire — instruction au-dessus du mot à définir"
+  },
+  "vocabYourDefinitionLabel": {
+    "fr": "Votre définition :",
+    "en": "Your definition:",
+    "desc": "Vocabulaire — libellé au-dessus du champ de saisie"
+  },
+  "vocabDefinitionHint": {
+    "fr": "Écrivez la définition du mot...",
+    "en": "Write the definition of the word...",
+    "desc": "Vocabulaire — texte indicatif dans le champ de définition"
+  },
+  "vocabTipsTitle": {
+    "fr": "Conseils pour obtenir 2 points :",
+    "en": "Tips to earn 2 points:",
+    "desc": "Vocabulaire — en-tête de l'encart de conseils de scoring"
+  },
+  "vocabTipComplete": {
+    "fr": "• Donnez une définition complète et précise",
+    "en": "• Give a complete and precise definition",
+    "desc": "Vocabulaire — conseil 1 de l'encart"
+  },
+  "vocabTipSynonyms": {
+    "fr": "• Utilisez des synonymes exacts",
+    "en": "• Use exact synonyms",
+    "desc": "Vocabulaire — conseil 2 de l'encart"
+  },
+  "vocabTipContext": {
+    "fr": "• Expliquez le sens avec contexte",
+    "en": "• Explain the meaning with context",
+    "desc": "Vocabulaire — conseil 3 de l'encart"
+  }
+}

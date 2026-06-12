@@ -1,0 +1,365 @@
+{
+  "infoTestName": {
+    "fr": "Information",
+    "en": "Information",
+    "desc": "Information — nom du test affiché dans le scaffold"
+  },
+  "infoEyebrow": {
+    "fr": "COMPRÉHENSION VERBALE · VCI",
+    "en": "VERBAL COMPREHENSION · VCI",
+    "desc": "Information — sur-titre (indice mesuré)"
+  },
+  "infoTrailingStatus": {
+    "fr": "{seconds}s · {score}/{attempted}",
+    "en": "{seconds}s · {score}/{attempted}",
+    "desc": "Information — statut en AppBar : temps écoulé · score/items tentés",
+    "placeholders": {"seconds": "int", "score": "int", "attempted": "int"}
+  },
+  "infoCorrect": {
+    "fr": "Correct !",
+    "en": "Correct!",
+    "desc": "Information — titre du dialogue de feedback quand la réponse est juste"
+  },
+  "infoIncorrect": {
+    "fr": "Incorrect",
+    "en": "Incorrect",
+    "desc": "Information — titre du dialogue de feedback quand la réponse est fausse"
+  },
+  "infoFeedbackRight": {
+    "fr": "Bonne réponse ! +1 point",
+    "en": "Correct answer! +1 point",
+    "desc": "Information — corps du feedback quand la réponse est juste"
+  },
+  "infoFeedbackWrong": {
+    "fr": "Mauvaise réponse. 0 point",
+    "en": "Wrong answer. 0 points",
+    "desc": "Information — corps du feedback quand la réponse est fausse"
+  },
+  "infoQuestionLabel": {
+    "fr": "Question : {question}",
+    "en": "Question: {question}",
+    "desc": "Information — rappel de l'énoncé dans le feedback",
+    "placeholders": {"question": "String"}
+  },
+  "infoCorrectAnswerLabel": {
+    "fr": "Bonne réponse : {answer}",
+    "en": "Correct answer: {answer}",
+    "desc": "Information — affiche la bonne réponse après un échec",
+    "placeholders": {"answer": "String"}
+  },
+  "infoTimeLabel": {
+    "fr": "Temps : {seconds}s",
+    "en": "Time: {seconds}s",
+    "desc": "Information — temps passé sur l'item",
+    "placeholders": {"seconds": "int"}
+  },
+  "infoScoreLabel": {
+    "fr": "Score : {score}/{attempted}",
+    "en": "Score: {score}/{attempted}",
+    "desc": "Information — score courant",
+    "placeholders": {"score": "int", "attempted": "int"}
+  },
+  "infoDomainLabel": {
+    "fr": "Domaine : {domain}",
+    "en": "Domain: {domain}",
+    "desc": "Information — domaine de connaissance de l'item",
+    "placeholders": {"domain": "String"}
+  },
+  "infoDiscontinue3": {
+    "fr": "3 échecs consécutifs - Test terminé (WAIS-IV)",
+    "en": "3 consecutive failures - Test ended (WAIS-IV)",
+    "desc": "Information — message de règle de discontinuation après 3 échecs"
+  },
+  "infoSeeResults": {
+    "fr": "Voir les résultats",
+    "en": "See results",
+    "desc": "Information — bouton qui ouvre l'écran de résultats final"
+  },
+  "infoResultsTitle": {
+    "fr": "Test d'Information - Résultats",
+    "en": "Information Test - Results",
+    "desc": "Information — titre du dialogue de résultats final"
+  },
+  "infoRawScore": {
+    "fr": "Score brut : {score}/{max} points",
+    "en": "Raw score: {score}/{max} points",
+    "desc": "Information — score brut final",
+    "placeholders": {"score": "int", "max": "int"}
+  },
+  "infoItemsCompleted": {
+    "fr": "Items complétés : {completed}/{total}",
+    "en": "Items completed: {completed}/{total}",
+    "desc": "Information — nombre d'items complétés",
+    "placeholders": {"completed": "int", "total": "int"}
+  },
+  "infoPercentage": {
+    "fr": "Pourcentage : {percent}%",
+    "en": "Percentage: {percent}%",
+    "desc": "Information — pourcentage de réussite",
+    "placeholders": {"percent": "int"}
+  },
+  "infoTotalTime": {
+    "fr": "Temps total : {seconds}s",
+    "en": "Total time: {seconds}s",
+    "desc": "Information — temps total du test",
+    "placeholders": {"seconds": "int"}
+  },
+  "infoTestSubtitle": {
+    "fr": "Test de connaissances générales acquises",
+    "en": "Test of acquired general knowledge",
+    "desc": "Information — sous-titre descriptif sous le niveau de performance"
+  },
+  "infoDomainBreakdownTitle": {
+    "fr": "Répartition par domaine :",
+    "en": "Breakdown by domain:",
+    "desc": "Information — titre de la section répartition par domaine"
+  },
+  "infoDomainBreakdownRow": {
+    "fr": "{domain}: {correct}/{total}",
+    "en": "{domain}: {correct}/{total}",
+    "desc": "Information — ligne de répartition par domaine",
+    "placeholders": {"domain": "String", "correct": "int", "total": "int"}
+  },
+  "infoPerfExceptional": {
+    "fr": "Performance exceptionnelle (θ > +2.0)",
+    "en": "Exceptional performance (θ > +2.0)",
+    "desc": "Information — niveau de performance exceptionnel"
+  },
+  "infoPerfSuperior": {
+    "fr": "Performance supérieure (θ > +1.0)",
+    "en": "Superior performance (θ > +1.0)",
+    "desc": "Information — niveau de performance supérieur"
+  },
+  "infoPerfAverage": {
+    "fr": "Performance moyenne (θ ≈ 0)",
+    "en": "Average performance (θ ≈ 0)",
+    "desc": "Information — niveau de performance moyen"
+  },
+  "infoPerfBelow": {
+    "fr": "Performance inférieure (θ < 0)",
+    "en": "Below-average performance (θ < 0)",
+    "desc": "Information — niveau de performance inférieur"
+  },
+  "infoPerfLow": {
+    "fr": "Performance faible (θ < -1.0)",
+    "en": "Low performance (θ < -1.0)",
+    "desc": "Information — niveau de performance faible"
+  },
+  "infoDomainScience": {
+    "fr": "Sciences naturelles",
+    "en": "Natural sciences",
+    "desc": "Information — domaine : sciences naturelles"
+  },
+  "infoDomainHistoryGeography": {
+    "fr": "Histoire/Géographie",
+    "en": "History/Geography",
+    "desc": "Information — domaine : histoire/géographie"
+  },
+  "infoDomainGeneralCulture": {
+    "fr": "Culture générale",
+    "en": "General knowledge",
+    "desc": "Information — domaine : culture générale"
+  },
+  "infoDomainMathLogic": {
+    "fr": "Mathématiques/Logique",
+    "en": "Mathematics/Logic",
+    "desc": "Information — domaine : mathématiques/logique"
+  },
+  "infoDomainArtsLiterature": {
+    "fr": "Arts/Littérature",
+    "en": "Arts/Literature",
+    "desc": "Information — domaine : arts/littérature"
+  },
+  "infoDifficultyEasy": {
+    "fr": "Facile",
+    "en": "Easy",
+    "desc": "Information — difficulté : facile"
+  },
+  "infoDifficultyMedium": {
+    "fr": "Moyen",
+    "en": "Medium",
+    "desc": "Information — difficulté : moyen"
+  },
+  "infoDifficultyHard": {
+    "fr": "Difficile",
+    "en": "Hard",
+    "desc": "Information — difficulté : difficile"
+  },
+  "arithTestName": {
+    "fr": "Arithmétique",
+    "en": "Arithmetic",
+    "desc": "Arithmétique — nom du test affiché dans le scaffold/AppBar"
+  },
+  "arithEyebrow": {
+    "fr": "MÉMOIRE DE TRAVAIL · WMI",
+    "en": "WORKING MEMORY · WMI",
+    "desc": "Arithmétique — sur-titre (indice mesuré)"
+  },
+  "arithStartTest": {
+    "fr": "Commencer le test",
+    "en": "Start the test",
+    "desc": "Arithmétique — bouton de démarrage du test"
+  },
+  "arithIntroTitle": {
+    "fr": "Test d'Arithmétique",
+    "en": "Arithmetic Test",
+    "desc": "Arithmétique — titre de l'écran d'introduction"
+  },
+  "arithIntroDescription": {
+    "fr": "Ce test mesure votre mémoire de travail et votre raisonnement numérique.",
+    "en": "This test measures your working memory and numerical reasoning.",
+    "desc": "Arithmétique — description sur l'écran d'introduction"
+  },
+  "arithInfoMentalTitle": {
+    "fr": "Calcul mental uniquement",
+    "en": "Mental calculation only",
+    "desc": "Arithmétique — carte info : titre calcul mental"
+  },
+  "arithInfoMentalSubtitle": {
+    "fr": "Résolvez les problèmes sans papier ni calculatrice",
+    "en": "Solve the problems without paper or calculator",
+    "desc": "Arithmétique — carte info : sous-titre calcul mental"
+  },
+  "arithInfoTimeTitle": {
+    "fr": "Temps limité",
+    "en": "Limited time",
+    "desc": "Arithmétique — carte info : titre temps limité"
+  },
+  "arithInfoTimeSubtitle": {
+    "fr": "Chaque problème a une limite de temps (15-60 secondes)",
+    "en": "Each problem has a time limit (15-60 seconds)",
+    "desc": "Arithmétique — carte info : sous-titre temps limité"
+  },
+  "arithInfoBonusTitle": {
+    "fr": "Bonus de rapidité",
+    "en": "Speed bonus",
+    "desc": "Arithmétique — carte info : titre bonus rapidité"
+  },
+  "arithInfoBonusSubtitle": {
+    "fr": "Réponses rapides sur certains items = points bonus",
+    "en": "Fast answers on some items = bonus points",
+    "desc": "Arithmétique — carte info : sous-titre bonus rapidité"
+  },
+  "arithInfoRepeatTitle": {
+    "fr": "Répétition possible",
+    "en": "Repeat available",
+    "desc": "Arithmétique — carte info : titre répétition"
+  },
+  "arithInfoRepeatSubtitle": {
+    "fr": "Vous pouvez demander de répéter UNE fois (chrono continue)",
+    "en": "You can ask to repeat ONCE (timer keeps running)",
+    "desc": "Arithmétique — carte info : sous-titre répétition"
+  },
+  "arithIntroDiscontinueNote": {
+    "fr": "22 problèmes au total. Le test s'arrête après 3 échecs consécutifs.",
+    "en": "22 problems in total. The test stops after 3 consecutive failures.",
+    "desc": "Arithmétique — note d'information sur la discontinuation"
+  },
+  "arithProblemCounter": {
+    "fr": "Problème {current}/{total}",
+    "en": "Problem {current}/{total}",
+    "desc": "Arithmétique — compteur de problème en AppBar",
+    "placeholders": {"current": "int", "total": "int"}
+  },
+  "arithRepeatTitle": {
+    "fr": "Répétition du problème",
+    "en": "Repeat the problem",
+    "desc": "Arithmétique — titre du dialogue de répétition"
+  },
+  "arithUnderstood": {
+    "fr": "Compris",
+    "en": "Got it",
+    "desc": "Arithmétique — bouton de fermeture du dialogue de répétition"
+  },
+  "arithTimeUp": {
+    "fr": "Temps écoulé !",
+    "en": "Time's up!",
+    "desc": "Arithmétique — titre du dialogue de temps écoulé"
+  },
+  "arithCorrectAnswerLabel": {
+    "fr": "Réponse correcte : {answer}",
+    "en": "Correct answer: {answer}",
+    "desc": "Arithmétique — affiche la bonne réponse",
+    "placeholders": {"answer": "int"}
+  },
+  "arithCorrect": {
+    "fr": "Correct !",
+    "en": "Correct!",
+    "desc": "Arithmétique — titre du feedback quand la réponse est juste"
+  },
+  "arithIncorrect": {
+    "fr": "Incorrect",
+    "en": "Incorrect",
+    "desc": "Arithmétique — titre du feedback quand la réponse est fausse"
+  },
+  "arithTimeSpent": {
+    "fr": "Temps : {seconds} secondes",
+    "en": "Time: {seconds} seconds",
+    "desc": "Arithmétique — temps passé sur l'item",
+    "placeholders": {"seconds": "int"}
+  },
+  "arithSpeedBonus": {
+    "fr": "🎉 Bonus de rapidité ! (+1 point)",
+    "en": "🎉 Speed bonus! (+1 point)",
+    "desc": "Arithmétique — message de bonus de rapidité"
+  },
+  "arithTestEnded": {
+    "fr": "Test terminé !",
+    "en": "Test complete!",
+    "desc": "Arithmétique — titre du dialogue de résultats final"
+  },
+  "arithItemsCompleted": {
+    "fr": "Items complétés : {completed}/{total}",
+    "en": "Items completed: {completed}/{total}",
+    "desc": "Arithmétique — nombre d'items complétés",
+    "placeholders": {"completed": "int", "total": "int"}
+  },
+  "arithBaseScore": {
+    "fr": "Score de base : {score} points",
+    "en": "Base score: {score} points",
+    "desc": "Arithmétique — score de base",
+    "placeholders": {"score": "int"}
+  },
+  "arithBonusScore": {
+    "fr": "Bonus de rapidité : {bonus} points",
+    "en": "Speed bonus: {bonus} points",
+    "desc": "Arithmétique — points de bonus",
+    "placeholders": {"bonus": "int"}
+  },
+  "arithTotalScore": {
+    "fr": "Score Total : {total} points",
+    "en": "Total Score: {total} points",
+    "desc": "Arithmétique — score total final",
+    "placeholders": {"total": "int"}
+  },
+  "arithRepeat": {
+    "fr": "Répéter",
+    "en": "Repeat",
+    "desc": "Arithmétique — bouton de répétition de l'énoncé"
+  },
+  "arithAnswerHint": {
+    "fr": "Votre réponse",
+    "en": "Your answer",
+    "desc": "Arithmétique — hint du champ de réponse"
+  },
+  "arithDifficultyEasy": {
+    "fr": "Facile",
+    "en": "Easy",
+    "desc": "Arithmétique — difficulté : facile"
+  },
+  "arithDifficultyMedium": {
+    "fr": "Moyen",
+    "en": "Medium",
+    "desc": "Arithmétique — difficulté : moyen"
+  },
+  "arithDifficultyHard": {
+    "fr": "Difficile",
+    "en": "Hard",
+    "desc": "Arithmétique — difficulté : difficile"
+  },
+  "arithDifficultyVeryHard": {
+    "fr": "Très difficile",
+    "en": "Very hard",
+    "desc": "Arithmétique — difficulté : très difficile"
+  }
+}

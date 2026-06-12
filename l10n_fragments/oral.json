@@ -1,0 +1,245 @@
+{
+  "oralMicAccessTitle": {
+    "fr": "Accès au microphone",
+    "en": "Microphone access",
+    "desc": "Titre du dialogue de permission micro (lecture et résumé)"
+  },
+  "oralReadingPermissionBody1": {
+    "fr": "Cette activité enregistre votre voix pendant que vous lisez le texte à voix haute.",
+    "en": "This activity records your voice while you read the text aloud.",
+    "desc": "Dialogue permission micro — test de lecture, paragraphe 1"
+  },
+  "oralReadingPermissionBody2": {
+    "fr": "Vos enregistrements seront anonymisés et pourront contribuer à l'amélioration de la reconnaissance vocale en français.",
+    "en": "Your recordings will be anonymized and may contribute to improving speech recognition.",
+    "desc": "Dialogue permission micro — test de lecture, paragraphe 2. EN omet volontairement « en français » (les textes lus sont dans la langue de l'app)"
+  },
+  "oralBrowserWillAskMic": {
+    "fr": "Votre navigateur vous demandera ensuite d'autoriser le microphone.",
+    "en": "Your browser will then ask you to allow the microphone.",
+    "desc": "Dialogue permission micro — note italique sur la demande navigateur"
+  },
+  "oralCancel": {
+    "fr": "Annuler",
+    "en": "Cancel",
+    "desc": "Bouton annuler des dialogues de permission micro"
+  },
+  "oralAllowMicrophone": {
+    "fr": "Autoriser le microphone",
+    "en": "Allow microphone",
+    "desc": "Bouton de confirmation du dialogue de permission micro (lecture)"
+  },
+  "oralMicDeniedOrUnavailable": {
+    "fr": "Microphone refusé ou indisponible.",
+    "en": "Microphone denied or unavailable.",
+    "desc": "Message d'erreur quand la permission micro est refusée"
+  },
+  "oralCannotStartRecording": {
+    "fr": "Impossible de démarrer l'enregistrement sur ce navigateur.",
+    "en": "Unable to start recording on this browser.",
+    "desc": "Message d'erreur quand le démarrage de l'enregistrement échoue"
+  },
+  "oralCanSkipToNextStep": {
+    "fr": "{message} Vous pouvez passer à l'étape suivante.",
+    "en": "{message} You can move on to the next step.",
+    "desc": "Contenu du SnackBar d'erreur micro ; message = erreur déjà localisée",
+    "placeholders": { "message": "String" }
+  },
+  "oralSkip": {
+    "fr": "Passer",
+    "en": "Skip",
+    "desc": "Action du SnackBar d'erreur micro pour passer l'étape"
+  },
+  "oralRecordingInProgress": {
+    "fr": "Enregistrement en cours",
+    "en": "Recording in progress",
+    "desc": "Indicateur clignotant rouge pendant l'enregistrement"
+  },
+  "oralKeepGoingSeconds": {
+    "fr": "Continuez encore {seconds}s...",
+    "en": "Keep going for {seconds}s more...",
+    "desc": "Compte à rebours avant que le bouton Terminer ne s'active",
+    "placeholders": { "seconds": "int" }
+  },
+  "oralSaving": {
+    "fr": "Sauvegarde...",
+    "en": "Saving...",
+    "desc": "Libellé du bouton pendant la sauvegarde de l'audio"
+  },
+  "oralReadingInstructions": {
+    "fr": "Lisez le texte suivant à voix haute, clairement et à votre rythme naturel. Appuyez sur \"Démarrer\" quand vous êtes prêt.",
+    "en": "Read the following text aloud, clearly and at your natural pace. Press \"Start\" when you are ready.",
+    "desc": "Bandeau d'instructions du test de lecture à voix haute"
+  },
+  "oralStartReading": {
+    "fr": "Démarrer la lecture",
+    "en": "Start reading",
+    "desc": "Bouton principal pour démarrer l'enregistrement de la lecture"
+  },
+  "oralFinish": {
+    "fr": "Terminer",
+    "en": "Finish",
+    "desc": "Bouton pour arrêter l'enregistrement de la lecture"
+  },
+  "oralSkipThisStep": {
+    "fr": "Passer cette étape",
+    "en": "Skip this step",
+    "desc": "Bouton texte affiché si le micro est refusé"
+  },
+  "oralSummaryPermissionBody1": {
+    "fr": "Vous allez maintenant enregistrer votre résumé oral du texte.",
+    "en": "You will now record your oral summary of the text.",
+    "desc": "Dialogue permission micro — test de résumé, paragraphe 1"
+  },
+  "oralSummaryPermissionBody2": {
+    "fr": "Parlez naturellement, comme si vous expliquiez le texte à un ami. Prenez entre 30 et 60 secondes.",
+    "en": "Speak naturally, as if you were explaining the text to a friend. Take between 30 and 60 seconds.",
+    "desc": "Dialogue permission micro — test de résumé, paragraphe 2"
+  },
+  "oralStartSummary": {
+    "fr": "Démarrer le résumé",
+    "en": "Start the summary",
+    "desc": "Bouton pour démarrer l'enregistrement du résumé (dialogue et écran)"
+  },
+  "oralSummaryInstructionLead": {
+    "fr": "Vous venez de lire ce texte. ",
+    "en": "You have just read this text. ",
+    "desc": "Début (en gras) du bandeau d'instructions du résumé — l'espace final est volontaire"
+  },
+  "oralSummaryInstructionBody": {
+    "fr": "Résumez ce que vous avez compris avec vos propres mots. Prenez entre 30 et 60 secondes. Parlez naturellement, comme si vous l'expliquiez à un ami.",
+    "en": "Summarize what you understood in your own words. Take between 30 and 60 seconds. Speak naturally, as if you were explaining it to a friend.",
+    "desc": "Suite du bandeau d'instructions du résumé"
+  },
+  "oralReferenceText": {
+    "fr": "Texte de référence",
+    "en": "Reference text",
+    "desc": "Étiquette de la carte grisée montrant le texte original pendant le résumé"
+  },
+  "oralFinishSummary": {
+    "fr": "Terminer le résumé",
+    "en": "Finish the summary",
+    "desc": "Bouton pour arrêter l'enregistrement du résumé"
+  },
+  "oralFlowTitle": {
+    "fr": "Collecte audio",
+    "en": "Audio collection",
+    "desc": "Titre de l'AppBar du flux de test oral"
+  },
+  "oralConsentTitle": {
+    "fr": "Test de Compréhension Orale",
+    "en": "Oral Comprehension Test",
+    "desc": "Titre de l'écran de consentement"
+  },
+  "oralConsentRecordTitle": {
+    "fr": "Ce que nous enregistrons",
+    "en": "What we record",
+    "desc": "Écran de consentement — titre de la section enregistrements"
+  },
+  "oralConsentRecordBody": {
+    "fr": "Votre voix pendant la lecture de 5 courts textes (environ 1 min chacun) et votre résumé oral (environ 40 secondes par texte).",
+    "en": "Your voice while you read 5 short texts (about 1 min each) and your oral summary (about 40 seconds per text).",
+    "desc": "Écran de consentement — corps de la section enregistrements"
+  },
+  "oralConsentAnonTitle": {
+    "fr": "Anonymisation",
+    "en": "Anonymization",
+    "desc": "Écran de consentement — titre de la section anonymisation"
+  },
+  "oralConsentAnonBody": {
+    "fr": "Aucun nom, aucune information personnelle n'est associé aux enregistrements. Un identifiant de session aléatoire est utilisé.",
+    "en": "No name or personal information is linked to the recordings. A random session identifier is used.",
+    "desc": "Écran de consentement — corps de la section anonymisation"
+  },
+  "oralConsentUsageTitle": {
+    "fr": "Utilisation",
+    "en": "How it is used",
+    "desc": "Écran de consentement — titre de la section utilisation"
+  },
+  "oralConsentUsageBody": {
+    "fr": "Ces enregistrements pourront contribuer à l'amélioration de la reconnaissance vocale du français, notamment pour des modèles comme Whisper ou Speechmatics.",
+    "en": "These recordings may contribute to improving speech recognition, notably for models such as Whisper or Speechmatics.",
+    "desc": "Écran de consentement — corps de la section utilisation. EN omet volontairement « du français »"
+  },
+  "oralAcceptAndStart": {
+    "fr": "J'accepte et je commence",
+    "en": "I accept and start",
+    "desc": "Bouton principal de l'écran de consentement"
+  },
+  "oralDeclineAndGoBack": {
+    "fr": "Refuser et revenir en arrière",
+    "en": "Decline and go back",
+    "desc": "Bouton texte de refus du consentement"
+  },
+  "oralWithdrawConsentNote": {
+    "fr": "Vous pouvez retirer votre consentement à tout moment depuis les paramètres de l'application.",
+    "en": "You can withdraw your consent at any time from the app settings.",
+    "desc": "Note légale en bas de l'écran de consentement"
+  },
+  "oralTextProgress": {
+    "fr": "Texte {current} sur 5",
+    "en": "Text {current} of 5",
+    "desc": "En-tête de progression du flux (5 textes au total)",
+    "placeholders": { "current": "int" }
+  },
+  "oralStepReading": {
+    "fr": "Lecture",
+    "en": "Reading",
+    "desc": "Étiquette d'étape courante dans l'en-tête de progression"
+  },
+  "oralStepSummary": {
+    "fr": "Résumé",
+    "en": "Summary",
+    "desc": "Étiquette d'étape courante dans l'en-tête de progression"
+  },
+  "oralPauseWellDone": {
+    "fr": "Bien !",
+    "en": "Well done!",
+    "desc": "Titre de l'écran de pause entre lecture et résumé"
+  },
+  "oralPauseNowSummarize": {
+    "fr": "Maintenant, résumez oralement ce texte.",
+    "en": "Now, summarize this text aloud.",
+    "desc": "Consigne de l'écran de pause"
+  },
+  "oralPauseStartingIn": {
+    "fr": "Début dans...",
+    "en": "Starting in...",
+    "desc": "Libellé au-dessus du compte à rebours de la pause"
+  },
+  "oralCompletedThanks": {
+    "fr": "Merci !",
+    "en": "Thank you!",
+    "desc": "Titre de l'écran de fin"
+  },
+  "oralCompletedBody": {
+    "fr": "Vous avez complété les 5 textes.\nVos enregistrements contribueront à l'amélioration\nde la reconnaissance vocale en français.",
+    "en": "You have completed all 5 texts.\nYour recordings will contribute to improving\nspeech recognition.",
+    "desc": "Corps de l'écran de fin (retours à la ligne volontaires). EN omet volontairement « en français »"
+  },
+  "oralBackToHome": {
+    "fr": "Retour à l'accueil",
+    "en": "Back to home",
+    "desc": "Bouton de l'écran de fin"
+  },
+  "oralExitDialogTitle": {
+    "fr": "Quitter ?",
+    "en": "Leave?",
+    "desc": "Titre du dialogue de confirmation de sortie pendant un enregistrement"
+  },
+  "oralExitDialogBody": {
+    "fr": "Un enregistrement est en cours. Si vous quittez maintenant, il ne sera pas sauvegardé.",
+    "en": "A recording is in progress. If you leave now, it will not be saved.",
+    "desc": "Corps du dialogue de confirmation de sortie"
+  },
+  "oralContinue": {
+    "fr": "Continuer",
+    "en": "Continue",
+    "desc": "Bouton pour rester dans le test (dialogue de sortie)"
+  },
+  "oralQuit": {
+    "fr": "Quitter",
+    "en": "Leave",
+    "desc": "Bouton pour quitter le test (dialogue de sortie)"
+  }
+}

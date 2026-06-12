@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../../core/l10n/l10n_ext.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
 
@@ -26,11 +27,12 @@ class PuzzleSlotIndicator extends StatelessWidget {
         AppColors.indexVSI, Theme.of(context).brightness);
 
     return Semantics(
-      label: 'Sélection : $filled sur $total pièces',
+      label: context.l10n.vpSelectionSemantics(filled, total),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('SÉLECTION', style: AppText.mono(color: cs.outline, size: 11)),
+          Text(context.l10n.vpSelectionLabel,
+              style: AppText.mono(color: cs.outline, size: 11)),
           const SizedBox(width: 12),
           for (int i = 0; i < total; i++) ...[
             AnimatedContainer(

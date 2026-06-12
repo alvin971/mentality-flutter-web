@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/l10n/l10n_ext.dart';
+import '../../../../core/l10n/locale_notifier.dart';
 import '../pages/mentality_chat_page.dart';
 
 /// Service de communication avec Claude via le Cloudflare Worker proxy.
@@ -53,11 +55,11 @@ class ClaudeChatService {
         if (content != null && content.isNotEmpty) {
           return (content[0] as Map<String, dynamic>)['text'] as String;
         }
-        throw Exception('Réponse vide du worker');
+        throw Exception(appL10n.chatErrorEmptyResponse);
       } else if (response.statusCode == 403) {
-        throw Exception('Accès refusé par le worker (origine non autorisée).');
+        throw Exception(appL10n.chatErrorAccessDenied);
       } else if (response.statusCode == 429) {
-        throw Exception('Limite de requêtes atteinte. Réessayez dans quelques instants.');
+        throw Exception(appL10n.chatErrorRateLimit);
       } else if (response.statusCode == 500) {
         final data = jsonDecode(response.body) as Map<String, dynamic>;
         throw Exception(data['error'] ?? 'Erreur serveur (${response.statusCode})');
@@ -93,7 +95,35 @@ class ClaudeChatService {
     return messages;
   }
 
+  /// Prompt système dépendant de la langue courante de l'app.
+  /// Volontairement hors ARB : c'est une instruction pour l'IA, pas une
+  /// chaîne d'interface.
   String _getSystemPrompt() {
+    if (localeNotifier.languageCode == 'en') {
+      return '''You are Mental E.T., an AI assistant specialized in cognitive assessment based on the WAIS-IV scales (Wechsler Adult Intelligence Scale).
+
+Your role is to help users:
+1. Understand their cognitive test results
+2. Explain the different cognitive domains (Verbal Comprehension, Visual-Spatial Reasoning, Fluid Reasoning, Working Memory, Processing Speed)
+3. Provide personalized advice to improve their cognitive abilities
+4. Answer questions about the tests and what they mean
+
+Important characteristics:
+- You are caring, patient and encouraging
+- You explain complex concepts in a simple, accessible way
+- You use clear language, without unnecessary jargon
+- You are honest and accurate in your explanations
+- You always encourage the user in a positive way
+- You respond in English
+
+IMPORTANT:
+- Do not make any medical or psychological diagnosis
+- Do not replace the advice of a healthcare professional
+- Always encourage consulting a professional psychologist when appropriate
+- Stay within the scope of general information and advice
+
+Your tone is: friendly, professional, encouraging and accessible.''';
+    }
     return '''Tu es Mental E.T., un assistant IA spécialisé dans l'évaluation cognitive basée sur les échelles WAIS-IV (Wechsler Adult Intelligence Scale).
 
 Ton rôle est d'aider les utilisateurs à :

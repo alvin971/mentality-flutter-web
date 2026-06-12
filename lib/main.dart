@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'core/l10n/gen/app_localizations.dart';
+import 'core/l10n/locale_notifier.dart';
 import 'core/theme/app_colors.dart';
 import 'core/theme/app_typography.dart';
 import 'core/theme/theme_notifier.dart';
@@ -63,8 +66,9 @@ Future<void> _configureApp() async {
     // Ne pas bloquer le démarrage si l'init Supabase échoue
   }
 
-  // Charger le thème sauvegardé
+  // Charger le thème et la langue sauvegardés
   await themeNotifier.load();
+  await localeNotifier.load();
 
   // Charger la configuration distante depuis Supabase admin
   // Fallback automatique sur les valeurs locales si inaccessible
@@ -89,13 +93,25 @@ class MentalityApp extends StatelessWidget {
       builder: (context, child) {
         return ValueListenableBuilder<ThemeMode>(
           valueListenable: themeNotifier,
-          builder: (_, themeMode, __) => MaterialApp.router(
-            title: 'Mental E.T.',
-            debugShowCheckedModeBanner: false,
-            theme: _buildLightTheme(),
-            darkTheme: _buildDarkTheme(),
-            themeMode: themeMode,
-            routerConfig: appRouter,
+          builder: (_, themeMode, __) => ValueListenableBuilder<Locale>(
+            valueListenable: localeNotifier,
+            builder: (_, locale, __) => MaterialApp.router(
+              onGenerateTitle: (context) =>
+                  AppLocalizations.of(context).appTitle,
+              debugShowCheckedModeBanner: false,
+              locale: locale,
+              supportedLocales: AppLocalizations.supportedLocales,
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              theme: _buildLightTheme(),
+              darkTheme: _buildDarkTheme(),
+              themeMode: themeMode,
+              routerConfig: appRouter,
+            ),
           ),
         );
       },

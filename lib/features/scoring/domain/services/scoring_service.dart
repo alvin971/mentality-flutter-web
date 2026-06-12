@@ -1,3 +1,4 @@
+import '../../../../core/l10n/l10n_ext.dart';
 import '../../data/normative_tables.dart';
 import '../../data/composite_score_tables.dart';
 import '../entities/iq_score.dart';
@@ -164,13 +165,13 @@ class ScoringService {
 
   /// Classification d'une note standardisée (1-19)
   String _classifyScaled(int? scaledScore) {
-    if (scaledScore == null) return 'N/A';
-    if (scaledScore >= 16) return 'Très supérieur';
-    if (scaledScore >= 13) return 'Supérieur';
-    if (scaledScore >= 11) return 'Moyen fort';
-    if (scaledScore >= 8) return 'Moyen';
-    if (scaledScore >= 6) return 'Moyen faible';
-    if (scaledScore >= 4) return 'Limite';
-    return 'Extrêmement bas';
+    if (scaledScore == null) return appL10n.scoringNotAvailable;
+    if (scaledScore >= 16) return appL10n.scoringClassificationVerySuperior;
+    if (scaledScore >= 13) return appL10n.scoringClassificationSuperior;
+    if (scaledScore >= 11) return appL10n.scoringClassificationHighAverage;
+    if (scaledScore >= 8) return appL10n.scoringClassificationAverage;
+    if (scaledScore >= 6) return appL10n.scoringClassificationLowAverage;
+    if (scaledScore >= 4) return appL10n.scoringClassificationBorderline;
+    return appL10n.scoringClassificationExtremelyLow;
   }
 }

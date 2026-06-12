@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:async';
+import '../../../../../core/l10n/l10n_ext.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
 import '../../../../../core/widgets/test/kepler_test_button.dart';
@@ -147,15 +148,15 @@ class _CodingTestPageState extends State<CodingTestPage> {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: const Text('Entraînement terminé'),
-        content: const Text('Vous êtes prêt à commencer le test. Vous aurez 120 secondes pour compléter le maximum de cases.'),
+        title: Text(context.l10n.codingTrainingDoneTitle),
+        content: Text(context.l10n.codingTrainingDoneBody),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.pop(context);
               _startTest();
             },
-            child: const Text('Commencer le test'),
+            child: Text(context.l10n.codingStartTest),
           ),
         ],
       ),
@@ -172,18 +173,18 @@ class _CodingTestPageState extends State<CodingTestPage> {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: const Text('Test terminé !'),
+        title: Text(context.l10n.codingTestDoneTitle),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Temps écoulé : 120 secondes', style: TextStyle(fontSize: 16.sp)),
+            Text(context.l10n.codingTimeElapsed, style: TextStyle(fontSize: 16.sp)),
             SizedBox(height: 12.h),
-            Text('Cases complétées : $completedCells/135'),
-            Text('Cases correctes : $score'),
+            Text(context.l10n.codingCellsCompleted(completedCells)),
+            Text(context.l10n.codingCellsCorrect(score)),
             SizedBox(height: 16.h),
             Text(
-              'Score : $score points',
+              context.l10n.codingScorePoints(score),
               style: TextStyle(
                 fontSize: 20.sp,
                 fontWeight: FontWeight.bold,
@@ -192,7 +193,7 @@ class _CodingTestPageState extends State<CodingTestPage> {
             ),
             SizedBox(height: 12.h),
             Text(
-              _getPerformanceMessage(score),
+              _getPerformanceMessage(context, score),
               style: TextStyle(fontSize: 14.sp, color: AppColors.grey700),
             ),
           ],
@@ -204,19 +205,19 @@ class _CodingTestPageState extends State<CodingTestPage> {
               Navigator.pop(context);
               Navigator.pop(context, score);
             },
-            child: const Text('Retour'),
+            child: Text(context.l10n.commonBack),
           ),
         ],
       ),
     );
   }
 
-  String _getPerformanceMessage(int score) {
-    if (score >= 100) return 'Performance exceptionnelle !';
-    if (score >= 80) return 'Très bonne performance';
-    if (score >= 60) return 'Performance moyenne-haute';
-    if (score >= 40) return 'Performance moyenne';
-    return 'Performance en-dessous de la moyenne';
+  String _getPerformanceMessage(BuildContext context, int score) {
+    if (score >= 100) return context.l10n.codingPerfExceptional;
+    if (score >= 80) return context.l10n.codingPerfVeryGood;
+    if (score >= 60) return context.l10n.codingPerfAboveAverage;
+    if (score >= 40) return context.l10n.codingPerfAverage;
+    return context.l10n.codingPerfBelowAverage;
   }
 
   @override
@@ -231,12 +232,12 @@ class _CodingTestPageState extends State<CodingTestPage> {
 
   Widget _buildIntroScreen() {
     return KeplerTestScaffold(
-      testName: 'Code (Digit Symbol)',
-      eyebrow: 'VITESSE DE TRAITEMENT · PSI',
+      testName: context.l10n.codingTestName,
+      eyebrow: context.l10n.codingEyebrow,
       accentColor: AppColors.indexPSI,
       // Bouton de démarrage sticky : visible sans scroller.
       bottomBar: KeplerTestButton.primary(
-        label: 'Commencer l\'entraînement',
+        label: context.l10n.codingStartTraining,
         accentColor: AppColors.indexPSI,
         onPressed: _startTraining,
       ),
@@ -250,7 +251,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
               ),
               SizedBox(height: 24.h),
               Text(
-                'Test de Code',
+                context.l10n.codingTitle,
                 style: TextStyle(
                   fontSize: 28.sp,
                   fontWeight: FontWeight.bold,
@@ -259,7 +260,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
               ),
               SizedBox(height: 16.h),
               Text(
-                'Ce test mesure votre vitesse de traitement et votre coordination visuomotrice.',
+                context.l10n.codingDescription,
                 style: TextStyle(fontSize: 16.sp),
               ),
               SizedBox(height: 24.h),
@@ -274,7 +275,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Clé de référence :',
+                      context.l10n.codingReferenceKey,
                       style: TextStyle(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.bold,
@@ -288,20 +289,20 @@ crossAxisAlignment: CrossAxisAlignment.start,
               ),
               SizedBox(height: 24.h),
               _buildInfoCard(
-                'Votre tâche',
-                'Pour chaque chiffre affiché, sélectionnez le symbole correspondant',
+                context.l10n.codingTaskTitle,
+                context.l10n.codingTaskDesc,
                 Icons.task_outlined,
               ),
               SizedBox(height: 12.h),
               _buildInfoCard(
-                'Temps limité',
-                '120 secondes pour compléter le maximum de cases (135 au total)',
+                context.l10n.codingTimeLimitTitle,
+                context.l10n.codingTimeLimitDesc,
                 Icons.timer_outlined,
               ),
               SizedBox(height: 12.h),
               _buildInfoCard(
-                'Scoring',
-                '1 point par case correcte, pas de pénalité pour les erreurs',
+                context.l10n.codingScoringTitle,
+                context.l10n.codingScoringDesc,
                 Icons.stars_outlined,
               ),
             ],
@@ -318,7 +319,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: Text(_isTraining ? 'Entraînement' : 'Test de Code'),
+        title: Text(_isTraining ? context.l10n.codingTrainingTab : context.l10n.codingTitle),
         actions: [
           if (!_isTraining)
             Center(
@@ -337,7 +338,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                       Icon(Icons.timer, size: 20.sp, color: _remainingSeconds <= 10 ? AppColors.error : Theme.of(context).colorScheme.onSurface),
                       SizedBox(width: 4.w),
                       Text(
-                        '$_remainingSeconds s',
+                        context.l10n.commonSeconds(_remainingSeconds),
                         style: TextStyle(
                           fontSize: 16.sp,
                           fontWeight: FontWeight.bold,
@@ -361,7 +362,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
               child: Column(
                 children: [
                   Text(
-                    'Référence :',
+                    context.l10n.codingReferenceShort,
                     style: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.bold,
@@ -382,11 +383,14 @@ crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Case ${_selectedCellIndex + 1}/$maxCells',
+                    context.l10n.codingCellProgress(_selectedCellIndex + 1, maxCells),
                     style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    'Complétées : ${_userAnswers.take(maxCells).where((a) => a != null).length}/$maxCells',
+                    context.l10n.codingCompletedProgress(
+                      _userAnswers.take(maxCells).where((a) => a != null).length,
+                      maxCells,
+                    ),
                     style: TextStyle(fontSize: 14.sp, color: AppColors.grey600),
                   ),
                 ],
@@ -462,7 +466,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
               child: Column(
                 children: [
                   Text(
-                    'Sélectionnez un symbole :',
+                    context.l10n.codingSelectSymbol,
                     style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 12.h),
@@ -501,7 +505,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                         child: OutlinedButton.icon(
                           onPressed: _clearCurrentCell,
                           icon: Icon(Icons.backspace, size: 20.sp),
-                          label: const Text('Effacer'),
+                          label: Text(context.l10n.codingClear),
                           style: OutlinedButton.styleFrom(
                             foregroundColor: AppColors.error,
                             side: BorderSide(color: AppColors.error, width: 2),
@@ -517,7 +521,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.indexPSI,
                             ),
-                            child: const Text('Terminer l\'entraînement'),
+                            child: Text(context.l10n.codingFinishTraining),
                           ),
                         ),
                       ],

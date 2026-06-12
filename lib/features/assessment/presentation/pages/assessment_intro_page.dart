@@ -19,30 +19,30 @@ import '../../../exercises_implementations/arithmetic/presentation/pages/arithme
 import '../../../exercises_implementations/picture_span/presentation/pages/picture_span_test_page.dart';
 import '../../../exercises_implementations/coding/presentation/pages/coding_test_page.dart';
 import '../../../exercises_implementations/symbol_search/presentation/pages/symbol_search_test_page.dart';
+import '../../../../core/l10n/l10n_ext.dart';
 
 class AssessmentIntroPage extends StatelessWidget {
   const AssessmentIntroPage({super.key});
 
-  static const _domains = [
-    ('VCI', 'Compréhension Verbale'),
-    ('VSI', 'Raisonnement Visuo-Spatial'),
-    ('FRI', 'Raisonnement Fluide'),
-    ('WMI', 'Mémoire de Travail'),
-    ('PSI', 'Vitesse de Traitement'),
-    ('LO',  'Langage Oral'),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final domains = [
+      ('VCI', context.l10n.assessDomainVci),
+      ('VSI', context.l10n.assessDomainVsi),
+      ('FRI', context.l10n.assessDomainFri),
+      ('WMI', context.l10n.assessDomainWmi),
+      ('PSI', context.l10n.assessDomainPsi),
+      ('LO', context.l10n.assessDomainLo),
+    ];
     return KeplerScaffold(
-      title: 'Nouvelle évaluation',
-      eyebrow: 'BILAN COGNITIF',
+      title: context.l10n.assessIntroTitle,
+      eyebrow: context.l10n.assessIntroEyebrow,
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Cinq indices,', style: AppText.heroDisplay()),
-          Text('une mesure.', style: AppText.heroItalic()),
+          Text(context.l10n.assessIntroHero1, style: AppText.heroDisplay()),
+          Text(context.l10n.assessIntroHero2, style: AppText.heroItalic()),
           SizedBox(height: 16.h),
           Container(
               width: 36.w,
@@ -50,8 +50,7 @@ class AssessmentIntroPage extends StatelessWidget {
               color: AppColors.primary.withValues(alpha: 0.4)),
           SizedBox(height: 16.h),
           Text(
-            'Cette évaluation mesure vos capacités cognitives à travers six domaines '
-            'issus du WAIS-IV. Un score global (FSIQ) en est la synthèse.',
+            context.l10n.assessIntroDescription,
             style: AppText.body(),
           ),
           SizedBox(height: 28.h),
@@ -60,10 +59,10 @@ class AssessmentIntroPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('DOMAINES MESURÉS',
+                Text(context.l10n.assessDomainsHeader,
                     style: AppText.monoLabel(color: AppColors.primary)),
                 SizedBox(height: 16.h),
-                for (final d in _domains) _DomainRow(code: d.$1, label: d.$2),
+                for (final d in domains) _DomainRow(code: d.$1, label: d.$2),
               ],
             ),
           ),
@@ -77,11 +76,11 @@ class AssessmentIntroPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('AVANT DE COMMENCER',
+                      Text(context.l10n.assessBeforeStartHeader,
                           style: AppText.monoLabel(color: AppColors.primary)),
                       SizedBox(height: 4.h),
                       Text(
-                        'Durée estimée 30 à 45 minutes. Calme et concentration requis.',
+                        context.l10n.assessBeforeStartBody,
                         style: AppText.bodySmall(),
                       ),
                     ],
@@ -92,7 +91,7 @@ class AssessmentIntroPage extends StatelessWidget {
           ),
           SizedBox(height: 28.h),
           KeplerButton(
-            label: 'Lancer le bilan complet',
+            label: context.l10n.assessLaunchFullAssessment,
             icon: Icons.east,
             expand: true,
             onPressed: () => Navigator.push(
@@ -110,7 +109,7 @@ class AssessmentIntroPage extends StatelessWidget {
                       color: Colors.black.withValues(alpha: 0.08))),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12.w),
-                child: Text('OU SUBTEST INDIVIDUEL',
+                child: Text(context.l10n.assessOrIndividualSubtest,
                     style: AppText.monoLabel()),
               ),
               Expanded(
@@ -151,27 +150,37 @@ class _DomainRow extends StatelessWidget {
 }
 
 class _IndividualTests extends StatelessWidget {
-  static final _tests = <(String, String, Widget Function())>[
-    ('VSI', 'Cubes (Block Design)', () => const CubesTestPage()),
-    ('FRI', 'Matrices Progressives', () => const MatricesTestPage()),
-    ('FRI', 'Balances Quantitatives', () => const FigureWeightsTestPage()),
-    ('VSI', 'Puzzles Visuels', () => const VisualPuzzlesTestPage()),
-    ('VCI', 'Similitudes', () => const SimilaritiesTestPage()),
-    ('VCI', 'Vocabulaire', () => const VocabularyTestPage()),
-    ('VCI', 'Information', () => const InformationTestPage()),
-    ('WMI', 'Mémoire des Chiffres', () => const DigitSpanTestPage()),
-    ('WMI', 'Arithmétique', () => const ArithmeticTestPage()),
-    ('WMI', 'Mémoire des Images', () => const PictureSpanTestPage()),
-    ('PSI', 'Code', () => const CodingTestPage()),
-    ('PSI', 'Recherche de Symboles', () => const SymbolSearchTestPage()),
-    ('LO',  'Compréhension Orale', () => const OralTestFlow()),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final tests = <(String, String, Widget Function())>[
+      ('VSI', context.l10n.assessSubtestCubes, () => const CubesTestPage()),
+      ('FRI', context.l10n.assessSubtestMatrices,
+          () => const MatricesTestPage()),
+      ('FRI', context.l10n.assessSubtestFigureWeights,
+          () => const FigureWeightsTestPage()),
+      ('VSI', context.l10n.assessSubtestVisualPuzzles,
+          () => const VisualPuzzlesTestPage()),
+      ('VCI', context.l10n.assessSubtestSimilarities,
+          () => const SimilaritiesTestPage()),
+      ('VCI', context.l10n.assessSubtestVocabulary,
+          () => const VocabularyTestPage()),
+      ('VCI', context.l10n.assessSubtestInformation,
+          () => const InformationTestPage()),
+      ('WMI', context.l10n.assessSubtestDigitSpan,
+          () => const DigitSpanTestPage()),
+      ('WMI', context.l10n.assessSubtestArithmetic,
+          () => const ArithmeticTestPage()),
+      ('WMI', context.l10n.assessSubtestPictureSpan,
+          () => const PictureSpanTestPage()),
+      ('PSI', context.l10n.assessSubtestCoding, () => const CodingTestPage()),
+      ('PSI', context.l10n.assessSubtestSymbolSearch,
+          () => const SymbolSearchTestPage()),
+      ('LO', context.l10n.assessSubtestOralComprehension,
+          () => const OralTestFlow()),
+    ];
     return Column(
       children: [
-        for (final t in _tests) ...[
+        for (final t in tests) ...[
           KeplerCard(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
             onTap: () => Navigator.push(

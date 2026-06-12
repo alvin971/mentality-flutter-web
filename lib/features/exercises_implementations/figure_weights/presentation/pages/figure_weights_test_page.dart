@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../../core/l10n/l10n_ext.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
 import '../../../../../core/widgets/test/kepler_test_button.dart';
@@ -116,7 +117,7 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
       barrierDismissible: false,
       builder: (context) => AlertDialog(
         title: Text(
-          isCorrect ? 'Correct !' : 'Incorrect',
+          isCorrect ? context.l10n.matCorrect : context.l10n.matIncorrect,
           style: TextStyle(
             color: isCorrect ? AppColors.success : AppColors.error,
             fontWeight: FontWeight.bold,
@@ -127,20 +128,20 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
           children: [
             Text(
               isCorrect
-                  ? 'Bonne réponse ! +1 point'
-                  : 'Mauvaise réponse. La bonne réponse était :',
+                  ? context.l10n.fwCorrectAnswerPoint
+                  : context.l10n.fwWrongAnswer,
             ),
             if (!isCorrect) ...[
               SizedBox(height: 8.h),
               _buildTokenList(_generatedItems[currentLevel].correctAnswer),
             ],
             SizedBox(height: 12.h),
-            Text('Temps : ${timeSeconds}s'),
-            Text('Score : $score/${currentLevel + 1}'),
+            Text(context.l10n.fwTime(timeSeconds)),
+            Text(context.l10n.matScoreFraction(score, currentLevel + 1)),
             if (_consecutiveFailures >= 3) ...[
               SizedBox(height: 8.h),
               Text(
-                '3 échecs consécutifs - Test terminé (WAIS-IV)',
+                context.l10n.fwDiscontinue3,
                 style: TextStyle(
                   color: AppColors.warning,
                   fontWeight: FontWeight.bold,
@@ -166,9 +167,10 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
               }
             },
             child: Text(
-              _consecutiveFailures >= 3 || currentLevel >= _generatedItems.length - 1
-                  ? 'Voir les résultats'
-                  : 'Continuer',
+              _consecutiveFailures >= 3 ||
+                      currentLevel >= _generatedItems.length - 1
+                  ? context.l10n.fwSeeResults
+                  : context.l10n.commonContinue,
             ),
           ),
         ],
@@ -183,21 +185,21 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: const Text(
-          'Test des Balances Quantitatives - Résultats',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        title: Text(
+          context.l10n.fwResultsTitle,
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Score brut : $score/27 points'),
-            Text('Items complétés : ${currentLevel + 1}/27'),
-            Text('Pourcentage : $percentageScore%'),
-            Text('Temps total : ${totalTime}s'),
+            Text(context.l10n.fwRawScorePoints(score)),
+            Text(context.l10n.fwItemsCompleted(currentLevel + 1)),
+            Text(context.l10n.fwPercentage(percentageScore)),
+            Text(context.l10n.fwTotalTime(totalTime)),
             SizedBox(height: 12.h),
             Text(
-              _getPerformanceLevel(score),
+              _getPerformanceLevel(context, score),
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: _getPerformanceColor(score),
@@ -205,7 +207,7 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
             ),
             SizedBox(height: 8.h),
             Text(
-              'g-loading : 0.78 (le plus élevé du WAIS-IV)',
+              context.l10n.fwGLoading,
               style: TextStyle(
                 fontSize: 12.sp,
                 fontStyle: FontStyle.italic,
@@ -220,19 +222,20 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
               Navigator.of(context).pop();
               Navigator.of(context).pop(score);
             },
-            child: const Text('Retour'),
+            child: Text(context.l10n.commonBack),
           ),
         ],
       ),
     );
   }
 
-  String _getPerformanceLevel(int score) {
-    if (score >= 23) return 'Performance exceptionnelle (θ > +2.0)';
-    if (score >= 18) return 'Performance supérieure (θ > +1.0)';
-    if (score >= 12) return 'Performance moyenne (θ ≈ 0)';
-    if (score >= 7) return 'Performance inférieure (θ < 0)';
-    return 'Performance faible (θ < -1.0)';
+  String _getPerformanceLevel(BuildContext context, int score) {
+    final l10n = context.l10n;
+    if (score >= 23) return l10n.fwPerfExceptional;
+    if (score >= 18) return l10n.fwPerfSuperior;
+    if (score >= 12) return l10n.fwPerfAverage;
+    if (score >= 7) return l10n.fwPerfInferior;
+    return l10n.fwPerfLow;
   }
 
   Color _getPerformanceColor(int score) {
@@ -248,8 +251,8 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
     final currentItem = _generatedItems[currentLevel];
 
     return KeplerTestScaffold(
-      testName: 'Balances Quantitatives',
-      eyebrow: 'RAISONNEMENT FLUIDE · FRI',
+      testName: context.l10n.fwTestName,
+      eyebrow: context.l10n.fwEyebrow,
       accentColor: AppColors.indexFRI,
       currentItem: currentLevel + 1,
       totalItems: _generatedItems.length,
@@ -258,16 +261,16 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
       trailing: [
         Padding(
           padding: EdgeInsets.only(left: 8.w),
-          child: _buildTimerBadge(),
+          child: _buildTimerBadge(context),
         ),
         Padding(
           padding: EdgeInsets.only(left: 6.w),
-          child: Text('$score/${currentLevel + 1}',
+          child: Text(context.l10n.fwScoreFraction(score, currentLevel + 1),
               style: AppText.monoLabel(color: AppColors.indexFRI)),
         ),
       ],
       bottomBar: KeplerTestButton.primary(
-        label: 'Valider',
+        label: context.l10n.commonValidate,
         accentColor: AppColors.indexFRI,
         onPressed: _selectedAnswer != null ? _submitAnswer : null,
       ),
@@ -283,7 +286,7 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                   border: Border.all(color: AppColors.infoLight),
                 ),
                 child: Text(
-                  'Trouvez la valeur manquante qui équilibre la balance.',
+                  context.l10n.fwInstruction,
                   style: TextStyle(
                     fontSize: 13.sp,
                     fontWeight: FontWeight.w500,
@@ -321,7 +324,7 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Que vaut ',
+                        context.l10n.fwWhatIs,
                         style: TextStyle(
                           fontSize: 15.sp,
                           fontWeight: FontWeight.bold,
@@ -345,7 +348,7 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
 
               // Options de réponse
               Text(
-                'Choisissez la réponse :',
+                context.l10n.matChooseAnswer,
                 style: TextStyle(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.bold,
@@ -406,7 +409,7 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
     );
   }
 
-  Widget _buildTimerBadge() {
+  Widget _buildTimerBadge(BuildContext context) {
     final danger = _remainingSeconds <= 5;
     final color = danger ? AppColors.error : AppColors.info;
     return Container(
@@ -422,7 +425,7 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
           Icon(Icons.timer_outlined, size: 14.sp, color: color),
           SizedBox(width: 4.w),
           Text(
-            '${_remainingSeconds}s',
+            context.l10n.fwSeconds(_remainingSeconds),
             style: TextStyle(
               fontSize: 13.sp,
               fontWeight: FontWeight.bold,

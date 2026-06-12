@@ -7,6 +7,7 @@ import '../../../../core/theme/app_typography.dart';
 import '../../../../core/widgets/kepler_button.dart';
 import '../../../../core/widgets/kepler_card.dart';
 import '../../../../core/widgets/kepler_scaffold.dart';
+import '../../../../core/l10n/l10n_ext.dart';
 import '../bloc/registration_bloc.dart';
 import 'registration_phone_page.dart';
 
@@ -40,13 +41,13 @@ class _RegistrationEmailOtpPageState extends State<RegistrationEmailOtpPage> {
       builder: (context, state) {
         final email = state.form.email ?? '';
         return KeplerScaffold(
-          title: 'Vérifier mon email',
-          eyebrow: 'ÉTAPE 1 / 4',
+          title: context.l10n.regEmailOtpTitle,
+          eyebrow: context.l10n.regStepEyebrow(1),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 12.h),
-              Text('Code envoyé à',
+              Text(context.l10n.regCodeSentTo,
                   style: AppText.monoLabel(color: AppColors.primary)),
               SizedBox(height: 4.h),
               Text(email, style: AppText.h3()),
@@ -78,7 +79,9 @@ class _RegistrationEmailOtpPageState extends State<RegistrationEmailOtpPage> {
               ],
               SizedBox(height: 24.h),
               KeplerButton(
-                label: state.busy ? 'Vérification…' : 'Valider',
+                label: state.busy
+                    ? context.l10n.regVerifying
+                    : context.l10n.commonValidate,
                 expand: true,
                 onPressed: state.busy
                     ? null
@@ -98,7 +101,7 @@ class _RegistrationEmailOtpPageState extends State<RegistrationEmailOtpPage> {
                       : () => context
                           .read<RegistrationBloc>()
                           .add(SubmitEmail(email)),
-                  child: const Text('Renvoyer le code'),
+                  child: Text(context.l10n.regResendCode),
                 ),
               ),
             ],

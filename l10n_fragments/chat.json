@@ -1,0 +1,18 @@
+{
+  "chatEyebrow": {"fr": "ASSISTANT IA", "en": "AI ASSISTANT", "desc": "App bar eyebrow on chat screen"},
+  "chatNewConversation": {"fr": "Nouvelle conversation", "en": "New conversation", "desc": "Tooltip to clear the chat"},
+  "chatAssistantLabel": {"fr": "MENTAL E.T.", "en": "MENTAL E.T.", "desc": "Label above assistant messages (brand)"},
+  "chatUserLabel": {"fr": "VOUS", "en": "YOU", "desc": "Label above user messages"},
+  "chatHeroTitle1": {"fr": "Posez", "en": "Ask", "desc": "Empty-state hero, line 1"},
+  "chatHeroTitle2": {"fr": "vos questions.", "en": "your questions.", "desc": "Empty-state hero, line 2 (italic)"},
+  "chatEmptyIntro": {"fr": "L'IA Mental E.T. vous aide à mieux comprendre votre profil cognitif. Discussions confidentielles, accompagnement non-directif.", "en": "The Mental E.T. AI helps you better understand your cognitive profile. Confidential conversations, non-directive support."},
+  "chatThinking": {"fr": "Réflexion…", "en": "Thinking…", "desc": "Loading bubble label"},
+  "chatInputHint": {"fr": "Écrire un message…", "en": "Write a message…", "desc": "Chat input placeholder"},
+  "chatTimeJustNow": {"fr": "à l'instant", "en": "just now", "desc": "Message timestamp, under 1 min"},
+  "chatTimeMinutes": {"fr": "{count} min", "en": "{count} min", "desc": "Message timestamp in minutes", "placeholders": {"count": "int"}},
+  "chatTimeHours": {"fr": "{count}h", "en": "{count}h", "desc": "Message timestamp in hours", "placeholders": {"count": "int"}},
+  "chatErrorMessage": {"fr": "Désolé, une erreur s'est produite. Veuillez réessayer.", "en": "Sorry, an error occurred. Please try again.", "desc": "Generic chat error bubble"},
+  "chatErrorEmptyResponse": {"fr": "Réponse vide du worker", "en": "Empty response from the worker", "desc": "Network error (not user-facing prose)"},
+  "chatErrorAccessDenied": {"fr": "Accès refusé par le worker (origine non autorisée).", "en": "Access denied by the worker (origin not allowed).", "desc": "403 network error"},
+  "chatErrorRateLimit": {"fr": "Limite de requêtes atteinte. Réessayez dans quelques instants.", "en": "Rate limit reached. Please try again shortly.", "desc": "429 network error"}
+}

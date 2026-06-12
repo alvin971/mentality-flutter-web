@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import '../../../../core/l10n/l10n_ext.dart';
 
 enum Sex { masculine, feminine, undisclosed }
 
@@ -14,13 +15,13 @@ extension AgeBucketX on AgeBucket {
         AgeBucket.b66plus => '66+',
       };
 
-  String get label => switch (this) {
-        AgeBucket.b1825 => '18 – 25 ans',
-        AgeBucket.b2635 => '26 – 35 ans',
-        AgeBucket.b3645 => '36 – 45 ans',
-        AgeBucket.b4655 => '46 – 55 ans',
-        AgeBucket.b5665 => '56 – 65 ans',
-        AgeBucket.b66plus => '66 ans et plus',
+  String label(AppLocalizations l10n) => switch (this) {
+        AgeBucket.b1825 => l10n.regAge1825,
+        AgeBucket.b2635 => l10n.regAge2635,
+        AgeBucket.b3645 => l10n.regAge3645,
+        AgeBucket.b4655 => l10n.regAge4655,
+        AgeBucket.b5665 => l10n.regAge5665,
+        AgeBucket.b66plus => l10n.regAge66plus,
       };
 }
 
@@ -31,10 +32,10 @@ extension SexX on Sex {
         Sex.undisclosed => 'X',
       };
 
-  String get label => switch (this) {
-        Sex.masculine => 'Masculin',
-        Sex.feminine => 'Féminin',
-        Sex.undisclosed => 'Préfère ne pas dire',
+  String label(AppLocalizations l10n) => switch (this) {
+        Sex.masculine => l10n.regSexMale,
+        Sex.feminine => l10n.regSexFemale,
+        Sex.undisclosed => l10n.regSexUndisclosed,
       };
 }
 

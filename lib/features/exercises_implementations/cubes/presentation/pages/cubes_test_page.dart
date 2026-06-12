@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../../core/l10n/l10n_ext.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
@@ -130,7 +131,7 @@ class _CubesTestPageState extends State<CubesTestPage> {
             ),
             SizedBox(width: 12.w),
             Text(
-              isCorrect ? 'Bravo !' : 'Incorrect',
+              isCorrect ? context.l10n.cubesBravo : context.l10n.matIncorrect,
               style: TextStyle(
                 color: isCorrect ? AppColors.success : AppColors.error,
               ),
@@ -141,11 +142,11 @@ class _CubesTestPageState extends State<CubesTestPage> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Temps écoulé : ${_formatTime(timeSeconds)}'),
+            Text(context.l10n.cubesElapsedTime(_formatTime(timeSeconds))),
             if (isCorrect) ...[
               SizedBox(height: 8.h),
               Text(
-                'Points gagnés : ${_calculatePoints(timeSeconds)}',
+                context.l10n.cubesPointsEarned(_calculatePoints(timeSeconds)),
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: AppColors.success,
@@ -153,7 +154,7 @@ class _CubesTestPageState extends State<CubesTestPage> {
               ),
             ],
             SizedBox(height: 8.h),
-            Text('Score total : $score'),
+            Text(context.l10n.cubesTotalScore(score)),
           ],
         ),
         actions: [
@@ -174,8 +175,10 @@ class _CubesTestPageState extends State<CubesTestPage> {
             },
             child: Text(
               _consecutiveFailures >= 2
-                  ? 'Voir résultats (test terminé)'
-                  : (currentLevel < _generatedPatterns.length - 1 ? 'Item suivant' : 'Voir résultats'),
+                  ? context.l10n.matSeeResultsEnded
+                  : (currentLevel < _generatedPatterns.length - 1
+                      ? context.l10n.matNextItem
+                      : context.l10n.matSeeResults),
             ),
           ),
         ],
@@ -195,15 +198,18 @@ class _CubesTestPageState extends State<CubesTestPage> {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: const Text('Test terminé !'),
+        title: Text(context.l10n.cubesFinishedTitle),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _resultRow('Score total', '$score/$maxScore pts'),
-            _resultRow('Items complétés', '$completedItems/14'),
-            _resultRow('Taux de réussite', '$percentageCorrect%'),
-            _resultRow('Temps moyen', _formatTime(avgTime)),
+            _resultRow(context.l10n.cubesTotalScoreLabel,
+                context.l10n.cubesTotalScoreValue(score, maxScore)),
+            _resultRow(context.l10n.cubesItemsCompletedLabel,
+                context.l10n.cubesItemsCompletedValue(completedItems)),
+            _resultRow(
+                context.l10n.matSuccessRate, '$percentageCorrect%'),
+            _resultRow(context.l10n.cubesAvgTime, _formatTime(avgTime)),
             SizedBox(height: 16.h),
             Container(
               padding: EdgeInsets.all(12.w),
@@ -215,7 +221,7 @@ class _CubesTestPageState extends State<CubesTestPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Évaluation :',
+                    context.l10n.matEvaluation,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14.sp,
@@ -223,7 +229,7 @@ class _CubesTestPageState extends State<CubesTestPage> {
                   ),
                   SizedBox(height: 4.h),
                   Text(
-                    _getPerformanceLevel(percentageCorrect),
+                    _getPerformanceLevel(context, percentageCorrect),
                     style: TextStyle(fontSize: 13.sp),
                   ),
                 ],
@@ -237,7 +243,7 @@ class _CubesTestPageState extends State<CubesTestPage> {
               Navigator.pop(context);
               Navigator.pop(context, score); // Retourne le score final
             },
-            child: const Text('Terminer'),
+            child: Text(context.l10n.commonFinish),
           ),
           ElevatedButton(
             onPressed: () {
@@ -251,7 +257,7 @@ class _CubesTestPageState extends State<CubesTestPage> {
                 _generateLevels(); // Régénérer des patterns aléatoires
               });
             },
-            child: const Text('Recommencer'),
+            child: Text(context.l10n.matRestart),
           ),
         ],
       ),
@@ -274,12 +280,13 @@ class _CubesTestPageState extends State<CubesTestPage> {
     );
   }
 
-  String _getPerformanceLevel(int percentage) {
-    if (percentage >= 90) return 'Excellent ! Capacités visuospatiales très supérieures.';
-    if (percentage >= 75) return 'Très bien ! Bonnes capacités d\'analyse visuelle.';
-    if (percentage >= 60) return 'Bien. Capacités moyennes à bonnes.';
-    if (percentage >= 40) return 'Moyen. Des améliorations sont possibles.';
-    return 'Résultats en-dessous de la moyenne. Entraînement recommandé.';
+  String _getPerformanceLevel(BuildContext context, int percentage) {
+    final l10n = context.l10n;
+    if (percentage >= 90) return l10n.cubesPerfExcellent;
+    if (percentage >= 75) return l10n.cubesPerfVeryGood;
+    if (percentage >= 60) return l10n.matPerfGood;
+    if (percentage >= 40) return l10n.matPerfAverage;
+    return l10n.matPerfBelowAverage;
   }
 
   String _formatTime(int seconds) {
@@ -293,8 +300,8 @@ class _CubesTestPageState extends State<CubesTestPage> {
     final pattern = _generatedPatterns[currentLevel];
 
     return KeplerTestScaffold(
-      testName: 'Test des Cubes',
-      eyebrow: 'RAISONNEMENT FLUIDE · FRI',
+      testName: context.l10n.cubesTestName,
+      eyebrow: context.l10n.fwEyebrow,
       accentColor: AppColors.indexFRI,
       currentItem: currentLevel + 1,
       totalItems: _generatedPatterns.length,
@@ -304,7 +311,7 @@ class _CubesTestPageState extends State<CubesTestPage> {
       trailing: [
         Padding(
           padding: EdgeInsets.only(left: 8.w),
-          child: Text('$score pts',
+          child: Text(context.l10n.matPoints(score),
               style: AppText.monoLabel(color: AppColors.indexFRI)),
         ),
       ],
@@ -312,7 +319,7 @@ class _CubesTestPageState extends State<CubesTestPage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // Niveau — version compacte (la progression est déjà dans le scaffold)
-          _buildLevelHeader(pattern),
+          _buildLevelHeader(context, pattern),
           SizedBox(height: 8.h),
 
           // Exercice — occupe toute la hauteur restante
@@ -332,7 +339,7 @@ class _CubesTestPageState extends State<CubesTestPage> {
 
   // Version compacte : la progression d'items est déjà affichée par le
   // scaffold (KeplerProgress) — on ne garde que difficulté + description.
-  Widget _buildLevelHeader(CubePattern pattern) {
+  Widget _buildLevelHeader(BuildContext context, CubePattern pattern) {
     return Row(
       children: [
         Container(
@@ -342,7 +349,7 @@ class _CubesTestPageState extends State<CubesTestPage> {
             borderRadius: BorderRadius.circular(20.r),
           ),
           child: Text(
-            _getDifficultyLabel(pattern.difficulty),
+            _getDifficultyLabel(context, pattern.difficulty),
             style: TextStyle(
               fontSize: 12.sp,
               fontWeight: FontWeight.w600,
@@ -353,7 +360,8 @@ class _CubesTestPageState extends State<CubesTestPage> {
         SizedBox(width: 8.w),
         Expanded(
           child: Text(
-            '${pattern.description} · Cohésion: ${pattern.cohesionScore}',
+            '${_getPatternDescription(context, pattern.difficulty)} · '
+            '${context.l10n.cubesCohesion(pattern.cohesionScore)}',
             style: TextStyle(
               fontSize: 11.sp,
               color: AppColors.grey600,
@@ -367,22 +375,41 @@ class _CubesTestPageState extends State<CubesTestPage> {
     );
   }
 
-  String _getDifficultyLabel(DifficultyLevel difficulty) {
+  String _getDifficultyLabel(BuildContext context, DifficultyLevel difficulty) {
+    final l10n = context.l10n;
     switch (difficulty) {
       case DifficultyLevel.example:
-        return 'Exemple';
+        return l10n.cubesDiffExample;
       case DifficultyLevel.veryEasy:
-        return 'Facile';
+        return l10n.matDiffEasy;
       case DifficultyLevel.easy:
-        return 'Moyen';
+        return l10n.matDiffMedium;
       case DifficultyLevel.medium:
-        return 'Moyen';
+        return l10n.matDiffMedium;
       case DifficultyLevel.mediumHard:
-        return 'Difficile';
+        return l10n.matDiffHard;
       case DifficultyLevel.hard:
-        return 'Difficile';
+        return l10n.matDiffHard;
       case DifficultyLevel.veryHard:
-        return 'Très difficile';
+        return l10n.cubesDiffVeryHard;
+    }
+  }
+
+  String _getPatternDescription(
+      BuildContext context, DifficultyLevel difficulty) {
+    final l10n = context.l10n;
+    switch (difficulty) {
+      case DifficultyLevel.example:
+        return l10n.cubesDescExample;
+      case DifficultyLevel.veryEasy:
+        return l10n.cubesDesc2x2;
+      case DifficultyLevel.easy:
+      case DifficultyLevel.medium:
+        return l10n.cubesDesc3x3Diagonals;
+      case DifficultyLevel.mediumHard:
+      case DifficultyLevel.hard:
+      case DifficultyLevel.veryHard:
+        return l10n.cubesDesc3x3Complex;
     }
   }
 }

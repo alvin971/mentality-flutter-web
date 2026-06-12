@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:async';
+import '../../../../../core/l10n/l10n_ext.dart';
+import '../../../../../core/l10n/locale_notifier.dart';
 import '../../../../../core/theme/app_colors.dart';
-import '../../../../../core/theme/app_typography.dart';
 import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/arithmetic_generator.dart';
@@ -19,7 +20,8 @@ class ArithmeticTestPage extends StatefulWidget {
 }
 
 class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
-  final ArithmeticGenerator _generator = ArithmeticGenerator();
+  final ArithmeticGenerator _generator =
+      ArithmeticGenerator(languageCode: localeNotifier.languageCode);
   late List<ArithmeticItem> _generatedItems;
 
   int _currentItemIndex = 0;
@@ -96,7 +98,7 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: const Text('Répétition du problème'),
+        title: Text(context.l10n.arithRepeatTitle),
         content: Text(
           _currentItem.problem,
           style: TextStyle(fontSize: 16.sp),
@@ -106,7 +108,7 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
             onPressed: () {
               Navigator.pop(context);
             },
-            child: const Text('Compris'),
+            child: Text(context.l10n.arithUnderstood),
           ),
         ],
       ),
@@ -127,17 +129,18 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
           children: [
             Icon(Icons.timer_off, color: AppColors.error, size: 32.sp),
             SizedBox(width: 12.w),
-            const Text('Temps écoulé !'),
+            Text(context.l10n.arithTimeUp),
           ],
         ),
-        content: Text('Réponse correcte : ${_currentItem.correctAnswer}'),
+        content:
+            Text(context.l10n.arithCorrectAnswerLabel(_currentItem.correctAnswer)),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.pop(context);
               _processAnswer(null);
             },
-            child: const Text('Continuer'),
+            child: Text(context.l10n.commonContinue),
           ),
         ],
       ),
@@ -187,21 +190,21 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
               size: 32.sp,
             ),
             SizedBox(width: 12.w),
-            Text(isCorrect ? 'Correct !' : 'Incorrect'),
+            Text(isCorrect ? context.l10n.arithCorrect : context.l10n.arithIncorrect),
           ],
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Réponse correcte : ${_currentItem.correctAnswer}'),
+            Text(context.l10n.arithCorrectAnswerLabel(_currentItem.correctAnswer)),
             if (isCorrect) ...[
               SizedBox(height: 8.h),
-              Text('Temps : $_elapsedSeconds secondes'),
+              Text(context.l10n.arithTimeSpent(_elapsedSeconds)),
               if (hasBonus) ...[
                 SizedBox(height: 8.h),
                 Text(
-                  '🎉 Bonus de rapidité ! (+1 point)',
+                  context.l10n.arithSpeedBonus,
                   style: TextStyle(
                     color: AppColors.success,
                     fontWeight: FontWeight.bold,
@@ -217,7 +220,7 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
               Navigator.pop(context);
               _nextItem();
             },
-            child: const Text('Continuer'),
+            child: Text(context.l10n.commonContinue),
           ),
         ],
       ),
@@ -251,21 +254,22 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: const Text('Test terminé !'),
+        title: Text(context.l10n.arithTestEnded),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Items complétés : ${_currentItemIndex + 1}/22',
+              context.l10n.arithItemsCompleted(
+                  _currentItemIndex + 1, _generatedItems.length),
               style: TextStyle(fontSize: 16.sp),
             ),
             SizedBox(height: 12.h),
-            Text('Score de base : $_score points'),
-            Text('Bonus de rapidité : $_bonusPoints points'),
+            Text(context.l10n.arithBaseScore(_score)),
+            Text(context.l10n.arithBonusScore(_bonusPoints)),
             SizedBox(height: 16.h),
             Text(
-              'Score Total : $totalScore points',
+              context.l10n.arithTotalScore(totalScore),
               style: TextStyle(
                 fontSize: 20.sp,
                 fontWeight: FontWeight.bold,
@@ -281,7 +285,7 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
               Navigator.pop(context);
               Navigator.pop(context, totalScore);
             },
-            child: const Text('Retour'),
+            child: Text(context.l10n.commonBack),
           ),
         ],
       ),
@@ -298,12 +302,12 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
 
   Widget _buildIntroScreen() {
     return KeplerTestScaffold(
-      testName: 'Arithmétique',
-      eyebrow: 'MÉMOIRE DE TRAVAIL · WMI',
+      testName: context.l10n.arithTestName,
+      eyebrow: context.l10n.arithEyebrow,
       accentColor: AppColors.indexWMI,
       // Bouton de démarrage sticky : visible sans scroller.
       bottomBar: KeplerTestButton.primary(
-        label: 'Commencer le test',
+        label: context.l10n.arithStartTest,
         accentColor: AppColors.indexWMI,
         onPressed: _startItem,
       ),
@@ -317,7 +321,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
               ),
               SizedBox(height: 24.h),
               Text(
-                'Test d\'Arithmétique',
+                context.l10n.arithIntroTitle,
                 style: TextStyle(
                   fontSize: 28.sp,
                   fontWeight: FontWeight.bold,
@@ -326,31 +330,31 @@ crossAxisAlignment: CrossAxisAlignment.start,
               ),
               SizedBox(height: 16.h),
               Text(
-                'Ce test mesure votre mémoire de travail et votre raisonnement numérique.',
+                context.l10n.arithIntroDescription,
                 style: TextStyle(fontSize: 16.sp),
               ),
               SizedBox(height: 24.h),
               _buildInfoCard(
-                'Calcul mental uniquement',
-                'Résolvez les problèmes sans papier ni calculatrice',
+                context.l10n.arithInfoMentalTitle,
+                context.l10n.arithInfoMentalSubtitle,
                 Icons.psychology_outlined,
               ),
               SizedBox(height: 12.h),
               _buildInfoCard(
-                'Temps limité',
-                'Chaque problème a une limite de temps (15-60 secondes)',
+                context.l10n.arithInfoTimeTitle,
+                context.l10n.arithInfoTimeSubtitle,
                 Icons.timer_outlined,
               ),
               SizedBox(height: 12.h),
               _buildInfoCard(
-                'Bonus de rapidité',
-                'Réponses rapides sur certains items = points bonus',
+                context.l10n.arithInfoBonusTitle,
+                context.l10n.arithInfoBonusSubtitle,
                 Icons.speed_outlined,
               ),
               SizedBox(height: 12.h),
               _buildInfoCard(
-                'Répétition possible',
-                'Vous pouvez demander de répéter UNE fois (chrono continue)',
+                context.l10n.arithInfoRepeatTitle,
+                context.l10n.arithInfoRepeatSubtitle,
                 Icons.replay_outlined,
               ),
               SizedBox(height: 24.h),
@@ -367,7 +371,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                     SizedBox(width: 12.w),
                     Expanded(
                       child: Text(
-                        '22 problèmes au total. Le test s\'arrête après 3 échecs consécutifs.',
+                        context.l10n.arithIntroDiscontinueNote,
                         style: TextStyle(color: AppColors.info, fontSize: 14.sp),
                       ),
                     ),
@@ -383,13 +387,14 @@ crossAxisAlignment: CrossAxisAlignment.start,
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('Arithmétique'),
+        title: Text(context.l10n.arithTestName),
         actions: [
           Center(
             child: Padding(
               padding: EdgeInsets.only(right: 16.w),
               child: Text(
-                'Problème ${_currentItemIndex + 1}/22',
+                context.l10n.arithProblemCounter(
+                    _currentItemIndex + 1, _generatedItems.length),
                 style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
               ),
             ),
@@ -423,7 +428,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                       ),
                       SizedBox(height: 4.h),
                       Text(
-                        '$_remainingSeconds s',
+                        context.l10n.commonSeconds(_remainingSeconds),
                         style: TextStyle(
                           fontSize: 28.sp,
                           fontWeight: FontWeight.bold,
@@ -445,7 +450,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                   border: Border.all(color: _getDifficultyColor()),
                 ),
                 child: Text(
-                  _currentItem.difficultyName,
+                  _difficultyName(_currentItem.difficulty),
                   style: TextStyle(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.bold,
@@ -495,7 +500,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                   color: AppColors.indexWMI,
                 ),
                 decoration: InputDecoration(
-                  hintText: 'Votre réponse',
+                  hintText: context.l10n.arithAnswerHint,
                   hintStyle: TextStyle(
                     fontSize: 24.sp,
                     color: AppColors.grey400,
@@ -528,7 +533,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                         onPressed: !_hasRepeated ? _repeatProblem : null,
                         icon: Icon(Icons.replay, size: 20.sp),
                         label: Text(
-                          'Répéter',
+                          context.l10n.arithRepeat,
                           style: TextStyle(fontSize: 16.sp),
                         ),
                         style: OutlinedButton.styleFrom(
@@ -553,7 +558,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                           disabledBackgroundColor: AppColors.grey300,
                         ),
                         child: Text(
-                          'Valider',
+                          context.l10n.commonValidate,
                           style: TextStyle(
                             fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
@@ -618,6 +623,20 @@ crossAxisAlignment: CrossAxisAlignment.start,
         return AppColors.warning;
       case DifficultyLevel.veryHard:
         return AppColors.error;
+    }
+  }
+
+  /// Nom localisé du niveau de difficulté.
+  String _difficultyName(DifficultyLevel difficulty) {
+    switch (difficulty) {
+      case DifficultyLevel.easy:
+        return context.l10n.arithDifficultyEasy;
+      case DifficultyLevel.medium:
+        return context.l10n.arithDifficultyMedium;
+      case DifficultyLevel.hard:
+        return context.l10n.arithDifficultyHard;
+      case DifficultyLevel.veryHard:
+        return context.l10n.arithDifficultyVeryHard;
     }
   }
 }

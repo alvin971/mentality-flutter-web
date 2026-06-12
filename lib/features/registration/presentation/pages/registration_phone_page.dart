@@ -8,6 +8,7 @@ import '../../../../core/theme/app_typography.dart';
 import '../../../../core/widgets/kepler_button.dart';
 import '../../../../core/widgets/kepler_card.dart';
 import '../../../../core/widgets/kepler_scaffold.dart';
+import '../../../../core/l10n/l10n_ext.dart';
 import '../bloc/registration_bloc.dart';
 import 'registration_phone_otp_page.dart';
 
@@ -47,15 +48,14 @@ class _RegistrationPhonePageState extends State<RegistrationPhonePage> {
       },
       builder: (context, state) {
         return KeplerScaffold(
-          title: 'Votre téléphone',
-          eyebrow: 'ÉTAPE 2 / 4',
+          title: context.l10n.regPhoneTitle,
+          eyebrow: context.l10n.regStepEyebrow(2),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 12.h),
               Text(
-                'Un code SMS à 6 chiffres sera envoyé pour vérifier votre '
-                'numéro. Aucun lien entre votre numéro et votre token.',
+                context.l10n.regPhoneIntro,
                 style: AppText.body(),
               ),
               SizedBox(height: 20.h),
@@ -77,8 +77,8 @@ class _RegistrationPhonePageState extends State<RegistrationPhonePage> {
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
                         ],
-                        decoration: const InputDecoration(
-                          hintText: 'Numéro',
+                        decoration: InputDecoration(
+                          hintText: context.l10n.regPhoneFieldHint,
                           border: InputBorder.none,
                         ),
                       ),
@@ -93,7 +93,9 @@ class _RegistrationPhonePageState extends State<RegistrationPhonePage> {
               ],
               SizedBox(height: 24.h),
               KeplerButton(
-                label: state.busy ? 'Envoi du SMS…' : 'Recevoir le SMS',
+                label: state.busy
+                    ? context.l10n.regSendingSms
+                    : context.l10n.regReceiveSms,
                 expand: true,
                 onPressed: state.busy
                     ? null
