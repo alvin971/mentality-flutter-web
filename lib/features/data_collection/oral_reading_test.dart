@@ -8,7 +8,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:record/record.dart';
+import '../../core/consent/consent_service.dart';
 import '../../core/l10n/l10n_ext.dart';
+import '../../core/l10n/locale_notifier.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/reading_texts.dart';
 import '../../services/data_collection_service.dart';
@@ -205,6 +207,8 @@ class _OralReadingTestState extends State<OralReadingTest> {
 
     try {
       final blobUrl = await _recorder.stop();
+      // Preuve de consentement attachée à l'enregistrement (cession ou non).
+      final consent = ConsentService.instance.current;
 
       final record = <String, dynamic>{
         'session_id': widget.sessionId,
@@ -212,9 +216,10 @@ class _OralReadingTestState extends State<OralReadingTest> {
         'audio_path': blobUrl ?? '',
         'duration_seconds': _elapsedSeconds,
         'timestamp': DateTime.now().toIso8601String(),
-        'language': 'fr',
+        'language': localeNotifier.languageCode,
         'layer': 'C',
-        'anonymized': true,
+        'consent_version': consent?.version,
+        'commercial_reuse': consent?.commercialReuse ?? false,
       };
 
       await DataCollectionService.instance.saveAudioRecord(record);

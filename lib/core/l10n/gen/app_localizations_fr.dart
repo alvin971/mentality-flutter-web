@@ -288,11 +288,11 @@ class AppLocalizationsFr extends AppLocalizations {
       'Votre voix pendant la lecture de 5 courts textes (environ 1 min chacun) et votre résumé oral (environ 40 secondes par texte).';
 
   @override
-  String get oralConsentAnonTitle => 'Anonymisation';
+  String get oralConsentAnonTitle => 'Confidentialité';
 
   @override
   String get oralConsentAnonBody =>
-      'Aucun nom, aucune information personnelle n\'est associé aux enregistrements. Un identifiant de session aléatoire est utilisé.';
+      'Vos enregistrements sont identifiés par un code de session aléatoire, et non par votre nom. Ils restent toutefois rattachables à votre compte : ce sont des données personnelles protégées, chiffrées et stockées en Europe.';
 
   @override
   String get oralConsentUsageTitle => 'Utilisation';
@@ -310,6 +310,21 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get oralWithdrawConsentNote =>
       'Vous pouvez retirer votre consentement à tout moment depuis les paramètres de l\'application.';
+
+  @override
+  String get oralConsentRequiredCheckbox =>
+      'J\'autorise l\'enregistrement de ma voix et son analyse, le temps de réaliser ce test. (obligatoire)';
+
+  @override
+  String get oralConsentCommercialCheckbox =>
+      'J\'autorise aussi la réutilisation de mes enregistrements, sous forme anonymisée, à des fins de recherche et commerciales — y compris leur cession à des tiers. (facultatif)';
+
+  @override
+  String get oralConsentRequiredHint =>
+      'Cochez la première case pour pouvoir commencer le test.';
+
+  @override
+  String get oralConsentPrivacyLink => 'Lire la politique de confidentialité';
 
   @override
   String oralTextProgress(int current) {

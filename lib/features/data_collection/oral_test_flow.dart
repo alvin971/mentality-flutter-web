@@ -2,7 +2,7 @@
 // Orchestrateur : 5 cycles complets Lecture → Pause → Résumé.
 //
 // Gère :
-//   - vérification du consentement audio (SharedPreferences)
+//   - vérification du consentement audio (ConsentService, granulaire + versionné)
 //   - mélange aléatoire des 5 textes
 //   - machine d'états _FlowStep
 //   - barre de progression "Texte X sur 5"
@@ -13,8 +13,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../../core/consent/consent_service.dart';
 import '../../core/l10n/l10n_ext.dart';
+import '../../core/l10n/locale_notifier.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/reading_texts.dart';
 import '../../services/session_manager.dart';
@@ -48,7 +49,11 @@ class _OralTestFlowState extends State<OralTestFlow> {
   int _pauseCountdown = 5;
   Timer? _pauseTimer;
 
-  static const String _consentKey = 'consent_audio';
+  /// Case OBLIGATOIRE : enregistrement + analyse pour réaliser le test.
+  bool _consentRequired = false;
+
+  /// Case OPTIONNELLE : réutilisation à des fins de recherche/commerciales.
+  bool _consentCommercial = false;
 
   @override
   void initState() {
@@ -67,17 +72,24 @@ class _OralTestFlowState extends State<OralTestFlow> {
   // ─── Consentement ────────────────────────────────────────────────────────────
 
   Future<void> _checkConsent() async {
-    final prefs = await SharedPreferences.getInstance();
-    final hasConsent = prefs.getBool(_consentKey) ?? false;
+    // Re-sollicite si aucun consentement valide OU si la version du texte a changé.
+    final hasConsent = await ConsentService.instance.hasValidConsent();
     if (!mounted) return;
     setState(() {
       _step = hasConsent ? _FlowStep.reading : _FlowStep.noConsent;
     });
   }
 
+  /// N'est appelable que lorsque la case obligatoire est cochée.
+  /// Enregistre une preuve de consentement granulaire, horodatée et versionnée.
   Future<void> _grantConsent() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_consentKey, true);
+    if (!_consentRequired) return;
+    await ConsentService.instance.grant(
+      sessionId: _sessionId,
+      locale: localeNotifier.languageCode,
+      recordingAndAnalysis: true,
+      commercialReuse: _consentCommercial,
+    );
     if (!mounted) return;
     setState(() => _step = _FlowStep.reading);
   }
@@ -209,19 +221,61 @@ class _OralTestFlowState extends State<OralTestFlow> {
             title: context.l10n.oralConsentUsageTitle,
             body: context.l10n.oralConsentUsageBody,
           ),
-          SizedBox(height: 32.h),
+          SizedBox(height: 24.h),
+          // Case OBLIGATOIRE — sans elle, pas de test (action positive requise).
+          CheckboxListTile(
+            value: _consentRequired,
+            onChanged: (v) => setState(() => _consentRequired = v ?? false),
+            controlAffinity: ListTileControlAffinity.leading,
+            contentPadding: EdgeInsets.zero,
+            dense: true,
+            activeColor: AppColors.primary,
+            title: Text(
+              context.l10n.oralConsentRequiredCheckbox,
+              style: TextStyle(fontSize: 13.sp),
+            ),
+          ),
+          // Case OPTIONNELLE — réutilisation recherche/commerciale séparée.
+          CheckboxListTile(
+            value: _consentCommercial,
+            onChanged: (v) => setState(() => _consentCommercial = v ?? false),
+            controlAffinity: ListTileControlAffinity.leading,
+            contentPadding: EdgeInsets.zero,
+            dense: true,
+            activeColor: AppColors.primary,
+            title: Text(
+              context.l10n.oralConsentCommercialCheckbox,
+              style: TextStyle(fontSize: 13.sp),
+            ),
+          ),
+          SizedBox(height: 20.h),
           ElevatedButton.icon(
-            onPressed: _grantConsent,
+            // Désactivé tant que la case obligatoire n'est pas cochée.
+            onPressed: _consentRequired ? _grantConsent : null,
             icon: const Icon(Icons.check_circle_outline),
             label: Text(context.l10n.oralAcceptAndStart),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
               foregroundColor: Colors.white,
+              disabledBackgroundColor:
+                  AppColors.primary.withValues(alpha: 0.35),
+              disabledForegroundColor: Colors.white70,
               padding: EdgeInsets.symmetric(vertical: 16.h),
               textStyle:
                   TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
             ),
           ),
+          if (!_consentRequired) ...[
+            SizedBox(height: 8.h),
+            Text(
+              context.l10n.oralConsentRequiredHint,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 11.sp,
+                  color: Theme.of(context).colorScheme.error,
+                  fontStyle: FontStyle.italic),
+            ),
+          ],
           SizedBox(height: 12.h),
           TextButton(
             onPressed: _declineConsent,

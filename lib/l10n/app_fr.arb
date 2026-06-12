@@ -294,13 +294,13 @@
   "@oralConsentRecordBody": {
     "description": "Écran de consentement — corps de la section enregistrements"
   },
-  "oralConsentAnonTitle": "Anonymisation",
+  "oralConsentAnonTitle": "Confidentialité",
   "@oralConsentAnonTitle": {
-    "description": "Écran de consentement — titre de la section anonymisation"
+    "description": "Écran de consentement — titre de la section confidentialité"
   },
-  "oralConsentAnonBody": "Aucun nom, aucune information personnelle n'est associé aux enregistrements. Un identifiant de session aléatoire est utilisé.",
+  "oralConsentAnonBody": "Vos enregistrements sont identifiés par un code de session aléatoire, et non par votre nom. Ils restent toutefois rattachables à votre compte : ce sont des données personnelles protégées, chiffrées et stockées en Europe.",
   "@oralConsentAnonBody": {
-    "description": "Écran de consentement — corps de la section anonymisation"
+    "description": "Écran de consentement — corps de la section confidentialité (pseudonymisation honnête)"
   },
   "oralConsentUsageTitle": "Utilisation",
   "@oralConsentUsageTitle": {
@@ -321,6 +321,22 @@
   "oralWithdrawConsentNote": "Vous pouvez retirer votre consentement à tout moment depuis les paramètres de l'application.",
   "@oralWithdrawConsentNote": {
     "description": "Note légale en bas de l'écran de consentement"
+  },
+  "oralConsentRequiredCheckbox": "J'autorise l'enregistrement de ma voix et son analyse, le temps de réaliser ce test. (obligatoire)",
+  "@oralConsentRequiredCheckbox": {
+    "description": "Case à cocher OBLIGATOIRE du consentement audio"
+  },
+  "oralConsentCommercialCheckbox": "J'autorise aussi la réutilisation de mes enregistrements, sous forme anonymisée, à des fins de recherche et commerciales — y compris leur cession à des tiers. (facultatif)",
+  "@oralConsentCommercialCheckbox": {
+    "description": "Case à cocher OPTIONNELLE du consentement à la réutilisation commerciale"
+  },
+  "oralConsentRequiredHint": "Cochez la première case pour pouvoir commencer le test.",
+  "@oralConsentRequiredHint": {
+    "description": "Indice affiché tant que la case obligatoire n'est pas cochée"
+  },
+  "oralConsentPrivacyLink": "Lire la politique de confidentialité",
+  "@oralConsentPrivacyLink": {
+    "description": "Lien vers la politique de confidentialité sur l'écran de consentement"
   },
   "oralTextProgress": "Texte {current} sur 5",
   "@oralTextProgress": {

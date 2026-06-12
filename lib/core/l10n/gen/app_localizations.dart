@@ -602,16 +602,16 @@ abstract class AppLocalizations {
   /// **'Votre voix pendant la lecture de 5 courts textes (environ 1 min chacun) et votre résumé oral (environ 40 secondes par texte).'**
   String get oralConsentRecordBody;
 
-  /// Écran de consentement — titre de la section anonymisation
+  /// Écran de consentement — titre de la section confidentialité
   ///
   /// In fr, this message translates to:
-  /// **'Anonymisation'**
+  /// **'Confidentialité'**
   String get oralConsentAnonTitle;
 
-  /// Écran de consentement — corps de la section anonymisation
+  /// Écran de consentement — corps de la section confidentialité (pseudonymisation honnête)
   ///
   /// In fr, this message translates to:
-  /// **'Aucun nom, aucune information personnelle n\'est associé aux enregistrements. Un identifiant de session aléatoire est utilisé.'**
+  /// **'Vos enregistrements sont identifiés par un code de session aléatoire, et non par votre nom. Ils restent toutefois rattachables à votre compte : ce sont des données personnelles protégées, chiffrées et stockées en Europe.'**
   String get oralConsentAnonBody;
 
   /// Écran de consentement — titre de la section utilisation
@@ -643,6 +643,30 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Vous pouvez retirer votre consentement à tout moment depuis les paramètres de l\'application.'**
   String get oralWithdrawConsentNote;
+
+  /// Case à cocher OBLIGATOIRE du consentement audio
+  ///
+  /// In fr, this message translates to:
+  /// **'J\'autorise l\'enregistrement de ma voix et son analyse, le temps de réaliser ce test. (obligatoire)'**
+  String get oralConsentRequiredCheckbox;
+
+  /// Case à cocher OPTIONNELLE du consentement à la réutilisation commerciale
+  ///
+  /// In fr, this message translates to:
+  /// **'J\'autorise aussi la réutilisation de mes enregistrements, sous forme anonymisée, à des fins de recherche et commerciales — y compris leur cession à des tiers. (facultatif)'**
+  String get oralConsentCommercialCheckbox;
+
+  /// Indice affiché tant que la case obligatoire n'est pas cochée
+  ///
+  /// In fr, this message translates to:
+  /// **'Cochez la première case pour pouvoir commencer le test.'**
+  String get oralConsentRequiredHint;
+
+  /// Lien vers la politique de confidentialité sur l'écran de consentement
+  ///
+  /// In fr, this message translates to:
+  /// **'Lire la politique de confidentialité'**
+  String get oralConsentPrivacyLink;
 
   /// En-tête de progression du flux (5 textes au total)
   ///

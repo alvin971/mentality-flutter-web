@@ -10,7 +10,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:record/record.dart';
+import '../../core/consent/consent_service.dart';
 import '../../core/l10n/l10n_ext.dart';
+import '../../core/l10n/locale_notifier.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/reading_texts.dart';
 import '../../services/data_collection_service.dart';
@@ -197,6 +199,9 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
     try {
       final blobUrl = await _recorder.stop();
       final timestamp = DateTime.now().toIso8601String();
+      // Preuve de consentement attachée à chaque enregistrement : permet de
+      // savoir à l'upload si le fichier est cessible commercialement.
+      final consent = ConsentService.instance.current;
 
       // Record 1 — Layer C : audio du résumé
       await DataCollectionService.instance.saveAudioRecord({
@@ -205,9 +210,10 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
         'audio_summary_path': blobUrl ?? '',
         'duration_seconds': _elapsedSeconds,
         'timestamp': timestamp,
-        'language': 'fr',
+        'language': localeNotifier.languageCode,
         'layer': 'C',
-        'anonymized': true,
+        'consent_version': consent?.version,
+        'commercial_reuse': consent?.commercialReuse ?? false,
       });
 
       // Record 2 — Layer D : paire NLU (la donnée la plus précieuse)
@@ -220,7 +226,8 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
         'summary_transcription': '',
         'timestamp': timestamp,
         'layer': 'D',
-        'anonymized': true,
+        'consent_version': consent?.version,
+        'commercial_reuse': consent?.commercialReuse ?? false,
       });
     } catch (_) {
       // L'échec de sauvegarde ne doit pas bloquer le parcours.
