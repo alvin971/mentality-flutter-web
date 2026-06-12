@@ -3,6 +3,22 @@
 Reçoit les enregistrements audio du client Flutter Web et les écrit dans
 Cloudflare R2. Le client n'a **jamais** de clé R2 : tout passe par ce worker.
 
+## Résidence des données : EU garantie ?
+
+Deux notions distinctes chez R2 :
+
+| Flag | Effet | RGPD |
+|------|-------|------|
+| `--jurisdiction eu` | **Contrainte légale** : données stockées ET traitées uniquement dans l'UE | ✅ c'est CELUI-CI qu'il faut |
+| `--location weur` | Simple *indice* de placement physique (perf), aucune garantie légale | ❌ insuffisant seul |
+
+La résidence EU n'est réelle que si **les deux** conditions sont remplies :
+1. bucket créé avec `--jurisdiction eu`, **et**
+2. le binding du Worker porte `jurisdiction = "eu"` (déjà dans `wrangler.toml`).
+
+⚠️ La juridiction est figée **à la création** du bucket : elle ne peut pas être
+changée après coup. Si tu crées le bucket sans le flag, il faut le **recréer**.
+
 ## Déploiement
 
 ```bash
@@ -18,6 +34,16 @@ wrangler deploy
 
 # 4. Ajouter le domaine Pages de l'app dans ALLOWED_ORIGINS (index.js) si besoin.
 ```
+
+## Vérifier que le bucket est bien en EU
+
+```bash
+# Le bucket EU n'apparaît QUE si on précise la juridiction :
+wrangler r2 bucket list --jurisdiction eu      # → doit lister mentality-audio
+wrangler r2 bucket list                        # → ne doit PAS le lister
+```
+
+Dashboard Cloudflare → R2 → le bucket doit afficher le badge **« Jurisdiction: EU »**.
 
 Tant que `r2UploadWorkerUrl` reste le placeholder (`YOUR_SUBDOMAIN`), l'app
 **fonctionne normalement** : l'upload est simplement sauté (no-op), l'audio
@@ -41,9 +67,9 @@ durée, langue, session…).
 **Droit à l'effacement (art. 17)** — supprimer tout l'audio d'un utilisateur :
 
 ```bash
-# Lister puis supprimer la clé de session (les deux préfixes)
-wrangler r2 object delete mentality-audio --prefix "reusable/<sessionId>/"
-wrangler r2 object delete mentality-audio --prefix "internal/<sessionId>/"
+# Bucket EU → le flag --jurisdiction eu est requis sur CHAQUE commande.
+wrangler r2 object delete mentality-audio --jurisdiction eu --prefix "reusable/<sessionId>/"
+wrangler r2 object delete mentality-audio --jurisdiction eu --prefix "internal/<sessionId>/"
 ```
 
 **Droit à la portabilité (art. 20)** — exporter les données d'un utilisateur :

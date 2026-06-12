@@ -4,10 +4,15 @@ compatibility_date = "2025-01-01"
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Binding R2 — le bucket est résolu côté serveur, aucune clé n'atteint le client.
+#
+# `jurisdiction = "eu"` est OBLIGATOIRE : sans cette ligne, le Worker ne se lie
+# PAS à un bucket EU (il chercherait un bucket standard du même nom). C'est ce
+# qui garantit techniquement la résidence des données en Europe (RGPD).
 # ─────────────────────────────────────────────────────────────────────────────
 [[r2_buckets]]
 binding = "AUDIO_BUCKET"
 bucket_name = "mentality-audio"
+jurisdiction = "eu"
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Mise en place (RGPD : résidence des données dans l'UE)
