@@ -161,6 +161,9 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
         encoder: encoder,
         sampleRate: 16000,
         numChannels: 1,
+        // 32 kbps : qualité voix/NLU largement suffisante à 16 kHz mono.
+        // Divise par ~4 le poids audio vs le défaut (128 kbps) du package.
+        bitRate: 32000,
       ),
       path: 'mentality_summary.webm',
     );
