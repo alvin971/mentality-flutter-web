@@ -1,0 +1,29 @@
+name = "mentality-tokeniser"
+main = "index.js"
+compatibility_date = "2025-01-01"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Worker de signature Ed25519 du token anonyme.
+# La clé privée est un SECRET (jamais ici). WebCrypto 'Ed25519' est natif à
+# compatibility_date >= 2024 (aucun flag). Ne PAS activer nodejs_compat.
+# ─────────────────────────────────────────────────────────────────────────────
+#
+# Secret requis (à configurer via CLI, JAMAIS commité) :
+#   wrangler secret put ED25519_PRIVATE_KEY_B64
+#     → coller le base64 du DER PKCS#8 (48 octets) de la clé privée.
+#
+# Voir README.md pour la génération du keypair et le déploiement.
+
+# Binding R2 (MÊME bucket EU que r2-upload) : utilisé par POST /validate pour
+# vérifier qu'un test a réellement produit des enregistrements sous le compte
+# (preuve de complétion) avant de valider le token, et pour écrire le marqueur
+# validated/<account>. jurisdiction = "eu" OBLIGATOIRE (résidence RGPD).
+[[r2_buckets]]
+binding = "AUDIO_BUCKET"
+bucket_name = "mentality-audio"
+jurisdiction = "eu"
+
+# Nombre minimal d'enregistrements exigé sous le compte pour valider le token
+# (proxy de « test complété » ; best-effort uploads → garder bas, ajustable).
+[vars]
+MIN_RECORDINGS = "1"

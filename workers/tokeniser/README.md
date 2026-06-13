@@ -1,0 +1,114 @@
+# Worker `mentality-tokeniser` — signature Ed25519 du token anonyme
+
+Signe les claims démographiques larges en **JWS compact EdDSA** :
+`header_b64url . payload_b64url . signature_b64url`.
+
+La clé privée ne quitte jamais le Worker (Secret, `extractable=false`). Le client
+ne reçoit que la signature et vérifie avec la **clé publique pinnée**.
+
+Voir `PLAN_TOKEN_FIN_DE_TEST.md` à la racine du repo.
+
+---
+
+## 1. Générer le keypair Ed25519 (hors-ligne, une seule fois)
+
+> ⚠️ À faire sur une machine de confiance, **dans un dossier HORS du repo**
+> (ex. `~/.secrets/`). Ne JAMAIS committer `.pem`/`.der`/le base64 de la privée.
+
+```bash
+openssl genpkey -algorithm ed25519 -out priv.pem
+openssl pkey -in priv.pem -outform DER -out priv.der            # PKCS#8, 48 octets
+openssl pkey -in priv.pem -pubout -outform DER -out pub.der     # SPKI, 44 octets
+
+# SECRET Worker (base64 du DER PKCS#8) :
+base64 -w0 priv.der
+
+# Clé PUBLIQUE raw 32o en base64url (pinning client) :
+tail -c 32 pub.der | base64 -w0 | tr '+/' '-_' | tr -d '='
+```
+
+`tail -c 32` jette les 12 octets d'en-tête ASN.1 du SPKI → il reste la clé
+publique brute (32 octets).
+
+## 2. Configurer le secret + déployer
+
+```bash
+cd workers/tokeniser
+wrangler secret put ED25519_PRIVATE_KEY_B64    # coller le base64 du DER PKCS#8
+wrangler deploy
+```
+
+> Préférer la saisie **interactive** de `wrangler secret put` (ne pas piper le
+> base64, qui resterait dans l'historique shell).
+
+## 3. Brancher le client
+
+Dans `lib/core/constants/app_constants.dart` :
+- `tokeniserWorkerUrl` = URL réelle du Worker déployé (remplacer `YOUR_SUBDOMAIN`).
+- `tokenSigningPublicKeys['k1']` = la clé publique base64url (étape 1).
+
+Ajouter le domaine Pages de prod à `ALLOWED_ORIGINS` dans `index.js` si différent.
+
+## 4. Vérifier l'interop crypto (BLOQUANT)
+
+Le test Dart `test/token_signature_verifier_test.dart` valide la vérification
+côté client. **Après déploiement**, valider aussi le chemin V8→Dart : émettre un
+token via l'URL déployée et confirmer qu'il passe `verifyAndDecode` côté client
+(un `importKey('pkcs8')` silencieusement cassé ou un mismatch clé privée/publique
+ne se voit qu'ainsi).
+
+```bash
+# Émission d'un token PROVISOIRE (début de parcours, « se connecter ») :
+curl -s -X POST "$URL/" -H 'Content-Type: application/json' \
+  -d '{"sex":"M","birth_year":1998,"birth_month":7,"region":"IDF"}'
+# → {"token":"<3 segments, status:provisional>"}  (signup_day ajouté côté serveur)
+
+# Validation à la soumission du test → token VALIDÉ (permanent, même nonce) :
+curl -s -X POST "$URL/validate" -H 'Content-Type: application/json' \
+  -d '{"token":"<le token provisoire>"}'
+# → {"token":"<status:validated>"}
+```
+
+## Cycle de vie du token (deux états)
+
+- `POST /` → **provisoire** (`status:'provisional'`) : émis au début. Tant que le
+  test n'est pas soumis, le token est dans un entre-deux et peut être abandonné.
+- `POST /validate` → **validé** (`status:'validated'`) : re-signe un token
+  provisoire valide en conservant nonce + démographiques + signup_day. Permanent
+  (jamais d'expiration). **Preuve de complétion exigée** : le worker vérifie dans
+  R2 (binding `AUDIO_BUCKET`) qu'au moins `MIN_RECORDINGS` enregistrements
+  existent sous le compte `H(nonce)` avant de valider (→ 400 sinon). Écrit aussi
+  un marqueur `validated/<account>` (utilisé par le cron de nettoyage de r2-upload).
+
+  ⚠️ Le tokeniseur a donc besoin du **même bucket R2 que r2-upload** (voir
+  `wrangler.toml`, binding `AUDIO_BUCKET`, `jurisdiction = "eu"`). `MIN_RECORDINGS`
+  est un seuil de qualité (uploads best-effort → garder bas, ajustable via `[vars]`).
+
+---
+
+## Rotation de clé (`kid`)
+
+`KID` (index.js) identifie la clé active. Pour tourner : ajouter la nouvelle clé
+publique (`k2`) au trousseau client **avant** de passer `KID` à `k2`.
+
+⚠️ **Honnêteté sur la compromission** : comme les tokens **n'expirent jamais** et
+ne sont **pas révocables** (le token est l'unique accès permanent aux données),
+une **fuite de la clé privée est catastrophique et irréversible** : la rotation
+vers `k2` n'invalide pas les tokens forgés avec `k1` tant que `k1` reste dans le
+trousseau client. La seule réponse réelle à une fuite = retirer `k1` du trousseau
+(invalide TOUS les tokens k1, légitimes inclus) — sans canal de ré-émission, cela
+équivaut à un reset. À assumer par écrit dans la politique de confidentialité.
+
+## Garanties & limites (à documenter dans la politique)
+
+- **Signature** = authenticité d'émission (anti-forge). N'est un **contrôle
+  d'accès** que si un serveur **re-vérifie** la signature au moment de servir les
+  données (à construire). La vérif côté client est un sanity-check de config.
+- **Identifiant d'accès = le `nonce`** (256 bits, dans les octets signés), jamais
+  la chaîne token complète ni la signature (malléabilité Ed25519).
+- **Bearer token** : qui le détient y accède. Pas de révocation sans état serveur.
+  Perte = définitive, vol = accès. Défense : entropie 256 bits + Hive AES-256 + HTTPS.
+- **Anonymat / no-log** : Worker stateless, aucun log d'IP/timestamp/claims/token,
+  aucun `iat` précis (le `signup_day` au jour suffit).
+- **CORS ≠ contrôle d'accès** : limiter le volume d'émission via le rate-limiting
+  edge de Cloudflare (distinct du no-log applicatif).

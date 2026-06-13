@@ -14,6 +14,7 @@ import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 
 import '../core/constants/app_constants.dart';
+import '../core/services/auth_local_store.dart';
 
 class R2UploadResult {
   final String key;
@@ -64,11 +65,15 @@ class R2UploadService {
     required Map<String, String> meta,
   }) async {
     if (!isConfigured || bytes.isEmpty) return null;
+    // Le worker exige un token signé valide ; sans token, inutile d'uploader.
+    final token = await AuthLocalStore.instance.getToken();
+    if (token == null || token.isEmpty) return null;
     try {
       final resp = await http.post(
         Uri.parse(AppConstants.r2UploadWorkerUrl),
         headers: {
           'Content-Type': contentType,
+          'X-Mentality-Token': token,
           'X-Session-Id': meta['session_id'] ?? '',
           'X-Text-Id': meta['text_id'] ?? '',
           'X-Layer': meta['layer'] ?? 'C',

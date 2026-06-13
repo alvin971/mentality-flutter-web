@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -5,6 +6,8 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/l10n/l10n_ext.dart';
 import '../../../../core/services/auth_local_store.dart';
+import '../../../../core/services/token_issuer.dart';
+import '../../../../core/services/token_signature_verifier.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/widgets/et_logo_animated.dart';
@@ -39,12 +42,28 @@ class _SplashPageState extends State<SplashPage>
         context.go(AppConstants.routeHome);
         return;
       }
-      final hasToken = await AuthLocalStore.instance.hasToken();
+      // Gate durci : on n'accepte pas la simple PRÉSENCE d'un token, mais sa
+      // VALIDITÉ (signature Ed25519). Un token altéré/forgé localement est purgé.
+      final token = await AuthLocalStore.instance.getToken();
+      final accepted = await _isTokenAccepted(token);
       if (!mounted) return;
-      context.go(hasToken
+      if (!accepted && token != null) {
+        await AuthLocalStore.instance.clear();
+        if (!mounted) return;
+      }
+      context.go(accepted
           ? AppConstants.routeHome
           : AppConstants.routeRegister);
     });
+  }
+
+  /// Accepte un token signé valide. En debug uniquement, tolère un token DEV
+  /// non signé (`MENTA1.…`) pour permettre les tests sans Worker déployé.
+  Future<bool> _isTokenAccepted(String? token) async {
+    if (token == null || token.isEmpty) return false;
+    if (await TokenSignatureVerifier.isValid(token)) return true;
+    if (kDebugMode && TokenIssuer.tryDecode(token) != null) return true;
+    return false;
   }
 
   @override

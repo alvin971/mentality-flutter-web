@@ -11,6 +11,8 @@
  *   4. Copier l'URL du worker dans AppConstants.claudeWorkerUrl
  */
 
+import { verifyToken, TOKEN_SIGNING_PUBLIC_KEYS } from '../_shared/token_verify.js';
+
 const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
 const ANTHROPIC_VERSION = '2023-06-01';
 
@@ -30,7 +32,7 @@ export default {
 
     // Vérifier l'origine
     const origin = request.headers.get('Origin') || '';
-    const isAllowed = ALLOWED_ORIGINS.some(o => origin.startsWith(o));
+    const isAllowed = ALLOWED_ORIGINS.includes(origin); // égalité stricte
     if (!isAllowed && origin !== '') {
       return new Response(JSON.stringify({ error: 'Origin non autorisée' }), {
         status: 403,
@@ -44,6 +46,18 @@ export default {
         status: 405,
         headers: corsHeaders(origin),
       });
+    }
+
+    // Authentification : token anonyme signé requis (re-vérif serveur Ed25519).
+    const auth = await verifyToken(
+      request.headers.get('X-Mentality-Token') || '',
+      TOKEN_SIGNING_PUBLIC_KEYS,
+    );
+    if (!auth.valid) {
+      return new Response(
+        JSON.stringify({ error: `Token requis/invalide (${auth.reason})` }),
+        { status: 401, headers: { ...corsHeaders(origin), 'Content-Type': 'application/json' } },
+      );
     }
 
     // Vérifier que la clé API est configurée
@@ -113,11 +127,11 @@ export default {
 };
 
 function corsHeaders(origin) {
-  const allowedOrigin = ALLOWED_ORIGINS.find(o => origin.startsWith(o)) || ALLOWED_ORIGINS[0];
+  const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
   return {
     'Access-Control-Allow-Origin': allowedOrigin,
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Headers': 'Content-Type, X-Mentality-Token',
     'Access-Control-Max-Age': '86400',
   };
 }
