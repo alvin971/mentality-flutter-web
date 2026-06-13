@@ -40,6 +40,24 @@ class TokeniserService {
     return _postForToken(Uri.parse(AppConstants.tokeniserWorkerUrl), claims);
   }
 
+  /// Suggestion de région large déduite de la géo-IP (Cloudflare), pour
+  /// pré-remplir le menu. Indice CORRIGEABLE : aucune donnée stockée, aucune
+  /// permission. Renvoie un code région (ex. 'IDF') ou `null` si indisponible.
+  Future<String?> suggestRegion() async {
+    if (!isConfigured) return null;
+    try {
+      final resp = await _client
+          .get(Uri.parse('${AppConstants.tokeniserWorkerUrl}/geo'))
+          .timeout(AppConstants.connectionTimeout);
+      if (resp.statusCode != 200) return null;
+      final data = jsonDecode(resp.body) as Map<String, dynamic>;
+      final region = data['region'];
+      return region is String && region.isNotEmpty ? region : null;
+    } catch (_) {
+      return null; // non bloquant
+    }
+  }
+
   /// Re-signe un token provisoire en token VALIDÉ (à la soumission d'un test).
   /// `null` si non configuré (no-op DEV).
   Future<String?> validateToken(String token) async {

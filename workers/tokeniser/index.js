@@ -59,6 +59,15 @@ export default {
     if (!ALLOWED_ORIGINS.includes(origin) && origin !== '') {
       return json({ error: 'Origin non autorisée' }, 403, origin);
     }
+    const path = new URL(request.url).pathname;
+
+    // GET /geo — suggestion de région large depuis la géo-IP Cloudflare.
+    // Aucune auth, aucune donnée stockée/loggée : un simple indice corrigeable
+    // côté client (pas de coordonnées, pas d'IP — juste une région large).
+    if (request.method === 'GET' && path === '/geo') {
+      return handleGeo(request, origin);
+    }
+
     if (request.method !== 'POST') {
       return json({ error: 'Méthode non autorisée' }, 405, origin);
     }
@@ -76,13 +85,58 @@ export default {
       return json({ error: 'Corps JSON invalide' }, 400, origin);
     }
 
-    const path = new URL(request.url).pathname;
     if (path === '/validate') {
       return handleValidate(body, env, origin);
     }
     return handleIssue(body, env, origin);
   },
 };
+
+/**
+ * GET /geo — déduit une région large depuis la géo-IP Cloudflare (request.cf).
+ * Renvoie { region: <code|null>, country }. L'IP n'est ni stockée ni loggée ;
+ * on n'expose qu'une région large (jamais ville/coordonnées). Indice corrigeable.
+ */
+function handleGeo(request, origin) {
+  const cf = request.cf || null;
+  return json(
+    { region: regionFromCf(cf), country: (cf && cf.country) || null },
+    200, origin,
+  );
+}
+
+// Noms ISO/Cloudflare des régions FR → codes de l'allow-list (clés normalisées).
+const REGION_NAME_TO_CODE = {
+  'ile-de-france': 'IDF',
+  'auvergne-rhone-alpes': 'ARA',
+  'bourgogne-franche-comte': 'BFC',
+  'bretagne': 'BRE',
+  'centre-val de loire': 'CVL',
+  'corse': 'COR',
+  'grand est': 'GES',
+  'hauts-de-france': 'HDF',
+  'normandie': 'NOR',
+  'nouvelle-aquitaine': 'NAQ',
+  'occitanie': 'OCC',
+  'pays de la loire': 'PDL',
+  "provence-alpes-cote d'azur": 'PAC',
+};
+
+function stripAccentsLower(s) {
+  return (s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+}
+
+/** Mappe request.cf → code région de l'allow-list. null si géo inconnue. */
+function regionFromCf(cf) {
+  if (!cf || !cf.country) return null;        // géo indisponible → pas de pré-remplissage
+  if (cf.country !== 'FR') return 'OTHER';     // hors France → « Hors France / Autre »
+  // cf.regionCode : ISO 3166-2 (ex. 'IDF' ou 'FR-IDF') selon la donnée Cloudflare.
+  const code = stripAccentsLower(cf.regionCode).replace(/^fr-/, '').toUpperCase();
+  if (ALLOWED_REGIONS.has(code)) return code;
+  // Repli par nom (cf.region, ex. 'Île-de-France').
+  const byName = REGION_NAME_TO_CODE[stripAccentsLower(cf.region)];
+  return byName || 'OTHER';
+}
 
 /** POST / — émet un token PROVISOIRE depuis des claims démographiques larges. */
 async function handleIssue(body, env, origin) {
@@ -249,7 +303,7 @@ function corsHeaders(origin) {
   const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
   return {
     'Access-Control-Allow-Origin': allowedOrigin,
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Max-Age': '86400',
   };

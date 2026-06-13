@@ -69,6 +69,18 @@ curl -s -X POST "$URL/validate" -H 'Content-Type: application/json' \
 # → {"token":"<status:validated>"}
 ```
 
+## `GET /geo` — suggestion de région (pré-remplissage)
+
+```bash
+curl -s "$URL/geo"   # → {"region":"IDF"|...|"OTHER"|null,"country":"FR"|...}
+```
+
+Déduit une région large depuis la **géo-IP Cloudflare** (`request.cf.regionCode` /
+`region`, mappés sur l'allow-list ; hors France → `OTHER`). **Aucune permission,
+aucune coordonnée, IP ni stockée ni loggée** — simple indice corrigeable côté
+client (le menu reste modifiable). ⚠️ Vérifier au déploiement les valeurs réelles
+de `request.cf.regionCode` pour la France (la donnée Cloudflare peut varier).
+
 ## Cycle de vie du token (deux états)
 
 - `POST /` → **provisoire** (`status:'provisional'`) : émis au début. Tant que le

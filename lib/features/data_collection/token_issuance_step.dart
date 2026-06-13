@@ -17,6 +17,7 @@ import '../../core/l10n/l10n_ext.dart';
 import '../../core/services/auth_local_store.dart';
 import '../../core/services/token_issuer.dart';
 import '../../core/theme/app_colors.dart';
+import '../../services/tokeniser_service.dart';
 import '../registration/domain/entities/registration_form.dart' show Sex, SexX;
 
 /// Région large (le seul niveau géographique autorisé — jamais code postal).
@@ -79,6 +80,26 @@ class _TokenIssuanceStepState extends State<TokenIssuanceStep> {
   String? _issuedToken;
   String? _error;
   bool _busy = false;
+  bool _regionAutodetected = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _prefillRegionFromGeo();
+  }
+
+  /// Pré-remplit la région via la géo-IP (Cloudflare), corrigeable. No-op si le
+  /// worker n'est pas configuré ou si la détection échoue.
+  Future<void> _prefillRegionFromGeo() async {
+    final code = await TokeniserService.instance.suggestRegion();
+    if (!mounted || code == null || _regionCode != null) return;
+    if (_kRegions.any((r) => r.code == code)) {
+      setState(() {
+        _regionCode = code;
+        _regionAutodetected = true;
+      });
+    }
+  }
 
   bool get _formComplete =>
       _sex != null &&
@@ -233,8 +254,30 @@ class _TokenIssuanceStepState extends State<TokenIssuanceStep> {
               for (final r in _kRegions)
                 DropdownMenuItem(value: r.code, child: Text(r.label)),
             ],
-            onChanged: (v) => setState(() => _regionCode = v),
+            onChanged: (v) => setState(() {
+              _regionCode = v;
+              _regionAutodetected = false; // l'utilisateur a corrigé
+            }),
           ),
+          if (_regionAutodetected) ...[
+            SizedBox(height: 6.h),
+            Row(
+              children: [
+                Icon(Icons.my_location_outlined,
+                    size: 14.sp, color: Theme.of(context).colorScheme.outline),
+                SizedBox(width: 6.w),
+                Expanded(
+                  child: Text(
+                    'Détectée automatiquement — corrige si besoin.',
+                    style: TextStyle(
+                        fontSize: 11.sp,
+                        color: Theme.of(context).colorScheme.outline,
+                        fontStyle: FontStyle.italic),
+                  ),
+                ),
+              ],
+            ),
+          ],
           SizedBox(height: 32.h),
 
           ElevatedButton.icon(
