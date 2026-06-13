@@ -7,6 +7,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart' show kReleaseMode;
 
+import '../constants/app_constants.dart';
 import '../../services/tokeniser_service.dart';
 import 'token_signature_verifier.dart';
 
@@ -82,9 +83,10 @@ class TokenIssuer {
       return token;
     }
 
-    // FALLBACK DEV — refus explicite en release pour ne jamais émettre un faux
-    // token non signé en production.
-    if (kReleaseMode) {
+    // FALLBACK DEV/TEST — token local non signé. Refusé en release SAUF en mode
+    // test explicite (kAllowUnsignedTokenInRelease), pour ne jamais émettre un
+    // faux token non signé en production réelle.
+    if (kReleaseMode && !AppConstants.kAllowUnsignedTokenInRelease) {
       throw StateError(
         "Tokeniser non configuré en release : refus d'émettre un token non signé.",
       );
@@ -120,8 +122,8 @@ class TokenIssuer {
       return newToken;
     }
 
-    // FALLBACK DEV — bascule le statut dans le token non signé (debug only).
-    if (kReleaseMode) {
+    // FALLBACK DEV/TEST — bascule le statut dans le token non signé.
+    if (kReleaseMode && !AppConstants.kAllowUnsignedTokenInRelease) {
       throw StateError(
         "Validation indisponible en release sans tokeniseur configuré.",
       );

@@ -62,7 +62,12 @@ class _SplashPageState extends State<SplashPage>
   Future<bool> _isTokenAccepted(String? token) async {
     if (token == null || token.isEmpty) return false;
     if (await TokenSignatureVerifier.isValid(token)) return true;
-    if (kDebugMode && TokenIssuer.tryDecode(token) != null) return true;
+    // En debug OU en mode test (token local non signé autorisé), accepter un
+    // token DEV décodable. En prod réelle, seule la signature valide compte.
+    if ((kDebugMode || AppConstants.kAllowUnsignedTokenInRelease) &&
+        TokenIssuer.tryDecode(token) != null) {
+      return true;
+    }
     return false;
   }
 

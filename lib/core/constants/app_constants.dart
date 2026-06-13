@@ -278,12 +278,15 @@ class AppConstants {
   /// `false` = vérifie la VALIDITÉ du token local (signature), route vers
   ///           /register (écran de connexion démographique) si absent/invalide.
   ///
-  /// ⚠️ TEMPORAIREMENT `true` pour le build TestFlight : le worker tokeniseur
-  /// n'est pas encore déployé, donc en release l'émission du token échoue
-  /// volontairement (cf. TokenIssuer). Repasser à `false` UNE FOIS les workers
-  /// Cloudflare déployés et tokeniserWorkerUrl renseignée → l'onboarding par
-  /// token (TokenLoginPage) sera alors actif. Le flux téléphone/OTP est supprimé.
-  static const bool kSkipRegistrationGate = true;
+  /// `false` = le formulaire de connexion (TokenLoginPage) s'affiche au début.
+  /// Le flux téléphone/OTP est supprimé (remplacé par le token anonyme).
+  static const bool kSkipRegistrationGate = false;
+
+  /// MODE TEST : autorise un token LOCAL NON SIGNÉ en release tant que le worker
+  /// tokeniseur n'est pas déployé — permet de tester l'onboarding (le formulaire
+  /// + le flux) sur TestFlight sans backend. ⚠️ Repasser à `false` AVANT la prod
+  /// (une fois les workers déployés) pour n'accepter que des tokens signés.
+  static const bool kAllowUnsignedTokenInRelease = true;
   static const bool enableVoiceRecognition = true;
   static const bool enable3DCubes = true;
   static const bool enableAnalytics = true;
