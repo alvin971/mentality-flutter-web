@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../core/services/auth_local_store.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/theme/theme_notifier.dart';
@@ -18,6 +21,34 @@ import '../../../results_history/presentation/pages/results_history_page.dart';
 /// Home Kepler — hero éditorial + 3 cards d'action + résumé "À propos".
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
+
+  /// Efface le token local et renvoie à l'écran de connexion.
+  Future<void> _confirmLogout(BuildContext context) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Se déconnecter ?'),
+        content: const Text(
+          'Ton token sera retiré de cet appareil. Assure-toi de l’avoir '
+          'sauvegardé : sans lui, tu ne pourras pas te reconnecter à tes données.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Annuler'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Se déconnecter'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+    await AuthLocalStore.instance.clear();
+    if (!context.mounted) return;
+    context.go(AppConstants.routeRegister);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +83,15 @@ class HomePage extends StatelessWidget {
                     ),
                     onPressed: themeNotifier.toggle,
                   ),
+                ),
+                IconButton(
+                  tooltip: 'Se déconnecter',
+                  icon: Icon(
+                    Icons.logout_outlined,
+                    size: 20.sp,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                  onPressed: () => _confirmLogout(context),
                 ),
               ],
             ),

@@ -59,12 +59,17 @@ class TokenIssuanceStep extends StatefulWidget {
   /// Appelé une fois le token généré + persisté. `null` en mode standalone.
   final void Function(String token)? onIssued;
 
+  /// Si fourni, affiche un lien « J'ai déjà un token » qui déclenche ce callback
+  /// (typiquement : naviguer vers l'écran de reconnexion).
+  final VoidCallback? onRestore;
+
   /// Si true, fournit son propre Scaffold (usage page autonome / DEV).
   final bool standalone;
 
   const TokenIssuanceStep({
     super.key,
     this.onIssued,
+    this.onRestore,
     this.standalone = false,
   });
 
@@ -308,6 +313,14 @@ class _TokenIssuanceStepState extends State<TokenIssuanceStep> {
               style: TextStyle(
                   fontSize: 12.sp,
                   color: Theme.of(context).colorScheme.error),
+            ),
+          ],
+          if (widget.onRestore != null) ...[
+            SizedBox(height: 8.h),
+            TextButton.icon(
+              onPressed: _busy ? null : widget.onRestore,
+              icon: Icon(Icons.login, size: 16.sp),
+              label: const Text('J’ai déjà un token — me connecter'),
             ),
           ],
           SizedBox(height: 24.h),

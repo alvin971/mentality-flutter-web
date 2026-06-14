@@ -36,6 +36,8 @@ class TokenLoginPage extends StatelessWidget {
           onIssued: (_) {
             if (context.mounted) context.go(AppConstants.routeHome);
           },
+          // Reconnexion avec un token déjà sauvegardé.
+          onRestore: () => context.push('/login-token'),
         ),
       ),
     );

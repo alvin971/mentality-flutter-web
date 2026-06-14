@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../features/registration/presentation/pages/token_login_page.dart';
+import '../../features/registration/presentation/pages/token_restore_page.dart';
 import '../../features/home/presentation/pages/home_page.dart';
 import '../../features/assessment/presentation/pages/assessment_intro_page.dart';
 import '../../features/complete_test/presentation/pages/complete_test_orchestrator_page.dart';
@@ -85,6 +86,13 @@ final GoRouter appRouter = GoRouter(
       path: AppConstants.routeRegister,
       name: 'register',
       builder: (_, __) => const TokenLoginPage(),
+    ),
+
+    // Reconnexion : coller un token déjà sauvegardé pour restaurer l'accès.
+    GoRoute(
+      path: '/login-token',
+      name: 'login-token',
+      builder: (_, __) => const TokenRestorePage(),
     ),
 
     // Accueil
