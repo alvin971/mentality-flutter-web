@@ -463,7 +463,7 @@
   "matIncorrect": "Incorrect",
   "matResponseTime": "Response time: {seconds}s",
   "matScoreFraction": "Score: {score}/{total}",
-  "matDiscontinue4": "4 consecutive failures - Test ended (WAIS-IV)",
+  "matDiscontinue3": "3 consecutive failures - Test ended (WAIS-IV)",
   "matSeeResultsEnded": "See results (test ended)",
   "matNextItem": "Next item",
   "matSeeResults": "See results",

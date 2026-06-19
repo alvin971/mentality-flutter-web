@@ -101,7 +101,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
             Text(context.l10n.matResponseTime(timeSeconds)),
             SizedBox(height: 8.h),
             Text(context.l10n.matScoreFraction(score, currentLevel + 1)),
-            if (_consecutiveFailures >= 4) ...[
+            if (_consecutiveFailures >= 3) ...[
               SizedBox(height: 12.h),
               Container(
                 padding: EdgeInsets.all(8.w),
@@ -110,7 +110,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
                   borderRadius: BorderRadius.circular(4.r),
                 ),
                 child: Text(
-                  context.l10n.matDiscontinue4,
+                  context.l10n.matDiscontinue3,
                   style: TextStyle(
                     color: AppColors.warning,
                     fontWeight: FontWeight.bold,
@@ -125,8 +125,8 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
             onPressed: () {
               Navigator.pop(context);
 
-              // Règle de discontinuation : 4 échecs consécutifs (WAIS-IV)
-              if (_consecutiveFailures >= 4 || currentLevel >= _generatedItems.length - 1) {
+              // Règle de discontinuation WAIS-IV : 3 scores 0 consécutifs
+              if (_consecutiveFailures >= 3 || currentLevel >= _generatedItems.length - 1) {
                 _showFinalResults();
               } else {
                 setState(() {
@@ -137,7 +137,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
               }
             },
             child: Text(
-              _consecutiveFailures >= 4
+              _consecutiveFailures >= 3
                   ? context.l10n.matSeeResultsEnded
                   : (currentLevel < _generatedItems.length - 1
                       ? context.l10n.matNextItem

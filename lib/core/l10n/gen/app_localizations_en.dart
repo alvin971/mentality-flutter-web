@@ -1567,7 +1567,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get matDiscontinue4 => '4 consecutive failures - Test ended (WAIS-IV)';
+  String get matDiscontinue3 => '3 consecutive failures - Test ended (WAIS-IV)';
 
   @override
   String get matSeeResultsEnded => 'See results (test ended)';

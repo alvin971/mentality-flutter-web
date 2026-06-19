@@ -2876,11 +2876,11 @@ abstract class AppLocalizations {
   /// **'Score : {score}/{total}'**
   String matScoreFraction(int score, int total);
 
-  /// Matrices — message de règle de discontinuation après 4 échecs
+  /// Matrices — message de règle de discontinuation après 3 échecs
   ///
   /// In fr, this message translates to:
-  /// **'4 échecs consécutifs - Test terminé (WAIS-IV)'**
-  String get matDiscontinue4;
+  /// **'3 échecs consécutifs - Test terminé (WAIS-IV)'**
+  String get matDiscontinue3;
 
   /// Matrices/Cubes — bouton dialogue lorsque le test est terminé par discontinuation
   ///

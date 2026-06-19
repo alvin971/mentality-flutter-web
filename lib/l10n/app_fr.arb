@@ -2128,9 +2128,9 @@
       }
     }
   },
-  "matDiscontinue4": "4 échecs consécutifs - Test terminé (WAIS-IV)",
-  "@matDiscontinue4": {
-    "description": "Matrices — message de règle de discontinuation après 4 échecs"
+  "matDiscontinue3": "3 échecs consécutifs - Test terminé (WAIS-IV)",
+  "@matDiscontinue3": {
+    "description": "Matrices — message de règle de discontinuation après 3 échecs"
   },
   "matSeeResultsEnded": "Voir résultats (test terminé)",
   "@matSeeResultsEnded": {
