@@ -1,0 +1,9 @@
+# Clés de signature — NE JAMAIS committer (générer/stocker hors repo).
+# Voir README.md : le keypair doit vivre dans un coffre, pas ici.
+ed25519_priv.pem
+ed25519_priv.der
+ed25519_pub.der
+priv.pem
+priv.der
+pub.der
+*.key

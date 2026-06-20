@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import '../theme/app_colors.dart';
-import '../../features/registration/presentation/bloc/registration_bloc.dart';
-import '../../features/registration/presentation/pages/registration_email_page.dart';
+import '../../features/registration/presentation/pages/token_login_page.dart';
+import '../../features/registration/presentation/pages/token_restore_page.dart';
 import '../../features/home/presentation/pages/home_page.dart';
 import '../../features/assessment/presentation/pages/assessment_intro_page.dart';
 import '../../features/complete_test/presentation/pages/complete_test_orchestrator_page.dart';
@@ -11,6 +9,7 @@ import '../../features/chat/presentation/pages/mentality_chat_page.dart';
 import '../../features/results_history/presentation/pages/results_history_page.dart';
 import '../../features/onboarding/presentation/pages/onboarding_page.dart';
 import '../../features/data_collection/oral_test_flow.dart';
+import '../../features/data_collection/token_issuance_step.dart';
 import '../../features/exercises_implementations/cubes/presentation/pages/cubes_test_page.dart';
 import '../../features/exercises_implementations/matrices/presentation/pages/matrices_test_page.dart';
 import '../../features/exercises_implementations/figure_weights/presentation/pages/figure_weights_test_page.dart';
@@ -81,14 +80,19 @@ final GoRouter appRouter = GoRouter(
       builder: (_, __) => const OnboardingPage(),
     ),
 
-    // Inscription par token anonyme (4 étapes)
+    // Connexion par token anonyme : petit formulaire démographique au début →
+    // token PROVISOIRE → accès à l'app. Remplace l'ancien flux téléphone/OTP.
     GoRoute(
       path: AppConstants.routeRegister,
       name: 'register',
-      builder: (_, __) => BlocProvider(
-        create: (_) => RegistrationBloc()..add(const StartRegistration()),
-        child: const RegistrationEmailPage(),
-      ),
+      builder: (_, __) => const TokenLoginPage(),
+    ),
+
+    // Reconnexion : coller un token déjà sauvegardé pour restaurer l'accès.
+    GoRoute(
+      path: '/login-token',
+      name: 'login-token',
+      builder: (_, __) => const TokenRestorePage(),
     ),
 
     // Accueil
@@ -177,6 +181,14 @@ final GoRouter appRouter = GoRouter(
       path: '/test/oral',
       name: 'test-oral',
       builder: (_, __) => const OralTestFlow(),
+    ),
+
+    // DEV : écran isolé démographiques + émission du token, pour tester la
+    // fonction sans refaire tout le test. Voir PLAN_TOKEN_FIN_DE_TEST.md.
+    GoRoute(
+      path: '/test/token',
+      name: 'test-token',
+      builder: (_, __) => const TokenIssuanceStep(standalone: true),
     ),
 
     // Chat IA

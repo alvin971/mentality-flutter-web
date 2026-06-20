@@ -30,3 +30,13 @@ jurisdiction = "eu"
 #
 #   4. Ajouter le domaine Pages de l'app dans ALLOWED_ORIGINS (index.js).
 # ─────────────────────────────────────────────────────────────────────────────
+
+# Cron de nettoyage (handler scheduled() dans index.js) : supprime les données
+# des comptes PROVISOIRES abandonnés (sans marqueur validated/<account>) au-delà
+# de RETENTION_DAYS. Tous les jours à 03:00 UTC.
+[triggers]
+crons = ["0 3 * * *"]
+
+[vars]
+RETENTION_DAYS = "30"
+CLEANUP_MAX_OBJECTS = "20000"

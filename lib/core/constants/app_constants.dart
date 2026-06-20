@@ -68,6 +68,23 @@ class AppConstants {
   /// normalement en stockage local seulement.
   static const String r2UploadWorkerUrl =
       'https://mentality-r2-upload.YOUR_SUBDOMAIN.workers.dev';
+
+  /// URL du Cloudflare Worker qui SIGNE le token anonyme (Ed25519).
+  /// Déployer workers/tokeniser/ et remplacer cette valeur.
+  /// Tant que l'URL reste le placeholder, l'émission utilise le fallback DEV
+  /// local NON signé (autorisé en debug uniquement — voir TokenIssuer).
+  static const String tokeniserWorkerUrl =
+      'https://mentality-tokeniser.YOUR_SUBDOMAIN.workers.dev';
+
+  /// Clés PUBLIQUES Ed25519 (32 octets, base64url) pour vérifier les tokens
+  /// signés, indexées par `kid`. Ce n'est PAS un secret.
+  /// ⚠️ Doit correspondre à la clé privée déployée dans le Worker tokeniseur.
+  /// La valeur ci-dessous est la clé publique du keypair DEV — la REMPLACER si
+  /// le keypair est régénéré pour la production.
+  static const Map<String, String> tokenSigningPublicKeys = {
+    'k1': '-2eBilftJKpyg_NHaQpXDBwuVFMA2z3JaZgXpDF_rCw',
+  };
+
   static const String endpointAuth = '/auth';
   static const String endpointUsers = '/users';
   static const String endpointAssessments = '/assessments';
@@ -256,11 +273,20 @@ class AppConstants {
 
   static const bool enableAIGeneration = true;
 
-  /// Bypass temporaire du flow d'inscription par token (en attendant config SMTP).
+  /// Gate d'accès par token anonyme.
   /// `true` = le splash route directement vers /home (accès libre).
-  /// `false` = vérifie le token en local, route vers /register si absent.
-  /// À repasser à `false` quand SMTP réel configuré (Resend / Gmail / etc.).
-  static const bool kSkipRegistrationGate = true;
+  /// `false` = vérifie la VALIDITÉ du token local (signature), route vers
+  ///           /register (écran de connexion démographique) si absent/invalide.
+  ///
+  /// `false` = le formulaire de connexion (TokenLoginPage) s'affiche au début.
+  /// Le flux téléphone/OTP est supprimé (remplacé par le token anonyme).
+  static const bool kSkipRegistrationGate = false;
+
+  /// MODE TEST : autorise un token LOCAL NON SIGNÉ en release tant que le worker
+  /// tokeniseur n'est pas déployé — permet de tester l'onboarding (le formulaire
+  /// + le flux) sur TestFlight sans backend. ⚠️ Repasser à `false` AVANT la prod
+  /// (une fois les workers déployés) pour n'accepter que des tokens signés.
+  static const bool kAllowUnsignedTokenInRelease = true;
   static const bool enableVoiceRecognition = true;
   static const bool enable3DCubes = true;
   static const bool enableAnalytics = true;

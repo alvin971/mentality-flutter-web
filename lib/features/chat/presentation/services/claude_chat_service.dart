@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/l10n/l10n_ext.dart';
 import '../../../../core/l10n/locale_notifier.dart';
+import '../../../../core/services/auth_local_store.dart';
 import '../pages/mentality_chat_page.dart';
 
 /// Service de communication avec Claude via le Cloudflare Worker proxy.
@@ -34,12 +35,16 @@ class ClaudeChatService {
     }
 
     try {
+      final token = await AuthLocalStore.instance.getToken();
       final messages = _buildMessages(message, conversationHistory);
 
       final response = await http
           .post(
             Uri.parse(workerUrl),
-            headers: {'Content-Type': 'application/json'},
+            headers: {
+              'Content-Type': 'application/json',
+              if (token != null && token.isNotEmpty) 'X-Mentality-Token': token,
+            },
             body: jsonEncode({
               'model': _model,
               'max_tokens': 1024,

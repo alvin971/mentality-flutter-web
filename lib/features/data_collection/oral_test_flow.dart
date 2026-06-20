@@ -16,6 +16,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../core/consent/consent_service.dart';
 import '../../core/l10n/l10n_ext.dart';
 import '../../core/l10n/locale_notifier.dart';
+import '../../core/services/auth_local_store.dart';
+import '../../core/services/token_issuer.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/reading_texts.dart';
 import '../../services/session_manager.dart';
@@ -131,8 +133,24 @@ class _OralTestFlowState extends State<OralTestFlow> {
         _step = _FlowStep.reading;
       });
     } else {
+      // Test terminé : soumission → le token provisoire passe à VALIDÉ (à vie).
       setState(() => _step = _FlowStep.completed);
       widget.onAllCompleted?.call();
+      _validateTokenAfterTest();
+    }
+  }
+
+  /// À la soumission du test, fait passer le token PROVISOIRE → VALIDÉ.
+  /// Non bloquant : un échec réseau ne doit pas empêcher la fin du test
+  /// (la validation pourra être retentée ultérieurement).
+  Future<void> _validateTokenAfterTest() async {
+    try {
+      final token = await AuthLocalStore.instance.getToken();
+      if (token == null) return;
+      final validated = await TokenIssuer.validate(token);
+      await AuthLocalStore.instance.saveToken(validated);
+    } catch (_) {
+      // silencieux : la complétion du test reste effective.
     }
   }
 
