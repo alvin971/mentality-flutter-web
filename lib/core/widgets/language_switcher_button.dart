@@ -18,7 +18,7 @@ class LanguageSwitcherButton extends StatelessWidget {
 
   static const Map<String, String> _flags = {
     'fr': '🇫🇷',
-    'en': '🇬🇧',
+    'en': '🇺🇸',
   };
 
   @override
