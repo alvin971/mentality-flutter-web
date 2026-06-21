@@ -331,7 +331,13 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                         ),
                       ),
                       Flexible(
-                        child: _buildTokenList(currentItem.question.targetSide),
+                        child: _buildTokenList(
+                          currentItem.question.targetSide,
+                          separator: currentItem.question.type ==
+                                  QuestionType.findDifference
+                              ? '−'
+                              : '+',
+                        ),
                       ),
                       Text(
                         ' ?',
@@ -437,33 +443,31 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
     );
   }
 
-  Widget _buildTokenList(List<Token> tokens) {
+  Widget _buildTokenList(List<Token> tokens, {String separator = '+'}) {
     return Wrap(
       spacing: 4.w,
       runSpacing: 4.h,
       alignment: WrapAlignment.center,
-      children: tokens.map((token) {
-        return Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TokenWidget(
-              token: token,
-              size: 28,
-            ),
-            if (tokens.indexOf(token) < tokens.length - 1)
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 4.w),
-                child: Text(
-                  '+',
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        for (var i = 0; i < tokens.length; i++) ...[
+          TokenWidget(
+            token: tokens[i],
+            size: 28,
+          ),
+          if (i < tokens.length - 1)
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 4.w),
+              child: Text(
+                separator,
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-          ],
-        );
-      }).toList(),
+            ),
+        ],
+      ],
     );
   }
 }

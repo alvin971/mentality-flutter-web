@@ -145,14 +145,15 @@ class _TokenPainter extends CustomPainter {
         break;
     }
 
-    // Afficher fraction si < 1.0 (demi-forme)
+    // Afficher la fraction réelle si < 1.0 (ex: ½, ⅖, ⅙)
     if (fraction < 1.0 && fraction > 0) {
+      final label = _fractionLabel(fraction);
       final textPainter = TextPainter(
         text: TextSpan(
-          text: '½',
+          text: label,
           style: TextStyle(
             color: Colors.black,
-            fontSize: size.width * 0.4,
+            fontSize: size.width * (label.length > 1 ? 0.32 : 0.4),
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -168,6 +169,35 @@ class _TokenPainter extends CustomPainter {
       );
     }
   }
+
+  /// Retrouve la fraction n/d la plus proche du double stocké et la formate
+  /// (caractère unicode si disponible, sinon "n/d").
+  String _fractionLabel(double fraction) {
+    const vulgars = {
+      '1/2': '½',
+      '1/3': '⅓',
+      '2/3': '⅔',
+      '1/4': '¼',
+      '3/4': '¾',
+      '1/5': '⅕',
+      '2/5': '⅖',
+      '3/5': '⅗',
+      '4/5': '⅘',
+      '1/6': '⅙',
+      '5/6': '⅚',
+    };
+    for (int d = 2; d <= 12; d++) {
+      final n = (fraction * d).round();
+      if (n >= 1 && n < d && ((n / d) - fraction).abs() < 0.001) {
+        final g = _gcd(n, d);
+        final key = '${n ~/ g}/${d ~/ g}';
+        return vulgars[key] ?? key;
+      }
+    }
+    return fraction.toStringAsFixed(2);
+  }
+
+  int _gcd(int a, int b) => b == 0 ? a : _gcd(b, a % b);
 
   Color _getColor() {
     switch (shape) {
