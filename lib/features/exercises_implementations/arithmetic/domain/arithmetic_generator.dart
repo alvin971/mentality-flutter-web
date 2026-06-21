@@ -1,297 +1,115 @@
-import 'arithmetic_items_en.dart';
+import 'dart:math';
 
-/// Générateur de 22 problèmes d'Arithmétique (WAIS-IV)
-/// Mesure la mémoire de travail, le raisonnement numérique et l'attention
-/// Résolution mentale sous contrainte de temps
+import '../../_shared/stratified_draw.dart';
+import 'arithmetic_templates.dart';
+
+/// Générateur de 22 problèmes d'Arithmétique (WAIS-IV).
+///
+/// Contrairement aux autres sous-tests, l'arithmétique est CALCULABLE : le code
+/// tire un template d'énoncé + des opérandes aléatoires (plages par bande), puis
+/// CALCULE la réponse. Aucune réponse n'est écrite à la main. Deux passations ne
+/// donnent jamais le même test (énoncés ET nombres changent).
+/// Structure conservée : 4/8/6/4 problèmes par bande (easy → veryHard), theta
+/// croissant par slot, limites de temps et bonus par bande.
 class ArithmeticGenerator {
+  final Random _random;
+  final String languageCode;
   final List<ArithmeticItem> _preGeneratedItems = [];
 
-  /// Langue de la banque d'items ('fr' par défaut, 'en' disponible).
-  final String languageCode;
+  /// Nombre de problèmes tirés par bande (total = 22).
+  static const List<int> _itemsPerBand = [4, 8, 6, 4];
+  static const List<DifficultyLevel> _bandDifficulty = [
+    DifficultyLevel.easy,
+    DifficultyLevel.medium,
+    DifficultyLevel.hard,
+    DifficultyLevel.veryHard,
+  ];
+  static const List<int> _bandTimeLimit = [15, 25, 40, 50];
+  static const List<int> _bandBonusThreshold = [8, 13, 20, 25];
 
-  ArithmeticGenerator({this.languageCode = 'fr'}) {
+  /// [languageCode] : 'fr' (défaut) ou 'en'.
+  /// [seed] optionnel : tirage reproductible (tests). null = aléatoire réel.
+  ArithmeticGenerator({this.languageCode = 'fr', int? seed})
+      : _random = seed != null ? Random(seed) : Random() {
     _initializeAllItems();
   }
 
-  /// Initialise TOUS les 22 items uniques
   void _initializeAllItems() {
     _preGeneratedItems.clear();
-
-    if (languageCode == 'en') {
-      _preGeneratedItems.addAll(buildArithmeticItemsEn());
-      return;
+    final banks = arithmeticTemplatesByBand();
+    final drawn = stratifiedDraw<ArithTemplate>(banks, _itemsPerBand, _random);
+    for (var i = 0; i < drawn.length; i++) {
+      final band = _bandForSlot(i);
+      final t = drawn[i];
+      final (tokens, answer) = _instantiate(band, t.kind);
+      _preGeneratedItems.add(ArithmeticItem(
+        problem: _fill(languageCode == 'en' ? t.en : t.fr, tokens),
+        correctAnswer: answer,
+        difficulty: _bandDifficulty[band],
+        timeLimitSeconds: _bandTimeLimit[band],
+        hasTimeBonus: true,
+        timeBonusThreshold: _bandBonusThreshold[band],
+        thetaValue: thetaForSlot(i),
+      ));
     }
-
-    // Items 1-4 : Facile (addition/soustraction simple)
-    _preGeneratedItems.addAll(_createEasyItems());
-
-    // Items 5-12 : Moyen (multiplication/division)
-    _preGeneratedItems.addAll(_createMediumItems());
-
-    // Items 13-18 : Difficile (multi-étapes)
-    _preGeneratedItems.addAll(_createHardItems());
-
-    // Items 19-22 : Très difficile (proportions/pourcentages)
-    _preGeneratedItems.addAll(_createVeryHardItems());
   }
 
-  /// Retourne les 22 items pré-générés
+  /// Bande (0..3) du slot, d'après la répartition 4/8/6/4.
+  int _bandForSlot(int slot) {
+    if (slot < 4) return 0;
+    if (slot < 12) return 1;
+    if (slot < 18) return 2;
+    return 3;
+  }
+
+  int _ri(int min, int max) => min + _random.nextInt(max - min + 1);
+
+  /// Tire les opérandes (plages par bande) et calcule la réponse.
+  /// Retourne (tokens à injecter, réponse correcte).
+  (Map<String, int>, int) _instantiate(int band, ArithKind kind) {
+    switch (kind) {
+      case ArithKind.add:
+        final a = band == 0 ? _ri(1, 9) : _ri(11, 49);
+        final b = band == 0 ? _ri(1, 9) : _ri(11, 49);
+        return ({'a': a, 'b': b}, a + b);
+      case ArithKind.sub:
+        final a = band == 0 ? _ri(4, 9) : _ri(20, 60);
+        final b = _ri(1, a - 1);
+        return ({'a': a, 'b': b}, a - b);
+      case ArithKind.mul:
+        final a = band == 1 ? _ri(2, 9) : _ri(11, 25);
+        final b = band == 1 ? _ri(2, 12) : _ri(3, 12);
+        return ({'a': a, 'b': b}, a * b);
+      case ArithKind.div:
+        final divisor = band == 1 ? _ri(2, 9) : _ri(3, 12);
+        final quotient = band == 1 ? _ri(2, 9) : _ri(6, 15);
+        return ({'dividend': divisor * quotient, 'divisor': divisor}, quotient);
+      case ArithKind.percent:
+        final percents = band == 2
+            ? const [10, 20, 25, 50, 75]
+            : const [5, 15, 25, 40, 60];
+        final p = percents[_random.nextInt(percents.length)];
+        final whole = 20 * (band == 2 ? _ri(2, 10) : _ri(3, 15));
+        return ({'percent': p, 'whole': whole}, p * whole ~/ 100);
+      case ArithKind.twoStep:
+        final a = _ri(2, 12);
+        final b = _ri(2, 12);
+        final c = _ri(5, 50);
+        return ({'a': a, 'b': b, 'c': c}, a * b + c);
+    }
+  }
+
+  String _fill(String template, Map<String, int> tokens) {
+    var s = template;
+    tokens.forEach((k, v) => s = s.replaceAll('{$k}', v.toString()));
+    return s;
+  }
+
+  /// Retourne les 22 problèmes tirés pour cette passation.
   List<ArithmeticItem> generateComplete22Items() {
     return List.from(_preGeneratedItems);
   }
-
-  // ========== NIVEAU FACILE : Addition/Soustraction simple (4 items) ==========
-  List<ArithmeticItem> _createEasyItems() {
-    return [
-      // Item 1
-      ArithmeticItem(
-        problem: 'Si vous avez 3 pommes et que j\'en ajoute 2, combien en avez-vous ?',
-        correctAnswer: 5,
-        difficulty: DifficultyLevel.easy,
-        timeLimitSeconds: 15,
-        hasTimeBonus: false,
-        thetaValue: -2.0,
-      ),
-
-      // Item 2
-      ArithmeticItem(
-        problem: 'Combien font 8 plus 7 ?',
-        correctAnswer: 15,
-        difficulty: DifficultyLevel.easy,
-        timeLimitSeconds: 15,
-        hasTimeBonus: false,
-        thetaValue: -1.8,
-      ),
-
-      // Item 3
-      ArithmeticItem(
-        problem: 'Si vous avez 12 euros et que vous dépensez 5 euros, combien vous reste-t-il ?',
-        correctAnswer: 7,
-        difficulty: DifficultyLevel.easy,
-        timeLimitSeconds: 20,
-        hasTimeBonus: false,
-        thetaValue: -1.5,
-      ),
-
-      // Item 4
-      ArithmeticItem(
-        problem: 'Combien font 20 moins 8 ?',
-        correctAnswer: 12,
-        difficulty: DifficultyLevel.easy,
-        timeLimitSeconds: 15,
-        hasTimeBonus: false,
-        thetaValue: -1.3,
-      ),
-    ];
-  }
-
-  // ========== NIVEAU MOYEN : Multiplication/Division (8 items) ==========
-  List<ArithmeticItem> _createMediumItems() {
-    return [
-      // Item 5
-      ArithmeticItem(
-        problem: 'Combien coûtent 4 cahiers à 3 euros pièce ?',
-        correctAnswer: 12,
-        difficulty: DifficultyLevel.medium,
-        timeLimitSeconds: 25,
-        hasTimeBonus: false,
-        thetaValue: -1.0,
-      ),
-
-      // Item 6
-      ArithmeticItem(
-        problem: 'Combien font 6 fois 7 ?',
-        correctAnswer: 42,
-        difficulty: DifficultyLevel.medium,
-        timeLimitSeconds: 20,
-        hasTimeBonus: false,
-        thetaValue: -0.8,
-      ),
-
-      // Item 7
-      ArithmeticItem(
-        problem: 'Si vous divisez 24 cookies également entre 6 enfants, combien chaque enfant en reçoit-il ?',
-        correctAnswer: 4,
-        difficulty: DifficultyLevel.medium,
-        timeLimitSeconds: 25,
-        hasTimeBonus: false,
-        thetaValue: -0.5,
-      ),
-
-      // Item 8
-      ArithmeticItem(
-        problem: 'Combien font 9 fois 8 ?',
-        correctAnswer: 72,
-        difficulty: DifficultyLevel.medium,
-        timeLimitSeconds: 25,
-        hasTimeBonus: false,
-        thetaValue: -0.3,
-      ),
-
-      // Item 9
-      ArithmeticItem(
-        problem: 'Une douzaine d\'œufs coûte 6 euros. Combien coûtent 2 douzaines ?',
-        correctAnswer: 12,
-        difficulty: DifficultyLevel.medium,
-        timeLimitSeconds: 30,
-        hasTimeBonus: false,
-        thetaValue: 0.0,
-      ),
-
-      // Item 10
-      ArithmeticItem(
-        problem: 'Combien font 56 divisé par 8 ?',
-        correctAnswer: 7,
-        difficulty: DifficultyLevel.medium,
-        timeLimitSeconds: 25,
-        hasTimeBonus: false,
-        thetaValue: 0.2,
-      ),
-
-      // Item 11
-      ArithmeticItem(
-        problem: 'Si un livre coûte 15 euros et que vous en achetez 3, combien payez-vous ?',
-        correctAnswer: 45,
-        difficulty: DifficultyLevel.medium,
-        timeLimitSeconds: 30,
-        hasTimeBonus: false,
-        thetaValue: 0.5,
-      ),
-
-      // Item 12
-      ArithmeticItem(
-        problem: 'Combien font 12 fois 11 ?',
-        correctAnswer: 132,
-        difficulty: DifficultyLevel.medium,
-        timeLimitSeconds: 30,
-        hasTimeBonus: false,
-        thetaValue: 0.8,
-      ),
-    ];
-  }
-
-  // ========== NIVEAU DIFFICILE : Multi-étapes (6 items) ==========
-  List<ArithmeticItem> _createHardItems() {
-    return [
-      // Item 13
-      ArithmeticItem(
-        problem: 'Jean a 24 euros. Il dépense un tiers de cette somme. Combien lui reste-t-il ?',
-        correctAnswer: 16,
-        difficulty: DifficultyLevel.hard,
-        timeLimitSeconds: 40,
-        hasTimeBonus: true,
-        timeBonusThreshold: 25,
-        thetaValue: 1.0,
-      ),
-
-      // Item 14
-      ArithmeticItem(
-        problem: 'Si 3 stylos coûtent 9 euros, combien coûtent 5 stylos ?',
-        correctAnswer: 15,
-        difficulty: DifficultyLevel.hard,
-        timeLimitSeconds: 40,
-        hasTimeBonus: true,
-        timeBonusThreshold: 25,
-        thetaValue: 1.2,
-      ),
-
-      // Item 15
-      ArithmeticItem(
-        problem: 'Marie achète 4 livres à 12 euros chacun. Elle paie avec un billet de 100 euros. Combien reçoit-elle en monnaie ?',
-        correctAnswer: 52,
-        difficulty: DifficultyLevel.hard,
-        timeLimitSeconds: 45,
-        hasTimeBonus: true,
-        timeBonusThreshold: 30,
-        thetaValue: 1.4,
-      ),
-
-      // Item 16
-      ArithmeticItem(
-        problem: 'Un train parcourt 120 kilomètres en 2 heures. Quelle est sa vitesse moyenne en kilomètres par heure ?',
-        correctAnswer: 60,
-        difficulty: DifficultyLevel.hard,
-        timeLimitSeconds: 40,
-        hasTimeBonus: true,
-        timeBonusThreshold: 25,
-        thetaValue: 1.6,
-      ),
-
-      // Item 17
-      ArithmeticItem(
-        problem: 'Sophie a 48 bonbons. Elle en donne la moitié à son frère, puis mange un quart du reste. Combien lui en reste-t-il ?',
-        correctAnswer: 18,
-        difficulty: DifficultyLevel.hard,
-        timeLimitSeconds: 50,
-        hasTimeBonus: true,
-        timeBonusThreshold: 35,
-        thetaValue: 1.8,
-      ),
-
-      // Item 18
-      ArithmeticItem(
-        problem: 'Un rectangle mesure 8 mètres de long et 5 mètres de large. Quelle est son aire en mètres carrés ?',
-        correctAnswer: 40,
-        difficulty: DifficultyLevel.hard,
-        timeLimitSeconds: 35,
-        hasTimeBonus: true,
-        timeBonusThreshold: 20,
-        thetaValue: 2.0,
-      ),
-    ];
-  }
-
-  // ========== NIVEAU TRÈS DIFFICILE : Proportions/Pourcentages (4 items) ==========
-  List<ArithmeticItem> _createVeryHardItems() {
-    return [
-      // Item 19
-      ArithmeticItem(
-        problem: 'Quel est 10 pour cent de 50 ?',
-        correctAnswer: 5,
-        difficulty: DifficultyLevel.veryHard,
-        timeLimitSeconds: 45,
-        hasTimeBonus: true,
-        timeBonusThreshold: 30,
-        thetaValue: 2.2,
-      ),
-
-      // Item 20
-      ArithmeticItem(
-        problem: 'Quel est 25 pour cent de 80 ?',
-        correctAnswer: 20,
-        difficulty: DifficultyLevel.veryHard,
-        timeLimitSeconds: 50,
-        hasTimeBonus: true,
-        timeBonusThreshold: 35,
-        thetaValue: 2.4,
-      ),
-
-      // Item 21
-      ArithmeticItem(
-        problem: 'Un article coûte 60 euros. Son prix augmente de 20 pour cent. Quel est son nouveau prix ?',
-        correctAnswer: 72,
-        difficulty: DifficultyLevel.veryHard,
-        timeLimitSeconds: 60,
-        hasTimeBonus: true,
-        timeBonusThreshold: 40,
-        thetaValue: 2.6,
-      ),
-
-      // Item 22
-      ArithmeticItem(
-        problem: 'Si 5 ouvriers construisent un mur en 12 jours, combien de jours faudrait-il à 3 ouvriers pour construire le même mur ?',
-        correctAnswer: 20,
-        difficulty: DifficultyLevel.veryHard,
-        timeLimitSeconds: 60,
-        hasTimeBonus: true,
-        timeBonusThreshold: 45,
-        thetaValue: 2.8,
-      ),
-    ];
-  }
 }
-
-// ========== MODÈLES DE DONNÉES ==========
 
 class ArithmeticItem {
   final String problem;
