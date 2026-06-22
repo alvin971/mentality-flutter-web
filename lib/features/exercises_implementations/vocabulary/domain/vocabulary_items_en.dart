@@ -1,599 +1,161 @@
-/// ENGLISH item bank for the Vocabulary subtest (Vocabulary - WAIS-IV).
-/// 30 unique items, psychometrically equivalent to the French bank:
-/// item i shares the SAME WordFrequency and the SAME thetaValue as FR item i,
-/// so the difficulty / lexical-frequency curve is identical across languages.
-/// Words are genuine English frequency equivalents (not literal translations
-/// when the literal translation would shift frequency band).
+/// Banque d'items ANGLAISE du sous-test Vocabulaire (WAIS-IV).
+/// GENERE automatiquement (genere par IA, verifie). 5 bandes de frequence.
+/// NE PAS editer a la main : regenerer via le pipeline de generation.
 import 'vocabulary_generator.dart';
 
-/// Returns the 30 English items in ascending difficulty order.
-List<VocabularyItem> buildEnglishVocabularyItems() {
+List<List<VocabularyItem>> buildEnglishVocabularyBanks() {
   return [
-    // ========== LEVEL 1: VERY EASY (Items 1-5) ==========
-    // Top 1000 - very frequent words, concrete objects
-
-    // Item 1: very familiar object
-    VocabularyItem(
-      word: 'Table',
-      frequency: WordFrequency.veryHigh,
-      twoPointAnswers: [
-        'A piece of furniture with a flat horizontal top',
-        'A flat surface on legs used to eat or work at',
-        'Furniture with a top supported by legs',
-        'A flat surface you put things on',
-      ],
-      onePointAnswers: [
-        'Furniture',
-        'To eat on',
-        'You eat on it',
-        'It is flat',
-        'It has four legs',
-      ],
-      thetaValue: -2.0,
-    ),
-
-    // Item 2: familiar animal
-    VocabularyItem(
-      word: 'Cat',
-      frequency: WordFrequency.veryHigh,
-      twoPointAnswers: [
-        'A small domestic feline animal',
-        'A small pet mammal that meows',
-        'A domesticated feline',
-        'A furry pet that purrs and meows',
-      ],
-      onePointAnswers: [
-        'An animal',
-        'A pet',
-        'It meows',
-        'It has fur',
-        'An animal with whiskers',
-      ],
-      thetaValue: -1.8,
-    ),
-
-    // Item 3: everyday object
-    VocabularyItem(
-      word: 'Book',
-      frequency: WordFrequency.veryHigh,
-      twoPointAnswers: [
-        'A set of printed pages bound together that you read',
-        'A bound printed work',
-        'A collection of pages put together for reading',
-        'A bound publication containing text',
-      ],
-      onePointAnswers: [
-        'For reading',
-        'It has pages',
-        'You read it',
-        'An object with text',
-      ],
-      thetaValue: -1.6,
-    ),
-
-    // Item 4: common quality
-    VocabularyItem(
-      word: 'Fast',
-      frequency: WordFrequency.veryHigh,
-      twoPointAnswers: [
-        'Moving at high speed',
-        'Able to move very quickly',
-        'Doing something in very little time',
-        'Having great speed',
-      ],
-      onePointAnswers: [
-        'Quick',
-        'Not slow',
-        'Speedy',
-        'Takes little time',
-      ],
-      thetaValue: -1.4,
-    ),
-
-    // Item 5: simple emotion
-    VocabularyItem(
-      word: 'Happy',
-      frequency: WordFrequency.veryHigh,
-      twoPointAnswers: [
-        'Feeling joy or pleasure',
-        'Pleased and content',
-        'Experiencing a feeling of happiness',
-        'In a state of contentment',
-      ],
-      onePointAnswers: [
-        'Glad',
-        'Joyful',
-        'Smiling',
-        'Not sad',
-      ],
-      thetaValue: -1.2,
-    ),
-
-    // ========== LEVEL 2: EASY (Items 6-12) ==========
-    // Top 5000 - common objects and familiar concepts
-
-    // Item 6
-    VocabularyItem(
-      word: 'Desk',
-      frequency: WordFrequency.high,
-      twoPointAnswers: [
-        'A piece of furniture you work and write at',
-        'A work table with drawers',
-        'Furniture used for working',
-        'A workstation with a surface and storage',
-      ],
-      onePointAnswers: [
-        'Furniture',
-        'A table',
-        'For working',
-        'Where you write',
-      ],
-      thetaValue: -1.0,
-    ),
-
-    // Item 7
-    VocabularyItem(
-      word: 'Brave',
-      frequency: WordFrequency.high,
-      twoPointAnswers: [
-        'Not afraid of danger',
-        'Showing courage in the face of difficulty',
-        'Willing to face danger without fear',
-        'Acting with courage',
-      ],
-      onePointAnswers: [
-        'Courageous',
-        'Not scared',
-        'Strong',
-        'Has no fear',
-      ],
-      thetaValue: -0.8,
-    ),
-
-    // Item 8
-    VocabularyItem(
-      word: 'Hesitate',
-      frequency: WordFrequency.high,
-      twoPointAnswers: [
-        'To be unsure before making a choice',
-        'To pause because you cannot decide',
-        'To show uncertainty before acting',
-        'To waver before deciding',
-      ],
-      onePointAnswers: [
-        'To be unsure',
-        'To doubt',
-        'Not decided',
-        'To wait before choosing',
-      ],
-      thetaValue: -0.6,
-    ),
-
-    // Item 9
-    VocabularyItem(
-      word: 'Fragile',
-      frequency: WordFrequency.high,
-      twoPointAnswers: [
-        'Easily broken',
-        'Lacking strength or solidity',
-        'Delicate and easily damaged',
-        'Likely to break if handled roughly',
-      ],
-      onePointAnswers: [
-        'Breakable',
-        'Not solid',
-        'Delicate',
-        'Weak',
-      ],
-      thetaValue: -0.4,
-    ),
-
-    // Item 10
-    VocabularyItem(
-      word: 'Huge',
-      frequency: WordFrequency.high,
-      twoPointAnswers: [
-        'Extremely large',
-        'Of very great size',
-        'Enormous',
-        'Of exceptional dimensions',
-      ],
-      onePointAnswers: [
-        'Very big',
-        'Large',
-        'Gigantic',
-        'Not small',
-      ],
-      thetaValue: -0.2,
-    ),
-
-    // Item 11
-    VocabularyItem(
-      word: 'Generous',
-      frequency: WordFrequency.high,
-      twoPointAnswers: [
-        'Willing to give freely',
-        'Glad to share and give to others',
-        'Showing generosity',
-        'Giving a lot to others',
-      ],
-      onePointAnswers: [
-        'Giving',
-        'Kind',
-        'Sharing',
-        'Good-hearted',
-      ],
-      thetaValue: 0.0,
-    ),
-
-    // Item 12
-    VocabularyItem(
-      word: 'Obstacle',
-      frequency: WordFrequency.high,
-      twoPointAnswers: [
-        'Something that prevents progress',
-        'A difficulty that blocks the way',
-        'A thing that gets in the way of advancing',
-        'A barrier that hinders movement',
-      ],
-      onePointAnswers: [
-        'Something that blocks',
-        'A problem',
-        'A difficulty',
-        'A barrier',
-      ],
-      thetaValue: 0.2,
-    ),
-
-    // ========== LEVEL 3: MEDIUM (Items 13-20) ==========
-    // Top 10,000 - abstract concepts and broader vocabulary
-
-    // Item 13
-    VocabularyItem(
-      word: 'Transparent',
-      frequency: WordFrequency.medium,
-      twoPointAnswers: [
-        'Allowing light to pass through',
-        'Able to be seen through',
-        'Not opaque',
-        'Clear so that you can see through it',
-      ],
-      onePointAnswers: [
-        'You can see through it',
-        'Clear',
-        'Like glass',
-        'Not opaque',
-      ],
-      thetaValue: 0.4,
-    ),
-
-    // Item 14
-    VocabularyItem(
-      word: 'Concept',
-      frequency: WordFrequency.medium,
-      twoPointAnswers: [
-        'An abstract and general idea',
-        'An abstract mental representation',
-        'A theoretical notion',
-        'A general idea of something',
-      ],
-      onePointAnswers: [
-        'An idea',
-        'A thought',
-        'A notion',
-        'Something abstract',
-      ],
-      thetaValue: 0.6,
-    ),
-
-    // Item 15
-    VocabularyItem(
-      word: 'Absurd',
-      frequency: WordFrequency.medium,
-      twoPointAnswers: [
-        'Contrary to reason and common sense',
-        'Unreasonable and illogical',
-        'Having no logical sense',
-        'Irrational and senseless',
-      ],
-      onePointAnswers: [
-        'Foolish',
-        'Silly',
-        'Not logical',
-        'Makes no sense',
-      ],
-      thetaValue: 0.8,
-    ),
-
-    // Item 16
-    VocabularyItem(
-      word: 'Ethical',
-      frequency: WordFrequency.medium,
-      twoPointAnswers: [
-        'Relating to moral principles',
-        'Concerned with morality and values',
-        'In keeping with rules of moral conduct',
-        'Guided by principles of right and wrong',
-      ],
-      onePointAnswers: [
-        'Moral',
-        'About values',
-        'About right and wrong',
-        'Rules of conduct',
-      ],
-      thetaValue: 1.0,
-    ),
-
-    // Item 17
-    VocabularyItem(
-      word: 'Concise',
-      frequency: WordFrequency.medium,
-      twoPointAnswers: [
-        'Brief and to the point',
-        'Expressed in few words',
-        'Short and precise',
-        'Succinct',
-      ],
-      onePointAnswers: [
-        'Short',
-        'Brief',
-        'Not long',
-        'Summed up',
-      ],
-      thetaValue: 1.2,
-    ),
-
-    // Item 18
-    VocabularyItem(
-      word: 'Nuance',
-      frequency: WordFrequency.medium,
-      twoPointAnswers: [
-        'A subtle difference between two things',
-        'A slight variation in meaning or tone',
-        'A fine and delicate distinction',
-        'A small, barely noticeable difference',
-      ],
-      onePointAnswers: [
-        'A difference',
-        'A variation',
-        'A shade',
-        'A small change',
-      ],
-      thetaValue: 1.4,
-    ),
-
-    // Item 19
-    VocabularyItem(
-      word: 'Dilemma',
-      frequency: WordFrequency.medium,
-      twoPointAnswers: [
-        'A difficult choice between two options',
-        'A situation requiring a choice between alternatives',
-        'A hard decision between two undesirable options',
-        'Having to choose between two solutions',
-      ],
-      onePointAnswers: [
-        'A problem',
-        'A hard choice',
-        'A decision to make',
-        'A tough situation',
-      ],
-      thetaValue: 1.6,
-    ),
-
-    // Item 20
-    VocabularyItem(
-      word: 'Perceptive',
-      frequency: WordFrequency.medium,
-      twoPointAnswers: [
-        'Quick to understand things keenly',
-        'Having sharp insight and awareness',
-        'Able to notice and grasp things clearly',
-        'Showing keen mental penetration',
-      ],
-      onePointAnswers: [
-        'Smart',
-        'Quick to understand',
-        'Sharp',
-        'Insightful',
-      ],
-      thetaValue: 1.8,
-    ),
-
-    // ========== LEVEL 4: DIFFICULT (Items 21-27) ==========
-    // Top 20,000 - rich and sophisticated vocabulary
-
-    // Item 21
-    VocabularyItem(
-      word: 'Ambivalent',
-      frequency: WordFrequency.low,
-      twoPointAnswers: [
-        'Having contradictory feelings about something',
-        'Holding two opposing attitudes at once',
-        'Marked by a duality of feelings',
-        'Feeling both positive and negative at the same time',
-      ],
-      onePointAnswers: [
-        'Contradictory',
-        'Torn',
-        'Unsure',
-        'Of two minds',
-      ],
-      thetaValue: 2.0,
-    ),
-
-    // Item 22
-    VocabularyItem(
-      word: 'Pragmatic',
-      frequency: WordFrequency.low,
-      twoPointAnswers: [
-        'Oriented toward practical action',
-        'Focused on what works in practice',
-        'Dealing with things realistically and practically',
-        'Practical rather than idealistic',
-      ],
-      onePointAnswers: [
-        'Practical',
-        'Realistic',
-        'Down to earth',
-        'Concrete',
-      ],
-      thetaValue: 2.2,
-    ),
-
-    // Item 23
-    VocabularyItem(
-      word: 'Eloquent',
-      frequency: WordFrequency.low,
-      twoPointAnswers: [
-        'Speaking fluently and persuasively',
-        'Expressing oneself in a convincing way',
-        'Skilled in the art of speaking well',
-        'Fluent and expressive in speech',
-      ],
-      onePointAnswers: [
-        'Speaks well',
-        'A good speaker',
-        'Persuasive',
-        'Well-spoken',
-      ],
-      thetaValue: 2.4,
-    ),
-
-    // Item 24
-    VocabularyItem(
-      word: 'Meticulous',
-      frequency: WordFrequency.low,
-      twoPointAnswers: [
-        'Paying careful attention to the smallest details',
-        'Extremely careful and precise',
-        'Showing great thoroughness and care',
-        'Scrupulous and exact in every detail',
-      ],
-      onePointAnswers: [
-        'Precise',
-        'Careful',
-        'Thorough',
-        'A perfectionist',
-      ],
-      thetaValue: 2.6,
-    ),
-
-    // Item 25
-    VocabularyItem(
-      word: 'Dogmatic',
-      frequency: WordFrequency.low,
-      twoPointAnswers: [
-        'Asserting opinions as if they were certain truths',
-        'Insisting on beliefs without allowing contradiction',
-        'Authoritarian about one\'s convictions',
-        'Presenting ideas as absolute and beyond question',
-      ],
-      onePointAnswers: [
-        'Stubborn',
-        'Rigid',
-        'Inflexible',
-        'Authoritarian',
-      ],
-      thetaValue: 2.8,
-    ),
-
-    // Item 26
-    VocabularyItem(
-      word: 'Paradox',
-      frequency: WordFrequency.low,
-      twoPointAnswers: [
-        'An apparent contradiction that may still be true',
-        'A statement contrary to common opinion',
-        'A seemingly contradictory proposition',
-        'A statement that seems absurd yet may be true',
-      ],
-      onePointAnswers: [
-        'A contradiction',
-        'A contrary idea',
-        'An opposite',
-        'Something strange',
-      ],
-      thetaValue: 3.0,
-    ),
-
-    // Item 27
-    VocabularyItem(
-      word: 'Resilience',
-      frequency: WordFrequency.low,
-      twoPointAnswers: [
-        'The capacity to recover from hardship',
-        'The ability to bounce back after a setback',
-        'The ability to withstand and adapt to adversity',
-        'Strength to recover quickly from difficulties',
-      ],
-      onePointAnswers: [
-        'Strength',
-        'Toughness',
-        'Recovery',
-        'Bouncing back',
-      ],
-      thetaValue: 3.2,
-    ),
-
-    // ========== LEVEL 5: VERY DIFFICULT (Items 28-30) ==========
-    // >20,000 - rare and highly specialized vocabulary
-
-    // Item 28
-    VocabularyItem(
-      word: 'Ubiquitous',
-      frequency: WordFrequency.veryLow,
-      twoPointAnswers: [
-        'Present everywhere at the same time',
-        'Found in all places',
-        'Existing or being everywhere at once',
-        'Constantly encountered; omnipresent',
-      ],
-      onePointAnswers: [
-        'Everywhere',
-        'Present everywhere',
-        'Common',
-        'Widespread',
-      ],
-      thetaValue: 3.4,
-    ),
-
-    // Item 29
-    VocabularyItem(
-      word: 'Verbose',
-      frequency: WordFrequency.veryLow,
-      twoPointAnswers: [
-        'Using far more words than necessary',
-        'Wordy and overly long',
-        'Expressing oneself with an excess of words',
-        'Long-winded and rambling',
-      ],
-      onePointAnswers: [
-        'Wordy',
-        'Long-winded',
-        'Talks too much',
-        'Uses many words',
-      ],
-      thetaValue: 3.6,
-    ),
-
-    // Item 30
-    VocabularyItem(
-      word: 'Exacerbate',
-      frequency: WordFrequency.veryLow,
-      twoPointAnswers: [
-        'To make something worse or more intense',
-        'To aggravate or intensify',
-        'To increase the severity of something',
-        'To make a bad situation more severe',
-      ],
-      onePointAnswers: [
-        'To worsen',
-        'To increase',
-        'To make worse',
-        'To intensify',
-      ],
-      thetaValue: 3.8,
-    ),
+    // veryHigh (25 items)
+    [
+      VocabularyItem(word: 'Cat', frequency: WordFrequency.veryHigh, twoPointAnswers: ['A small pet animal that meows and lives in the house', 'A furry four-legged pet with whiskers and a tail', 'A little animal that purrs and catches mice', 'A small domestic feline that says meow'], onePointAnswers: ['An animal', 'A furry creature', 'It meows', 'Something that purrs', 'Like a tiny lion at home', 'It chases mice'], thetaValue: -2.0),
+      VocabularyItem(word: 'Table', frequency: WordFrequency.veryHigh, twoPointAnswers: ['A flat piece of furniture on legs where you put things and eat', 'A piece of furniture with a flat top and legs to eat or work on', 'A flat surface on legs where you set plates and dishes', 'Furniture with a top where you sit to eat'], onePointAnswers: ['A piece of furniture', 'You eat on it', 'It has legs', 'You put things on it', 'Something in the kitchen', 'It\'s flat with legs'], thetaValue: -2.0),
+      VocabularyItem(word: 'Book', frequency: WordFrequency.veryHigh, twoPointAnswers: ['An object with pages that has stories or pictures to read', 'Sheets of paper bound together that you read', 'A set of pages with text that you read', 'An object made of pages full of words and stories'], onePointAnswers: ['You read it', 'It has pages', 'There are stories in it', 'Paper with words', 'Something at school', 'With pictures and text'], thetaValue: -2.0),
+      VocabularyItem(word: 'House', frequency: WordFrequency.veryHigh, twoPointAnswers: ['The building where people live and sleep', 'The place where you live with your family, with walls and a roof', 'A building with rooms where you live', 'The home where you sleep, eat and live'], onePointAnswers: ['You live in it', 'A building', 'Where you live', 'With a roof and walls', 'Where you sleep', 'The family\'s place'], thetaValue: -2.0),
+      VocabularyItem(word: 'Dog', frequency: WordFrequency.veryHigh, twoPointAnswers: ['A pet animal that barks and goes for walks', 'A loyal four-legged animal that guards the house', 'A pet that barks and wags its tail', 'A furry animal that barks and plays with people'], onePointAnswers: ['An animal', 'It barks', 'A furry creature', 'Man\'s best friend', 'It guards the house', 'It wags its tail'], thetaValue: -2.0),
+      VocabularyItem(word: 'Fast', frequency: WordFrequency.veryHigh, twoPointAnswers: ['Moving very quickly', 'Going at high speed', 'Done in very little time', 'Quick, not taking long'], onePointAnswers: ['Not slow', 'Like a race car', 'It goes quick', 'Speedy', 'Like a cheetah', 'At high speed'], thetaValue: -2.0),
+      VocabularyItem(word: 'Happy', frequency: WordFrequency.veryHigh, twoPointAnswers: ['Feeling joyful and in a good mood', 'Feeling glad and pleased', 'Feeling good and wanting to smile', 'Feeling pleasure and joy'], onePointAnswers: ['Not sad', 'Smiling', 'In a good mood', 'Feeling good', 'Joyful', 'When you get what you want'], thetaValue: -2.0),
+      VocabularyItem(word: 'Eat', frequency: WordFrequency.veryHigh, twoPointAnswers: ['To put food in your mouth and swallow it', 'To have a meal, to feed yourself', 'To swallow food to nourish yourself', 'To chew and swallow food'], onePointAnswers: ['Put food in your mouth', 'Swallow food', 'Have a meal', 'What you do at the table', 'Feed yourself', 'Bite into food'], thetaValue: -2.0),
+      VocabularyItem(word: 'Water', frequency: WordFrequency.veryHigh, twoPointAnswers: ['The clear liquid you drink that comes out of the tap', 'The colorless liquid that fills rivers and the sea', 'What you drink when you\'re thirsty, clear and with no taste', 'The liquid that falls when it rains and that you drink'], onePointAnswers: ['You drink it', 'A liquid', 'It comes from the tap', 'In the sea and rivers', 'For thirst', 'When it rains'], thetaValue: -2.0),
+      VocabularyItem(word: 'Big', frequency: WordFrequency.veryHigh, twoPointAnswers: ['Having a large size, being tall or wide', 'Taking up a lot of space, not small', 'Measuring a lot, in height or size', 'Of large dimensions, great'], onePointAnswers: ['Not small', 'Like a giant', 'Very tall', 'Takes up space', 'Like a big tree', 'A lot in size'], thetaValue: -2.0),
+      VocabularyItem(word: 'Car', frequency: WordFrequency.veryHigh, twoPointAnswers: ['A vehicle with four wheels and an engine for getting around', 'A machine on wheels that you drive to go places', 'A motorized vehicle you sit in to drive on the road', 'An automobile with a steering wheel and four wheels'], onePointAnswers: ['It rolls', 'Has four wheels', 'You drive it', 'It has an engine', 'For getting around', 'On the road'], thetaValue: -2.0),
+      VocabularyItem(word: 'Sleep', frequency: WordFrequency.veryHigh, twoPointAnswers: ['To close your eyes and rest at night in your bed', 'To be asleep, resting with your eyes shut', 'To rest and lose awareness during the night', 'To take a nap, to be deep in slumber'], onePointAnswers: ['Close your eyes', 'To rest', 'Go to bed', 'At night', 'Take a nap', 'When you\'re tired'], thetaValue: -2.0),
+      VocabularyItem(word: 'Apple', frequency: WordFrequency.veryHigh, twoPointAnswers: ['A round red or green fruit that grows on a tree and you eat', 'A crunchy juicy fruit, round, red or green', 'A fruit you bite into, round, that comes from a tree', 'A sweet round fruit you eat raw'], onePointAnswers: ['A fruit', 'It\'s red or green', 'It grows on a tree', 'You eat it', 'It\'s round', 'You bite into it'], thetaValue: -2.0),
+      VocabularyItem(word: 'Hot', frequency: WordFrequency.veryHigh, twoPointAnswers: ['Having a high temperature, a bit burning', 'Giving a feeling of heat when you touch it', 'Not cold, something that warms you up', 'With a strong temperature, like fire or the sun'], onePointAnswers: ['Not cold', 'Like fire', 'It burns', 'Like the sun in summer', 'When you feel warm', 'A lot of heat'], thetaValue: -2.0),
+      VocabularyItem(word: 'Run', frequency: WordFrequency.veryHigh, twoPointAnswers: ['To move very fast with your legs, faster than walking', 'To go forward quickly by moving your legs fast', 'To move at full speed using your feet', 'To go fast on foot, like in a race'], onePointAnswers: ['Go fast on foot', 'With your legs', 'Faster than walking', 'Like in a race', 'When you hurry', 'Move quickly on foot'], thetaValue: -2.0),
+      VocabularyItem(word: 'Flower', frequency: WordFrequency.veryHigh, twoPointAnswers: ['The colorful pretty part of a plant that often smells nice', 'What grows on a stem with colored petals', 'The part of a plant with petals that you give in a bouquet', 'A pretty colorful thing that grows in the garden'], onePointAnswers: ['It grows in the garden', 'It smells nice', 'It\'s pretty and colorful', 'With petals', 'You make bouquets of them', 'On a plant'], thetaValue: -2.0),
+      VocabularyItem(word: 'Cold', frequency: WordFrequency.veryHigh, twoPointAnswers: ['Having a low temperature, making you shiver', 'Not hot, giving an icy chilly feeling', 'With a very low temperature, like ice', 'Something that makes you want to cover up'], onePointAnswers: ['Not hot', 'Like ice', 'Like winter', 'It makes you shiver', 'Like snow', 'When you feel chilly'], thetaValue: -2.0),
+      VocabularyItem(word: 'Baby', frequency: WordFrequency.veryHigh, twoPointAnswers: ['A very small child that was just born', 'A very young child who can\'t walk or talk yet', 'A person\'s little one, still very small', 'An infant, a child a few months old'], onePointAnswers: ['A small child', 'Very tiny', 'It cries a lot', 'Just born', 'In a crib', 'Drinks milk'], thetaValue: -2.0),
+      VocabularyItem(word: 'Bird', frequency: WordFrequency.veryHigh, twoPointAnswers: ['An animal with wings and feathers that can fly', 'A feathered creature that flies and builds nests in trees', 'A small animal with wings, a beak, that sings', 'A flying animal covered in feathers with two legs'], onePointAnswers: ['It flies', 'It has wings', 'With feathers', 'It sings', 'In the trees', 'It has a beak'], thetaValue: -2.0),
+      VocabularyItem(word: 'Wash', frequency: WordFrequency.veryHigh, twoPointAnswers: ['To clean something with water to remove the dirt', 'To use water and soap to make something clean', 'To remove dirt by scrubbing with water', 'To make clean using water and soap'], onePointAnswers: ['To clean', 'With water', 'Remove the dirt', 'With soap', 'Make it clean', 'Like washing your hands'], thetaValue: -2.0),
+      VocabularyItem(word: 'Moon', frequency: WordFrequency.veryHigh, twoPointAnswers: ['The big round bright object you see in the sky at night', 'The shining body that appears in the sky in the evening', 'The glowing ball in the sky during the night', 'What lights up the sky a little when it\'s dark'], onePointAnswers: ['In the night sky', 'It\'s round', 'It shines at night', 'Way up high', 'When it\'s dark', 'Not the sun but similar'], thetaValue: -2.0),
+      VocabularyItem(word: 'Small', frequency: WordFrequency.veryHigh, twoPointAnswers: ['Having a little size, not big', 'Taking up little space, of low dimension', 'Measuring very little, tiny', 'Of little size, like an ant'], onePointAnswers: ['Not big', 'Very tiny', 'Like an ant', 'Takes up little space', 'Minuscule', 'Little in size'], thetaValue: -2.0),
+      VocabularyItem(word: 'Cry', frequency: WordFrequency.veryHigh, twoPointAnswers: ['To have tears falling from your eyes when you\'re sad', 'To shed tears because you\'re hurt or unhappy', 'To sob with tears on your cheeks', 'To let tears fall when you\'re upset'], onePointAnswers: ['To have tears', 'When you\'re sad', 'Tears fall down', 'When you\'re hurt', 'To sob', 'Like a baby who is upset'], thetaValue: -2.0),
+      VocabularyItem(word: 'Sun', frequency: WordFrequency.veryHigh, twoPointAnswers: ['The big bright ball in the sky that gives light during the day', 'The star that lights and warms the Earth during the daytime', 'What shines very brightly in the sky and heats the day', 'The warm light that comes from the sky during the day'], onePointAnswers: ['In the sky during the day', 'It shines', 'It\'s warm', 'It\'s yellow and round', 'Daylight', 'When the weather is nice'], thetaValue: -2.0),
+      VocabularyItem(word: 'Clean', frequency: WordFrequency.veryHigh, twoPointAnswers: ['Having no dirt, having been cleaned', 'Being neat, with no stains or dust', 'Having been washed and not dirty', 'Spotless, with no grime'], onePointAnswers: ['Not dirty', 'Nicely cleaned', 'Without stains', 'Has been washed', 'All neat', 'Like washed hands'], thetaValue: -2.0),
+    ],
+    // high (37 items)
+    [
+      VocabularyItem(word: 'Desk', frequency: WordFrequency.high, twoPointAnswers: ['A piece of furniture with a flat top where you sit and write or work', 'The table where you put your computer to work', 'A work table, usually with drawers', 'Where you sit to do paperwork or study'], onePointAnswers: ['For working', 'A piece of furniture', 'Where you write', 'A table', 'At the office'], thetaValue: -1.0),
+      VocabularyItem(word: 'Brave', frequency: WordFrequency.high, twoPointAnswers: ['Someone who isn\'t afraid to face danger or hard things', 'A person who does difficult things even when scared', 'Someone full of courage who doesn\'t back down', 'Willing to face risk or hardship without fear'], onePointAnswers: ['Not scared', 'Like a hero', 'Bold', 'Someone strong', 'Who dares'], thetaValue: -1.0),
+      VocabularyItem(word: 'Hesitate', frequency: WordFrequency.high, twoPointAnswers: ['To pause because you can\'t decide what to do', 'To wait before acting because you\'re unsure', 'To be torn between two choices and not decide right away', 'To delay a choice because you\'re not certain'], onePointAnswers: ['Not sure', 'To pause', 'Have a doubt', 'Can\'t decide', 'Think too long'], thetaValue: -1.0),
+      VocabularyItem(word: 'Obstacle', frequency: WordFrequency.high, twoPointAnswers: ['Something that blocks your way or stops you from moving forward', 'A difficulty that gets in your way', 'Something you have to get past to succeed', 'A barrier standing between you and your goal'], onePointAnswers: ['A blockage', 'A problem', 'In the way', 'A barrier', 'Something hard'], thetaValue: -1.0),
+      VocabularyItem(word: 'Save', frequency: WordFrequency.high, twoPointAnswers: ['To put money aside instead of spending it', 'To keep money for later', 'To spend less so you have more later', 'To not waste something so you keep it'], onePointAnswers: ['Keep money', 'Not spend', 'Put aside', 'Be careful with money', 'Stash it'], thetaValue: -1.0),
+      VocabularyItem(word: 'Neighbor', frequency: WordFrequency.high, twoPointAnswers: ['The person who lives right next to you', 'Someone who lives in a house or flat close to yours', 'A person whose home is near yours', 'Someone living nearby, on the same street or building'], onePointAnswers: ['Next door', 'Lives close', 'On my street', 'Nearby', 'In the building'], thetaValue: -1.0),
+      VocabularyItem(word: 'Proud', frequency: WordFrequency.high, twoPointAnswers: ['Feeling great satisfaction about what you\'ve done or who you are', 'Someone pleased and satisfied with an achievement', 'Feeling good about a success, your own or a loved one\'s', 'Feeling valued by what you have accomplished'], onePointAnswers: ['Pleased with yourself', 'Happy you succeeded', 'Glad about what you did', 'When you did well', 'Full of pride'], thetaValue: -1.0),
+      VocabularyItem(word: 'Repair', frequency: WordFrequency.high, twoPointAnswers: ['To fix something that is broken', 'To make a damaged thing work again', 'To put right something that stopped working', 'To restore a broken object to good condition'], onePointAnswers: ['To fix', 'Make it work again', 'When it\'s broken', 'A mechanic does it', 'Mend it'], thetaValue: -1.0),
+      VocabularyItem(word: 'Border', frequency: WordFrequency.high, twoPointAnswers: ['The line that separates two countries', 'The boundary between one territory and another', 'The place where one country ends and the next begins', 'The official dividing line between two states'], onePointAnswers: ['Between two countries', 'A limit', 'Where you show your passport', 'Edge of a country', 'A line'], thetaValue: -1.0),
+      VocabularyItem(word: 'Skilful', frequency: WordFrequency.high, twoPointAnswers: ['Someone who does things well and with ease', 'A person who is good with their hands or very clever at a task', 'Someone who succeeds thanks to their know-how', 'Good at doing something through practice and ability'], onePointAnswers: ['Good at it', 'Clever with hands', 'Talented', 'Does things well', 'Handy'], thetaValue: -1.0),
+      VocabularyItem(word: 'Reward', frequency: WordFrequency.high, twoPointAnswers: ['Something you get for doing well or succeeding', 'A prize or gift given to thank or congratulate someone', 'Something given in return for effort or good behavior', 'A benefit you earn for a good deed'], onePointAnswers: ['A prize', 'A gift for winning', 'When you deserve it', 'A medal', 'To say well done'], thetaValue: -1.0),
+      VocabularyItem(word: 'Mix', frequency: WordFrequency.high, twoPointAnswers: ['To put several things together so they combine', 'To stir ingredients so they blend into one', 'To bring different things together into one whole', 'To combine things until they are blended'], onePointAnswers: ['Put together', 'Stir', 'Blend things', 'In cooking', 'Combine'], thetaValue: -1.0),
+      VocabularyItem(word: 'Tiredness', frequency: WordFrequency.high, twoPointAnswers: ['The state of being worn out and needing rest', 'The feeling of having no energy after too much effort', 'What you feel when your body needs to rest or sleep', 'Exhaustion after work or lack of sleep'], onePointAnswers: ['Being worn out', 'No energy', 'Need to sleep', 'Out of strength', 'Exhausted'], thetaValue: -1.0),
+      VocabularyItem(word: 'Careful', frequency: WordFrequency.high, twoPointAnswers: ['Someone who pays attention to avoid danger or mistakes', 'A person who thinks before acting so as not to take risks', 'Someone who acts with caution', 'Watchful about what could go wrong'], onePointAnswers: ['Pays attention', 'Not reckless', 'Watchful', 'Avoids risk', 'Sensible'], thetaValue: -1.0),
+      VocabularyItem(word: 'Hide', frequency: WordFrequency.high, twoPointAnswers: ['To put something out of sight so it isn\'t found', 'To conceal an object or a piece of information', 'To make sure something can\'t be seen', 'To keep something from being discovered'], onePointAnswers: ['Put out of sight', 'Conceal', 'Not show', 'So nobody finds it', 'Stash away'], thetaValue: -1.0),
+      VocabularyItem(word: 'Memory', frequency: WordFrequency.high, twoPointAnswers: ['Something you remember from the past', 'An image or moment that stays in your mind', 'What comes back to your mind from a past event', 'A trace in the mind of something you lived'], onePointAnswers: ['What you remember', 'A moment from the past', 'In your mind', 'An old image in your head', 'Something you don\'t forget'], thetaValue: -1.0),
+      VocabularyItem(word: 'Generous', frequency: WordFrequency.high, twoPointAnswers: ['Someone who likes to give and share with others', 'A person who gladly offers their time or money', 'Someone who gives freely without holding back', 'Willing to share what they have'], onePointAnswers: ['Gives a lot', 'Who shares', 'Not stingy', 'Kind to others', 'Who offers'], thetaValue: -1.0),
+      VocabularyItem(word: 'Tool', frequency: WordFrequency.high, twoPointAnswers: ['An object you use to do manual work', 'An instrument that helps you build or fix something', 'Something you hold to do a job, like a hammer', 'An item made to help carry out a task'], onePointAnswers: ['For DIY', 'Like a hammer', 'An instrument', 'For working', 'In the toolbox'], thetaValue: -1.0),
+      VocabularyItem(word: 'Freeze', frequency: WordFrequency.high, twoPointAnswers: ['To turn hard like ice because of the cold', 'To become ice when it gets very cold', 'To turn solid because the temperature is very low', 'To change into ice under the cold'], onePointAnswers: ['Turn to ice', 'When it\'s very cold', 'Become an ice cube', 'Very cold', 'Like water in winter'], thetaValue: -1.0),
+      VocabularyItem(word: 'Curious', frequency: WordFrequency.high, twoPointAnswers: ['Someone who wants to know and discover things', 'A person who asks lots of questions to learn', 'Someone interested in everything, eager to understand', 'Someone with a thirst to learn and find out'], onePointAnswers: ['Wants to know', 'Asks questions', 'Interested in everything', 'Eager to discover', 'Nosy'], thetaValue: -1.0),
+      VocabularyItem(word: 'Advice', frequency: WordFrequency.high, twoPointAnswers: ['A suggestion you give to help someone do the right thing', 'A useful opinion to guide a person in a choice', 'What you recommend to help someone', 'Guidance you offer to help a decision'], onePointAnswers: ['Help with an opinion', 'A recommendation', 'Telling what to do', 'An opinion', 'A tip'], thetaValue: -1.0),
+      VocabularyItem(word: 'Shine', frequency: WordFrequency.high, twoPointAnswers: ['To give off or reflect bright light', 'To send out light like the sun or a star', 'To have a bright glow that catches the eye', 'To gleam or sparkle in the light'], onePointAnswers: ['Give off light', 'Like the sun', 'When it sparkles', 'It gleams', 'To light up'], thetaValue: -1.0),
+      VocabularyItem(word: 'Selfish', frequency: WordFrequency.high, twoPointAnswers: ['Someone who thinks only of themselves and not others', 'A person who keeps everything for themselves and won\'t share', 'Someone who puts their own interest before others', 'Someone who cares only about themselves'], onePointAnswers: ['Thinks only of himself', 'Won\'t share', 'Not kind', 'Opposite of generous', 'Wants it all'], thetaValue: -1.0),
+      VocabularyItem(word: 'Slide', frequency: WordFrequency.high, twoPointAnswers: ['To move smoothly over a slippery surface', 'To slip or move along something slippery', 'To move with no friction across a surface', 'To glide along like on ice or a wet floor'], onePointAnswers: ['To slip', 'On the ice', 'Move smoothly', 'When it\'s wet', 'Like on a slide'], thetaValue: -1.0),
+      VocabularyItem(word: 'Honest', frequency: WordFrequency.high, twoPointAnswers: ['Someone who tells the truth and doesn\'t cheat', 'A trustworthy and frank person', 'Someone who doesn\'t lie and acts uprightly', 'Someone who behaves fairly and sincerely'], onePointAnswers: ['Tells the truth', 'Doesn\'t lie', 'Frank', 'Doesn\'t cheat', 'Upright'], thetaValue: -1.0),
+      VocabularyItem(word: 'Crowd', frequency: WordFrequency.high, twoPointAnswers: ['A large number of people gathered in one place', 'A mass of people packed close together', 'Lots of people together in a spot', 'A dense group of people, like at a concert'], onePointAnswers: ['Lots of people', 'A big group', 'Many people', 'Like at a concert', 'A throng'], thetaValue: -1.0),
+      VocabularyItem(word: 'Deceive', frequency: WordFrequency.high, twoPointAnswers: ['To make someone believe something that isn\'t true', 'To lie to or trick a person on purpose', 'To deliberately lead someone into error', 'To abuse someone\'s trust by fooling them'], onePointAnswers: ['Lie to someone', 'Trick them', 'Make them believe a lie', 'Fool them', 'Con them'], thetaValue: -1.0),
+      VocabularyItem(word: 'Deep', frequency: WordFrequency.high, twoPointAnswers: ['Going a long way down from the surface', 'Whose bottom is far from the top', 'Reaching far below, like a well or a lake', 'Extending a long way downward'], onePointAnswers: ['Not shallow', 'Far down', 'Like the sea', 'Lots of water below', 'Goes way down'], thetaValue: -1.0),
+      VocabularyItem(word: 'Encourage', frequency: WordFrequency.high, twoPointAnswers: ['To give someone courage or the will to act', 'To support a person so they keep up their efforts', 'To push someone to do better by motivating them', 'To help someone stay confident and keep going'], onePointAnswers: ['Give courage', 'Motivate', 'Support', 'Push to keep going', 'Cheer someone on'], thetaValue: -1.0),
+      VocabularyItem(word: 'Shadow', frequency: WordFrequency.high, twoPointAnswers: ['The dark area made when an object blocks the light', 'The dark shape cast by a lit-up body', 'The spot out of the sun where light doesn\'t reach', 'The dark outline you see on the ground when the sun is behind you'], onePointAnswers: ['Out of the sun', 'A dark shape', 'The dark spot on the ground', 'Not in the light', 'Opposite of light'], thetaValue: -1.0),
+      VocabularyItem(word: 'Rare', frequency: WordFrequency.high, twoPointAnswers: ['Something found very little, met only seldom', 'Something that exists or happens only in small amounts', 'Hard to find because there\'s little of it', 'Not common, not frequent'], onePointAnswers: ['Not common', 'Hard to find', 'Uncommon', 'Not many of them', 'Opposite of common'], thetaValue: -1.0),
+      VocabularyItem(word: 'Promise', frequency: WordFrequency.high, twoPointAnswers: ['A commitment to do something you\'ve sworn to keep', 'When you give your word to do a thing', 'An engagement you take toward someone', 'Pledging to do what you said'], onePointAnswers: ['Give your word', 'Commit to do something', 'When you swear', 'Keep your word', 'A pledge'], thetaValue: -1.0),
+      VocabularyItem(word: 'Narrow', frequency: WordFrequency.high, twoPointAnswers: ['Having little width, not wide', 'Tight, leaving little room on the sides', 'With close-together sides, like a tight hallway', 'Lacking in width'], onePointAnswers: ['Not wide', 'Tight', 'Little room', 'Like a small corridor', 'Opposite of wide'], thetaValue: -1.0),
+      VocabularyItem(word: 'Talkative', frequency: WordFrequency.high, twoPointAnswers: ['Someone who talks a lot, almost all the time', 'A person who loves to talk and doesn\'t stop', 'Someone chatty who keeps on talking', 'Someone who speaks a great deal'], onePointAnswers: ['Talks a lot', 'Never stops talking', 'Loves to chat', 'A chatterbox', 'Always talking'], thetaValue: -1.0),
+      VocabularyItem(word: 'Guess', frequency: WordFrequency.high, twoPointAnswers: ['To find an answer without being sure, by supposing', 'To imagine what\'s right without truly knowing', 'To work something out from clues or at random', 'To find by hunch what you don\'t know for certain'], onePointAnswers: ['Find without being sure', 'Make a supposition', 'A shot in the dark', 'Imagine the answer', 'Try to find out'], thetaValue: -1.0),
+      VocabularyItem(word: 'Worried', frequency: WordFrequency.high, twoPointAnswers: ['Someone who is anxious because they fear a problem may happen', 'A preoccupied person whose mind isn\'t at ease', 'Feeling uneasy about what might happen', 'Not reassured, thinking about what could go wrong'], onePointAnswers: ['Anxious', 'Not reassured', 'Afraid something will happen', 'Preoccupied', 'Stressed'], thetaValue: -1.0),
+      VocabularyItem(word: 'Effort', frequency: WordFrequency.high, twoPointAnswers: ['The energy you spend to do something difficult', 'The trouble you take to reach a result', 'Pushing yourself or trying hard to succeed', 'What you put in when a task takes willpower'], onePointAnswers: ['Trying hard', 'Pushing to succeed', 'Energy you spend', 'When it\'s hard you make it', 'Strain'], thetaValue: -1.0),
+    ],
+    // medium (39 items)
+    [
+      VocabularyItem(word: 'Transparent', frequency: WordFrequency.medium, twoPointAnswers: ['letting light pass so you can see through it', 'clear enough to see through', 'you can see right through it', 'clear and open, hiding nothing', 'figuratively, honest and open'], onePointAnswers: ['like glass', 'like a window', 'like clear water', 'you see what\'s behind', 'not opaque', 'see-through'], thetaValue: 0.4),
+      VocabularyItem(word: 'Concept', frequency: WordFrequency.medium, twoPointAnswers: ['a general idea or abstract notion', 'a mental representation of something', 'an idea you form about something', 'the basic idea behind something', 'an abstract idea'], onePointAnswers: ['an idea', 'a thought', 'a theory', 'a notion', 'a mental picture'], thetaValue: 0.4),
+      VocabularyItem(word: 'Nuance', frequency: WordFrequency.medium, twoPointAnswers: ['a small subtle difference', 'a slight variation in meaning or color', 'a fine distinction between things', 'a subtle detail that changes the sense', 'a slight shade of difference'], onePointAnswers: ['a small difference', 'a detail', 'a shade', 'a subtle point', 'not black and white'], thetaValue: 0.4),
+      VocabularyItem(word: 'Ethics', frequency: WordFrequency.medium, twoPointAnswers: ['the rules of right moral conduct', 'what concerns good and bad behavior', 'thinking about what is right to do', 'the moral principles guiding action', 'applied morality'], onePointAnswers: ['morals', 'knowing right from wrong', 'good values', 'what is fair', 'principles'], thetaValue: 0.4),
+      VocabularyItem(word: 'Sober', frequency: WordFrequency.medium, twoPointAnswers: ['not drunk, not drinking alcohol', 'moderate, without excess', 'plain and without frills', 'restrained in habits', 'serious and self-controlled'], onePointAnswers: ['not drinking', 'not drunk', 'plain', 'not excessive', 'controlled'], thetaValue: 0.4),
+      VocabularyItem(word: 'Distrust', frequency: WordFrequency.medium, twoPointAnswers: ['the feeling of not trusting someone', 'an attitude of suspicion', 'fear of being deceived', 'lack of confidence out of caution', 'wary suspicion'], onePointAnswers: ['not trusting', 'being suspicious', 'being careful', 'doubting people', 'not believing someone'], thetaValue: 0.4),
+      VocabularyItem(word: 'Vague', frequency: WordFrequency.medium, twoPointAnswers: ['not precise or clear', 'blurry and imprecise in meaning', 'not well defined', 'unclear in outline', 'approximate and indistinct'], onePointAnswers: ['not clear', 'blurry', 'imprecise', 'fuzzy', 'hard to grasp'], thetaValue: 0.4),
+      VocabularyItem(word: 'Shortage', frequency: WordFrequency.medium, twoPointAnswers: ['a serious lack of something needed', 'a situation where resources run out', 'scarcity of an essential good', 'not having enough of something', 'a deficit in supplies'], onePointAnswers: ['a lack', 'not enough', 'when something runs out', 'scarcity', 'a supply problem'], thetaValue: 0.4),
+      VocabularyItem(word: 'Persevere', frequency: WordFrequency.medium, twoPointAnswers: ['to keep going despite difficulties', 'to not give up on your efforts', 'to continue steadily toward a goal', 'to keep trying without discouragement', 'to stick with it to the end'], onePointAnswers: ['not give up', 'keep going', 'hang in there', 'keep trying', 'stay with it'], thetaValue: 0.4),
+      VocabularyItem(word: 'Ambiguous', frequency: WordFrequency.medium, twoPointAnswers: ['able to be understood in two ways', 'unclear in meaning', 'open to more than one interpretation', 'having a double meaning', 'confusing in sense'], onePointAnswers: ['not clear', 'double meaning', 'unsure what it means', 'two possible meanings', 'open to interpretation'], thetaValue: 0.4),
+      VocabularyItem(word: 'Essential', frequency: WordFrequency.medium, twoPointAnswers: ['something you absolutely cannot do without', 'absolutely necessary', 'needed for it to work', 'crucial and required', 'vital to the purpose'], onePointAnswers: ['very important', 'needed', 'necessary', 'can\'t do without it', 'required'], thetaValue: 0.4),
+      VocabularyItem(word: 'Improvise', frequency: WordFrequency.medium, twoPointAnswers: ['to do something without preparation', 'to make it up on the spot', 'to act without a plan', 'to create as you go', 'to manage with what you have'], onePointAnswers: ['do without preparing', 'make it up on the spot', 'no plan', 'wing it', 'figure it out as you go'], thetaValue: 0.4),
+      VocabularyItem(word: 'Reluctant', frequency: WordFrequency.medium, twoPointAnswers: ['unwilling to do something', 'hesitant and not really agreeing', 'showing some resistance', 'doing it unwillingly', 'not eager to act'], onePointAnswers: ['not really wanting to', 'hesitant', 'not keen', 'holding back', 'not eager'], thetaValue: 0.4),
+      VocabularyItem(word: 'Prejudice', frequency: WordFrequency.medium, twoPointAnswers: ['an opinion formed without thinking', 'a judgment made before knowing', 'a preconceived and often false idea', 'a fixed bias against someone', 'an unverified belief about a group'], onePointAnswers: ['a ready-made idea', 'judging without knowing', 'a bias', 'a preconception', 'thinking ill in advance'], thetaValue: 0.4),
+      VocabularyItem(word: 'Accommodating', frequency: WordFrequency.medium, twoPointAnswers: ['willing to find agreement', 'ready to compromise', 'easy to deal with and helpful', 'avoiding conflict by giving a little', 'open to working things out'], onePointAnswers: ['easygoing', 'ready to give in', 'helpful in disputes', 'seeks agreement', 'not stubborn'], thetaValue: 0.4),
+      VocabularyItem(word: 'Anticipate', frequency: WordFrequency.medium, twoPointAnswers: ['to foresee something before it happens', 'to prepare in advance', 'to act ahead of time', 'to expect and get ready for it', 'to plan for what\'s coming'], onePointAnswers: ['to foresee', 'to do it beforehand', 'think ahead', 'get ready', 'not wait'], thetaValue: 0.4),
+      VocabularyItem(word: 'Spontaneous', frequency: WordFrequency.medium, twoPointAnswers: ['coming naturally without thinking', 'done on the spur of the moment', 'acting on natural impulse', 'unplanned and natural', 'not calculated, just happens'], onePointAnswers: ['natural', 'without thinking', 'on the spot', 'not planned', 'just happens'], thetaValue: 0.4),
+      VocabularyItem(word: 'Moderate', frequency: WordFrequency.medium, twoPointAnswers: ['staying within reasonable limits', 'neither too much nor too little', 'without excess, measured', 'balanced and reasonable', 'avoiding extremes'], onePointAnswers: ['not too much', 'reasonable', 'measured', 'in between', 'not extreme'], thetaValue: 0.4),
+      VocabularyItem(word: 'Reveal', frequency: WordFrequency.medium, twoPointAnswers: ['to make known something that was hidden', 'to show what was concealed', 'to disclose a secret or information', 'to bring something to light', 'to make public what was kept hidden'], onePointAnswers: ['to show', 'to disclose', 'to tell a secret', 'to bring to light', 'to uncover'], thetaValue: 0.4),
+      VocabularyItem(word: 'Coherent', frequency: WordFrequency.medium, twoPointAnswers: ['with parts that fit together logically', 'logical and without contradiction', 'holding together as a whole', 'consistent and well connected', 'making sense throughout'], onePointAnswers: ['logical', 'it holds together', 'no contradiction', 'it fits', 'makes sense'], thetaValue: 0.4),
+      VocabularyItem(word: 'Suppress', frequency: WordFrequency.medium, twoPointAnswers: ['to hold something back from showing', 'to contain a feeling or reaction', 'to put down a revolt by force', 'to keep something from coming out', 'to forcibly restrain something'], onePointAnswers: ['to hold back', 'to stop', 'to stifle', 'to contain', 'to keep in'], thetaValue: 0.4),
+      VocabularyItem(word: 'Subtle', frequency: WordFrequency.medium, twoPointAnswers: ['fine and hard to notice', 'delicate, needing attention to grasp', 'slight and nuanced', 'refined and discreet', 'working through small differences'], onePointAnswers: ['fine', 'discreet', 'not obvious', 'delicate', 'hard to spot'], thetaValue: 0.4),
+      VocabularyItem(word: 'Inevitable', frequency: WordFrequency.medium, twoPointAnswers: ['that cannot be avoided', 'sure to happen no matter what', 'impossible to prevent', 'bound to occur', 'certain in its outcome'], onePointAnswers: ['can\'t be avoided', 'it will happen anyway', 'unavoidable', 'bound to come', 'certain'], thetaValue: 0.4),
+      VocabularyItem(word: 'Evoke', frequency: WordFrequency.medium, twoPointAnswers: ['to give rise to a feeling or reaction', 'to bring about or call forth something', 'to stir up an emotion or interest', 'to awaken a response in someone', 'to be the cause of a reaction'], onePointAnswers: ['to bring out', 'to call forth', 'to stir up', 'to trigger', 'to cause'], thetaValue: 0.4),
+      VocabularyItem(word: 'Lucid', frequency: WordFrequency.medium, twoPointAnswers: ['seeing things clearly without illusion', 'aware of reality as it is', 'clear-headed about the situation', 'keeping a clear, realistic mind', 'able to judge soundly'], onePointAnswers: ['clear-headed', 'realistic', 'aware', 'sees clearly', 'not deluded'], thetaValue: 0.4),
+      VocabularyItem(word: 'Frugal', frequency: WordFrequency.medium, twoPointAnswers: ['spending and using very little', 'sparing and simple in needs', 'thrifty, content with little', 'modest in food and spending', 'avoiding waste'], onePointAnswers: ['thrifty', 'spends little', 'simple', 'content with little', 'not wasteful'], thetaValue: 0.4),
+      VocabularyItem(word: 'Erect', frequency: WordFrequency.medium, twoPointAnswers: ['to build or put up a structure', 'to raise something upright', 'to construct solidly and standing', 'to set a building in place', 'figuratively, to establish'], onePointAnswers: ['to build', 'to put up', 'to raise', 'to set up', 'to construct'], thetaValue: 0.4),
+      VocabularyItem(word: 'Tangible', frequency: WordFrequency.medium, twoPointAnswers: ['that you can touch or clearly observe', 'real and perceptible, not abstract', 'material and verifiable', 'concrete, with proof', 'palpable and real'], onePointAnswers: ['concrete', 'real', 'you can touch it', 'palpable', 'not abstract'], thetaValue: 0.4),
+      VocabularyItem(word: 'Discern', frequency: WordFrequency.medium, twoPointAnswers: ['to distinguish or tell things apart', 'to perceive clearly despite difficulty', 'to recognize what sets things apart', 'to make out something clearly', 'to separate true from false'], onePointAnswers: ['to tell apart', 'to distinguish', 'to recognize', 'to make out', 'to separate'], thetaValue: 0.4),
+      VocabularyItem(word: 'Concise', frequency: WordFrequency.medium, twoPointAnswers: ['saying a lot in few words', 'brief and to the point, without filler', 'short but complete in meaning', 'expressed in a compact way', 'getting to the point without rambling'], onePointAnswers: ['brief', 'short', 'to the point', 'in few words', 'no rambling'], thetaValue: 0.4),
+      VocabularyItem(word: 'Mitigate', frequency: WordFrequency.medium, twoPointAnswers: ['to make something less strong or intense', 'to reduce or ease an effect', 'to lessen the severity of something', 'to soften a pain or a blow', 'to lower the intensity'], onePointAnswers: ['to lessen', 'to reduce', 'to ease', 'to soften', 'to make less severe'], thetaValue: 0.4),
+      VocabularyItem(word: 'Pragmatic', frequency: WordFrequency.medium, twoPointAnswers: ['focused on facts and what is concrete', 'practical and results-oriented', 'favoring what actually works', 'realistic rather than theoretical', 'acting based on outcomes'], onePointAnswers: ['practical', 'realistic', 'down to earth', 'about what works', 'not theoretical'], thetaValue: 0.4),
+      VocabularyItem(word: 'Refute', frequency: WordFrequency.medium, twoPointAnswers: ['to prove that a claim is false', 'to demonstrate the opposite of an idea', 'to contradict with arguments', 'to disprove a reasoning with evidence', 'to show an argument doesn\'t hold'], onePointAnswers: ['to prove it wrong', 'to contradict', 'to disprove', 'to argue against', 'to deny with proof'], thetaValue: 0.4),
+      VocabularyItem(word: 'Inherent', frequency: WordFrequency.medium, twoPointAnswers: ['belonging naturally to something', 'inseparably tied to something', 'part of the very nature of a thing', 'intrinsic and impossible to remove', 'essential to something by its nature'], onePointAnswers: ['part of it', 'belonging to', 'tied to', 'built in', 'in its nature'], thetaValue: 0.4),
+      VocabularyItem(word: 'Advocate', frequency: WordFrequency.medium, twoPointAnswers: ['to strongly recommend a solution', 'to argue in favor of a course of action', 'to put forward as the best option', 'to publicly support something', 'to urge the adoption of'], onePointAnswers: ['to recommend', 'to advise', 'to push for', 'to suggest', 'to support'], thetaValue: 0.4),
+      VocabularyItem(word: 'Skeptical', frequency: WordFrequency.medium, twoPointAnswers: ['doubting and wanting proof', 'not easily inclined to believe', 'wary of claims', 'questioning before accepting', 'unconvinced without evidence'], onePointAnswers: ['doubtful', 'not convinced', 'wary', 'wants proof', 'unsure to believe'], thetaValue: 0.4),
+      VocabularyItem(word: 'Fleeting', frequency: WordFrequency.medium, twoPointAnswers: ['lasting only a very short time', 'passing and short-lived', 'quickly gone', 'brief and temporary', 'not lasting'], onePointAnswers: ['short-lived', 'passing', 'temporary', 'brief', 'doesn\'t last'], thetaValue: 0.4),
+      VocabularyItem(word: 'Reconcile', frequency: WordFrequency.medium, twoPointAnswers: ['to bring estranged people back together', 'to restore good relations after a quarrel', 'to make peace between angry people', 'to bring two sides back together', 'to settle a conflict between parties'], onePointAnswers: ['to make peace', 'to bring together again', 'to patch things up', 'to restore harmony', 'to settle a quarrel'], thetaValue: 0.4),
+      VocabularyItem(word: 'Address', frequency: WordFrequency.medium, twoPointAnswers: ['to begin dealing with a topic', 'to take up a question or theme', 'to approach someone to speak to them', 'to tackle a problem', 'to start handling an issue'], onePointAnswers: ['to start on a topic', 'to bring up', 'to deal with', 'to approach someone', 'to take on'], thetaValue: 0.4),
+    ],
+    // low (18 items)
+    [
+      VocabularyItem(word: 'Ambivalent', frequency: WordFrequency.low, twoPointAnswers: ['Having two opposite feelings at the same time', 'Torn between contradictory emotions, like loving and hating something', 'Having mixed feelings, both for and against', 'Feeling pulled in two directions emotionally'], onePointAnswers: ['Unsure, undecided', 'When you can\'t make up your mind', 'Mixed up about how you feel', 'Hesitant', 'Of two minds'], thetaValue: 2.0),
+      VocabularyItem(word: 'Eloquent', frequency: WordFrequency.low, twoPointAnswers: ['Speaking very well and persuasively', 'Able to express ideas fluently and convincingly', 'Having a gift for skillful, moving speech', 'Expressing yourself clearly and powerfully with words'], onePointAnswers: ['A good speaker', 'Speaks well', 'Smooth talker', 'Persuasive', 'Articulate'], thetaValue: 2.0),
+      VocabularyItem(word: 'Meticulous', frequency: WordFrequency.low, twoPointAnswers: ['Paying great attention to every small detail', 'Very careful and precise in what you do', 'Thorough and exact, leaving nothing overlooked', 'Doing things with great care and precision'], onePointAnswers: ['Careful', 'Precise', 'A perfectionist', 'Detail-oriented', 'Thorough', 'Painstaking'], thetaValue: 2.0),
+      VocabularyItem(word: 'Paradox', frequency: WordFrequency.low, twoPointAnswers: ['An idea that seems to contradict itself', 'A statement that sounds absurd but may actually be true', 'A situation that seems impossible or self-contradictory', 'Something that appears contradictory yet can hold a truth'], onePointAnswers: ['A contradiction', 'Something illogical', 'A weird, puzzling idea', 'The opposite of what you\'d expect', 'An apparent absurdity'], thetaValue: 2.0),
+      VocabularyItem(word: 'Tenacious', frequency: WordFrequency.low, twoPointAnswers: ['Not giving up despite obstacles', 'Holding on firmly and persistently', 'Determined and refusing to let go', 'Sticking with something until the end'], onePointAnswers: ['Persistent', 'Determined', 'Doesn\'t give up', 'Stubborn', 'Keeps holding on', 'Dogged'], thetaValue: 2.0),
+      VocabularyItem(word: 'Probity', frequency: WordFrequency.low, twoPointAnswers: ['Strong moral honesty and integrity', 'Strict adherence to honest and ethical conduct', 'The quality of being upright and incorruptible', 'Complete uprightness in one\'s dealings'], onePointAnswers: ['Honesty', 'Integrity', 'Uprightness', 'Being incorruptible', 'Moral rectitude', 'Honor'], thetaValue: 2.0),
+      VocabularyItem(word: 'Superfluous', frequency: WordFrequency.low, twoPointAnswers: ['More than is needed, unnecessary', 'Extra and could be done without', 'Beyond what is required, excess', 'Serving no essential purpose'], onePointAnswers: ['Unnecessary', 'Extra', 'Not needed', 'Surplus', 'Excess', 'Could do without it'], thetaValue: 2.0),
+      VocabularyItem(word: 'Undeniable', frequency: WordFrequency.low, twoPointAnswers: ['Impossible to deny', 'Clearly true and beyond dispute', 'Certain, that cannot be argued against', 'Obvious and unquestionable'], onePointAnswers: ['Obvious', 'Certain', 'Can\'t argue with it', 'Clear', 'Unquestionable', 'For sure'], thetaValue: 2.0),
+      VocabularyItem(word: 'Conceal', frequency: WordFrequency.low, twoPointAnswers: ['To hide something so it can\'t be seen', 'To keep something secret or out of sight', 'To deliberately keep something from being noticed', 'To cover up or mask something'], onePointAnswers: ['Hide', 'Cover up', 'Keep secret', 'Not show', 'Mask', 'Stash away'], thetaValue: 2.0),
+      VocabularyItem(word: 'Specious', frequency: WordFrequency.low, twoPointAnswers: ['Seeming true or right but actually false', 'Superficially convincing yet misleading', 'Plausible on the surface but flawed underneath', 'Apparently sound but deceptive in reality'], onePointAnswers: ['Misleading', 'False but convincing', 'Looks right but isn\'t', 'Deceptively plausible', 'Fallacious', 'Not as valid as it seems'], thetaValue: 2.0),
+      VocabularyItem(word: 'Irresolute', frequency: WordFrequency.low, twoPointAnswers: ['Unable to decide or follow through on intentions', 'Having weak resolve that never turns into action', 'Wavering and lacking firm determination', 'Full of good intentions but never acting on them'], onePointAnswers: ['Lacking willpower', 'Doesn\'t follow through', 'Indecisive', 'Never acts', 'Wavering', 'Half-hearted'], thetaValue: 2.0),
+      VocabularyItem(word: 'Solemn', frequency: WordFrequency.low, twoPointAnswers: ['Serious and dignified, like a formal ceremony', 'Marked by deep, grave seriousness', 'Formal and weighty in tone', 'Having a serious, ceremonious quality'], onePointAnswers: ['Serious', 'Grave', 'Formal', 'Ceremonial', 'Dignified', 'Heavy in mood'], thetaValue: 2.0),
+      VocabularyItem(word: 'Terse', frequency: WordFrequency.low, twoPointAnswers: ['Expressed in few words, brief and to the point', 'Concise and sharp in style', 'Saying much in very little, pithy', 'Short and pointed in expression'], onePointAnswers: ['Very brief', 'Concise', 'Short and sharp', 'To the point', 'Pithy', 'Curt'], thetaValue: 2.0),
+      VocabularyItem(word: 'Austere', frequency: WordFrequency.low, twoPointAnswers: ['Severe and plain, without comfort or decoration', 'Strict and simple, rejecting luxury', 'Stern and bare in style or manner', 'Harsh and unadorned'], onePointAnswers: ['Strict', 'Plain', 'Bare', 'Stern', 'No frills', 'Simple and harsh'], thetaValue: 2.0),
+      VocabularyItem(word: 'Venerable', frequency: WordFrequency.low, twoPointAnswers: ['Deserving deep respect because of age or wisdom', 'Highly respected due to long experience or seniority', 'Commanding respect through dignity and great age', 'Honored and esteemed for being old and wise'], onePointAnswers: ['Respectable', 'Old and respected', 'Worthy of respect', 'Esteemed', 'Wise and aged', 'Honored'], thetaValue: 2.0),
+      VocabularyItem(word: 'Exuberant', frequency: WordFrequency.low, twoPointAnswers: ['Full of overflowing energy and joy', 'Very lively and enthusiastic', 'Bursting with high spirits and excitement', 'Wildly cheerful and expressive'], onePointAnswers: ['Full of energy', 'Very enthusiastic', 'Bubbly', 'Lively', 'Overflowing with joy', 'High-spirited'], thetaValue: 2.0),
+      VocabularyItem(word: 'Obsolete', frequency: WordFrequency.low, twoPointAnswers: ['No longer in use, out of date', 'Replaced by something newer, outdated', 'Belonging to the past and no longer current', 'Outmoded and no longer useful'], onePointAnswers: ['Outdated', 'Out of date', 'Old-fashioned', 'No longer used', 'Out of style', 'From another time'], thetaValue: 2.0),
+      VocabularyItem(word: 'Insidious', frequency: WordFrequency.low, twoPointAnswers: ['Spreading harmfully in a gradual, hidden way', 'Dangerous because it works unnoticed', 'Treacherous and stealthy in its effect', 'Slowly and secretly causing harm'], onePointAnswers: ['Sneaky', 'Works unnoticed', 'Treacherous', 'Harmful in a hidden way', 'Stealthy', 'Creeps in quietly'], thetaValue: 2.0),
+    ],
+    // veryLow (18 items)
+    [
+      VocabularyItem(word: 'Temporization', frequency: WordFrequency.veryLow, twoPointAnswers: ['Repeatedly putting something off to gain time', 'Delaying or postponing a decision or action', 'Stalling instead of acting or deciding', 'The act of dragging things out on purpose'], onePointAnswers: ['Delaying', 'Putting it off', 'Stalling', 'Waiting too long', 'A postponement'], thetaValue: 3.4),
+      VocabularyItem(word: 'Pusillanimous', frequency: WordFrequency.veryLow, twoPointAnswers: ['Lacking courage and firmness of character', 'Timid and fearful in the face of difficulty', 'Cowardly, easily frightened away from action', 'Faint-hearted and weak-willed'], onePointAnswers: ['Cowardly', 'Timid', 'Fearful', 'Weak', 'Not brave'], thetaValue: 3.4),
+      VocabularyItem(word: 'Obsequious', frequency: WordFrequency.veryLow, twoPointAnswers: ['Excessively eager to please or obey', 'Showing servile, fawning politeness', 'Overly attentive in a flattering, insincere way', 'Subservient and ingratiating to gain favor'], onePointAnswers: ['Fawning', 'Too polite', 'Servile', 'A suck-up', 'Eager to please'], thetaValue: 3.4),
+      VocabularyItem(word: 'Ineluctable', frequency: WordFrequency.veryLow, twoPointAnswers: ['Impossible to avoid or escape', 'Bound to happen, inevitable', 'That cannot be resisted or prevented', 'Certain to occur no matter what'], onePointAnswers: ['Inevitable', 'Unavoidable', 'Certain', 'Bound to happen', 'Can\'t stop it'], thetaValue: 3.4),
+      VocabularyItem(word: 'Sycophant', frequency: WordFrequency.veryLow, twoPointAnswers: ['A person who flatters others to gain advantage', 'A servile flatterer of the powerful', 'Someone who fawns over others for favor', 'A self-seeking toady or bootlicker'], onePointAnswers: ['A flatterer', 'A bootlicker', 'A yes-man', 'Someone who sucks up', 'A toady'], thetaValue: 3.4),
+      VocabularyItem(word: 'Plethora', frequency: WordFrequency.veryLow, twoPointAnswers: ['An excessive abundance of something', 'An overly large amount, a surplus', 'More than is needed, a profusion', 'An oversupply or overabundance'], onePointAnswers: ['A lot', 'Too much', 'A large amount', 'Plenty', 'An excess'], thetaValue: 3.4),
+      VocabularyItem(word: 'Acrimony', frequency: WordFrequency.veryLow, twoPointAnswers: ['Bitterness and harshness in speech or manner', 'Angry, biting hostility', 'Sharp, resentful ill feeling', 'A caustic, spiteful tone or temper'], onePointAnswers: ['Bitterness', 'Anger', 'Harshness', 'Resentment', 'Spite'], thetaValue: 3.4),
+      VocabularyItem(word: 'Deleterious', frequency: WordFrequency.veryLow, twoPointAnswers: ['Causing harm or damage, especially to health', 'Having a harmful or destructive effect', 'Injurious and detrimental in its influence', 'Tending to spoil or undermine something'], onePointAnswers: ['Harmful', 'Damaging', 'Toxic', 'Bad for you', 'Hurtful'], thetaValue: 3.4),
+      VocabularyItem(word: 'Pontificate', frequency: WordFrequency.veryLow, twoPointAnswers: ['To speak at length in a pompous, dogmatic way', 'To hold forth as if one\'s opinions are beyond doubt', 'To lecture others with self-important authority', 'To express views pompously and at length'], onePointAnswers: ['To talk a lot', 'To lecture', 'To preach', 'To go on and on', 'To show off talking'], thetaValue: 3.4),
+      VocabularyItem(word: 'Velleity', frequency: WordFrequency.veryLow, twoPointAnswers: ['A faint wish not strong enough to act on', 'A mere inclination without real effort', 'A weak desire that produces no action', 'A vague intention that never materializes'], onePointAnswers: ['A faint wish', 'A weak desire', 'An idle wish', 'An intention', 'A passing urge'], thetaValue: 3.4),
+      VocabularyItem(word: 'Fallacious', frequency: WordFrequency.veryLow, twoPointAnswers: ['Based on a mistaken belief, misleading', 'Deceptive while appearing true', 'Containing a flaw that leads to error', 'Wrong in a way meant to deceive'], onePointAnswers: ['Misleading', 'False', 'Deceptive', 'Wrong', 'Untrue'], thetaValue: 3.4),
+      VocabularyItem(word: 'Sugarcoat', frequency: WordFrequency.veryLow, twoPointAnswers: ['To make something unpleasant seem more acceptable', 'To soften harsh news so it\'s easier to take', 'To present something bad in a nicer way', 'To tone down the unpleasant parts of a message'], onePointAnswers: ['To soften', 'To tone down', 'To make it nicer', 'To hide the bad part', 'To downplay'], thetaValue: 3.4),
+      VocabularyItem(word: 'Vindictive', frequency: WordFrequency.veryLow, twoPointAnswers: ['Eager for revenge, holding a grudge', 'Wanting to harm someone who has wronged you', 'Disposed to seek vengeance spitefully', 'Driven by a desire to get even'], onePointAnswers: ['Vengeful', 'Spiteful', 'Holds grudges', 'Wants revenge', 'Mean'], thetaValue: 3.4),
+      VocabularyItem(word: 'Rabelaisian', frequency: WordFrequency.veryLow, twoPointAnswers: ['Earthy, exuberant and full of colorful humor', 'Coarsely vivid and richly expressive in style', 'Robust, lively and bawdily picturesque', 'Marked by boisterous, full-blooded vigor'], onePointAnswers: ['Colorful', 'Earthy', 'Lively', 'Full of spirit', 'Vivid and bawdy'], thetaValue: 3.4),
+      VocabularyItem(word: 'Inanity', frequency: WordFrequency.veryLow, twoPointAnswers: ['The quality of being empty or pointless', 'Lack of sense, silliness or emptiness', 'Utter triviality and meaninglessness', 'The state of being vapid and worthless'], onePointAnswers: ['Emptiness', 'Pointlessness', 'Silliness', 'Uselessness', 'Nonsense'], thetaValue: 3.4),
+      VocabularyItem(word: 'Atavistic', frequency: WordFrequency.veryLow, twoPointAnswers: ['Reverting to an ancestral, primitive trait', 'Inherited from a distant ancestor', 'Recurring from an earlier evolutionary stage', 'Relating to a throwback to ancestors'], onePointAnswers: ['Inherited', 'Ancestral', 'Primitive', 'From ancestors', 'A throwback'], thetaValue: 3.4),
+      VocabularyItem(word: 'Circumlocution', frequency: WordFrequency.veryLow, twoPointAnswers: ['Using many words to avoid saying something directly', 'A roundabout way of expressing an idea', 'Talking around a point instead of stating it', 'An indirect, wordy way of speaking'], onePointAnswers: ['Beating around the bush', 'A roundabout way', 'Wordiness', 'Talking indirectly', 'A detour in speech'], thetaValue: 3.4),
+      VocabularyItem(word: 'Obviate', frequency: WordFrequency.veryLow, twoPointAnswers: ['To remove a difficulty before it arises', 'To prevent a problem from occurring', 'To make something unnecessary by anticipating it', 'To do away with a need or obstacle in advance'], onePointAnswers: ['To prevent', 'To avoid', 'To remove', 'To stop beforehand', 'To get rid of the need'], thetaValue: 3.4),
+    ],
   ];
 }

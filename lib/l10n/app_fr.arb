@@ -25,303 +25,6 @@
       }
     }
   },
-  "chatEyebrow": "ASSISTANT IA",
-  "@chatEyebrow": {
-    "description": "App bar eyebrow on chat screen"
-  },
-  "chatNewConversation": "Nouvelle conversation",
-  "@chatNewConversation": {
-    "description": "Tooltip to clear the chat"
-  },
-  "chatAssistantLabel": "MENTAL E.T.",
-  "@chatAssistantLabel": {
-    "description": "Label above assistant messages (brand)"
-  },
-  "chatUserLabel": "VOUS",
-  "@chatUserLabel": {
-    "description": "Label above user messages"
-  },
-  "chatHeroTitle1": "Posez",
-  "@chatHeroTitle1": {
-    "description": "Empty-state hero, line 1"
-  },
-  "chatHeroTitle2": "vos questions.",
-  "@chatHeroTitle2": {
-    "description": "Empty-state hero, line 2 (italic)"
-  },
-  "chatEmptyIntro": "L'IA Mental E.T. vous aide à mieux comprendre votre profil cognitif. Discussions confidentielles, accompagnement non-directif.",
-  "chatThinking": "Réflexion…",
-  "@chatThinking": {
-    "description": "Loading bubble label"
-  },
-  "chatInputHint": "Écrire un message…",
-  "@chatInputHint": {
-    "description": "Chat input placeholder"
-  },
-  "chatTimeJustNow": "à l'instant",
-  "@chatTimeJustNow": {
-    "description": "Message timestamp, under 1 min"
-  },
-  "chatTimeMinutes": "{count} min",
-  "@chatTimeMinutes": {
-    "description": "Message timestamp in minutes",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "chatTimeHours": "{count}h",
-  "@chatTimeHours": {
-    "description": "Message timestamp in hours",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "chatErrorMessage": "Désolé, une erreur s'est produite. Veuillez réessayer.",
-  "@chatErrorMessage": {
-    "description": "Generic chat error bubble"
-  },
-  "chatErrorEmptyResponse": "Réponse vide du worker",
-  "@chatErrorEmptyResponse": {
-    "description": "Network error (not user-facing prose)"
-  },
-  "chatErrorAccessDenied": "Accès refusé par le worker (origine non autorisée).",
-  "@chatErrorAccessDenied": {
-    "description": "403 network error"
-  },
-  "chatErrorRateLimit": "Limite de requêtes atteinte. Réessayez dans quelques instants.",
-  "@chatErrorRateLimit": {
-    "description": "429 network error"
-  },
-  "coreSplashTitleLine1": "Évaluation",
-  "@coreSplashTitleLine1": {
-    "description": "Splash title, line 1"
-  },
-  "coreSplashTitleLine2": "cognitive",
-  "@coreSplashTitleLine2": {
-    "description": "Splash title, line 2 (italic)"
-  },
-  "homeHeroTitle": "Découvrez",
-  "@homeHeroTitle": {
-    "description": "Home hero, line 1"
-  },
-  "homeHeroTitleItalic": "votre profil cognitif.",
-  "@homeHeroTitleItalic": {
-    "description": "Home hero, line 2 (italic)"
-  },
-  "homeHeroBody": "Une évaluation scientifique adaptative, inspirée des échelles Wechsler. 12 sous-tests, 5 indices, un score global.",
-  "homeActionStartTitle": "Commencer une évaluation",
-  "@homeActionStartTitle": {
-    "description": "Home action card 1 title"
-  },
-  "homeActionStartSubtitle": "Durée : 30 – 45 minutes",
-  "@homeActionStartSubtitle": {
-    "description": "Home action card 1 subtitle"
-  },
-  "homeActionResultsTitle": "Mes résultats",
-  "@homeActionResultsTitle": {
-    "description": "Home action card 2 title"
-  },
-  "homeActionResultsSubtitle": "Historique des évaluations",
-  "@homeActionResultsSubtitle": {
-    "description": "Home action card 2 subtitle"
-  },
-  "homeActionChatTitle": "Parler avec Mental E.T.",
-  "@homeActionChatTitle": {
-    "description": "Home action card 3 title"
-  },
-  "homeActionChatSubtitle": "Assistant IA, questions psychologiques",
-  "@homeActionChatSubtitle": {
-    "description": "Home action card 3 subtitle"
-  },
-  "homeComingSoon": "BIENTÔT DISPONIBLE",
-  "@homeComingSoon": {
-    "description": "Badge on disabled action"
-  },
-  "homeAboutEyebrow": "À PROPOS",
-  "@homeAboutEyebrow": {
-    "description": "About section eyebrow"
-  },
-  "homeAboutSubtestsTitle": "12 sous-tests",
-  "@homeAboutSubtestsTitle": {
-    "description": "About tile 1 title"
-  },
-  "homeAboutSubtestsBody": "Évaluation complète des cinq indices cognitifs WAIS-IV.",
-  "homeAboutAdaptiveTitle": "IA adaptative",
-  "@homeAboutAdaptiveTitle": {
-    "description": "About tile 2 title"
-  },
-  "homeAboutAdaptiveBody": "Difficulté ajustée en temps réel via inférence IRT.",
-  "homeAboutValidationTitle": "Validation scientifique",
-  "@homeAboutValidationTitle": {
-    "description": "About tile 3 title"
-  },
-  "homeAboutValidationBody": "Items inspirés des échelles Wechsler (WPPSI / WISC / WAIS).",
-  "homeResumeEyebrow": "TEST EN COURS",
-  "@homeResumeEyebrow": {
-    "description": "Resume banner eyebrow"
-  },
-  "homeResumeTitle": "Reprendre votre évaluation",
-  "@homeResumeTitle": {
-    "description": "Resume banner title"
-  },
-  "homeResumeButton": "Reprendre",
-  "@homeResumeButton": {
-    "description": "Resume banner button"
-  },
-  "oralMicAccessTitle": "Accès au microphone",
-  "@oralMicAccessTitle": {
-    "description": "Titre du dialogue de permission micro (lecture et résumé)"
-  },
-  "oralReadingPermissionBody1": "Cette activité enregistre votre voix pendant que vous lisez le texte à voix haute.",
-  "@oralReadingPermissionBody1": {
-    "description": "Dialogue permission micro — test de lecture, paragraphe 1"
-  },
-  "oralReadingPermissionBody2": "Vos enregistrements seront anonymisés et pourront contribuer à l'amélioration de la reconnaissance vocale en français.",
-  "@oralReadingPermissionBody2": {
-    "description": "Dialogue permission micro — test de lecture, paragraphe 2. EN omet volontairement « en français » (les textes lus sont dans la langue de l'app)"
-  },
-  "oralBrowserWillAskMic": "Votre navigateur vous demandera ensuite d'autoriser le microphone.",
-  "@oralBrowserWillAskMic": {
-    "description": "Dialogue permission micro — note italique sur la demande navigateur"
-  },
-  "oralCancel": "Annuler",
-  "@oralCancel": {
-    "description": "Bouton annuler des dialogues de permission micro"
-  },
-  "oralAllowMicrophone": "Autoriser le microphone",
-  "@oralAllowMicrophone": {
-    "description": "Bouton de confirmation du dialogue de permission micro (lecture)"
-  },
-  "oralMicDeniedOrUnavailable": "Microphone refusé ou indisponible.",
-  "@oralMicDeniedOrUnavailable": {
-    "description": "Message d'erreur quand la permission micro est refusée"
-  },
-  "oralCannotStartRecording": "Impossible de démarrer l'enregistrement sur ce navigateur.",
-  "@oralCannotStartRecording": {
-    "description": "Message d'erreur quand le démarrage de l'enregistrement échoue"
-  },
-  "oralCanSkipToNextStep": "{message} Vous pouvez passer à l'étape suivante.",
-  "@oralCanSkipToNextStep": {
-    "description": "Contenu du SnackBar d'erreur micro ; message = erreur déjà localisée",
-    "placeholders": {
-      "message": {
-        "type": "String"
-      }
-    }
-  },
-  "oralSkip": "Passer",
-  "@oralSkip": {
-    "description": "Action du SnackBar d'erreur micro pour passer l'étape"
-  },
-  "oralRecordingInProgress": "Enregistrement en cours",
-  "@oralRecordingInProgress": {
-    "description": "Indicateur clignotant rouge pendant l'enregistrement"
-  },
-  "oralKeepGoingSeconds": "Continuez encore {seconds}s...",
-  "@oralKeepGoingSeconds": {
-    "description": "Compte à rebours avant que le bouton Terminer ne s'active",
-    "placeholders": {
-      "seconds": {
-        "type": "int"
-      }
-    }
-  },
-  "oralSaving": "Sauvegarde...",
-  "@oralSaving": {
-    "description": "Libellé du bouton pendant la sauvegarde de l'audio"
-  },
-  "oralReadingInstructions": "Lisez le texte suivant à voix haute, clairement et à votre rythme naturel. Appuyez sur \"Démarrer\" quand vous êtes prêt.",
-  "@oralReadingInstructions": {
-    "description": "Bandeau d'instructions du test de lecture à voix haute"
-  },
-  "oralStartReading": "Démarrer la lecture",
-  "@oralStartReading": {
-    "description": "Bouton principal pour démarrer l'enregistrement de la lecture"
-  },
-  "oralFinish": "Terminer",
-  "@oralFinish": {
-    "description": "Bouton pour arrêter l'enregistrement de la lecture"
-  },
-  "oralSkipThisStep": "Passer cette étape",
-  "@oralSkipThisStep": {
-    "description": "Bouton texte affiché si le micro est refusé"
-  },
-  "oralSummaryPermissionBody1": "Vous allez maintenant enregistrer votre résumé oral du texte.",
-  "@oralSummaryPermissionBody1": {
-    "description": "Dialogue permission micro — test de résumé, paragraphe 1"
-  },
-  "oralSummaryPermissionBody2": "Parlez naturellement, comme si vous expliquiez le texte à un ami. Prenez entre 30 et 60 secondes.",
-  "@oralSummaryPermissionBody2": {
-    "description": "Dialogue permission micro — test de résumé, paragraphe 2"
-  },
-  "oralStartSummary": "Démarrer le résumé",
-  "@oralStartSummary": {
-    "description": "Bouton pour démarrer l'enregistrement du résumé (dialogue et écran)"
-  },
-  "oralSummaryInstructionLead": "Vous venez de lire ce texte. ",
-  "@oralSummaryInstructionLead": {
-    "description": "Début (en gras) du bandeau d'instructions du résumé — l'espace final est volontaire"
-  },
-  "oralSummaryInstructionBody": "Résumez ce que vous avez compris avec vos propres mots. Prenez entre 30 et 60 secondes. Parlez naturellement, comme si vous l'expliquiez à un ami.",
-  "@oralSummaryInstructionBody": {
-    "description": "Suite du bandeau d'instructions du résumé"
-  },
-  "oralReferenceText": "Texte de référence",
-  "@oralReferenceText": {
-    "description": "Étiquette de la carte grisée montrant le texte original pendant le résumé"
-  },
-  "oralFinishSummary": "Terminer le résumé",
-  "@oralFinishSummary": {
-    "description": "Bouton pour arrêter l'enregistrement du résumé"
-  },
-  "oralFlowTitle": "Collecte audio",
-  "@oralFlowTitle": {
-    "description": "Titre de l'AppBar du flux de test oral"
-  },
-  "oralConsentTitle": "Test de Compréhension Orale",
-  "@oralConsentTitle": {
-    "description": "Titre de l'écran de consentement"
-  },
-  "oralConsentRecordTitle": "Ce que nous enregistrons",
-  "@oralConsentRecordTitle": {
-    "description": "Écran de consentement — titre de la section enregistrements"
-  },
-  "oralConsentRecordBody": "Votre voix pendant la lecture de 5 courts textes (environ 1 min chacun) et votre résumé oral (environ 40 secondes par texte).",
-  "@oralConsentRecordBody": {
-    "description": "Écran de consentement — corps de la section enregistrements"
-  },
-  "oralConsentAnonTitle": "Confidentialité",
-  "@oralConsentAnonTitle": {
-    "description": "Écran de consentement — titre de la section confidentialité"
-  },
-  "oralConsentAnonBody": "Vos enregistrements sont identifiés par un code de session aléatoire, et non par votre nom. Ils restent toutefois rattachables à votre compte : ce sont des données personnelles protégées, chiffrées et stockées en Europe.",
-  "@oralConsentAnonBody": {
-    "description": "Écran de consentement — corps de la section confidentialité (pseudonymisation honnête)"
-  },
-  "oralConsentUsageTitle": "Utilisation",
-  "@oralConsentUsageTitle": {
-    "description": "Écran de consentement — titre de la section utilisation"
-  },
-  "oralConsentUsageBody": "Ces enregistrements pourront contribuer à l'amélioration de la reconnaissance vocale du français, notamment pour des modèles comme Whisper ou Speechmatics.",
-  "@oralConsentUsageBody": {
-    "description": "Écran de consentement — corps de la section utilisation. EN omet volontairement « du français »"
-  },
-  "oralAcceptAndStart": "J'accepte et je commence",
-  "@oralAcceptAndStart": {
-    "description": "Bouton principal de l'écran de consentement"
-  },
-  "oralDeclineAndGoBack": "Refuser et revenir en arrière",
-  "@oralDeclineAndGoBack": {
-    "description": "Bouton texte de refus du consentement"
-  },
-  "oralWithdrawConsentNote": "Vous pouvez retirer votre consentement à tout moment depuis les paramètres de l'application.",
-  "@oralWithdrawConsentNote": {
-    "description": "Note légale en bas de l'écran de consentement"
-  },
   "oralConsentRequiredCheckbox": "J'autorise l'enregistrement de ma voix et son analyse, le temps de réaliser ce test. (obligatoire)",
   "@oralConsentRequiredCheckbox": {
     "description": "Case à cocher OBLIGATOIRE du consentement audio"
@@ -338,399 +41,9 @@
   "@oralConsentPrivacyLink": {
     "description": "Lien vers la politique de confidentialité sur l'écran de consentement"
   },
-  "oralTextProgress": "Texte {current} sur 5",
-  "@oralTextProgress": {
-    "description": "En-tête de progression du flux (5 textes au total)",
-    "placeholders": {
-      "current": {
-        "type": "int"
-      }
-    }
-  },
-  "oralStepReading": "Lecture",
-  "@oralStepReading": {
-    "description": "Étiquette d'étape courante dans l'en-tête de progression"
-  },
-  "oralStepSummary": "Résumé",
-  "@oralStepSummary": {
-    "description": "Étiquette d'étape courante dans l'en-tête de progression"
-  },
-  "oralPauseWellDone": "Bien !",
-  "@oralPauseWellDone": {
-    "description": "Titre de l'écran de pause entre lecture et résumé"
-  },
-  "oralPauseNowSummarize": "Maintenant, résumez oralement ce texte.",
-  "@oralPauseNowSummarize": {
-    "description": "Consigne de l'écran de pause"
-  },
-  "oralPauseStartingIn": "Début dans...",
-  "@oralPauseStartingIn": {
-    "description": "Libellé au-dessus du compte à rebours de la pause"
-  },
-  "oralCompletedThanks": "Merci !",
-  "@oralCompletedThanks": {
-    "description": "Titre de l'écran de fin"
-  },
-  "oralCompletedBody": "Vous avez complété les 5 textes.\nVos enregistrements contribueront à l'amélioration\nde la reconnaissance vocale en français.",
-  "@oralCompletedBody": {
-    "description": "Corps de l'écran de fin (retours à la ligne volontaires). EN omet volontairement « en français »"
-  },
-  "oralBackToHome": "Retour à l'accueil",
-  "@oralBackToHome": {
-    "description": "Bouton de l'écran de fin"
-  },
-  "oralExitDialogTitle": "Quitter ?",
-  "@oralExitDialogTitle": {
-    "description": "Titre du dialogue de confirmation de sortie pendant un enregistrement"
-  },
-  "oralExitDialogBody": "Un enregistrement est en cours. Si vous quittez maintenant, il ne sera pas sauvegardé.",
-  "@oralExitDialogBody": {
-    "description": "Corps du dialogue de confirmation de sortie"
-  },
-  "oralContinue": "Continuer",
-  "@oralContinue": {
-    "description": "Bouton pour rester dans le test (dialogue de sortie)"
-  },
-  "oralQuit": "Quitter",
-  "@oralQuit": {
-    "description": "Bouton pour quitter le test (dialogue de sortie)"
-  },
-  "regStepEyebrow": "ÉTAPE {step} / 4",
-  "@regStepEyebrow": {
-    "description": "Eyebrow label showing the current registration step out of 4",
-    "placeholders": {
-      "step": {
-        "type": "int"
-      }
-    }
-  },
-  "regStepEyebrowSuccess": "ÉTAPE 4 / 4 · SUCCÈS",
-  "@regStepEyebrowSuccess": {
-    "description": "Eyebrow label on the registration success page"
-  },
-  "regEmailTitle": "Créer mon token",
-  "@regEmailTitle": {
-    "description": "Title of the email entry page (step 1 of registration)"
-  },
-  "regEmailHeading": "Votre email",
-  "@regEmailHeading": {
-    "description": "Heading next to the logo on the email entry page"
-  },
-  "regEmailIntro": "Nous vous envoyons un code de vérification à 6 chiffres. Votre email n'est pas lié à votre token et reste privé.",
-  "@regEmailIntro": {
-    "description": "Introductory text on the email entry page"
-  },
-  "regEmailFieldLabel": "Adresse email",
-  "@regEmailFieldLabel": {
-    "description": "Label of the email text field"
-  },
-  "regEmailInvalid": "Email invalide",
-  "@regEmailInvalid": {
-    "description": "Validation error when the email format is invalid"
-  },
-  "regSendingCode": "Envoi du code…",
-  "@regSendingCode": {
-    "description": "Button label while the email OTP is being sent"
-  },
-  "regReceiveCode": "Recevoir le code",
-  "@regReceiveCode": {
-    "description": "Button to request the email verification code"
-  },
-  "regEmailPrivacyNote": "Aucun nom, prénom ou adresse précise ne sera stocké. Seuls votre sexe, tranche d'âge et code postal sont encodés (chiffrés) dans votre token anonyme.",
-  "@regEmailPrivacyNote": {
-    "description": "Privacy note at the bottom of the email entry page"
-  },
-  "regEmailOtpTitle": "Vérifier mon email",
-  "@regEmailOtpTitle": {
-    "description": "Title of the email OTP verification page"
-  },
-  "regCodeSentTo": "Code envoyé à",
-  "@regCodeSentTo": {
-    "description": "Label above the email address the OTP was sent to"
-  },
-  "regVerifying": "Vérification…",
-  "@regVerifying": {
-    "description": "Button label while an OTP code is being verified"
-  },
-  "regResendCode": "Renvoyer le code",
-  "@regResendCode": {
-    "description": "Button to resend the email verification code"
-  },
-  "regPhoneTitle": "Votre téléphone",
-  "@regPhoneTitle": {
-    "description": "Title of the phone entry page (step 2 of registration)"
-  },
-  "regPhoneIntro": "Un code SMS à 6 chiffres sera envoyé pour vérifier votre numéro. Aucun lien entre votre numéro et votre token.",
-  "@regPhoneIntro": {
-    "description": "Introductory text on the phone entry page"
-  },
-  "regPhoneFieldHint": "Numéro",
-  "@regPhoneFieldHint": {
-    "description": "Hint of the phone number text field"
-  },
-  "regSendingSms": "Envoi du SMS…",
-  "@regSendingSms": {
-    "description": "Button label while the SMS OTP is being sent"
-  },
-  "regReceiveSms": "Recevoir le SMS",
-  "@regReceiveSms": {
-    "description": "Button to request the SMS verification code"
-  },
-  "regPhoneOtpTitle": "Vérifier mon téléphone",
-  "@regPhoneOtpTitle": {
-    "description": "Title of the phone OTP verification page"
-  },
-  "regSmsSentTo": "SMS envoyé au",
-  "@regSmsSentTo": {
-    "description": "Label above the phone number the SMS OTP was sent to"
-  },
-  "regResendSms": "Renvoyer le SMS",
-  "@regResendSms": {
-    "description": "Button to resend the SMS verification code"
-  },
-  "regDemoTitle": "Vos données démographiques",
-  "@regDemoTitle": {
-    "description": "Title of the demographics page (step 3 of registration)"
-  },
-  "regDemoIntro": "Ces informations seront chiffrées dans votre token. Aucune valeur exacte n'est stockée (ni âge précis, ni adresse précise).",
-  "@regDemoIntro": {
-    "description": "Introductory text on the demographics page"
-  },
-  "regSectionSex": "SEXE",
-  "@regSectionSex": {
-    "description": "Section label (uppercase) for the sex selection"
-  },
-  "regSectionAgeBucket": "TRANCHE D'ÂGE",
-  "@regSectionAgeBucket": {
-    "description": "Section label (uppercase) for the age range selection"
-  },
-  "regSectionCountryPostal": "PAYS ET CODE POSTAL",
-  "@regSectionCountryPostal": {
-    "description": "Section label (uppercase) for the country and postal code inputs"
-  },
-  "regPostalCodeHint": "Code postal",
-  "@regPostalCodeHint": {
-    "description": "Hint of the postal code text field"
-  },
-  "regGeneratingToken": "Génération du token…",
-  "@regGeneratingToken": {
-    "description": "Button label while the anonymous token is being generated"
-  },
-  "regGenerateMyToken": "Générer mon token",
-  "@regGenerateMyToken": {
-    "description": "Button to submit demographics and generate the anonymous token"
-  },
-  "regSuccessTitle": "Bienvenue dans Mental E.T.",
-  "@regSuccessTitle": {
-    "description": "Title of the registration success page"
-  },
-  "regSuccessTokenSaved": "Votre token anonyme a été généré et sauvegardé sur cet appareil.",
-  "@regSuccessTokenSaved": {
-    "description": "Confirmation message on the success page"
-  },
-  "regSuccessTokenDetails": "Il ne contient ni votre email, ni votre numéro de téléphone, ni votre nom. Uniquement votre sexe, votre tranche d'âge et votre zone géographique (chiffrés). Vous pouvez maintenant commencer votre évaluation cognitive.",
-  "@regSuccessTokenDetails": {
-    "description": "Details about the token content on the success page"
-  },
-  "regImportantLabel": "IMPORTANT",
-  "@regImportantLabel": {
-    "description": "Uppercase warning label on the success page"
-  },
-  "regSuccessWarning": "Ne désinstallez pas l'application sans avoir terminé votre évaluation : votre token est uniquement stocké sur cet appareil. Si vous le perdez, vous ne pourrez plus créer de nouveau compte avec le même email ou téléphone.",
-  "@regSuccessWarning": {
-    "description": "Warning about token being stored only on the device"
-  },
-  "regEmailAlreadyRegistered": "Cet email a déjà un compte. Si c'est le vôtre, vous avez déjà un token.",
-  "@regEmailAlreadyRegistered": {
-    "description": "Error when the email is already linked to an account"
-  },
-  "regEmailUnavailable": "Email indisponible.",
-  "@regEmailUnavailable": {
-    "description": "Generic error when the email cannot be used"
-  },
-  "regOtpIncorrectOrExpired": "Code incorrect ou expiré.",
-  "@regOtpIncorrectOrExpired": {
-    "description": "Error when an OTP code (email or SMS) is wrong or expired"
-  },
-  "regPhoneAlreadyRegistered": "Ce numéro a déjà un compte.",
-  "@regPhoneAlreadyRegistered": {
-    "description": "Error when the phone number is already linked to an account"
-  },
-  "regPhoneUnavailable": "Numéro indisponible.",
-  "@regPhoneUnavailable": {
-    "description": "Generic error when the phone number cannot be used"
-  },
-  "regEmailAlreadyHasToken": "Cet email a déjà un token.",
-  "@regEmailAlreadyHasToken": {
-    "description": "Error at token generation when the email already has a token"
-  },
-  "regPhoneAlreadyHasToken": "Ce numéro a déjà un token.",
-  "@regPhoneAlreadyHasToken": {
-    "description": "Error at token generation when the phone already has a token"
-  },
-  "regPostalNotFound": "Code postal introuvable. Vérifiez le pays et le code.",
-  "@regPostalNotFound": {
-    "description": "Error when the submitted postal code is unknown"
-  },
-  "regNoInternet": "Pas de connexion internet.",
-  "@regNoInternet": {
-    "description": "Error when the network is unreachable"
-  },
-  "regGenericRetryError": "Erreur — merci de réessayer.",
-  "@regGenericRetryError": {
-    "description": "Generic fallback error during registration"
-  },
-  "regSexMale": "Masculin",
-  "@regSexMale": {
-    "description": "Displayed label for the male sex option"
-  },
-  "regSexFemale": "Féminin",
-  "@regSexFemale": {
-    "description": "Displayed label for the female sex option"
-  },
-  "regSexUndisclosed": "Préfère ne pas dire",
-  "@regSexUndisclosed": {
-    "description": "Displayed label for the undisclosed sex option"
-  },
-  "regAge1825": "18 – 25 ans",
-  "@regAge1825": {
-    "description": "Displayed label for the 18-25 age range"
-  },
-  "regAge2635": "26 – 35 ans",
-  "@regAge2635": {
-    "description": "Displayed label for the 26-35 age range"
-  },
-  "regAge3645": "36 – 45 ans",
-  "@regAge3645": {
-    "description": "Displayed label for the 36-45 age range"
-  },
-  "regAge4655": "46 – 55 ans",
-  "@regAge4655": {
-    "description": "Displayed label for the 46-55 age range"
-  },
-  "regAge5665": "56 – 65 ans",
-  "@regAge5665": {
-    "description": "Displayed label for the 56-65 age range"
-  },
-  "regAge66plus": "66 ans et plus",
-  "@regAge66plus": {
-    "description": "Displayed label for the 66+ age range"
-  },
-  "scoringClassificationVerySuperior": "Très supérieur",
-  "@scoringClassificationVerySuperior": {
-    "description": "Classification Wechsler pour un score composite >= 130 ou note standard >= 16"
-  },
-  "scoringClassificationSuperior": "Supérieur",
-  "@scoringClassificationSuperior": {
-    "description": "Classification Wechsler pour un score composite 120-129 ou note standard 13-15"
-  },
-  "scoringClassificationHighAverage": "Moyen fort",
-  "@scoringClassificationHighAverage": {
-    "description": "Classification Wechsler pour un score composite 110-119 ou note standard 11-12"
-  },
-  "scoringClassificationAverage": "Moyen",
-  "@scoringClassificationAverage": {
-    "description": "Classification Wechsler pour un score composite 90-109 ou note standard 8-10"
-  },
-  "scoringClassificationLowAverage": "Moyen faible",
-  "@scoringClassificationLowAverage": {
-    "description": "Classification Wechsler pour un score composite 80-89 ou note standard 6-7"
-  },
-  "scoringClassificationBorderline": "Limite",
-  "@scoringClassificationBorderline": {
-    "description": "Classification Wechsler pour un score composite 70-79 ou note standard 4-5"
-  },
-  "scoringClassificationExtremelyLow": "Extrêmement bas",
-  "@scoringClassificationExtremelyLow": {
-    "description": "Classification Wechsler pour un score composite < 70 ou note standard < 4"
-  },
-  "scoringNotAvailable": "N/A",
-  "@scoringNotAvailable": {
-    "description": "Classification affichée quand la note standardisée d'un sous-test est absente"
-  },
-  "scoringSummaryFullScaleIq": "QI Total: {score} ({classification})",
-  "@scoringSummaryFullScaleIq": {
-    "description": "Ligne du résumé de profil : QI total avec sa classification",
-    "placeholders": {
-      "score": {
-        "type": "int"
-      },
-      "classification": {
-        "type": "String"
-      }
-    }
-  },
-  "scoringSummaryPercentile": "Percentile: {rank}e",
-  "@scoringSummaryPercentile": {
-    "description": "Ligne du résumé de profil : rang percentile du QI total (suffixe ordinal 'e' en FR)",
-    "placeholders": {
-      "rank": {
-        "type": "int"
-      }
-    }
-  },
-  "scoringSummaryConfidenceInterval": "Intervalle de confiance 95%: {lower} - {upper}",
-  "@scoringSummaryConfidenceInterval": {
-    "description": "Ligne du résumé de profil : intervalle de confiance à 95% du QI total",
-    "placeholders": {
-      "lower": {
-        "type": "int"
-      },
-      "upper": {
-        "type": "int"
-      }
-    }
-  },
-  "scoringIndexVerbalComprehension": "Compréhension Verbale",
-  "@scoringIndexVerbalComprehension": {
-    "description": "Nom affiché de l'indice VCI (WAIS-IV)"
-  },
-  "scoringIndexVisualSpatial": "Visuo-Spatial",
-  "@scoringIndexVisualSpatial": {
-    "description": "Nom affiché de l'indice VSI (WAIS-IV)"
-  },
-  "scoringIndexFluidReasoning": "Raisonnement Fluide",
-  "@scoringIndexFluidReasoning": {
-    "description": "Nom affiché de l'indice FRI (WAIS-IV)"
-  },
-  "scoringIndexWorkingMemory": "Mémoire de Travail",
-  "@scoringIndexWorkingMemory": {
-    "description": "Nom affiché de l'indice WMI (WAIS-IV)"
-  },
-  "scoringIndexProcessingSpeed": "Vitesse de Traitement",
-  "@scoringIndexProcessingSpeed": {
-    "description": "Nom affiché de l'indice PSI (WAIS-IV)"
-  },
-  "scoringSummaryRelativeStrengths": "Forces relatives: {list}",
-  "@scoringSummaryRelativeStrengths": {
-    "description": "Ligne du résumé de profil : liste des indices significativement au-dessus du QI total",
-    "placeholders": {
-      "list": {
-        "type": "String"
-      }
-    }
-  },
-  "scoringSummaryRelativeWeaknesses": "Faiblesses relatives: {list}",
-  "@scoringSummaryRelativeWeaknesses": {
-    "description": "Ligne du résumé de profil : liste des indices significativement en dessous du QI total",
-    "placeholders": {
-      "list": {
-        "type": "String"
-      }
-    }
-  },
-  "scoringSummaryHomogeneousProfile": "Profil cognitif homogène",
-  "@scoringSummaryHomogeneousProfile": {
-    "description": "Conclusion du résumé de profil quand les indices sont homogènes (écarts < 1 écart-type)"
-  },
-  "scoringSummaryHeterogeneousProfile": "Profil cognitif hétérogène (écart max: {points} points)",
-  "@scoringSummaryHeterogeneousProfile": {
-    "description": "Conclusion du résumé de profil quand les indices sont hétérogènes, avec l'écart maximal en points",
-    "placeholders": {
-      "points": {
-        "type": "int"
-      }
-    }
+  "matDiscontinue3": "3 échecs consécutifs - Test terminé (WAIS-IV)",
+  "@matDiscontinue3": {
+    "description": "Matrices — message de règle de discontinuation après 3 échecs"
   },
   "assessIntroTitle": "Nouvelle évaluation",
   "@assessIntroTitle": {
@@ -1460,6 +773,114 @@
   "@ctPdfDisclaimer": {
     "description": "Avertissement en bas du rapport PDF"
   },
+  "chatEyebrow": "ASSISTANT IA",
+  "@chatEyebrow": {
+    "description": "App bar eyebrow on chat screen"
+  },
+  "chatNewConversation": "Nouvelle conversation",
+  "@chatNewConversation": {
+    "description": "Tooltip to clear the chat"
+  },
+  "chatAssistantLabel": "MENTAL E.T.",
+  "@chatAssistantLabel": {
+    "description": "Label above assistant messages (brand)"
+  },
+  "chatUserLabel": "VOUS",
+  "@chatUserLabel": {
+    "description": "Label above user messages"
+  },
+  "chatHeroTitle1": "Posez",
+  "@chatHeroTitle1": {
+    "description": "Empty-state hero, line 1"
+  },
+  "chatHeroTitle2": "vos questions.",
+  "@chatHeroTitle2": {
+    "description": "Empty-state hero, line 2 (italic)"
+  },
+  "chatEmptyIntro": "L'IA Mental E.T. vous aide à mieux comprendre votre profil cognitif. Discussions confidentielles, accompagnement non-directif.",
+  "chatThinking": "Réflexion…",
+  "@chatThinking": {
+    "description": "Loading bubble label"
+  },
+  "chatInputHint": "Écrire un message…",
+  "@chatInputHint": {
+    "description": "Chat input placeholder"
+  },
+  "chatTimeJustNow": "à l'instant",
+  "@chatTimeJustNow": {
+    "description": "Message timestamp, under 1 min"
+  },
+  "chatTimeMinutes": "{count} min",
+  "@chatTimeMinutes": {
+    "description": "Message timestamp in minutes",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatTimeHours": "{count}h",
+  "@chatTimeHours": {
+    "description": "Message timestamp in hours",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "chatErrorMessage": "Désolé, une erreur s'est produite. Veuillez réessayer.",
+  "@chatErrorMessage": {
+    "description": "Generic chat error bubble"
+  },
+  "chatErrorEmptyResponse": "Réponse vide du worker",
+  "@chatErrorEmptyResponse": {
+    "description": "Network error (not user-facing prose)"
+  },
+  "chatErrorAccessDenied": "Accès refusé par le worker (origine non autorisée).",
+  "@chatErrorAccessDenied": {
+    "description": "403 network error"
+  },
+  "chatErrorRateLimit": "Limite de requêtes atteinte. Réessayez dans quelques instants.",
+  "@chatErrorRateLimit": {
+    "description": "429 network error"
+  },
+  "chatErrorServer": "Erreur serveur ({code})",
+  "@chatErrorServer": {
+    "description": "500 network error fallback",
+    "placeholders": {
+      "code": {
+        "type": "int"
+      }
+    }
+  },
+  "chatErrorHttp": "Erreur {code} : {body}",
+  "@chatErrorHttp": {
+    "description": "Generic HTTP error fallback",
+    "placeholders": {
+      "code": {
+        "type": "int"
+      },
+      "body": {
+        "type": "String"
+      }
+    }
+  },
+  "coreSplashTitleLine1": "Évaluation",
+  "@coreSplashTitleLine1": {
+    "description": "Splash title, line 1"
+  },
+  "coreSplashTitleLine2": "cognitive",
+  "@coreSplashTitleLine2": {
+    "description": "Splash title, line 2 (italic)"
+  },
+  "commonNotAvailable": "N/D",
+  "@commonNotAvailable": {
+    "description": "Abréviation 'non disponible' (cellules PDF compactes)"
+  },
+  "pdfFilenameBase": "mentality_resultats",
+  "@pdfFilenameBase": {
+    "description": "Base du nom de fichier PDF (ASCII, sans accents)"
+  },
   "coreRouteNotFound": "Page introuvable : {path}",
   "@coreRouteNotFound": {
     "description": "Message affiché par le routeur quand une route demandée n'existe pas. {path} est le chemin de l'URL.",
@@ -1468,6 +889,86 @@
         "type": "String"
       }
     }
+  },
+  "homeHeroTitle": "Découvrez",
+  "@homeHeroTitle": {
+    "description": "Home hero, line 1"
+  },
+  "homeHeroTitleItalic": "votre profil cognitif.",
+  "@homeHeroTitleItalic": {
+    "description": "Home hero, line 2 (italic)"
+  },
+  "homeHeroBody": "Une évaluation scientifique adaptative, inspirée des échelles Wechsler. 12 sous-tests, 5 indices, un score global.",
+  "homeActionStartTitle": "Commencer une évaluation",
+  "@homeActionStartTitle": {
+    "description": "Home action card 1 title"
+  },
+  "homeActionStartSubtitle": "Durée : 30 – 45 minutes",
+  "@homeActionStartSubtitle": {
+    "description": "Home action card 1 subtitle"
+  },
+  "homeActionResultsTitle": "Mes résultats",
+  "@homeActionResultsTitle": {
+    "description": "Home action card 2 title"
+  },
+  "homeActionResultsSubtitle": "Historique des évaluations",
+  "@homeActionResultsSubtitle": {
+    "description": "Home action card 2 subtitle"
+  },
+  "homeActionChatTitle": "Parler avec Mental E.T.",
+  "@homeActionChatTitle": {
+    "description": "Home action card 3 title"
+  },
+  "homeActionChatSubtitle": "Assistant IA, questions psychologiques",
+  "@homeActionChatSubtitle": {
+    "description": "Home action card 3 subtitle"
+  },
+  "homeComingSoon": "BIENTÔT DISPONIBLE",
+  "@homeComingSoon": {
+    "description": "Badge on disabled action"
+  },
+  "homeAboutEyebrow": "À PROPOS",
+  "@homeAboutEyebrow": {
+    "description": "About section eyebrow"
+  },
+  "homeAboutSubtestsTitle": "12 sous-tests",
+  "@homeAboutSubtestsTitle": {
+    "description": "About tile 1 title"
+  },
+  "homeAboutSubtestsBody": "Évaluation complète des cinq indices cognitifs WAIS-IV.",
+  "homeAboutAdaptiveTitle": "IA adaptative",
+  "@homeAboutAdaptiveTitle": {
+    "description": "About tile 2 title"
+  },
+  "homeAboutAdaptiveBody": "Difficulté ajustée en temps réel via inférence IRT.",
+  "homeAboutValidationTitle": "Validation scientifique",
+  "@homeAboutValidationTitle": {
+    "description": "About tile 3 title"
+  },
+  "homeAboutValidationBody": "Items inspirés des échelles Wechsler (WPPSI / WISC / WAIS).",
+  "homeResumeEyebrow": "TEST EN COURS",
+  "@homeResumeEyebrow": {
+    "description": "Resume banner eyebrow"
+  },
+  "homeResumeTitle": "Reprendre votre évaluation",
+  "@homeResumeTitle": {
+    "description": "Resume banner title"
+  },
+  "homeResumeButton": "Reprendre",
+  "@homeResumeButton": {
+    "description": "Resume banner button"
+  },
+  "homeLogoutTitle": "Se déconnecter ?",
+  "@homeLogoutTitle": {
+    "description": "Logout confirmation dialog title"
+  },
+  "homeLogoutBody": "Ton token sera retiré de cet appareil. Assure-toi de l'avoir sauvegardé : sans lui, tu ne pourras pas te reconnecter à tes données.",
+  "@homeLogoutBody": {
+    "description": "Logout confirmation dialog body"
+  },
+  "homeLogoutConfirm": "Se déconnecter",
+  "@homeLogoutConfirm": {
+    "description": "Logout confirm/tooltip label"
   },
   "infoTestName": "Information",
   "@infoTestName": {
@@ -1862,6 +1363,550 @@
   "@arithDifficultyVeryHard": {
     "description": "Arithmétique — difficulté : très difficile"
   },
+  "oralMicAccessTitle": "Accès au microphone",
+  "@oralMicAccessTitle": {
+    "description": "Titre du dialogue de permission micro (lecture et résumé)"
+  },
+  "oralReadingPermissionBody1": "Cette activité enregistre votre voix pendant que vous lisez le texte à voix haute.",
+  "@oralReadingPermissionBody1": {
+    "description": "Dialogue permission micro — test de lecture, paragraphe 1"
+  },
+  "oralReadingPermissionBody2": "Vos enregistrements seront anonymisés et pourront contribuer à l'amélioration de la reconnaissance vocale en français.",
+  "@oralReadingPermissionBody2": {
+    "description": "Dialogue permission micro — test de lecture, paragraphe 2. EN omet volontairement « en français » (les textes lus sont dans la langue de l'app)"
+  },
+  "oralBrowserWillAskMic": "Votre navigateur vous demandera ensuite d'autoriser le microphone.",
+  "@oralBrowserWillAskMic": {
+    "description": "Dialogue permission micro — note italique sur la demande navigateur"
+  },
+  "oralCancel": "Annuler",
+  "@oralCancel": {
+    "description": "Bouton annuler des dialogues de permission micro"
+  },
+  "oralAllowMicrophone": "Autoriser le microphone",
+  "@oralAllowMicrophone": {
+    "description": "Bouton de confirmation du dialogue de permission micro (lecture)"
+  },
+  "oralMicDeniedOrUnavailable": "Microphone refusé ou indisponible.",
+  "@oralMicDeniedOrUnavailable": {
+    "description": "Message d'erreur quand la permission micro est refusée"
+  },
+  "oralCannotStartRecording": "Impossible de démarrer l'enregistrement sur ce navigateur.",
+  "@oralCannotStartRecording": {
+    "description": "Message d'erreur quand le démarrage de l'enregistrement échoue"
+  },
+  "oralCanSkipToNextStep": "{message} Vous pouvez passer à l'étape suivante.",
+  "@oralCanSkipToNextStep": {
+    "description": "Contenu du SnackBar d'erreur micro ; message = erreur déjà localisée",
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "oralSkip": "Passer",
+  "@oralSkip": {
+    "description": "Action du SnackBar d'erreur micro pour passer l'étape"
+  },
+  "oralRecordingInProgress": "Enregistrement en cours",
+  "@oralRecordingInProgress": {
+    "description": "Indicateur clignotant rouge pendant l'enregistrement"
+  },
+  "oralKeepGoingSeconds": "Continuez encore {seconds}s...",
+  "@oralKeepGoingSeconds": {
+    "description": "Compte à rebours avant que le bouton Terminer ne s'active",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "oralSaving": "Sauvegarde...",
+  "@oralSaving": {
+    "description": "Libellé du bouton pendant la sauvegarde de l'audio"
+  },
+  "oralReadingInstructions": "Lisez le texte suivant à voix haute, clairement et à votre rythme naturel. Appuyez sur \"Démarrer\" quand vous êtes prêt.",
+  "@oralReadingInstructions": {
+    "description": "Bandeau d'instructions du test de lecture à voix haute"
+  },
+  "oralStartReading": "Démarrer la lecture",
+  "@oralStartReading": {
+    "description": "Bouton principal pour démarrer l'enregistrement de la lecture"
+  },
+  "oralFinish": "Terminer",
+  "@oralFinish": {
+    "description": "Bouton pour arrêter l'enregistrement de la lecture"
+  },
+  "oralSkipThisStep": "Passer cette étape",
+  "@oralSkipThisStep": {
+    "description": "Bouton texte affiché si le micro est refusé"
+  },
+  "oralSummaryPermissionBody1": "Vous allez maintenant enregistrer votre résumé oral du texte.",
+  "@oralSummaryPermissionBody1": {
+    "description": "Dialogue permission micro — test de résumé, paragraphe 1"
+  },
+  "oralSummaryPermissionBody2": "Parlez naturellement, comme si vous expliquiez le texte à un ami. Prenez entre 30 et 60 secondes.",
+  "@oralSummaryPermissionBody2": {
+    "description": "Dialogue permission micro — test de résumé, paragraphe 2"
+  },
+  "oralStartSummary": "Démarrer le résumé",
+  "@oralStartSummary": {
+    "description": "Bouton pour démarrer l'enregistrement du résumé (dialogue et écran)"
+  },
+  "oralSummaryInstructionLead": "Vous venez de lire ce texte. ",
+  "@oralSummaryInstructionLead": {
+    "description": "Début (en gras) du bandeau d'instructions du résumé — l'espace final est volontaire"
+  },
+  "oralSummaryInstructionBody": "Résumez ce que vous avez compris avec vos propres mots. Prenez entre 30 et 60 secondes. Parlez naturellement, comme si vous l'expliquiez à un ami.",
+  "@oralSummaryInstructionBody": {
+    "description": "Suite du bandeau d'instructions du résumé"
+  },
+  "oralReferenceText": "Texte de référence",
+  "@oralReferenceText": {
+    "description": "Étiquette de la carte grisée montrant le texte original pendant le résumé"
+  },
+  "oralFinishSummary": "Terminer le résumé",
+  "@oralFinishSummary": {
+    "description": "Bouton pour arrêter l'enregistrement du résumé"
+  },
+  "oralFlowTitle": "Collecte audio",
+  "@oralFlowTitle": {
+    "description": "Titre de l'AppBar du flux de test oral"
+  },
+  "oralConsentTitle": "Test de Compréhension Orale",
+  "@oralConsentTitle": {
+    "description": "Titre de l'écran de consentement"
+  },
+  "oralConsentRecordTitle": "Ce que nous enregistrons",
+  "@oralConsentRecordTitle": {
+    "description": "Écran de consentement — titre de la section enregistrements"
+  },
+  "oralConsentRecordBody": "Votre voix pendant la lecture de 5 courts textes (environ 1 min chacun) et votre résumé oral (environ 40 secondes par texte).",
+  "@oralConsentRecordBody": {
+    "description": "Écran de consentement — corps de la section enregistrements"
+  },
+  "oralConsentAnonTitle": "Confidentialité",
+  "@oralConsentAnonTitle": {
+    "description": "Écran de consentement — titre de la section anonymisation"
+  },
+  "oralConsentAnonBody": "Vos enregistrements sont identifiés par un code de session aléatoire, et non par votre nom. Ils restent toutefois rattachables à votre compte : ce sont des données personnelles protégées, chiffrées et stockées en Europe.",
+  "@oralConsentAnonBody": {
+    "description": "Écran de consentement — corps de la section anonymisation"
+  },
+  "oralConsentUsageTitle": "Utilisation",
+  "@oralConsentUsageTitle": {
+    "description": "Écran de consentement — titre de la section utilisation"
+  },
+  "oralConsentUsageBody": "Ces enregistrements pourront contribuer à l'amélioration de la reconnaissance vocale du français, notamment pour des modèles comme Whisper ou Speechmatics.",
+  "@oralConsentUsageBody": {
+    "description": "Écran de consentement — corps de la section utilisation. EN omet volontairement « du français »"
+  },
+  "oralAcceptAndStart": "J'accepte et je commence",
+  "@oralAcceptAndStart": {
+    "description": "Bouton principal de l'écran de consentement"
+  },
+  "oralDeclineAndGoBack": "Refuser et revenir en arrière",
+  "@oralDeclineAndGoBack": {
+    "description": "Bouton texte de refus du consentement"
+  },
+  "oralWithdrawConsentNote": "Vous pouvez retirer votre consentement à tout moment depuis les paramètres de l'application.",
+  "@oralWithdrawConsentNote": {
+    "description": "Note légale en bas de l'écran de consentement"
+  },
+  "oralTextProgress": "Texte {current} sur 5",
+  "@oralTextProgress": {
+    "description": "En-tête de progression du flux (5 textes au total)",
+    "placeholders": {
+      "current": {
+        "type": "int"
+      }
+    }
+  },
+  "oralStepReading": "Lecture",
+  "@oralStepReading": {
+    "description": "Étiquette d'étape courante dans l'en-tête de progression"
+  },
+  "oralStepSummary": "Résumé",
+  "@oralStepSummary": {
+    "description": "Étiquette d'étape courante dans l'en-tête de progression"
+  },
+  "oralPauseWellDone": "Bien !",
+  "@oralPauseWellDone": {
+    "description": "Titre de l'écran de pause entre lecture et résumé"
+  },
+  "oralPauseNowSummarize": "Maintenant, résumez oralement ce texte.",
+  "@oralPauseNowSummarize": {
+    "description": "Consigne de l'écran de pause"
+  },
+  "oralPauseStartingIn": "Début dans...",
+  "@oralPauseStartingIn": {
+    "description": "Libellé au-dessus du compte à rebours de la pause"
+  },
+  "oralCompletedThanks": "Merci !",
+  "@oralCompletedThanks": {
+    "description": "Titre de l'écran de fin"
+  },
+  "oralCompletedBody": "Vous avez complété les 5 textes.\nVos enregistrements contribueront à l'amélioration\nde la reconnaissance vocale en français.",
+  "@oralCompletedBody": {
+    "description": "Corps de l'écran de fin (retours à la ligne volontaires). EN omet volontairement « en français »"
+  },
+  "oralBackToHome": "Retour à l'accueil",
+  "@oralBackToHome": {
+    "description": "Bouton de l'écran de fin"
+  },
+  "oralExitDialogTitle": "Quitter ?",
+  "@oralExitDialogTitle": {
+    "description": "Titre du dialogue de confirmation de sortie pendant un enregistrement"
+  },
+  "oralExitDialogBody": "Un enregistrement est en cours. Si vous quittez maintenant, il ne sera pas sauvegardé.",
+  "@oralExitDialogBody": {
+    "description": "Corps du dialogue de confirmation de sortie"
+  },
+  "oralContinue": "Continuer",
+  "@oralContinue": {
+    "description": "Bouton pour rester dans le test (dialogue de sortie)"
+  },
+  "oralQuit": "Quitter",
+  "@oralQuit": {
+    "description": "Bouton pour quitter le test (dialogue de sortie)"
+  },
+  "regStepEyebrow": "ÉTAPE {step} / 4",
+  "@regStepEyebrow": {
+    "description": "Eyebrow label showing the current registration step out of 4",
+    "placeholders": {
+      "step": {
+        "type": "int"
+      }
+    }
+  },
+  "regStepEyebrowSuccess": "ÉTAPE 4 / 4 · SUCCÈS",
+  "@regStepEyebrowSuccess": {
+    "description": "Eyebrow label on the registration success page"
+  },
+  "regEmailTitle": "Créer mon token",
+  "@regEmailTitle": {
+    "description": "Title of the email entry page (step 1 of registration)"
+  },
+  "regEmailHeading": "Votre email",
+  "@regEmailHeading": {
+    "description": "Heading next to the logo on the email entry page"
+  },
+  "regEmailIntro": "Nous vous envoyons un code de vérification à 6 chiffres. Votre email n'est pas lié à votre token et reste privé.",
+  "@regEmailIntro": {
+    "description": "Introductory text on the email entry page"
+  },
+  "regEmailFieldLabel": "Adresse email",
+  "@regEmailFieldLabel": {
+    "description": "Label of the email text field"
+  },
+  "regEmailInvalid": "Email invalide",
+  "@regEmailInvalid": {
+    "description": "Validation error when the email format is invalid"
+  },
+  "regSendingCode": "Envoi du code…",
+  "@regSendingCode": {
+    "description": "Button label while the email OTP is being sent"
+  },
+  "regReceiveCode": "Recevoir le code",
+  "@regReceiveCode": {
+    "description": "Button to request the email verification code"
+  },
+  "regEmailPrivacyNote": "Aucun nom, prénom ou adresse précise ne sera stocké. Seuls votre sexe, tranche d'âge et code postal sont encodés (chiffrés) dans votre token anonyme.",
+  "@regEmailPrivacyNote": {
+    "description": "Privacy note at the bottom of the email entry page"
+  },
+  "regEmailOtpTitle": "Vérifier mon email",
+  "@regEmailOtpTitle": {
+    "description": "Title of the email OTP verification page"
+  },
+  "regCodeSentTo": "Code envoyé à",
+  "@regCodeSentTo": {
+    "description": "Label above the email address the OTP was sent to"
+  },
+  "regVerifying": "Vérification…",
+  "@regVerifying": {
+    "description": "Button label while an OTP code is being verified"
+  },
+  "regResendCode": "Renvoyer le code",
+  "@regResendCode": {
+    "description": "Button to resend the email verification code"
+  },
+  "regPhoneTitle": "Votre téléphone",
+  "@regPhoneTitle": {
+    "description": "Title of the phone entry page (step 2 of registration)"
+  },
+  "regPhoneIntro": "Un code SMS à 6 chiffres sera envoyé pour vérifier votre numéro. Aucun lien entre votre numéro et votre token.",
+  "@regPhoneIntro": {
+    "description": "Introductory text on the phone entry page"
+  },
+  "regPhoneFieldHint": "Numéro",
+  "@regPhoneFieldHint": {
+    "description": "Hint of the phone number text field"
+  },
+  "regSendingSms": "Envoi du SMS…",
+  "@regSendingSms": {
+    "description": "Button label while the SMS OTP is being sent"
+  },
+  "regReceiveSms": "Recevoir le SMS",
+  "@regReceiveSms": {
+    "description": "Button to request the SMS verification code"
+  },
+  "regPhoneOtpTitle": "Vérifier mon téléphone",
+  "@regPhoneOtpTitle": {
+    "description": "Title of the phone OTP verification page"
+  },
+  "regSmsSentTo": "SMS envoyé au",
+  "@regSmsSentTo": {
+    "description": "Label above the phone number the SMS OTP was sent to"
+  },
+  "regResendSms": "Renvoyer le SMS",
+  "@regResendSms": {
+    "description": "Button to resend the SMS verification code"
+  },
+  "regDemoTitle": "Vos données démographiques",
+  "@regDemoTitle": {
+    "description": "Title of the demographics page (step 3 of registration)"
+  },
+  "regDemoIntro": "Ces informations seront chiffrées dans votre token. Aucune valeur exacte n'est stockée (ni âge précis, ni adresse précise).",
+  "@regDemoIntro": {
+    "description": "Introductory text on the demographics page"
+  },
+  "regSectionSex": "SEXE",
+  "@regSectionSex": {
+    "description": "Section label (uppercase) for the sex selection"
+  },
+  "regSectionAgeBucket": "TRANCHE D'ÂGE",
+  "@regSectionAgeBucket": {
+    "description": "Section label (uppercase) for the age range selection"
+  },
+  "regSectionCountryPostal": "PAYS ET CODE POSTAL",
+  "@regSectionCountryPostal": {
+    "description": "Section label (uppercase) for the country and postal code inputs"
+  },
+  "regPostalCodeHint": "Code postal",
+  "@regPostalCodeHint": {
+    "description": "Hint of the postal code text field"
+  },
+  "regGeneratingToken": "Génération du token…",
+  "@regGeneratingToken": {
+    "description": "Button label while the anonymous token is being generated"
+  },
+  "regGenerateMyToken": "Générer mon token",
+  "@regGenerateMyToken": {
+    "description": "Button to submit demographics and generate the anonymous token"
+  },
+  "regSuccessTitle": "Bienvenue dans Mental E.T.",
+  "@regSuccessTitle": {
+    "description": "Title of the registration success page"
+  },
+  "regSuccessTokenSaved": "Votre token anonyme a été généré et sauvegardé sur cet appareil.",
+  "@regSuccessTokenSaved": {
+    "description": "Confirmation message on the success page"
+  },
+  "regSuccessTokenDetails": "Il ne contient ni votre email, ni votre numéro de téléphone, ni votre nom. Uniquement votre sexe, votre tranche d'âge et votre zone géographique (chiffrés). Vous pouvez maintenant commencer votre évaluation cognitive.",
+  "@regSuccessTokenDetails": {
+    "description": "Details about the token content on the success page"
+  },
+  "regImportantLabel": "IMPORTANT",
+  "@regImportantLabel": {
+    "description": "Uppercase warning label on the success page"
+  },
+  "regSuccessWarning": "Ne désinstallez pas l'application sans avoir terminé votre évaluation : votre token est uniquement stocké sur cet appareil. Si vous le perdez, vous ne pourrez plus créer de nouveau compte avec le même email ou téléphone.",
+  "@regSuccessWarning": {
+    "description": "Warning about token being stored only on the device"
+  },
+  "regEmailAlreadyRegistered": "Cet email a déjà un compte. Si c'est le vôtre, vous avez déjà un token.",
+  "@regEmailAlreadyRegistered": {
+    "description": "Error when the email is already linked to an account"
+  },
+  "regEmailUnavailable": "Email indisponible.",
+  "@regEmailUnavailable": {
+    "description": "Generic error when the email cannot be used"
+  },
+  "regOtpIncorrectOrExpired": "Code incorrect ou expiré.",
+  "@regOtpIncorrectOrExpired": {
+    "description": "Error when an OTP code (email or SMS) is wrong or expired"
+  },
+  "regPhoneAlreadyRegistered": "Ce numéro a déjà un compte.",
+  "@regPhoneAlreadyRegistered": {
+    "description": "Error when the phone number is already linked to an account"
+  },
+  "regPhoneUnavailable": "Numéro indisponible.",
+  "@regPhoneUnavailable": {
+    "description": "Generic error when the phone number cannot be used"
+  },
+  "regEmailAlreadyHasToken": "Cet email a déjà un token.",
+  "@regEmailAlreadyHasToken": {
+    "description": "Error at token generation when the email already has a token"
+  },
+  "regPhoneAlreadyHasToken": "Ce numéro a déjà un token.",
+  "@regPhoneAlreadyHasToken": {
+    "description": "Error at token generation when the phone already has a token"
+  },
+  "regPostalNotFound": "Code postal introuvable. Vérifiez le pays et le code.",
+  "@regPostalNotFound": {
+    "description": "Error when the submitted postal code is unknown"
+  },
+  "regNoInternet": "Pas de connexion internet.",
+  "@regNoInternet": {
+    "description": "Error when the network is unreachable"
+  },
+  "regGenericRetryError": "Erreur — merci de réessayer.",
+  "@regGenericRetryError": {
+    "description": "Generic fallback error during registration"
+  },
+  "regSexMale": "Masculin",
+  "@regSexMale": {
+    "description": "Displayed label for the male sex option"
+  },
+  "regSexFemale": "Féminin",
+  "@regSexFemale": {
+    "description": "Displayed label for the female sex option"
+  },
+  "regSexUndisclosed": "Préfère ne pas dire",
+  "@regSexUndisclosed": {
+    "description": "Displayed label for the undisclosed sex option"
+  },
+  "regAge1825": "18 – 25 ans",
+  "@regAge1825": {
+    "description": "Displayed label for the 18-25 age range"
+  },
+  "regAge2635": "26 – 35 ans",
+  "@regAge2635": {
+    "description": "Displayed label for the 26-35 age range"
+  },
+  "regAge3645": "36 – 45 ans",
+  "@regAge3645": {
+    "description": "Displayed label for the 36-45 age range"
+  },
+  "regAge4655": "46 – 55 ans",
+  "@regAge4655": {
+    "description": "Displayed label for the 46-55 age range"
+  },
+  "regAge5665": "56 – 65 ans",
+  "@regAge5665": {
+    "description": "Displayed label for the 56-65 age range"
+  },
+  "regAge66plus": "66 ans et plus",
+  "@regAge66plus": {
+    "description": "Displayed label for the 66+ age range"
+  },
+  "scoringClassificationVerySuperior": "Très supérieur",
+  "@scoringClassificationVerySuperior": {
+    "description": "Classification Wechsler pour un score composite >= 130 ou note standard >= 16"
+  },
+  "scoringClassificationSuperior": "Supérieur",
+  "@scoringClassificationSuperior": {
+    "description": "Classification Wechsler pour un score composite 120-129 ou note standard 13-15"
+  },
+  "scoringClassificationHighAverage": "Moyen fort",
+  "@scoringClassificationHighAverage": {
+    "description": "Classification Wechsler pour un score composite 110-119 ou note standard 11-12"
+  },
+  "scoringClassificationAverage": "Moyen",
+  "@scoringClassificationAverage": {
+    "description": "Classification Wechsler pour un score composite 90-109 ou note standard 8-10"
+  },
+  "scoringClassificationLowAverage": "Moyen faible",
+  "@scoringClassificationLowAverage": {
+    "description": "Classification Wechsler pour un score composite 80-89 ou note standard 6-7"
+  },
+  "scoringClassificationBorderline": "Limite",
+  "@scoringClassificationBorderline": {
+    "description": "Classification Wechsler pour un score composite 70-79 ou note standard 4-5"
+  },
+  "scoringClassificationExtremelyLow": "Extrêmement bas",
+  "@scoringClassificationExtremelyLow": {
+    "description": "Classification Wechsler pour un score composite < 70 ou note standard < 4"
+  },
+  "scoringNotAvailable": "N/A",
+  "@scoringNotAvailable": {
+    "description": "Classification affichée quand la note standardisée d'un sous-test est absente"
+  },
+  "scoringSummaryFullScaleIq": "QI Total: {score} ({classification})",
+  "@scoringSummaryFullScaleIq": {
+    "description": "Ligne du résumé de profil : QI total avec sa classification",
+    "placeholders": {
+      "score": {
+        "type": "int"
+      },
+      "classification": {
+        "type": "String"
+      }
+    }
+  },
+  "scoringSummaryPercentile": "Percentile: {rank}e",
+  "@scoringSummaryPercentile": {
+    "description": "Ligne du résumé de profil : rang percentile du QI total (suffixe ordinal 'e' en FR)",
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      }
+    }
+  },
+  "scoringSummaryConfidenceInterval": "Intervalle de confiance 95%: {lower} - {upper}",
+  "@scoringSummaryConfidenceInterval": {
+    "description": "Ligne du résumé de profil : intervalle de confiance à 95% du QI total",
+    "placeholders": {
+      "lower": {
+        "type": "int"
+      },
+      "upper": {
+        "type": "int"
+      }
+    }
+  },
+  "scoringIndexVerbalComprehension": "Compréhension Verbale",
+  "@scoringIndexVerbalComprehension": {
+    "description": "Nom affiché de l'indice VCI (WAIS-IV)"
+  },
+  "scoringIndexVisualSpatial": "Visuo-Spatial",
+  "@scoringIndexVisualSpatial": {
+    "description": "Nom affiché de l'indice VSI (WAIS-IV)"
+  },
+  "scoringIndexFluidReasoning": "Raisonnement Fluide",
+  "@scoringIndexFluidReasoning": {
+    "description": "Nom affiché de l'indice FRI (WAIS-IV)"
+  },
+  "scoringIndexWorkingMemory": "Mémoire de Travail",
+  "@scoringIndexWorkingMemory": {
+    "description": "Nom affiché de l'indice WMI (WAIS-IV)"
+  },
+  "scoringIndexProcessingSpeed": "Vitesse de Traitement",
+  "@scoringIndexProcessingSpeed": {
+    "description": "Nom affiché de l'indice PSI (WAIS-IV)"
+  },
+  "scoringSummaryRelativeStrengths": "Forces relatives: {list}",
+  "@scoringSummaryRelativeStrengths": {
+    "description": "Ligne du résumé de profil : liste des indices significativement au-dessus du QI total",
+    "placeholders": {
+      "list": {
+        "type": "String"
+      }
+    }
+  },
+  "scoringSummaryRelativeWeaknesses": "Faiblesses relatives: {list}",
+  "@scoringSummaryRelativeWeaknesses": {
+    "description": "Ligne du résumé de profil : liste des indices significativement en dessous du QI total",
+    "placeholders": {
+      "list": {
+        "type": "String"
+      }
+    }
+  },
+  "scoringSummaryHomogeneousProfile": "Profil cognitif homogène",
+  "@scoringSummaryHomogeneousProfile": {
+    "description": "Conclusion du résumé de profil quand les indices sont homogènes (écarts < 1 écart-type)"
+  },
+  "scoringSummaryHeterogeneousProfile": "Profil cognitif hétérogène (écart max: {points} points)",
+  "@scoringSummaryHeterogeneousProfile": {
+    "description": "Conclusion du résumé de profil quand les indices sont hétérogènes, avec l'écart maximal en points",
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
   "simTestName": "Similitudes",
   "@simTestName": {
     "description": "Similitudes — nom du test affiché dans le scaffold"
@@ -2128,9 +2173,9 @@
       }
     }
   },
-  "matDiscontinue3": "3 échecs consécutifs - Test terminé (WAIS-IV)",
-  "@matDiscontinue3": {
-    "description": "Matrices — message de règle de discontinuation après 3 échecs"
+  "matDiscontinue4": "4 échecs consécutifs - Test terminé (WAIS-IV)",
+  "@matDiscontinue4": {
+    "description": "Matrices — message de règle de discontinuation après 4 échecs"
   },
   "matSeeResultsEnded": "Voir résultats (test terminé)",
   "@matSeeResultsEnded": {

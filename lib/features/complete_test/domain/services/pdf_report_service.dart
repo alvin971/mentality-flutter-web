@@ -44,7 +44,7 @@ class PdfReportService {
 
     await Printing.layoutPdf(
       onLayout: (_) async => doc.save(),
-      name: 'mentality_resultats_${_dateString()}.pdf',
+      name: '${appL10n.pdfFilenameBase}_${_dateString()}.pdf',
     );
   }
 
@@ -87,7 +87,7 @@ class PdfReportService {
     final dur = duration != null
         ? appL10n.ctPdfDurationMinSec(
             duration.inMinutes, duration.inSeconds % 60)
-        : 'N/A';
+        : appL10n.commonNotAvailable;
 
     return pw.Container(
       padding: const pw.EdgeInsets.all(12),
@@ -218,10 +218,10 @@ class PdfReportService {
               final key = r.$1;
               final classif = score != null
                   ? (iqScore.classifications[key] ?? '')
-                  : 'N/A';
+                  : appL10n.commonNotAvailable;
               return pw.TableRow(children: [
                 _tableCell(r.$2),
-                _tableCell(score != null ? '$score' : 'N/A', centered: true),
+                _tableCell(score != null ? '$score' : appL10n.commonNotAvailable, centered: true),
                 _tableCell(classif),
               ]);
             }),
@@ -273,7 +273,7 @@ class PdfReportService {
             ...subtests.map((s) => pw.TableRow(children: [
                   _tableCell(s.$1),
                   _tableCell(
-                    s.$2 != null ? '${s.$2}' : 'N/A',
+                    s.$2 != null ? '${s.$2}' : appL10n.commonNotAvailable,
                     centered: true,
                   ),
                 ])),

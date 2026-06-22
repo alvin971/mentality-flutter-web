@@ -1,322 +1,232 @@
+/// Banque de QCM ANGLAISE du sous-test Information (WAIS-IV).
+/// GENERE automatiquement (genere par IA, fact-checke). 15 cellules domaine x difficulte.
+/// Ordre : bloc easy (5 domaines), medium (5), hard (5). NE PAS editer a la main.
 import 'information_generator.dart';
 
-/// Banque d'items ANGLAIS du test d'Information (WAIS-IV).
-///
-/// Psychométriquement équivalente à la banque FR : même nombre d'items (28),
-/// mêmes domaines, mêmes difficultés et mêmes [thetaValue] par position.
-/// Les questions franco-centrées de la banque FR ont été remplacées par des
-/// équivalents de difficulté comparable pour un public anglophone international
-/// (cf. items 13 et 16).
-List<InformationItem> buildInformationItemsEn() {
+List<List<InformationItem>> buildEnglishInformationBanks() {
   return [
-    // ===== SCIENCES NATURELLES (6 items) =====
-    // Item 1 : Facile
-    InformationItem(
-      question: 'How many legs does a spider have?',
-      options: ['6', '8', '10', '12'],
-      correctAnswer: 1,
-      domain: KnowledgeDomain.science,
-      difficulty: DifficultyLevel.easy,
-      thetaValue: -1.5,
-    ),
-
-    // Item 2 : Facile
-    InformationItem(
-      question: 'Which organ pumps blood through the human body?',
-      options: ['The liver', 'The heart', 'The lungs', 'The stomach'],
-      correctAnswer: 1,
-      domain: KnowledgeDomain.science,
-      difficulty: DifficultyLevel.easy,
-      thetaValue: -1.2,
-    ),
-
-    // Item 3 : Moyen
-    InformationItem(
-      question: 'How many bones does an adult human body have?',
-      options: ['186', '206', '226', '246'],
-      correctAnswer: 1,
-      domain: KnowledgeDomain.science,
-      difficulty: DifficultyLevel.medium,
-      thetaValue: 0.5,
-    ),
-
-    // Item 4 : Moyen
-    InformationItem(
-      question: 'Which planet is closest to the Sun?',
-      options: ['Venus', 'Mars', 'Mercury', 'Earth'],
-      correctAnswer: 2,
-      domain: KnowledgeDomain.science,
-      difficulty: DifficultyLevel.medium,
-      thetaValue: 0.8,
-    ),
-
-    // Item 5 : Difficile
-    InformationItem(
-      question: 'What is the chemical symbol for gold?',
-      options: ['Au', 'Ag', 'Fe', 'Go'],
-      correctAnswer: 0,
-      domain: KnowledgeDomain.science,
-      difficulty: DifficultyLevel.hard,
-      thetaValue: 1.5,
-    ),
-
-    // Item 6 : Difficile
-    InformationItem(
-      question: 'What is the speed of light in a vacuum?',
-      options: [
-        '300,000 km/s',
-        '150,000 km/s',
-        '500,000 km/s',
-        '200,000 km/s'
-      ],
-      correctAnswer: 0,
-      domain: KnowledgeDomain.science,
-      difficulty: DifficultyLevel.hard,
-      thetaValue: 2.0,
-    ),
-
-    // ===== HISTOIRE/GÉOGRAPHIE (7 items) =====
-    // Item 7 : Facile
-    InformationItem(
-      question: 'What is the capital of France?',
-      options: ['Lyon', 'Marseille', 'Paris', 'Nice'],
-      correctAnswer: 2,
-      domain: KnowledgeDomain.historyGeography,
-      difficulty: DifficultyLevel.easy,
-      thetaValue: -1.8,
-    ),
-
-    // Item 8 : Facile
-    InformationItem(
-      question: 'On which continent is Egypt located?',
-      options: ['Asia', 'Africa', 'Europe', 'America'],
-      correctAnswer: 1,
-      domain: KnowledgeDomain.historyGeography,
-      difficulty: DifficultyLevel.easy,
-      thetaValue: -1.3,
-    ),
-
-    // Item 9 : Moyen
-    InformationItem(
-      question: 'What is the capital of Italy?',
-      options: ['Milan', 'Rome', 'Naples', 'Florence'],
-      correctAnswer: 1,
-      domain: KnowledgeDomain.historyGeography,
-      difficulty: DifficultyLevel.medium,
-      thetaValue: -0.5,
-    ),
-
-    // Item 10 : Moyen
-    InformationItem(
-      question: 'In which year did Christopher Columbus reach the Americas?',
-      options: ['1492', '1500', '1482', '1520'],
-      correctAnswer: 0,
-      domain: KnowledgeDomain.historyGeography,
-      difficulty: DifficultyLevel.medium,
-      thetaValue: 0.3,
-    ),
-
-    // Item 11 : Moyen
-    InformationItem(
-      question: 'Which ocean separates America from Europe?',
-      options: [
-        'Pacific Ocean',
-        'Indian Ocean',
-        'Atlantic Ocean',
-        'Arctic Ocean'
-      ],
-      correctAnswer: 2,
-      domain: KnowledgeDomain.historyGeography,
-      difficulty: DifficultyLevel.medium,
-      thetaValue: 0.6,
-    ),
-
-    // Item 12 : Difficile
-    InformationItem(
-      question: 'What is the capital of Australia?',
-      options: ['Sydney', 'Melbourne', 'Canberra', 'Brisbane'],
-      correctAnswer: 2,
-      domain: KnowledgeDomain.historyGeography,
-      difficulty: DifficultyLevel.hard,
-      thetaValue: 1.8,
-    ),
-
-    // Item 13 : Difficile
-    // Remplace « Quel traité a mis fin à la Première Guerre mondiale ? » :
-    // équivalent international de même difficulté (organisation mondiale).
-    InformationItem(
-      question:
-          'In which city is the headquarters of the United Nations located?',
-      options: ['Geneva', 'New York', 'Paris', 'Vienna'],
-      correctAnswer: 1,
-      domain: KnowledgeDomain.historyGeography,
-      difficulty: DifficultyLevel.hard,
-      thetaValue: 2.2,
-    ),
-
-    // ===== CULTURE GÉNÉRALE (6 items) =====
-    // Item 14 : Facile
-    InformationItem(
-      question: 'How many days are there in a week?',
-      options: ['5', '6', '7', '8'],
-      correctAnswer: 2,
-      domain: KnowledgeDomain.generalCulture,
-      difficulty: DifficultyLevel.easy,
-      thetaValue: -2.0,
-    ),
-
-    // Item 15 : Facile
-    InformationItem(
-      question: 'What color do you get when you mix blue and yellow?',
-      options: ['Orange', 'Green', 'Purple', 'Red'],
-      correctAnswer: 1,
-      domain: KnowledgeDomain.generalCulture,
-      difficulty: DifficultyLevel.easy,
-      thetaValue: -1.6,
-    ),
-
-    // Item 16 : Moyen
-    // Remplace « Qui a peint la Joconde ? » par une œuvre tout aussi
-    // universellement connue d'un public anglophone (même difficulté).
-    InformationItem(
-      question: 'Who painted the Mona Lisa?',
-      options: [
-        'Michelangelo',
-        'Leonardo da Vinci',
-        'Raphael',
-        'Vincent van Gogh'
-      ],
-      correctAnswer: 1,
-      domain: KnowledgeDomain.generalCulture,
-      difficulty: DifficultyLevel.medium,
-      thetaValue: 0.0,
-    ),
-
-    // Item 17 : Moyen
-    InformationItem(
-      question: 'Which instrument measures temperature?',
-      options: ['Barometer', 'Thermometer', 'Hygrometer', 'Anemometer'],
-      correctAnswer: 1,
-      domain: KnowledgeDomain.generalCulture,
-      difficulty: DifficultyLevel.medium,
-      thetaValue: 0.4,
-    ),
-
-    // Item 18 : Difficile
-    InformationItem(
-      question: 'What is the official currency of Japan?',
-      options: ['Yuan', 'Won', 'Yen', 'Baht'],
-      correctAnswer: 2,
-      domain: KnowledgeDomain.generalCulture,
-      difficulty: DifficultyLevel.hard,
-      thetaValue: 1.6,
-    ),
-
-    // Item 19 : Difficile
-    InformationItem(
-      question: 'How many strings does a classical guitar have?',
-      options: ['4', '5', '6', '7'],
-      correctAnswer: 2,
-      domain: KnowledgeDomain.generalCulture,
-      difficulty: DifficultyLevel.hard,
-      thetaValue: 1.9,
-    ),
-
-    // ===== MATHÉMATIQUES/LOGIQUE (5 items) =====
-    // Item 20 : Facile
-    InformationItem(
-      question: 'How many days are there in a normal (non-leap) year?',
-      options: ['364', '365', '366', '360'],
-      correctAnswer: 1,
-      domain: KnowledgeDomain.mathLogic,
-      difficulty: DifficultyLevel.easy,
-      thetaValue: -1.4,
-    ),
-
-    // Item 21 : Facile
-    InformationItem(
-      question: 'What is 12 × 12?',
-      options: ['124', '134', '144', '154'],
-      correctAnswer: 2,
-      domain: KnowledgeDomain.mathLogic,
-      difficulty: DifficultyLevel.easy,
-      thetaValue: -0.8,
-    ),
-
-    // Item 22 : Moyen
-    InformationItem(
-      question: 'How many minutes are there in 2 hours?',
-      options: ['100', '110', '120', '130'],
-      correctAnswer: 2,
-      domain: KnowledgeDomain.mathLogic,
-      difficulty: DifficultyLevel.medium,
-      thetaValue: 0.2,
-    ),
-
-    // Item 23 : Moyen
-    InformationItem(
-      question: 'What is the value of π (pi) rounded to two decimal places?',
-      options: ['3.12', '3.14', '3.16', '3.18'],
-      correctAnswer: 1,
-      domain: KnowledgeDomain.mathLogic,
-      difficulty: DifficultyLevel.medium,
-      thetaValue: 0.9,
-    ),
-
-    // Item 24 : Difficile
-    InformationItem(
-      question: 'How many degrees are there in a right angle?',
-      options: ['45°', '60°', '90°', '180°'],
-      correctAnswer: 2,
-      domain: KnowledgeDomain.mathLogic,
-      difficulty: DifficultyLevel.hard,
-      thetaValue: 1.3,
-    ),
-
-    // ===== ARTS/LITTÉRATURE (4 items) =====
-    // Item 25 : Moyen
-    InformationItem(
-      question: 'Who wrote "Romeo and Juliet"?',
-      options: ['Molière', 'Shakespeare', 'Victor Hugo', 'Racine'],
-      correctAnswer: 1,
-      domain: KnowledgeDomain.artsLiterature,
-      difficulty: DifficultyLevel.medium,
-      thetaValue: 0.7,
-    ),
-
-    // Item 26 : Moyen
-    InformationItem(
-      question: 'Which composer wrote the "9th Symphony"?',
-      options: ['Mozart', 'Bach', 'Beethoven', 'Chopin'],
-      correctAnswer: 2,
-      domain: KnowledgeDomain.artsLiterature,
-      difficulty: DifficultyLevel.medium,
-      thetaValue: 1.1,
-    ),
-
-    // Item 27 : Difficile
-    InformationItem(
-      question: 'Who wrote "Hamlet"?',
-      options: ['Shakespeare', 'Molière', 'Cervantes', 'Goethe'],
-      correctAnswer: 0,
-      domain: KnowledgeDomain.artsLiterature,
-      difficulty: DifficultyLevel.hard,
-      thetaValue: 2.1,
-    ),
-
-    // Item 28 : Difficile
-    InformationItem(
-      question: 'Which painter is famous for his "Sunflowers"?',
-      options: [
-        'Claude Monet',
-        'Pablo Picasso',
-        'Vincent van Gogh',
-        'Paul Cézanne'
-      ],
-      correctAnswer: 2,
-      domain: KnowledgeDomain.artsLiterature,
-      difficulty: DifficultyLevel.hard,
-      thetaValue: 2.4,
-    ),
+    // easy / science (12)
+    [
+      InformationItem(question: 'Which gas must humans breathe in to survive?', options: ['Oxygen', 'Carbon dioxide', 'Helium', 'Hydrogen'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'Which planet is closest to the Sun?', options: ['Mercury', 'Venus', 'Earth', 'Mars'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'Which organ pumps blood through the human body?', options: ['The heart', 'The lungs', 'The liver', 'The brain'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'At what temperature does water boil at sea level?', options: ['100 degrees Celsius', '50 degrees Celsius', '0 degrees Celsius', '200 degrees Celsius'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'What process do plants use to make their food using light?', options: ['Photosynthesis', 'Digestion', 'Respiration', 'Fermentation'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'Which natural celestial body orbits the Earth?', options: ['The Moon', 'The Sun', 'Mars', 'Venus'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'How many legs does an adult insect have?', options: ['6', '4', '8', '10'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'What state is water in when it freezes?', options: ['Solid (ice)', 'Liquid', 'Gas (vapor)', 'Plasma'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'Which organ allows humans to breathe?', options: ['The lungs', 'The stomach', 'The kidneys', 'The heart'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'Which force makes objects fall to the ground?', options: ['Gravity', 'Magnetism', 'Electricity', 'Friction'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'What color is the chlorophyll that gives plant leaves their color?', options: ['Green', 'Red', 'Blue', 'Yellow'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'Which animal is a mammal?', options: ['The whale', 'The shark', 'The crocodile', 'The frog'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+    ],
+    // easy / historyGeography (12)
+    [
+      InformationItem(question: 'What is the capital of France?', options: ['Paris', 'Lyon', 'Marseille', 'Bordeaux'], correctAnswer: 0, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'On which continent is Egypt located?', options: ['Africa', 'Asia', 'Europe', 'South America'], correctAnswer: 0, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'What is the largest ocean in the world?', options: ['Pacific Ocean', 'Atlantic Ocean', 'Indian Ocean', 'Arctic Ocean'], correctAnswer: 0, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'In which country is the Eiffel Tower located?', options: ['France', 'Italy', 'Spain', 'Germany'], correctAnswer: 0, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'Which river flows through Egypt?', options: ['The Nile', 'The Amazon', 'The Danube', 'The Ganges'], correctAnswer: 0, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'What is the capital of Italy?', options: ['Rome', 'Milan', 'Venice', 'Naples'], correctAnswer: 0, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'On which continent is Australia located?', options: ['Oceania', 'Asia', 'Africa', 'Europe'], correctAnswer: 0, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'What is the highest mountain in the world?', options: ['Mount Everest', 'Mont Blanc', 'Kilimanjaro', 'Mount Fuji'], correctAnswer: 0, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'Which country is shaped like a boot?', options: ['Italy', 'Spain', 'Greece', 'Portugal'], correctAnswer: 0, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'What is the capital of Japan?', options: ['Tokyo', 'Beijing', 'Seoul', 'Bangkok'], correctAnswer: 0, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'In which country are the Pyramids of Giza located?', options: ['Egypt', 'Mexico', 'Greece', 'Iraq'], correctAnswer: 0, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'Which ocean separates Europe from America?', options: ['The Atlantic Ocean', 'The Pacific Ocean', 'The Indian Ocean', 'The Arctic Ocean'], correctAnswer: 0, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+    ],
+    // easy / generalCulture (13)
+    [
+      InformationItem(question: 'How many days are there in a week?', options: ['5', '6', '7', '8'], correctAnswer: 2, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'What color do you get by mixing blue and yellow?', options: ['Orange', 'Green', 'Purple', 'Brown'], correctAnswer: 1, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'Which celestial body gives us daylight?', options: ['The Moon', 'The Sun', 'Venus', 'Mars'], correctAnswer: 1, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'How many legs does a spider have?', options: ['6', '8', '10', '12'], correctAnswer: 1, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'Which animal is nicknamed "the king of the animals"?', options: ['The elephant', 'The lion', 'The tiger', 'The eagle'], correctAnswer: 1, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'At what temperature does pure water freeze (at sea level)?', options: ['0 °C', '10 °C', '-10 °C', '5 °C'], correctAnswer: 0, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'How many months are there in a year?', options: ['10', '11', '12', '13'], correctAnswer: 2, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'What color is the sky on a clear day?', options: ['Green', 'Red', 'Blue', 'Yellow'], correctAnswer: 2, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'Which fruit is traditionally associated with the color orange and morning juice?', options: ['The apple', 'The orange', 'The banana', 'The strawberry'], correctAnswer: 1, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'Which organ allows a human to breathe?', options: ['The liver', 'The lungs', 'The stomach', 'The kidneys'], correctAnswer: 1, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'What do you call a baby dog?', options: ['A puppy', 'A foal', 'A calf', 'A lamb'], correctAnswer: 0, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'Which season comes right after winter?', options: ['Summer', 'Autumn', 'Spring', 'The monsoon'], correctAnswer: 2, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'Which geometric shape has three sides?', options: ['The square', 'The triangle', 'The circle', 'The rectangle'], correctAnswer: 1, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+    ],
+    // easy / mathLogic (12)
+    [
+      InformationItem(question: 'What is 7 multiplied by 8?', options: ['54', '56', '48', '64'], correctAnswer: 1, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'How many sides does a triangle have?', options: ['2', '3', '4', '5'], correctAnswer: 1, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'What is 100 divided by 4?', options: ['20', '25', '40', '50'], correctAnswer: 1, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'How many degrees are there in a right angle?', options: ['45', '90', '180', '360'], correctAnswer: 1, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'What number comes next in the series: 2, 4, 6, 8, ... ?', options: ['9', '10', '12', '16'], correctAnswer: 1, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'What is 15 plus 27?', options: ['32', '42', '52', '43'], correctAnswer: 1, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'Which fraction is equal to 0.5?', options: ['1/4', '1/2', '1/3', '3/4'], correctAnswer: 1, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'What is 10 percent of 200?', options: ['2', '10', '20', '40'], correctAnswer: 2, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'What is the smallest prime number?', options: ['0', '1', '2', '3'], correctAnswer: 2, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'How many minutes are there in one hour?', options: ['30', '60', '90', '100'], correctAnswer: 1, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'What is the square root of 81?', options: ['8', '9', '18', '27'], correctAnswer: 1, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'What is 3 squared (3 multiplied by 3)?', options: ['6', '9', '12', '27'], correctAnswer: 1, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+    ],
+    // easy / artsLiterature (12)
+    [
+      InformationItem(question: 'Who painted the work titled the "Mona Lisa"?', options: ['Leonardo da Vinci', 'Michelangelo', 'Raphael', 'Pablo Picasso'], correctAnswer: 0, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'Which English playwright wrote the play "Romeo and Juliet"?', options: ['William Shakespeare', 'Charles Dickens', 'Oscar Wilde', 'Victor Hugo'], correctAnswer: 0, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'Which Austrian composer and child prodigy wrote "The Magic Flute"?', options: ['Wolfgang Amadeus Mozart', 'Ludwig van Beethoven', 'Johann Sebastian Bach', 'Frederic Chopin'], correctAnswer: 0, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'Which French writer wrote the novel "Les Miserables"?', options: ['Victor Hugo', 'Emile Zola', 'Gustave Flaubert', 'Alexandre Dumas'], correctAnswer: 0, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'Which Dutch painter cut off part of his ear and painted "The Starry Night"?', options: ['Vincent van Gogh', 'Rembrandt', 'Claude Monet', 'Salvador Dali'], correctAnswer: 0, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'Who wrote the classic French versions of the fairy tales "Cinderella" and "Little Red Riding Hood"?', options: ['Charles Perrault', 'Jean de La Fontaine', 'Hans Christian Andersen', 'Antoine de Saint-Exupery'], correctAnswer: 0, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'Which German composer, who became deaf, wrote the famous "Fifth Symphony"?', options: ['Ludwig van Beethoven', 'Richard Wagner', 'Johannes Brahms', 'Antonio Vivaldi'], correctAnswer: 0, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'Which Italian artist painted the ceiling of the Sistine Chapel in the Vatican?', options: ['Michelangelo', 'Leonardo da Vinci', 'Sandro Botticelli', 'Caravaggio'], correctAnswer: 0, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'Which French author wrote "The Little Prince"?', options: ['Antoine de Saint-Exupery', 'Albert Camus', 'Marcel Proust', 'Jules Verne'], correctAnswer: 0, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'In ancient Greece, which poet is traditionally credited as the author of "The Iliad" and "The Odyssey"?', options: ['Homer', 'Sophocles', 'Plato', 'Aristotle'], correctAnswer: 0, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'Which Spanish painter is famous for co-founding Cubism and painting "Guernica"?', options: ['Pablo Picasso', 'Salvador Dali', 'Diego Velazquez', 'Francisco Goya'], correctAnswer: 0, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+      InformationItem(question: 'Which British novelist wrote the "Harry Potter" series of novels?', options: ['J. K. Rowling', 'Agatha Christie', 'Jane Austen', 'Virginia Woolf'], correctAnswer: 0, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.easy, thetaValue: -2.0),
+    ],
+    // medium / science (12)
+    [
+      InformationItem(question: 'Which gas do plants mainly absorb during photosynthesis?', options: ['Carbon dioxide', 'Oxygen', 'Nitrogen', 'Hydrogen'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'What is the chemical symbol for gold?', options: ['Au', 'Ag', 'Go', 'Gd'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'Which planet in the solar system is closest to the Sun?', options: ['Mercury', 'Venus', 'Mars', 'Earth'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'Approximately how many bones make up the adult human skeleton?', options: ['206', '152', '278', '320'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'Which organ of the human body produces insulin?', options: ['The pancreas', 'The liver', 'The kidneys', 'The spleen'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'What is the approximate speed of light in a vacuum?', options: ['300,000 km/s', '30,000 km/s', '3,000,000 km/s', '1,080 km/s'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'Which chemical element is the most abundant in Earth\'s atmosphere?', options: ['Nitrogen', 'Oxygen', 'Carbon dioxide', 'Argon'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'Which scientist formulated the theory of general relativity?', options: ['Albert Einstein', 'Isaac Newton', 'Niels Bohr', 'Galileo'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'What is the pH of a neutral solution at 25 °C?', options: ['7', '0', '1', '14'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'Which part of the cell contains the DNA and controls its activity?', options: ['The nucleus', 'The mitochondrion', 'The ribosome', 'The plasma membrane'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'At what temperature, in degrees Celsius, does water boil at sea level?', options: ['100 °C', '90 °C', '120 °C', '212 °C'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'Which type of rock forms from the cooling and solidification of magma?', options: ['An igneous rock', 'A sedimentary rock', 'A metamorphic rock', 'A limestone rock'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+    ],
+    // medium / historyGeography (12)
+    [
+      InformationItem(question: 'Which river flows through the city of Paris?', options: ['The Loire', 'The Seine', 'The Rhône', 'The Garonne'], correctAnswer: 1, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'Which empire was led by Julius Caesar and Augustus?', options: ['The Ottoman Empire', 'The Roman Empire', 'The Byzantine Empire', 'The Persian Empire'], correctAnswer: 1, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'What is the capital of Australia?', options: ['Sydney', 'Melbourne', 'Canberra', 'Brisbane'], correctAnswer: 2, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'On which continent is the Sahara Desert located?', options: ['Asia', 'Africa', 'South America', 'Oceania'], correctAnswer: 1, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'In which year did the fall of the Berlin Wall take place?', options: ['1979', '1985', '1989', '1991'], correctAnswer: 2, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'Which mountain range traditionally separates Europe from Asia?', options: ['The Alps', 'The Carpathians', 'The Urals', 'The Pyrenees'], correctAnswer: 2, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'Which pre-Columbian civilization built Machu Picchu, in Peru?', options: ['The Aztecs', 'The Maya', 'The Incas', 'The Olmecs'], correctAnswer: 2, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'In which country are the ruins of the ancient city of Babylon located?', options: ['Egypt', 'Iraq', 'Iran', 'Syria'], correctAnswer: 1, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'Which country gave the Statue of Liberty to the United States?', options: ['The United Kingdom', 'France', 'Spain', 'The Netherlands'], correctAnswer: 1, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'Which sea borders the coasts of Greece, Italy and Egypt?', options: ['The Black Sea', 'The Mediterranean Sea', 'The Red Sea', 'The Baltic Sea'], correctAnswer: 1, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'Which Genoese explorer reached the Americas in 1492 on behalf of Spain?', options: ['Vasco da Gama', 'Ferdinand Magellan', 'Christopher Columbus', 'Amerigo Vespucci'], correctAnswer: 2, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'What is the capital of Canada?', options: ['Toronto', 'Montreal', 'Ottawa', 'Vancouver'], correctAnswer: 2, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+    ],
+    // medium / generalCulture (11)
+    [
+      InformationItem(question: 'Which atmospheric gas do plants mainly absorb to carry out photosynthesis?', options: ['Oxygen', 'Carbon dioxide', 'Nitrogen', 'Hydrogen'], correctAnswer: 1, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'How many ribs does the adult human body usually have?', options: ['20 (10 pairs)', '24 (12 pairs)', '26 (13 pairs)', '22 (11 pairs)'], correctAnswer: 1, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'Which is the largest ocean in the world by surface area?', options: ['The Atlantic Ocean', 'The Indian Ocean', 'The Pacific Ocean', 'The Arctic Ocean'], correctAnswer: 2, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'Which metal is liquid at room temperature?', options: ['Lead', 'Mercury', 'Tin', 'Zinc'], correctAnswer: 1, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'Which painter created the painting \'The Starry Night\'?', options: ['Claude Monet', 'Vincent van Gogh', 'Paul Cezanne', 'Pablo Picasso'], correctAnswer: 1, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'At what temperature does pure water freeze at sea level?', options: ['0 degrees Celsius', '-10 degrees Celsius', '5 degrees Celsius', '-5 degrees Celsius'], correctAnswer: 0, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'Which planet of the solar system is known for its most visible rings?', options: ['Jupiter', 'Saturn', 'Uranus', 'Neptune'], correctAnswer: 1, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'Which musical instrument has 88 keys in its standard version?', options: ['The organ', 'The piano', 'The accordion', 'The harpsichord'], correctAnswer: 1, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'What is the longest river in Africa?', options: ['The Congo', 'The Niger', 'The Nile', 'The Zambezi'], correctAnswer: 2, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'How many sides does a hexagon have?', options: ['Five', 'Six', 'Seven', 'Eight'], correctAnswer: 1, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'Which country is the tulip traditionally associated with as a symbol?', options: ['Belgium', 'The Netherlands', 'Denmark', 'Switzerland'], correctAnswer: 1, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+    ],
+    // medium / mathLogic (10)
+    [
+      InformationItem(question: 'What is the sum of the interior angles of a triangle?', options: ['90°', '180°', '270°', '360°'], correctAnswer: 1, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'What is the value of 7 factorial (7!) ?', options: ['49', '720', '5040', '40320'], correctAnswer: 2, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'A number is divisible by 3 if... ?', options: ['Its last digit is 3, 6 or 9', 'The sum of its digits is divisible by 3', 'It ends in an even digit', 'It ends in 0 or 5'], correctAnswer: 1, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'What is 15% of 200?', options: ['15', '30', '45', '300'], correctAnswer: 1, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'What is the (arithmetic) mean of the numbers 4, 8, 10 and 14?', options: ['8', '9', '10', '12'], correctAnswer: 1, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'What is the square root of 144?', options: ['10', '12', '14', '72'], correctAnswer: 1, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'According to the Pythagorean theorem, in a right triangle the square of the hypotenuse equals... ?', options: ['The sum of the other two sides', 'The sum of the squares of the other two sides', 'The product of the other two sides', 'The difference of the squares of the other two sides'], correctAnswer: 1, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'What is the next term in the sequence: 2, 6, 18, 54, ... ?', options: ['108', '162', '216', '270'], correctAnswer: 1, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'What is the approximate value of pi (π) to two decimal places?', options: ['3.12', '3.14', '3.16', '3.41'], correctAnswer: 1, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'In binary, how is the decimal number 5 written?', options: ['101', '110', '111', '011'], correctAnswer: 0, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+    ],
+    // medium / artsLiterature (12)
+    [
+      InformationItem(question: 'Who painted the ceiling of the Sistine Chapel in the Vatican?', options: ['Raphael', 'Michelangelo', 'Leonardo da Vinci', 'Titian'], correctAnswer: 1, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'Which composer, who became deaf, wrote the Ninth Symphony featuring the \'Ode to Joy\'?', options: ['Wolfgang Amadeus Mozart', 'Ludwig van Beethoven', 'Johann Sebastian Bach', 'Johannes Brahms'], correctAnswer: 1, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'Who wrote the novel \'Crime and Punishment\'?', options: ['Leo Tolstoy', 'Anton Chekhov', 'Fyodor Dostoevsky', 'Ivan Turgenev'], correctAnswer: 2, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'Which artistic movement, born in the late 19th century, is associated with Claude Monet and his painting \'Impression, Sunrise\'?', options: ['Cubism', 'Impressionism', 'Surrealism', 'Romanticism'], correctAnswer: 1, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'Which English playwright wrote \'Romeo and Juliet\' and \'Hamlet\'?', options: ['Christopher Marlowe', 'William Shakespeare', 'Ben Jonson', 'Oscar Wilde'], correctAnswer: 1, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'Which Dutch painter cut off part of his ear and painted \'The Starry Night\'?', options: ['Rembrandt', 'Vincent van Gogh', 'Johannes Vermeer', 'Piet Mondrian'], correctAnswer: 1, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'Who wrote the comedies \'The Imaginary Invalid\' and \'Tartuffe\'?', options: ['Jean Racine', 'Molière', 'Pierre Corneille', 'Victor Hugo'], correctAnswer: 1, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'Which medieval Italian poet wrote \'The Divine Comedy\'?', options: ['Petrarch', 'Dante Alighieri', 'Giovanni Boccaccio', 'Torquato Tasso'], correctAnswer: 1, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'Which Spanish artist is considered a co-founder of Cubism and painted \'Guernica\'?', options: ['Salvador Dalí', 'Pablo Picasso', 'Joan Miró', 'Francisco de Goya'], correctAnswer: 1, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'Which French writer is the author of \'Les Misérables\' and \'The Hunchback of Notre-Dame\'?', options: ['Émile Zola', 'Victor Hugo', 'Honoré de Balzac', 'Gustave Flaubert'], correctAnswer: 1, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'In which major Paris museum is Leonardo da Vinci\'s \'Mona Lisa\' displayed?', options: ['The Musée d\'Orsay', 'The Louvre', 'The Pompidou Centre', 'The Rodin Museum'], correctAnswer: 1, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+      InformationItem(question: 'Which Italian Baroque composer wrote the famous set of violin concertos known as \'The Four Seasons\'?', options: ['George Frideric Handel', 'Antonio Vivaldi', 'Arcangelo Corelli', 'Domenico Scarlatti'], correctAnswer: 1, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.medium, thetaValue: 0.0),
+    ],
+    // hard / science (12)
+    [
+      InformationItem(question: 'Which cellular organelle is responsible for modifying, sorting and packaging proteins destined for secretion?', options: ['The Golgi apparatus', 'The smooth endoplasmic reticulum', 'The lysosome', 'The peroxisome'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'In physics, which quantity is measured in teslas in the International System of Units?', options: ['Magnetic flux density (magnetic induction)', 'Magnetic flux', 'Electric field', 'Inductance'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'What is the name of the process by which a massive star ends its life through core collapse and then explodes, dispersing heavy elements?', options: ['A supernova', 'A nova', 'A planetary nebula', 'A quasar'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'In organic chemistry, what type of bond characterizes a compound described as "unsaturated" such as ethylene?', options: ['A carbon-carbon double bond', 'A hydrogen bond', 'An ionic bond', 'Only a carbon-hydrogen single bond'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'Which hormone, secreted by the pancreas, raises blood sugar by stimulating the release of glucose from the liver?', options: ['Glucagon', 'Insulin', 'Somatostatin', 'Cortisol'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'In particle physics, which quarks make up a proton?', options: ['Two up quarks and one down quark', 'Two down quarks and one up quark', 'One up, one down and one strange quark', 'Three up quarks'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'Which scientist formulated the exclusion principle stating that two identical fermions cannot occupy the same quantum state?', options: ['Wolfgang Pauli', 'Niels Bohr', 'Werner Heisenberg', 'Erwin Schrödinger'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'In the Krebs cycle (citric acid cycle), which two-carbon compound combines with oxaloacetate to form citrate?', options: ['Acetyl coenzyme A', 'Pyruvate', 'Succinate', 'Malate'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'What is the name of the theoretical boundary beyond which no information can escape from a black hole?', options: ['The event horizon', 'The Roche limit', 'The inner Schwarzschild sphere', 'The photosphere'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'Which chalcogen chemical element, atomic number 34, is a trace element essential to the synthesis of the enzyme glutathione peroxidase in humans?', options: ['Selenium', 'Tellurium', 'Arsenic', 'Germanium'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'Which law of thermodynamics implies that the entropy of an isolated system can only increase or remain constant?', options: ['The second law', 'The first law', 'The third law', 'The zeroth law'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'In astronomy, which term refers to the spectral redshift of an object due to the expansion of the Universe?', options: ['Cosmological redshift', 'Relativistic Doppler effect', 'Aberration of light', 'Gravitational redshift'], correctAnswer: 0, domain: KnowledgeDomain.science, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+    ],
+    // hard / historyGeography (12)
+    [
+      InformationItem(question: 'Which treaty, signed in 1648, ended the Thirty Years\' War in Europe?', options: ['The Peace of Westphalia', 'The Treaty of Tordesillas', 'The Peace of Augsburg', 'The Treaty of Utrecht'], correctAnswer: 0, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'Which strait separates the island of Sakhalin from the Japanese island of Hokkaido?', options: ['La Perouse Strait (Soya Strait)', 'The Strait of Tartary', 'The Tsushima Strait', 'The Bering Strait'], correctAnswer: 0, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'In what year did the Battle of Hastings, in which William the Conqueror seized England, take place?', options: ['1066', '1042', '1087', '1100'], correctAnswer: 0, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'Which ancient city was the capital of the Hittite Empire, located in present-day Turkey?', options: ['Hattusa', 'Ugarit', 'Nineveh', 'Persepolis'], correctAnswer: 0, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'Which South American river joins the Uruguay River to form the Rio de la Plata before reaching the Atlantic Ocean?', options: ['The Parana', 'The Orinoco', 'The Sao Francisco', 'The Magdalena'], correctAnswer: 0, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'Which Byzantine emperor had Roman law codified in the Corpus Juris Civilis during the 6th century?', options: ['Justinian I', 'Heraclius', 'Constantine I', 'Basil II'], correctAnswer: 0, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'Which African country has Yamoussoukro as its administrative capital?', options: ['Ivory Coast', 'Ghana', 'Benin', 'Burkina Faso'], correctAnswer: 0, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'Which Chinese dynasty immediately preceded the Tang dynasty?', options: ['The Sui dynasty', 'The Han dynasty', 'The Song dynasty', 'The Ming dynasty'], correctAnswer: 0, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'Which mountain range traditionally forms the natural boundary between Europe and Asia?', options: ['The Ural Mountains', 'The Caucasus', 'The Carpathians', 'The Altai Mountains'], correctAnswer: 0, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'Which Portuguese explorer was the first European to reach India by sea, in 1498?', options: ['Vasco da Gama', 'Bartolomeu Dias', 'Pedro Alvares Cabral', 'Ferdinand Magellan'], correctAnswer: 0, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'Which is the largest lake in Africa by surface area?', options: ['Lake Victoria', 'Lake Tanganyika', 'Lake Malawi', 'Lake Chad'], correctAnswer: 0, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'Which 1571 battle was a major naval defeat for the Ottoman Empire against a Christian coalition (the Holy League)?', options: ['The Battle of Lepanto', 'The Battle of Mohacs', 'The Battle of Preveza', 'The Siege of Malta'], correctAnswer: 0, domain: KnowledgeDomain.historyGeography, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+    ],
+    // hard / generalCulture (12)
+    [
+      InformationItem(question: 'In heraldry, which term designates the colour red on a coat of arms?', options: ['Vert', 'Gules', 'Azure', 'Sable'], correctAnswer: 1, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'What is the name of the green coating that forms on copper exposed to air, as seen on old roofs?', options: ['Ferric rust', 'Verdigris (patina)', 'Calamine', 'Limescale'], correctAnswer: 1, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'How many strings does a classical violin have?', options: ['Four', 'Five', 'Six', 'Three'], correctAnswer: 0, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'What botanical term describes a tree that sheds its leaves every year?', options: ['Deciduous', 'Evergreen', 'Coniferous', 'Perennial'], correctAnswer: 0, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'In traditional Western symbolism, which flower classically represents remembrance of fallen soldiers?', options: ['The poppy', 'The lily', 'The tulip', 'The sunflower'], correctAnswer: 0, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'On a compass rose, what is the name of the direction located at 45° between north and east?', options: ['Northeast', 'Northwest', 'East-northeast', 'Southeast'], correctAnswer: 0, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'Which metal, liquid at room temperature, was traditionally used in old thermometers?', options: ['Mercury', 'Lead', 'Tin', 'Gallium'], correctAnswer: 0, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'In cooking, which term means to cook food in a liquid kept just below boiling point?', options: ['To poach', 'To braise', 'To sauté', 'To grill'], correctAnswer: 0, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'The asterism known as the Big Dipper (or Plough) is part of which constellation?', options: ['Ursa Major', 'Orion', 'Cassiopeia', 'Cygnus'], correctAnswer: 0, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'Which inert noble gas is traditionally used to fill incandescent light bulbs to prevent the filament from oxidising?', options: ['Argon', 'Helium', 'Neon', 'Krypton'], correctAnswer: 0, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'What is the name of the side of a coin that bears the main figure or portrait (the \'heads\' side)?', options: ['The obverse', 'The reverse', 'The edge', 'The rim'], correctAnswer: 0, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'What natural textile fibre is produced by the caterpillars of the mulberry silkworm moth?', options: ['Silk', 'Linen', 'Cotton', 'Wool'], correctAnswer: 0, domain: KnowledgeDomain.generalCulture, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+    ],
+    // hard / mathLogic (12)
+    [
+      InformationItem(question: 'The famous number 1729, known as the \'Hardy-Ramanujan number\', is the smallest integer expressible in two different ways as a sum of two cubes. Which of these is one of those two decompositions?', options: ['1³ + 12³', '2³ + 11³', '5³ + 11³', '7³ + 10³'], correctAnswer: 0, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'According to Euler\'s formula relating the vertices (V), edges (E) and faces (F) of a convex polyhedron, which relation always holds?', options: ['V − E + F = 2', 'V + E − F = 2', 'V + E + F = 0', 'V − E − F = 1'], correctAnswer: 0, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'How many convex regular polyhedra (Platonic solids) exist?', options: ['5', '4', '6', 'Infinitely many'], correctAnswer: 0, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'In combinatorics, a \'derangement\' is a permutation with no fixed point. How many derangements are there of a set of 4 elements?', options: ['9', '6', '12', '24'], correctAnswer: 0, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'According to the Riemann hypothesis, one of the most famous conjectures in mathematics, what is the supposed common real part of all the non-trivial zeros of the zeta function?', options: ['1/2', '1', '0', '2'], correctAnswer: 0, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'The four color theorem, proved in 1976, states that any planar map can be colored with at most how many colors so that no two adjacent regions share the same color?', options: ['4', '3', '5', '6'], correctAnswer: 0, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'In Cantor\'s set theory, what term describes an infinite set that can be put in bijection with the set of natural numbers?', options: ['Countable', 'Continuous', 'Uncountable', 'Compact'], correctAnswer: 0, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'What is the value of Euler\'s identity, often considered the most beautiful formula in mathematics, given by e^(iπ) + 1?', options: ['0', '1', '−1', 'i'], correctAnswer: 0, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'A \'perfect\' number equals the sum of its proper divisors. What is the smallest perfect number?', options: ['6', '12', '28', '1'], correctAnswer: 0, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'How many edges does the complete graph K₅ (5 vertices all pairwise connected) have?', options: ['10', '20', '5', '25'], correctAnswer: 0, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'Fermat\'s Last Theorem, proved by Andrew Wiles in 1994, states that there are no strictly positive integers satisfying aⁿ + bⁿ = cⁿ for which condition on the exponent n?', options: ['n > 2', 'n ≥ 1', 'n = 2', 'n odd'], correctAnswer: 0, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'The golden ratio φ, linked to the Fibonacci sequence, is the unique positive solution of the equation x² = x + 1. What is its exact value?', options: ['(1 + √5) / 2', '(1 + √3) / 2', '√2', '(1 + √5) / 3'], correctAnswer: 0, domain: KnowledgeDomain.mathLogic, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+    ],
+    // hard / artsLiterature (12)
+    [
+      InformationItem(question: 'Which composer left unfinished his symphony in B minor (D. 759), known as the \'Unfinished\'?', options: ['Franz Schubert', 'Ludwig van Beethoven', 'Anton Bruckner', 'Gustav Mahler'], correctAnswer: 0, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'Which Flemish painter completed, after the death of his brother Hubert, the Ghent Altarpiece (\'The Adoration of the Mystic Lamb\') in 1432?', options: ['Jan van Eyck', 'Rogier van der Weyden', 'Hans Memling', 'Hieronymus Bosch'], correctAnswer: 0, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'Who wrote the poetry collection \'Les Fleurs du mal\' (The Flowers of Evil), published in 1857?', options: ['Charles Baudelaire', 'Arthur Rimbaud', 'Paul Verlaine', 'Stephane Mallarme'], correctAnswer: 0, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'In which city does most of James Joyce\'s novel \'Ulysses\' take place?', options: ['Dublin', 'London', 'Trieste', 'Cork'], correctAnswer: 0, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'Which painting movement took its name from Claude Monet\'s work \'Impression, Sunrise\'?', options: ['Impressionism', 'Fauvism', 'Pointillism', 'Symbolism'], correctAnswer: 0, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'Which Russian composer wrote the ballet \'The Rite of Spring\', premiered in 1913?', options: ['Igor Stravinsky', 'Sergei Prokofiev', 'Modest Mussorgsky', 'Sergei Rachmaninoff'], correctAnswer: 0, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'Which ancient Greek playwright wrote the trilogy \'The Oresteia\'?', options: ['Aeschylus', 'Sophocles', 'Euripides', 'Aristophanes'], correctAnswer: 0, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'Which Renaissance artist sculpted the marble \'David\' housed in Florence, completed in 1504?', options: ['Michelangelo', 'Donatello', 'Bernini', 'Verrocchio'], correctAnswer: 0, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'Who composed the opera \'Tristan und Isolde\', a landmark of Romantic chromaticism?', options: ['Richard Wagner', 'Giuseppe Verdi', 'Richard Strauss', 'Carl Maria von Weber'], correctAnswer: 0, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'Which Russian writer is the author of the novel \'The Brothers Karamazov\'?', options: ['Fyodor Dostoevsky', 'Leo Tolstoy', 'Ivan Turgenev', 'Nikolai Gogol'], correctAnswer: 0, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'Which Spanish painter created \'Las Meninas\' around 1656?', options: ['Diego Velazquez', 'Francisco de Goya', 'El Greco', 'Bartolome Esteban Murillo'], correctAnswer: 0, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+      InformationItem(question: 'Which Italian poet wrote the \'Divine Comedy\' in the early 14th century?', options: ['Dante Alighieri', 'Petrarch', 'Boccaccio', 'Ariosto'], correctAnswer: 0, domain: KnowledgeDomain.artsLiterature, difficulty: DifficultyLevel.hard, thetaValue: 1.5),
+    ],
   ];
 }

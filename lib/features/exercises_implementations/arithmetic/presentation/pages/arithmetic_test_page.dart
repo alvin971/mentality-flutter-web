@@ -21,7 +21,7 @@ class ArithmeticTestPage extends StatefulWidget {
 
 class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
   final ArithmeticGenerator _generator =
-      ArithmeticGenerator(languageCode: localeNotifier.languageCode);
+      ArithmeticGenerator(languageCode: localeNotifier.contentTag);
   late List<ArithmeticItem> _generatedItems;
 
   int _currentItemIndex = 0;

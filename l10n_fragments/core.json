@@ -1,4 +1,6 @@
 {
   "coreSplashTitleLine1": {"fr": "Évaluation", "en": "Cognitive", "desc": "Splash title, line 1"},
-  "coreSplashTitleLine2": {"fr": "cognitive", "en": "assessment", "desc": "Splash title, line 2 (italic)"}
+  "coreSplashTitleLine2": {"fr": "cognitive", "en": "assessment", "desc": "Splash title, line 2 (italic)"},
+  "commonNotAvailable": {"fr": "N/D", "en": "N/A", "es": "N/D", "pt": "N/D", "de": "k.A.", "en_GB": "N/A", "desc": "Abréviation 'non disponible' (cellules PDF compactes)"},
+  "pdfFilenameBase": {"fr": "mentality_resultats", "en": "mentality_results", "es": "mentality_resultados", "pt": "mentality_resultados", "de": "mentality_ergebnisse", "en_GB": "mentality_results", "desc": "Base du nom de fichier PDF (ASCII, sans accents)"}
 }

@@ -52,7 +52,7 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
   void _generateItems() {
     // Génération des 21 items UNIQUES en une seule fois
     final generator =
-        SimilaritiesGenerator(languageCode: localeNotifier.languageCode);
+        SimilaritiesGenerator(languageCode: localeNotifier.contentTag);
     _generatedItems = generator.generateComplete21Items();
   }
 

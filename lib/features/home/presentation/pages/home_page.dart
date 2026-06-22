@@ -27,19 +27,16 @@ class HomePage extends StatelessWidget {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Se déconnecter ?'),
-        content: const Text(
-          'Ton token sera retiré de cet appareil. Assure-toi de l’avoir '
-          'sauvegardé : sans lui, tu ne pourras pas te reconnecter à tes données.',
-        ),
+        title: Text(context.l10n.homeLogoutTitle),
+        content: Text(context.l10n.homeLogoutBody),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Annuler'),
+            child: Text(context.l10n.commonCancel),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Se déconnecter'),
+            child: Text(context.l10n.homeLogoutConfirm),
           ),
         ],
       ),
@@ -85,7 +82,7 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  tooltip: 'Se déconnecter',
+                  tooltip: context.l10n.homeLogoutConfirm,
                   icon: Icon(
                     Icons.logout_outlined,
                     size: 20.sp,

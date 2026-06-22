@@ -5,8 +5,11 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
+import 'app_localizations_de.dart';
 import 'app_localizations_en.dart';
+import 'app_localizations_es.dart';
 import 'app_localizations_fr.dart';
+import 'app_localizations_pt.dart';
 
 // ignore_for_file: type=lint
 
@@ -94,8 +97,12 @@ abstract class AppLocalizations {
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
+    Locale('de'),
     Locale('en'),
-    Locale('fr')
+    Locale('en', 'GB'),
+    Locale('es'),
+    Locale('fr'),
+    Locale('pt')
   ];
 
   /// No description provided for @appTitle.
@@ -206,444 +213,6 @@ abstract class AppLocalizations {
   /// **'{count} s'**
   String commonSeconds(int count);
 
-  /// App bar eyebrow on chat screen
-  ///
-  /// In fr, this message translates to:
-  /// **'ASSISTANT IA'**
-  String get chatEyebrow;
-
-  /// Tooltip to clear the chat
-  ///
-  /// In fr, this message translates to:
-  /// **'Nouvelle conversation'**
-  String get chatNewConversation;
-
-  /// Label above assistant messages (brand)
-  ///
-  /// In fr, this message translates to:
-  /// **'MENTAL E.T.'**
-  String get chatAssistantLabel;
-
-  /// Label above user messages
-  ///
-  /// In fr, this message translates to:
-  /// **'VOUS'**
-  String get chatUserLabel;
-
-  /// Empty-state hero, line 1
-  ///
-  /// In fr, this message translates to:
-  /// **'Posez'**
-  String get chatHeroTitle1;
-
-  /// Empty-state hero, line 2 (italic)
-  ///
-  /// In fr, this message translates to:
-  /// **'vos questions.'**
-  String get chatHeroTitle2;
-
-  /// No description provided for @chatEmptyIntro.
-  ///
-  /// In fr, this message translates to:
-  /// **'L\'IA Mental E.T. vous aide à mieux comprendre votre profil cognitif. Discussions confidentielles, accompagnement non-directif.'**
-  String get chatEmptyIntro;
-
-  /// Loading bubble label
-  ///
-  /// In fr, this message translates to:
-  /// **'Réflexion…'**
-  String get chatThinking;
-
-  /// Chat input placeholder
-  ///
-  /// In fr, this message translates to:
-  /// **'Écrire un message…'**
-  String get chatInputHint;
-
-  /// Message timestamp, under 1 min
-  ///
-  /// In fr, this message translates to:
-  /// **'à l\'instant'**
-  String get chatTimeJustNow;
-
-  /// Message timestamp in minutes
-  ///
-  /// In fr, this message translates to:
-  /// **'{count} min'**
-  String chatTimeMinutes(int count);
-
-  /// Message timestamp in hours
-  ///
-  /// In fr, this message translates to:
-  /// **'{count}h'**
-  String chatTimeHours(int count);
-
-  /// Generic chat error bubble
-  ///
-  /// In fr, this message translates to:
-  /// **'Désolé, une erreur s\'est produite. Veuillez réessayer.'**
-  String get chatErrorMessage;
-
-  /// Network error (not user-facing prose)
-  ///
-  /// In fr, this message translates to:
-  /// **'Réponse vide du worker'**
-  String get chatErrorEmptyResponse;
-
-  /// 403 network error
-  ///
-  /// In fr, this message translates to:
-  /// **'Accès refusé par le worker (origine non autorisée).'**
-  String get chatErrorAccessDenied;
-
-  /// 429 network error
-  ///
-  /// In fr, this message translates to:
-  /// **'Limite de requêtes atteinte. Réessayez dans quelques instants.'**
-  String get chatErrorRateLimit;
-
-  /// Splash title, line 1
-  ///
-  /// In fr, this message translates to:
-  /// **'Évaluation'**
-  String get coreSplashTitleLine1;
-
-  /// Splash title, line 2 (italic)
-  ///
-  /// In fr, this message translates to:
-  /// **'cognitive'**
-  String get coreSplashTitleLine2;
-
-  /// Home hero, line 1
-  ///
-  /// In fr, this message translates to:
-  /// **'Découvrez'**
-  String get homeHeroTitle;
-
-  /// Home hero, line 2 (italic)
-  ///
-  /// In fr, this message translates to:
-  /// **'votre profil cognitif.'**
-  String get homeHeroTitleItalic;
-
-  /// No description provided for @homeHeroBody.
-  ///
-  /// In fr, this message translates to:
-  /// **'Une évaluation scientifique adaptative, inspirée des échelles Wechsler. 12 sous-tests, 5 indices, un score global.'**
-  String get homeHeroBody;
-
-  /// Home action card 1 title
-  ///
-  /// In fr, this message translates to:
-  /// **'Commencer une évaluation'**
-  String get homeActionStartTitle;
-
-  /// Home action card 1 subtitle
-  ///
-  /// In fr, this message translates to:
-  /// **'Durée : 30 – 45 minutes'**
-  String get homeActionStartSubtitle;
-
-  /// Home action card 2 title
-  ///
-  /// In fr, this message translates to:
-  /// **'Mes résultats'**
-  String get homeActionResultsTitle;
-
-  /// Home action card 2 subtitle
-  ///
-  /// In fr, this message translates to:
-  /// **'Historique des évaluations'**
-  String get homeActionResultsSubtitle;
-
-  /// Home action card 3 title
-  ///
-  /// In fr, this message translates to:
-  /// **'Parler avec Mental E.T.'**
-  String get homeActionChatTitle;
-
-  /// Home action card 3 subtitle
-  ///
-  /// In fr, this message translates to:
-  /// **'Assistant IA, questions psychologiques'**
-  String get homeActionChatSubtitle;
-
-  /// Badge on disabled action
-  ///
-  /// In fr, this message translates to:
-  /// **'BIENTÔT DISPONIBLE'**
-  String get homeComingSoon;
-
-  /// About section eyebrow
-  ///
-  /// In fr, this message translates to:
-  /// **'À PROPOS'**
-  String get homeAboutEyebrow;
-
-  /// About tile 1 title
-  ///
-  /// In fr, this message translates to:
-  /// **'12 sous-tests'**
-  String get homeAboutSubtestsTitle;
-
-  /// No description provided for @homeAboutSubtestsBody.
-  ///
-  /// In fr, this message translates to:
-  /// **'Évaluation complète des cinq indices cognitifs WAIS-IV.'**
-  String get homeAboutSubtestsBody;
-
-  /// About tile 2 title
-  ///
-  /// In fr, this message translates to:
-  /// **'IA adaptative'**
-  String get homeAboutAdaptiveTitle;
-
-  /// No description provided for @homeAboutAdaptiveBody.
-  ///
-  /// In fr, this message translates to:
-  /// **'Difficulté ajustée en temps réel via inférence IRT.'**
-  String get homeAboutAdaptiveBody;
-
-  /// About tile 3 title
-  ///
-  /// In fr, this message translates to:
-  /// **'Validation scientifique'**
-  String get homeAboutValidationTitle;
-
-  /// No description provided for @homeAboutValidationBody.
-  ///
-  /// In fr, this message translates to:
-  /// **'Items inspirés des échelles Wechsler (WPPSI / WISC / WAIS).'**
-  String get homeAboutValidationBody;
-
-  /// Resume banner eyebrow
-  ///
-  /// In fr, this message translates to:
-  /// **'TEST EN COURS'**
-  String get homeResumeEyebrow;
-
-  /// Resume banner title
-  ///
-  /// In fr, this message translates to:
-  /// **'Reprendre votre évaluation'**
-  String get homeResumeTitle;
-
-  /// Resume banner button
-  ///
-  /// In fr, this message translates to:
-  /// **'Reprendre'**
-  String get homeResumeButton;
-
-  /// Titre du dialogue de permission micro (lecture et résumé)
-  ///
-  /// In fr, this message translates to:
-  /// **'Accès au microphone'**
-  String get oralMicAccessTitle;
-
-  /// Dialogue permission micro — test de lecture, paragraphe 1
-  ///
-  /// In fr, this message translates to:
-  /// **'Cette activité enregistre votre voix pendant que vous lisez le texte à voix haute.'**
-  String get oralReadingPermissionBody1;
-
-  /// Dialogue permission micro — test de lecture, paragraphe 2. EN omet volontairement « en français » (les textes lus sont dans la langue de l'app)
-  ///
-  /// In fr, this message translates to:
-  /// **'Vos enregistrements seront anonymisés et pourront contribuer à l\'amélioration de la reconnaissance vocale en français.'**
-  String get oralReadingPermissionBody2;
-
-  /// Dialogue permission micro — note italique sur la demande navigateur
-  ///
-  /// In fr, this message translates to:
-  /// **'Votre navigateur vous demandera ensuite d\'autoriser le microphone.'**
-  String get oralBrowserWillAskMic;
-
-  /// Bouton annuler des dialogues de permission micro
-  ///
-  /// In fr, this message translates to:
-  /// **'Annuler'**
-  String get oralCancel;
-
-  /// Bouton de confirmation du dialogue de permission micro (lecture)
-  ///
-  /// In fr, this message translates to:
-  /// **'Autoriser le microphone'**
-  String get oralAllowMicrophone;
-
-  /// Message d'erreur quand la permission micro est refusée
-  ///
-  /// In fr, this message translates to:
-  /// **'Microphone refusé ou indisponible.'**
-  String get oralMicDeniedOrUnavailable;
-
-  /// Message d'erreur quand le démarrage de l'enregistrement échoue
-  ///
-  /// In fr, this message translates to:
-  /// **'Impossible de démarrer l\'enregistrement sur ce navigateur.'**
-  String get oralCannotStartRecording;
-
-  /// Contenu du SnackBar d'erreur micro ; message = erreur déjà localisée
-  ///
-  /// In fr, this message translates to:
-  /// **'{message} Vous pouvez passer à l\'étape suivante.'**
-  String oralCanSkipToNextStep(String message);
-
-  /// Action du SnackBar d'erreur micro pour passer l'étape
-  ///
-  /// In fr, this message translates to:
-  /// **'Passer'**
-  String get oralSkip;
-
-  /// Indicateur clignotant rouge pendant l'enregistrement
-  ///
-  /// In fr, this message translates to:
-  /// **'Enregistrement en cours'**
-  String get oralRecordingInProgress;
-
-  /// Compte à rebours avant que le bouton Terminer ne s'active
-  ///
-  /// In fr, this message translates to:
-  /// **'Continuez encore {seconds}s...'**
-  String oralKeepGoingSeconds(int seconds);
-
-  /// Libellé du bouton pendant la sauvegarde de l'audio
-  ///
-  /// In fr, this message translates to:
-  /// **'Sauvegarde...'**
-  String get oralSaving;
-
-  /// Bandeau d'instructions du test de lecture à voix haute
-  ///
-  /// In fr, this message translates to:
-  /// **'Lisez le texte suivant à voix haute, clairement et à votre rythme naturel. Appuyez sur \"Démarrer\" quand vous êtes prêt.'**
-  String get oralReadingInstructions;
-
-  /// Bouton principal pour démarrer l'enregistrement de la lecture
-  ///
-  /// In fr, this message translates to:
-  /// **'Démarrer la lecture'**
-  String get oralStartReading;
-
-  /// Bouton pour arrêter l'enregistrement de la lecture
-  ///
-  /// In fr, this message translates to:
-  /// **'Terminer'**
-  String get oralFinish;
-
-  /// Bouton texte affiché si le micro est refusé
-  ///
-  /// In fr, this message translates to:
-  /// **'Passer cette étape'**
-  String get oralSkipThisStep;
-
-  /// Dialogue permission micro — test de résumé, paragraphe 1
-  ///
-  /// In fr, this message translates to:
-  /// **'Vous allez maintenant enregistrer votre résumé oral du texte.'**
-  String get oralSummaryPermissionBody1;
-
-  /// Dialogue permission micro — test de résumé, paragraphe 2
-  ///
-  /// In fr, this message translates to:
-  /// **'Parlez naturellement, comme si vous expliquiez le texte à un ami. Prenez entre 30 et 60 secondes.'**
-  String get oralSummaryPermissionBody2;
-
-  /// Bouton pour démarrer l'enregistrement du résumé (dialogue et écran)
-  ///
-  /// In fr, this message translates to:
-  /// **'Démarrer le résumé'**
-  String get oralStartSummary;
-
-  /// Début (en gras) du bandeau d'instructions du résumé — l'espace final est volontaire
-  ///
-  /// In fr, this message translates to:
-  /// **'Vous venez de lire ce texte. '**
-  String get oralSummaryInstructionLead;
-
-  /// Suite du bandeau d'instructions du résumé
-  ///
-  /// In fr, this message translates to:
-  /// **'Résumez ce que vous avez compris avec vos propres mots. Prenez entre 30 et 60 secondes. Parlez naturellement, comme si vous l\'expliquiez à un ami.'**
-  String get oralSummaryInstructionBody;
-
-  /// Étiquette de la carte grisée montrant le texte original pendant le résumé
-  ///
-  /// In fr, this message translates to:
-  /// **'Texte de référence'**
-  String get oralReferenceText;
-
-  /// Bouton pour arrêter l'enregistrement du résumé
-  ///
-  /// In fr, this message translates to:
-  /// **'Terminer le résumé'**
-  String get oralFinishSummary;
-
-  /// Titre de l'AppBar du flux de test oral
-  ///
-  /// In fr, this message translates to:
-  /// **'Collecte audio'**
-  String get oralFlowTitle;
-
-  /// Titre de l'écran de consentement
-  ///
-  /// In fr, this message translates to:
-  /// **'Test de Compréhension Orale'**
-  String get oralConsentTitle;
-
-  /// Écran de consentement — titre de la section enregistrements
-  ///
-  /// In fr, this message translates to:
-  /// **'Ce que nous enregistrons'**
-  String get oralConsentRecordTitle;
-
-  /// Écran de consentement — corps de la section enregistrements
-  ///
-  /// In fr, this message translates to:
-  /// **'Votre voix pendant la lecture de 5 courts textes (environ 1 min chacun) et votre résumé oral (environ 40 secondes par texte).'**
-  String get oralConsentRecordBody;
-
-  /// Écran de consentement — titre de la section confidentialité
-  ///
-  /// In fr, this message translates to:
-  /// **'Confidentialité'**
-  String get oralConsentAnonTitle;
-
-  /// Écran de consentement — corps de la section confidentialité (pseudonymisation honnête)
-  ///
-  /// In fr, this message translates to:
-  /// **'Vos enregistrements sont identifiés par un code de session aléatoire, et non par votre nom. Ils restent toutefois rattachables à votre compte : ce sont des données personnelles protégées, chiffrées et stockées en Europe.'**
-  String get oralConsentAnonBody;
-
-  /// Écran de consentement — titre de la section utilisation
-  ///
-  /// In fr, this message translates to:
-  /// **'Utilisation'**
-  String get oralConsentUsageTitle;
-
-  /// Écran de consentement — corps de la section utilisation. EN omet volontairement « du français »
-  ///
-  /// In fr, this message translates to:
-  /// **'Ces enregistrements pourront contribuer à l\'amélioration de la reconnaissance vocale du français, notamment pour des modèles comme Whisper ou Speechmatics.'**
-  String get oralConsentUsageBody;
-
-  /// Bouton principal de l'écran de consentement
-  ///
-  /// In fr, this message translates to:
-  /// **'J\'accepte et je commence'**
-  String get oralAcceptAndStart;
-
-  /// Bouton texte de refus du consentement
-  ///
-  /// In fr, this message translates to:
-  /// **'Refuser et revenir en arrière'**
-  String get oralDeclineAndGoBack;
-
-  /// Note légale en bas de l'écran de consentement
-  ///
-  /// In fr, this message translates to:
-  /// **'Vous pouvez retirer votre consentement à tout moment depuis les paramètres de l\'application.'**
-  String get oralWithdrawConsentNote;
-
   /// Case à cocher OBLIGATOIRE du consentement audio
   ///
   /// In fr, this message translates to:
@@ -668,527 +237,11 @@ abstract class AppLocalizations {
   /// **'Lire la politique de confidentialité'**
   String get oralConsentPrivacyLink;
 
-  /// En-tête de progression du flux (5 textes au total)
+  /// Matrices — message de règle de discontinuation après 3 échecs
   ///
   /// In fr, this message translates to:
-  /// **'Texte {current} sur 5'**
-  String oralTextProgress(int current);
-
-  /// Étiquette d'étape courante dans l'en-tête de progression
-  ///
-  /// In fr, this message translates to:
-  /// **'Lecture'**
-  String get oralStepReading;
-
-  /// Étiquette d'étape courante dans l'en-tête de progression
-  ///
-  /// In fr, this message translates to:
-  /// **'Résumé'**
-  String get oralStepSummary;
-
-  /// Titre de l'écran de pause entre lecture et résumé
-  ///
-  /// In fr, this message translates to:
-  /// **'Bien !'**
-  String get oralPauseWellDone;
-
-  /// Consigne de l'écran de pause
-  ///
-  /// In fr, this message translates to:
-  /// **'Maintenant, résumez oralement ce texte.'**
-  String get oralPauseNowSummarize;
-
-  /// Libellé au-dessus du compte à rebours de la pause
-  ///
-  /// In fr, this message translates to:
-  /// **'Début dans...'**
-  String get oralPauseStartingIn;
-
-  /// Titre de l'écran de fin
-  ///
-  /// In fr, this message translates to:
-  /// **'Merci !'**
-  String get oralCompletedThanks;
-
-  /// Corps de l'écran de fin (retours à la ligne volontaires). EN omet volontairement « en français »
-  ///
-  /// In fr, this message translates to:
-  /// **'Vous avez complété les 5 textes.\nVos enregistrements contribueront à l\'amélioration\nde la reconnaissance vocale en français.'**
-  String get oralCompletedBody;
-
-  /// Bouton de l'écran de fin
-  ///
-  /// In fr, this message translates to:
-  /// **'Retour à l\'accueil'**
-  String get oralBackToHome;
-
-  /// Titre du dialogue de confirmation de sortie pendant un enregistrement
-  ///
-  /// In fr, this message translates to:
-  /// **'Quitter ?'**
-  String get oralExitDialogTitle;
-
-  /// Corps du dialogue de confirmation de sortie
-  ///
-  /// In fr, this message translates to:
-  /// **'Un enregistrement est en cours. Si vous quittez maintenant, il ne sera pas sauvegardé.'**
-  String get oralExitDialogBody;
-
-  /// Bouton pour rester dans le test (dialogue de sortie)
-  ///
-  /// In fr, this message translates to:
-  /// **'Continuer'**
-  String get oralContinue;
-
-  /// Bouton pour quitter le test (dialogue de sortie)
-  ///
-  /// In fr, this message translates to:
-  /// **'Quitter'**
-  String get oralQuit;
-
-  /// Eyebrow label showing the current registration step out of 4
-  ///
-  /// In fr, this message translates to:
-  /// **'ÉTAPE {step} / 4'**
-  String regStepEyebrow(int step);
-
-  /// Eyebrow label on the registration success page
-  ///
-  /// In fr, this message translates to:
-  /// **'ÉTAPE 4 / 4 · SUCCÈS'**
-  String get regStepEyebrowSuccess;
-
-  /// Title of the email entry page (step 1 of registration)
-  ///
-  /// In fr, this message translates to:
-  /// **'Créer mon token'**
-  String get regEmailTitle;
-
-  /// Heading next to the logo on the email entry page
-  ///
-  /// In fr, this message translates to:
-  /// **'Votre email'**
-  String get regEmailHeading;
-
-  /// Introductory text on the email entry page
-  ///
-  /// In fr, this message translates to:
-  /// **'Nous vous envoyons un code de vérification à 6 chiffres. Votre email n\'est pas lié à votre token et reste privé.'**
-  String get regEmailIntro;
-
-  /// Label of the email text field
-  ///
-  /// In fr, this message translates to:
-  /// **'Adresse email'**
-  String get regEmailFieldLabel;
-
-  /// Validation error when the email format is invalid
-  ///
-  /// In fr, this message translates to:
-  /// **'Email invalide'**
-  String get regEmailInvalid;
-
-  /// Button label while the email OTP is being sent
-  ///
-  /// In fr, this message translates to:
-  /// **'Envoi du code…'**
-  String get regSendingCode;
-
-  /// Button to request the email verification code
-  ///
-  /// In fr, this message translates to:
-  /// **'Recevoir le code'**
-  String get regReceiveCode;
-
-  /// Privacy note at the bottom of the email entry page
-  ///
-  /// In fr, this message translates to:
-  /// **'Aucun nom, prénom ou adresse précise ne sera stocké. Seuls votre sexe, tranche d\'âge et code postal sont encodés (chiffrés) dans votre token anonyme.'**
-  String get regEmailPrivacyNote;
-
-  /// Title of the email OTP verification page
-  ///
-  /// In fr, this message translates to:
-  /// **'Vérifier mon email'**
-  String get regEmailOtpTitle;
-
-  /// Label above the email address the OTP was sent to
-  ///
-  /// In fr, this message translates to:
-  /// **'Code envoyé à'**
-  String get regCodeSentTo;
-
-  /// Button label while an OTP code is being verified
-  ///
-  /// In fr, this message translates to:
-  /// **'Vérification…'**
-  String get regVerifying;
-
-  /// Button to resend the email verification code
-  ///
-  /// In fr, this message translates to:
-  /// **'Renvoyer le code'**
-  String get regResendCode;
-
-  /// Title of the phone entry page (step 2 of registration)
-  ///
-  /// In fr, this message translates to:
-  /// **'Votre téléphone'**
-  String get regPhoneTitle;
-
-  /// Introductory text on the phone entry page
-  ///
-  /// In fr, this message translates to:
-  /// **'Un code SMS à 6 chiffres sera envoyé pour vérifier votre numéro. Aucun lien entre votre numéro et votre token.'**
-  String get regPhoneIntro;
-
-  /// Hint of the phone number text field
-  ///
-  /// In fr, this message translates to:
-  /// **'Numéro'**
-  String get regPhoneFieldHint;
-
-  /// Button label while the SMS OTP is being sent
-  ///
-  /// In fr, this message translates to:
-  /// **'Envoi du SMS…'**
-  String get regSendingSms;
-
-  /// Button to request the SMS verification code
-  ///
-  /// In fr, this message translates to:
-  /// **'Recevoir le SMS'**
-  String get regReceiveSms;
-
-  /// Title of the phone OTP verification page
-  ///
-  /// In fr, this message translates to:
-  /// **'Vérifier mon téléphone'**
-  String get regPhoneOtpTitle;
-
-  /// Label above the phone number the SMS OTP was sent to
-  ///
-  /// In fr, this message translates to:
-  /// **'SMS envoyé au'**
-  String get regSmsSentTo;
-
-  /// Button to resend the SMS verification code
-  ///
-  /// In fr, this message translates to:
-  /// **'Renvoyer le SMS'**
-  String get regResendSms;
-
-  /// Title of the demographics page (step 3 of registration)
-  ///
-  /// In fr, this message translates to:
-  /// **'Vos données démographiques'**
-  String get regDemoTitle;
-
-  /// Introductory text on the demographics page
-  ///
-  /// In fr, this message translates to:
-  /// **'Ces informations seront chiffrées dans votre token. Aucune valeur exacte n\'est stockée (ni âge précis, ni adresse précise).'**
-  String get regDemoIntro;
-
-  /// Section label (uppercase) for the sex selection
-  ///
-  /// In fr, this message translates to:
-  /// **'SEXE'**
-  String get regSectionSex;
-
-  /// Section label (uppercase) for the age range selection
-  ///
-  /// In fr, this message translates to:
-  /// **'TRANCHE D\'ÂGE'**
-  String get regSectionAgeBucket;
-
-  /// Section label (uppercase) for the country and postal code inputs
-  ///
-  /// In fr, this message translates to:
-  /// **'PAYS ET CODE POSTAL'**
-  String get regSectionCountryPostal;
-
-  /// Hint of the postal code text field
-  ///
-  /// In fr, this message translates to:
-  /// **'Code postal'**
-  String get regPostalCodeHint;
-
-  /// Button label while the anonymous token is being generated
-  ///
-  /// In fr, this message translates to:
-  /// **'Génération du token…'**
-  String get regGeneratingToken;
-
-  /// Button to submit demographics and generate the anonymous token
-  ///
-  /// In fr, this message translates to:
-  /// **'Générer mon token'**
-  String get regGenerateMyToken;
-
-  /// Title of the registration success page
-  ///
-  /// In fr, this message translates to:
-  /// **'Bienvenue dans Mental E.T.'**
-  String get regSuccessTitle;
-
-  /// Confirmation message on the success page
-  ///
-  /// In fr, this message translates to:
-  /// **'Votre token anonyme a été généré et sauvegardé sur cet appareil.'**
-  String get regSuccessTokenSaved;
-
-  /// Details about the token content on the success page
-  ///
-  /// In fr, this message translates to:
-  /// **'Il ne contient ni votre email, ni votre numéro de téléphone, ni votre nom. Uniquement votre sexe, votre tranche d\'âge et votre zone géographique (chiffrés). Vous pouvez maintenant commencer votre évaluation cognitive.'**
-  String get regSuccessTokenDetails;
-
-  /// Uppercase warning label on the success page
-  ///
-  /// In fr, this message translates to:
-  /// **'IMPORTANT'**
-  String get regImportantLabel;
-
-  /// Warning about token being stored only on the device
-  ///
-  /// In fr, this message translates to:
-  /// **'Ne désinstallez pas l\'application sans avoir terminé votre évaluation : votre token est uniquement stocké sur cet appareil. Si vous le perdez, vous ne pourrez plus créer de nouveau compte avec le même email ou téléphone.'**
-  String get regSuccessWarning;
-
-  /// Error when the email is already linked to an account
-  ///
-  /// In fr, this message translates to:
-  /// **'Cet email a déjà un compte. Si c\'est le vôtre, vous avez déjà un token.'**
-  String get regEmailAlreadyRegistered;
-
-  /// Generic error when the email cannot be used
-  ///
-  /// In fr, this message translates to:
-  /// **'Email indisponible.'**
-  String get regEmailUnavailable;
-
-  /// Error when an OTP code (email or SMS) is wrong or expired
-  ///
-  /// In fr, this message translates to:
-  /// **'Code incorrect ou expiré.'**
-  String get regOtpIncorrectOrExpired;
-
-  /// Error when the phone number is already linked to an account
-  ///
-  /// In fr, this message translates to:
-  /// **'Ce numéro a déjà un compte.'**
-  String get regPhoneAlreadyRegistered;
-
-  /// Generic error when the phone number cannot be used
-  ///
-  /// In fr, this message translates to:
-  /// **'Numéro indisponible.'**
-  String get regPhoneUnavailable;
-
-  /// Error at token generation when the email already has a token
-  ///
-  /// In fr, this message translates to:
-  /// **'Cet email a déjà un token.'**
-  String get regEmailAlreadyHasToken;
-
-  /// Error at token generation when the phone already has a token
-  ///
-  /// In fr, this message translates to:
-  /// **'Ce numéro a déjà un token.'**
-  String get regPhoneAlreadyHasToken;
-
-  /// Error when the submitted postal code is unknown
-  ///
-  /// In fr, this message translates to:
-  /// **'Code postal introuvable. Vérifiez le pays et le code.'**
-  String get regPostalNotFound;
-
-  /// Error when the network is unreachable
-  ///
-  /// In fr, this message translates to:
-  /// **'Pas de connexion internet.'**
-  String get regNoInternet;
-
-  /// Generic fallback error during registration
-  ///
-  /// In fr, this message translates to:
-  /// **'Erreur — merci de réessayer.'**
-  String get regGenericRetryError;
-
-  /// Displayed label for the male sex option
-  ///
-  /// In fr, this message translates to:
-  /// **'Masculin'**
-  String get regSexMale;
-
-  /// Displayed label for the female sex option
-  ///
-  /// In fr, this message translates to:
-  /// **'Féminin'**
-  String get regSexFemale;
-
-  /// Displayed label for the undisclosed sex option
-  ///
-  /// In fr, this message translates to:
-  /// **'Préfère ne pas dire'**
-  String get regSexUndisclosed;
-
-  /// Displayed label for the 18-25 age range
-  ///
-  /// In fr, this message translates to:
-  /// **'18 – 25 ans'**
-  String get regAge1825;
-
-  /// Displayed label for the 26-35 age range
-  ///
-  /// In fr, this message translates to:
-  /// **'26 – 35 ans'**
-  String get regAge2635;
-
-  /// Displayed label for the 36-45 age range
-  ///
-  /// In fr, this message translates to:
-  /// **'36 – 45 ans'**
-  String get regAge3645;
-
-  /// Displayed label for the 46-55 age range
-  ///
-  /// In fr, this message translates to:
-  /// **'46 – 55 ans'**
-  String get regAge4655;
-
-  /// Displayed label for the 56-65 age range
-  ///
-  /// In fr, this message translates to:
-  /// **'56 – 65 ans'**
-  String get regAge5665;
-
-  /// Displayed label for the 66+ age range
-  ///
-  /// In fr, this message translates to:
-  /// **'66 ans et plus'**
-  String get regAge66plus;
-
-  /// Classification Wechsler pour un score composite >= 130 ou note standard >= 16
-  ///
-  /// In fr, this message translates to:
-  /// **'Très supérieur'**
-  String get scoringClassificationVerySuperior;
-
-  /// Classification Wechsler pour un score composite 120-129 ou note standard 13-15
-  ///
-  /// In fr, this message translates to:
-  /// **'Supérieur'**
-  String get scoringClassificationSuperior;
-
-  /// Classification Wechsler pour un score composite 110-119 ou note standard 11-12
-  ///
-  /// In fr, this message translates to:
-  /// **'Moyen fort'**
-  String get scoringClassificationHighAverage;
-
-  /// Classification Wechsler pour un score composite 90-109 ou note standard 8-10
-  ///
-  /// In fr, this message translates to:
-  /// **'Moyen'**
-  String get scoringClassificationAverage;
-
-  /// Classification Wechsler pour un score composite 80-89 ou note standard 6-7
-  ///
-  /// In fr, this message translates to:
-  /// **'Moyen faible'**
-  String get scoringClassificationLowAverage;
-
-  /// Classification Wechsler pour un score composite 70-79 ou note standard 4-5
-  ///
-  /// In fr, this message translates to:
-  /// **'Limite'**
-  String get scoringClassificationBorderline;
-
-  /// Classification Wechsler pour un score composite < 70 ou note standard < 4
-  ///
-  /// In fr, this message translates to:
-  /// **'Extrêmement bas'**
-  String get scoringClassificationExtremelyLow;
-
-  /// Classification affichée quand la note standardisée d'un sous-test est absente
-  ///
-  /// In fr, this message translates to:
-  /// **'N/A'**
-  String get scoringNotAvailable;
-
-  /// Ligne du résumé de profil : QI total avec sa classification
-  ///
-  /// In fr, this message translates to:
-  /// **'QI Total: {score} ({classification})'**
-  String scoringSummaryFullScaleIq(int score, String classification);
-
-  /// Ligne du résumé de profil : rang percentile du QI total (suffixe ordinal 'e' en FR)
-  ///
-  /// In fr, this message translates to:
-  /// **'Percentile: {rank}e'**
-  String scoringSummaryPercentile(int rank);
-
-  /// Ligne du résumé de profil : intervalle de confiance à 95% du QI total
-  ///
-  /// In fr, this message translates to:
-  /// **'Intervalle de confiance 95%: {lower} - {upper}'**
-  String scoringSummaryConfidenceInterval(int lower, int upper);
-
-  /// Nom affiché de l'indice VCI (WAIS-IV)
-  ///
-  /// In fr, this message translates to:
-  /// **'Compréhension Verbale'**
-  String get scoringIndexVerbalComprehension;
-
-  /// Nom affiché de l'indice VSI (WAIS-IV)
-  ///
-  /// In fr, this message translates to:
-  /// **'Visuo-Spatial'**
-  String get scoringIndexVisualSpatial;
-
-  /// Nom affiché de l'indice FRI (WAIS-IV)
-  ///
-  /// In fr, this message translates to:
-  /// **'Raisonnement Fluide'**
-  String get scoringIndexFluidReasoning;
-
-  /// Nom affiché de l'indice WMI (WAIS-IV)
-  ///
-  /// In fr, this message translates to:
-  /// **'Mémoire de Travail'**
-  String get scoringIndexWorkingMemory;
-
-  /// Nom affiché de l'indice PSI (WAIS-IV)
-  ///
-  /// In fr, this message translates to:
-  /// **'Vitesse de Traitement'**
-  String get scoringIndexProcessingSpeed;
-
-  /// Ligne du résumé de profil : liste des indices significativement au-dessus du QI total
-  ///
-  /// In fr, this message translates to:
-  /// **'Forces relatives: {list}'**
-  String scoringSummaryRelativeStrengths(String list);
-
-  /// Ligne du résumé de profil : liste des indices significativement en dessous du QI total
-  ///
-  /// In fr, this message translates to:
-  /// **'Faiblesses relatives: {list}'**
-  String scoringSummaryRelativeWeaknesses(String list);
-
-  /// Conclusion du résumé de profil quand les indices sont homogènes (écarts < 1 écart-type)
-  ///
-  /// In fr, this message translates to:
-  /// **'Profil cognitif homogène'**
-  String get scoringSummaryHomogeneousProfile;
-
-  /// Conclusion du résumé de profil quand les indices sont hétérogènes, avec l'écart maximal en points
-  ///
-  /// In fr, this message translates to:
-  /// **'Profil cognitif hétérogène (écart max: {points} points)'**
-  String scoringSummaryHeterogeneousProfile(int points);
+  /// **'3 échecs consécutifs - Test terminé (WAIS-IV)'**
+  String get matDiscontinue3;
 
   /// Titre de la page d'introduction au bilan cognitif
   ///
@@ -2174,11 +1227,281 @@ abstract class AppLocalizations {
   /// **'AVERTISSEMENT : Ce rapport est généré par une application d\'aide à l\'évaluation et ne constitue pas un diagnostic clinique officiel. Il doit être interprété par un professionnel de santé qualifié. Ne pas utiliser à des fins médicales ou légales sans évaluation professionnelle complémentaire.'**
   String get ctPdfDisclaimer;
 
+  /// App bar eyebrow on chat screen
+  ///
+  /// In fr, this message translates to:
+  /// **'ASSISTANT IA'**
+  String get chatEyebrow;
+
+  /// Tooltip to clear the chat
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvelle conversation'**
+  String get chatNewConversation;
+
+  /// Label above assistant messages (brand)
+  ///
+  /// In fr, this message translates to:
+  /// **'MENTAL E.T.'**
+  String get chatAssistantLabel;
+
+  /// Label above user messages
+  ///
+  /// In fr, this message translates to:
+  /// **'VOUS'**
+  String get chatUserLabel;
+
+  /// Empty-state hero, line 1
+  ///
+  /// In fr, this message translates to:
+  /// **'Posez'**
+  String get chatHeroTitle1;
+
+  /// Empty-state hero, line 2 (italic)
+  ///
+  /// In fr, this message translates to:
+  /// **'vos questions.'**
+  String get chatHeroTitle2;
+
+  /// No description provided for @chatEmptyIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'IA Mental E.T. vous aide à mieux comprendre votre profil cognitif. Discussions confidentielles, accompagnement non-directif.'**
+  String get chatEmptyIntro;
+
+  /// Loading bubble label
+  ///
+  /// In fr, this message translates to:
+  /// **'Réflexion…'**
+  String get chatThinking;
+
+  /// Chat input placeholder
+  ///
+  /// In fr, this message translates to:
+  /// **'Écrire un message…'**
+  String get chatInputHint;
+
+  /// Message timestamp, under 1 min
+  ///
+  /// In fr, this message translates to:
+  /// **'à l\'instant'**
+  String get chatTimeJustNow;
+
+  /// Message timestamp in minutes
+  ///
+  /// In fr, this message translates to:
+  /// **'{count} min'**
+  String chatTimeMinutes(int count);
+
+  /// Message timestamp in hours
+  ///
+  /// In fr, this message translates to:
+  /// **'{count}h'**
+  String chatTimeHours(int count);
+
+  /// Generic chat error bubble
+  ///
+  /// In fr, this message translates to:
+  /// **'Désolé, une erreur s\'est produite. Veuillez réessayer.'**
+  String get chatErrorMessage;
+
+  /// Network error (not user-facing prose)
+  ///
+  /// In fr, this message translates to:
+  /// **'Réponse vide du worker'**
+  String get chatErrorEmptyResponse;
+
+  /// 403 network error
+  ///
+  /// In fr, this message translates to:
+  /// **'Accès refusé par le worker (origine non autorisée).'**
+  String get chatErrorAccessDenied;
+
+  /// 429 network error
+  ///
+  /// In fr, this message translates to:
+  /// **'Limite de requêtes atteinte. Réessayez dans quelques instants.'**
+  String get chatErrorRateLimit;
+
+  /// 500 network error fallback
+  ///
+  /// In fr, this message translates to:
+  /// **'Erreur serveur ({code})'**
+  String chatErrorServer(int code);
+
+  /// Generic HTTP error fallback
+  ///
+  /// In fr, this message translates to:
+  /// **'Erreur {code} : {body}'**
+  String chatErrorHttp(int code, String body);
+
+  /// Splash title, line 1
+  ///
+  /// In fr, this message translates to:
+  /// **'Évaluation'**
+  String get coreSplashTitleLine1;
+
+  /// Splash title, line 2 (italic)
+  ///
+  /// In fr, this message translates to:
+  /// **'cognitive'**
+  String get coreSplashTitleLine2;
+
+  /// Abréviation 'non disponible' (cellules PDF compactes)
+  ///
+  /// In fr, this message translates to:
+  /// **'N/D'**
+  String get commonNotAvailable;
+
+  /// Base du nom de fichier PDF (ASCII, sans accents)
+  ///
+  /// In fr, this message translates to:
+  /// **'mentality_resultats'**
+  String get pdfFilenameBase;
+
   /// Message affiché par le routeur quand une route demandée n'existe pas. {path} est le chemin de l'URL.
   ///
   /// In fr, this message translates to:
   /// **'Page introuvable : {path}'**
   String coreRouteNotFound(String path);
+
+  /// Home hero, line 1
+  ///
+  /// In fr, this message translates to:
+  /// **'Découvrez'**
+  String get homeHeroTitle;
+
+  /// Home hero, line 2 (italic)
+  ///
+  /// In fr, this message translates to:
+  /// **'votre profil cognitif.'**
+  String get homeHeroTitleItalic;
+
+  /// No description provided for @homeHeroBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Une évaluation scientifique adaptative, inspirée des échelles Wechsler. 12 sous-tests, 5 indices, un score global.'**
+  String get homeHeroBody;
+
+  /// Home action card 1 title
+  ///
+  /// In fr, this message translates to:
+  /// **'Commencer une évaluation'**
+  String get homeActionStartTitle;
+
+  /// Home action card 1 subtitle
+  ///
+  /// In fr, this message translates to:
+  /// **'Durée : 30 – 45 minutes'**
+  String get homeActionStartSubtitle;
+
+  /// Home action card 2 title
+  ///
+  /// In fr, this message translates to:
+  /// **'Mes résultats'**
+  String get homeActionResultsTitle;
+
+  /// Home action card 2 subtitle
+  ///
+  /// In fr, this message translates to:
+  /// **'Historique des évaluations'**
+  String get homeActionResultsSubtitle;
+
+  /// Home action card 3 title
+  ///
+  /// In fr, this message translates to:
+  /// **'Parler avec Mental E.T.'**
+  String get homeActionChatTitle;
+
+  /// Home action card 3 subtitle
+  ///
+  /// In fr, this message translates to:
+  /// **'Assistant IA, questions psychologiques'**
+  String get homeActionChatSubtitle;
+
+  /// Badge on disabled action
+  ///
+  /// In fr, this message translates to:
+  /// **'BIENTÔT DISPONIBLE'**
+  String get homeComingSoon;
+
+  /// About section eyebrow
+  ///
+  /// In fr, this message translates to:
+  /// **'À PROPOS'**
+  String get homeAboutEyebrow;
+
+  /// About tile 1 title
+  ///
+  /// In fr, this message translates to:
+  /// **'12 sous-tests'**
+  String get homeAboutSubtestsTitle;
+
+  /// No description provided for @homeAboutSubtestsBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Évaluation complète des cinq indices cognitifs WAIS-IV.'**
+  String get homeAboutSubtestsBody;
+
+  /// About tile 2 title
+  ///
+  /// In fr, this message translates to:
+  /// **'IA adaptative'**
+  String get homeAboutAdaptiveTitle;
+
+  /// No description provided for @homeAboutAdaptiveBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Difficulté ajustée en temps réel via inférence IRT.'**
+  String get homeAboutAdaptiveBody;
+
+  /// About tile 3 title
+  ///
+  /// In fr, this message translates to:
+  /// **'Validation scientifique'**
+  String get homeAboutValidationTitle;
+
+  /// No description provided for @homeAboutValidationBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Items inspirés des échelles Wechsler (WPPSI / WISC / WAIS).'**
+  String get homeAboutValidationBody;
+
+  /// Resume banner eyebrow
+  ///
+  /// In fr, this message translates to:
+  /// **'TEST EN COURS'**
+  String get homeResumeEyebrow;
+
+  /// Resume banner title
+  ///
+  /// In fr, this message translates to:
+  /// **'Reprendre votre évaluation'**
+  String get homeResumeTitle;
+
+  /// Resume banner button
+  ///
+  /// In fr, this message translates to:
+  /// **'Reprendre'**
+  String get homeResumeButton;
+
+  /// Logout confirmation dialog title
+  ///
+  /// In fr, this message translates to:
+  /// **'Se déconnecter ?'**
+  String get homeLogoutTitle;
+
+  /// Logout confirmation dialog body
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton token sera retiré de cet appareil. Assure-toi de l\'avoir sauvegardé : sans lui, tu ne pourras pas te reconnecter à tes données.'**
+  String get homeLogoutBody;
+
+  /// Logout confirm/tooltip label
+  ///
+  /// In fr, this message translates to:
+  /// **'Se déconnecter'**
+  String get homeLogoutConfirm;
 
   /// Information — nom du test affiché dans le scaffold
   ///
@@ -2594,6 +1917,738 @@ abstract class AppLocalizations {
   /// **'Très difficile'**
   String get arithDifficultyVeryHard;
 
+  /// Titre du dialogue de permission micro (lecture et résumé)
+  ///
+  /// In fr, this message translates to:
+  /// **'Accès au microphone'**
+  String get oralMicAccessTitle;
+
+  /// Dialogue permission micro — test de lecture, paragraphe 1
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette activité enregistre votre voix pendant que vous lisez le texte à voix haute.'**
+  String get oralReadingPermissionBody1;
+
+  /// Dialogue permission micro — test de lecture, paragraphe 2. EN omet volontairement « en français » (les textes lus sont dans la langue de l'app)
+  ///
+  /// In fr, this message translates to:
+  /// **'Vos enregistrements seront anonymisés et pourront contribuer à l\'amélioration de la reconnaissance vocale en français.'**
+  String get oralReadingPermissionBody2;
+
+  /// Dialogue permission micro — note italique sur la demande navigateur
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre navigateur vous demandera ensuite d\'autoriser le microphone.'**
+  String get oralBrowserWillAskMic;
+
+  /// Bouton annuler des dialogues de permission micro
+  ///
+  /// In fr, this message translates to:
+  /// **'Annuler'**
+  String get oralCancel;
+
+  /// Bouton de confirmation du dialogue de permission micro (lecture)
+  ///
+  /// In fr, this message translates to:
+  /// **'Autoriser le microphone'**
+  String get oralAllowMicrophone;
+
+  /// Message d'erreur quand la permission micro est refusée
+  ///
+  /// In fr, this message translates to:
+  /// **'Microphone refusé ou indisponible.'**
+  String get oralMicDeniedOrUnavailable;
+
+  /// Message d'erreur quand le démarrage de l'enregistrement échoue
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible de démarrer l\'enregistrement sur ce navigateur.'**
+  String get oralCannotStartRecording;
+
+  /// Contenu du SnackBar d'erreur micro ; message = erreur déjà localisée
+  ///
+  /// In fr, this message translates to:
+  /// **'{message} Vous pouvez passer à l\'étape suivante.'**
+  String oralCanSkipToNextStep(String message);
+
+  /// Action du SnackBar d'erreur micro pour passer l'étape
+  ///
+  /// In fr, this message translates to:
+  /// **'Passer'**
+  String get oralSkip;
+
+  /// Indicateur clignotant rouge pendant l'enregistrement
+  ///
+  /// In fr, this message translates to:
+  /// **'Enregistrement en cours'**
+  String get oralRecordingInProgress;
+
+  /// Compte à rebours avant que le bouton Terminer ne s'active
+  ///
+  /// In fr, this message translates to:
+  /// **'Continuez encore {seconds}s...'**
+  String oralKeepGoingSeconds(int seconds);
+
+  /// Libellé du bouton pendant la sauvegarde de l'audio
+  ///
+  /// In fr, this message translates to:
+  /// **'Sauvegarde...'**
+  String get oralSaving;
+
+  /// Bandeau d'instructions du test de lecture à voix haute
+  ///
+  /// In fr, this message translates to:
+  /// **'Lisez le texte suivant à voix haute, clairement et à votre rythme naturel. Appuyez sur \"Démarrer\" quand vous êtes prêt.'**
+  String get oralReadingInstructions;
+
+  /// Bouton principal pour démarrer l'enregistrement de la lecture
+  ///
+  /// In fr, this message translates to:
+  /// **'Démarrer la lecture'**
+  String get oralStartReading;
+
+  /// Bouton pour arrêter l'enregistrement de la lecture
+  ///
+  /// In fr, this message translates to:
+  /// **'Terminer'**
+  String get oralFinish;
+
+  /// Bouton texte affiché si le micro est refusé
+  ///
+  /// In fr, this message translates to:
+  /// **'Passer cette étape'**
+  String get oralSkipThisStep;
+
+  /// Dialogue permission micro — test de résumé, paragraphe 1
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous allez maintenant enregistrer votre résumé oral du texte.'**
+  String get oralSummaryPermissionBody1;
+
+  /// Dialogue permission micro — test de résumé, paragraphe 2
+  ///
+  /// In fr, this message translates to:
+  /// **'Parlez naturellement, comme si vous expliquiez le texte à un ami. Prenez entre 30 et 60 secondes.'**
+  String get oralSummaryPermissionBody2;
+
+  /// Bouton pour démarrer l'enregistrement du résumé (dialogue et écran)
+  ///
+  /// In fr, this message translates to:
+  /// **'Démarrer le résumé'**
+  String get oralStartSummary;
+
+  /// Début (en gras) du bandeau d'instructions du résumé — l'espace final est volontaire
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous venez de lire ce texte. '**
+  String get oralSummaryInstructionLead;
+
+  /// Suite du bandeau d'instructions du résumé
+  ///
+  /// In fr, this message translates to:
+  /// **'Résumez ce que vous avez compris avec vos propres mots. Prenez entre 30 et 60 secondes. Parlez naturellement, comme si vous l\'expliquiez à un ami.'**
+  String get oralSummaryInstructionBody;
+
+  /// Étiquette de la carte grisée montrant le texte original pendant le résumé
+  ///
+  /// In fr, this message translates to:
+  /// **'Texte de référence'**
+  String get oralReferenceText;
+
+  /// Bouton pour arrêter l'enregistrement du résumé
+  ///
+  /// In fr, this message translates to:
+  /// **'Terminer le résumé'**
+  String get oralFinishSummary;
+
+  /// Titre de l'AppBar du flux de test oral
+  ///
+  /// In fr, this message translates to:
+  /// **'Collecte audio'**
+  String get oralFlowTitle;
+
+  /// Titre de l'écran de consentement
+  ///
+  /// In fr, this message translates to:
+  /// **'Test de Compréhension Orale'**
+  String get oralConsentTitle;
+
+  /// Écran de consentement — titre de la section enregistrements
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce que nous enregistrons'**
+  String get oralConsentRecordTitle;
+
+  /// Écran de consentement — corps de la section enregistrements
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre voix pendant la lecture de 5 courts textes (environ 1 min chacun) et votre résumé oral (environ 40 secondes par texte).'**
+  String get oralConsentRecordBody;
+
+  /// Écran de consentement — titre de la section anonymisation
+  ///
+  /// In fr, this message translates to:
+  /// **'Confidentialité'**
+  String get oralConsentAnonTitle;
+
+  /// Écran de consentement — corps de la section anonymisation
+  ///
+  /// In fr, this message translates to:
+  /// **'Vos enregistrements sont identifiés par un code de session aléatoire, et non par votre nom. Ils restent toutefois rattachables à votre compte : ce sont des données personnelles protégées, chiffrées et stockées en Europe.'**
+  String get oralConsentAnonBody;
+
+  /// Écran de consentement — titre de la section utilisation
+  ///
+  /// In fr, this message translates to:
+  /// **'Utilisation'**
+  String get oralConsentUsageTitle;
+
+  /// Écran de consentement — corps de la section utilisation. EN omet volontairement « du français »
+  ///
+  /// In fr, this message translates to:
+  /// **'Ces enregistrements pourront contribuer à l\'amélioration de la reconnaissance vocale du français, notamment pour des modèles comme Whisper ou Speechmatics.'**
+  String get oralConsentUsageBody;
+
+  /// Bouton principal de l'écran de consentement
+  ///
+  /// In fr, this message translates to:
+  /// **'J\'accepte et je commence'**
+  String get oralAcceptAndStart;
+
+  /// Bouton texte de refus du consentement
+  ///
+  /// In fr, this message translates to:
+  /// **'Refuser et revenir en arrière'**
+  String get oralDeclineAndGoBack;
+
+  /// Note légale en bas de l'écran de consentement
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous pouvez retirer votre consentement à tout moment depuis les paramètres de l\'application.'**
+  String get oralWithdrawConsentNote;
+
+  /// En-tête de progression du flux (5 textes au total)
+  ///
+  /// In fr, this message translates to:
+  /// **'Texte {current} sur 5'**
+  String oralTextProgress(int current);
+
+  /// Étiquette d'étape courante dans l'en-tête de progression
+  ///
+  /// In fr, this message translates to:
+  /// **'Lecture'**
+  String get oralStepReading;
+
+  /// Étiquette d'étape courante dans l'en-tête de progression
+  ///
+  /// In fr, this message translates to:
+  /// **'Résumé'**
+  String get oralStepSummary;
+
+  /// Titre de l'écran de pause entre lecture et résumé
+  ///
+  /// In fr, this message translates to:
+  /// **'Bien !'**
+  String get oralPauseWellDone;
+
+  /// Consigne de l'écran de pause
+  ///
+  /// In fr, this message translates to:
+  /// **'Maintenant, résumez oralement ce texte.'**
+  String get oralPauseNowSummarize;
+
+  /// Libellé au-dessus du compte à rebours de la pause
+  ///
+  /// In fr, this message translates to:
+  /// **'Début dans...'**
+  String get oralPauseStartingIn;
+
+  /// Titre de l'écran de fin
+  ///
+  /// In fr, this message translates to:
+  /// **'Merci !'**
+  String get oralCompletedThanks;
+
+  /// Corps de l'écran de fin (retours à la ligne volontaires). EN omet volontairement « en français »
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous avez complété les 5 textes.\nVos enregistrements contribueront à l\'amélioration\nde la reconnaissance vocale en français.'**
+  String get oralCompletedBody;
+
+  /// Bouton de l'écran de fin
+  ///
+  /// In fr, this message translates to:
+  /// **'Retour à l\'accueil'**
+  String get oralBackToHome;
+
+  /// Titre du dialogue de confirmation de sortie pendant un enregistrement
+  ///
+  /// In fr, this message translates to:
+  /// **'Quitter ?'**
+  String get oralExitDialogTitle;
+
+  /// Corps du dialogue de confirmation de sortie
+  ///
+  /// In fr, this message translates to:
+  /// **'Un enregistrement est en cours. Si vous quittez maintenant, il ne sera pas sauvegardé.'**
+  String get oralExitDialogBody;
+
+  /// Bouton pour rester dans le test (dialogue de sortie)
+  ///
+  /// In fr, this message translates to:
+  /// **'Continuer'**
+  String get oralContinue;
+
+  /// Bouton pour quitter le test (dialogue de sortie)
+  ///
+  /// In fr, this message translates to:
+  /// **'Quitter'**
+  String get oralQuit;
+
+  /// Eyebrow label showing the current registration step out of 4
+  ///
+  /// In fr, this message translates to:
+  /// **'ÉTAPE {step} / 4'**
+  String regStepEyebrow(int step);
+
+  /// Eyebrow label on the registration success page
+  ///
+  /// In fr, this message translates to:
+  /// **'ÉTAPE 4 / 4 · SUCCÈS'**
+  String get regStepEyebrowSuccess;
+
+  /// Title of the email entry page (step 1 of registration)
+  ///
+  /// In fr, this message translates to:
+  /// **'Créer mon token'**
+  String get regEmailTitle;
+
+  /// Heading next to the logo on the email entry page
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre email'**
+  String get regEmailHeading;
+
+  /// Introductory text on the email entry page
+  ///
+  /// In fr, this message translates to:
+  /// **'Nous vous envoyons un code de vérification à 6 chiffres. Votre email n\'est pas lié à votre token et reste privé.'**
+  String get regEmailIntro;
+
+  /// Label of the email text field
+  ///
+  /// In fr, this message translates to:
+  /// **'Adresse email'**
+  String get regEmailFieldLabel;
+
+  /// Validation error when the email format is invalid
+  ///
+  /// In fr, this message translates to:
+  /// **'Email invalide'**
+  String get regEmailInvalid;
+
+  /// Button label while the email OTP is being sent
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoi du code…'**
+  String get regSendingCode;
+
+  /// Button to request the email verification code
+  ///
+  /// In fr, this message translates to:
+  /// **'Recevoir le code'**
+  String get regReceiveCode;
+
+  /// Privacy note at the bottom of the email entry page
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun nom, prénom ou adresse précise ne sera stocké. Seuls votre sexe, tranche d\'âge et code postal sont encodés (chiffrés) dans votre token anonyme.'**
+  String get regEmailPrivacyNote;
+
+  /// Title of the email OTP verification page
+  ///
+  /// In fr, this message translates to:
+  /// **'Vérifier mon email'**
+  String get regEmailOtpTitle;
+
+  /// Label above the email address the OTP was sent to
+  ///
+  /// In fr, this message translates to:
+  /// **'Code envoyé à'**
+  String get regCodeSentTo;
+
+  /// Button label while an OTP code is being verified
+  ///
+  /// In fr, this message translates to:
+  /// **'Vérification…'**
+  String get regVerifying;
+
+  /// Button to resend the email verification code
+  ///
+  /// In fr, this message translates to:
+  /// **'Renvoyer le code'**
+  String get regResendCode;
+
+  /// Title of the phone entry page (step 2 of registration)
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre téléphone'**
+  String get regPhoneTitle;
+
+  /// Introductory text on the phone entry page
+  ///
+  /// In fr, this message translates to:
+  /// **'Un code SMS à 6 chiffres sera envoyé pour vérifier votre numéro. Aucun lien entre votre numéro et votre token.'**
+  String get regPhoneIntro;
+
+  /// Hint of the phone number text field
+  ///
+  /// In fr, this message translates to:
+  /// **'Numéro'**
+  String get regPhoneFieldHint;
+
+  /// Button label while the SMS OTP is being sent
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoi du SMS…'**
+  String get regSendingSms;
+
+  /// Button to request the SMS verification code
+  ///
+  /// In fr, this message translates to:
+  /// **'Recevoir le SMS'**
+  String get regReceiveSms;
+
+  /// Title of the phone OTP verification page
+  ///
+  /// In fr, this message translates to:
+  /// **'Vérifier mon téléphone'**
+  String get regPhoneOtpTitle;
+
+  /// Label above the phone number the SMS OTP was sent to
+  ///
+  /// In fr, this message translates to:
+  /// **'SMS envoyé au'**
+  String get regSmsSentTo;
+
+  /// Button to resend the SMS verification code
+  ///
+  /// In fr, this message translates to:
+  /// **'Renvoyer le SMS'**
+  String get regResendSms;
+
+  /// Title of the demographics page (step 3 of registration)
+  ///
+  /// In fr, this message translates to:
+  /// **'Vos données démographiques'**
+  String get regDemoTitle;
+
+  /// Introductory text on the demographics page
+  ///
+  /// In fr, this message translates to:
+  /// **'Ces informations seront chiffrées dans votre token. Aucune valeur exacte n\'est stockée (ni âge précis, ni adresse précise).'**
+  String get regDemoIntro;
+
+  /// Section label (uppercase) for the sex selection
+  ///
+  /// In fr, this message translates to:
+  /// **'SEXE'**
+  String get regSectionSex;
+
+  /// Section label (uppercase) for the age range selection
+  ///
+  /// In fr, this message translates to:
+  /// **'TRANCHE D\'ÂGE'**
+  String get regSectionAgeBucket;
+
+  /// Section label (uppercase) for the country and postal code inputs
+  ///
+  /// In fr, this message translates to:
+  /// **'PAYS ET CODE POSTAL'**
+  String get regSectionCountryPostal;
+
+  /// Hint of the postal code text field
+  ///
+  /// In fr, this message translates to:
+  /// **'Code postal'**
+  String get regPostalCodeHint;
+
+  /// Button label while the anonymous token is being generated
+  ///
+  /// In fr, this message translates to:
+  /// **'Génération du token…'**
+  String get regGeneratingToken;
+
+  /// Button to submit demographics and generate the anonymous token
+  ///
+  /// In fr, this message translates to:
+  /// **'Générer mon token'**
+  String get regGenerateMyToken;
+
+  /// Title of the registration success page
+  ///
+  /// In fr, this message translates to:
+  /// **'Bienvenue dans Mental E.T.'**
+  String get regSuccessTitle;
+
+  /// Confirmation message on the success page
+  ///
+  /// In fr, this message translates to:
+  /// **'Votre token anonyme a été généré et sauvegardé sur cet appareil.'**
+  String get regSuccessTokenSaved;
+
+  /// Details about the token content on the success page
+  ///
+  /// In fr, this message translates to:
+  /// **'Il ne contient ni votre email, ni votre numéro de téléphone, ni votre nom. Uniquement votre sexe, votre tranche d\'âge et votre zone géographique (chiffrés). Vous pouvez maintenant commencer votre évaluation cognitive.'**
+  String get regSuccessTokenDetails;
+
+  /// Uppercase warning label on the success page
+  ///
+  /// In fr, this message translates to:
+  /// **'IMPORTANT'**
+  String get regImportantLabel;
+
+  /// Warning about token being stored only on the device
+  ///
+  /// In fr, this message translates to:
+  /// **'Ne désinstallez pas l\'application sans avoir terminé votre évaluation : votre token est uniquement stocké sur cet appareil. Si vous le perdez, vous ne pourrez plus créer de nouveau compte avec le même email ou téléphone.'**
+  String get regSuccessWarning;
+
+  /// Error when the email is already linked to an account
+  ///
+  /// In fr, this message translates to:
+  /// **'Cet email a déjà un compte. Si c\'est le vôtre, vous avez déjà un token.'**
+  String get regEmailAlreadyRegistered;
+
+  /// Generic error when the email cannot be used
+  ///
+  /// In fr, this message translates to:
+  /// **'Email indisponible.'**
+  String get regEmailUnavailable;
+
+  /// Error when an OTP code (email or SMS) is wrong or expired
+  ///
+  /// In fr, this message translates to:
+  /// **'Code incorrect ou expiré.'**
+  String get regOtpIncorrectOrExpired;
+
+  /// Error when the phone number is already linked to an account
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce numéro a déjà un compte.'**
+  String get regPhoneAlreadyRegistered;
+
+  /// Generic error when the phone number cannot be used
+  ///
+  /// In fr, this message translates to:
+  /// **'Numéro indisponible.'**
+  String get regPhoneUnavailable;
+
+  /// Error at token generation when the email already has a token
+  ///
+  /// In fr, this message translates to:
+  /// **'Cet email a déjà un token.'**
+  String get regEmailAlreadyHasToken;
+
+  /// Error at token generation when the phone already has a token
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce numéro a déjà un token.'**
+  String get regPhoneAlreadyHasToken;
+
+  /// Error when the submitted postal code is unknown
+  ///
+  /// In fr, this message translates to:
+  /// **'Code postal introuvable. Vérifiez le pays et le code.'**
+  String get regPostalNotFound;
+
+  /// Error when the network is unreachable
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas de connexion internet.'**
+  String get regNoInternet;
+
+  /// Generic fallback error during registration
+  ///
+  /// In fr, this message translates to:
+  /// **'Erreur — merci de réessayer.'**
+  String get regGenericRetryError;
+
+  /// Displayed label for the male sex option
+  ///
+  /// In fr, this message translates to:
+  /// **'Masculin'**
+  String get regSexMale;
+
+  /// Displayed label for the female sex option
+  ///
+  /// In fr, this message translates to:
+  /// **'Féminin'**
+  String get regSexFemale;
+
+  /// Displayed label for the undisclosed sex option
+  ///
+  /// In fr, this message translates to:
+  /// **'Préfère ne pas dire'**
+  String get regSexUndisclosed;
+
+  /// Displayed label for the 18-25 age range
+  ///
+  /// In fr, this message translates to:
+  /// **'18 – 25 ans'**
+  String get regAge1825;
+
+  /// Displayed label for the 26-35 age range
+  ///
+  /// In fr, this message translates to:
+  /// **'26 – 35 ans'**
+  String get regAge2635;
+
+  /// Displayed label for the 36-45 age range
+  ///
+  /// In fr, this message translates to:
+  /// **'36 – 45 ans'**
+  String get regAge3645;
+
+  /// Displayed label for the 46-55 age range
+  ///
+  /// In fr, this message translates to:
+  /// **'46 – 55 ans'**
+  String get regAge4655;
+
+  /// Displayed label for the 56-65 age range
+  ///
+  /// In fr, this message translates to:
+  /// **'56 – 65 ans'**
+  String get regAge5665;
+
+  /// Displayed label for the 66+ age range
+  ///
+  /// In fr, this message translates to:
+  /// **'66 ans et plus'**
+  String get regAge66plus;
+
+  /// Classification Wechsler pour un score composite >= 130 ou note standard >= 16
+  ///
+  /// In fr, this message translates to:
+  /// **'Très supérieur'**
+  String get scoringClassificationVerySuperior;
+
+  /// Classification Wechsler pour un score composite 120-129 ou note standard 13-15
+  ///
+  /// In fr, this message translates to:
+  /// **'Supérieur'**
+  String get scoringClassificationSuperior;
+
+  /// Classification Wechsler pour un score composite 110-119 ou note standard 11-12
+  ///
+  /// In fr, this message translates to:
+  /// **'Moyen fort'**
+  String get scoringClassificationHighAverage;
+
+  /// Classification Wechsler pour un score composite 90-109 ou note standard 8-10
+  ///
+  /// In fr, this message translates to:
+  /// **'Moyen'**
+  String get scoringClassificationAverage;
+
+  /// Classification Wechsler pour un score composite 80-89 ou note standard 6-7
+  ///
+  /// In fr, this message translates to:
+  /// **'Moyen faible'**
+  String get scoringClassificationLowAverage;
+
+  /// Classification Wechsler pour un score composite 70-79 ou note standard 4-5
+  ///
+  /// In fr, this message translates to:
+  /// **'Limite'**
+  String get scoringClassificationBorderline;
+
+  /// Classification Wechsler pour un score composite < 70 ou note standard < 4
+  ///
+  /// In fr, this message translates to:
+  /// **'Extrêmement bas'**
+  String get scoringClassificationExtremelyLow;
+
+  /// Classification affichée quand la note standardisée d'un sous-test est absente
+  ///
+  /// In fr, this message translates to:
+  /// **'N/A'**
+  String get scoringNotAvailable;
+
+  /// Ligne du résumé de profil : QI total avec sa classification
+  ///
+  /// In fr, this message translates to:
+  /// **'QI Total: {score} ({classification})'**
+  String scoringSummaryFullScaleIq(int score, String classification);
+
+  /// Ligne du résumé de profil : rang percentile du QI total (suffixe ordinal 'e' en FR)
+  ///
+  /// In fr, this message translates to:
+  /// **'Percentile: {rank}e'**
+  String scoringSummaryPercentile(int rank);
+
+  /// Ligne du résumé de profil : intervalle de confiance à 95% du QI total
+  ///
+  /// In fr, this message translates to:
+  /// **'Intervalle de confiance 95%: {lower} - {upper}'**
+  String scoringSummaryConfidenceInterval(int lower, int upper);
+
+  /// Nom affiché de l'indice VCI (WAIS-IV)
+  ///
+  /// In fr, this message translates to:
+  /// **'Compréhension Verbale'**
+  String get scoringIndexVerbalComprehension;
+
+  /// Nom affiché de l'indice VSI (WAIS-IV)
+  ///
+  /// In fr, this message translates to:
+  /// **'Visuo-Spatial'**
+  String get scoringIndexVisualSpatial;
+
+  /// Nom affiché de l'indice FRI (WAIS-IV)
+  ///
+  /// In fr, this message translates to:
+  /// **'Raisonnement Fluide'**
+  String get scoringIndexFluidReasoning;
+
+  /// Nom affiché de l'indice WMI (WAIS-IV)
+  ///
+  /// In fr, this message translates to:
+  /// **'Mémoire de Travail'**
+  String get scoringIndexWorkingMemory;
+
+  /// Nom affiché de l'indice PSI (WAIS-IV)
+  ///
+  /// In fr, this message translates to:
+  /// **'Vitesse de Traitement'**
+  String get scoringIndexProcessingSpeed;
+
+  /// Ligne du résumé de profil : liste des indices significativement au-dessus du QI total
+  ///
+  /// In fr, this message translates to:
+  /// **'Forces relatives: {list}'**
+  String scoringSummaryRelativeStrengths(String list);
+
+  /// Ligne du résumé de profil : liste des indices significativement en dessous du QI total
+  ///
+  /// In fr, this message translates to:
+  /// **'Faiblesses relatives: {list}'**
+  String scoringSummaryRelativeWeaknesses(String list);
+
+  /// Conclusion du résumé de profil quand les indices sont homogènes (écarts < 1 écart-type)
+  ///
+  /// In fr, this message translates to:
+  /// **'Profil cognitif homogène'**
+  String get scoringSummaryHomogeneousProfile;
+
+  /// Conclusion du résumé de profil quand les indices sont hétérogènes, avec l'écart maximal en points
+  ///
+  /// In fr, this message translates to:
+  /// **'Profil cognitif hétérogène (écart max: {points} points)'**
+  String scoringSummaryHeterogeneousProfile(int points);
+
   /// Similitudes — nom du test affiché dans le scaffold
   ///
   /// In fr, this message translates to:
@@ -2876,11 +2931,11 @@ abstract class AppLocalizations {
   /// **'Score : {score}/{total}'**
   String matScoreFraction(int score, int total);
 
-  /// Matrices — message de règle de discontinuation après 3 échecs
+  /// Matrices — message de règle de discontinuation après 4 échecs
   ///
   /// In fr, this message translates to:
-  /// **'3 échecs consécutifs - Test terminé (WAIS-IV)'**
-  String get matDiscontinue3;
+  /// **'4 échecs consécutifs - Test terminé (WAIS-IV)'**
+  String get matDiscontinue4;
 
   /// Matrices/Cubes — bouton dialogue lorsque le test est terminé par discontinuation
   ///
@@ -4544,19 +4599,37 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['en', 'fr'].contains(locale.languageCode);
+      <String>['de', 'en', 'es', 'fr', 'pt'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
-  // Lookup logic when only language code is specified.
+  // Lookup logic when language+country codes are specified.
   switch (locale.languageCode) {
     case 'en':
+      {
+        switch (locale.countryCode) {
+          case 'GB':
+            return AppLocalizationsEnGb();
+        }
+        break;
+      }
+  }
+
+  // Lookup logic when only language code is specified.
+  switch (locale.languageCode) {
+    case 'de':
+      return AppLocalizationsDe();
+    case 'en':
       return AppLocalizationsEn();
+    case 'es':
+      return AppLocalizationsEs();
     case 'fr':
       return AppLocalizationsFr();
+    case 'pt':
+      return AppLocalizationsPt();
   }
 
   throw FlutterError(

@@ -88,7 +88,7 @@ class _OralTestFlowState extends State<OralTestFlow> {
     if (!_consentRequired) return;
     await ConsentService.instance.grant(
       sessionId: _sessionId,
-      locale: localeNotifier.languageCode,
+      locale: localeNotifier.contentTag,
       recordingAndAnalysis: true,
       commercialReuse: _consentCommercial,
     );

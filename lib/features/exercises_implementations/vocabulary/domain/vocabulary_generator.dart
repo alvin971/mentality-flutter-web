@@ -5,29 +5,75 @@
 /// La banque d'items est choisie selon [languageCode] ('fr' par défaut, 'en').
 /// Les deux banques sont psychométriquement équivalentes : item i partage la
 /// même WordFrequency et la même thetaValue dans les deux langues.
+import 'dart:math';
+
+import '../../_shared/stratified_draw.dart';
 import 'vocabulary_items_en.dart';
+import 'vocabulary_items_en_gb.dart';
+import 'vocabulary_items_es.dart';
 import 'vocabulary_items_fr.dart';
+import 'vocabulary_items_de.dart';
+import 'vocabulary_items_pt.dart';
 
 class VocabularyGenerator {
+  final Random _random;
+  final String languageCode;
   final List<VocabularyItem> _preGeneratedItems = [];
 
+  /// Nombre d'items tirés par bande de fréquence (total = 30).
+  /// veryHigh / high / medium / low / veryLow.
+  static const List<int> _itemsPerBand = [5, 7, 8, 7, 3];
+
   /// [languageCode] : 'fr' (défaut) ou 'en'. Toute autre valeur retombe sur 'fr'.
-  VocabularyGenerator({String languageCode = 'fr'}) {
-    _initializeAllItems(languageCode);
+  /// [seed] optionnel : tirage reproductible (tests). null = aléatoire réel.
+  VocabularyGenerator({this.languageCode = 'fr', int? seed})
+      : _random = seed != null ? Random(seed) : Random() {
+    _initializeAllItems();
   }
 
-  /// Initialise TOUS les 30 items uniques dès la création du générateur,
-  /// dans la langue demandée.
-  void _initializeAllItems(String languageCode) {
+  /// Tire 30 items dans une banque élargie (~150 mots, 5 bandes de fréquence).
+  /// Le `thetaValue` dépend du SLOT (position), pas du mot tiré : l'échelle de
+  /// difficulté reste identique d'une passation à l'autre, seul le CONTENU
+  /// change. La fréquence vient de la bande d'origine (banques disjointes).
+  void _initializeAllItems() {
     _preGeneratedItems.clear();
-    _preGeneratedItems.addAll(
-      languageCode == 'en'
-          ? buildEnglishVocabularyItems()
-          : buildFrenchVocabularyItems(),
-    );
+    final banks = _banksFor(languageCode);
+    final drawn = stratifiedDraw<VocabularyItem>(banks, _itemsPerBand, _random);
+    for (var i = 0; i < drawn.length; i++) {
+      final src = drawn[i];
+      _preGeneratedItems.add(VocabularyItem(
+        word: src.word,
+        frequency: src.frequency,
+        twoPointAnswers: src.twoPointAnswers,
+        onePointAnswers: src.onePointAnswers,
+        thetaValue: thetaForSlot(i),
+      ));
+    }
   }
 
-  /// Retourne les 30 items pré-générés
+  /// Banques (par bande) correspondant au tag de langue de contenu
+  /// (`fr`, `en`, `en-GB`, `es`, `pt`, `de`). en-GB partage la banque anglaise
+  /// tant qu'une banque britannique dédiée n'existe pas ; es/pt/de seront
+  /// branchées en Phase 2. Repli : tout tag inconnu → français.
+  List<List<VocabularyItem>> _banksFor(String tag) {
+    switch (tag) {
+      case 'en':
+        return buildEnglishVocabularyBanks();
+      case 'en-GB':
+        return buildBritishVocabularyBanks();
+      case 'es':
+        return buildSpanishVocabularyBanks();
+      case 'pt':
+        return buildPortugueseVocabularyBanks();
+      case 'de':
+        return buildGermanVocabularyBanks();
+      case 'fr':
+      default:
+        return buildFrenchVocabularyBanks();
+    }
+  }
+
+  /// Retourne les 30 items tirés pour cette passation.
   List<VocabularyItem> generateComplete30Items() {
     return List.from(_preGeneratedItems);
   }

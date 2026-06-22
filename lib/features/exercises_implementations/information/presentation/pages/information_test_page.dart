@@ -51,7 +51,7 @@ class _InformationTestPageState extends State<InformationTestPage> {
   void _generateItems() {
     // Génération des 28 items UNIQUES en une seule fois
     final generator =
-        InformationGenerator(languageCode: localeNotifier.languageCode);
+        InformationGenerator(languageCode: localeNotifier.contentTag);
     final all = generator.generateComplete28Items();
     final level = widget.filterLevel;
     if (level != null) {

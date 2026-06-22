@@ -228,7 +228,7 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
           'consent_version': consent?.version ?? '',
           'commercial_reuse': '${consent?.commercialReuse ?? false}',
           'duration_seconds': '$_elapsedSeconds',
-          'language': localeNotifier.languageCode,
+          'language': localeNotifier.contentTag,
         },
       );
       final r2Key = upload?.key;
@@ -241,7 +241,7 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
         if (r2Key != null) 'r2_key': r2Key,
         'duration_seconds': _elapsedSeconds,
         'timestamp': timestamp,
-        'language': localeNotifier.languageCode,
+        'language': localeNotifier.contentTag,
         'layer': 'C',
         'consent_version': consent?.version,
         'commercial_reuse': consent?.commercialReuse ?? false,

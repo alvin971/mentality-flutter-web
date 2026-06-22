@@ -18,5 +18,8 @@
   "homeAboutValidationBody": {"fr": "Items inspirés des échelles Wechsler (WPPSI / WISC / WAIS).", "en": "Items inspired by the Wechsler scales (WPPSI / WISC / WAIS)."},
   "homeResumeEyebrow": {"fr": "TEST EN COURS", "en": "TEST IN PROGRESS", "desc": "Resume banner eyebrow"},
   "homeResumeTitle": {"fr": "Reprendre votre évaluation", "en": "Resume your assessment", "desc": "Resume banner title"},
-  "homeResumeButton": {"fr": "Reprendre", "en": "Resume", "desc": "Resume banner button"}
+  "homeResumeButton": {"fr": "Reprendre", "en": "Resume", "desc": "Resume banner button"},
+  "homeLogoutTitle": {"fr": "Se déconnecter ?", "en": "Sign out?", "es": "¿Cerrar sesión?", "pt": "Terminar sessão?", "de": "Abmelden?", "en_GB": "Sign out?", "desc": "Logout confirmation dialog title"},
+  "homeLogoutBody": {"fr": "Ton token sera retiré de cet appareil. Assure-toi de l'avoir sauvegardé : sans lui, tu ne pourras pas te reconnecter à tes données.", "en": "Your token will be removed from this device. Make sure you have saved it: without it, you won't be able to reconnect to your data.", "es": "Tu token se eliminará de este dispositivo. Asegúrate de haberlo guardado: sin él, no podrás volver a acceder a tus datos.", "pt": "O teu token será removido deste dispositivo. Certifica-te de que o guardaste: sem ele, não poderás voltar a aceder aos teus dados.", "de": "Ihr Token wird von diesem Gerät entfernt. Stellen Sie sicher, dass Sie ihn gespeichert haben: Ohne ihn können Sie nicht mehr auf Ihre Daten zugreifen.", "en_GB": "Your token will be removed from this device. Make sure you have saved it: without it, you won't be able to reconnect to your data.", "desc": "Logout confirmation dialog body"},
+  "homeLogoutConfirm": {"fr": "Se déconnecter", "en": "Sign out", "es": "Cerrar sesión", "pt": "Terminar sessão", "de": "Abmelden", "en_GB": "Sign out", "desc": "Logout confirm/tooltip label"}
 }
