@@ -2,7 +2,11 @@ import 'dart:math';
 
 import '../../_shared/stratified_draw.dart';
 import 'similarities_items_en.dart';
+import 'similarities_items_en_gb.dart';
+import 'similarities_items_es.dart';
 import 'similarities_items_fr.dart';
+import 'similarities_items_de.dart';
+import 'similarities_items_pt.dart';
 
 /// Générateur de 21 items de Similitudes (Similarities - WAIS-IV).
 ///
@@ -33,9 +37,7 @@ class SimilaritiesGenerator {
   /// tirée : l'échelle de difficulté reste identique d'une passation à l'autre.
   void _initializeAllItems() {
     _preGeneratedItems.clear();
-    final banks = languageCode == 'en'
-        ? buildEnglishSimilarityBanks()
-        : buildFrenchSimilarityBanks();
+    final banks = _banksFor(languageCode);
     final drawn = stratifiedDraw<SimilarityItem>(banks, _itemsPerBand, _random);
     for (var i = 0; i < drawn.length; i++) {
       final src = drawn[i];
@@ -47,6 +49,27 @@ class SimilaritiesGenerator {
         onePointAnswers: src.onePointAnswers,
         thetaValue: thetaForSlot(i, start: -1.5),
       ));
+    }
+  }
+
+  /// Banques (par niveau d'abstraction) correspondant au tag de langue de
+  /// contenu (`fr`, `en`, `en-GB`, `es`, `pt`, `de`). en-GB partage la banque
+  /// anglaise ; es/pt/de seront branchées en Phase 2. Repli → français.
+  List<List<SimilarityItem>> _banksFor(String tag) {
+    switch (tag) {
+      case 'en':
+        return buildEnglishSimilarityBanks();
+      case 'en-GB':
+        return buildBritishSimilarityBanks();
+      case 'es':
+        return buildSpanishSimilarityBanks();
+      case 'pt':
+        return buildPortugueseSimilarityBanks();
+      case 'de':
+        return buildGermanSimilarityBanks();
+      case 'fr':
+      default:
+        return buildFrenchSimilarityBanks();
     }
   }
 

@@ -52,7 +52,7 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
   void _generateItems() {
     // Génération des 30 items UNIQUES en une seule fois
     final generator =
-        VocabularyGenerator(languageCode: localeNotifier.languageCode);
+        VocabularyGenerator(languageCode: localeNotifier.contentTag);
     _generatedItems = generator.generateComplete30Items();
   }
 

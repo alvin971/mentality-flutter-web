@@ -4,21 +4,31 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../l10n/l10n_ext.dart';
 import '../l10n/locale_notifier.dart';
 
-/// Bouton de changement de langue (FR / EN).
+/// Bouton de changement de langue (FR / EN-US / EN-UK / ES / PT / DE).
 ///
-/// Affiche le code de la langue courante et ouvre un menu listant les
-/// langues disponibles. Le choix est persisté via [localeNotifier].
+/// Affiche le tag de la langue courante et ouvre un menu listant les langues
+/// disponibles. Le choix est persisté via [localeNotifier]. Les libellés et
+/// drapeaux sont indexés par le tag de contenu ([LocaleNotifier.tagFor]) afin
+/// de distinguer l'anglais US 🇺🇸 de l'anglais britannique 🇬🇧.
 class LanguageSwitcherButton extends StatelessWidget {
   const LanguageSwitcherButton({super.key});
 
   static const Map<String, String> _labels = {
     'fr': 'Français',
-    'en': 'English',
+    'en': 'English (US)',
+    'en-GB': 'English (UK)',
+    'es': 'Español',
+    'pt': 'Português',
+    'de': 'Deutsch',
   };
 
   static const Map<String, String> _flags = {
     'fr': '🇫🇷',
     'en': '🇺🇸',
+    'en-GB': '🇬🇧',
+    'es': '🇪🇸',
+    'pt': '🇵🇹',
+    'de': '🇩🇪',
   };
 
   @override
@@ -37,11 +47,13 @@ class LanguageSwitcherButton extends StatelessWidget {
                 value: l,
                 child: Row(
                   children: [
-                    Text(_flags[l.languageCode] ?? ''),
+                    Text(_flags[LocaleNotifier.tagFor(l)] ?? ''),
                     SizedBox(width: 8.w),
-                    Text(_labels[l.languageCode] ?? l.languageCode),
+                    Text(_labels[LocaleNotifier.tagFor(l)] ??
+                        LocaleNotifier.tagFor(l)),
                     const Spacer(),
-                    if (l.languageCode == locale.languageCode)
+                    if (l.languageCode == locale.languageCode &&
+                        l.countryCode == locale.countryCode)
                       Icon(Icons.check, size: 16.sp),
                   ],
                 ),
@@ -55,7 +67,7 @@ class LanguageSwitcherButton extends StatelessWidget {
                 Icon(Icons.language, size: 20.sp, color: color),
                 SizedBox(width: 4.w),
                 Text(
-                  locale.languageCode.toUpperCase(),
+                  LocaleNotifier.tagFor(locale).toUpperCase(),
                   style: TextStyle(
                     fontSize: 12.sp,
                     fontWeight: FontWeight.w600,

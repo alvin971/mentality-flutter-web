@@ -228,7 +228,7 @@ class _OralReadingTestState extends State<OralReadingTest> {
         'audio_path': blobUrl ?? '',
         'duration_seconds': _elapsedSeconds,
         'timestamp': DateTime.now().toIso8601String(),
-        'language': localeNotifier.languageCode,
+        'language': localeNotifier.contentTag,
         'layer': 'C',
         'consent_version': consent?.version,
         'commercial_reuse': consent?.commercialReuse ?? false,
@@ -247,7 +247,7 @@ class _OralReadingTestState extends State<OralReadingTest> {
           'consent_version': consent?.version ?? '',
           'commercial_reuse': '${consent?.commercialReuse ?? false}',
           'duration_seconds': '$_elapsedSeconds',
-          'language': localeNotifier.languageCode,
+          'language': localeNotifier.contentTag,
         },
       );
       if (upload != null) record['r2_key'] = upload.key;

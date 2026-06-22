@@ -65,253 +65,6 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get chatEyebrow => 'ASSISTANT IA';
-
-  @override
-  String get chatNewConversation => 'Nouvelle conversation';
-
-  @override
-  String get chatAssistantLabel => 'MENTAL E.T.';
-
-  @override
-  String get chatUserLabel => 'VOUS';
-
-  @override
-  String get chatHeroTitle1 => 'Posez';
-
-  @override
-  String get chatHeroTitle2 => 'vos questions.';
-
-  @override
-  String get chatEmptyIntro =>
-      'L\'IA Mental E.T. vous aide à mieux comprendre votre profil cognitif. Discussions confidentielles, accompagnement non-directif.';
-
-  @override
-  String get chatThinking => 'Réflexion…';
-
-  @override
-  String get chatInputHint => 'Écrire un message…';
-
-  @override
-  String get chatTimeJustNow => 'à l\'instant';
-
-  @override
-  String chatTimeMinutes(int count) {
-    return '$count min';
-  }
-
-  @override
-  String chatTimeHours(int count) {
-    return '${count}h';
-  }
-
-  @override
-  String get chatErrorMessage =>
-      'Désolé, une erreur s\'est produite. Veuillez réessayer.';
-
-  @override
-  String get chatErrorEmptyResponse => 'Réponse vide du worker';
-
-  @override
-  String get chatErrorAccessDenied =>
-      'Accès refusé par le worker (origine non autorisée).';
-
-  @override
-  String get chatErrorRateLimit =>
-      'Limite de requêtes atteinte. Réessayez dans quelques instants.';
-
-  @override
-  String get coreSplashTitleLine1 => 'Évaluation';
-
-  @override
-  String get coreSplashTitleLine2 => 'cognitive';
-
-  @override
-  String get homeHeroTitle => 'Découvrez';
-
-  @override
-  String get homeHeroTitleItalic => 'votre profil cognitif.';
-
-  @override
-  String get homeHeroBody =>
-      'Une évaluation scientifique adaptative, inspirée des échelles Wechsler. 12 sous-tests, 5 indices, un score global.';
-
-  @override
-  String get homeActionStartTitle => 'Commencer une évaluation';
-
-  @override
-  String get homeActionStartSubtitle => 'Durée : 30 – 45 minutes';
-
-  @override
-  String get homeActionResultsTitle => 'Mes résultats';
-
-  @override
-  String get homeActionResultsSubtitle => 'Historique des évaluations';
-
-  @override
-  String get homeActionChatTitle => 'Parler avec Mental E.T.';
-
-  @override
-  String get homeActionChatSubtitle => 'Assistant IA, questions psychologiques';
-
-  @override
-  String get homeComingSoon => 'BIENTÔT DISPONIBLE';
-
-  @override
-  String get homeAboutEyebrow => 'À PROPOS';
-
-  @override
-  String get homeAboutSubtestsTitle => '12 sous-tests';
-
-  @override
-  String get homeAboutSubtestsBody =>
-      'Évaluation complète des cinq indices cognitifs WAIS-IV.';
-
-  @override
-  String get homeAboutAdaptiveTitle => 'IA adaptative';
-
-  @override
-  String get homeAboutAdaptiveBody =>
-      'Difficulté ajustée en temps réel via inférence IRT.';
-
-  @override
-  String get homeAboutValidationTitle => 'Validation scientifique';
-
-  @override
-  String get homeAboutValidationBody =>
-      'Items inspirés des échelles Wechsler (WPPSI / WISC / WAIS).';
-
-  @override
-  String get homeResumeEyebrow => 'TEST EN COURS';
-
-  @override
-  String get homeResumeTitle => 'Reprendre votre évaluation';
-
-  @override
-  String get homeResumeButton => 'Reprendre';
-
-  @override
-  String get oralMicAccessTitle => 'Accès au microphone';
-
-  @override
-  String get oralReadingPermissionBody1 =>
-      'Cette activité enregistre votre voix pendant que vous lisez le texte à voix haute.';
-
-  @override
-  String get oralReadingPermissionBody2 =>
-      'Vos enregistrements seront anonymisés et pourront contribuer à l\'amélioration de la reconnaissance vocale en français.';
-
-  @override
-  String get oralBrowserWillAskMic =>
-      'Votre navigateur vous demandera ensuite d\'autoriser le microphone.';
-
-  @override
-  String get oralCancel => 'Annuler';
-
-  @override
-  String get oralAllowMicrophone => 'Autoriser le microphone';
-
-  @override
-  String get oralMicDeniedOrUnavailable => 'Microphone refusé ou indisponible.';
-
-  @override
-  String get oralCannotStartRecording =>
-      'Impossible de démarrer l\'enregistrement sur ce navigateur.';
-
-  @override
-  String oralCanSkipToNextStep(String message) {
-    return '$message Vous pouvez passer à l\'étape suivante.';
-  }
-
-  @override
-  String get oralSkip => 'Passer';
-
-  @override
-  String get oralRecordingInProgress => 'Enregistrement en cours';
-
-  @override
-  String oralKeepGoingSeconds(int seconds) {
-    return 'Continuez encore ${seconds}s...';
-  }
-
-  @override
-  String get oralSaving => 'Sauvegarde...';
-
-  @override
-  String get oralReadingInstructions =>
-      'Lisez le texte suivant à voix haute, clairement et à votre rythme naturel. Appuyez sur \"Démarrer\" quand vous êtes prêt.';
-
-  @override
-  String get oralStartReading => 'Démarrer la lecture';
-
-  @override
-  String get oralFinish => 'Terminer';
-
-  @override
-  String get oralSkipThisStep => 'Passer cette étape';
-
-  @override
-  String get oralSummaryPermissionBody1 =>
-      'Vous allez maintenant enregistrer votre résumé oral du texte.';
-
-  @override
-  String get oralSummaryPermissionBody2 =>
-      'Parlez naturellement, comme si vous expliquiez le texte à un ami. Prenez entre 30 et 60 secondes.';
-
-  @override
-  String get oralStartSummary => 'Démarrer le résumé';
-
-  @override
-  String get oralSummaryInstructionLead => 'Vous venez de lire ce texte. ';
-
-  @override
-  String get oralSummaryInstructionBody =>
-      'Résumez ce que vous avez compris avec vos propres mots. Prenez entre 30 et 60 secondes. Parlez naturellement, comme si vous l\'expliquiez à un ami.';
-
-  @override
-  String get oralReferenceText => 'Texte de référence';
-
-  @override
-  String get oralFinishSummary => 'Terminer le résumé';
-
-  @override
-  String get oralFlowTitle => 'Collecte audio';
-
-  @override
-  String get oralConsentTitle => 'Test de Compréhension Orale';
-
-  @override
-  String get oralConsentRecordTitle => 'Ce que nous enregistrons';
-
-  @override
-  String get oralConsentRecordBody =>
-      'Votre voix pendant la lecture de 5 courts textes (environ 1 min chacun) et votre résumé oral (environ 40 secondes par texte).';
-
-  @override
-  String get oralConsentAnonTitle => 'Confidentialité';
-
-  @override
-  String get oralConsentAnonBody =>
-      'Vos enregistrements sont identifiés par un code de session aléatoire, et non par votre nom. Ils restent toutefois rattachables à votre compte : ce sont des données personnelles protégées, chiffrées et stockées en Europe.';
-
-  @override
-  String get oralConsentUsageTitle => 'Utilisation';
-
-  @override
-  String get oralConsentUsageBody =>
-      'Ces enregistrements pourront contribuer à l\'amélioration de la reconnaissance vocale du français, notamment pour des modèles comme Whisper ou Speechmatics.';
-
-  @override
-  String get oralAcceptAndStart => 'J\'accepte et je commence';
-
-  @override
-  String get oralDeclineAndGoBack => 'Refuser et revenir en arrière';
-
-  @override
-  String get oralWithdrawConsentNote =>
-      'Vous pouvez retirer votre consentement à tout moment depuis les paramètres de l\'application.';
-
-  @override
   String get oralConsentRequiredCheckbox =>
       'J\'autorise l\'enregistrement de ma voix et son analyse, le temps de réaliser ce test. (obligatoire)';
 
@@ -327,292 +80,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get oralConsentPrivacyLink => 'Lire la politique de confidentialité';
 
   @override
-  String oralTextProgress(int current) {
-    return 'Texte $current sur 5';
-  }
-
-  @override
-  String get oralStepReading => 'Lecture';
-
-  @override
-  String get oralStepSummary => 'Résumé';
-
-  @override
-  String get oralPauseWellDone => 'Bien !';
-
-  @override
-  String get oralPauseNowSummarize => 'Maintenant, résumez oralement ce texte.';
-
-  @override
-  String get oralPauseStartingIn => 'Début dans...';
-
-  @override
-  String get oralCompletedThanks => 'Merci !';
-
-  @override
-  String get oralCompletedBody =>
-      'Vous avez complété les 5 textes.\nVos enregistrements contribueront à l\'amélioration\nde la reconnaissance vocale en français.';
-
-  @override
-  String get oralBackToHome => 'Retour à l\'accueil';
-
-  @override
-  String get oralExitDialogTitle => 'Quitter ?';
-
-  @override
-  String get oralExitDialogBody =>
-      'Un enregistrement est en cours. Si vous quittez maintenant, il ne sera pas sauvegardé.';
-
-  @override
-  String get oralContinue => 'Continuer';
-
-  @override
-  String get oralQuit => 'Quitter';
-
-  @override
-  String regStepEyebrow(int step) {
-    return 'ÉTAPE $step / 4';
-  }
-
-  @override
-  String get regStepEyebrowSuccess => 'ÉTAPE 4 / 4 · SUCCÈS';
-
-  @override
-  String get regEmailTitle => 'Créer mon token';
-
-  @override
-  String get regEmailHeading => 'Votre email';
-
-  @override
-  String get regEmailIntro =>
-      'Nous vous envoyons un code de vérification à 6 chiffres. Votre email n\'est pas lié à votre token et reste privé.';
-
-  @override
-  String get regEmailFieldLabel => 'Adresse email';
-
-  @override
-  String get regEmailInvalid => 'Email invalide';
-
-  @override
-  String get regSendingCode => 'Envoi du code…';
-
-  @override
-  String get regReceiveCode => 'Recevoir le code';
-
-  @override
-  String get regEmailPrivacyNote =>
-      'Aucun nom, prénom ou adresse précise ne sera stocké. Seuls votre sexe, tranche d\'âge et code postal sont encodés (chiffrés) dans votre token anonyme.';
-
-  @override
-  String get regEmailOtpTitle => 'Vérifier mon email';
-
-  @override
-  String get regCodeSentTo => 'Code envoyé à';
-
-  @override
-  String get regVerifying => 'Vérification…';
-
-  @override
-  String get regResendCode => 'Renvoyer le code';
-
-  @override
-  String get regPhoneTitle => 'Votre téléphone';
-
-  @override
-  String get regPhoneIntro =>
-      'Un code SMS à 6 chiffres sera envoyé pour vérifier votre numéro. Aucun lien entre votre numéro et votre token.';
-
-  @override
-  String get regPhoneFieldHint => 'Numéro';
-
-  @override
-  String get regSendingSms => 'Envoi du SMS…';
-
-  @override
-  String get regReceiveSms => 'Recevoir le SMS';
-
-  @override
-  String get regPhoneOtpTitle => 'Vérifier mon téléphone';
-
-  @override
-  String get regSmsSentTo => 'SMS envoyé au';
-
-  @override
-  String get regResendSms => 'Renvoyer le SMS';
-
-  @override
-  String get regDemoTitle => 'Vos données démographiques';
-
-  @override
-  String get regDemoIntro =>
-      'Ces informations seront chiffrées dans votre token. Aucune valeur exacte n\'est stockée (ni âge précis, ni adresse précise).';
-
-  @override
-  String get regSectionSex => 'SEXE';
-
-  @override
-  String get regSectionAgeBucket => 'TRANCHE D\'ÂGE';
-
-  @override
-  String get regSectionCountryPostal => 'PAYS ET CODE POSTAL';
-
-  @override
-  String get regPostalCodeHint => 'Code postal';
-
-  @override
-  String get regGeneratingToken => 'Génération du token…';
-
-  @override
-  String get regGenerateMyToken => 'Générer mon token';
-
-  @override
-  String get regSuccessTitle => 'Bienvenue dans Mental E.T.';
-
-  @override
-  String get regSuccessTokenSaved =>
-      'Votre token anonyme a été généré et sauvegardé sur cet appareil.';
-
-  @override
-  String get regSuccessTokenDetails =>
-      'Il ne contient ni votre email, ni votre numéro de téléphone, ni votre nom. Uniquement votre sexe, votre tranche d\'âge et votre zone géographique (chiffrés). Vous pouvez maintenant commencer votre évaluation cognitive.';
-
-  @override
-  String get regImportantLabel => 'IMPORTANT';
-
-  @override
-  String get regSuccessWarning =>
-      'Ne désinstallez pas l\'application sans avoir terminé votre évaluation : votre token est uniquement stocké sur cet appareil. Si vous le perdez, vous ne pourrez plus créer de nouveau compte avec le même email ou téléphone.';
-
-  @override
-  String get regEmailAlreadyRegistered =>
-      'Cet email a déjà un compte. Si c\'est le vôtre, vous avez déjà un token.';
-
-  @override
-  String get regEmailUnavailable => 'Email indisponible.';
-
-  @override
-  String get regOtpIncorrectOrExpired => 'Code incorrect ou expiré.';
-
-  @override
-  String get regPhoneAlreadyRegistered => 'Ce numéro a déjà un compte.';
-
-  @override
-  String get regPhoneUnavailable => 'Numéro indisponible.';
-
-  @override
-  String get regEmailAlreadyHasToken => 'Cet email a déjà un token.';
-
-  @override
-  String get regPhoneAlreadyHasToken => 'Ce numéro a déjà un token.';
-
-  @override
-  String get regPostalNotFound =>
-      'Code postal introuvable. Vérifiez le pays et le code.';
-
-  @override
-  String get regNoInternet => 'Pas de connexion internet.';
-
-  @override
-  String get regGenericRetryError => 'Erreur — merci de réessayer.';
-
-  @override
-  String get regSexMale => 'Masculin';
-
-  @override
-  String get regSexFemale => 'Féminin';
-
-  @override
-  String get regSexUndisclosed => 'Préfère ne pas dire';
-
-  @override
-  String get regAge1825 => '18 – 25 ans';
-
-  @override
-  String get regAge2635 => '26 – 35 ans';
-
-  @override
-  String get regAge3645 => '36 – 45 ans';
-
-  @override
-  String get regAge4655 => '46 – 55 ans';
-
-  @override
-  String get regAge5665 => '56 – 65 ans';
-
-  @override
-  String get regAge66plus => '66 ans et plus';
-
-  @override
-  String get scoringClassificationVerySuperior => 'Très supérieur';
-
-  @override
-  String get scoringClassificationSuperior => 'Supérieur';
-
-  @override
-  String get scoringClassificationHighAverage => 'Moyen fort';
-
-  @override
-  String get scoringClassificationAverage => 'Moyen';
-
-  @override
-  String get scoringClassificationLowAverage => 'Moyen faible';
-
-  @override
-  String get scoringClassificationBorderline => 'Limite';
-
-  @override
-  String get scoringClassificationExtremelyLow => 'Extrêmement bas';
-
-  @override
-  String get scoringNotAvailable => 'N/A';
-
-  @override
-  String scoringSummaryFullScaleIq(int score, String classification) {
-    return 'QI Total: $score ($classification)';
-  }
-
-  @override
-  String scoringSummaryPercentile(int rank) {
-    return 'Percentile: ${rank}e';
-  }
-
-  @override
-  String scoringSummaryConfidenceInterval(int lower, int upper) {
-    return 'Intervalle de confiance 95%: $lower - $upper';
-  }
-
-  @override
-  String get scoringIndexVerbalComprehension => 'Compréhension Verbale';
-
-  @override
-  String get scoringIndexVisualSpatial => 'Visuo-Spatial';
-
-  @override
-  String get scoringIndexFluidReasoning => 'Raisonnement Fluide';
-
-  @override
-  String get scoringIndexWorkingMemory => 'Mémoire de Travail';
-
-  @override
-  String get scoringIndexProcessingSpeed => 'Vitesse de Traitement';
-
-  @override
-  String scoringSummaryRelativeStrengths(String list) {
-    return 'Forces relatives: $list';
-  }
-
-  @override
-  String scoringSummaryRelativeWeaknesses(String list) {
-    return 'Faiblesses relatives: $list';
-  }
-
-  @override
-  String get scoringSummaryHomogeneousProfile => 'Profil cognitif homogène';
-
-  @override
-  String scoringSummaryHeterogeneousProfile(int points) {
-    return 'Profil cognitif hétérogène (écart max: $points points)';
-  }
+  String get matDiscontinue3 => '3 échecs consécutifs - Test terminé (WAIS-IV)';
 
   @override
   String get assessIntroTitle => 'Nouvelle évaluation';
@@ -1147,9 +615,161 @@ class AppLocalizationsFr extends AppLocalizations {
       'AVERTISSEMENT : Ce rapport est généré par une application d\'aide à l\'évaluation et ne constitue pas un diagnostic clinique officiel. Il doit être interprété par un professionnel de santé qualifié. Ne pas utiliser à des fins médicales ou légales sans évaluation professionnelle complémentaire.';
 
   @override
+  String get chatEyebrow => 'ASSISTANT IA';
+
+  @override
+  String get chatNewConversation => 'Nouvelle conversation';
+
+  @override
+  String get chatAssistantLabel => 'MENTAL E.T.';
+
+  @override
+  String get chatUserLabel => 'VOUS';
+
+  @override
+  String get chatHeroTitle1 => 'Posez';
+
+  @override
+  String get chatHeroTitle2 => 'vos questions.';
+
+  @override
+  String get chatEmptyIntro =>
+      'L\'IA Mental E.T. vous aide à mieux comprendre votre profil cognitif. Discussions confidentielles, accompagnement non-directif.';
+
+  @override
+  String get chatThinking => 'Réflexion…';
+
+  @override
+  String get chatInputHint => 'Écrire un message…';
+
+  @override
+  String get chatTimeJustNow => 'à l\'instant';
+
+  @override
+  String chatTimeMinutes(int count) {
+    return '$count min';
+  }
+
+  @override
+  String chatTimeHours(int count) {
+    return '${count}h';
+  }
+
+  @override
+  String get chatErrorMessage =>
+      'Désolé, une erreur s\'est produite. Veuillez réessayer.';
+
+  @override
+  String get chatErrorEmptyResponse => 'Réponse vide du worker';
+
+  @override
+  String get chatErrorAccessDenied =>
+      'Accès refusé par le worker (origine non autorisée).';
+
+  @override
+  String get chatErrorRateLimit =>
+      'Limite de requêtes atteinte. Réessayez dans quelques instants.';
+
+  @override
+  String chatErrorServer(int code) {
+    return 'Erreur serveur ($code)';
+  }
+
+  @override
+  String chatErrorHttp(int code, String body) {
+    return 'Erreur $code : $body';
+  }
+
+  @override
+  String get coreSplashTitleLine1 => 'Évaluation';
+
+  @override
+  String get coreSplashTitleLine2 => 'cognitive';
+
+  @override
+  String get commonNotAvailable => 'N/D';
+
+  @override
+  String get pdfFilenameBase => 'mentality_resultats';
+
+  @override
   String coreRouteNotFound(String path) {
     return 'Page introuvable : $path';
   }
+
+  @override
+  String get homeHeroTitle => 'Découvrez';
+
+  @override
+  String get homeHeroTitleItalic => 'votre profil cognitif.';
+
+  @override
+  String get homeHeroBody =>
+      'Une évaluation scientifique adaptative, inspirée des échelles Wechsler. 12 sous-tests, 5 indices, un score global.';
+
+  @override
+  String get homeActionStartTitle => 'Commencer une évaluation';
+
+  @override
+  String get homeActionStartSubtitle => 'Durée : 30 – 45 minutes';
+
+  @override
+  String get homeActionResultsTitle => 'Mes résultats';
+
+  @override
+  String get homeActionResultsSubtitle => 'Historique des évaluations';
+
+  @override
+  String get homeActionChatTitle => 'Parler avec Mental E.T.';
+
+  @override
+  String get homeActionChatSubtitle => 'Assistant IA, questions psychologiques';
+
+  @override
+  String get homeComingSoon => 'BIENTÔT DISPONIBLE';
+
+  @override
+  String get homeAboutEyebrow => 'À PROPOS';
+
+  @override
+  String get homeAboutSubtestsTitle => '12 sous-tests';
+
+  @override
+  String get homeAboutSubtestsBody =>
+      'Évaluation complète des cinq indices cognitifs WAIS-IV.';
+
+  @override
+  String get homeAboutAdaptiveTitle => 'IA adaptative';
+
+  @override
+  String get homeAboutAdaptiveBody =>
+      'Difficulté ajustée en temps réel via inférence IRT.';
+
+  @override
+  String get homeAboutValidationTitle => 'Validation scientifique';
+
+  @override
+  String get homeAboutValidationBody =>
+      'Items inspirés des échelles Wechsler (WPPSI / WISC / WAIS).';
+
+  @override
+  String get homeResumeEyebrow => 'TEST EN COURS';
+
+  @override
+  String get homeResumeTitle => 'Reprendre votre évaluation';
+
+  @override
+  String get homeResumeButton => 'Reprendre';
+
+  @override
+  String get homeLogoutTitle => 'Se déconnecter ?';
+
+  @override
+  String get homeLogoutBody =>
+      'Ton token sera retiré de cet appareil. Assure-toi de l\'avoir sauvegardé : sans lui, tu ne pourras pas te reconnecter à tes données.';
+
+  @override
+  String get homeLogoutConfirm => 'Se déconnecter';
 
   @override
   String get infoTestName => 'Information';
@@ -1402,6 +1022,415 @@ class AppLocalizationsFr extends AppLocalizations {
   String get arithDifficultyVeryHard => 'Très difficile';
 
   @override
+  String get oralMicAccessTitle => 'Accès au microphone';
+
+  @override
+  String get oralReadingPermissionBody1 =>
+      'Cette activité enregistre votre voix pendant que vous lisez le texte à voix haute.';
+
+  @override
+  String get oralReadingPermissionBody2 =>
+      'Vos enregistrements seront anonymisés et pourront contribuer à l\'amélioration de la reconnaissance vocale en français.';
+
+  @override
+  String get oralBrowserWillAskMic =>
+      'Votre navigateur vous demandera ensuite d\'autoriser le microphone.';
+
+  @override
+  String get oralCancel => 'Annuler';
+
+  @override
+  String get oralAllowMicrophone => 'Autoriser le microphone';
+
+  @override
+  String get oralMicDeniedOrUnavailable => 'Microphone refusé ou indisponible.';
+
+  @override
+  String get oralCannotStartRecording =>
+      'Impossible de démarrer l\'enregistrement sur ce navigateur.';
+
+  @override
+  String oralCanSkipToNextStep(String message) {
+    return '$message Vous pouvez passer à l\'étape suivante.';
+  }
+
+  @override
+  String get oralSkip => 'Passer';
+
+  @override
+  String get oralRecordingInProgress => 'Enregistrement en cours';
+
+  @override
+  String oralKeepGoingSeconds(int seconds) {
+    return 'Continuez encore ${seconds}s...';
+  }
+
+  @override
+  String get oralSaving => 'Sauvegarde...';
+
+  @override
+  String get oralReadingInstructions =>
+      'Lisez le texte suivant à voix haute, clairement et à votre rythme naturel. Appuyez sur \"Démarrer\" quand vous êtes prêt.';
+
+  @override
+  String get oralStartReading => 'Démarrer la lecture';
+
+  @override
+  String get oralFinish => 'Terminer';
+
+  @override
+  String get oralSkipThisStep => 'Passer cette étape';
+
+  @override
+  String get oralSummaryPermissionBody1 =>
+      'Vous allez maintenant enregistrer votre résumé oral du texte.';
+
+  @override
+  String get oralSummaryPermissionBody2 =>
+      'Parlez naturellement, comme si vous expliquiez le texte à un ami. Prenez entre 30 et 60 secondes.';
+
+  @override
+  String get oralStartSummary => 'Démarrer le résumé';
+
+  @override
+  String get oralSummaryInstructionLead => 'Vous venez de lire ce texte. ';
+
+  @override
+  String get oralSummaryInstructionBody =>
+      'Résumez ce que vous avez compris avec vos propres mots. Prenez entre 30 et 60 secondes. Parlez naturellement, comme si vous l\'expliquiez à un ami.';
+
+  @override
+  String get oralReferenceText => 'Texte de référence';
+
+  @override
+  String get oralFinishSummary => 'Terminer le résumé';
+
+  @override
+  String get oralFlowTitle => 'Collecte audio';
+
+  @override
+  String get oralConsentTitle => 'Test de Compréhension Orale';
+
+  @override
+  String get oralConsentRecordTitle => 'Ce que nous enregistrons';
+
+  @override
+  String get oralConsentRecordBody =>
+      'Votre voix pendant la lecture de 5 courts textes (environ 1 min chacun) et votre résumé oral (environ 40 secondes par texte).';
+
+  @override
+  String get oralConsentAnonTitle => 'Confidentialité';
+
+  @override
+  String get oralConsentAnonBody =>
+      'Vos enregistrements sont identifiés par un code de session aléatoire, et non par votre nom. Ils restent toutefois rattachables à votre compte : ce sont des données personnelles protégées, chiffrées et stockées en Europe.';
+
+  @override
+  String get oralConsentUsageTitle => 'Utilisation';
+
+  @override
+  String get oralConsentUsageBody =>
+      'Ces enregistrements pourront contribuer à l\'amélioration de la reconnaissance vocale du français, notamment pour des modèles comme Whisper ou Speechmatics.';
+
+  @override
+  String get oralAcceptAndStart => 'J\'accepte et je commence';
+
+  @override
+  String get oralDeclineAndGoBack => 'Refuser et revenir en arrière';
+
+  @override
+  String get oralWithdrawConsentNote =>
+      'Vous pouvez retirer votre consentement à tout moment depuis les paramètres de l\'application.';
+
+  @override
+  String oralTextProgress(int current) {
+    return 'Texte $current sur 5';
+  }
+
+  @override
+  String get oralStepReading => 'Lecture';
+
+  @override
+  String get oralStepSummary => 'Résumé';
+
+  @override
+  String get oralPauseWellDone => 'Bien !';
+
+  @override
+  String get oralPauseNowSummarize => 'Maintenant, résumez oralement ce texte.';
+
+  @override
+  String get oralPauseStartingIn => 'Début dans...';
+
+  @override
+  String get oralCompletedThanks => 'Merci !';
+
+  @override
+  String get oralCompletedBody =>
+      'Vous avez complété les 5 textes.\nVos enregistrements contribueront à l\'amélioration\nde la reconnaissance vocale en français.';
+
+  @override
+  String get oralBackToHome => 'Retour à l\'accueil';
+
+  @override
+  String get oralExitDialogTitle => 'Quitter ?';
+
+  @override
+  String get oralExitDialogBody =>
+      'Un enregistrement est en cours. Si vous quittez maintenant, il ne sera pas sauvegardé.';
+
+  @override
+  String get oralContinue => 'Continuer';
+
+  @override
+  String get oralQuit => 'Quitter';
+
+  @override
+  String regStepEyebrow(int step) {
+    return 'ÉTAPE $step / 4';
+  }
+
+  @override
+  String get regStepEyebrowSuccess => 'ÉTAPE 4 / 4 · SUCCÈS';
+
+  @override
+  String get regEmailTitle => 'Créer mon token';
+
+  @override
+  String get regEmailHeading => 'Votre email';
+
+  @override
+  String get regEmailIntro =>
+      'Nous vous envoyons un code de vérification à 6 chiffres. Votre email n\'est pas lié à votre token et reste privé.';
+
+  @override
+  String get regEmailFieldLabel => 'Adresse email';
+
+  @override
+  String get regEmailInvalid => 'Email invalide';
+
+  @override
+  String get regSendingCode => 'Envoi du code…';
+
+  @override
+  String get regReceiveCode => 'Recevoir le code';
+
+  @override
+  String get regEmailPrivacyNote =>
+      'Aucun nom, prénom ou adresse précise ne sera stocké. Seuls votre sexe, tranche d\'âge et code postal sont encodés (chiffrés) dans votre token anonyme.';
+
+  @override
+  String get regEmailOtpTitle => 'Vérifier mon email';
+
+  @override
+  String get regCodeSentTo => 'Code envoyé à';
+
+  @override
+  String get regVerifying => 'Vérification…';
+
+  @override
+  String get regResendCode => 'Renvoyer le code';
+
+  @override
+  String get regPhoneTitle => 'Votre téléphone';
+
+  @override
+  String get regPhoneIntro =>
+      'Un code SMS à 6 chiffres sera envoyé pour vérifier votre numéro. Aucun lien entre votre numéro et votre token.';
+
+  @override
+  String get regPhoneFieldHint => 'Numéro';
+
+  @override
+  String get regSendingSms => 'Envoi du SMS…';
+
+  @override
+  String get regReceiveSms => 'Recevoir le SMS';
+
+  @override
+  String get regPhoneOtpTitle => 'Vérifier mon téléphone';
+
+  @override
+  String get regSmsSentTo => 'SMS envoyé au';
+
+  @override
+  String get regResendSms => 'Renvoyer le SMS';
+
+  @override
+  String get regDemoTitle => 'Vos données démographiques';
+
+  @override
+  String get regDemoIntro =>
+      'Ces informations seront chiffrées dans votre token. Aucune valeur exacte n\'est stockée (ni âge précis, ni adresse précise).';
+
+  @override
+  String get regSectionSex => 'SEXE';
+
+  @override
+  String get regSectionAgeBucket => 'TRANCHE D\'ÂGE';
+
+  @override
+  String get regSectionCountryPostal => 'PAYS ET CODE POSTAL';
+
+  @override
+  String get regPostalCodeHint => 'Code postal';
+
+  @override
+  String get regGeneratingToken => 'Génération du token…';
+
+  @override
+  String get regGenerateMyToken => 'Générer mon token';
+
+  @override
+  String get regSuccessTitle => 'Bienvenue dans Mental E.T.';
+
+  @override
+  String get regSuccessTokenSaved =>
+      'Votre token anonyme a été généré et sauvegardé sur cet appareil.';
+
+  @override
+  String get regSuccessTokenDetails =>
+      'Il ne contient ni votre email, ni votre numéro de téléphone, ni votre nom. Uniquement votre sexe, votre tranche d\'âge et votre zone géographique (chiffrés). Vous pouvez maintenant commencer votre évaluation cognitive.';
+
+  @override
+  String get regImportantLabel => 'IMPORTANT';
+
+  @override
+  String get regSuccessWarning =>
+      'Ne désinstallez pas l\'application sans avoir terminé votre évaluation : votre token est uniquement stocké sur cet appareil. Si vous le perdez, vous ne pourrez plus créer de nouveau compte avec le même email ou téléphone.';
+
+  @override
+  String get regEmailAlreadyRegistered =>
+      'Cet email a déjà un compte. Si c\'est le vôtre, vous avez déjà un token.';
+
+  @override
+  String get regEmailUnavailable => 'Email indisponible.';
+
+  @override
+  String get regOtpIncorrectOrExpired => 'Code incorrect ou expiré.';
+
+  @override
+  String get regPhoneAlreadyRegistered => 'Ce numéro a déjà un compte.';
+
+  @override
+  String get regPhoneUnavailable => 'Numéro indisponible.';
+
+  @override
+  String get regEmailAlreadyHasToken => 'Cet email a déjà un token.';
+
+  @override
+  String get regPhoneAlreadyHasToken => 'Ce numéro a déjà un token.';
+
+  @override
+  String get regPostalNotFound =>
+      'Code postal introuvable. Vérifiez le pays et le code.';
+
+  @override
+  String get regNoInternet => 'Pas de connexion internet.';
+
+  @override
+  String get regGenericRetryError => 'Erreur — merci de réessayer.';
+
+  @override
+  String get regSexMale => 'Masculin';
+
+  @override
+  String get regSexFemale => 'Féminin';
+
+  @override
+  String get regSexUndisclosed => 'Préfère ne pas dire';
+
+  @override
+  String get regAge1825 => '18 – 25 ans';
+
+  @override
+  String get regAge2635 => '26 – 35 ans';
+
+  @override
+  String get regAge3645 => '36 – 45 ans';
+
+  @override
+  String get regAge4655 => '46 – 55 ans';
+
+  @override
+  String get regAge5665 => '56 – 65 ans';
+
+  @override
+  String get regAge66plus => '66 ans et plus';
+
+  @override
+  String get scoringClassificationVerySuperior => 'Très supérieur';
+
+  @override
+  String get scoringClassificationSuperior => 'Supérieur';
+
+  @override
+  String get scoringClassificationHighAverage => 'Moyen fort';
+
+  @override
+  String get scoringClassificationAverage => 'Moyen';
+
+  @override
+  String get scoringClassificationLowAverage => 'Moyen faible';
+
+  @override
+  String get scoringClassificationBorderline => 'Limite';
+
+  @override
+  String get scoringClassificationExtremelyLow => 'Extrêmement bas';
+
+  @override
+  String get scoringNotAvailable => 'N/A';
+
+  @override
+  String scoringSummaryFullScaleIq(int score, String classification) {
+    return 'QI Total: $score ($classification)';
+  }
+
+  @override
+  String scoringSummaryPercentile(int rank) {
+    return 'Percentile: ${rank}e';
+  }
+
+  @override
+  String scoringSummaryConfidenceInterval(int lower, int upper) {
+    return 'Intervalle de confiance 95%: $lower - $upper';
+  }
+
+  @override
+  String get scoringIndexVerbalComprehension => 'Compréhension Verbale';
+
+  @override
+  String get scoringIndexVisualSpatial => 'Visuo-Spatial';
+
+  @override
+  String get scoringIndexFluidReasoning => 'Raisonnement Fluide';
+
+  @override
+  String get scoringIndexWorkingMemory => 'Mémoire de Travail';
+
+  @override
+  String get scoringIndexProcessingSpeed => 'Vitesse de Traitement';
+
+  @override
+  String scoringSummaryRelativeStrengths(String list) {
+    return 'Forces relatives: $list';
+  }
+
+  @override
+  String scoringSummaryRelativeWeaknesses(String list) {
+    return 'Faiblesses relatives: $list';
+  }
+
+  @override
+  String get scoringSummaryHomogeneousProfile => 'Profil cognitif homogène';
+
+  @override
+  String scoringSummaryHeterogeneousProfile(int points) {
+    return 'Profil cognitif hétérogène (écart max: $points points)';
+  }
+
+  @override
   String get simTestName => 'Similitudes';
 
   @override
@@ -1571,7 +1600,7 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get matDiscontinue3 => '3 échecs consécutifs - Test terminé (WAIS-IV)';
+  String get matDiscontinue4 => '4 échecs consécutifs - Test terminé (WAIS-IV)';
 
   @override
   String get matSeeResultsEnded => 'Voir résultats (test terminé)';

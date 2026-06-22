@@ -142,13 +142,13 @@
     "desc": "Écran de consentement — corps de la section enregistrements"
   },
   "oralConsentAnonTitle": {
-    "fr": "Anonymisation",
-    "en": "Anonymization",
+    "fr": "Confidentialité",
+    "en": "Privacy",
     "desc": "Écran de consentement — titre de la section anonymisation"
   },
   "oralConsentAnonBody": {
-    "fr": "Aucun nom, aucune information personnelle n'est associé aux enregistrements. Un identifiant de session aléatoire est utilisé.",
-    "en": "No name or personal information is linked to the recordings. A random session identifier is used.",
+    "fr": "Vos enregistrements sont identifiés par un code de session aléatoire, et non par votre nom. Ils restent toutefois rattachables à votre compte : ce sont des données personnelles protégées, chiffrées et stockées en Europe.",
+    "en": "Your recordings are identified by a random session code, not by your name. They remain linkable to your account, however: they are personal data, encrypted and stored in Europe.",
     "desc": "Écran de consentement — corps de la section anonymisation"
   },
   "oralConsentUsageTitle": {

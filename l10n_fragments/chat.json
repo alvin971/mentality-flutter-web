@@ -14,5 +14,7 @@
   "chatErrorMessage": {"fr": "Désolé, une erreur s'est produite. Veuillez réessayer.", "en": "Sorry, an error occurred. Please try again.", "desc": "Generic chat error bubble"},
   "chatErrorEmptyResponse": {"fr": "Réponse vide du worker", "en": "Empty response from the worker", "desc": "Network error (not user-facing prose)"},
   "chatErrorAccessDenied": {"fr": "Accès refusé par le worker (origine non autorisée).", "en": "Access denied by the worker (origin not allowed).", "desc": "403 network error"},
-  "chatErrorRateLimit": {"fr": "Limite de requêtes atteinte. Réessayez dans quelques instants.", "en": "Rate limit reached. Please try again shortly.", "desc": "429 network error"}
+  "chatErrorRateLimit": {"fr": "Limite de requêtes atteinte. Réessayez dans quelques instants.", "en": "Rate limit reached. Please try again shortly.", "desc": "429 network error"},
+  "chatErrorServer": {"fr": "Erreur serveur ({code})", "en": "Server error ({code})", "es": "Error del servidor ({code})", "pt": "Erro do servidor ({code})", "de": "Serverfehler ({code})", "en_GB": "Server error ({code})", "desc": "500 network error fallback", "placeholders": {"code": "int"}},
+  "chatErrorHttp": {"fr": "Erreur {code} : {body}", "en": "Error {code}: {body}", "es": "Error {code}: {body}", "pt": "Erro {code}: {body}", "de": "Fehler {code}: {body}", "en_GB": "Error {code}: {body}", "desc": "Generic HTTP error fallback", "placeholders": {"code": "int", "body": "String"}}
 }

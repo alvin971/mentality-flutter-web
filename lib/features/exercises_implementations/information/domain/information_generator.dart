@@ -2,7 +2,11 @@ import 'dart:math';
 
 import '../../_shared/stratified_draw.dart';
 import 'information_items_en.dart';
+import 'information_items_en_gb.dart';
+import 'information_items_es.dart';
 import 'information_items_fr.dart';
+import 'information_items_de.dart';
+import 'information_items_pt.dart';
 
 /// Générateur de 28 items d'Information (Connaissances générales - WAIS-IV).
 ///
@@ -40,9 +44,7 @@ class InformationGenerator {
   /// `thetaValue` par SLOT (échelle de difficulté stable entre passations).
   void _initializeAllItems() {
     _preGeneratedItems.clear();
-    final banks = languageCode == 'en'
-        ? buildEnglishInformationBanks()
-        : buildFrenchInformationBanks();
+    final banks = _banksFor(languageCode);
     final drawn = stratifiedDraw<InformationItem>(banks, _slotsPerCell, _random);
     for (var i = 0; i < drawn.length; i++) {
       final src = drawn[i];
@@ -56,6 +58,28 @@ class InformationGenerator {
         difficulty: src.difficulty,
         thetaValue: thetaForSlot(i, start: -2.0, step: 0.15, decimals: 2),
       ));
+    }
+  }
+
+  /// Banques (par cellule domaine×difficulté) correspondant au tag de langue
+  /// de contenu (`fr`, `en`, `en-GB`, `es`, `pt`, `de`). en-GB partage la
+  /// banque anglaise ; es/pt/de (faits adaptés culturellement) seront branchées
+  /// en Phase 2. Repli → français.
+  List<List<InformationItem>> _banksFor(String tag) {
+    switch (tag) {
+      case 'en':
+        return buildEnglishInformationBanks();
+      case 'en-GB':
+        return buildBritishInformationBanks();
+      case 'es':
+        return buildSpanishInformationBanks();
+      case 'pt':
+        return buildPortugueseInformationBanks();
+      case 'de':
+        return buildGermanInformationBanks();
+      case 'fr':
+      default:
+        return buildFrenchInformationBanks();
     }
   }
 

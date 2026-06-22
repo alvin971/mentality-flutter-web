@@ -9,7 +9,11 @@ import 'dart:math';
 
 import '../../_shared/stratified_draw.dart';
 import 'vocabulary_items_en.dart';
+import 'vocabulary_items_en_gb.dart';
+import 'vocabulary_items_es.dart';
 import 'vocabulary_items_fr.dart';
+import 'vocabulary_items_de.dart';
+import 'vocabulary_items_pt.dart';
 
 class VocabularyGenerator {
   final Random _random;
@@ -33,9 +37,7 @@ class VocabularyGenerator {
   /// change. La fréquence vient de la bande d'origine (banques disjointes).
   void _initializeAllItems() {
     _preGeneratedItems.clear();
-    final banks = languageCode == 'en'
-        ? buildEnglishVocabularyBanks()
-        : buildFrenchVocabularyBanks();
+    final banks = _banksFor(languageCode);
     final drawn = stratifiedDraw<VocabularyItem>(banks, _itemsPerBand, _random);
     for (var i = 0; i < drawn.length; i++) {
       final src = drawn[i];
@@ -46,6 +48,28 @@ class VocabularyGenerator {
         onePointAnswers: src.onePointAnswers,
         thetaValue: thetaForSlot(i),
       ));
+    }
+  }
+
+  /// Banques (par bande) correspondant au tag de langue de contenu
+  /// (`fr`, `en`, `en-GB`, `es`, `pt`, `de`). en-GB partage la banque anglaise
+  /// tant qu'une banque britannique dédiée n'existe pas ; es/pt/de seront
+  /// branchées en Phase 2. Repli : tout tag inconnu → français.
+  List<List<VocabularyItem>> _banksFor(String tag) {
+    switch (tag) {
+      case 'en':
+        return buildEnglishVocabularyBanks();
+      case 'en-GB':
+        return buildBritishVocabularyBanks();
+      case 'es':
+        return buildSpanishVocabularyBanks();
+      case 'pt':
+        return buildPortugueseVocabularyBanks();
+      case 'de':
+        return buildGermanVocabularyBanks();
+      case 'fr':
+      default:
+        return buildFrenchVocabularyBanks();
     }
   }
 

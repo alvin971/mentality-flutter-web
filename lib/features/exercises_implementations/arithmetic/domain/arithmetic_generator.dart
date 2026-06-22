@@ -43,7 +43,7 @@ class ArithmeticGenerator {
       final t = drawn[i];
       final (tokens, answer) = _instantiate(band, t.kind);
       _preGeneratedItems.add(ArithmeticItem(
-        problem: _fill(languageCode == 'en' ? t.en : t.fr, tokens),
+        problem: _fill(t.text(languageCode), tokens),
         correctAnswer: answer,
         difficulty: _bandDifficulty[band],
         timeLimitSeconds: _bandTimeLimit[band],
