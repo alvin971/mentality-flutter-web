@@ -322,12 +322,12 @@ class _OralTestFlowState extends State<OralTestFlow> {
 
   Widget _buildActiveStep() {
     return Padding(
-      padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 20.h),
+      padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 12.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _buildProgressHeader(),
-          SizedBox(height: 16.h),
+          SizedBox(height: 10.h),
           Expanded(
             child: _step == _FlowStep.reading
                 ? OralReadingTest(
