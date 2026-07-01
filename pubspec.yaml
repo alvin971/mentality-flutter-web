@@ -76,3 +76,4 @@ flutter:
 
   assets:
     - icons/
+    - assets/reading_corpus/
