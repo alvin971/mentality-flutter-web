@@ -17,6 +17,7 @@ import '../../core/theme/app_colors.dart';
 import '../../data/reading_texts.dart';
 import '../../services/data_collection_service.dart';
 import '../../services/r2_upload_service.dart';
+import 'widgets/adaptive_reading_text.dart';
 
 class OralSummaryTest extends StatefulWidget {
   final ReadingText originalText;
@@ -297,9 +298,9 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         _buildInstruction(),
-        SizedBox(height: 14.h),
+        SizedBox(height: 8.h),
         _buildOriginalTextCard(),
-        SizedBox(height: 20.h),
+        SizedBox(height: 12.h),
         _buildRecordingControls(),
       ],
     );
@@ -307,7 +308,7 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
 
   Widget _buildInstruction() {
     return Container(
-      padding: EdgeInsets.all(14.w),
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 9.h),
       decoration: BoxDecoration(
         color: Colors.teal.shade50,
         borderRadius: BorderRadius.circular(12.r),
@@ -317,16 +318,19 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(Icons.chat_bubble_outline,
-              color: Colors.teal.shade700, size: 22.sp),
-          SizedBox(width: 10.w),
+              color: Colors.teal.shade700, size: 18.sp),
+          SizedBox(width: 8.w),
           Expanded(
             child: Text.rich(
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
               TextSpan(
                 children: [
                   TextSpan(
                     text: context.l10n.oralSummaryInstructionLead,
                     style: TextStyle(
-                      fontSize: 14.sp,
+                      fontSize: 12.5.sp,
+                      height: 1.3,
                       fontWeight: FontWeight.bold,
                       color: Colors.teal.shade800,
                     ),
@@ -334,7 +338,8 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
                   TextSpan(
                     text: context.l10n.oralSummaryInstructionBody,
                     style: TextStyle(
-                      fontSize: 14.sp,
+                      fontSize: 12.5.sp,
+                      height: 1.3,
                       color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
@@ -355,7 +360,7 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
         child: Padding(
-          padding: EdgeInsets.all(20.w),
+          padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 8.h),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -374,19 +379,17 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
                   ),
                 ],
               ),
-              SizedBox(height: 10.h),
+              SizedBox(height: 8.h),
               Expanded(
-                child: SingleChildScrollView(
-                  child: Text(
-                    widget.originalText.body,
-                    style: TextStyle(
-                      fontSize: 15.sp,
-                      height: 1.65,
-                      color: Theme.of(context)
-                          .colorScheme
-                          .outline, // grisé = référence non interactive
-                    ),
-                  ),
+                child: AdaptiveReadingText(
+                  text: widget.originalText.body,
+                  height: 1.55,
+                  minFontSp: 12.sp,
+                  maxFontSp: 16.sp,
+                  // grisé = référence non interactive
+                  textColor: Theme.of(context).colorScheme.outline,
+                  surfaceColor:
+                      Theme.of(context).colorScheme.surfaceContainerHighest,
                 ),
               ),
             ],
@@ -398,101 +401,20 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
 
   Widget _buildRecordingControls() {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        if (_isRecording) ...[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              AnimatedOpacity(
-                opacity: _blinkVisible ? 1.0 : 0.0,
-                duration: const Duration(milliseconds: 100),
-                child: Container(
-                  width: 14.w,
-                  height: 14.w,
-                  decoration: const BoxDecoration(
-                    color: Colors.red,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ),
-              SizedBox(width: 8.w),
-              Text(
-                context.l10n.oralRecordingInProgress,
-                style: TextStyle(
-                    fontSize: 14.sp,
-                    color: Colors.red,
-                    fontWeight: FontWeight.w500),
-              ),
-            ],
-          ),
-          SizedBox(height: 8.h),
-          Text(
-            _formatTime(_elapsedSeconds),
-            style: TextStyle(
-              fontSize: 36.sp,
-              fontWeight: FontWeight.bold,
-              fontFeatures: const [FontFeature.tabularFigures()],
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
-          ),
-          SizedBox(height: 4.h),
-          if (_elapsedSeconds < _minDurationSeconds)
-            Text(
-              context.l10n
-                  .oralKeepGoingSeconds(_minDurationSeconds - _elapsedSeconds),
-              style: TextStyle(
-                  fontSize: 13.sp,
-                  color: Theme.of(context).colorScheme.outline),
-            ),
-          SizedBox(height: 16.h),
-        ],
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        Wrap(
+          alignment: WrapAlignment.center,
+          crossAxisAlignment: WrapCrossAlignment.center,
+          spacing: 12.w,
+          runSpacing: 8.h,
           children: [
-            if (!_isRecording && !_isSaving) ...[
-              ElevatedButton.icon(
-                onPressed: _showPermissionDialog,
-                icon: const Icon(Icons.mic),
-                label: Text(context.l10n.oralStartSummary),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.teal,
-                  foregroundColor: Colors.white,
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 24.w, vertical: 14.h),
-                  textStyle: TextStyle(fontSize: 15.sp),
-                ),
-              ),
-            ] else ...[
-              ElevatedButton.icon(
-                onPressed: (_isRecording &&
-                        _elapsedSeconds >= _minDurationSeconds &&
-                        !_isSaving)
-                    ? _stopRecording
-                    : null,
-                icon: _isSaving
-                    ? SizedBox(
-                        width: 18.w,
-                        height: 18.w,
-                        child: const CircularProgressIndicator(
-                            strokeWidth: 2, color: Colors.white),
-                      )
-                    : const Icon(Icons.stop_circle),
-                label: Text(_isSaving
-                    ? context.l10n.oralSaving
-                    : context.l10n.oralFinishSummary),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  foregroundColor: Colors.white,
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 24.w, vertical: 14.h),
-                  textStyle: TextStyle(fontSize: 15.sp),
-                ),
-              ),
-            ],
+            if (_isRecording) _buildTimerPill(),
+            _buildActionButton(),
           ],
         ),
         if (_permissionDenied) ...[
-          SizedBox(height: 12.h),
+          SizedBox(height: 8.h),
           TextButton(
             onPressed: () =>
                 widget.onCompleted(widget.originalText.id, widget.sessionId),
@@ -505,6 +427,95 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
           ),
         ],
       ],
+    );
+  }
+
+  /// Pilule compacte : point clignotant + chrono + « encore X s » inline.
+  Widget _buildTimerPill() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+      decoration: BoxDecoration(
+        color: Colors.red.withValues(alpha: 0.10),
+        borderRadius: BorderRadius.circular(20.r),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          AnimatedOpacity(
+            opacity: _blinkVisible ? 1.0 : 0.15,
+            duration: const Duration(milliseconds: 200),
+            child: Container(
+              width: 10.w,
+              height: 10.w,
+              decoration: const BoxDecoration(
+                color: Colors.red,
+                shape: BoxShape.circle,
+              ),
+            ),
+          ),
+          SizedBox(width: 8.w),
+          Text(
+            _formatTime(_elapsedSeconds),
+            style: TextStyle(
+              fontSize: 17.sp,
+              fontWeight: FontWeight.w700,
+              fontFeatures: const [FontFeature.tabularFigures()],
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+          ),
+          if (_elapsedSeconds < _minDurationSeconds) ...[
+            SizedBox(width: 8.w),
+            Text(
+              context.l10n
+                  .oralKeepGoingSeconds(_minDurationSeconds - _elapsedSeconds),
+              style: TextStyle(
+                  fontSize: 12.sp,
+                  color: Theme.of(context).colorScheme.outline),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActionButton() {
+    if (!_isRecording && !_isSaving) {
+      return ElevatedButton.icon(
+        onPressed: _showPermissionDialog,
+        icon: const Icon(Icons.mic, size: 20),
+        label: Text(context.l10n.oralStartSummary),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.teal,
+          foregroundColor: Colors.white,
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
+          textStyle: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
+        ),
+      );
+    }
+    return ElevatedButton.icon(
+      onPressed: (_isRecording &&
+              _elapsedSeconds >= _minDurationSeconds &&
+              !_isSaving)
+          ? _stopRecording
+          : null,
+      icon: _isSaving
+          ? SizedBox(
+              width: 16.w,
+              height: 16.w,
+              child: const CircularProgressIndicator(
+                  strokeWidth: 2, color: Colors.white),
+            )
+          : const Icon(Icons.stop_circle, size: 20),
+      label: Text(
+          _isSaving ? context.l10n.oralSaving : context.l10n.oralFinishSummary),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.red,
+        foregroundColor: Colors.white,
+        disabledBackgroundColor: Colors.red.withValues(alpha: 0.4),
+        disabledForegroundColor: Colors.white70,
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
+        textStyle: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
+      ),
     );
   }
 }
