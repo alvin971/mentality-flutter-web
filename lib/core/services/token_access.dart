@@ -15,7 +15,7 @@ class TokenAccess {
   /// `true` si [token] donne accès :
   /// - token SIGNÉ dont la signature Ed25519 est valide, OU
   /// - en debug / mode test (kAllowUnsignedTokenInRelease), un token DEV
-  ///   (`MENTA1.…`) décodable. En prod réelle, seule la signature compte.
+  ///   (`M2.…`) décodable. En prod réelle, seule la signature compte.
   static Future<bool> isAcceptable(String? token) async {
     if (token == null || token.isEmpty) return false;
     if (await TokenSignatureVerifier.isValid(token)) return true;

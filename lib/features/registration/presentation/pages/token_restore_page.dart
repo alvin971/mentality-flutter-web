@@ -94,7 +94,7 @@ class _TokenRestorePageState extends State<TokenRestorePage> {
                 autocorrect: false,
                 enableSuggestions: false,
                 decoration: InputDecoration(
-                  hintText: 'MENTA1.… ou eyJ…',
+                  hintText: 'M2.… ou eyJ…',
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
                   border: OutlineInputBorder(

@@ -133,22 +133,23 @@ class _OralTestFlowState extends State<OralTestFlow> {
         _step = _FlowStep.reading;
       });
     } else {
-      // Test terminé : soumission → le token provisoire passe à VALIDÉ (à vie).
+      // Test terminé : soumission → complétion enregistrée côté serveur (le
+      // token, lui, ne change pas — cf. TokenIssuer.markCompleted).
       setState(() => _step = _FlowStep.completed);
       widget.onAllCompleted?.call();
       _validateTokenAfterTest();
     }
   }
 
-  /// À la soumission du test, fait passer le token PROVISOIRE → VALIDÉ.
+  /// À la soumission du test, enregistre côté serveur que le token a
+  /// complété le test (le token local ne change pas — rien à re-sauvegarder).
   /// Non bloquant : un échec réseau ne doit pas empêcher la fin du test
-  /// (la validation pourra être retentée ultérieurement).
+  /// (la complétion pourra être retentée ultérieurement).
   Future<void> _validateTokenAfterTest() async {
     try {
       final token = await AuthLocalStore.instance.getToken();
       if (token == null) return;
-      final validated = await TokenIssuer.validate(token);
-      await AuthLocalStore.instance.saveToken(validated);
+      await TokenIssuer.markCompleted(token);
     } catch (_) {
       // silencieux : la complétion du test reste effective.
     }

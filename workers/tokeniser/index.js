@@ -1,18 +1,20 @@
 /**
  * Cloudflare Worker — Tokeniseur (signature Ed25519 du token anonyme)
  *
- * Cycle de vie du token (deux états) :
- *   - POST /          → émet un token PROVISOIRE (status:'provisional').
+ * Le token est ÉMIS UNE FOIS et est IMMUABLE ensuite (jamais re-signé) :
+ *   - POST /          → émet le token (claims démographiques + nonce + sv).
  *                       Créé au DÉBUT (petit formulaire âge/région/sexe = « se
- *                       connecter »). Tant que le test n'est pas soumis, le token
- *                       est dans un entre-deux et peut être supprimé/abandonné.
- *   - POST /validate  → prend un token provisoire VALIDE et le re-signe en
- *                       status:'validated' (même nonce + mêmes démographiques +
- *                       même signup_day conservés). Appelé à la SOUMISSION d'un
- *                       test → le token devient permanent (validé à vie, jamais
- *                       d'expiration).
+ *                       connecter »).
+ *   - POST /validate  → vérifie une PREUVE DE COMPLÉTION (enregistrements
+ *                       présents dans R2 sous le compte dérivé du nonce) et
+ *                       pose un marqueur serveur permanent
+ *                       (`validated/<account>`). Le token N'EST PAS modifié :
+ *                       le client garde et réutilise le même token émis au
+ *                       départ. Idempotent (rejouer /validate est sans effet).
  *
  * Format : JWS compact EdDSA  header_b64url . payload_b64url . signature_b64url
+ * Claims compactes (sv: 2) : {s, y, m, r, d, n, sv} — voir validateClaims()
+ * et lib/core/services/token_issuer.dart (miroir exact côté client).
  *
  * La clé privée Ed25519 ne quitte JAMAIS ce worker (Worker Secret,
  * extractable=false). Le client ne reçoit que la signature ; la clé PUBLIQUE
@@ -22,11 +24,6 @@
  *    D'ACCÈS que si un serveur RE-VÉRIFIE la signature au moment de servir/écrire
  *    les données (cf. workers/_shared/token_verify.js, utilisé par r2-upload).
  *
- * ⚠️ /validate re-signe tout token provisoire valide. En production, l'appel à
- *    /validate DOIT être déclenché par la vraie soumission d'un test (preuve de
- *    complétion), pas librement par le client. TODO(prod) : gater /validate
- *    derrière la soumission de résultats.
- *
  * Déploiement : voir README.md. Secret : wrangler secret put ED25519_PRIVATE_KEY_B64.
  *
  * ANONYMAT : stateless, AUCUN log (IP/timestamp/claims/token), aucun stockage.
@@ -35,7 +32,7 @@
 import { verifyToken, TOKEN_SIGNING_PUBLIC_KEYS, sha256hex } from '../_shared/token_verify.js';
 
 const KID = 'k1';
-const SCHEMA_VERSION = 1;
+const SCHEMA_VERSION = 2;
 
 const ALLOWED_ORIGINS = [
   'https://mentality-flutter-web.pages.dev',
@@ -138,18 +135,18 @@ function regionFromCf(cf) {
   return byName || 'OTHER';
 }
 
-/** POST / — émet un token PROVISOIRE depuis des claims démographiques larges. */
+/** POST / — émet le token (immuable) depuis des claims démographiques larges. */
 async function handleIssue(body, env, origin) {
   const v = validateClaims(body);
   if (v.error) return json({ error: v.error }, 400, origin);
 
-  const nonceBytes = new Uint8Array(32); // 256 bits
+  const nonceBytes = new Uint8Array(16); // 128 bits — identifiant de partition, pas un secret
   crypto.getRandomValues(nonceBytes);
 
   const payload = {
     ...v.claims,
-    nonce: b64url(nonceBytes),
-    status: 'provisional',
+    d: daysSinceEpoch(new Date()),
+    n: b64url(nonceBytes),
     sv: SCHEMA_VERSION,
   };
   try {
@@ -159,7 +156,12 @@ async function handleIssue(body, env, origin) {
   }
 }
 
-/** POST /validate — re-signe un token provisoire valide en VALIDÉ (permanent). */
+/**
+ * POST /validate — vérifie une preuve de complétion et marque le compte
+ * comme validé. Le token N'EST PAS re-signé : il ne change pas, le client
+ * garde le même. Idempotent (rejouer l'appel écrase silencieusement le même
+ * marqueur R2).
+ */
 async function handleValidate(body, env, origin) {
   const token = body && typeof body.token === 'string' ? body.token : null;
   if (!token) return json({ error: 'token requis' }, 400, origin);
@@ -167,21 +169,13 @@ async function handleValidate(body, env, origin) {
   const v = await verifyToken(token, TOKEN_SIGNING_PUBLIC_KEYS);
   if (!v.valid) return json({ error: `token invalide (${v.reason})` }, 401, origin);
 
-  // Idempotent : un token déjà validé est renvoyé tel quel.
-  if (v.claims.status === 'validated') {
-    return json({ token, alreadyValidated: true }, 200, origin);
-  }
-  if (v.claims.status !== 'provisional') {
-    return json({ error: 'statut inattendu' }, 400, origin);
-  }
-
   // ─── Preuve de complétion : des enregistrements existent sous le compte ───
   // La validation n'est pas un appel client libre : on exige que le compte
   // (dérivé du nonce signé) contienne réellement des données de test dans R2.
   if (!env.AUDIO_BUCKET) {
     return json({ error: 'Bucket R2 non lié (preuve de test indisponible)' }, 500, origin);
   }
-  const account = (await sha256hex(v.claims.nonce)).slice(0, 32);
+  const account = (await sha256hex(v.claims.n)).slice(0, 32);
   const min = parseInt(env.MIN_RECORDINGS || '1', 10);
   if (!(await hasEnoughRecordings(env.AUDIO_BUCKET, account, min))) {
     return json(
@@ -190,34 +184,18 @@ async function handleValidate(body, env, origin) {
     );
   }
 
-  // Re-signe en conservant nonce + démographiques + signup_day d'origine.
-  const c = v.claims;
-  const payload = {
-    sex: c.sex,
-    birth_year: c.birth_year,
-    birth_month: c.birth_month,
-    region: c.region,
-    signup_day: c.signup_day,
-    nonce: c.nonce,
-    status: 'validated',
-    sv: SCHEMA_VERSION,
-  };
-  let token2;
-  try {
-    token2 = await signPayload(payload, env.ED25519_PRIVATE_KEY_B64);
-  } catch {
-    return json({ error: 'Échec de signature (clé invalide ?)' }, 500, origin);
-  }
   // Marqueur permanent « ce compte a été validé » (sert au cron de nettoyage
-  // pour distinguer les comptes complétés des provisoires abandonnés).
+  // pour distinguer les comptes complétés des abandonnés, cf. r2-upload).
   try {
     await env.AUDIO_BUCKET.put(`validated/${account}`, new Uint8Array(0), {
       customMetadata: { validated_day: new Date().toISOString().slice(0, 10) },
     });
   } catch {
-    // non bloquant : la validation du token reste effective.
+    // Bloquant : sans marqueur écrit, la complétion n'est pas confirmée —
+    // le client réessaiera (cf. TokenIssuer.markCompleted côté Flutter).
+    return json({ error: "Échec de l'enregistrement de la complétion" }, 500, origin);
   }
-  return json({ token: token2 }, 200, origin);
+  return json({ ok: true }, 200, origin);
 }
 
 /** True si ≥ [min] objets existent sous reusable/<account>/ ou internal/<account>/. */
@@ -232,34 +210,41 @@ async function hasEnoughRecordings(bucket, account, min) {
 }
 
 /**
- * Valide et NORMALISE les claims d'émission. signup_day est IGNORÉ s'il est
- * fourni et recalculé côté serveur (UTC, au jour) : autorité serveur, jamais client.
+ * Valide et NORMALISE les claims d'émission (clés compactes : s/y/m/r). Le
+ * jour d'inscription (`d`) n'est PAS un champ d'entrée : il est calculé côté
+ * serveur (UTC, au jour) — autorité serveur, jamais client.
  */
 function validateClaims(body) {
   if (typeof body !== 'object' || body === null || Array.isArray(body)) {
     return { error: 'Payload invalide' };
   }
-  const allowedInputKeys = new Set(['sex', 'birth_year', 'birth_month', 'region', 'signup_day']);
+  const allowedInputKeys = new Set(['s', 'y', 'm', 'r']);
   for (const k of Object.keys(body)) {
     if (!allowedInputKeys.has(k)) return { error: `Champ non autorisé: ${k}` };
   }
-  const { sex, birth_year, birth_month, region } = body;
-  if (!ALLOWED_SEX.has(sex)) return { error: 'sex invalide' };
-  if (!ALLOWED_REGIONS.has(region)) return { error: 'region invalide' };
-  if (!Number.isInteger(birth_month) || birth_month < 1 || birth_month > 12) {
-    return { error: 'birth_month invalide' };
+  const { s, y, m, r } = body;
+  if (!ALLOWED_SEX.has(s)) return { error: 's (sexe) invalide' };
+  if (!ALLOWED_REGIONS.has(r)) return { error: 'r (région) invalide' };
+  if (!Number.isInteger(m) || m < 1 || m > 12) {
+    return { error: 'm (mois de naissance) invalide' };
   }
   const nowYear = new Date().getUTCFullYear();
-  if (!Number.isInteger(birth_year) || birth_year < nowYear - 100 || birth_year > nowYear - 5) {
-    return { error: 'birth_year invalide' };
+  if (!Number.isInteger(y) || y < nowYear - 100 || y > nowYear - 5) {
+    return { error: 'y (année de naissance) invalide' };
   }
-  const signupDay = new Date().toISOString().slice(0, 10); // YYYY-MM-DD, UTC, au jour
-  return { claims: { sex, birth_year, birth_month, region, signup_day: signupDay } };
+  return { claims: { s, y, m, r } };
+}
+
+/** Jours écoulés depuis epoch UTC (au jour, jamais l'heure). */
+function daysSinceEpoch(date) {
+  return Math.floor(date.getTime() / 86400000);
 }
 
 /** Signe un objet payload complet → JWS compact EdDSA. */
 async function signPayload(payloadObj, privKeyB64) {
-  const header = { alg: 'EdDSA', typ: 'JWT', kid: KID };
+  // Pas de `typ` (inutile, ni le client ni aucun serveur ne le lit) — le
+  // raccourcir fait partie de la réduction de taille du token.
+  const header = { alg: 'EdDSA', kid: KID };
   const headerB64 = b64url(utf8(JSON.stringify(header)));
   const payloadB64 = b64url(utf8(JSON.stringify(payloadObj)));
   const signingInput = utf8(`${headerB64}.${payloadB64}`);

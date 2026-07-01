@@ -58,15 +58,16 @@ token via l'URL déployée et confirmer qu'il passe `verifyAndDecode` côté cli
 ne se voit qu'ainsi).
 
 ```bash
-# Émission d'un token PROVISOIRE (début de parcours, « se connecter ») :
+# Émission du token (immuable, début de parcours, « se connecter ») :
 curl -s -X POST "$URL/" -H 'Content-Type: application/json' \
-  -d '{"sex":"M","birth_year":1998,"birth_month":7,"region":"IDF"}'
-# → {"token":"<3 segments, status:provisional>"}  (signup_day ajouté côté serveur)
+  -d '{"s":"M","y":1998,"m":7,"r":"IDF"}'
+# → {"token":"<3 segments, claims compactes s/y/m/r/d/n/sv>"}  (d = jour, calculé côté serveur)
 
-# Validation à la soumission du test → token VALIDÉ (permanent, même nonce) :
+# Confirmation de complétion à la soumission du test — NE re-signe rien, le
+# client garde le MÊME token :
 curl -s -X POST "$URL/validate" -H 'Content-Type: application/json' \
-  -d '{"token":"<le token provisoire>"}'
-# → {"token":"<status:validated>"}
+  -d '{"token":"<le token émis au début>"}'
+# → {"ok":true}
 ```
 
 ## `GET /geo` — suggestion de région (pré-remplissage)
@@ -81,16 +82,20 @@ aucune coordonnée, IP ni stockée ni loggée** — simple indice corrigeable c�
 client (le menu reste modifiable). ⚠️ Vérifier au déploiement les valeurs réelles
 de `request.cf.regionCode` pour la France (la donnée Cloudflare peut varier).
 
-## Cycle de vie du token (deux états)
+## Cycle de vie du token (immuable)
 
-- `POST /` → **provisoire** (`status:'provisional'`) : émis au début. Tant que le
-  test n'est pas soumis, le token est dans un entre-deux et peut être abandonné.
-- `POST /validate` → **validé** (`status:'validated'`) : re-signe un token
-  provisoire valide en conservant nonce + démographiques + signup_day. Permanent
-  (jamais d'expiration). **Preuve de complétion exigée** : le worker vérifie dans
-  R2 (binding `AUDIO_BUCKET`) qu'au moins `MIN_RECORDINGS` enregistrements
-  existent sous le compte `H(nonce)` avant de valider (→ 400 sinon). Écrit aussi
-  un marqueur `validated/<account>` (utilisé par le cron de nettoyage de r2-upload).
+- `POST /` → émet le token : émis une fois au début, **ne change jamais
+  ensuite**.
+- `POST /validate` → **ne re-signe pas le token**. Vérifie une preuve de
+  complétion (le worker vérifie dans R2, binding `AUDIO_BUCKET`, qu'au moins
+  `MIN_RECORDINGS` enregistrements existent sous le compte `H(nonce)` — sinon
+  400) puis écrit un marqueur `validated/<account>` (utilisé par le cron de
+  nettoyage de r2-upload) et renvoie `{ok:true}`. Idempotent : rejouer l'appel
+  écrase silencieusement le même marqueur.
+
+  L'état « test complété » vit donc **uniquement côté serveur** (ce marqueur
+  R2), jamais dans le token — le client n'a rien à re-persister après
+  `/validate`.
 
   ⚠️ Le tokeniseur a donc besoin du **même bucket R2 que r2-upload** (voir
   `wrangler.toml`, binding `AUDIO_BUCKET`, `jurisdiction = "eu"`). `MIN_RECORDINGS`
@@ -116,11 +121,12 @@ trousseau client. La seule réponse réelle à une fuite = retirer `k1` du trous
 - **Signature** = authenticité d'émission (anti-forge). N'est un **contrôle
   d'accès** que si un serveur **re-vérifie** la signature au moment de servir les
   données (à construire). La vérif côté client est un sanity-check de config.
-- **Identifiant d'accès = le `nonce`** (256 bits, dans les octets signés), jamais
-  la chaîne token complète ni la signature (malléabilité Ed25519).
+- **Identifiant d'accès = le `nonce`** (128 bits, claim `n`, dans les octets
+  signés), jamais la chaîne token complète ni la signature (malléabilité Ed25519).
 - **Bearer token** : qui le détient y accède. Pas de révocation sans état serveur.
-  Perte = définitive, vol = accès. Défense : entropie 256 bits + Hive AES-256 + HTTPS.
+  Perte = définitive, vol = accès. Défense : entropie 128 bits (toujours
+  cryptographiquement massive comme identifiant, pas un secret) + Hive AES-256 + HTTPS.
 - **Anonymat / no-log** : Worker stateless, aucun log d'IP/timestamp/claims/token,
-  aucun `iat` précis (le `signup_day` au jour suffit).
+  aucun `iat` précis (le jour d'inscription, claim `d`, suffit).
 - **CORS ≠ contrôle d'accès** : limiter le volume d'émission via le rate-limiting
   edge de Cloudflare (distinct du no-log applicatif).

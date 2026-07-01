@@ -58,11 +58,13 @@ class TokeniserService {
     }
   }
 
-  /// Re-signe un token provisoire en token VALIDÉ (à la soumission d'un test).
-  /// `null` si non configuré (no-op DEV).
-  Future<String?> validateToken(String token) async {
-    if (!isConfigured) return null;
-    return _postForToken(
+  /// Enregistre côté serveur qu'un token a complété le test (preuve de
+  /// complétion vérifiée par le Worker). Le token N'EST PAS re-signé : il ne
+  /// change pas, on ne récupère qu'une confirmation. `false` si non configuré
+  /// (no-op DEV) ou si le Worker refuse.
+  Future<bool> validateToken(String token) async {
+    if (!isConfigured) return false;
+    return _postForConfirmation(
       Uri.parse('${AppConstants.tokeniserWorkerUrl}/validate'),
       {'token': token},
     );
@@ -104,6 +106,24 @@ class TokeniserService {
         throw const TokeniserException('trop de requêtes (429)');
       default:
         throw TokeniserException('erreur serveur (${resp.statusCode})');
+    }
+  }
+
+  /// POST attendant une simple confirmation (`{ok:true}`, pas de token en
+  /// retour). `true` si le statut HTTP est 200, `false` sinon (erreur réseau
+  /// ou statut non-200 — non bloquant, appelant décide de retenter).
+  Future<bool> _postForConfirmation(Uri uri, Object body) async {
+    try {
+      final resp = await _client
+          .post(
+            uri,
+            headers: const {'Content-Type': 'application/json'},
+            body: jsonEncode(body),
+          )
+          .timeout(AppConstants.connectionTimeout);
+      return resp.statusCode == 200;
+    } catch (_) {
+      return false;
     }
   }
 }

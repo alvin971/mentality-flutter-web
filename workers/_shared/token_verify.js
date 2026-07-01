@@ -8,10 +8,11 @@
  * Renvoie { valid, reason, nonce, claims } :
  *   - valid : booléen
  *   - reason : code d'échec lisible (null si valide)
- *   - nonce : base64url du nonce 256 bits — UNIQUE identifiant d'accès aux
- *             données (jamais la chaîne token complète ni la signature : la
- *             signature Ed25519 est malléable, le nonce est dans les octets signés)
- *   - claims : payload décodé (si valide)
+ *   - nonce : base64url du nonce (128 bits, claim `n`) — UNIQUE identifiant
+ *             d'accès aux données (jamais la chaîne token complète ni la
+ *             signature : la signature Ed25519 est malléable, le nonce est
+ *             dans les octets signés)
+ *   - claims : payload décodé (si valide), clés compactes {s,y,m,r,d,n,sv}
  *
  * Usage (dans un Worker) :
  *   import { verifyToken, TOKEN_SIGNING_PUBLIC_KEYS } from '../_shared/token_verify.js';
@@ -28,8 +29,9 @@ export const TOKEN_SIGNING_PUBLIC_KEYS = {
   k1: '-2eBilftJKpyg_NHaQpXDBwuVFMA2z3JaZgXpDF_rCw',
 };
 
-// Versions de schéma de claims supportées.
-const SUPPORTED_SCHEMA_VERSIONS = new Set([1]);
+// Versions de schéma de claims supportées. Miroir de `kTokenSchemaVersion`
+// dans lib/core/services/token_issuer.dart.
+const SUPPORTED_SCHEMA_VERSIONS = new Set([2]);
 
 // Alphabet base64url strict (anti-octets parasites / homoglyphes).
 const B64URL_SEGMENT = /^[A-Za-z0-9\-_]+$/;
@@ -89,11 +91,11 @@ export async function verifyToken(token, pubKeysByKid) {
     const payload = decodeJson(payloadSeg);
     if (!payload) return fail('payload');
     if (!SUPPORTED_SCHEMA_VERSIONS.has(payload.sv)) return fail('schema_version');
-    if (typeof payload.nonce !== 'string' || !B64URL_SEGMENT.test(payload.nonce)) {
+    if (typeof payload.n !== 'string' || !B64URL_SEGMENT.test(payload.n)) {
       return fail('nonce');
     }
 
-    return { valid: true, reason: null, nonce: payload.nonce, claims: payload };
+    return { valid: true, reason: null, nonce: payload.n, claims: payload };
   } catch {
     return fail('exception');
   }

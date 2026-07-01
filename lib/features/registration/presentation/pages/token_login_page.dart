@@ -1,9 +1,11 @@
 // lib/features/registration/presentation/pages/token_login_page.dart
 //
 // Écran de « connexion » au DÉBUT du parcours : petit formulaire démographique
-// (sexe, mois/année, région) → à la soumission, crée le token PROVISOIRE,
-// le sauvegarde localement, puis donne accès à l'app. Le token passe à VALIDÉ
-// quand un test est soumis (cf. OralTestFlow). Voir PLAN_TOKEN_FIN_DE_TEST.md.
+// (sexe, mois/année, région) → à la soumission, crée le token (immuable), le
+// sauvegarde localement, puis donne accès à l'app. À la soumission d'un test,
+// le token ne change PAS : c'est sa complétion qui est enregistrée côté
+// serveur (cf. OralTestFlow, TokenIssuer.markCompleted). Voir
+// PLAN_TOKEN_FIN_DE_TEST.md.
 //
 // Remplace l'ancien flux d'inscription par téléphone/OTP (RegistrationEmailPage).
 //
@@ -31,7 +33,7 @@ class TokenLoginPage extends StatelessWidget {
       ),
       body: SafeArea(
         child: TokenIssuanceStep(
-          // Le token provisoire est créé à la soumission du formulaire ; une fois
+          // Le token est créé à la soumission du formulaire ; une fois
           // l'utilisateur invité à le sauvegarder, on entre dans l'app.
           onIssued: (_) {
             if (context.mounted) context.go(AppConstants.routeHome);

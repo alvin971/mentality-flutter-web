@@ -21,8 +21,9 @@
 
 ## Le token
 
-- Contenu : `{ sexe, mois_naissance, annee_naissance, region, jour_inscription }` — rien de secret.
+- Contenu (claims compactes, `sv: 2`) : `{ s: sexe, y: annee_naissance, m: mois_naissance, r: region, d: jour_inscription (jours depuis epoch), n: nonce, sv }` — rien de secret. Clés raccourcies volontairement (le token doit rester court à copier/coller) — voir `lib/core/services/token_issuer.dart` (source de vérité côté client) et `workers/tokeniser/index.js` (miroir côté serveur).
 - **Signé**, pas chiffré : une signature (clé privée côté serveur) empêche de fabriquer de faux tokens ; le contenu peut rester en clair (ex. JSON base64url + signature). **Ne PAS chiffrer avec « une clé que moi seul possède »** — ça ferait de nous le détenteur d'un profil ré-identifiable, ce qui contredit l'anonymat.
+- **Immuable** : le token émis au début ne change JAMAIS, y compris à la fin du test. La complétion du test est enregistrée uniquement côté serveur (marqueur R2 `validated/<account>`, `account = SHA-256(nonce)`) — `POST /validate` vérifie une preuve de complétion et pose ce marqueur, il ne re-signe rien.
 - Vérifiable hors-ligne via la clé **publique** au moment de l'usage.
 - Persisté côté client (Hive AES-256, déjà en place via `AuthLocalStore`).
 

@@ -13,37 +13,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../core/constants/token_regions.dart';
 import '../../core/l10n/l10n_ext.dart';
 import '../../core/services/auth_local_store.dart';
 import '../../core/services/token_issuer.dart';
 import '../../core/theme/app_colors.dart';
 import '../../services/tokeniser_service.dart';
 import '../registration/domain/entities/registration_form.dart' show Sex, SexX;
-
-/// Région large (le seul niveau géographique autorisé — jamais code postal).
-class _Region {
-  final String code;
-  final String label;
-  const _Region(this.code, this.label);
-}
-
-const List<_Region> _kRegions = [
-  _Region('IDF', 'Île-de-France'),
-  _Region('ARA', 'Auvergne-Rhône-Alpes'),
-  _Region('BFC', 'Bourgogne-Franche-Comté'),
-  _Region('BRE', 'Bretagne'),
-  _Region('CVL', 'Centre-Val de Loire'),
-  _Region('COR', 'Corse'),
-  _Region('GES', 'Grand Est'),
-  _Region('HDF', 'Hauts-de-France'),
-  _Region('NOR', 'Normandie'),
-  _Region('NAQ', 'Nouvelle-Aquitaine'),
-  _Region('OCC', 'Occitanie'),
-  _Region('PDL', 'Pays de la Loire'),
-  _Region('PAC', "Provence-Alpes-Côte d'Azur"),
-  _Region('DOM', "Outre-mer"),
-  _Region('OTHER', 'Hors France / Autre'),
-];
 
 const List<String> _kMonths = [
   'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
@@ -98,7 +74,7 @@ class _TokenIssuanceStepState extends State<TokenIssuanceStep> {
   Future<void> _prefillRegionFromGeo() async {
     final code = await TokeniserService.instance.suggestRegion();
     if (!mounted || code == null || _regionCode != null) return;
-    if (_kRegions.any((r) => r.code == code)) {
+    if (kTokenRegionCodes.contains(code)) {
       setState(() {
         _regionCode = code;
         _regionAutodetected = true;
@@ -256,8 +232,8 @@ class _TokenIssuanceStepState extends State<TokenIssuanceStep> {
             isExpanded: true,
             decoration: _dropdownDecoration('Sélectionne ta région'),
             items: [
-              for (final r in _kRegions)
-                DropdownMenuItem(value: r.code, child: Text(r.label)),
+              for (final entry in kTokenRegionLabels.entries)
+                DropdownMenuItem(value: entry.key, child: Text(entry.value)),
             ],
             onChanged: (v) => setState(() {
               _regionCode = v;

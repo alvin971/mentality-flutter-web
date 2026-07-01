@@ -17,7 +17,8 @@ import 'package:cryptography/cryptography.dart';
 import '../constants/app_constants.dart';
 
 /// Versions de schéma de claims (`sv`) que cette build sait interpréter.
-const Set<int> _kSupportedSchemaVersions = {1};
+/// Miroir de `SUPPORTED_SCHEMA_VERSIONS` dans workers/_shared/token_verify.js.
+const Set<int> _kSupportedSchemaVersions = {2};
 
 /// Caractères autorisés dans un segment base64url (anti-octets parasites).
 final RegExp _b64urlSegment = RegExp(r'^[A-Za-z0-9\-_]+$');
@@ -46,7 +47,7 @@ class TokenSignatureVerifier {
   /// Vérifie la signature d'un token signé (3 segments) et renvoie ses claims.
   ///
   /// Tout chemin d'erreur renvoie un échec PROPRE (jamais d'exception).
-  /// Un token DEV (2 segments `MENTA1.…`) est considéré « non signé » → échec
+  /// Un token DEV (2 segments `M2.…`) est considéré « non signé » → échec
   /// (utiliser TokenIssuer.tryDecode pour ces tokens DEV en debug).
   static Future<TokenVerificationResult> verifyAndDecode(String token) async {
     try {

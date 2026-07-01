@@ -35,16 +35,19 @@ Future<String> _makeToken({
   return '$headerB64.$payloadB64.${_b64url(sig.bytes)}';
 }
 
-Map<String, dynamic> _validHeader() => {'alg': 'EdDSA', 'typ': 'JWT', 'kid': 'k1'};
+/// Header compact (sv: 2) — plus de `typ`, cf. workers/tokeniser/index.js.
+Map<String, dynamic> _validHeader() => {'alg': 'EdDSA', 'kid': 'k1'};
 
+/// Payload compact (sv: 2) — clés courtes s/y/m/r/d/n/sv, nonce 128 bits,
+/// plus de `status`. Miroir de lib/core/services/token_issuer.dart.
 Map<String, dynamic> _validPayload() => {
-      'sex': 'M',
-      'birth_year': 1998,
-      'birth_month': 7,
-      'region': 'IDF',
-      'signup_day': '2026-06-13',
-      'nonce': _b64url(List<int>.generate(32, (i) => i)),
-      'sv': 1,
+      's': 'M',
+      'y': 1998,
+      'm': 7,
+      'r': 'IDF',
+      'd': 20613,
+      'n': _b64url(List<int>.generate(16, (i) => i)),
+      'sv': 2,
     };
 
 void main() {
@@ -53,9 +56,9 @@ void main() {
         await _makeToken(header: _validHeader(), payload: _validPayload());
     final res = await TokenSignatureVerifier.verifyAndDecode(token);
     expect(res.valid, isTrue, reason: res.reason);
-    expect(res.claims!['sex'], 'M');
-    expect(res.claims!['region'], 'IDF');
-    expect(res.claims!['birth_year'], 1998);
+    expect(res.claims!['s'], 'M');
+    expect(res.claims!['r'], 'IDF');
+    expect(res.claims!['y'], 1998);
   });
 
   test('rejette un payload altéré (1 octet modifié)', () async {
@@ -72,7 +75,7 @@ void main() {
 
   test('rejette alg != EdDSA (anti alg confusion)', () async {
     final token = await _makeToken(
-      header: {'alg': 'none', 'typ': 'JWT', 'kid': 'k1'},
+      header: {'alg': 'none', 'kid': 'k1'},
       payload: _validPayload(),
     );
     final res = await TokenSignatureVerifier.verifyAndDecode(token);
@@ -82,7 +85,7 @@ void main() {
 
   test('rejette un kid inconnu', () async {
     final token = await _makeToken(
-      header: {'alg': 'EdDSA', 'typ': 'JWT', 'kid': 'k999'},
+      header: {'alg': 'EdDSA', 'kid': 'k999'},
       payload: _validPayload(),
     );
     final res = await TokenSignatureVerifier.verifyAndDecode(token);
@@ -92,7 +95,7 @@ void main() {
 
   test('rejette un kid de mauvais type (int)', () async {
     final token = await _makeToken(
-      header: {'alg': 'EdDSA', 'typ': 'JWT', 'kid': 42},
+      header: {'alg': 'EdDSA', 'kid': 42},
       payload: _validPayload(),
     );
     final res = await TokenSignatureVerifier.verifyAndDecode(token);
@@ -121,7 +124,7 @@ void main() {
   });
 
   test('rejette un token DEV non signé (2 segments)', () async {
-    final res = await TokenSignatureVerifier.verifyAndDecode('MENTA1.abc');
+    final res = await TokenSignatureVerifier.verifyAndDecode('M2.abc');
     expect(res.valid, isFalse);
   });
 
@@ -132,18 +135,24 @@ void main() {
         (await TokenSignatureVerifier.verifyAndDecode('a.b.c.d')).valid, isFalse);
   });
 
-  // INTEROP V8 → Dart : ce token a été signé par WebCrypto (Node/workerd, même
-  // moteur que les Cloudflare Workers) avec la clé privée DEV, via
-  // workers/_shared/token_verify.js. Qu'il vérifie ici prouve que le Worker
-  // tokeniseur (V8) et le vérifieur client (Dart) sont interopérables.
-  test('accepte un token signé par WebCrypto V8 (interop Worker→Dart)', () async {
-    const v8Token =
+  // RÉGRESSION — changement de format (sv: 1 → sv: 2) : ce token a été
+  // RÉELLEMENT signé par WebCrypto (V8/Cloudflare Workers) avec la clé
+  // privée DEV, dans l'ANCIEN format verbeux (sv:1, clés longues, nonce 256
+  // bits). Il reste cryptographiquement valide (signature correcte) mais
+  // DOIT être rejeté : c'est la version de schéma qui coupe la compatibilité,
+  // pas la signature. Confirme que la bascule sv:1 → sv:2 est bien étanche.
+  test('rejette un ancien token réel (sv:1, WebCrypto V8) après la bascule sv:2', () async {
+    const oldV8Token =
         'eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCIsImtpZCI6ImsxIn0'
         '.eyJzZXgiOiJGIiwiYmlydGhfeWVhciI6MTk5MCwiYmlydGhfbW9udGgiOjMsInJlZ2lvbiI6Ik9DQyIsInNpZ251cF9kYXkiOiIyMDI2LTA2LTEzIiwibm9uY2UiOiJFNWxoWXJhV0ZqU3RyREc1ejRKcWVnSVhJWE9rdGpZdFpvYmhmNDNXOTBzIiwic3YiOjF9'
         '.Mp00iw5CRtvXjsgc-QUV58J__pXxae4AhtvvupGJzLRyxltX5ERflJKRxOy6V7JmxGJ3v5tj7J5UwPMnMeUxBQ';
-    final res = await TokenSignatureVerifier.verifyAndDecode(v8Token);
-    expect(res.valid, isTrue, reason: res.reason);
-    expect(res.claims!['region'], 'OCC');
-    expect(res.claims!['nonce'], isNotEmpty);
+    final res = await TokenSignatureVerifier.verifyAndDecode(oldV8Token);
+    expect(res.valid, isFalse);
+    expect(res.reason, 'schema_version');
   });
+
+  // TODO(interop) : après déploiement du Worker mis à jour (sv:2), capturer
+  // un NOUVEAU token signé par WebCrypto V8 (cf. README.md §4 « Vérifier
+  // l'interop crypto ») et l'ajouter ici pour re-couvrir l'interop
+  // Worker(V8) → client(Dart) sur le nouveau format compact.
 }

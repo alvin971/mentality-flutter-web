@@ -56,7 +56,7 @@ class _SplashPageState extends State<SplashPage>
   }
 
   /// Accepte un token signé valide. En debug uniquement, tolère un token DEV
-  /// non signé (`MENTA1.…`) pour permettre les tests sans Worker déployé.
+  /// non signé (`M2.…`) pour permettre les tests sans Worker déployé.
   Future<bool> _isTokenAccepted(String? token) => TokenAccess.isAcceptable(token);
 
   @override
