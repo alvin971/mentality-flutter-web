@@ -1,8 +1,9 @@
 // lib/services/tokeniser_service.dart
 //
 // Appelle le Cloudflare Worker `tokeniser` (workers/tokeniser/) :
-//   - POST /          → SIGNE des claims démographiques → token PROVISOIRE.
-//   - POST /validate  → re-signe un token provisoire valide → token VALIDÉ.
+//   - POST /          → SIGNE des claims démographiques → token (immuable).
+//   - POST /validate  → enregistre la complétion côté serveur ({ok:true}) ;
+//                       le token N'EST PAS re-signé et ne change jamais.
 //
 // Le client n'a JAMAIS la clé privée. Si le Worker n'est pas configuré (URL
 // placeholder), `isConfigured` est false et l'appelant utilise le fallback DEV
