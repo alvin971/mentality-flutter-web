@@ -18,62 +18,62 @@ class PictureSpanGenerator {
 
     // Animaux (8 images)
     _imageBank.addAll([
-      ImageStimulus(id: 1, category: ImageCategory.animals, icon: Icons.pets, name: 'Chat', nameKey: 'psImgChat'),
-      ImageStimulus(id: 2, category: ImageCategory.animals, icon: Icons.bug_report, name: 'Insecte', nameKey: 'psImgInsecte'),
-      ImageStimulus(id: 3, category: ImageCategory.animals, icon: Icons.cruelty_free, name: 'Lapin', nameKey: 'psImgLapin'),
-      ImageStimulus(id: 4, category: ImageCategory.animals, icon: Icons.wb_sunny, name: 'Oiseau', nameKey: 'psImgOiseau'),
-      ImageStimulus(id: 5, category: ImageCategory.animals, icon: Icons.flutter_dash, name: 'Poisson', nameKey: 'psImgPoisson'),
-      ImageStimulus(id: 6, category: ImageCategory.animals, icon: Icons.eco, name: 'Tortue', nameKey: 'psImgTortue'),
-      ImageStimulus(id: 7, category: ImageCategory.animals, icon: Icons.stars, name: 'Papillon', nameKey: 'psImgPapillon'),
-      ImageStimulus(id: 8, category: ImageCategory.animals, icon: Icons.coronavirus, name: 'Coccinelle', nameKey: 'psImgCoccinelle'),
+      ImageStimulus(id: 1, category: ImageCategory.animals, icon: Icons.pets, imagePath: 'images/picture_span/01_chat.webp', name: 'Chat', nameKey: 'psImgChat'),
+      ImageStimulus(id: 2, category: ImageCategory.animals, icon: Icons.bug_report, imagePath: 'images/picture_span/02_insecte.webp', name: 'Insecte', nameKey: 'psImgInsecte'),
+      ImageStimulus(id: 3, category: ImageCategory.animals, icon: Icons.cruelty_free, imagePath: 'images/picture_span/03_lapin.webp', name: 'Lapin', nameKey: 'psImgLapin'),
+      ImageStimulus(id: 4, category: ImageCategory.animals, icon: Icons.wb_sunny, imagePath: 'images/picture_span/04_oiseau.webp', name: 'Oiseau', nameKey: 'psImgOiseau'),
+      ImageStimulus(id: 5, category: ImageCategory.animals, icon: Icons.flutter_dash, imagePath: 'images/picture_span/05_poisson.webp', name: 'Poisson', nameKey: 'psImgPoisson'),
+      ImageStimulus(id: 6, category: ImageCategory.animals, icon: Icons.eco, imagePath: 'images/picture_span/06_tortue.webp', name: 'Tortue', nameKey: 'psImgTortue'),
+      ImageStimulus(id: 7, category: ImageCategory.animals, icon: Icons.stars, imagePath: 'images/picture_span/07_papillon.webp', name: 'Papillon', nameKey: 'psImgPapillon'),
+      ImageStimulus(id: 8, category: ImageCategory.animals, icon: Icons.coronavirus, imagePath: 'images/picture_span/08_coccinelle.webp', name: 'Coccinelle', nameKey: 'psImgCoccinelle'),
     ]);
 
     // Objets quotidiens (8 images)
     _imageBank.addAll([
-      ImageStimulus(id: 9, category: ImageCategory.objects, icon: Icons.chair, name: 'Chaise', nameKey: 'psImgChaise'),
-      ImageStimulus(id: 10, category: ImageCategory.objects, icon: Icons.light, name: 'Lampe', nameKey: 'psImgLampe'),
-      ImageStimulus(id: 11, category: ImageCategory.objects, icon: Icons.watch, name: 'Montre', nameKey: 'psImgMontre'),
-      ImageStimulus(id: 12, category: ImageCategory.objects, icon: Icons.umbrella, name: 'Parapluie', nameKey: 'psImgParapluie'),
-      ImageStimulus(id: 13, category: ImageCategory.objects, icon: Icons.backpack, name: 'Sac', nameKey: 'psImgSac'),
-      ImageStimulus(id: 14, category: ImageCategory.objects, icon: Icons.bed, name: 'Lit', nameKey: 'psImgLit'),
-      ImageStimulus(id: 15, category: ImageCategory.objects, icon: Icons.meeting_room, name: 'Porte', nameKey: 'psImgPorte'),
-      ImageStimulus(id: 16, category: ImageCategory.objects, icon: Icons.window, name: 'Fenêtre', nameKey: 'psImgFenetre'),
+      ImageStimulus(id: 9, category: ImageCategory.objects, icon: Icons.chair, imagePath: 'images/picture_span/09_chaise.webp', name: 'Chaise', nameKey: 'psImgChaise'),
+      ImageStimulus(id: 10, category: ImageCategory.objects, icon: Icons.light, imagePath: 'images/picture_span/10_lampe.webp', name: 'Lampe', nameKey: 'psImgLampe'),
+      ImageStimulus(id: 11, category: ImageCategory.objects, icon: Icons.watch, imagePath: 'images/picture_span/11_montre.webp', name: 'Montre', nameKey: 'psImgMontre'),
+      ImageStimulus(id: 12, category: ImageCategory.objects, icon: Icons.umbrella, imagePath: 'images/picture_span/12_parapluie.webp', name: 'Parapluie', nameKey: 'psImgParapluie'),
+      ImageStimulus(id: 13, category: ImageCategory.objects, icon: Icons.backpack, imagePath: 'images/picture_span/13_sac.webp', name: 'Sac', nameKey: 'psImgSac'),
+      ImageStimulus(id: 14, category: ImageCategory.objects, icon: Icons.bed, imagePath: 'images/picture_span/14_lit.webp', name: 'Lit', nameKey: 'psImgLit'),
+      ImageStimulus(id: 15, category: ImageCategory.objects, icon: Icons.meeting_room, imagePath: 'images/picture_span/15_porte.webp', name: 'Porte', nameKey: 'psImgPorte'),
+      ImageStimulus(id: 16, category: ImageCategory.objects, icon: Icons.window, imagePath: 'images/picture_span/16_fenetre.webp', name: 'Fenêtre', nameKey: 'psImgFenetre'),
     ]);
 
     // Nourriture (8 images)
     _imageBank.addAll([
-      ImageStimulus(id: 17, category: ImageCategory.food, icon: Icons.cake, name: 'Gâteau', nameKey: 'psImgGateau'),
-      ImageStimulus(id: 18, category: ImageCategory.food, icon: Icons.coffee, name: 'Café', nameKey: 'psImgCafe'),
-      ImageStimulus(id: 19, category: ImageCategory.food, icon: Icons.local_pizza, name: 'Pizza', nameKey: 'psImgPizza'),
-      ImageStimulus(id: 20, category: ImageCategory.food, icon: Icons.apple, name: 'Pomme', nameKey: 'psImgPomme'),
-      ImageStimulus(id: 21, category: ImageCategory.food, icon: Icons.icecream, name: 'Glace', nameKey: 'psImgGlace'),
-      ImageStimulus(id: 22, category: ImageCategory.food, icon: Icons.fastfood, name: 'Burger', nameKey: 'psImgBurger'),
-      ImageStimulus(id: 23, category: ImageCategory.food, icon: Icons.lunch_dining, name: 'Sandwich', nameKey: 'psImgSandwich'),
-      ImageStimulus(id: 24, category: ImageCategory.food, icon: Icons.egg, name: 'Œuf', nameKey: 'psImgOeuf'),
+      ImageStimulus(id: 17, category: ImageCategory.food, icon: Icons.cake, imagePath: 'images/picture_span/17_gateau.webp', name: 'Gâteau', nameKey: 'psImgGateau'),
+      ImageStimulus(id: 18, category: ImageCategory.food, icon: Icons.coffee, imagePath: 'images/picture_span/18_cafe.webp', name: 'Café', nameKey: 'psImgCafe'),
+      ImageStimulus(id: 19, category: ImageCategory.food, icon: Icons.local_pizza, imagePath: 'images/picture_span/19_pizza.webp', name: 'Pizza', nameKey: 'psImgPizza'),
+      ImageStimulus(id: 20, category: ImageCategory.food, icon: Icons.apple, imagePath: 'images/picture_span/20_pomme.webp', name: 'Pomme', nameKey: 'psImgPomme'),
+      ImageStimulus(id: 21, category: ImageCategory.food, icon: Icons.icecream, imagePath: 'images/picture_span/21_glace.webp', name: 'Glace', nameKey: 'psImgGlace'),
+      ImageStimulus(id: 22, category: ImageCategory.food, icon: Icons.fastfood, imagePath: 'images/picture_span/22_burger.webp', name: 'Burger', nameKey: 'psImgBurger'),
+      ImageStimulus(id: 23, category: ImageCategory.food, icon: Icons.lunch_dining, imagePath: 'images/picture_span/23_sandwich.webp', name: 'Sandwich', nameKey: 'psImgSandwich'),
+      ImageStimulus(id: 24, category: ImageCategory.food, icon: Icons.egg, imagePath: 'images/picture_span/24_oeuf.webp', name: 'Œuf', nameKey: 'psImgOeuf'),
     ]);
 
     // Outils (8 images)
     _imageBank.addAll([
-      ImageStimulus(id: 25, category: ImageCategory.tools, icon: Icons.build, name: 'Marteau', nameKey: 'psImgMarteau'),
-      ImageStimulus(id: 26, category: ImageCategory.tools, icon: Icons.construction, name: 'Clé', nameKey: 'psImgCle'),
-      ImageStimulus(id: 27, category: ImageCategory.tools, icon: Icons.cut, name: 'Ciseaux', nameKey: 'psImgCiseaux'),
-      ImageStimulus(id: 28, category: ImageCategory.tools, icon: Icons.brush, name: 'Pinceau', nameKey: 'psImgPinceau'),
-      ImageStimulus(id: 29, category: ImageCategory.tools, icon: Icons.edit, name: 'Crayon', nameKey: 'psImgCrayon'),
-      ImageStimulus(id: 30, category: ImageCategory.tools, icon: Icons.content_cut, name: 'Couteau', nameKey: 'psImgCouteau'),
-      ImageStimulus(id: 31, category: ImageCategory.tools, icon: Icons.handyman, name: 'Tournevis', nameKey: 'psImgTournevis'),
-      ImageStimulus(id: 32, category: ImageCategory.tools, icon: Icons.settings, name: 'Engrenage', nameKey: 'psImgEngrenage'),
+      ImageStimulus(id: 25, category: ImageCategory.tools, icon: Icons.build, imagePath: 'images/picture_span/25_marteau.webp', name: 'Marteau', nameKey: 'psImgMarteau'),
+      ImageStimulus(id: 26, category: ImageCategory.tools, icon: Icons.construction, imagePath: 'images/picture_span/26_cle.webp', name: 'Clé', nameKey: 'psImgCle'),
+      ImageStimulus(id: 27, category: ImageCategory.tools, icon: Icons.cut, imagePath: 'images/picture_span/27_ciseaux.webp', name: 'Ciseaux', nameKey: 'psImgCiseaux'),
+      ImageStimulus(id: 28, category: ImageCategory.tools, icon: Icons.brush, imagePath: 'images/picture_span/28_pinceau.webp', name: 'Pinceau', nameKey: 'psImgPinceau'),
+      ImageStimulus(id: 29, category: ImageCategory.tools, icon: Icons.edit, imagePath: 'images/picture_span/29_crayon.webp', name: 'Crayon', nameKey: 'psImgCrayon'),
+      ImageStimulus(id: 30, category: ImageCategory.tools, icon: Icons.content_cut, imagePath: 'images/picture_span/30_couteau.webp', name: 'Couteau', nameKey: 'psImgCouteau'),
+      ImageStimulus(id: 31, category: ImageCategory.tools, icon: Icons.handyman, imagePath: 'images/picture_span/31_tournevis.webp', name: 'Tournevis', nameKey: 'psImgTournevis'),
+      ImageStimulus(id: 32, category: ImageCategory.tools, icon: Icons.settings, imagePath: 'images/picture_span/32_engrenage.webp', name: 'Engrenage', nameKey: 'psImgEngrenage'),
     ]);
 
     // Transport (8 images)
     _imageBank.addAll([
-      ImageStimulus(id: 33, category: ImageCategory.transport, icon: Icons.directions_car, name: 'Voiture', nameKey: 'psImgVoiture'),
-      ImageStimulus(id: 34, category: ImageCategory.transport, icon: Icons.directions_bike, name: 'Vélo', nameKey: 'psImgVelo'),
-      ImageStimulus(id: 35, category: ImageCategory.transport, icon: Icons.flight, name: 'Avion', nameKey: 'psImgAvion'),
-      ImageStimulus(id: 36, category: ImageCategory.transport, icon: Icons.train, name: 'Train', nameKey: 'psImgTrain'),
-      ImageStimulus(id: 37, category: ImageCategory.transport, icon: Icons.directions_boat, name: 'Bateau', nameKey: 'psImgBateau'),
-      ImageStimulus(id: 38, category: ImageCategory.transport, icon: Icons.directions_bus, name: 'Bus', nameKey: 'psImgBus'),
-      ImageStimulus(id: 39, category: ImageCategory.transport, icon: Icons.motorcycle, name: 'Moto', nameKey: 'psImgMoto'),
-      ImageStimulus(id: 40, category: ImageCategory.transport, icon: Icons.rocket_launch, name: 'Fusée', nameKey: 'psImgFusee'),
+      ImageStimulus(id: 33, category: ImageCategory.transport, icon: Icons.directions_car, imagePath: 'images/picture_span/33_voiture.webp', name: 'Voiture', nameKey: 'psImgVoiture'),
+      ImageStimulus(id: 34, category: ImageCategory.transport, icon: Icons.directions_bike, imagePath: 'images/picture_span/34_velo.webp', name: 'Vélo', nameKey: 'psImgVelo'),
+      ImageStimulus(id: 35, category: ImageCategory.transport, icon: Icons.flight, imagePath: 'images/picture_span/35_avion.webp', name: 'Avion', nameKey: 'psImgAvion'),
+      ImageStimulus(id: 36, category: ImageCategory.transport, icon: Icons.train, imagePath: 'images/picture_span/36_train.webp', name: 'Train', nameKey: 'psImgTrain'),
+      ImageStimulus(id: 37, category: ImageCategory.transport, icon: Icons.directions_boat, imagePath: 'images/picture_span/37_bateau.webp', name: 'Bateau', nameKey: 'psImgBateau'),
+      ImageStimulus(id: 38, category: ImageCategory.transport, icon: Icons.directions_bus, imagePath: 'images/picture_span/38_bus.webp', name: 'Bus', nameKey: 'psImgBus'),
+      ImageStimulus(id: 39, category: ImageCategory.transport, icon: Icons.motorcycle, imagePath: 'images/picture_span/39_moto.webp', name: 'Moto', nameKey: 'psImgMoto'),
+      ImageStimulus(id: 40, category: ImageCategory.transport, icon: Icons.rocket_launch, imagePath: 'images/picture_span/40_fusee.webp', name: 'Fusée', nameKey: 'psImgFusee'),
     ]);
   }
 
@@ -303,6 +303,10 @@ class ImageStimulus {
   final ImageCategory category;
   final IconData icon;
 
+  /// Chemin de l'asset image réel (WISC-V : stimulus visuel sans texte).
+  /// [icon] sert de fallback si l'image ne charge pas.
+  final String imagePath;
+
   /// Nom français (fallback / valeur par défaut). L'affichage localisé passe
   /// par [nameKey] résolu côté page via l10n.
   final String name;
@@ -315,6 +319,7 @@ class ImageStimulus {
     required this.id,
     required this.category,
     required this.icon,
+    required this.imagePath,
     required this.name,
     required this.nameKey,
   });

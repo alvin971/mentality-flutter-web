@@ -19,6 +19,7 @@ import '../../core/l10n/locale_notifier.dart';
 import '../../core/services/auth_local_store.dart';
 import '../../core/services/token_issuer.dart';
 import '../../core/theme/app_colors.dart';
+import '../../data/reading_corpus_service.dart';
 import '../../data/reading_texts.dart';
 import '../../services/session_manager.dart';
 import 'oral_reading_test.dart';
@@ -60,9 +61,22 @@ class _OralTestFlowState extends State<OralTestFlow> {
   @override
   void initState() {
     super.initState();
-    _shuffledTexts = List.from(kReadingTexts)..shuffle();
     _sessionId = SessionManager.instance.currentSessionId;
-    _checkConsent();
+    _initializeFlow();
+  }
+
+  /// Charge les 5 textes de la session (corpus complet, anti-répétition) en
+  /// parallèle de la vérification du consentement.
+  Future<void> _initializeFlow() async {
+    final results = await Future.wait([
+      ReadingCorpusService.instance.pickSessionTexts(count: 5),
+      ConsentService.instance.hasValidConsent(),
+    ]);
+    if (!mounted) return;
+    setState(() {
+      _shuffledTexts = results[0] as List<ReadingText>;
+      _step = (results[1] as bool) ? _FlowStep.reading : _FlowStep.noConsent;
+    });
   }
 
   @override
@@ -72,15 +86,6 @@ class _OralTestFlowState extends State<OralTestFlow> {
   }
 
   // ─── Consentement ────────────────────────────────────────────────────────────
-
-  Future<void> _checkConsent() async {
-    // Re-sollicite si aucun consentement valide OU si la version du texte a changé.
-    final hasConsent = await ConsentService.instance.hasValidConsent();
-    if (!mounted) return;
-    setState(() {
-      _step = hasConsent ? _FlowStep.reading : _FlowStep.noConsent;
-    });
-  }
 
   /// N'est appelable que lorsque la case obligatoire est cochée.
   /// Enregistre une preuve de consentement granulaire, horodatée et versionnée.

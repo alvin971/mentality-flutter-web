@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:async';
 import '../../../../../core/l10n/l10n_ext.dart';
 import '../../../../../core/theme/app_colors.dart';
-import '../../../../../core/theme/app_typography.dart';
 import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/picture_span_generator.dart';
@@ -21,7 +20,6 @@ class PictureSpanTestPage extends StatefulWidget {
 class _PictureSpanTestPageState extends State<PictureSpanTestPage> {
   final PictureSpanGenerator _generator = PictureSpanGenerator();
   late List<PictureSpanItem> _generatedItems;
-  late List<ImageStimulus> _imageBank;
 
   int _currentItemIndex = 0;
   int _score = 0;
@@ -42,7 +40,6 @@ class _PictureSpanTestPageState extends State<PictureSpanTestPage> {
   void initState() {
     super.initState();
     _generatedItems = _generator.generateComplete12Items();
-    _imageBank = _generator.getImageBank();
   }
 
   @override
@@ -479,24 +476,21 @@ crossAxisAlignment: CrossAxisAlignment.start,
                           borderRadius: BorderRadius.circular(20.r),
                           border: Border.all(color: AppColors.indexWMI, width: 4),
                         ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              currentImage.icon,
-                              size: 100.sp,
-                              color: AppColors.indexWMI,
-                            ),
-                            SizedBox(height: 12.h),
-                            Text(
-                              _imageName(currentImage),
-                              style: TextStyle(
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.bold,
+                        // WISC-V : stimulus visuel seul, sans texte.
+                        child: Padding(
+                          padding: EdgeInsets.all(10.w),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(14.r),
+                            child: Image.asset(
+                              currentImage.imagePath,
+                              fit: BoxFit.cover,
+                              errorBuilder: (_, __, ___) => Icon(
+                                currentImage.icon,
+                                size: 100.sp,
                                 color: AppColors.indexWMI,
                               ),
                             ),
-                          ],
+                          ),
                         ),
                       ),
                     );
@@ -599,7 +593,19 @@ crossAxisAlignment: CrossAxisAlignment.start,
                                         color: AppColors.indexWMI,
                                       ),
                                     ),
-                                    Icon(img?.icon ?? Icons.help, size: 24.sp, color: AppColors.indexWMI),
+                                    img == null
+                                        ? Icon(Icons.help, size: 24.sp, color: AppColors.indexWMI)
+                                        : ClipRRect(
+                                            borderRadius: BorderRadius.circular(6.r),
+                                            child: Image.asset(
+                                              img.imagePath,
+                                              width: 34.w,
+                                              height: 34.w,
+                                              fit: BoxFit.cover,
+                                              errorBuilder: (_, __, ___) =>
+                                                  Icon(img.icon, size: 24.sp, color: AppColors.indexWMI),
+                                            ),
+                                          ),
                                   ],
                                 ),
                               );
@@ -659,28 +665,17 @@ crossAxisAlignment: CrossAxisAlignment.start,
                         padding: EdgeInsets.all(6.w),
                         // FittedBox : le contenu se réduit au lieu de
                         // déborder quand les tuiles sont petites.
-                        child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                image.icon,
-                                size: 48.sp,
-                                color: isSelected ? AppColors.indexWMI : AppColors.grey600,
-                              ),
-                              SizedBox(height: 6.h),
-                              Text(
-                                _imageName(image),
-                                style: TextStyle(
-                                  fontSize: 12.sp,
-                                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                                  color: isSelected ? AppColors.indexWMI : AppColors.grey700,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
+                        // WISC-V : tuile image seule, sans texte.
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.r),
+                          child: Image.asset(
+                            image.imagePath,
+                            fit: BoxFit.contain,
+                            errorBuilder: (_, __, ___) => Icon(
+                              image.icon,
+                              size: 48.sp,
+                              color: isSelected ? AppColors.indexWMI : AppColors.grey600,
+                            ),
                           ),
                         ),
                       ),
