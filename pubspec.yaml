@@ -77,3 +77,4 @@ flutter:
   assets:
     - icons/
     - images/picture_span/
+    - assets/reading_corpus/
