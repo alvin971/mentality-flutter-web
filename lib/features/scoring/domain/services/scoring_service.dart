@@ -57,8 +57,9 @@ class ScoringService {
     }
     final friScore = CompositeScoreTables.computeCompositeScore('FRI', friSum);
 
-    // WMI : Mémoire des Chiffres + Arithmétique
-    final wmiSum = ds! + ar!;
+    // WMI : Mémoire des Chiffres + Arithmétique + Mémoire des Images (PM)
+    // PM est optionnel → si absent, contribution moyenne (note standard 10)
+    final wmiSum = ds! + ar! + (pm ?? 10);
     final wmiScore = CompositeScoreTables.computeCompositeScore('WMI', wmiSum);
 
     // PSI : Code + Recherche de Symboles

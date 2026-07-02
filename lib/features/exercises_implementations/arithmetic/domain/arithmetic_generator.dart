@@ -130,23 +130,16 @@ class ArithmeticItem {
     required this.thetaValue,
   });
 
-  /// Calcule le score obtenu (0, 1, ou 2 avec bonus temps)
+  /// Calcule le score obtenu (0 ou 1).
+  ///
+  /// Barème harmonisé : précision pure, AUCUN bonus de temps (la vitesse ne
+  /// compte que pour les sous-tests Code et Recherche de symboles).
+  /// [timeElapsed] est ignoré (conservé pour la compatibilité de signature).
   int calculateScore(int? userAnswer, int timeElapsed) {
     if (userAnswer == null || userAnswer != correctAnswer) {
       return 0; // Réponse incorrecte
     }
-
-    // Réponse correcte : 1 point de base
-    int score = 1;
-
-    // Bonus de temps si applicable
-    if (hasTimeBonus && timeBonusThreshold != null) {
-      if (timeElapsed <= timeBonusThreshold!) {
-        score += 1; // Bonus de rapidité
-      }
-    }
-
-    return score;
+    return 1; // Réponse correcte
   }
 
   String get difficultyName {

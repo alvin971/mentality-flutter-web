@@ -53,10 +53,13 @@ void main() {
       }
     });
 
-    test('calculateScore : bonne réponse = 1, +1 bonus si rapide, 0 si faux', () {
+    test('calculateScore : bonne réponse = 1, PAS de bonus de rapidité, 0 si faux', () {
+      // Refonte notation (étapes A-C) : la vitesse n'est plus créditée en
+      // Arithmétique (elle ne l'est qu'en Coding/Symbol Search). Une bonne
+      // réponse vaut 1 point, quel que soit le temps.
       final item = ArithmeticGenerator(seed: 9).generateComplete22Items().first;
       expect(item.calculateScore(item.correctAnswer, 999), 1); // correct, lent
-      expect(item.calculateScore(item.correctAnswer, 0), 2); // correct, rapide → bonus
+      expect(item.calculateScore(item.correctAnswer, 0), 1); // correct, rapide → toujours 1 (plus de bonus)
       expect(item.calculateScore(item.correctAnswer + 1, 0), 0); // faux
       expect(item.calculateScore(null, 0), 0); // pas de réponse
     });

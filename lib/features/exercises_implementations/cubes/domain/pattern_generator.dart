@@ -2,11 +2,56 @@ import 'dart:math';
 import '../presentation/widgets/cubes_exercise_widget.dart';
 
 /// Générateur procédural de patterns pour le test des Cubes
-/// Génération 100% aléatoire avec contraintes de difficulté
+/// Banque d'items DÉTERMINISTE et versionnée : tous les participants
+/// affrontent exactement les mêmes items dans le même ordre (comparabilité CTT).
 class CubePatternGenerator {
+  /// Graine de banque versionnée — bumper pour régénérer la banque.
+  /// Tant que cette valeur ne change pas, la banque reste identique pour
+  /// toutes les passations. La changer = régénérer (et invalider la
+  /// comparabilité avec les passations antérieures).
+  static const int kBankSeed = 20260616;
+
+  /// Progression de difficulté CANONIQUE de la banque (14 items, dont 12 cotés).
+  /// 2 exemples (non cotés) + 3 très faciles + 4 modérés + 5 complexes.
+  /// L'ordre est FIGÉ : ne pas réordonner (comparabilité CTT).
+  static const List<DifficultyLevel> kDifficultyProgression = <DifficultyLevel>[
+    // Items 1-2 : Exemples (non cotés)
+    DifficultyLevel.example,
+    DifficultyLevel.example,
+
+    // Items 3-5 : 2×2 simple (2 points, pas de bonus)
+    DifficultyLevel.veryEasy,
+    DifficultyLevel.veryEasy,
+    DifficultyLevel.veryEasy,
+
+    // Items 6-9 : 3×3 modéré avec diagonales (4 points)
+    DifficultyLevel.easy,
+    DifficultyLevel.easy,
+    DifficultyLevel.medium,
+    DifficultyLevel.medium,
+
+    // Items 10-14 : 3×3 complexe, haute cohésion (4 points)
+    DifficultyLevel.mediumHard,
+    DifficultyLevel.mediumHard,
+    DifficultyLevel.hard,
+    DifficultyLevel.veryHard,
+    DifficultyLevel.veryHard,
+  ];
+
   final Random _random;
 
-  CubePatternGenerator({int? seed}) : _random = Random(seed);
+  /// Par défaut, la banque utilise [kBankSeed] → génération DÉTERMINISTE.
+  /// Un [seed] explicite (tests, debug) reste possible, mais `null` ne doit
+  /// JAMAIS retomber sur un Random non seedé : on garde [kBankSeed].
+  CubePatternGenerator({int? seed}) : _random = Random(seed ?? kBankSeed);
+
+  /// Construit la banque complète des 14 items, dans l'ordre canonique
+  /// de [kDifficultyProgression]. Déterministe grâce à [kBankSeed].
+  List<CubePattern> generateBank() {
+    return kDifficultyProgression
+        .map((difficulty) => generatePattern(difficulty))
+        .toList();
+  }
 
   /// Génère un pattern aléatoire selon le niveau de difficulté
   CubePattern generatePattern(DifficultyLevel difficulty) {

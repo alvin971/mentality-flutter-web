@@ -26,37 +26,21 @@ class _CubesTestPageState extends State<CubesTestPage> {
   late final CubePatternGenerator _patternGenerator;
   late List<CubePattern> _generatedPatterns;
 
-  // 14 items selon WAIS-IV : 2 exemples + 3 faciles + 4 moyens + 5 difficiles
-  final List<DifficultyLevel> _difficultyProgression = [
-    // Items 1-2 : Exemples (non cotés)
-    DifficultyLevel.example,
-    DifficultyLevel.example,
-
-    // Items 3-5 : 2×2 simple, symétrique (2 points, pas de bonus)
-    DifficultyLevel.veryEasy,
-    DifficultyLevel.veryEasy,
-    DifficultyLevel.veryEasy,
-
-    // Items 6-9 : 3×3 modéré avec diagonales (4-7 points + bonus)
-    DifficultyLevel.easy,
-    DifficultyLevel.easy,
-    DifficultyLevel.medium,
-    DifficultyLevel.medium,
-
-    // Items 10-14 : 3×3 complexe, haute cohésion (4-7 points + bonus)
-    DifficultyLevel.mediumHard,
-    DifficultyLevel.mediumHard,
-    DifficultyLevel.hard,
-    DifficultyLevel.veryHard,
-    DifficultyLevel.veryHard,
-  ];
+  // 14 items selon WAIS-IV : 2 exemples + 3 faciles + 4 moyens + 5 difficiles.
+  // L'ordre canonique (figé, versionné) est défini une seule fois dans le
+  // générateur → source unique de vérité pour la banque déterministe.
+  final List<DifficultyLevel> _difficultyProgression =
+      CubePatternGenerator.kDifficultyProgression;
 
   int _consecutiveFailures = 0;
 
   @override
   void initState() {
     super.initState();
-    _patternGenerator = CubePatternGenerator();
+    // Graine versionnée explicite → banque déterministe (mêmes items,
+    // même ordre pour toutes les passations, comparabilité CTT).
+    _patternGenerator =
+        CubePatternGenerator(seed: CubePatternGenerator.kBankSeed);
     _generateLevels();
   }
 
@@ -95,26 +79,12 @@ class _CubesTestPageState extends State<CubesTestPage> {
   }
 
   int _calculatePoints(int timeSeconds) {
-    // Items 3-5 (indices 2-4) : 2 points fixes, pas de bonus
+    // Barème harmonisé : précision pure, AUCUN bonus de temps.
+    // Items 3-5 (indices 2-4) : 2 points ; items 6-14 (indices 5-13) : 4 points.
     if (currentLevel >= 2 && currentLevel <= 4) {
       return 2;
     }
-
-    // Items 6-14 (indices 5-13) : 4-7 points base + bonus temps
-    final basePoints = 4;
-
-    // Bonus de temps selon WAIS-IV (en secondes absolues)
-    int bonus = 0;
-    if (timeSeconds <= 15) {
-      bonus = 3; // 1-15 secondes : +3 points
-    } else if (timeSeconds <= 30) {
-      bonus = 2; // 16-30 secondes : +2 points
-    } else if (timeSeconds <= 60) {
-      bonus = 1; // 31-60 secondes : +1 point
-    }
-    // 61+ secondes : 0 bonus
-
-    return basePoints + bonus;
+    return 4;
   }
 
   void _showFeedbackDialog(bool isCorrect, int timeSeconds) {
@@ -190,8 +160,8 @@ class _CubesTestPageState extends State<CubesTestPage> {
     final completedItems = currentLevel + 1;
     final avgTime = completedItems > 0 ? totalTime ~/ completedItems : 0;
 
-    // Score max : Items 3-5 = 2 pts × 3 = 6, Items 6-14 = 7 pts × 9 = 63, Total = 69
-    final maxScore = 69;
+    // Score max : Items 3-5 = 2 pts × 3 = 6, Items 6-14 = 4 pts × 9 = 36, Total = 42
+    final maxScore = 42;
     final percentageCorrect = (score / maxScore * 100).round();
 
     showDialog(

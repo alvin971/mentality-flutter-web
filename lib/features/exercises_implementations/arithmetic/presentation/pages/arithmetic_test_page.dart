@@ -26,7 +26,6 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
 
   int _currentItemIndex = 0;
   int _score = 0;
-  int _bonusPoints = 0;
   int _consecutiveFailures = 0;
 
   // Timer
@@ -160,24 +159,20 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
   void _processAnswer(int? userAnswer) {
     final itemScore = _currentItem.calculateScore(userAnswer, _elapsedSeconds);
     final isCorrect = userAnswer == _currentItem.correctAnswer;
-    final hasBonus = itemScore > 1;
 
     setState(() {
       if (itemScore == 0) {
         _consecutiveFailures++;
       } else {
         _consecutiveFailures = 0;
-        _score += 1; // 1 point pour réponse correcte
-        if (hasBonus) {
-          _bonusPoints += 1; // Bonus de temps
-        }
+        _score += 1; // 1 point pour réponse correcte (précision pure)
       }
     });
 
-    _showFeedback(isCorrect, hasBonus);
+    _showFeedback(isCorrect);
   }
 
-  void _showFeedback(bool isCorrect, bool hasBonus) {
+  void _showFeedback(bool isCorrect) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -201,16 +196,6 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
             if (isCorrect) ...[
               SizedBox(height: 8.h),
               Text(context.l10n.arithTimeSpent(_elapsedSeconds)),
-              if (hasBonus) ...[
-                SizedBox(height: 8.h),
-                Text(
-                  context.l10n.arithSpeedBonus,
-                  style: TextStyle(
-                    color: AppColors.success,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
             ],
           ],
         ),
@@ -248,7 +233,7 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
   void _showFinalResults() {
     _countdownTimer?.cancel();
 
-    final totalScore = _score + _bonusPoints;
+    final totalScore = _score;
 
     showDialog(
       context: context,
@@ -264,9 +249,6 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
                   _currentItemIndex + 1, _generatedItems.length),
               style: TextStyle(fontSize: 16.sp),
             ),
-            SizedBox(height: 12.h),
-            Text(context.l10n.arithBaseScore(_score)),
-            Text(context.l10n.arithBonusScore(_bonusPoints)),
             SizedBox(height: 16.h),
             Text(
               context.l10n.arithTotalScore(totalScore),
@@ -281,7 +263,7 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
         actions: [
           TextButton(
             onPressed: () {
-              final totalScore = _score + _bonusPoints;
+              final totalScore = _score;
               Navigator.pop(context);
               Navigator.pop(context, totalScore);
             },
@@ -344,12 +326,6 @@ crossAxisAlignment: CrossAxisAlignment.start,
                 context.l10n.arithInfoTimeTitle,
                 context.l10n.arithInfoTimeSubtitle,
                 Icons.timer_outlined,
-              ),
-              SizedBox(height: 12.h),
-              _buildInfoCard(
-                context.l10n.arithInfoBonusTitle,
-                context.l10n.arithInfoBonusSubtitle,
-                Icons.speed_outlined,
               ),
               SizedBox(height: 12.h),
               _buildInfoCard(
