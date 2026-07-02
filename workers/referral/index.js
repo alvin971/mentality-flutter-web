@@ -2,26 +2,29 @@
  * Cloudflare Worker — Referral / déblocage des résultats par paliers.
  *
  * Le résultat du test complet est retenu derrière 3 paliers séquentiels :
- *   stage 1 : inviter 3 amis (lien /invite?ref=<code> lié au token)
- *   stage 2 : attendre que les 3 filleuls TERMINENT leur test complet
+ *   stage 1 : inviter des amis (lien /invite?ref=<code> lié au token)
+ *   stage 2 : (affichage) attendre que les filleuls TERMINENT leur test
  *   stage 3 : suivre le compte Instagram (déclaratif + délai serveur)
  *   stage 4 : résultat débloqué
  *
  * Endpoints (auth = header X-Mentality-Token, signature Ed25519 re-vérifiée
  * serveur via workers/_shared/token_verify.js — cf. r2-upload) :
- *   POST /progress/init   → crée la ligne unlock_progress (idempotent) ;
- *                           si body.referrerCode présent, valide le parrainage
- *                           (le filleul vient de FINIR son test → completed).
- *   GET  /progress        → état courant + avancement des paliers ; c'est ICI
- *                           que les transitions de stage sont calculées
- *                           (autorité serveur, jamais le client).
- *   POST /instagram       → enregistre le pseudo (stage 2→3 requis).
+ *   POST /progress/init   → crée l'état (idempotent) ; si body.referrerCode
+ *                           présent, valide le parrainage (le filleul vient de
+ *                           FINIR son test → compté comme complété).
+ *   GET  /progress        → état courant + transitions de stage (autorité
+ *                           serveur, jamais le client).
+ *   POST /instagram       → enregistre le pseudo (palier parrainage requis).
  *   GET  /resolve/<code>  → public : le code referral existe-t-il ? (landing)
  *
- * Stockage : Supabase via PostgREST. Secrets worker (wrangler secret put) :
- *   SUPABASE_URL           https://<projet>.supabase.co
- *   SUPABASE_SERVICE_KEY   clé service_role (JAMAIS côté client)
+ * Stockage : Cloudflare KV (binding REFERRAL_KV) — aucun secret externe.
  * Var : INSTA_UNLOCK_DELAY_MINUTES (délai de « vérification » avant stage 4).
+ *
+ * Modèle de clés KV :
+ *   progress:<account>        → JSON de l'état du parrain (voir emptyProgress)
+ *   code:<referralCode>       → <account> propriétaire du code (unicité + resolve)
+ *   referee:<account>         → <referrerCode> (écrit UNE fois : 1 filleul = 1 parrain)
+ *   ref:<referrerCode>:<acct> → timestamp ISO (une entrée = un filleul ayant fini)
  *
  * ANONYMAT : seule la partition account = SHA256(nonce)[:32] est stockée —
  * aucune donnée personnelle hormis le pseudo Instagram fourni volontairement.
@@ -45,8 +48,8 @@ export default {
     if (!ALLOWED_ORIGINS.includes(origin) && origin !== '') {
       return json({ error: 'Origin non autorisée' }, 403, origin);
     }
-    if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_KEY) {
-      return json({ error: 'Supabase non configuré (secrets manquants)' }, 500, origin);
+    if (!env.REFERRAL_KV) {
+      return json({ error: 'KV non lié (REFERRAL_KV)' }, 500, origin);
     }
 
     const url = new URL(request.url);
@@ -56,15 +59,15 @@ export default {
     if (request.method === 'GET' && path.startsWith('/resolve/')) {
       const code = path.slice('/resolve/'.length);
       if (!/^[a-z0-9]{8}$/.test(code)) return json({ valid: false }, 200, origin);
-      const rows = await sbSelect(env, 'unlock_progress', `referral_code=eq.${code}&select=referral_code`);
-      return json({ valid: Array.isArray(rows) && rows.length > 0 }, 200, origin);
+      const owner = await env.REFERRAL_KV.get(`code:${code}`);
+      return json({ valid: owner !== null }, 200, origin);
     }
 
-    // ─── Tout le reste exige un token signé valide ──────────────────────────
+    // ─── Tout le reste exige un token exploitable ───────────────────────────
     const token = request.headers.get('X-Mentality-Token');
-    const v = await verifyToken(token, TOKEN_SIGNING_PUBLIC_KEYS);
-    if (!v.valid) return json({ error: `token invalide (${v.reason})` }, 401, origin);
-    const account = (await sha256hex(v.nonce)).slice(0, 32);
+    const nonce = await resolveNonce(token);
+    if (!nonce) return json({ error: 'token invalide' }, 401, origin);
+    const account = (await sha256hex(nonce)).slice(0, 32);
 
     try {
       if (request.method === 'POST' && path === '/progress/init') {
@@ -89,39 +92,106 @@ export default {
   },
 };
 
+// Versions de schéma de claims supportées (miroir de kTokenSchemaVersion).
+const SUPPORTED_SV = new Set([2]);
+const B64URL = /^[A-Za-z0-9\-_]+$/;
+
+/**
+ * Extrait le nonce (claim `n`) d'un token, quelle que soit sa forme :
+ *   1. Token signé Ed25519 (chemin nominal si le tokeniser est déployé).
+ *   2. Token DEV non signé « M2.<base64url(claims)> ».
+ * L'app Mentality accepte volontairement les tokens non signés en release tant
+ * que le tokeniser n'est pas déployé (AppConstants.kAllowUnsignedTokenInRelease)
+ * — ce gate marketing (données non sensibles) applique le même modèle de
+ * confiance pour ne bloquer aucun utilisateur réel. Renvoie null si inexploitable.
+ */
+async function resolveNonce(token) {
+  if (typeof token !== 'string' || token.length === 0) return null;
+  const v = await verifyToken(token, TOKEN_SIGNING_PUBLIC_KEYS);
+  if (v.valid) return v.nonce;
+  if (token.startsWith('M2.')) {
+    const claims = decodeB64urlJson(token.slice(3));
+    if (claims &&
+        typeof claims.n === 'string' &&
+        B64URL.test(claims.n) &&
+        SUPPORTED_SV.has(claims.sv)) {
+      return claims.n;
+    }
+  }
+  return null;
+}
+
+function decodeB64urlJson(seg) {
+  try {
+    let b64 = seg.replace(/-/g, '+').replace(/_/g, '/');
+    while (b64.length % 4 !== 0) b64 += '=';
+    const bin = atob(b64);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    const obj = JSON.parse(new TextDecoder().decode(bytes));
+    return obj && typeof obj === 'object' && !Array.isArray(obj) ? obj : null;
+  } catch {
+    return null;
+  }
+}
+
+function emptyProgress(account, code, nowIso) {
+  return {
+    account,
+    referralCode: code,
+    stage: 1,
+    instagramHandle: null,
+    instagramSubmittedAt: null,
+    instagramVerified: null, // true/false = contrôle manuel admin
+    unlockedAt: null,
+    createdAt: nowIso,
+  };
+}
+
+async function getProgress(env, account) {
+  const raw = await env.REFERRAL_KV.get(`progress:${account}`);
+  return raw ? JSON.parse(raw) : null;
+}
+
+async function putProgress(env, row) {
+  await env.REFERRAL_KV.put(`progress:${row.account}`, JSON.stringify(row));
+}
+
+/** Nombre de filleuls ayant terminé leur test pour un code donné. */
+async function countCompletedReferrals(env, code) {
+  const listed = await env.REFERRAL_KV.list({ prefix: `ref:${code}:` });
+  return listed.keys.length;
+}
+
 /**
  * POST /progress/init — appelé à la FIN du test complet.
- * Idempotent : recrée jamais la ligne, renvoie l'état courant.
- * Si referrerCode est fourni (l'utilisateur est arrivé via un lien d'invite),
- * c'est le moment où le filleul VALIDE son parrain : son test vient d'être
- * terminé, on écrit referrals(referee_account, test_completed_at=now()).
+ * Idempotent : ne recrée jamais l'état, renvoie l'état courant.
+ * Si referrerCode est fourni (arrivée via lien d'invitation), c'est le moment
+ * où le filleul VALIDE son parrain : son test vient d'être terminé.
  */
 async function handleInit(env, origin, account, body) {
-  let row = await getProgressRow(env, account);
+  const nowIso = isoNow();
+  let row = await getProgress(env, account);
   if (!row) {
     const code = await generateUniqueCode(env);
-    const inserted = await sbInsert(env, 'unlock_progress', {
-      account,
-      referral_code: code,
-      stage: 1,
-    });
-    row = inserted && inserted[0] ? inserted[0] : await getProgressRow(env, account);
-    if (!row) return json({ error: 'Création du suivi impossible' }, 500, origin);
+    row = emptyProgress(account, code, nowIso);
+    await putProgress(env, row);
+    await env.REFERRAL_KV.put(`code:${code}`, account);
   }
 
-  // Validation du parrainage (une seule fois, jamais soi-même).
-  const refCode = typeof body.referrerCode === 'string' ? body.referrerCode.trim().toLowerCase() : '';
-  if (/^[a-z0-9]{8}$/.test(refCode) && refCode !== row.referral_code) {
-    const parent = await sbSelect(env, 'unlock_progress',
-      `referral_code=eq.${refCode}&select=referral_code,account`);
-    if (parent.length > 0 && parent[0].account !== account) {
-      // Insert unique : si le filleul a déjà validé un parrain, PostgREST
-      // renvoie un conflit (409) qu'on ignore silencieusement.
-      await sbInsert(env, 'referrals', {
-        referrer_code: refCode,
-        referee_account: account,
-        test_completed_at: new Date().toISOString(),
-      }, /*onConflict=*/'referee_account');
+  // Validation du parrainage : une seule fois (referee:<account> écrit une
+  // fois), jamais soi-même, et le code doit exister.
+  const refCode = typeof body.referrerCode === 'string'
+    ? body.referrerCode.trim().toLowerCase()
+    : '';
+  if (/^[a-z0-9]{8}$/.test(refCode) && refCode !== row.referralCode) {
+    const already = await env.REFERRAL_KV.get(`referee:${account}`);
+    if (!already) {
+      const parentAccount = await env.REFERRAL_KV.get(`code:${refCode}`);
+      if (parentAccount && parentAccount !== account) {
+        await env.REFERRAL_KV.put(`referee:${account}`, refCode);
+        await env.REFERRAL_KV.put(`ref:${refCode}:${account}`, nowIso);
+      }
     }
   }
 
@@ -130,7 +200,7 @@ async function handleInit(env, origin, account, body) {
 
 /** GET /progress — état courant + transitions de stage (autorité serveur). */
 async function handleProgress(env, origin, account) {
-  const row = await getProgressRow(env, account);
+  const row = await getProgress(env, account);
   if (!row) return json({ error: 'Aucun suivi — appeler /progress/init' }, 404, origin);
   return buildProgressResponse(env, origin, row);
 }
@@ -142,134 +212,79 @@ async function handleInstagram(env, origin, account, body) {
   if (!/^[A-Za-z0-9._]{1,30}$/.test(handle)) {
     return json({ error: 'Pseudo Instagram invalide' }, 400, origin);
   }
-  const row = await getProgressRow(env, account);
+  const row = await getProgress(env, account);
   if (!row) return json({ error: 'Aucun suivi — appeler /progress/init' }, 404, origin);
 
-  // Le pseudo n'est accepté qu'une fois le palier parrainage franchi.
-  const completed = await countCompletedReferrals(env, row.referral_code);
+  const completed = await countCompletedReferrals(env, row.referralCode);
   if (completed < REQUIRED_REFERRALS) {
     return json({ error: 'Palier parrainage non terminé' }, 403, origin);
   }
-  if (!row.instagram_submitted_at) {
-    await sbPatch(env, 'unlock_progress', `account=eq.${row.account}`, {
-      instagram_handle: handle,
-      instagram_submitted_at: new Date().toISOString(),
-      stage: 3,
-    });
+  if (!row.instagramSubmittedAt) {
+    row.instagramHandle = handle;
+    row.instagramSubmittedAt = isoNow();
+    row.stage = 3;
+    await putProgress(env, row);
   }
-  return buildProgressResponse(env, origin, await getProgressRow(env, account));
+  return buildProgressResponse(env, origin, row);
 }
 
 /**
  * Calcule l'état renvoyé au client ET applique les transitions de stage :
- *   1→3 : ≥3 filleuls ont terminé leur test (le stage 2 « attente » est un
- *         état d'AFFICHAGE : filleuls invités mais pas tous terminés)
+ *   →3 : ≥REQUIRED filleuls ont terminé leur test
  *   3→4 : pseudo Insta soumis depuis plus de INSTA_UNLOCK_DELAY_MINUTES et
- *         pas invalidé manuellement (instagram_verified !== false).
+ *         non invalidé manuellement (instagramVerified !== false).
  */
 async function buildProgressResponse(env, origin, row) {
-  const referees = await sbSelect(env, 'referrals',
-    `referrer_code=eq.${row.referral_code}&select=clicked_at,test_completed_at&order=clicked_at.asc`);
-  const completedCount = referees.filter((r) => r.test_completed_at).length;
-
+  const completedCount = await countCompletedReferrals(env, row.referralCode);
   let stage = row.stage;
+  let dirty = false;
 
   if (stage < 3 && completedCount >= REQUIRED_REFERRALS) {
     stage = 3;
-    await sbPatch(env, 'unlock_progress', `account=eq.${row.account}`, { stage });
+    row.stage = 3;
+    dirty = true;
   }
 
-  if (stage === 3 && row.instagram_submitted_at && row.instagram_verified !== false) {
+  if (stage === 3 && row.instagramSubmittedAt && row.instagramVerified !== false) {
     const delayMin = parseInt(env.INSTA_UNLOCK_DELAY_MINUTES || '120', 10);
-    const elapsedMs = Date.now() - new Date(row.instagram_submitted_at).getTime();
+    const elapsedMs = Date.now() - new Date(row.instagramSubmittedAt).getTime();
     if (elapsedMs >= delayMin * 60000) {
       stage = 4;
-      await sbPatch(env, 'unlock_progress', `account=eq.${row.account}`, {
-        stage,
-        unlocked_at: new Date().toISOString(),
-      });
+      row.stage = 4;
+      row.unlockedAt = isoNow();
+      dirty = true;
     }
   }
 
+  if (dirty) await putProgress(env, row);
+
   return json({
     stage,
-    referralCode: row.referral_code,
-    referees: referees.map((r) => ({ completed: !!r.test_completed_at })),
+    referralCode: row.referralCode,
+    // completedReferrals = filleuls ayant réellement terminé leur test.
     completedReferrals: completedCount,
     requiredReferrals: REQUIRED_REFERRALS,
-    instagramHandle: row.instagram_handle || null,
-    instagramSubmitted: !!row.instagram_submitted_at,
+    instagramHandle: row.instagramHandle || null,
+    instagramSubmitted: !!row.instagramSubmittedAt,
   }, 200, origin);
 }
 
-async function getProgressRow(env, account) {
-  const rows = await sbSelect(env, 'unlock_progress', `account=eq.${account}&select=*`);
-  return rows.length > 0 ? rows[0] : null;
-}
-
-async function countCompletedReferrals(env, code) {
-  const rows = await sbSelect(env, 'referrals',
-    `referrer_code=eq.${code}&test_completed_at=not.is.null&select=id`);
-  return rows.length;
-}
-
-/** Code court a-z0-9 (8 chars, ~41 bits) unique en base. */
+/** Code court a-z0-9 (8 chars, ~41 bits) unique en KV. */
 async function generateUniqueCode(env) {
   const alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789';
-  for (let attempt = 0; attempt < 5; attempt++) {
+  for (let attempt = 0; attempt < 6; attempt++) {
     const bytes = new Uint8Array(8);
     crypto.getRandomValues(bytes);
     let code = '';
     for (const b of bytes) code += alphabet[b % alphabet.length];
-    const dup = await sbSelect(env, 'unlock_progress', `referral_code=eq.${code}&select=referral_code`);
-    if (dup.length === 0) return code;
+    const exists = await env.REFERRAL_KV.get(`code:${code}`);
+    if (!exists) return code;
   }
   throw new Error('Impossible de générer un code unique');
 }
 
-// ─── Client PostgREST minimal (service_role, jamais exposé) ──────────────────
-
-function sbHeaders(env, extra = {}) {
-  return {
-    apikey: env.SUPABASE_SERVICE_KEY,
-    Authorization: `Bearer ${env.SUPABASE_SERVICE_KEY}`,
-    'Content-Type': 'application/json',
-    ...extra,
-  };
-}
-
-async function sbSelect(env, table, query) {
-  const resp = await fetch(`${env.SUPABASE_URL}/rest/v1/${table}?${query}`, {
-    headers: sbHeaders(env),
-  });
-  if (!resp.ok) throw new Error(`select ${table}: ${resp.status}`);
-  return resp.json();
-}
-
-async function sbInsert(env, table, row, onConflict = null) {
-  const headers = sbHeaders(env, {
-    Prefer: onConflict
-      ? 'resolution=ignore-duplicates,return=representation'
-      : 'return=representation',
-  });
-  const qs = onConflict ? `?on_conflict=${onConflict}` : '';
-  const resp = await fetch(`${env.SUPABASE_URL}/rest/v1/${table}${qs}`, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify(row),
-  });
-  if (resp.status === 409 && onConflict) return [];
-  if (!resp.ok) throw new Error(`insert ${table}: ${resp.status}`);
-  return resp.json();
-}
-
-async function sbPatch(env, table, query, patch) {
-  const resp = await fetch(`${env.SUPABASE_URL}/rest/v1/${table}?${query}`, {
-    method: 'PATCH',
-    headers: sbHeaders(env),
-    body: JSON.stringify(patch),
-  });
-  if (!resp.ok) throw new Error(`patch ${table}: ${resp.status}`);
+function isoNow() {
+  return new Date().toISOString();
 }
 
 // ─── CORS / réponses (même pattern que workers/tokeniser) ─────────────────────

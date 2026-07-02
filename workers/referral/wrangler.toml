@@ -4,14 +4,15 @@ compatibility_date = "2025-01-01"
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Worker du système de déblocage des résultats par paliers (referral).
-# Stockage : Supabase (PostgREST) — exécuter d'abord schema.sql dans Supabase.
-#
-# Secrets requis (via CLI, JAMAIS commités) :
-#   wrangler secret put SUPABASE_URL          # https://<projet>.supabase.co
-#   wrangler secret put SUPABASE_SERVICE_KEY  # clé service_role
+# Stockage : Cloudflare KV (aucun secret externe requis).
 # ─────────────────────────────────────────────────────────────────────────────
+
+# Namespace KV créé via : wrangler kv namespace create REFERRAL_KV
+[[kv_namespaces]]
+binding = "REFERRAL_KV"
+id = "6c70f3aab78c4aeb92d1255f62edbafd"
 
 [vars]
 # Délai (minutes) entre la soumission du pseudo Instagram et le déblocage
-# (« vérification en cours »). Réduire à 1 en environnement de test.
+# (« vérification en cours »). Réduire pour tester le parcours de bout en bout.
 INSTA_UNLOCK_DELAY_MINUTES = "120"

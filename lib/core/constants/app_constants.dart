@@ -81,7 +81,7 @@ class AppConstants {
   /// reste le placeholder, le gate est désactivé (résultats affichés
   /// directement, comportement historique).
   static const String referralWorkerUrl =
-      'https://mentality-referral.YOUR_SUBDOMAIN.workers.dev';
+      'https://mentality-referral.devgreenpro.workers.dev';
 
   /// Active le déblocage des résultats par paliers (parrainage + Instagram).
   /// Nécessite aussi une [referralWorkerUrl] réelle pour être effectif.
@@ -92,8 +92,9 @@ class AppConstants {
       'https://mentality-flutter-web.pages.dev/#/invite';
 
   /// Compte Instagram à suivre pour le dernier palier de déblocage.
-  static const String instagramHandle = 'mentality';
-  static const String instagramUrl = 'https://www.instagram.com/mentality/';
+  static const String instagramHandle = 'mental_e.t';
+  static const String instagramUrl =
+      'https://www.instagram.com/mental_e.t?igsh=b3hvM25zdHh2bm0y';
 
   /// Clés PUBLIQUES Ed25519 (32 octets, base64url) pour vérifier les tokens
   /// signés, indexées par `kid`. Ce n'est PAS un secret.

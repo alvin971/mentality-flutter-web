@@ -144,11 +144,11 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
 
   Widget _buildSteps(dynamic l10n) {
     final p = _progress!;
-    // Palier 2 révélé seulement quand les 3 invités ont rejoint mais que
-    // tous n'ont pas terminé ; palier 3 seulement quand le parrainage est
+    // Palier 2 (attente) révélé dès qu'au moins un filleul a terminé mais que
+    // le compte n'est pas atteint ; palier 3 seulement quand le parrainage est
     // acquis — jamais tous les paliers affichés d'un coup.
     final referralsDone = p.completedReferrals >= p.requiredReferrals;
-    final showWaiting = !referralsDone && p.invitedReferrals >= p.requiredReferrals;
+    final showWaiting = !referralsDone && p.completedReferrals >= 1;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -201,8 +201,8 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
           ),
           SizedBox(height: 14.h),
           _progressCounter(
-            l10n.ugInviteCounter(p.invitedReferrals, p.requiredReferrals),
-            p.invitedReferrals / p.requiredReferrals,
+            l10n.ugInviteCounter(p.completedReferrals, p.requiredReferrals),
+            p.completedReferrals / p.requiredReferrals,
           ),
         ],
       ),
@@ -219,7 +219,7 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
           SizedBox(height: 10.h),
           Text(l10n.ugStep2Body, style: AppText.bodySmall()),
           SizedBox(height: 16.h),
-          for (var i = 0; i < p.invitedReferrals; i++)
+          for (var i = 0; i < p.requiredReferrals; i++)
             Padding(
               padding: EdgeInsets.only(bottom: 8.h),
               child: Row(

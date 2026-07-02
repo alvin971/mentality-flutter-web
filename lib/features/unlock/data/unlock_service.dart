@@ -18,9 +18,10 @@ class UnlockProgress {
   /// 1=inviter, 2=attente filleuls, 3=instagram, 4=débloqué.
   final int stage;
   final String referralCode;
+
+  /// Nombre de filleuls ayant réellement TERMINÉ leur test complet.
   final int completedReferrals;
   final int requiredReferrals;
-  final int invitedReferrals;
   final bool instagramSubmitted;
 
   const UnlockProgress({
@@ -28,7 +29,6 @@ class UnlockProgress {
     required this.referralCode,
     required this.completedReferrals,
     required this.requiredReferrals,
-    required this.invitedReferrals,
     required this.instagramSubmitted,
   });
 
@@ -37,7 +37,6 @@ class UnlockProgress {
         referralCode: j['referralCode'] as String? ?? '',
         completedReferrals: (j['completedReferrals'] as num?)?.toInt() ?? 0,
         requiredReferrals: (j['requiredReferrals'] as num?)?.toInt() ?? 3,
-        invitedReferrals: (j['referees'] as List?)?.length ?? 0,
         instagramSubmitted: j['instagramSubmitted'] as bool? ?? false,
       );
 
