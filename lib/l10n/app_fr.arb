@@ -97,7 +97,7 @@
   "@assessBeforeStartHeader": {
     "description": "En-tête de la carte de consignes avant le bilan"
   },
-  "assessBeforeStartBody": "Durée estimée 30 à 45 minutes. Calme et concentration requis.",
+  "assessBeforeStartBody": "Durée estimée 60 à 90 minutes. Calme et concentration requis.",
   "@assessBeforeStartBody": {
     "description": "Texte de consigne avant le bilan"
   },
@@ -915,7 +915,7 @@
   "@homeActionStartTitle": {
     "description": "Home action card 1 title"
   },
-  "homeActionStartSubtitle": "Durée : 30 – 45 minutes",
+  "homeActionStartSubtitle": "Durée : 60 – 90 minutes",
   "@homeActionStartSubtitle": {
     "description": "Home action card 1 subtitle"
   },
@@ -3642,6 +3642,34 @@
   "vocabTipContext": "• Expliquez le sens avec contexte",
   "@vocabTipContext": {
     "description": "Vocabulaire — conseil 3 de l'encart"
+  },
+  "demoBadge": "ENTRAÎNEMENT",
+  "@demoBadge": {
+    "description": "Phase d'entraînement — libellé d'en-tête générique (partagé entre exercices)"
+  },
+  "demoNotice": "Entraînement — cet essai ne compte pas.",
+  "@demoNotice": {
+    "description": "Phase d'entraînement — bandeau expliquant que l'essai n'est pas noté"
+  },
+  "demoStart": "Commencer le test",
+  "@demoStart": {
+    "description": "Phase d'entraînement — bouton pour passer au test réel"
+  },
+  "demoRetry": "Réessayer",
+  "@demoRetry": {
+    "description": "Phase d'entraînement — bouton pour refaire l'essai"
+  },
+  "demoContinue": "Continuer",
+  "@demoContinue": {
+    "description": "Phase d'entraînement — bouton neutre pour poursuivre (exercices sans bonne/mauvaise réponse automatique)"
+  },
+  "demoWellDone": "Bonne réponse !",
+  "@demoWellDone": {
+    "description": "Phase d'entraînement — retour positif après un essai correct"
+  },
+  "demoTryAgain": "Pas tout à fait — réessayez",
+  "@demoTryAgain": {
+    "description": "Phase d'entraînement — retour après un essai incorrect"
   },
   "ugTitle": "Ton résultat est prêt",
   "ugEyebrow": "Dernières étapes",

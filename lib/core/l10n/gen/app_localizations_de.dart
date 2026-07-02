@@ -124,7 +124,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get assessBeforeStartBody =>
-      'Voraussichtliche Dauer 30 bis 45 Minuten. Ruhe und Konzentration erforderlich.';
+      'Voraussichtliche Dauer 60 bis 90 Minuten. Ruhe und Konzentration erforderlich.';
 
   @override
   String get assessLaunchFullAssessment => 'Vollständige Untersuchung starten';
@@ -724,7 +724,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get homeActionStartTitle => 'Untersuchung beginnen';
 
   @override
-  String get homeActionStartSubtitle => 'Dauer: 30 – 45 Minuten';
+  String get homeActionStartSubtitle => 'Dauer: 60 – 90 Minuten';
 
   @override
   String get homeActionResultsTitle => 'Meine Ergebnisse';
@@ -2607,6 +2607,27 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get vocabTipContext => '• Erklären Sie die Bedeutung mit Kontext';
+
+  @override
+  String get demoBadge => 'ÜBUNG';
+
+  @override
+  String get demoNotice => 'Übung – dieser Versuch zählt nicht.';
+
+  @override
+  String get demoStart => 'Test starten';
+
+  @override
+  String get demoRetry => 'Erneut versuchen';
+
+  @override
+  String get demoContinue => 'Weiter';
+
+  @override
+  String get demoWellDone => 'Richtig!';
+
+  @override
+  String get demoTryAgain => 'Nicht ganz – versuchen Sie es erneut';
 
   @override
   String get ugTitle => 'Dein Ergebnis ist bereit';

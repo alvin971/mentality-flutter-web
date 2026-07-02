@@ -165,14 +165,19 @@ void main() {
           tester, const FigureWeightsTestPage(), 'Valider');
     });
 
-    testWidgets('Vocabulaire — Valider visible', (tester) async {
+    // Vocabulaire et Similitudes s'ouvrent désormais sur l'écran
+    // d'entraînement (verbal, sans validation notée) : le bouton primaire
+    // visible sans scroll est « Commencer le test ».
+    testWidgets('Vocabulaire (entraînement) — Commencer visible',
+        (tester) async {
       await expectValidateVisible(
-          tester, const VocabularyTestPage(), 'Valider');
+          tester, const VocabularyTestPage(), 'Commencer');
     });
 
-    testWidgets('Similitudes — Valider visible', (tester) async {
+    testWidgets('Similitudes (entraînement) — Commencer visible',
+        (tester) async {
       await expectValidateVisible(
-          tester, const SimilaritiesTestPage(), 'Valider');
+          tester, const SimilaritiesTestPage(), 'Commencer');
     });
 
     testWidgets('Information — Valider visible', (tester) async {
