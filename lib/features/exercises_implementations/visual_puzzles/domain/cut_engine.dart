@@ -42,8 +42,9 @@ class CutEngine {
     final refDim = math.max(baseBb.width, baseBb.height);
     for (final p in pieces) {
       final bb = p.bbox();
-      // Pas de pièce "aiguille" : sa plus petite dimension doit rester lisible.
-      if (math.min(bb.width, bb.height) < 0.13 * refDim) return false;
+      // Pas de pièce "aiguille" : sa plus petite dimension doit rester
+      // lisible, y compris sur une case mobile (~70 px → 0.16 ≈ 11 px).
+      if (math.min(bb.width, bb.height) < 0.16 * refDim) return false;
     }
     return true;
   }

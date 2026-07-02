@@ -197,6 +197,97 @@ void main() {
         expect(item.palette.length, inInclusiveRange(1, 3));
       }
     });
+
+    // ---------- Solvabilité humaine (audit 2026-07-02) ----------
+    // Ces invariants verrouillent les correctifs de l'audit : un item peut
+    // être difficile, jamais ambigu ni réductible à un jugement au pixel.
+
+    test(
+        'aucun piège quasi congruent (seuil perceptuel 6 %) à une vraie '
+        'pièce — sinon deux réponses visuellement valides', () {
+      for (final item in allItems) {
+        for (final o in item.options.where((o) => !o.isCorrect)) {
+          if (o.trapKind == TrapKind.wrongColors) continue;
+          for (final c in item.correctPieces) {
+            expect(congruent(o.polygon, c.polygon, relTol: 0.06), isFalse,
+                reason: 'item ${item.index} : piège ${o.trapKind?.name} '
+                    'indiscernable d\'une vraie pièce '
+                    '(${item.baseShape.name}/${item.cutStrategy.name})');
+          }
+        }
+      }
+    });
+
+    test(
+        'wrongColors jamais réduit à une discrimination de taille : un piège '
+        'UNI ne porte jamais la couleur d\'une vraie pièce unie', () {
+      int? uniColor(Map<int, double> histo, double pieceArea) {
+        for (final e in histo.entries) {
+          if (e.value / pieceArea >= 0.95) return e.key;
+        }
+        return null;
+      }
+
+      for (final item in allItems) {
+        for (final o in item.options
+            .where((o) => o.trapKind == TrapKind.wrongColors)) {
+          final trapUni = uniColor(_colorHistogram(o.regions), o.polygon.area());
+          if (trapUni == null) continue;
+          for (final c in item.correctPieces) {
+            final trueUni =
+                uniColor(_colorHistogram(c.regions), c.polygon.area());
+            expect(trueUni == trapUni, isFalse,
+                reason: 'item ${item.index} : wrongColors uni de la même '
+                    'couleur qu\'une vraie pièce unie → pur jugement de '
+                    'taille');
+          }
+        }
+      }
+    });
+
+    test('palette : toutes les paires de couleurs sont compatibles '
+        '(proximité perceptuelle + daltonisme)', () {
+      for (final item in allItems) {
+        for (int i = 0; i < item.palette.length; i++) {
+          for (int j = i + 1; j < item.palette.length; j++) {
+            expect(
+                PuzzleGenerator.paletteCompatible(
+                    item.palette[i], item.palette[j]),
+                isTrue,
+                reason: 'item ${item.index} : paire interdite dans la '
+                    'palette');
+          }
+        }
+      }
+    });
+
+    test('aucune option "aiguille" : ratio bbox min/max ≥ 0.155 à l\'écran',
+        () {
+      for (final item in allItems) {
+        for (final o in item.options) {
+          final bb = o.displayPolygon.bbox();
+          final maxDim = bb.width > bb.height ? bb.width : bb.height;
+          final minDim = bb.width < bb.height ? bb.width : bb.height;
+          expect(minDim / maxDim, greaterThanOrEqualTo(0.155),
+              reason: 'item ${item.index}, piège ${o.trapKind?.name} : '
+                  'pièce trop fine pour être comparée');
+        }
+      }
+    });
+
+    test(
+        'les gardes perceptuelles n\'étouffent aucun type de piège : '
+        'chaque TrapKind reste présent sur 500 items', () {
+      final seen = <TrapKind>{};
+      for (final item in allItems) {
+        for (final o in item.options) {
+          if (o.trapKind != null) seen.add(o.trapKind!);
+        }
+      }
+      expect(seen, containsAll(TrapKind.values),
+          reason: 'types manquants : '
+              '${TrapKind.values.toSet().difference(seen)}');
+    });
   });
 
   group('PuzzleGenerator — progression de difficulté', () {

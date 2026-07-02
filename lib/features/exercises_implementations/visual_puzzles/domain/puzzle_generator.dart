@@ -283,9 +283,50 @@ class PuzzleGenerator {
     Color(0xFFE4D94F), // jaune
   ];
 
+  /// Paires de [colorPool] interdites dans une même palette.
+  ///
+  /// 5 paires violent la règle quantitative « distance RGB ≥ 100 ET
+  /// (écart de luminance ≥ 40 OU écart de canal bleu ≥ 40, approximation
+  /// deutéranopie) » ; magenta/violet la satisfait de justesse mais s'est
+  /// révélée confusable en conditions réelles (audit visuel 2026-07-02).
+  /// La mécanique wrongColors repose sur une discrimination de couleur
+  /// instantanée : aucune paire ambiguë n'est tolérable.
+  static const List<(Color, Color)> bannedColorPairs = [
+    (Color(0xFFC93A32), Color(0xFF3E9E4E)), // rouge / vert (daltonisme)
+    (Color(0xFFC93A32), Color(0xFFD8447C)), // rouge / magenta
+    (Color(0xFF2D6BC9), Color(0xFF45BFD3)), // bleu / cyan
+    (Color(0xFF2D6BC9), Color(0xFF8A5BD6)), // bleu / violet
+    (Color(0xFFEC9C2E), Color(0xFFE4D94F)), // orange / jaune
+    (Color(0xFFD8447C), Color(0xFF8A5BD6)), // magenta / violet
+    (Color(0xFF45BFD3), Color(0xFF8A5BD6)), // cyan / violet (daltonisme)
+  ];
+
+  /// Vrai si deux couleurs peuvent cohabiter dans la palette d'un item.
+  static bool paletteCompatible(Color a, Color b) {
+    for (final (p, q) in bannedColorPairs) {
+      if ((a == p && b == q) || (a == q && b == p)) return false;
+    }
+    return true;
+  }
+
   List<Color> _pickPalette(int size) {
-    final pool = [...colorPool]..shuffle(_rng);
-    return pool.take(size).toList();
+    final pool = [...colorPool];
+    for (int attempt = 0; attempt < 40; attempt++) {
+      pool.shuffle(_rng);
+      final pick = pool.take(size).toList();
+      bool ok = true;
+      for (int i = 0; i < pick.length && ok; i++) {
+        for (int j = i + 1; j < pick.length; j++) {
+          if (!paletteCompatible(pick[i], pick[j])) {
+            ok = false;
+            break;
+          }
+        }
+      }
+      if (ok) return pick;
+    }
+    // Fallback déterministe : triplet sûr (toutes paires compatibles).
+    return [colorPool[1], colorPool[3], colorPool[2]].take(size).toList();
   }
 
   /// Construit les zones de couleur de l'item.
@@ -426,14 +467,15 @@ class PuzzleGenerator {
           final srcIdx = _rng.nextInt(truePieces.length);
 
           // wrongColors garde la géométrie EXACTE d'une vraie pièce : la
-          // source ne doit donc être congruente à aucune AUTRE vraie pièce,
-          // sinon l'item aurait deux réponses visuellement valides.
+          // source ne doit donc être QUASI congruente (seuil perceptuel) à
+          // aucune AUTRE vraie pièce, sinon le piège recoloré pourrait se
+          // confondre avec cette autre pièce → deux réponses valides.
           if (kind == TrapKind.wrongColors) {
             bool unique = true;
             for (int j = 0; j < truePieces.length; j++) {
               if (j != srcIdx &&
                   congruent(truePieces[srcIdx], truePieces[j],
-                      allowMirror: true)) {
+                      allowMirror: true, relTol: kPerceptualTol)) {
                 unique = false;
                 break;
               }
@@ -454,16 +496,39 @@ class PuzzleGenerator {
           );
           if (candidate == null) continue;
 
-          // Validation : pas congruent aux vraies pièces ni aux distracteurs
-          // déjà retenus. Exceptions : mirrored (miroir d'une vraie pièce =
-          // valide par définition) et wrongColors (congruence voulue, la
-          // différence est dans les couleurs).
+          // Anti-dégénérescence wrongColors : si le piège recoloré est UNI
+          // et qu'une vraie pièce unie porte la MÊME couleur, l'item se
+          // réduit à comparer les tailles de deux pièces de même couleur
+          // (mesuré : 17 % des items veryEasy) — plus aucun raisonnement
+          // sur le motif. On rejette et on retente (autre source ou kind).
+          if (kind == TrapKind.wrongColors) {
+            final trapUni = _uniColorOf(candidate.regions, candidate.polygon);
+            if (trapUni != null) {
+              bool degenerate = false;
+              for (int j = 0; j < truePieces.length; j++) {
+                if (_uniColorOf(trueRegions[j], truePieces[j]) == trapUni) {
+                  degenerate = true;
+                  break;
+                }
+              }
+              if (degenerate) continue;
+            }
+          }
+
+          // Validation au seuil PERCEPTUEL : pas quasi-congruent aux vraies
+          // pièces ni aux distracteurs déjà retenus (un écart < ~8 % est
+          // invisible sur une case d'option). Exceptions : mirrored (miroir
+          // d'une vraie pièce = valide par définition, tant qu'il n'est pas
+          // superposable par simple rotation) et wrongColors (congruence
+          // voulue, la différence est dans les couleurs).
           bool clash = false;
           if (kind != TrapKind.wrongColors) {
             for (final tp in truePieces) {
-              if (congruent(candidate.polygon, tp, allowMirror: true)) {
+              if (congruent(candidate.polygon, tp,
+                  allowMirror: true, relTol: kPerceptualTol)) {
                 if (kind == TrapKind.mirrored &&
-                    !congruent(candidate.polygon, tp)) {
+                    !congruent(candidate.polygon, tp,
+                        relTol: kPerceptualTol)) {
                   continue;
                 }
                 clash = true;
@@ -473,12 +538,23 @@ class PuzzleGenerator {
           }
           if (clash) continue;
           for (final d in produced) {
-            if (congruent(candidate.polygon, d, allowMirror: true)) {
+            if (congruent(candidate.polygon, d,
+                allowMirror: true, relTol: kPerceptualTol)) {
               clash = true;
               break;
             }
           }
           if (clash) continue;
+
+          // Lisibilité : pas de piège "aiguille" (les étirements peuvent
+          // passer sous le seuil garanti par CutEngine pour les vraies
+          // pièces). Ratio bbox aligné sur CutEngine (0.16).
+          final cbb = candidate.polygon.bbox();
+          final cMax = math.max(cbb.width, cbb.height);
+          if (cMax < kGeomEps ||
+              math.min(cbb.width, cbb.height) / cMax < 0.16) {
+            continue;
+          }
 
           trap = candidate;
           usedKind = kind;
@@ -515,6 +591,21 @@ class PuzzleGenerator {
       ));
     }
     return result.length == 3 ? result : null;
+  }
+
+  /// Couleur d'une pièce visuellement UNIE : l'index de couleur qui couvre
+  /// ≥ 95 % de l'aire de la pièce, ou null si la pièce est multicolore.
+  static int? _uniColorOf(List<ColoredRegion> regions, Polygon piece) {
+    final total = piece.area();
+    if (total < kGeomEps) return null;
+    final byColor = <int, double>{};
+    for (final r in regions) {
+      byColor[r.colorIndex] = (byColor[r.colorIndex] ?? 0) + r.polygon.area();
+    }
+    for (final e in byColor.entries) {
+      if (e.value / total >= 0.95) return e.key;
+    }
+    return null;
   }
 
   // ---------- Pools par niveau ----------

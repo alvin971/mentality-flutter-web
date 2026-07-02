@@ -4,6 +4,13 @@ import 'package:flutter/material.dart';
 /// Tolérance pour les comparaisons flottantes en géométrie.
 const double kGeomEps = 1e-6;
 
+/// Tolérance PERCEPTUELLE pour [congruent] : en dessous de cet écart relatif,
+/// deux polygones sont indiscernables à l'œil nu sur une case d'option
+/// (~70-150 px). Sert aux gardes anti-ambiguïté des distracteurs : un piège
+/// « différent » de moins de 8 % d'une vraie pièce donnerait de fait deux
+/// réponses visuellement valides (mesuré : 4,6 % des items avant garde).
+const double kPerceptualTol = 0.08;
+
 /// Polygone simple (non auto-intersectant), sommets en coords normalisées
 /// [0,1] × [0,1].
 @immutable
@@ -320,7 +327,11 @@ bool congruent(Polygon a, Polygon b,
 
   final scaleRef = math.sqrt(maxArea);
   final lenTol = relTol * 2.5 * scaleRef;
-  const angTol = 0.06; // ~3.4°
+  // Tolérance angulaire proportionnelle à relTol (3.0 × 0.02 = 0.06 rad
+  // ≈ 3.4°, la valeur historique au relTol par défaut) : en mode perceptuel
+  // (kPerceptualTol), deux pièces dont les angles diffèrent de < ~14° sont
+  // aussi considérées congruentes.
+  final angTol = 3.0 * relTol;
 
   final sigA = _signature(pa);
   final sigB = _signature(pb);

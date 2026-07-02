@@ -96,7 +96,10 @@ class TrapEngine {
 
       case TrapKind.mirrored:
         final m = source.transform(mirrored: true);
-        if (congruent(m, source)) return null;
+        // Tolérance PERCEPTUELLE : le miroir d'une pièce quasi symétrique
+        // (ex. trapèze aux pentes presque égales) serait indiscernable de
+        // l'original par simple rotation → deux réponses valides de fait.
+        if (congruent(m, source, relTol: kPerceptualTol)) return null;
         return TrapResult(
           m,
           _transformRegions(sourceRegions, source.centroid(), mirrored: true),
@@ -112,7 +115,7 @@ class TrapEngine {
         final sx = swap ? fy : fx;
         final sy = swap ? fx : fy;
         final s = source.transform(scaleX: sx, scaleY: sy);
-        if (congruent(s, source)) return null;
+        if (congruent(s, source, relTol: kPerceptualTol)) return null;
         return TrapResult(
           s,
           _transformRegions(sourceRegions, source.centroid(),
@@ -128,7 +131,13 @@ class TrapEngine {
           final candidates = pieces.where((p) {
             if (p.vertices.length < 3) return false;
             for (final tp in truePieces) {
-              if (congruent(p, tp, allowMirror: true)) return false;
+              // Perceptuel : sur les cibles très symétriques (octogone,
+              // cercle), une autre découpe produit souvent des pièces
+              // quasi identiques aux vraies — inutilisables comme pièges.
+              if (congruent(p, tp,
+                  allowMirror: true, relTol: kPerceptualTol)) {
+                return false;
+              }
             }
             if (t > 0.5) {
               final ratio = p.area() / math.max(source.area(), kGeomEps);
