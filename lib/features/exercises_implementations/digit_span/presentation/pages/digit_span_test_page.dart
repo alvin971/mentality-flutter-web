@@ -161,13 +161,12 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
 
   void _submitAnswer() {
     final isCorrect = _currentItem.isCorrect(_userAnswer);
-    final trial = _currentItem.trial;
 
     int pointsEarned = 0;
 
     if (isCorrect) {
-      // Succès : 2 points au 1er essai, 1 point au 2e essai
-      pointsEarned = trial == 1 ? 2 : 1;
+      // Barème harmonisé : 1 point par essai réussi (max 46), pas de 2/1.
+      pointsEarned = 1;
       _failuresAtCurrentLength = 0; // Réinitialiser les échecs
     } else {
       // Échec

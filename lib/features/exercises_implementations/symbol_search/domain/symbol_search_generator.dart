@@ -10,8 +10,15 @@ class SymbolSearchGenerator {
     '◇', '□', '△', '▽', '◁', '▷', '⊕', '⊗', '⊙',
   ];
 
+  /// Graine de banque versionnée : garantit que TOUS les participants
+  /// affrontent EXACTEMENT les mêmes items dans le même ordre (comparabilité CTT).
+  /// Bumper cette valeur pour régénérer volontairement la banque.
+  static const int kBankSeed = 20260616;
+
   final List<SymbolSearchItem> _preGeneratedItems = [];
-  final Random _random = Random();
+
+  /// Unique source d'aléa, seedée -> génération 100% déterministe.
+  final Random _random = Random(kBankSeed);
 
   SymbolSearchGenerator() {
     _generateAllItems();
@@ -147,7 +154,8 @@ class SymbolSearchGenerator {
       }
     }
 
-    final rawScore = correct - incorrect;
+    // Barème harmonisé : le brut (corrects − erreurs) ne peut pas être négatif.
+    final rawScore = (correct - incorrect).clamp(0, _preGeneratedItems.length);
 
     return SymbolSearchScore(
       correct: correct,

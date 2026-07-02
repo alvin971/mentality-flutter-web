@@ -1,5 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mentality/core/models/complete_test_session.dart';
+import 'package:mentality/features/scoring/data/composite_score_tables.dart';
+import 'package:mentality/features/scoring/data/normative_tables.dart';
+import 'package:mentality/features/scoring/data/scoring_params.dart';
 import 'package:mentality/features/scoring/domain/services/scoring_service.dart';
 
 void main() {
@@ -125,6 +128,73 @@ void main() {
       expect(high, isNotNull);
       expect(low, isNotNull);
       expect(high!.fsiq, greaterThan(low!.fsiq));
+    });
+  });
+
+  group('NormativeTables.toScaledScore (âge-relatif)', () {
+    const refAge = 300; // 25 ans
+
+    test('un brut ≈ moyenne attendue donne une note ≈ 10 à l\'âge de référence', () {
+      expect(NormativeTables.toScaledScore('MR', 14, refAge),
+          inInclusiveRange(9, 11));
+    });
+
+    test('un brut parfait donne une note élevée (≥ 17)', () {
+      expect(NormativeTables.toScaledScore('MR', 26, refAge),
+          greaterThanOrEqualTo(17));
+    });
+
+    test('un brut nul donne une note basse (≤ 4)', () {
+      expect(
+          NormativeTables.toScaledScore('MR', 0, refAge), lessThanOrEqualTo(4));
+    });
+
+    test('un sous-test inconnu retourne la note moyenne 10', () {
+      expect(NormativeTables.toScaledScore('XX', 50, refAge), 10);
+    });
+
+    test('un brut négatif (SS) est borné à 0', () {
+      expect(NormativeTables.toScaledScore('SS', -20, refAge),
+          NormativeTables.toScaledScore('SS', 0, refAge));
+    });
+
+    test('à brut égal, un sujet âgé est mieux noté sur la vitesse (CD)', () {
+      final young = NormativeTables.toScaledScore('CD', 60, 300); // 25 ans
+      final old = NormativeTables.toScaledScore('CD', 60, 840); // 70 ans
+      expect(old, greaterThan(young));
+    });
+  });
+
+  group('CompositeScoreTables (paramétrique)', () {
+    test('des notes toutes moyennes (10) donnent un composite de 100', () {
+      ScoringParams.indices.forEach((code, idx) {
+        expect(CompositeScoreTables.computeCompositeScore(code, 10 * idx.k), 100,
+            reason: '$code avec ${idx.k} sous-tests moyens doit donner 100');
+      });
+    });
+
+    test('les percentiles suivent N(100,15)', () {
+      expect(CompositeScoreTables.getPercentile(100), 50);
+      expect(CompositeScoreTables.getPercentile(115), inInclusiveRange(83, 85));
+      expect(CompositeScoreTables.getPercentile(130), inInclusiveRange(97, 99));
+      expect(CompositeScoreTables.getPercentile(85), inInclusiveRange(15, 17));
+    });
+
+    test('l\'intervalle de confiance encadre le score', () {
+      final (lower, upper) =
+          CompositeScoreTables.getConfidenceInterval('FSIQ', 100);
+      expect(lower, lessThan(100));
+      expect(upper, greaterThan(100));
+    });
+  });
+
+  group('WMI intègre la Mémoire des images (PM)', () {
+    test('augmenter PM augmente le WMI, toutes choses égales par ailleurs', () {
+      final low = service.computeScore(_buildSession(pictureSpan: 2), 360);
+      final high = service.computeScore(_buildSession(pictureSpan: 12), 360);
+      expect(low?.wmi, isNotNull);
+      expect(high?.wmi, isNotNull);
+      expect(high!.wmi!, greaterThan(low!.wmi!));
     });
   });
 }
