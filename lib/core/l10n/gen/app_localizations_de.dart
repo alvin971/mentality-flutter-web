@@ -1898,6 +1898,19 @@ class AppLocalizationsDe extends AppLocalizations {
       'Wählen Sie die 3 Teile, die die Figur ergeben (Drehungen erlaubt, Spiegelungen nicht).';
 
   @override
+  String get vpDemoEyebrow => 'DEMONSTRATION';
+
+  @override
+  String get vpDemoInstruction =>
+      'Übung ohne Zeitlimit: Wählen Sie die 3 Teile, die die Figur ergeben, und bestätigen Sie.';
+
+  @override
+  String get vpDemoStart => 'Test starten';
+
+  @override
+  String get vpDemoRetry => 'Erneut versuchen';
+
+  @override
   String vpSelectionSemantics(int filled, int total) {
     return 'Auswahl: $filled von $total Teilen';
   }

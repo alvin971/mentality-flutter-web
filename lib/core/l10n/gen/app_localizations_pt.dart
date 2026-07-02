@@ -1894,6 +1894,19 @@ class AppLocalizationsPt extends AppLocalizations {
       'Escolha as 3 peças que formam a figura (rotações permitidas, inversões proibidas).';
 
   @override
+  String get vpDemoEyebrow => 'DEMONSTRAÇÃO';
+
+  @override
+  String get vpDemoInstruction =>
+      'Treino sem tempo: escolha as 3 peças que formam a figura e confirme.';
+
+  @override
+  String get vpDemoStart => 'Começar o teste';
+
+  @override
+  String get vpDemoRetry => 'Tentar novamente';
+
+  @override
   String vpSelectionSemantics(int filled, int total) {
     return 'Seleção: $filled de $total peças';
   }

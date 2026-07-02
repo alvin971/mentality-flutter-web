@@ -46,13 +46,25 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
   Timer? _advanceTimer;
   bool _submitted = false;
 
+  /// Phase de DÉMONSTRATION : un item d'exemple fixe, sans chrono ni score,
+  /// rejouable jusqu'à réussite — comme la démonstration du protocole réel.
+  bool _demoPhase = true;
+  late final PuzzleItem _demoItem;
+
+  /// Seed fixe de l'item de démonstration (contrôlé visuellement : pièges
+  /// évidents, motif bicolore lisible). Ne pas changer sans re-vérifier.
+  static const int _demoSeed = 7;
+
   static const String _labels = '123456';
 
   @override
   void initState() {
     super.initState();
+    _demoItem = PuzzleGenerator(seed: _demoSeed)
+        .generateItem(1, DifficultyLevel.veryEasy);
     _generateItems();
-    _startItem();
+    // La démonstration n'est pas chronométrée : le timer ne démarre qu'au
+    // passage au premier item réel (_startRealTest).
   }
 
   void _generateItems() {
@@ -71,7 +83,20 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
     }
   }
 
-  PuzzleItem get _currentItem => _items[_currentItemIndex];
+  PuzzleItem get _currentItem =>
+      _demoPhase ? _demoItem : _items[_currentItemIndex];
+
+  void _startRealTest() {
+    setState(() => _demoPhase = false);
+    _startItem();
+  }
+
+  void _retryDemo() {
+    setState(() {
+      _selectedIds.clear();
+      _submitted = false;
+    });
+  }
 
   void _startItem() {
     _selectedIds.clear();
@@ -105,14 +130,16 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
 
   void _togglePiece(String pieceId) {
     if (_submitted) return;
+    if (!_selectedIds.contains(pieceId) && _selectedIds.length >= 3) {
+      // Déjà 3 pièces : on N'ajoute PAS (remplacer silencieusement la plus
+      // ancienne sélection déroutait). Le sujet doit désélectionner d'abord.
+      HapticFeedback.mediumImpact();
+      return;
+    }
     setState(() {
       if (_selectedIds.contains(pieceId)) {
         _selectedIds.remove(pieceId);
       } else {
-        if (_selectedIds.length >= 3) {
-          // Déjà 3 : on remplace la plus ancienne sélection.
-          _selectedIds.remove(_selectedIds.first);
-        }
         _selectedIds.add(pieceId);
       }
     });
@@ -123,6 +150,13 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
     if (_submitted) return;
     _timer?.cancel();
     HapticFeedback.mediumImpact();
+
+    if (_demoPhase) {
+      // Démo : feedback visuel seulement — ni score, ni règle d'arrêt, ni
+      // avance automatique (le bouton devient « Commencer » / « Réessayer »).
+      setState(() => _submitted = true);
+      return;
+    }
 
     final isCorrect = _selectedIds.length == 3 &&
         setEquals(_selectedIds, _currentItem.correctIds);
@@ -168,28 +202,49 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
 
     return KeplerTestScaffold(
       testName: context.l10n.vpTestName,
-      eyebrow: context.l10n.vpEyebrow,
+      eyebrow:
+          _demoPhase ? context.l10n.vpDemoEyebrow : context.l10n.vpEyebrow,
       accentColor: accent,
-      currentItem: _currentItemIndex + 1,
-      totalItems: _items.length,
+      // Pas de barre de progression pendant la démo (hors des 26 items) :
+      // l'eyebrow « DÉMONSTRATION » s'affiche alors dans l'AppBar.
+      currentItem: _demoPhase ? null : _currentItemIndex + 1,
+      totalItems: _demoPhase ? null : _items.length,
       // Aucun défilement : cible et pièces se redimensionnent pour tenir
       // dans la hauteur de n'importe quel écran (test chronométré).
       scrollable: false,
-      trailing: [_TimerBadge(seconds: _remainingSeconds, accent: accent)],
+      trailing: _demoPhase
+          ? null
+          : [_TimerBadge(seconds: _remainingSeconds, accent: accent)],
       bottomBar: KeplerTestButton.primary(
-        label: _submitted
-            ? (setEquals(_selectedIds, item.correctIds)
-                ? context.l10n.vpCorrect
-                : context.l10n.vpIncorrect)
-            : (_selectedIds.length == 3
-                ? context.l10n.vpValidate
-                : context.l10n.vpSelectedCount(_selectedIds.length)),
+        label: _bottomBarLabel(context, item),
         accentColor: accent,
-        onPressed:
-            (_selectedIds.length == 3 && !_submitted) ? () => _submit() : null,
+        onPressed: _bottomBarAction(item),
       ),
       child: isWide ? _buildWide(context, item) : _buildNarrow(context, item),
     );
+  }
+
+  String _bottomBarLabel(BuildContext context, PuzzleItem item) {
+    if (_submitted) {
+      final ok = setEquals(_selectedIds, item.correctIds);
+      if (_demoPhase) {
+        return ok ? context.l10n.vpDemoStart : context.l10n.vpDemoRetry;
+      }
+      return ok ? context.l10n.vpCorrect : context.l10n.vpIncorrect;
+    }
+    return _selectedIds.length == 3
+        ? context.l10n.vpValidate
+        : context.l10n.vpSelectedCount(_selectedIds.length);
+  }
+
+  VoidCallback? _bottomBarAction(PuzzleItem item) {
+    if (_submitted) {
+      if (!_demoPhase) return null;
+      return setEquals(_selectedIds, item.correctIds)
+          ? _startRealTest
+          : _retryDemo;
+    }
+    return _selectedIds.length == 3 ? () => _submit() : null;
   }
 
   /// Mobile / fenêtre étroite : tout en colonne, dimensionné pour tenir
@@ -274,10 +329,20 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
   Widget _instruction(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
-      child: Text(
-        context.l10n.vpInstruction,
-        style: AppText.body().copyWith(fontSize: 13.5),
-        textAlign: TextAlign.center,
+      // Hauteur plafonnée (≈ 3 lignes) : le layout étroit est calibré au
+      // pixel — une consigne plus longue (autre langue, échelle de police)
+      // défile au lieu de faire déborder la colonne.
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxHeight: 56),
+        child: SingleChildScrollView(
+          child: Text(
+            _demoPhase
+                ? context.l10n.vpDemoInstruction
+                : context.l10n.vpInstruction,
+            style: AppText.body().copyWith(fontSize: 13.5),
+            textAlign: TextAlign.center,
+          ),
+        ),
       ),
     );
   }

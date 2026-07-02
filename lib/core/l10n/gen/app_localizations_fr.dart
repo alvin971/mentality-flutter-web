@@ -1890,6 +1890,19 @@ class AppLocalizationsFr extends AppLocalizations {
       'Choisissez les 3 pièces qui forment la figure (rotations permises, retournements interdits).';
 
   @override
+  String get vpDemoEyebrow => 'DÉMONSTRATION';
+
+  @override
+  String get vpDemoInstruction =>
+      'Entraînement sans chrono : choisissez les 3 pièces qui forment la figure, puis validez.';
+
+  @override
+  String get vpDemoStart => 'Commencer le test';
+
+  @override
+  String get vpDemoRetry => 'Réessayer';
+
+  @override
   String vpSelectionSemantics(int filled, int total) {
     return 'Sélection : $filled sur $total pièces';
   }

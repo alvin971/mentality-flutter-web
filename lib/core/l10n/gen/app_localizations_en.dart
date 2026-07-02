@@ -1883,6 +1883,19 @@ class AppLocalizationsEn extends AppLocalizations {
       'Choose the 3 pieces that form the figure (rotations allowed, flips not allowed).';
 
   @override
+  String get vpDemoEyebrow => 'DEMONSTRATION';
+
+  @override
+  String get vpDemoInstruction =>
+      'Untimed practice: choose the 3 pieces that form the figure, then confirm.';
+
+  @override
+  String get vpDemoStart => 'Start the test';
+
+  @override
+  String get vpDemoRetry => 'Try again';
+
+  @override
   String vpSelectionSemantics(int filled, int total) {
     return 'Selection: $filled of $total pieces';
   }
@@ -4455,6 +4468,19 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   @override
   String get vpInstruction =>
       'Choose the 3 pieces that form the figure (rotations allowed, flips not allowed).';
+
+  @override
+  String get vpDemoEyebrow => 'DEMONSTRATION';
+
+  @override
+  String get vpDemoInstruction =>
+      'Untimed practice: choose the 3 pieces that form the figure, then confirm.';
+
+  @override
+  String get vpDemoStart => 'Start the test';
+
+  @override
+  String get vpDemoRetry => 'Try again';
 
   @override
   String vpSelectionSemantics(int filled, int total) {

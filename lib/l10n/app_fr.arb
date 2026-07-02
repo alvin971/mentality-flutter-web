@@ -2595,6 +2595,22 @@
   "@vpInstruction": {
     "description": "Puzzles visuels — consigne sous la figure cible"
   },
+  "vpDemoEyebrow": "DÉMONSTRATION",
+  "@vpDemoEyebrow": {
+    "description": "Puzzles visuels — eyebrow de la phase de démonstration non chronométrée"
+  },
+  "vpDemoInstruction": "Entraînement sans chrono : choisissez les 3 pièces qui forment la figure, puis validez.",
+  "@vpDemoInstruction": {
+    "description": "Puzzles visuels — consigne de l'item de démonstration"
+  },
+  "vpDemoStart": "Commencer le test",
+  "@vpDemoStart": {
+    "description": "Puzzles visuels — bouton après une démo réussie, lance les items chronométrés"
+  },
+  "vpDemoRetry": "Réessayer",
+  "@vpDemoRetry": {
+    "description": "Puzzles visuels — bouton après une démo ratée, réinitialise la démo"
+  },
   "vpSelectionSemantics": "Sélection : {filled} sur {total} pièces",
   "@vpSelectionSemantics": {
     "description": "Puzzles visuels — étiquette d'accessibilité de l'indicateur de sélection",

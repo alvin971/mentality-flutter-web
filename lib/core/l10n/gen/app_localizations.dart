@@ -3423,6 +3423,30 @@ abstract class AppLocalizations {
   /// **'Choisissez les 3 pièces qui forment la figure (rotations permises, retournements interdits).'**
   String get vpInstruction;
 
+  /// Puzzles visuels — eyebrow de la phase de démonstration non chronométrée
+  ///
+  /// In fr, this message translates to:
+  /// **'DÉMONSTRATION'**
+  String get vpDemoEyebrow;
+
+  /// Puzzles visuels — consigne de l'item de démonstration
+  ///
+  /// In fr, this message translates to:
+  /// **'Entraînement sans chrono : choisissez les 3 pièces qui forment la figure, puis validez.'**
+  String get vpDemoInstruction;
+
+  /// Puzzles visuels — bouton après une démo réussie, lance les items chronométrés
+  ///
+  /// In fr, this message translates to:
+  /// **'Commencer le test'**
+  String get vpDemoStart;
+
+  /// Puzzles visuels — bouton après une démo ratée, réinitialise la démo
+  ///
+  /// In fr, this message translates to:
+  /// **'Réessayer'**
+  String get vpDemoRetry;
+
   /// Puzzles visuels — étiquette d'accessibilité de l'indicateur de sélection
   ///
   /// In fr, this message translates to:
