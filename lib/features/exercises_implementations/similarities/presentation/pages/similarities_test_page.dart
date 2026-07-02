@@ -595,6 +595,19 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                 maxLines: 3,
                 // Met à jour l'état du bouton Valider à chaque frappe.
                 onChanged: (_) => setState(() {}),
+                // Mobile : la touche Entrée du clavier devient « OK » (au
+                // lieu d'un retour à la ligne) et valide la réponse ; taper
+                // hors du champ referme le clavier — sinon il masque le
+                // bouton Valider.
+                textInputAction: TextInputAction.done,
+                onSubmitted: (_) {
+                  if (_answerController.text.trim().isNotEmpty) {
+                    _submitAnswer();
+                  }
+                },
+                onTapOutside: (_) =>
+                    FocusManager.instance.primaryFocus?.unfocus(),
+                scrollPadding: EdgeInsets.only(bottom: 140.h),
                 decoration: InputDecoration(
                   hintText: context.l10n.simAnswerHint,
                   border: OutlineInputBorder(
