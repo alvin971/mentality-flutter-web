@@ -2588,6 +2588,99 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get vocabTipContext => '• Explain the meaning with context';
+
+  @override
+  String get ugTitle => 'Your result is ready';
+
+  @override
+  String get ugEyebrow => 'Final steps';
+
+  @override
+  String get ugFreeNotice =>
+      'The test is 100% free. To receive your result, a few simple steps remain — they are validated automatically.';
+
+  @override
+  String get ugErrorBody =>
+      'Could not fetch your unlock status. Check your connection and try again.';
+
+  @override
+  String get ugRetry => 'Retry';
+
+  @override
+  String get ugRefresh => 'Refresh';
+
+  @override
+  String get ugStep1Title => 'Invite 3 friends';
+
+  @override
+  String get ugStep1Body =>
+      'Share your personal link with 3 friends. As soon as they join the test through your link, this step progresses.';
+
+  @override
+  String get ugCopyLink => 'Copy my invite link';
+
+  @override
+  String get ugCopied => 'Link copied!';
+
+  @override
+  String ugInviteCounter(int joined, int required) {
+    return '$joined/$required friends joined with your link';
+  }
+
+  @override
+  String get ugStep2Title => 'Your friends are taking their test';
+
+  @override
+  String get ugStep2Body =>
+      'Your friends now need to finish their IQ test. We are waiting for their results — feel free to remind them!';
+
+  @override
+  String ugFriendDone(int n) {
+    return 'Friend $n: test completed';
+  }
+
+  @override
+  String ugFriendPending(int n) {
+    return 'Friend $n: test in progress';
+  }
+
+  @override
+  String ugWaitingCounter(int done, int required) {
+    return '$done/$required tests completed';
+  }
+
+  @override
+  String get ugStep3Title => 'Last step: Instagram';
+
+  @override
+  String ugStep3Body(String handle) {
+    return 'Follow our account @$handle then enter your username. We verify your follow and your result is unlocked.';
+  }
+
+  @override
+  String ugFollowButton(String handle) {
+    return 'Follow @$handle on Instagram';
+  }
+
+  @override
+  String get ugInstaFieldLabel => 'Your Instagram username';
+
+  @override
+  String get ugInstaSubmit => 'Confirm my follow';
+
+  @override
+  String get ugInstaPending =>
+      'Verifying your follow… Your result will be unlocked within a few hours. You can close this page and come back later.';
+
+  @override
+  String get inviteLandingTitle => 'Invitation';
+
+  @override
+  String get inviteLandingBody =>
+      'A friend invited you to take the free Mentality IQ test. By finishing your test, you get your own result and help your friend unlock theirs.';
+
+  @override
+  String get inviteLandingCta => 'Start the free test';
 }
 
 /// The translations for English, as used in the United Kingdom (`en_GB`).
@@ -5175,4 +5268,97 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get vocabTipContext => '• Explain the meaning with context';
+
+  @override
+  String get ugTitle => 'Your result is ready';
+
+  @override
+  String get ugEyebrow => 'Final steps';
+
+  @override
+  String get ugFreeNotice =>
+      'The test is 100% free. To receive your result, a few simple steps remain — they are validated automatically.';
+
+  @override
+  String get ugErrorBody =>
+      'Could not fetch your unlock status. Check your connection and try again.';
+
+  @override
+  String get ugRetry => 'Retry';
+
+  @override
+  String get ugRefresh => 'Refresh';
+
+  @override
+  String get ugStep1Title => 'Invite 3 friends';
+
+  @override
+  String get ugStep1Body =>
+      'Share your personal link with 3 friends. As soon as they join the test through your link, this step progresses.';
+
+  @override
+  String get ugCopyLink => 'Copy my invite link';
+
+  @override
+  String get ugCopied => 'Link copied!';
+
+  @override
+  String ugInviteCounter(int joined, int required) {
+    return '$joined/$required friends joined with your link';
+  }
+
+  @override
+  String get ugStep2Title => 'Your friends are taking their test';
+
+  @override
+  String get ugStep2Body =>
+      'Your friends now need to finish their IQ test. We are waiting for their results — feel free to remind them!';
+
+  @override
+  String ugFriendDone(int n) {
+    return 'Friend $n: test completed';
+  }
+
+  @override
+  String ugFriendPending(int n) {
+    return 'Friend $n: test in progress';
+  }
+
+  @override
+  String ugWaitingCounter(int done, int required) {
+    return '$done/$required tests completed';
+  }
+
+  @override
+  String get ugStep3Title => 'Last step: Instagram';
+
+  @override
+  String ugStep3Body(String handle) {
+    return 'Follow our account @$handle then enter your username. We verify your follow and your result is unlocked.';
+  }
+
+  @override
+  String ugFollowButton(String handle) {
+    return 'Follow @$handle on Instagram';
+  }
+
+  @override
+  String get ugInstaFieldLabel => 'Your Instagram username';
+
+  @override
+  String get ugInstaSubmit => 'Confirm my follow';
+
+  @override
+  String get ugInstaPending =>
+      'Verifying your follow… Your result will be unlocked within a few hours. You can close this page and come back later.';
+
+  @override
+  String get inviteLandingTitle => 'Invitation';
+
+  @override
+  String get inviteLandingBody =>
+      'A friend invited you to take the free Mentality IQ test. By finishing your test, you get your own result and help your friend unlock theirs.';
+
+  @override
+  String get inviteLandingCta => 'Start the free test';
 }

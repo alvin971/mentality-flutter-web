@@ -2599,4 +2599,97 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get vocabTipContext => '• Explique o significado com contexto';
+
+  @override
+  String get ugTitle => 'O teu resultado está pronto';
+
+  @override
+  String get ugEyebrow => 'Últimas etapas';
+
+  @override
+  String get ugFreeNotice =>
+      'O teste é 100% gratuito. Para receberes o teu resultado faltam alguns passos simples: são validados automaticamente.';
+
+  @override
+  String get ugErrorBody =>
+      'Não foi possível obter o estado do teu desbloqueio. Verifica a tua ligação e tenta novamente.';
+
+  @override
+  String get ugRetry => 'Tentar novamente';
+
+  @override
+  String get ugRefresh => 'Atualizar';
+
+  @override
+  String get ugStep1Title => 'Convida 3 amigos';
+
+  @override
+  String get ugStep1Body =>
+      'Partilha o teu link pessoal com 3 amigos. Assim que entrarem no teste com o teu link, esta etapa avança.';
+
+  @override
+  String get ugCopyLink => 'Copiar o meu link de convite';
+
+  @override
+  String get ugCopied => 'Link copiado!';
+
+  @override
+  String ugInviteCounter(int joined, int required) {
+    return '$joined/$required amigos entraram com o teu link';
+  }
+
+  @override
+  String get ugStep2Title => 'Os teus amigos estão a fazer o teste';
+
+  @override
+  String get ugStep2Body =>
+      'Os teus amigos precisam agora de terminar o teste de QI. Estamos à espera dos resultados — lembra-os!';
+
+  @override
+  String ugFriendDone(int n) {
+    return 'Amigo $n: teste terminado';
+  }
+
+  @override
+  String ugFriendPending(int n) {
+    return 'Amigo $n: teste em curso';
+  }
+
+  @override
+  String ugWaitingCounter(int done, int required) {
+    return '$done/$required testes terminados';
+  }
+
+  @override
+  String get ugStep3Title => 'Última etapa: Instagram';
+
+  @override
+  String ugStep3Body(String handle) {
+    return 'Segue a nossa conta @$handle e indica o teu nome de utilizador. Verificamos e o teu resultado é desbloqueado.';
+  }
+
+  @override
+  String ugFollowButton(String handle) {
+    return 'Seguir @$handle no Instagram';
+  }
+
+  @override
+  String get ugInstaFieldLabel => 'O teu utilizador do Instagram';
+
+  @override
+  String get ugInstaSubmit => 'Validar a minha subscrição';
+
+  @override
+  String get ugInstaPending =>
+      'A verificar a tua subscrição… O teu resultado será desbloqueado dentro de algumas horas. Podes fechar esta página e voltar mais tarde.';
+
+  @override
+  String get inviteLandingTitle => 'Convite';
+
+  @override
+  String get inviteLandingBody =>
+      'Um amigo convidou-te para fazer o teste de QI gratuito da Mentality. Ao terminares o teu teste, obténs o teu resultado e ajudas o teu amigo a desbloquear o dele.';
+
+  @override
+  String get inviteLandingCta => 'Começar o teste gratuito';
 }

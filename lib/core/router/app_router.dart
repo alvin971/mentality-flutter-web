@@ -25,6 +25,7 @@ import '../../features/exercises_implementations/symbol_search/presentation/page
 import '../constants/app_constants.dart';
 import '../l10n/l10n_ext.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
+import '../../features/unlock/presentation/pages/invite_landing_page.dart';
 
 /// Mapping des clés admin (English slugs) vers les routes Flutter.
 /// Utilisé pour le prévisualisation des tests depuis mentality-admin.
@@ -189,6 +190,15 @@ final GoRouter appRouter = GoRouter(
       path: '/test/token',
       name: 'test-token',
       builder: (_, __) => const TokenIssuanceStep(standalone: true),
+    ),
+
+    // Lien d'invitation (parrainage) : /invite?ref=<code>. Mémorise le code
+    // du parrain puis envoie le filleul vers le parcours normal.
+    GoRoute(
+      path: '/invite',
+      name: 'invite',
+      builder: (_, state) =>
+          InviteLandingPage(referralCode: state.uri.queryParameters['ref']),
     ),
 
     // Chat IA

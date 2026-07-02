@@ -1,0 +1,17 @@
+name = "mentality-referral"
+main = "index.js"
+compatibility_date = "2025-01-01"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Worker du système de déblocage des résultats par paliers (referral).
+# Stockage : Supabase (PostgREST) — exécuter d'abord schema.sql dans Supabase.
+#
+# Secrets requis (via CLI, JAMAIS commités) :
+#   wrangler secret put SUPABASE_URL          # https://<projet>.supabase.co
+#   wrangler secret put SUPABASE_SERVICE_KEY  # clé service_role
+# ─────────────────────────────────────────────────────────────────────────────
+
+[vars]
+# Délai (minutes) entre la soumission du pseudo Instagram et le déblocage
+# (« vérification en cours »). Réduire à 1 en environnement de test.
+INSTA_UNLOCK_DELAY_MINUTES = "120"

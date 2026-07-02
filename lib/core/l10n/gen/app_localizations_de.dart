@@ -2607,4 +2607,97 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get vocabTipContext => '• Erklären Sie die Bedeutung mit Kontext';
+
+  @override
+  String get ugTitle => 'Dein Ergebnis ist bereit';
+
+  @override
+  String get ugEyebrow => 'Letzte Schritte';
+
+  @override
+  String get ugFreeNotice =>
+      'Der Test ist 100 % kostenlos. Um dein Ergebnis zu erhalten, fehlen noch einige einfache Schritte – sie werden automatisch bestätigt.';
+
+  @override
+  String get ugErrorBody =>
+      'Der Freischaltstatus konnte nicht geladen werden. Prüfe deine Verbindung und versuche es erneut.';
+
+  @override
+  String get ugRetry => 'Erneut versuchen';
+
+  @override
+  String get ugRefresh => 'Aktualisieren';
+
+  @override
+  String get ugStep1Title => 'Lade 3 Freunde ein';
+
+  @override
+  String get ugStep1Body =>
+      'Teile deinen persönlichen Link mit 3 Freunden. Sobald sie über deinen Link am Test teilnehmen, geht dieser Schritt voran.';
+
+  @override
+  String get ugCopyLink => 'Meinen Einladungslink kopieren';
+
+  @override
+  String get ugCopied => 'Link kopiert!';
+
+  @override
+  String ugInviteCounter(int joined, int required) {
+    return '$joined/$required Freunde sind über deinen Link beigetreten';
+  }
+
+  @override
+  String get ugStep2Title => 'Deine Freunde machen ihren Test';
+
+  @override
+  String get ugStep2Body =>
+      'Deine Freunde müssen nun ihren IQ-Test abschließen. Wir warten auf ihre Ergebnisse – erinnere sie ruhig daran!';
+
+  @override
+  String ugFriendDone(int n) {
+    return 'Freund $n: Test abgeschlossen';
+  }
+
+  @override
+  String ugFriendPending(int n) {
+    return 'Freund $n: Test läuft';
+  }
+
+  @override
+  String ugWaitingCounter(int done, int required) {
+    return '$done/$required Tests abgeschlossen';
+  }
+
+  @override
+  String get ugStep3Title => 'Letzter Schritt: Instagram';
+
+  @override
+  String ugStep3Body(String handle) {
+    return 'Folge unserem Konto @$handle und gib deinen Benutzernamen an. Wir prüfen dein Abo und dein Ergebnis wird freigeschaltet.';
+  }
+
+  @override
+  String ugFollowButton(String handle) {
+    return '@$handle auf Instagram folgen';
+  }
+
+  @override
+  String get ugInstaFieldLabel => 'Dein Instagram-Benutzername';
+
+  @override
+  String get ugInstaSubmit => 'Mein Abo bestätigen';
+
+  @override
+  String get ugInstaPending =>
+      'Dein Abo wird überprüft … Dein Ergebnis wird in wenigen Stunden freigeschaltet. Du kannst diese Seite schließen und später zurückkommen.';
+
+  @override
+  String get inviteLandingTitle => 'Einladung';
+
+  @override
+  String get inviteLandingBody =>
+      'Ein Freund lädt dich zum kostenlosen Mentality-IQ-Test ein. Wenn du deinen Test abschließt, erhältst du dein eigenes Ergebnis und hilfst deinem Freund, seines freizuschalten.';
+
+  @override
+  String get inviteLandingCta => 'Kostenlosen Test starten';
 }

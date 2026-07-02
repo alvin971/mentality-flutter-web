@@ -38,4 +38,25 @@ class AuthLocalStore {
 
   /// True si un token est présent localement.
   Future<bool> hasToken() async => (await getToken()) != null;
+
+  static const _referrerKey = 'pending_referrer_code';
+
+  /// Mémorise le code de parrainage capté sur le lien /invite?ref=<code>.
+  /// Consommé une seule fois à la fin du test (validation du parrain).
+  Future<void> savePendingReferrerCode(String code) async {
+    final box = await _openBox();
+    await box.put(_referrerKey, code);
+  }
+
+  /// Code de parrainage en attente, ou `null`.
+  Future<String?> getPendingReferrerCode() async {
+    final box = await _openBox();
+    return box.get(_referrerKey) as String?;
+  }
+
+  /// Efface le code de parrainage (après validation côté serveur).
+  Future<void> clearPendingReferrerCode() async {
+    final box = await _openBox();
+    await box.delete(_referrerKey);
+  }
 }

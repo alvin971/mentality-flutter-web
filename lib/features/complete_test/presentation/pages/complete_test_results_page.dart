@@ -11,6 +11,8 @@ import '../../../../services/session_history_service.dart';
 import '../../../scoring/domain/entities/iq_score.dart';
 import '../../../scoring/domain/services/scoring_service.dart';
 import '../../domain/services/pdf_report_service.dart';
+import '../../../unlock/data/unlock_service.dart';
+import '../../../unlock/presentation/pages/unlock_gate_page.dart';
 import '../../../../core/l10n/l10n_ext.dart';
 
 class CompleteTestResultsPage extends StatefulWidget {
@@ -30,6 +32,11 @@ class CompleteTestResultsPage extends StatefulWidget {
 
 class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
   late final IQScore? _iqScore;
+
+  /// Gate marketing : tant que les paliers (parrainage + Instagram) ne sont
+  /// pas franchis côté serveur, la page affiche UnlockGatePage à la place du
+  /// résultat. Le score reste calculé et sauvegardé en historique (inchangé).
+  bool _unlocked = !UnlockService.instance.gateEnabled;
 
   @override
   void initState() {
@@ -67,6 +74,13 @@ class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (!_unlocked) {
+      return UnlockGatePage(
+        onUnlocked: () {
+          if (mounted) setState(() => _unlocked = true);
+        },
+      );
+    }
     return KeplerScaffold(
       title: context.l10n.ctResultsTitle,
       eyebrow: context.l10n.ctResultsEyebrow,

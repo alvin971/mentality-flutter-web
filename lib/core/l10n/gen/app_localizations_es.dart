@@ -2603,4 +2603,97 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get vocabTipContext => '• Explica el significado con contexto';
+
+  @override
+  String get ugTitle => 'Tu resultado está listo';
+
+  @override
+  String get ugEyebrow => 'Últimos pasos';
+
+  @override
+  String get ugFreeNotice =>
+      'El test es 100 % gratuito. Para recibir tu resultado quedan unos pasos sencillos: se validan automáticamente.';
+
+  @override
+  String get ugErrorBody =>
+      'No se pudo obtener el estado de tu desbloqueo. Comprueba tu conexión e inténtalo de nuevo.';
+
+  @override
+  String get ugRetry => 'Reintentar';
+
+  @override
+  String get ugRefresh => 'Actualizar';
+
+  @override
+  String get ugStep1Title => 'Invita a 3 amigos';
+
+  @override
+  String get ugStep1Body =>
+      'Comparte tu enlace personal con 3 amigos. En cuanto se unan al test con tu enlace, este paso avanza.';
+
+  @override
+  String get ugCopyLink => 'Copiar mi enlace de invitación';
+
+  @override
+  String get ugCopied => '¡Enlace copiado!';
+
+  @override
+  String ugInviteCounter(int joined, int required) {
+    return '$joined/$required amigos se han unido con tu enlace';
+  }
+
+  @override
+  String get ugStep2Title => 'Tus amigos están haciendo su test';
+
+  @override
+  String get ugStep2Body =>
+      'Tus amigos deben terminar ahora su test de CI. Esperamos sus resultados: ¡no dudes en recordárselo!';
+
+  @override
+  String ugFriendDone(int n) {
+    return 'Amigo $n: test terminado';
+  }
+
+  @override
+  String ugFriendPending(int n) {
+    return 'Amigo $n: test en curso';
+  }
+
+  @override
+  String ugWaitingCounter(int done, int required) {
+    return '$done/$required tests terminados';
+  }
+
+  @override
+  String get ugStep3Title => 'Último paso: Instagram';
+
+  @override
+  String ugStep3Body(String handle) {
+    return 'Sigue nuestra cuenta @$handle e indica tu usuario. Verificamos tu suscripción y tu resultado se desbloquea.';
+  }
+
+  @override
+  String ugFollowButton(String handle) {
+    return 'Seguir a @$handle en Instagram';
+  }
+
+  @override
+  String get ugInstaFieldLabel => 'Tu usuario de Instagram';
+
+  @override
+  String get ugInstaSubmit => 'Validar mi suscripción';
+
+  @override
+  String get ugInstaPending =>
+      'Verificando tu suscripción… Tu resultado se desbloqueará en unas horas. Puedes cerrar esta página y volver más tarde.';
+
+  @override
+  String get inviteLandingTitle => 'Invitación';
+
+  @override
+  String get inviteLandingBody =>
+      'Un amigo te invita a hacer el test de CI gratuito de Mentality. Al terminar tu test, obtienes tu propio resultado y ayudas a tu amigo a desbloquear el suyo.';
+
+  @override
+  String get inviteLandingCta => 'Empezar el test gratuito';
 }

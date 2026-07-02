@@ -4628,6 +4628,156 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'• Expliquez le sens avec contexte'**
   String get vocabTipContext;
+
+  /// No description provided for @ugTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton résultat est prêt'**
+  String get ugTitle;
+
+  /// No description provided for @ugEyebrow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dernières étapes'**
+  String get ugEyebrow;
+
+  /// No description provided for @ugFreeNotice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le test est 100 % gratuit. Pour recevoir ton résultat, il te reste quelques étapes simples : elles se valident automatiquement.'**
+  String get ugFreeNotice;
+
+  /// No description provided for @ugErrorBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible de récupérer l\'état de ton déblocage. Vérifie ta connexion puis réessaie.'**
+  String get ugErrorBody;
+
+  /// No description provided for @ugRetry.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réessayer'**
+  String get ugRetry;
+
+  /// No description provided for @ugRefresh.
+  ///
+  /// In fr, this message translates to:
+  /// **'Actualiser'**
+  String get ugRefresh;
+
+  /// No description provided for @ugStep1Title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Invite 3 amis'**
+  String get ugStep1Title;
+
+  /// No description provided for @ugStep1Body.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partage ton lien personnel avec 3 amis. Dès qu\'ils rejoignent le test avec ton lien, cette étape avance.'**
+  String get ugStep1Body;
+
+  /// No description provided for @ugCopyLink.
+  ///
+  /// In fr, this message translates to:
+  /// **'Copier mon lien d\'invitation'**
+  String get ugCopyLink;
+
+  /// No description provided for @ugCopied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lien copié !'**
+  String get ugCopied;
+
+  /// No description provided for @ugInviteCounter.
+  ///
+  /// In fr, this message translates to:
+  /// **'{joined}/{required} amis ont rejoint avec ton lien'**
+  String ugInviteCounter(int joined, int required);
+
+  /// No description provided for @ugStep2Title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tes amis passent leur test'**
+  String get ugStep2Title;
+
+  /// No description provided for @ugStep2Body.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tes amis doivent maintenant terminer leur test de QI. On attend leurs résultats — n\'hésite pas à les relancer !'**
+  String get ugStep2Body;
+
+  /// No description provided for @ugFriendDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ami {n} : test terminé'**
+  String ugFriendDone(int n);
+
+  /// No description provided for @ugFriendPending.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ami {n} : test en cours'**
+  String ugFriendPending(int n);
+
+  /// No description provided for @ugWaitingCounter.
+  ///
+  /// In fr, this message translates to:
+  /// **'{done}/{required} tests terminés'**
+  String ugWaitingCounter(int done, int required);
+
+  /// No description provided for @ugStep3Title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dernière étape : Instagram'**
+  String get ugStep3Title;
+
+  /// No description provided for @ugStep3Body.
+  ///
+  /// In fr, this message translates to:
+  /// **'Abonne-toi à notre compte @{handle} puis indique ton pseudo. On vérifie ton abonnement et ton résultat est débloqué.'**
+  String ugStep3Body(String handle);
+
+  /// No description provided for @ugFollowButton.
+  ///
+  /// In fr, this message translates to:
+  /// **'Suivre @{handle} sur Instagram'**
+  String ugFollowButton(String handle);
+
+  /// No description provided for @ugInstaFieldLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton pseudo Instagram'**
+  String get ugInstaFieldLabel;
+
+  /// No description provided for @ugInstaSubmit.
+  ///
+  /// In fr, this message translates to:
+  /// **'Valider mon abonnement'**
+  String get ugInstaSubmit;
+
+  /// No description provided for @ugInstaPending.
+  ///
+  /// In fr, this message translates to:
+  /// **'Vérification de ton abonnement en cours… Ton résultat sera débloqué d\'ici quelques heures. Tu peux fermer cette page et revenir plus tard.'**
+  String get ugInstaPending;
+
+  /// No description provided for @inviteLandingTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Invitation'**
+  String get inviteLandingTitle;
+
+  /// No description provided for @inviteLandingBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un ami t\'invite à passer le test de QI gratuit Mentality. En terminant ton test, tu obtiens ton propre résultat et tu aides ton ami à débloquer le sien.'**
+  String get inviteLandingBody;
+
+  /// No description provided for @inviteLandingCta.
+  ///
+  /// In fr, this message translates to:
+  /// **'Commencer le test gratuit'**
+  String get inviteLandingCta;
 }
 
 class _AppLocalizationsDelegate

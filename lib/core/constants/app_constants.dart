@@ -76,6 +76,25 @@ class AppConstants {
   static const String tokeniserWorkerUrl =
       'https://mentality-tokeniser.YOUR_SUBDOMAIN.workers.dev';
 
+  /// URL du Cloudflare Worker referral (déblocage des résultats par paliers).
+  /// Déployer workers/referral/ et remplacer cette valeur. Tant que l'URL
+  /// reste le placeholder, le gate est désactivé (résultats affichés
+  /// directement, comportement historique).
+  static const String referralWorkerUrl =
+      'https://mentality-referral.YOUR_SUBDOMAIN.workers.dev';
+
+  /// Active le déblocage des résultats par paliers (parrainage + Instagram).
+  /// Nécessite aussi une [referralWorkerUrl] réelle pour être effectif.
+  static const bool unlockGateEnabled = true;
+
+  /// Base des liens d'invitation partagés (route /invite?ref=<code>).
+  static const String inviteBaseUrl =
+      'https://mentality-flutter-web.pages.dev/#/invite';
+
+  /// Compte Instagram à suivre pour le dernier palier de déblocage.
+  static const String instagramHandle = 'mentality';
+  static const String instagramUrl = 'https://www.instagram.com/mentality/';
+
   /// Clés PUBLIQUES Ed25519 (32 octets, base64url) pour vérifier les tokens
   /// signés, indexées par `kid`. Ce n'est PAS un secret.
   /// ⚠️ Doit correspondre à la clé privée déployée dans le Worker tokeniseur.

@@ -3642,5 +3642,78 @@
   "vocabTipContext": "• Expliquez le sens avec contexte",
   "@vocabTipContext": {
     "description": "Vocabulaire — conseil 3 de l'encart"
-  }
+  },
+  "ugTitle": "Ton résultat est prêt",
+  "ugEyebrow": "Dernières étapes",
+  "ugFreeNotice": "Le test est 100 % gratuit. Pour recevoir ton résultat, il te reste quelques étapes simples : elles se valident automatiquement.",
+  "ugErrorBody": "Impossible de récupérer l'état de ton déblocage. Vérifie ta connexion puis réessaie.",
+  "ugRetry": "Réessayer",
+  "ugRefresh": "Actualiser",
+  "ugStep1Title": "Invite 3 amis",
+  "ugStep1Body": "Partage ton lien personnel avec 3 amis. Dès qu'ils rejoignent le test avec ton lien, cette étape avance.",
+  "ugCopyLink": "Copier mon lien d'invitation",
+  "ugCopied": "Lien copié !",
+  "ugInviteCounter": "{joined}/{required} amis ont rejoint avec ton lien",
+  "@ugInviteCounter": {
+    "placeholders": {
+      "joined": {
+        "type": "int"
+      },
+      "required": {
+        "type": "int"
+      }
+    }
+  },
+  "ugStep2Title": "Tes amis passent leur test",
+  "ugStep2Body": "Tes amis doivent maintenant terminer leur test de QI. On attend leurs résultats — n'hésite pas à les relancer !",
+  "ugFriendDone": "Ami {n} : test terminé",
+  "@ugFriendDone": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "ugFriendPending": "Ami {n} : test en cours",
+  "@ugFriendPending": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "ugWaitingCounter": "{done}/{required} tests terminés",
+  "@ugWaitingCounter": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "required": {
+        "type": "int"
+      }
+    }
+  },
+  "ugStep3Title": "Dernière étape : Instagram",
+  "ugStep3Body": "Abonne-toi à notre compte @{handle} puis indique ton pseudo. On vérifie ton abonnement et ton résultat est débloqué.",
+  "@ugStep3Body": {
+    "placeholders": {
+      "handle": {
+        "type": "String"
+      }
+    }
+  },
+  "ugFollowButton": "Suivre @{handle} sur Instagram",
+  "@ugFollowButton": {
+    "placeholders": {
+      "handle": {
+        "type": "String"
+      }
+    }
+  },
+  "ugInstaFieldLabel": "Ton pseudo Instagram",
+  "ugInstaSubmit": "Valider mon abonnement",
+  "ugInstaPending": "Vérification de ton abonnement en cours… Ton résultat sera débloqué d'ici quelques heures. Tu peux fermer cette page et revenir plus tard.",
+  "inviteLandingTitle": "Invitation",
+  "inviteLandingBody": "Un ami t'invite à passer le test de QI gratuit Mentality. En terminant ton test, tu obtiens ton propre résultat et tu aides ton ami à débloquer le sien.",
+  "inviteLandingCta": "Commencer le test gratuit"
 }
