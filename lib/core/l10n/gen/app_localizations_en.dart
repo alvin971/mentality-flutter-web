@@ -538,6 +538,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ctBackToHome => 'Back to home';
 
   @override
+  String get ctSubtestExitTitle => 'Subtest interrupted';
+
+  @override
+  String get ctSubtestExitBody =>
+      'You left this subtest before finishing it. Would you like to resume it or stop the assessment?';
+
+  @override
+  String get ctSubtestExitResume => 'Resume subtest';
+
+  @override
   String get ctPdfSubtitle => 'WAIS-IV cognitive assessment report';
 
   @override
@@ -3099,6 +3109,16 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get ctBackToHome => 'Back to home';
+
+  @override
+  String get ctSubtestExitTitle => 'Subtest interrupted';
+
+  @override
+  String get ctSubtestExitBody =>
+      'You left this subtest before finishing it. Would you like to resume it or stop the assessment?';
+
+  @override
+  String get ctSubtestExitResume => 'Resume subtest';
 
   @override
   String get ctPdfSubtitle => 'WAIS-IV cognitive assessment report';

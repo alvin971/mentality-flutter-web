@@ -99,8 +99,42 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
         context.read<CompleteTestBloc>().add(
               SubmitSubtestScoreEvent(testName: testName, score: score),
             );
+      } else {
+        // L'utilisateur a quitté le sous-test sans le terminer (retour
+        // arrière). Sans ce garde-fou, aucun événement n'est émis et
+        // l'orchestrateur reste bloqué indéfiniment sur « Lancement… ».
+        // On propose de reprendre le sous-test ou d'arrêter l'évaluation.
+        _handleSubtestAbandon(context, testName);
       }
     });
+  }
+
+  Future<void> _handleSubtestAbandon(
+      BuildContext context, String testName) async {
+    final resume = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(dialogContext.l10n.ctSubtestExitTitle),
+        content: Text(dialogContext.l10n.ctSubtestExitBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: Text(dialogContext.l10n.ctBackToHome),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: Text(dialogContext.l10n.ctSubtestExitResume),
+          ),
+        ],
+      ),
+    );
+    if (!context.mounted) return;
+    if (resume == true) {
+      _launchTest(context, testName); // relance le même sous-test
+    } else {
+      Navigator.of(context).maybePop(); // quitte la batterie vers l'écran précédent
+    }
   }
 
   Widget _getTestPage(BuildContext context, String testName) {

@@ -541,6 +541,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get ctBackToHome => 'Volver al inicio';
 
   @override
+  String get ctSubtestExitTitle => 'Subprueba interrumpida';
+
+  @override
+  String get ctSubtestExitBody =>
+      'Has salido de esta subprueba antes de terminarla. ¿Quieres reanudarla o detener la evaluación?';
+
+  @override
+  String get ctSubtestExitResume => 'Reanudar la subprueba';
+
+  @override
   String get ctPdfSubtitle => 'Informe de evaluación cognitiva WAIS-IV';
 
   @override

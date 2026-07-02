@@ -668,6 +668,18 @@
   "@ctBackToHome": {
     "description": "Bouton de retour à l'accueil depuis les résultats"
   },
+  "ctSubtestExitTitle": "Sous-test interrompu",
+  "@ctSubtestExitTitle": {
+    "description": "Titre du dialogue affiché quand l'utilisateur quitte un sous-test sans le terminer"
+  },
+  "ctSubtestExitBody": "Vous avez quitté ce sous-test avant de le terminer. Voulez-vous le reprendre ou arrêter l'évaluation ?",
+  "@ctSubtestExitBody": {
+    "description": "Corps du dialogue de sortie d'un sous-test"
+  },
+  "ctSubtestExitResume": "Reprendre le sous-test",
+  "@ctSubtestExitResume": {
+    "description": "Bouton pour reprendre le sous-test interrompu"
+  },
   "ctPdfSubtitle": "Rapport d'évaluation cognitive WAIS-IV",
   "@ctPdfSubtitle": {
     "description": "Sous-titre du rapport PDF (sous le titre de marque)"

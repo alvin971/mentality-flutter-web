@@ -544,6 +544,16 @@ class AppLocalizationsDe extends AppLocalizations {
   String get ctBackToHome => 'Zurück zur Startseite';
 
   @override
+  String get ctSubtestExitTitle => 'Untertest unterbrochen';
+
+  @override
+  String get ctSubtestExitBody =>
+      'Sie haben diesen Untertest verlassen, bevor er beendet war. Möchten Sie ihn fortsetzen oder die Bewertung beenden?';
+
+  @override
+  String get ctSubtestExitResume => 'Untertest fortsetzen';
+
+  @override
   String get ctPdfSubtitle => 'WAIS-IV-Bericht zur kognitiven Untersuchung';
 
   @override

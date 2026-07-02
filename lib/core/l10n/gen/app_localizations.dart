@@ -1089,6 +1089,24 @@ abstract class AppLocalizations {
   /// **'Retour à l\'accueil'**
   String get ctBackToHome;
 
+  /// Titre du dialogue affiché quand l'utilisateur quitte un sous-test sans le terminer
+  ///
+  /// In fr, this message translates to:
+  /// **'Sous-test interrompu'**
+  String get ctSubtestExitTitle;
+
+  /// Corps du dialogue de sortie d'un sous-test
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous avez quitté ce sous-test avant de le terminer. Voulez-vous le reprendre ou arrêter l\'évaluation ?'**
+  String get ctSubtestExitBody;
+
+  /// Bouton pour reprendre le sous-test interrompu
+  ///
+  /// In fr, this message translates to:
+  /// **'Reprendre le sous-test'**
+  String get ctSubtestExitResume;
+
   /// Sous-titre du rapport PDF (sous le titre de marque)
   ///
   /// In fr, this message translates to:

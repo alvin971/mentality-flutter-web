@@ -542,6 +542,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get ctBackToHome => 'Voltar ao início';
 
   @override
+  String get ctSubtestExitTitle => 'Subteste interrompido';
+
+  @override
+  String get ctSubtestExitBody =>
+      'Saiu deste subteste antes de o terminar. Deseja retomá-lo ou parar a avaliação?';
+
+  @override
+  String get ctSubtestExitResume => 'Retomar o subteste';
+
+  @override
   String get ctPdfSubtitle => 'Relatório de avaliação cognitiva WAIS-IV';
 
   @override
