@@ -100,6 +100,38 @@ void main() {
     });
   });
 
+  group('VocabularyItem.scoreAnswer — matching par mot entier (anti-exploit)', () {
+    final item = VocabularyItem(
+      word: 'fruit',
+      frequency: WordFrequency.veryHigh,
+      twoPointAnswers: const ['aliment sucré', 'produit comestible'],
+      onePointAnswers: const ['nourriture'],
+      thetaValue: -2.0,
+    );
+
+    test('réponse exacte à 2 points → 2', () {
+      expect(item.scoreAnswer('aliment sucré'), 2);
+    });
+
+    test('définition contenant les mots clés entiers → 2', () {
+      expect(item.scoreAnswer('un aliment sucré que l\'on mange'), 2);
+    });
+
+    test('réponse partielle 1 point → 1', () {
+      expect(item.scoreAnswer('nourriture'), 1);
+    });
+
+    test('fragment de sous-chaîne ne score plus (exploit corrigé)', () {
+      // « men » est une sous-chaîne de « aliment »/« comestible » : ne doit
+      // plus scorer (l'ancien contains bidirectionnel donnait des points).
+      expect(item.scoreAnswer('men'), 0);
+      // Un mot hors-sujet, même contenant une sous-chaîne d'un mot clé.
+      expect(item.scoreAnswer('alimentation'), 0);
+      // Réponse absurde.
+      expect(item.scoreAnswer('xyz'), 0);
+    });
+  });
+
   group('VocabularyGenerator — banque anglaise', () {
     test('génère 30 items EN avec la même structure', () {
       final items =

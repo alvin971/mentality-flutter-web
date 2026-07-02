@@ -119,24 +119,33 @@ class SimilarityItem {
   }
 
   /// Vérifie si une réponse correspond (correspondance flexible)
+  /// Vérifie si une réponse correspond, par comparaison de MOTS ENTIERS.
+  ///
+  /// La comparaison par sous-chaîne (ancienne implémentation) était
+  /// exploitable : un fragment validait un mot clé plus long. On compare
+  /// désormais des ensembles de mots significatifs (≥ 4 lettres).
   bool _matchesAnswer(String userAnswer, String expectedAnswer) {
     // Correspondance exacte
     if (userAnswer == expectedAnswer) return true;
 
-    // Correspondance partielle (contient les mots clés)
-    final userWords = userAnswer.split(' ');
-    final expectedWords = expectedAnswer.split(' ');
+    final userWords = _significantWords(userAnswer);
+    final expectedWords = _significantWords(expectedAnswer);
+    if (expectedWords.isEmpty || userWords.isEmpty) return false;
 
-    // Si l'utilisateur a utilisé au moins 70% des mots clés importants
-    int matchCount = 0;
-    for (final word in expectedWords) {
-      if (word.length > 3 && userWords.any((w) => w.contains(word) || word.contains(w))) {
-        matchCount++;
-      }
-    }
-
+    // Au moins 70% des mots clés attendus présents comme mots entiers.
+    final matchCount = expectedWords.where(userWords.contains).length;
     return matchCount >= (expectedWords.length * 0.7);
   }
+
+  /// Mots significatifs (≥ 4 lettres) d'une chaîne, en ensemble — comparaison
+  /// par mot entier, jamais par sous-chaîne.
+  Set<String> _significantWords(String s) => s
+      .split(_wordSplit)
+      .where((w) => w.length >= 4)
+      .toSet();
+
+  static final RegExp _wordSplit =
+      RegExp(r'[^0-9a-zàâäéèêëïîôöùûüÿçñ]+');
 
   String get levelName {
     switch (level) {

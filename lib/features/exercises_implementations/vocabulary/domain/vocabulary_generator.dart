@@ -123,35 +123,38 @@ class VocabularyItem {
     return 0;
   }
 
-  /// Vérifie si une réponse correspond (correspondance flexible)
+  /// Vérifie si une réponse correspond, par comparaison de MOTS ENTIERS.
+  ///
+  /// La correspondance par sous-chaîne (ancienne implémentation) était
+  /// trivialement exploitable : « rui » validait « fruit », « a » validait
+  /// « animaux ». On compare désormais des ensembles de mots significatifs :
+  /// aucune sous-chaîne n'est acceptée.
   bool _matchesAnswer(String userAnswer, String expectedAnswer) {
     // Correspondance exacte
     if (userAnswer == expectedAnswer) return true;
 
-    // Si l'utilisateur a donné une définition contenant les mots clés
-    if (userAnswer.contains(expectedAnswer) ||
-        expectedAnswer.contains(userAnswer)) {
-      return true;
-    }
+    final userWords = _significantWords(userAnswer);
+    final expectedWords = _significantWords(expectedAnswer);
+    if (expectedWords.isEmpty || userWords.isEmpty) return false;
 
-    // Correspondance partielle (contient les mots clés importants)
-    final userWords =
-        userAnswer.split(' ').where((w) => w.length > 2).toList();
-    final expectedWords =
-        expectedAnswer.split(' ').where((w) => w.length > 2).toList();
+    // La réponse attendue est entièrement présente (tous ses mots clés comme
+    // mots entiers) dans la réponse de l'utilisateur.
+    if (expectedWords.every(userWords.contains)) return true;
 
-    if (expectedWords.isEmpty) return false;
-
-    // Si l'utilisateur a utilisé au moins 60% des mots clés importants
-    int matchCount = 0;
-    for (final word in expectedWords) {
-      if (userWords.any((w) => w.contains(word) || word.contains(w))) {
-        matchCount++;
-      }
-    }
-
+    // Sinon : au moins 60% des mots clés attendus présents comme mots entiers.
+    final matchCount = expectedWords.where(userWords.contains).length;
     return matchCount >= (expectedWords.length * 0.6);
   }
+
+  /// Mots significatifs (≥ 3 lettres) d'une chaîne, en ensemble — comparaison
+  /// par mot entier, jamais par sous-chaîne.
+  Set<String> _significantWords(String s) => s
+      .split(_wordSplit)
+      .where((w) => w.length >= 3)
+      .toSet();
+
+  static final RegExp _wordSplit =
+      RegExp(r'[^0-9a-zàâäéèêëïîôöùûüÿçñ]+');
 
   String get frequencyName {
     switch (frequency) {
