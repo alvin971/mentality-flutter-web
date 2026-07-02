@@ -123,7 +123,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get assessBeforeStartBody =>
-      'Estimated duration 30 to 45 minutes. Quiet and focus required.';
+      'Estimated duration 60 to 90 minutes. Quiet and focus required.';
 
   @override
   String get assessLaunchFullAssessment => 'Start the full assessment';
@@ -717,7 +717,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeActionStartTitle => 'Start an assessment';
 
   @override
-  String get homeActionStartSubtitle => 'Duration: 30 – 45 minutes';
+  String get homeActionStartSubtitle => 'Duration: 60 – 90 minutes';
 
   @override
   String get homeActionResultsTitle => 'My results';
@@ -2588,6 +2588,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get vocabTipContext => '• Explain the meaning with context';
+
+  @override
+  String get demoBadge => 'PRACTICE';
+
+  @override
+  String get demoNotice => 'Practice — this attempt does not count.';
+
+  @override
+  String get demoStart => 'Start the test';
+
+  @override
+  String get demoRetry => 'Try again';
+
+  @override
+  String get demoContinue => 'Continue';
+
+  @override
+  String get demoWellDone => 'Correct!';
+
+  @override
+  String get demoTryAgain => 'Not quite — try again';
 }
 
 /// The translations for English, as used in the United Kingdom (`en_GB`).
@@ -2709,7 +2730,7 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get assessBeforeStartBody =>
-      'Estimated duration 30 to 45 minutes. A quiet setting and full concentration are required.';
+      'Estimated duration 60 to 90 minutes. A quiet setting and full concentration are required.';
 
   @override
   String get assessLaunchFullAssessment => 'Start the full assessment';
@@ -3304,7 +3325,7 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get homeActionStartTitle => 'Start an assessment';
 
   @override
-  String get homeActionStartSubtitle => 'Duration: 30 – 45 minutes';
+  String get homeActionStartSubtitle => 'Duration: 60 – 90 minutes';
 
   @override
   String get homeActionResultsTitle => 'My results';
@@ -5175,4 +5196,25 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get vocabTipContext => '• Explain the meaning with context';
+
+  @override
+  String get demoBadge => 'PRACTICE';
+
+  @override
+  String get demoNotice => 'Practice — this attempt does not count.';
+
+  @override
+  String get demoStart => 'Start the test';
+
+  @override
+  String get demoRetry => 'Try again';
+
+  @override
+  String get demoContinue => 'Continue';
+
+  @override
+  String get demoWellDone => 'Correct!';
+
+  @override
+  String get demoTryAgain => 'Not quite — try again';
 }

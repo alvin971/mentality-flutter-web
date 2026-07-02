@@ -31,14 +31,67 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
   DateTime? _itemStartTime;
   Timer? _countdownTimer;
   int _remainingSeconds = 0;
+  bool _submitted = false;
 
   late List<BalanceItem> _generatedItems;
+
+  /// Phase de DÉMONSTRATION : un item d'exemple fixe, sans chrono ni score,
+  /// rejouable jusqu'à réussite — comme la démonstration du protocole réel.
+  bool _demoPhase = true;
+  late final BalanceItem _demoItem;
 
   @override
   void initState() {
     super.initState();
+    _demoItem = _buildDemoItem();
     _generateItems();
+    // La démonstration n'est pas chronométrée : le compte à rebours ne
+    // démarre qu'au passage au premier item réel (_startRealTest).
+  }
+
+  /// Item de démonstration FIXE et déterministe (aucun aléatoire) : une
+  /// balance triviale « 2 cercles = 2 cercles », question « 2 cercles = ? »,
+  /// 4 options A-D dont une seule correcte (2 cercles). Volontairement très
+  /// facile pour illustrer le principe de l'exercice sans le noter.
+  BalanceItem _buildDemoItem() {
+    const shape = TokenShape.circle;
+    final balance = Balance(
+      leftSide: [Token(shape: shape, count: 2)],
+      rightSide: [Token(shape: shape, count: 2)],
+    );
+    final correctAnswer = [Token(shape: shape, count: 2)];
+    final options = <List<Token>>[
+      [Token(shape: shape, count: 1)],
+      [Token(shape: shape, count: 3)],
+      correctAnswer,
+      [Token(shape: shape, count: 4)],
+    ];
+    return BalanceItem(
+      balances: [balance],
+      question: BalanceQuestion(
+        type: QuestionType.findEquivalent,
+        targetSide: [Token(shape: shape, count: 2)],
+      ),
+      correctAnswer: correctAnswer,
+      options: options,
+      timeLimitSeconds: 20,
+      thetaValue: -1.8,
+    );
+  }
+
+  BalanceItem get _currentItem =>
+      _demoPhase ? _demoItem : _generatedItems[currentLevel];
+
+  void _startRealTest() {
+    setState(() => _demoPhase = false);
     _startItem();
+  }
+
+  void _retryDemo() {
+    setState(() {
+      _selectedAnswer = null;
+      _submitted = false;
+    });
   }
 
   @override
@@ -56,7 +109,8 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
   void _startItem() {
     _itemStartTime = DateTime.now();
     _selectedAnswer = null;
-    _remainingSeconds = _generatedItems[currentLevel].timeLimitSeconds;
+    _submitted = false;
+    _remainingSeconds = _currentItem.timeLimitSeconds;
 
     _startCountdown();
   }
@@ -82,6 +136,14 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
   }
 
   void _submitAnswer() {
+    if (_demoPhase) {
+      // Démo : feedback visuel seulement — ni score, ni règle d'arrêt, ni
+      // chrono, ni dialog révélant la suite (le bouton devient
+      // « Commencer » / « Réessayer »).
+      setState(() => _submitted = true);
+      return;
+    }
+
     _countdownTimer?.cancel();
 
     final timeSeconds = _itemStartTime != null
@@ -248,31 +310,36 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
 
   @override
   Widget build(BuildContext context) {
-    final currentItem = _generatedItems[currentLevel];
+    final currentItem = _currentItem;
 
     return KeplerTestScaffold(
       testName: context.l10n.fwTestName,
-      eyebrow: context.l10n.fwEyebrow,
+      eyebrow: _demoPhase ? context.l10n.demoBadge : context.l10n.fwEyebrow,
       accentColor: AppColors.indexFRI,
-      currentItem: currentLevel + 1,
-      totalItems: _generatedItems.length,
+      // Pas de barre de progression pendant la démo (hors des items notés) :
+      // l'eyebrow « PRACTICE » s'affiche alors dans l'AppBar.
+      currentItem: _demoPhase ? null : currentLevel + 1,
+      totalItems: _demoPhase ? null : _generatedItems.length,
       // Timer + score dans l'AppBar (gain de hauteur) et bouton Valider
       // sticky en bas : plus jamais besoin de scroller pour valider.
-      trailing: [
-        Padding(
-          padding: EdgeInsets.only(left: 8.w),
-          child: _buildTimerBadge(context),
-        ),
-        Padding(
-          padding: EdgeInsets.only(left: 6.w),
-          child: Text(context.l10n.fwScoreFraction(score, currentLevel + 1),
-              style: AppText.monoLabel(color: AppColors.indexFRI)),
-        ),
-      ],
+      // Aucun badge chrono/score pendant la démo (non chronométrée, non notée).
+      trailing: _demoPhase
+          ? null
+          : [
+              Padding(
+                padding: EdgeInsets.only(left: 8.w),
+                child: _buildTimerBadge(context),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 6.w),
+                child: Text(context.l10n.fwScoreFraction(score, currentLevel + 1),
+                    style: AppText.monoLabel(color: AppColors.indexFRI)),
+              ),
+            ],
       bottomBar: KeplerTestButton.primary(
-        label: context.l10n.commonValidate,
+        label: _bottomBarLabel(context, currentItem),
         accentColor: AppColors.indexFRI,
-        onPressed: _selectedAnswer != null ? _submitAnswer : null,
+        onPressed: _bottomBarAction(currentItem),
       ),
       child: Column(
 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -294,6 +361,19 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                   textAlign: TextAlign.center,
                 ),
               ),
+
+              if (_demoPhase) ...[
+                SizedBox(height: 6.h),
+                Text(
+                  context.l10n.demoNotice,
+                  style: TextStyle(
+                    fontSize: 12.sp,
+                    fontStyle: FontStyle.italic,
+                    color: AppColors.grey600,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
 
               SizedBox(height: 10.h),
 
@@ -367,27 +447,42 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                 final option = entry.value;
                 final isSelected = _selectedAnswer != null &&
                     _listsEqual(_selectedAnswer!, option);
+                // Retour visuel de démo : une fois soumise, l'option choisie
+                // se colore en vert (bonne réponse) ou rouge (mauvaise).
+                final demoResult = (_demoPhase && _submitted && isSelected)
+                    ? _listsEqual(option, currentItem.correctAnswer)
+                    : null;
 
                 return Padding(
                   padding: EdgeInsets.only(bottom: 8.h),
                   child: InkWell(
-                    onTap: () {
-                      setState(() {
-                        _selectedAnswer = option;
-                      });
-                    },
+                    onTap: (_demoPhase && _submitted)
+                        ? null
+                        : () {
+                            setState(() {
+                              _selectedAnswer = option;
+                            });
+                          },
                     child: Container(
                       padding: EdgeInsets.symmetric(
                           horizontal: 12.w, vertical: 8.h),
                       decoration: BoxDecoration(
-                        color: isSelected
-                            ? AppColors.infoContainer
-                            : AppColors.grey50,
+                        color: demoResult == true
+                            ? AppColors.successContainer
+                            : demoResult == false
+                                ? AppColors.errorContainer
+                                : isSelected
+                                    ? AppColors.infoContainer
+                                    : AppColors.grey50,
                         borderRadius: BorderRadius.circular(12.r),
                         border: Border.all(
-                          color: isSelected
-                              ? AppColors.info
-                              : AppColors.grey300,
+                          color: demoResult == true
+                              ? AppColors.success
+                              : demoResult == false
+                                  ? AppColors.error
+                                  : isSelected
+                                      ? AppColors.info
+                                      : AppColors.grey300,
                           width: isSelected ? 3 : 2,
                         ),
                       ),
@@ -413,6 +508,24 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
         ],
       ),
     );
+  }
+
+  String _bottomBarLabel(BuildContext context, BalanceItem item) {
+    if (_demoPhase && _submitted) {
+      final isCorrect = _selectedAnswer != null &&
+          _listsEqual(_selectedAnswer!, item.correctAnswer);
+      return isCorrect ? context.l10n.demoStart : context.l10n.demoRetry;
+    }
+    return context.l10n.commonValidate;
+  }
+
+  VoidCallback? _bottomBarAction(BalanceItem item) {
+    if (_demoPhase && _submitted) {
+      final isCorrect = _selectedAnswer != null &&
+          _listsEqual(_selectedAnswer!, item.correctAnswer);
+      return isCorrect ? _startRealTest : _retryDemo;
+    }
+    return _selectedAnswer != null ? _submitAnswer : null;
   }
 
   Widget _buildTimerBadge(BuildContext context) {

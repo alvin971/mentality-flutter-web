@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/l10n/l10n_ext.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
+import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../widgets/cubes_exercise_widget.dart';
 import '../../domain/pattern_generator.dart';
@@ -34,6 +35,23 @@ class _CubesTestPageState extends State<CubesTestPage> {
 
   int _consecutiveFailures = 0;
 
+  /// Phase de DÉMONSTRATION : un item d'exemple fixe, sans chrono ni score,
+  /// rejouable jusqu'à réussite — comme la démonstration du protocole réel.
+  bool _demoPhase = true;
+  late final CubePattern _demoPattern;
+  bool? _demoLastCorrect;
+
+  /// Clé du widget d'exercice pendant la démo : on l'incrémente à chaque
+  /// réessai pour forcer une reconstruction complète de
+  /// [CubesExerciseWidget] (son état d'assemblage — grille utilisateur,
+  /// chrono interne, isCompleted — est privé, donc on repart d'un widget
+  /// neuf plutôt que d'exposer une méthode de reset publique).
+  int _demoAttempt = 0;
+
+  /// Seed fixe de l'item de démonstration (2×2 simple, très facile,
+  /// solvable en quelques secondes). Ne pas changer sans re-vérifier.
+  static const int _demoSeed = 42;
+
   @override
   void initState() {
     super.initState();
@@ -41,7 +59,12 @@ class _CubesTestPageState extends State<CubesTestPage> {
     // même ordre pour toutes les passations, comparabilité CTT).
     _patternGenerator =
         CubePatternGenerator(seed: CubePatternGenerator.kBankSeed);
+    _demoPattern = CubePatternGenerator(seed: _demoSeed)
+        .generatePattern(DifficultyLevel.veryEasy);
     _generateLevels();
+    // La démonstration n'est pas chronométrée : le chrono (interne au
+    // widget d'exercice) ne démarre qu'au passage au premier item réel
+    // (_startRealTest), car on passe timeLimitSeconds: null pendant la démo.
   }
 
   void _generateLevels() {
@@ -55,7 +78,30 @@ class _CubesTestPageState extends State<CubesTestPage> {
         .toList();
   }
 
+  /// Pattern courant : item de démonstration fixe pendant la phase
+  /// d'entraînement, sinon l'item réel généré pour le niveau courant.
+  CubePattern get _currentPattern =>
+      _demoPhase ? _demoPattern : _generatedPatterns[currentLevel];
+
+  void _startRealTest() {
+    setState(() => _demoPhase = false);
+  }
+
+  void _retryDemo() {
+    setState(() {
+      _demoLastCorrect = null;
+      _demoAttempt++;
+    });
+  }
+
   void _handleComplete(bool isCorrect, int timeSeconds) {
+    if (_demoPhase) {
+      // Démo : feedback visuel seulement — ni score, ni règle d'arrêt, ni
+      // avance automatique (le bouton bas devient « Commencer » / « Réessayer »).
+      setState(() => _demoLastCorrect = isCorrect);
+      return;
+    }
+
     setState(() {
       showResult = true;
       lastAnswerCorrect = isCorrect;
@@ -262,47 +308,82 @@ class _CubesTestPageState extends State<CubesTestPage> {
   String _formatTime(int seconds) {
     final mins = seconds ~/ 60;
     final secs = seconds % 60;
-    return '${mins}:${secs.toString().padLeft(2, '0')}';
+    return '$mins:${secs.toString().padLeft(2, '0')}';
   }
 
   @override
   Widget build(BuildContext context) {
-    final pattern = _generatedPatterns[currentLevel];
+    final pattern = _currentPattern;
 
     return KeplerTestScaffold(
       testName: context.l10n.cubesTestName,
-      eyebrow: context.l10n.fwEyebrow,
+      eyebrow: _demoPhase ? context.l10n.demoBadge : context.l10n.fwEyebrow,
       accentColor: AppColors.indexFRI,
-      currentItem: currentLevel + 1,
-      totalItems: _generatedPatterns.length,
+      // Pas de barre de progression pendant la démo (hors des 14 items) :
+      // l'eyebrow « ENTRAÎNEMENT » s'affiche alors dans l'AppBar.
+      currentItem: _demoPhase ? null : currentLevel + 1,
+      totalItems: _demoPhase ? null : _generatedPatterns.length,
       // Tout tient à l'écran : les deux grilles se redimensionnent à la
       // hauteur disponible, les boutons restent toujours visibles.
       scrollable: false,
-      trailing: [
-        Padding(
-          padding: EdgeInsets.only(left: 8.w),
-          child: Text(context.l10n.matPoints(score),
-              style: AppText.monoLabel(color: AppColors.indexFRI)),
-        ),
-      ],
+      trailing: _demoPhase
+          ? null
+          : [
+              Padding(
+                padding: EdgeInsets.only(left: 8.w),
+                child: Text(context.l10n.matPoints(score),
+                    style: AppText.monoLabel(color: AppColors.indexFRI)),
+              ),
+            ],
+      bottomBar: _demoPhase && _demoLastCorrect != null
+          ? KeplerTestButton.primary(
+              label: _demoLastCorrect!
+                  ? context.l10n.demoStart
+                  : context.l10n.demoRetry,
+              accentColor: AppColors.indexFRI,
+              onPressed: _demoLastCorrect! ? _startRealTest : _retryDemo,
+            )
+          : null,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // Niveau — version compacte (la progression est déjà dans le scaffold)
-          _buildLevelHeader(context, pattern),
+          _demoPhase
+              ? _buildDemoHeader(context)
+              : _buildLevelHeader(context, pattern),
           SizedBox(height: 8.h),
 
           // Exercice — occupe toute la hauteur restante
           Expanded(
             child: CubesExerciseWidget(
-              key: ValueKey(currentLevel),
+              // Pendant la démo, on incrémente la clé à chaque réessai pour
+              // forcer un widget neuf (état d'assemblage interne réinitialisé).
+              key: _demoPhase
+                  ? ValueKey('demo-$_demoAttempt')
+                  : ValueKey(currentLevel),
               gridSize: pattern.gridSize,
               targetPattern: pattern.pattern,
-              timeLimitSeconds: pattern.timeLimit,
+              // Pas de chrono pendant la démo : le compte à rebours interne
+              // du widget ne s'active que si timeLimitSeconds != null.
+              timeLimitSeconds: _demoPhase ? null : pattern.timeLimit,
               onComplete: _handleComplete,
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  /// Bandeau compact affiché pendant la démo (remplace _buildLevelHeader,
+  /// qui affiche la difficulté/cohésion — non pertinentes hors barème).
+  Widget _buildDemoHeader(BuildContext context) {
+    return Text(
+      context.l10n.demoNotice,
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        fontSize: 12.sp,
+        color: AppColors.grey600,
+        fontStyle: FontStyle.italic,
       ),
     );
   }

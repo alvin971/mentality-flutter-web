@@ -27,11 +27,26 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
 
   late List<MatrixItem> _generatedItems;
 
+  /// Phase de DÉMONSTRATION : un item d'exemple fixe, sans chrono ni score,
+  /// rejouable jusqu'à réussite — comme la démonstration du protocole réel.
+  bool _demoPhase = true;
+  late final MatrixItem _demoItem;
+
+  /// Vrai une fois la réponse de démo soumise (affiche le feedback et bascule
+  /// le bouton bas sur « Commencer »/« Réessayer »). Sans effet hors démo :
+  /// le vrai test affiche un dialog de feedback immédiat à la place.
+  bool _demoSubmitted = false;
+
   @override
   void initState() {
     super.initState();
     _generateItems();
-    _itemStartTime = DateTime.now();
+    // L'item de démonstration est le premier item (le plus facile) de la
+    // banque, déterministe (MatrixGenerator sans seed custom = kBankSeed
+    // fixe, banque identique à chaque passation).
+    _demoItem = _generatedItems.first;
+    // La démonstration n'est pas chronométrée : le chrono d'item ne démarre
+    // qu'au passage au premier item réel (_startRealTest).
   }
 
   void _generateItems() {
@@ -47,7 +62,27 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
     }
   }
 
+  MatrixItem get _currentItem =>
+      _demoPhase ? _demoItem : _generatedItems[currentLevel];
+
+  void _startRealTest() {
+    setState(() {
+      _demoPhase = false;
+      _demoSubmitted = false;
+      _selectedAnswer = null;
+      _itemStartTime = DateTime.now();
+    });
+  }
+
+  void _retryDemo() {
+    setState(() {
+      _selectedAnswer = null;
+      _demoSubmitted = false;
+    });
+  }
+
   void _handleAnswerSelected(MatrixCell answer) {
+    if (_demoPhase && _demoSubmitted) return;
     setState(() {
       _selectedAnswer = answer;
     });
@@ -55,6 +90,13 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
 
   void _handleSubmit() {
     if (_selectedAnswer == null) return;
+
+    if (_demoPhase) {
+      // Démo : feedback visuel seulement — ni score, ni règle d'arrêt, ni
+      // avance automatique (le bouton devient « Commencer » / « Réessayer »).
+      setState(() => _demoSubmitted = true);
+      return;
+    }
 
     final isCorrect = _selectedAnswer == _generatedItems[currentLevel].correctAnswer;
     final timeSeconds = DateTime.now().difference(_itemStartTime!).inSeconds;
@@ -248,28 +290,31 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
 
   @override
   Widget build(BuildContext context) {
-    final item = _generatedItems[currentLevel];
+    final item = _currentItem;
 
     return KeplerTestScaffold(
       testName: context.l10n.matTestName,
-      eyebrow: context.l10n.matEyebrow,
+      eyebrow: _demoPhase ? context.l10n.demoBadge : context.l10n.matEyebrow,
       accentColor: AppColors.indexFSIQ,
-      currentItem: currentLevel + 1,
-      totalItems: _generatedItems.length,
+      // Pas de barre de progression pendant la démo (hors des 26 items).
+      currentItem: _demoPhase ? null : currentLevel + 1,
+      totalItems: _demoPhase ? null : _generatedItems.length,
       // Tout tient à l'écran : matrice redimensionnée à la hauteur disponible,
       // bouton Valider sticky en bas (jamais besoin de scroller).
       scrollable: false,
-      trailing: [
-        Padding(
-          padding: EdgeInsets.only(left: 8.w),
-          child: Text(context.l10n.matPoints(score),
-              style: AppText.monoLabel(color: AppColors.indexFSIQ)),
-        ),
-      ],
+      trailing: _demoPhase
+          ? null
+          : [
+              Padding(
+                padding: EdgeInsets.only(left: 8.w),
+                child: Text(context.l10n.matPoints(score),
+                    style: AppText.monoLabel(color: AppColors.indexFSIQ)),
+              ),
+            ],
       bottomBar: KeplerTestButton.primary(
-        label: context.l10n.matValidateAnswer,
+        label: _bottomBarLabel(context, item),
         accentColor: AppColors.indexFSIQ,
-        onPressed: _selectedAnswer == null ? null : _handleSubmit,
+        onPressed: _bottomBarAction(),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -280,6 +325,10 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
 
           // Consigne
           _buildInstructions(context),
+          if (_demoPhase) ...[
+            SizedBox(height: 6.h),
+            _buildDemoNotice(context),
+          ],
 
           // Matrice — occupe l'espace restant, réduite si nécessaire
           Expanded(
@@ -296,6 +345,41 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
           _buildOptions(context, item),
           SizedBox(height: 4.h),
         ],
+      ),
+    );
+  }
+
+  String _bottomBarLabel(BuildContext context, MatrixItem item) {
+    if (_demoPhase && _demoSubmitted) {
+      final ok = _selectedAnswer == item.correctAnswer;
+      return ok ? context.l10n.demoStart : context.l10n.demoRetry;
+    }
+    return context.l10n.matValidateAnswer;
+  }
+
+  VoidCallback? _bottomBarAction() {
+    if (_demoPhase && _demoSubmitted) {
+      final ok = _selectedAnswer == _demoItem.correctAnswer;
+      return ok ? _startRealTest : _retryDemo;
+    }
+    return _selectedAnswer == null ? null : _handleSubmit;
+  }
+
+  Widget _buildDemoNotice(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+      decoration: BoxDecoration(
+        color: AppColors.indexFSIQ.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(8.r),
+      ),
+      child: Text(
+        context.l10n.demoNotice,
+        style: TextStyle(
+          fontSize: 11.sp,
+          fontStyle: FontStyle.italic,
+          color: AppColors.grey600,
+        ),
+        textAlign: TextAlign.center,
       ),
     );
   }
@@ -428,7 +512,9 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
                     size: cellSize,
                     isOption: true,
                     isSelected: _selectedAnswer == item.options[i],
-                    onTap: () => _handleAnswerSelected(item.options[i]),
+                    onTap: (_demoPhase && _demoSubmitted)
+                        ? null
+                        : () => _handleAnswerSelected(item.options[i]),
                   ),
                 ],
               ],

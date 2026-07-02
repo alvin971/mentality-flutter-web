@@ -35,10 +35,55 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
   late List<VocabularyItem> _generatedItems;
   final List<ItemResult> _results = [];
 
+  /// Phase d'entraînement (« pour bien commencer ») : un mot d'exemple fixe,
+  /// hors chrono, hors score, hors progression. L'utilisateur peut saisir
+  /// une définition librement mais elle n'est ni jugée ni corrigée — c'est
+  /// un exercice verbal ouvert, pas un item à réponse fermée comme les
+  /// Puzzles Visuels.
+  bool _demoPhase = true;
+
+  /// Mot d'exemple pour la démonstration, localisé selon la langue de contenu
+  /// active (« Vélo », « Bicycle », « Bicicleta », « Fahrrad »…). Ce mot est
+  /// absent des banques notées : la démo ne divulgue donc aucun item réel. La
+  /// définition n'est jamais jugée ni affichée (listes de réponses vides).
+  late final VocabularyItem _demoItem;
+
+  /// Mot d'exemple localisé pour la démonstration.
+  static VocabularyItem _demoItemFor(String tag) {
+    const words = {
+      'en': 'Bicycle',
+      'en-GB': 'Bicycle',
+      'es': 'Bicicleta',
+      'pt': 'Bicicleta',
+      'de': 'Fahrrad',
+      'fr': 'Vélo',
+    };
+    return VocabularyItem(
+      word: words[tag] ?? 'Vélo',
+      frequency: WordFrequency.veryHigh,
+      twoPointAnswers: const [],
+      onePointAnswers: const [],
+      thetaValue: -2.0,
+    );
+  }
+
+  VocabularyItem get _currentItem =>
+      _demoPhase ? _demoItem : _generatedItems[currentLevel];
+
   @override
   void initState() {
     super.initState();
+    _demoItem = _demoItemFor(localeNotifier.contentTag);
     _generateItems();
+    // La démonstration n'est pas chronométrée : le chrono ne démarre qu'au
+    // passage au premier item réel (_startRealTest).
+    _answerController.clear();
+  }
+
+  /// Quitte la phase de démonstration et démarre le premier item réel
+  /// (chrono compris).
+  void _startRealTest() {
+    setState(() => _demoPhase = false);
     _startItem();
   }
 
@@ -113,7 +158,8 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
     _showFeedbackDialog(itemScore, timeSeconds, currentItem);
   }
 
-  void _showFeedbackDialog(int itemScore, int timeSeconds, VocabularyItem item) {
+  void _showFeedbackDialog(
+      int itemScore, int timeSeconds, VocabularyItem item) {
     final l10n = context.l10n;
     showDialog(
       context: context,
@@ -214,7 +260,8 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
               Navigator.of(context).pop();
 
               // Règle de discontinuation : 3 scores de 0 consécutifs (WAIS-IV)
-              if (_consecutiveZeros >= 3 || currentLevel >= _generatedItems.length - 1) {
+              if (_consecutiveZeros >= 3 ||
+                  currentLevel >= _generatedItems.length - 1) {
                 _showFinalResults();
               } else {
                 setState(() {
@@ -363,212 +410,236 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final currentItem = _generatedItems[currentLevel];
+    final currentItem = _currentItem;
 
     return KeplerTestScaffold(
       testName: l10n.vocabTestName,
-      eyebrow: l10n.vocabEyebrow,
+      eyebrow: _demoPhase ? l10n.demoBadge : l10n.vocabEyebrow,
       accentColor: AppColors.indexVCI,
-      currentItem: currentLevel + 1,
-      totalItems: _generatedItems.length,
+      // Pas de barre de progression pendant la démo (hors des 30 items) :
+      // l'eyebrow « ENTRAÎNEMENT » s'affiche alors dans l'AppBar.
+      currentItem: _demoPhase ? null : currentLevel + 1,
+      totalItems: _demoPhase ? null : _generatedItems.length,
       // Timer + score dans l'AppBar et bouton Valider sticky en bas :
       // visible sans scroller, et il reste au-dessus du clavier.
-      trailing: [
-        Padding(
-          padding: EdgeInsets.only(left: 8.w),
-          child: Text(l10n.vocabTimerScore(_elapsedSeconds, score),
-              style: AppText.monoLabel(color: AppColors.indexVCI)),
-        ),
-      ],
-      bottomBar: KeplerTestButton.primary(
-        label: l10n.commonValidate,
-        accentColor: AppColors.indexVCI,
-        onPressed:
-            _answerController.text.trim().isNotEmpty ? _submitAnswer : null,
-      ),
+      // Masqués pendant la démo : ni chrono ni score ne sont engagés.
+      trailing: _demoPhase
+          ? null
+          : [
+              Padding(
+                padding: EdgeInsets.only(left: 8.w),
+                child: Text(l10n.vocabTimerScore(_elapsedSeconds, score),
+                    style: AppText.monoLabel(color: AppColors.indexVCI)),
+              ),
+            ],
+      bottomBar: _demoPhase
+          ? KeplerTestButton.primary(
+              label: l10n.demoStart,
+              accentColor: AppColors.indexVCI,
+              onPressed: _startRealTest,
+            )
+          : KeplerTestButton.primary(
+              label: l10n.commonValidate,
+              accentColor: AppColors.indexVCI,
+              onPressed: _answerController.text.trim().isNotEmpty
+                  ? _submitAnswer
+                  : null,
+            ),
       child: Column(
-crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Instructions
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
-                decoration: BoxDecoration(
-                  color: AppColors.infoContainer,
-                  borderRadius: BorderRadius.circular(8.r),
-                  border: Border.all(color: AppColors.infoLight),
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Instructions
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+            decoration: BoxDecoration(
+              color: AppColors.infoContainer,
+              borderRadius: BorderRadius.circular(8.r),
+              border: Border.all(color: AppColors.infoLight),
+            ),
+            child: Text(
+              l10n.vocabInstruction,
+              style: TextStyle(
+                fontSize: 13.sp,
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+
+          if (_demoPhase) ...[
+            SizedBox(height: 8.h),
+            Text(
+              l10n.demoNotice,
+              style: TextStyle(
+                fontSize: 12.sp,
+                fontStyle: FontStyle.italic,
+                color: AppColors.grey600,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+
+          SizedBox(height: 12.h),
+
+          // Le mot à définir
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 18.h),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  AppColors.indexVCI.withValues(alpha: 0.15),
+                  AppColors.indexVCI.withValues(alpha: 0.05),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(16.r),
+              border: Border.all(color: AppColors.indexVCI, width: 3),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.indexVCI.withValues(alpha: 0.2),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
                 ),
+              ],
+            ),
+            child: Center(
+              // FittedBox : les mots longs se réduisent au lieu de
+              // déborder sur les écrans étroits.
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
                 child: Text(
-                  l10n.vocabInstruction,
+                  currentItem.word,
                   style: TextStyle(
-                    fontSize: 13.sp,
-                    fontWeight: FontWeight.w500,
+                    fontSize: 34.sp,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.indexVCI,
+                    letterSpacing: 1.5,
                   ),
-                  textAlign: TextAlign.center,
                 ),
               ),
+            ),
+          ),
 
-              SizedBox(height: 12.h),
+          SizedBox(height: 12.h),
 
-              // Le mot à définir
+          // Fréquence du mot
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 18.h),
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      AppColors.indexVCI.withValues(alpha: 0.15),
-                      AppColors.indexVCI.withValues(alpha: 0.05),
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(16.r),
-                  border: Border.all(color: AppColors.indexVCI, width: 3),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.indexVCI.withValues(alpha: 0.2),
-                      blurRadius: 12,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
+                  color: _getFrequencyColor(currentItem.frequency),
+                  borderRadius: BorderRadius.circular(20.r),
                 ),
-                child: Center(
-                  // FittedBox : les mots longs se réduisent au lieu de
-                  // déborder sur les écrans étroits.
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      currentItem.word,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.star,
+                      size: 16.sp,
+                      color: Theme.of(context).colorScheme.surface,
+                    ),
+                    SizedBox(width: 6.w),
+                    Text(
+                      _frequencyName(currentItem.frequency),
                       style: TextStyle(
-                        fontSize: 34.sp,
+                        fontSize: 13.sp,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.indexVCI,
-                        letterSpacing: 1.5,
+                        color: Theme.of(context).colorScheme.surface,
                       ),
                     ),
-                  ),
-                ),
-              ),
-
-              SizedBox(height: 12.h),
-
-              // Fréquence du mot
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-                    decoration: BoxDecoration(
-                      color: _getFrequencyColor(currentItem.frequency),
-                      borderRadius: BorderRadius.circular(20.r),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.star,
-                          size: 16.sp,
-                          color: Theme.of(context).colorScheme.surface,
-                        ),
-                        SizedBox(width: 6.w),
-                        Text(
-                          _frequencyName(currentItem.frequency),
-                          style: TextStyle(
-                            fontSize: 13.sp,
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.surface,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-
-              SizedBox(height: 12.h),
-
-              // Champ de réponse
-              Text(
-                l10n.vocabYourDefinitionLabel,
-                style: TextStyle(
-                  fontSize: 15.sp,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 6.h),
-              TextField(
-                controller: _answerController,
-                maxLines: 3,
-                // Met à jour l'état du bouton Valider à chaque frappe.
-                onChanged: (_) => setState(() {}),
-                decoration: InputDecoration(
-                  hintText: l10n.vocabDefinitionHint,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12.r),
-                    borderSide: BorderSide(color: AppColors.grey300, width: 2),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12.r),
-                    borderSide: BorderSide(color: AppColors.indexVCI, width: 2),
-                  ),
-                  filled: true,
-                  fillColor: AppColors.grey50,
-                  contentPadding: EdgeInsets.all(16.w),
-                ),
-                textCapitalization: TextCapitalization.sentences,
-                style: TextStyle(fontSize: 15.sp),
-              ),
-
-              SizedBox(height: 12.h),
-
-              // Aide au scoring
-              Container(
-                padding: EdgeInsets.all(10.w),
-                decoration: BoxDecoration(
-                  color: AppColors.warningContainer,
-                  borderRadius: BorderRadius.circular(12.r),
-                  border: Border.all(color: AppColors.warningLight, width: 2),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.lightbulb_outline,
-                          color: AppColors.warning,
-                          size: 20.sp,
-                        ),
-                        SizedBox(width: 8.w),
-                        Expanded(
-                          child: Text(
-                            l10n.vocabTipsTitle,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14.sp,
-                              color: AppColors.tertiary,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 8.h),
-                    Text(
-                      l10n.vocabTipComplete,
-                      style: TextStyle(fontSize: 13.sp),
-                    ),
-                    Text(
-                      l10n.vocabTipSynonyms,
-                      style: TextStyle(fontSize: 13.sp),
-                    ),
-                    Text(
-                      l10n.vocabTipContext,
-                      style: TextStyle(fontSize: 13.sp),
-                    ),
                   ],
                 ),
               ),
-
             ],
+          ),
+
+          SizedBox(height: 12.h),
+
+          // Champ de réponse
+          Text(
+            l10n.vocabYourDefinitionLabel,
+            style: TextStyle(
+              fontSize: 15.sp,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 6.h),
+          TextField(
+            controller: _answerController,
+            maxLines: 3,
+            // Met à jour l'état du bouton Valider à chaque frappe.
+            onChanged: (_) => setState(() {}),
+            decoration: InputDecoration(
+              hintText: l10n.vocabDefinitionHint,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12.r),
+                borderSide: BorderSide(color: AppColors.grey300, width: 2),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12.r),
+                borderSide: BorderSide(color: AppColors.indexVCI, width: 2),
+              ),
+              filled: true,
+              fillColor: AppColors.grey50,
+              contentPadding: EdgeInsets.all(16.w),
+            ),
+            textCapitalization: TextCapitalization.sentences,
+            style: TextStyle(fontSize: 15.sp),
+          ),
+
+          SizedBox(height: 12.h),
+
+          // Aide au scoring
+          Container(
+            padding: EdgeInsets.all(10.w),
+            decoration: BoxDecoration(
+              color: AppColors.warningContainer,
+              borderRadius: BorderRadius.circular(12.r),
+              border: Border.all(color: AppColors.warningLight, width: 2),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.lightbulb_outline,
+                      color: AppColors.warning,
+                      size: 20.sp,
+                    ),
+                    SizedBox(width: 8.w),
+                    Expanded(
+                      child: Text(
+                        l10n.vocabTipsTitle,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14.sp,
+                          color: AppColors.tertiary,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 8.h),
+                Text(
+                  l10n.vocabTipComplete,
+                  style: TextStyle(fontSize: 13.sp),
+                ),
+                Text(
+                  l10n.vocabTipSynonyms,
+                  style: TextStyle(fontSize: 13.sp),
+                ),
+                Text(
+                  l10n.vocabTipContext,
+                  style: TextStyle(fontSize: 13.sp),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

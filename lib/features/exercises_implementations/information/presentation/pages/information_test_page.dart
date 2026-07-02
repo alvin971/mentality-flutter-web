@@ -31,15 +31,34 @@ class _InformationTestPageState extends State<InformationTestPage> {
   DateTime? _itemStartTime;
   Timer? _timer;
   int _elapsedSeconds = 0;
+  bool _submitted = false;
 
   late List<InformationItem> _generatedItems;
   final List<ItemResult> _results = [];
 
+  /// Phase de DÉMONSTRATION : un item d'exemple fixe, sans chrono ni score,
+  /// rejouable jusqu'à réussite — comme la démonstration du protocole réel.
+  bool _demoPhase = true;
+  late final InformationItem _demoItem;
+
+  /// Seed fixe de l'item de démonstration (tirage reproductible dans
+  /// `InformationGenerator` : mêmes options et même bonne réponse à chaque
+  /// lancement). On prend le premier item "easy" tiré. Ne pas changer sans
+  /// re-vérifier la lisibilité de la question dans toutes les langues.
+  static const int _demoSeed = 7;
+
   @override
   void initState() {
     super.initState();
+    final demoPool = InformationGenerator(
+            languageCode: localeNotifier.contentTag, seed: _demoSeed)
+        .generateComplete28Items();
+    _demoItem = demoPool.firstWhere(
+        (item) => item.difficulty == DifficultyLevel.easy,
+        orElse: () => demoPool.first);
     _generateItems();
-    _startItem();
+    // La démonstration n'est pas chronométrée : le timer ne démarre qu'au
+    // passage au premier item réel (_startRealTest).
   }
 
   @override
@@ -62,10 +81,32 @@ class _InformationTestPageState extends State<InformationTestPage> {
     }
   }
 
+  /// Item actif : l'item de démo fixe pendant la démo, sinon l'item réel
+  /// courant.
+  InformationItem get _currentItem =>
+      _demoPhase ? _demoItem : _generatedItems[currentLevel];
+
+  void _startRealTest() {
+    setState(() {
+      _demoPhase = false;
+      _submitted = false;
+      _selectedAnswer = null;
+    });
+    _startItem();
+  }
+
+  void _retryDemo() {
+    setState(() {
+      _selectedAnswer = null;
+      _submitted = false;
+    });
+  }
+
   void _startItem() {
     _itemStartTime = DateTime.now();
     _elapsedSeconds = 0;
     _selectedAnswer = null;
+    _submitted = false;
 
     _startTimer();
   }
@@ -85,6 +126,7 @@ class _InformationTestPageState extends State<InformationTestPage> {
   }
 
   void _selectAnswer(int index) {
+    if (_demoPhase && _submitted) return;
     setState(() {
       _selectedAnswer = index;
     });
@@ -92,6 +134,13 @@ class _InformationTestPageState extends State<InformationTestPage> {
 
   void _submitAnswer() {
     if (_selectedAnswer == null) return;
+
+    if (_demoPhase) {
+      // Démo : feedback visuel seulement — ni score, ni dialog, ni règle
+      // d'arrêt (le bouton devient « Commencer » / « Réessayer »).
+      setState(() => _submitted = true);
+      return;
+    }
 
     _timer?.cancel();
 
@@ -350,35 +399,86 @@ class _InformationTestPageState extends State<InformationTestPage> {
     return AppColors.error;
   }
 
+  String _bottomBarLabel(BuildContext context) {
+    if (_demoPhase && _submitted) {
+      final ok = _demoItem.isCorrect(_selectedAnswer!);
+      return ok ? context.l10n.demoStart : context.l10n.demoRetry;
+    }
+    return context.l10n.commonValidate;
+  }
+
+  VoidCallback? _bottomBarAction() {
+    if (_demoPhase && _submitted) {
+      final ok = _demoItem.isCorrect(_selectedAnswer!);
+      return ok ? _startRealTest : _retryDemo;
+    }
+    return _selectedAnswer != null ? _submitAnswer : null;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final currentItem = _generatedItems[currentLevel];
+    final currentItem = _currentItem;
 
     return KeplerTestScaffold(
       testName: context.l10n.infoTestName,
-      eyebrow: context.l10n.infoEyebrow,
+      eyebrow: _demoPhase ? context.l10n.demoBadge : context.l10n.infoEyebrow,
       accentColor: AppColors.indexVCI,
-      currentItem: currentLevel + 1,
-      totalItems: _generatedItems.length,
+      // Pas de barre de progression pendant la démo (hors des 28 items) :
+      // le badge « ENTRAÎNEMENT » s'affiche alors dans l'AppBar.
+      currentItem: _demoPhase ? null : currentLevel + 1,
+      totalItems: _demoPhase ? null : _generatedItems.length,
       // Timer + score dans l'AppBar et bouton Valider sticky en bas :
       // question + 4 options + validation visibles sans scroller.
-      trailing: [
-        Padding(
-          padding: EdgeInsets.only(left: 8.w),
-          child: Text(
-              context.l10n.infoTrailingStatus(
-                  _elapsedSeconds, score, currentLevel + 1),
-              style: AppText.monoLabel(color: AppColors.indexVCI)),
-        ),
-      ],
+      // Pendant la démo : ni chrono, ni score (l'essai ne compte pas).
+      trailing: _demoPhase
+          ? null
+          : [
+              Padding(
+                padding: EdgeInsets.only(left: 8.w),
+                child: Text(
+                    context.l10n.infoTrailingStatus(
+                        _elapsedSeconds, score, currentLevel + 1),
+                    style: AppText.monoLabel(color: AppColors.indexVCI)),
+              ),
+            ],
       bottomBar: KeplerTestButton.primary(
-        label: context.l10n.commonValidate,
+        label: _bottomBarLabel(context),
         accentColor: AppColors.indexVCI,
-        onPressed: _selectedAnswer != null ? _submitAnswer : null,
+        onPressed: _bottomBarAction(),
       ),
       child: Column(
 crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              if (_demoPhase) ...[
+                Padding(
+                  padding: EdgeInsets.only(bottom: 8.h),
+                  child: Text(
+                    context.l10n.demoNotice,
+                    style: AppText.body().copyWith(
+                      fontSize: 12.5,
+                      fontStyle: FontStyle.italic,
+                      color: AppColors.grey600,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                if (_submitted)
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 8.h),
+                    child: Text(
+                      _demoItem.isCorrect(_selectedAnswer!)
+                          ? context.l10n.demoWellDone
+                          : context.l10n.demoTryAgain,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: _demoItem.isCorrect(_selectedAnswer!)
+                            ? AppColors.success
+                            : AppColors.error,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+              ],
               // Domaine et difficulté
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -455,6 +555,20 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
               // Options (QCM)
               ...List.generate(4, (index) {
                 final isSelected = _selectedAnswer == index;
+                // Pendant la démo soumise : bref feedback visuel vert/rouge
+                // (bonne réponse / choix incorrect), comme le protocole réel.
+                final showDemoCorrect = _demoPhase &&
+                    _submitted &&
+                    index == currentItem.correctAnswer;
+                final showDemoIncorrect =
+                    _demoPhase && _submitted && isSelected && !showDemoCorrect;
+                final optionColor = showDemoCorrect
+                    ? AppColors.success
+                    : showDemoIncorrect
+                        ? AppColors.error
+                        : isSelected
+                            ? AppColors.indexVCI
+                            : AppColors.grey300;
                 return Padding(
                   padding: EdgeInsets.only(bottom: 8.h),
                   child: InkWell(
@@ -464,15 +578,15 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                       padding: EdgeInsets.symmetric(
                           horizontal: 12.w, vertical: 10.h),
                       decoration: BoxDecoration(
-                        color: isSelected
-                            ? AppColors.indexVCI.withValues(alpha: 0.15)
-                            : AppColors.grey50,
+                        color: (showDemoCorrect || showDemoIncorrect)
+                            ? optionColor.withValues(alpha: 0.15)
+                            : isSelected
+                                ? AppColors.indexVCI.withValues(alpha: 0.15)
+                                : AppColors.grey50,
                         borderRadius: BorderRadius.circular(12.r),
                         border: Border.all(
-                          color: isSelected
-                              ? AppColors.indexVCI
-                              : AppColors.grey300,
-                          width: isSelected ? 3 : 2,
+                          color: optionColor,
+                          width: isSelected || showDemoCorrect ? 3 : 2,
                         ),
                       ),
                       child: Row(
@@ -482,9 +596,11 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                             height: 32.w,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: isSelected
-                                  ? AppColors.indexVCI
-                                  : AppColors.grey300,
+                              color: (showDemoCorrect || showDemoIncorrect)
+                                  ? optionColor
+                                  : isSelected
+                                      ? AppColors.indexVCI
+                                      : AppColors.grey300,
                             ),
                             child: Center(
                               child: Text(

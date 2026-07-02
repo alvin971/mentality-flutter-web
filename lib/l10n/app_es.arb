@@ -36,7 +36,7 @@
   "assessDomainPsi": "Velocidad de Procesamiento",
   "assessDomainLo": "Lenguaje Oral",
   "assessBeforeStartHeader": "ANTES DE EMPEZAR",
-  "assessBeforeStartBody": "Duración estimada de 30 a 45 minutos. Se requiere tranquilidad y concentración.",
+  "assessBeforeStartBody": "Duración estimada de 60 a 90 minutos. Se requiere tranquilidad y concentración.",
   "assessLaunchFullAssessment": "Iniciar la evaluación completa",
   "assessOrIndividualSubtest": "O SUBPRUEBA INDIVIDUAL",
   "assessSubtestCubes": "Cubos (Block Design)",
@@ -217,7 +217,7 @@
   "homeHeroTitleItalic": "tu perfil cognitivo.",
   "homeHeroBody": "Una evaluación científica y adaptativa, inspirada en las escalas Wechsler. 12 subpruebas, 5 índices, una puntuación global.",
   "homeActionStartTitle": "Comenzar una evaluación",
-  "homeActionStartSubtitle": "Duración: 30 – 45 minutos",
+  "homeActionStartSubtitle": "Duración: 60 – 90 minutos",
   "homeActionResultsTitle": "Mis resultados",
   "homeActionResultsSubtitle": "Historial de evaluaciones",
   "homeActionChatTitle": "Hablar con Mental E.T.",
@@ -753,5 +753,12 @@
   "vocabTipsTitle": "Consejos para obtener 2 puntos:",
   "vocabTipComplete": "• Da una definición completa y precisa",
   "vocabTipSynonyms": "• Utiliza sinónimos exactos",
-  "vocabTipContext": "• Explica el significado con contexto"
+  "vocabTipContext": "• Explica el significado con contexto",
+  "demoBadge": "PRÁCTICA",
+  "demoNotice": "Práctica: este intento no cuenta.",
+  "demoStart": "Comenzar la prueba",
+  "demoRetry": "Reintentar",
+  "demoContinue": "Continuar",
+  "demoWellDone": "¡Correcto!",
+  "demoTryAgain": "Casi… inténtalo de nuevo"
 }

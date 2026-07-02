@@ -35,10 +35,91 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
   late List<SimilarityItem> _generatedItems;
   final List<ItemResult> _results = [];
 
+  /// Phase d'ENTRAÎNEMENT : un item d'exemple fixe, sans chrono ni score.
+  /// Similitudes est un exercice VERBAL à réponse ouverte (score 0/1/2 par
+  /// jugement clinique) : il n'y a PAS de correction automatique possible.
+  /// La démo se contente donc de montrer l'exercice et de laisser l'usager
+  /// s'exercer librement, sans jugement correct/incorrect.
+  bool _demoPhase = true;
+
+  /// Item d'exemple FIXE, localisé selon la langue de contenu active. On
+  /// utilise une paire de COULEURS : ce thème est absent des banques de
+  /// similitudes, donc l'exemple (et sa réponse type) ne divulgue aucun item
+  /// réellement noté. Construit dans initState pour suivre `contentTag`.
+  late final SimilarityItem _demoItem;
+
+  /// Paire d'exemple localisée (couleurs) pour la démonstration.
+  static SimilarityItem _demoItemFor(String tag) {
+    switch (tag) {
+      case 'en':
+        return SimilarityItem(
+            word1: 'Red',
+            word2: 'Blue',
+            level: AbstractionLevel.concrete,
+            twoPointAnswers: const ['They are colors'],
+            onePointAnswers: const [],
+            thetaValue: -1.5);
+      case 'en-GB':
+        return SimilarityItem(
+            word1: 'Red',
+            word2: 'Blue',
+            level: AbstractionLevel.concrete,
+            twoPointAnswers: const ['They are colours'],
+            onePointAnswers: const [],
+            thetaValue: -1.5);
+      case 'es':
+        return SimilarityItem(
+            word1: 'Rojo',
+            word2: 'Azul',
+            level: AbstractionLevel.concrete,
+            twoPointAnswers: const ['Son colores'],
+            onePointAnswers: const [],
+            thetaValue: -1.5);
+      case 'pt':
+        return SimilarityItem(
+            word1: 'Vermelho',
+            word2: 'Azul',
+            level: AbstractionLevel.concrete,
+            twoPointAnswers: const ['São cores'],
+            onePointAnswers: const [],
+            thetaValue: -1.5);
+      case 'de':
+        return SimilarityItem(
+            word1: 'Rot',
+            word2: 'Blau',
+            level: AbstractionLevel.concrete,
+            twoPointAnswers: const ['Es sind Farben'],
+            onePointAnswers: const [],
+            thetaValue: -1.5);
+      case 'fr':
+      default:
+        return SimilarityItem(
+            word1: 'Rouge',
+            word2: 'Bleu',
+            level: AbstractionLevel.concrete,
+            twoPointAnswers: const ['Ce sont des couleurs'],
+            onePointAnswers: const [],
+            thetaValue: -1.5);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    _demoItem = _demoItemFor(localeNotifier.contentTag);
     _generateItems();
+    // La démonstration n'est pas chronométrée : le chrono ne démarre qu'au
+    // passage au premier item réel (_startRealTest).
+  }
+
+  SimilarityItem get _currentItem =>
+      _demoPhase ? _demoItem : _generatedItems[currentLevel];
+
+  /// Quitte la phase de démonstration et démarre le premier item réel
+  /// (chrono inclus). Toujours disponible, même sans réponse saisie : la
+  /// démo n'est pas notée, l'usager peut donc l'ignorer et enchaîner.
+  void _startRealTest() {
+    setState(() => _demoPhase = false);
     _startItem();
   }
 
@@ -346,32 +427,67 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
 
   @override
   Widget build(BuildContext context) {
-    final currentItem = _generatedItems[currentLevel];
+    final currentItem = _currentItem;
 
     return KeplerTestScaffold(
       testName: context.l10n.simTestName,
-      eyebrow: context.l10n.simEyebrow,
+      eyebrow: _demoPhase ? context.l10n.demoBadge : context.l10n.simEyebrow,
       accentColor: AppColors.indexVCI,
-      currentItem: currentLevel + 1,
-      totalItems: _generatedItems.length,
+      // Pas de barre de progression pendant la démo (hors des 21 items).
+      currentItem: _demoPhase ? null : currentLevel + 1,
+      totalItems: _demoPhase ? null : _generatedItems.length,
       // Timer + score dans l'AppBar et bouton Valider sticky en bas :
       // visible sans scroller, et il reste au-dessus du clavier.
-      trailing: [
-        Padding(
-          padding: EdgeInsets.only(left: 8.w),
-          child: Text(context.l10n.simStatusBar(_elapsedSeconds, score),
-              style: AppText.monoLabel(color: AppColors.indexVCI)),
-        ),
-      ],
-      bottomBar: KeplerTestButton.primary(
-        label: context.l10n.commonValidate,
-        accentColor: AppColors.indexVCI,
-        onPressed:
-            _answerController.text.trim().isNotEmpty ? _submitAnswer : null,
-      ),
+      // Masqués pendant la démo : ni chrono, ni score en entraînement.
+      trailing: _demoPhase
+          ? null
+          : [
+              Padding(
+                padding: EdgeInsets.only(left: 8.w),
+                child: Text(context.l10n.simStatusBar(_elapsedSeconds, score),
+                    style: AppText.monoLabel(color: AppColors.indexVCI)),
+              ),
+            ],
+      bottomBar: _demoPhase
+          ? KeplerTestButton.primary(
+              label: context.l10n.demoStart,
+              accentColor: AppColors.indexVCI,
+              // Toujours actif : la démo n'est pas notée, une réponse n'est
+              // pas requise pour continuer.
+              onPressed: _startRealTest,
+            )
+          : KeplerTestButton.primary(
+              label: context.l10n.commonValidate,
+              accentColor: AppColors.indexVCI,
+              onPressed: _answerController.text.trim().isNotEmpty
+                  ? _submitAnswer
+                  : null,
+            ),
       child: Column(
 crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              // Bandeau d'entraînement : rappelle que cet essai ne compte pas.
+              if (_demoPhase) ...[
+                Container(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+                  decoration: BoxDecoration(
+                    color: AppColors.warningContainer,
+                    borderRadius: BorderRadius.circular(8.r),
+                    border: Border.all(color: AppColors.warningLight),
+                  ),
+                  child: Text(
+                    context.l10n.demoNotice,
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+              ],
               // Instructions
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
@@ -491,6 +607,39 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
               ),
 
               SizedBox(height: 16.h),
+
+              // Exemple de bonne réponse (démo uniquement) : pas de jugement
+              // automatique correct/incorrect sur ce qui est saisi, on montre
+              // simplement à quoi ressemble une réponse complète.
+              if (_demoPhase && currentItem.twoPointAnswers.isNotEmpty) ...[
+                Container(
+                  padding: EdgeInsets.all(12.w),
+                  decoration: BoxDecoration(
+                    color: AppColors.infoContainer,
+                    borderRadius: BorderRadius.circular(8.r),
+                    border: Border.all(color: AppColors.infoLight),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        context.l10n.simExamples2pts,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13.sp,
+                          color: AppColors.success,
+                        ),
+                      ),
+                      SizedBox(height: 4.h),
+                      Text(
+                        '• ${currentItem.twoPointAnswers.first}',
+                        style: TextStyle(fontSize: 12.sp),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 16.h),
+              ],
 
               // Aide au scoring
               Container(

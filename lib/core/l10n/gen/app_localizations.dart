@@ -324,7 +324,7 @@ abstract class AppLocalizations {
   /// Texte de consigne avant le bilan
   ///
   /// In fr, this message translates to:
-  /// **'Durée estimée 30 à 45 minutes. Calme et concentration requis.'**
+  /// **'Durée estimée 60 à 90 minutes. Calme et concentration requis.'**
   String get assessBeforeStartBody;
 
   /// Bouton pour lancer le bilan complet
@@ -1410,7 +1410,7 @@ abstract class AppLocalizations {
   /// Home action card 1 subtitle
   ///
   /// In fr, this message translates to:
-  /// **'Durée : 30 – 45 minutes'**
+  /// **'Durée : 60 – 90 minutes'**
   String get homeActionStartSubtitle;
 
   /// Home action card 2 title
@@ -4628,6 +4628,48 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'• Expliquez le sens avec contexte'**
   String get vocabTipContext;
+
+  /// Phase d'entraînement — libellé d'en-tête générique (partagé entre exercices)
+  ///
+  /// In fr, this message translates to:
+  /// **'ENTRAÎNEMENT'**
+  String get demoBadge;
+
+  /// Phase d'entraînement — bandeau expliquant que l'essai n'est pas noté
+  ///
+  /// In fr, this message translates to:
+  /// **'Entraînement — cet essai ne compte pas.'**
+  String get demoNotice;
+
+  /// Phase d'entraînement — bouton pour passer au test réel
+  ///
+  /// In fr, this message translates to:
+  /// **'Commencer le test'**
+  String get demoStart;
+
+  /// Phase d'entraînement — bouton pour refaire l'essai
+  ///
+  /// In fr, this message translates to:
+  /// **'Réessayer'**
+  String get demoRetry;
+
+  /// Phase d'entraînement — bouton neutre pour poursuivre (exercices sans bonne/mauvaise réponse automatique)
+  ///
+  /// In fr, this message translates to:
+  /// **'Continuer'**
+  String get demoContinue;
+
+  /// Phase d'entraînement — retour positif après un essai correct
+  ///
+  /// In fr, this message translates to:
+  /// **'Bonne réponse !'**
+  String get demoWellDone;
+
+  /// Phase d'entraînement — retour après un essai incorrect
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas tout à fait — réessayez'**
+  String get demoTryAgain;
 }
 
 class _AppLocalizationsDelegate

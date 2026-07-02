@@ -36,7 +36,7 @@
   "assessDomainPsi": "Verarbeitungsgeschwindigkeit",
   "assessDomainLo": "Mündliche Sprache",
   "assessBeforeStartHeader": "VOR DEM BEGINN",
-  "assessBeforeStartBody": "Voraussichtliche Dauer 30 bis 45 Minuten. Ruhe und Konzentration erforderlich.",
+  "assessBeforeStartBody": "Voraussichtliche Dauer 60 bis 90 Minuten. Ruhe und Konzentration erforderlich.",
   "assessLaunchFullAssessment": "Vollständige Untersuchung starten",
   "assessOrIndividualSubtest": "ODER EINZELNER UNTERTEST",
   "assessSubtestCubes": "Mosaik-Test (Block Design)",
@@ -217,7 +217,7 @@
   "homeHeroTitleItalic": "Ihr kognitives Profil.",
   "homeHeroBody": "Eine adaptive, wissenschaftliche Untersuchung, angelehnt an die Wechsler-Skalen. 12 Untertests, 5 Indizes, ein Gesamtwert.",
   "homeActionStartTitle": "Untersuchung beginnen",
-  "homeActionStartSubtitle": "Dauer: 30 – 45 Minuten",
+  "homeActionStartSubtitle": "Dauer: 60 – 90 Minuten",
   "homeActionResultsTitle": "Meine Ergebnisse",
   "homeActionResultsSubtitle": "Untersuchungsverlauf",
   "homeActionChatTitle": "Mit Mental E.T. sprechen",
@@ -753,5 +753,12 @@
   "vocabTipsTitle": "Tipps, um 2 Punkte zu erreichen:",
   "vocabTipComplete": "• Geben Sie eine vollständige und präzise Definition",
   "vocabTipSynonyms": "• Verwenden Sie genaue Synonyme",
-  "vocabTipContext": "• Erklären Sie die Bedeutung mit Kontext"
+  "vocabTipContext": "• Erklären Sie die Bedeutung mit Kontext",
+  "demoBadge": "ÜBUNG",
+  "demoNotice": "Übung – dieser Versuch zählt nicht.",
+  "demoStart": "Test starten",
+  "demoRetry": "Erneut versuchen",
+  "demoContinue": "Weiter",
+  "demoWellDone": "Richtig!",
+  "demoTryAgain": "Nicht ganz – versuchen Sie es erneut"
 }
