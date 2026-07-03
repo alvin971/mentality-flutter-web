@@ -18,10 +18,16 @@ compatibility_date = "2025-01-01"
 # vérifier qu'un test a réellement produit des enregistrements sous le compte
 # (preuve de complétion) avant de valider le token, et pour écrire le marqueur
 # validated/<account>. jurisdiction = "eu" OBLIGATOIRE (résidence RGPD).
-[[r2_buckets]]
-binding = "AUDIO_BUCKET"
-bucket_name = "mentality-audio"
-jurisdiction = "eu"
+#
+# ⚠️ TEMPORAIREMENT DÉSACTIVÉ (2026-07-03) : R2 n'est pas encore activé sur le
+# compte Cloudflare (1 clic dashboard requis). L'émission (POST /) fonctionne
+# sans ; seul POST /validate répond 503 (le code garde env.AUDIO_BUCKET).
+# → RÉACTIVER ces 4 lignes + `wrangler r2 bucket create mentality-audio
+#   --jurisdiction eu` + redéployer, dès que R2 est activé.
+# [[r2_buckets]]
+# binding = "AUDIO_BUCKET"
+# bucket_name = "mentality-audio"
+# jurisdiction = "eu"
 
 # Nombre minimal d'enregistrements exigé sous le compte pour valider le token
 # (proxy de « test complété » ; best-effort uploads → garder bas, ajustable).

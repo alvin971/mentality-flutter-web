@@ -26,7 +26,7 @@
 // ⚠️ NON secret. DOIT rester synchronisé avec
 //    AppConstants.tokenSigningPublicKeys (lib/core/constants/app_constants.dart).
 export const TOKEN_SIGNING_PUBLIC_KEYS = {
-  k1: '-2eBilftJKpyg_NHaQpXDBwuVFMA2z3JaZgXpDF_rCw',
+  k1: 'mb7Vw9W63IPYxTzTiVYbkFk9LYBEhIm7w7meIjK8Dd4',
 };
 
 // Versions de schéma de claims supportées. Miroir de `kTokenSchemaVersion`

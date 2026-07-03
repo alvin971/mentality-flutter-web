@@ -10,6 +10,7 @@
 // (voir TokenIssuer).
 
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../core/constants/app_constants.dart';
@@ -29,8 +30,14 @@ class TokeniserService {
 
   final http.Client _client;
 
+  /// TESTS UNIQUEMENT : force le chemin « non configuré » (fallback DEV local)
+  /// pour que les tests unitaires n'appellent jamais le Worker réel.
+  @visibleForTesting
+  static bool debugForceUnconfigured = false;
+
   /// `true` si une URL de Worker réelle est configurée (pas le placeholder).
   bool get isConfigured =>
+      !debugForceUnconfigured &&
       !AppConstants.tokeniserWorkerUrl.contains('YOUR_SUBDOMAIN');
 
   /// Demande un token signé PROVISOIRE pour [claims] (claims larges :

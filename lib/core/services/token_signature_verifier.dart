@@ -13,6 +13,7 @@
 import 'dart:convert';
 
 import 'package:cryptography/cryptography.dart';
+import 'package:flutter/foundation.dart';
 
 import '../constants/app_constants.dart';
 
@@ -43,6 +44,12 @@ class TokenSignatureVerifier {
   TokenSignatureVerifier._();
 
   static final _algo = Ed25519();
+
+  /// TESTS UNIQUEMENT : remplace les clés pinnées de production. Permet aux
+  /// tests de signer leurs fixtures avec un keypair de test sans jamais
+  /// embarquer la clé privée de prod dans le repo. Null en fonctionnement réel.
+  @visibleForTesting
+  static Map<String, String>? debugKeysOverride;
 
   /// Vérifie la signature d'un token signé (3 segments) et renvoie ses claims.
   ///
@@ -78,7 +85,8 @@ class TokenSignatureVerifier {
       }
       final kid = header['kid'];
       if (kid is! String) return TokenVerificationResult.fail('kid');
-      final pubB64 = AppConstants.tokenSigningPublicKeys[kid];
+      final pubB64 =
+          (debugKeysOverride ?? AppConstants.tokenSigningPublicKeys)[kid];
       if (pubB64 == null) return TokenVerificationResult.fail('kid_unknown');
 
       final pubBytes = _b64urlDecode(pubB64);

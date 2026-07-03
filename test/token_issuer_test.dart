@@ -8,6 +8,7 @@ import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mentality/core/services/token_issuer.dart';
+import 'package:mentality/services/tokeniser_service.dart';
 
 TokenDemographics _validDemo() => const TokenDemographics(
       sexCode: 'F',
@@ -17,6 +18,11 @@ TokenDemographics _validDemo() => const TokenDemographics(
     );
 
 void main() {
+  // Ces tests valident le FALLBACK DEV local (token M2. non signé) : on force
+  // le chemin « Worker non configuré » pour ne jamais appeler le réseau.
+  setUpAll(() => TokeniserService.debugForceUnconfigured = true);
+  tearDownAll(() => TokeniserService.debugForceUnconfigured = false);
+
   test('issue() produit un token préfixé M2 avec des claims compactes',
       () async {
     final now = DateTime.utc(2026, 7, 1);

@@ -1,9 +1,11 @@
 // Test d'interopérabilité de la vérification de signature Ed25519.
 //
-// On SIGNE un token avec la seed du keypair DEV (celle dont la clé publique est
-// pinnée dans AppConstants.tokenSigningPublicKeys['k1']), puis on vérifie via
-// TokenSignatureVerifier. Cela valide à la fois la logique de vérif ET que la
-// clé publique pinnée correspond bien à la clé privée DEV.
+// On SIGNE un token avec la seed du keypair DEV (test uniquement) et on
+// injecte sa clé publique via `debugKeysOverride` : la clé pinnée de PROD
+// (AppConstants) correspond à une clé privée qui ne vit que dans le secret du
+// Worker — elle n'est jamais dans le repo. L'interop réelle V8→Dart avec la
+// clé de prod est validée hors CI (token émis par le Worker déployé, cf.
+// workers/tokeniser/README.md §4).
 
 import 'dart:convert';
 
@@ -50,7 +52,17 @@ Map<String, dynamic> _validPayload() => {
       'sv': 2,
     };
 
+/// Clé publique du keypair DEV ci-dessus (base64url, 32 octets).
+const String _devPubB64url = '-2eBilftJKpyg_NHaQpXDBwuVFMA2z3JaZgXpDF_rCw';
+
 void main() {
+  setUpAll(() {
+    TokenSignatureVerifier.debugKeysOverride = {'k1': _devPubB64url};
+  });
+  tearDownAll(() {
+    TokenSignatureVerifier.debugKeysOverride = null;
+  });
+
   test('accepte un token correctement signé et renvoie ses claims', () async {
     final token =
         await _makeToken(header: _validHeader(), payload: _validPayload());

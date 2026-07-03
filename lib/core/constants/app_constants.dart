@@ -74,7 +74,7 @@ class AppConstants {
   /// Tant que l'URL reste le placeholder, l'émission utilise le fallback DEV
   /// local NON signé (autorisé en debug uniquement — voir TokenIssuer).
   static const String tokeniserWorkerUrl =
-      'https://mentality-tokeniser.YOUR_SUBDOMAIN.workers.dev';
+      'https://mentality-tokeniser.devgreenpro.workers.dev';
 
   /// URL du Cloudflare Worker referral (déblocage des résultats par paliers).
   /// Déployer workers/referral/ et remplacer cette valeur. Tant que l'URL
@@ -104,7 +104,7 @@ class AppConstants {
   /// La valeur ci-dessous est la clé publique du keypair DEV — la REMPLACER si
   /// le keypair est régénéré pour la production.
   static const Map<String, String> tokenSigningPublicKeys = {
-    'k1': '-2eBilftJKpyg_NHaQpXDBwuVFMA2z3JaZgXpDF_rCw',
+    'k1': 'mb7Vw9W63IPYxTzTiVYbkFk9LYBEhIm7w7meIjK8Dd4',
   };
 
   static const String endpointAuth = '/auth';
