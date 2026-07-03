@@ -88,8 +88,10 @@ class AppConstants {
   static const bool unlockGateEnabled = true;
 
   /// Base des liens d'invitation partagés (route /invite?ref=<code>).
-  static const String inviteBaseUrl =
-      'https://mentality-flutter-web.pages.dev/#/invite';
+  /// Pointe sur le site vitrine (l'app web publique a été retirée) : la page
+  /// affiche le code + les liens stores ; le filleul saisit le code à
+  /// l'inscription dans l'app mobile.
+  static const String inviteBaseUrl = 'https://mental-et.com/invite';
 
   /// Compte Instagram à suivre pour le dernier palier de déblocage.
   static const String instagramHandle = 'mental_e.t';

@@ -35,6 +35,10 @@ import { verifyToken, TOKEN_SIGNING_PUBLIC_KEYS, sha256hex } from '../_shared/to
 const REQUIRED_REFERRALS = 3;
 
 const ALLOWED_ORIGINS = [
+  'https://mental-et.com',
+  'https://www.mental-et.com',
+  'https://mental-et-web.pages.dev',
+  // Historique (app web retirée, liens d'invitation déjà partagés) :
   'https://mentality-flutter-web.pages.dev',
   'http://localhost:7357',
   'http://localhost:8080',
