@@ -1,4 +1,4 @@
-package com.example.mentality
+package com.mentalite.app
 
 import io.flutter.embedding.android.FlutterActivity
 
