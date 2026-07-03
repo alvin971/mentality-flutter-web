@@ -34,9 +34,9 @@ android {
     defaultConfig {
         // Identifiant unique de l'app (cohérent avec l'iOS : com.mentalite.app).
         applicationId = "com.mentalite.app"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        // minSdk 23 : exigé par le plugin record_android (enregistrement audio
+        // des tests oraux). Android 6.0+, ~98 % du parc.
+        minSdk = 23
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
