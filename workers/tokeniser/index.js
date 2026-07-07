@@ -30,6 +30,7 @@
  */
 
 import { verifyToken, TOKEN_SIGNING_PUBLIC_KEYS, sha256hex } from '../_shared/token_verify.js';
+import { hasEnoughRecordings } from '../_shared/completion_proof.js';
 
 const KID = 'k1';
 const SCHEMA_VERSION = 2;
@@ -85,9 +86,30 @@ export default {
     if (path === '/validate') {
       return handleValidate(body, env, origin);
     }
+    if (await isRateLimited(request, env)) {
+      return json({ error: 'Trop de requêtes — réessayer plus tard' }, 429, origin);
+    }
     return handleIssue(body, env, origin);
   },
 };
+
+/**
+ * Limite d'émission par IP : au plus RATE_LIMIT_PER_HOUR tokens par heure.
+ * L'IP n'est JAMAIS stockée en clair (clé = sha256), TTL 1 h — cohérent avec
+ * l'anonymat du worker (aucun log). Fail-open si RATE_KV absent : une panne
+ * du rate-limit ne doit jamais empêcher un vrai utilisateur d'obtenir son token.
+ */
+async function isRateLimited(request, env) {
+  if (!env.RATE_KV) return false;
+  const ip = request.headers.get('CF-Connecting-IP') || '';
+  if (!ip) return false;
+  const key = `rl:${await sha256hex(ip)}`;
+  const max = parseInt(env.RATE_LIMIT_PER_HOUR || '5', 10);
+  const count = parseInt((await env.RATE_KV.get(key)) || '0', 10) || 0;
+  if (count >= max) return true;
+  await env.RATE_KV.put(key, String(count + 1), { expirationTtl: 3600 });
+  return false;
+}
 
 /**
  * GET /geo — déduit une région large depuis la géo-IP Cloudflare (request.cf).
@@ -196,17 +218,6 @@ async function handleValidate(body, env, origin) {
     return json({ error: "Échec de l'enregistrement de la complétion" }, 500, origin);
   }
   return json({ ok: true }, 200, origin);
-}
-
-/** True si ≥ [min] objets existent sous reusable/<account>/ ou internal/<account>/. */
-async function hasEnoughRecordings(bucket, account, min) {
-  let count = 0;
-  for (const prefix of [`reusable/${account}/`, `internal/${account}/`]) {
-    const listed = await bucket.list({ prefix, limit: min });
-    count += listed.objects.length;
-    if (count >= min) return true;
-  }
-  return count >= min;
 }
 
 /**

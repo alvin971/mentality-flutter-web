@@ -12,7 +12,18 @@ compatibility_date = "2025-01-01"
 binding = "REFERRAL_KV"
 id = "6c70f3aab78c4aeb92d1255f62edbafd"
 
+# MÊME bucket EU que tokeniser / r2-upload : sert à vérifier la PREUVE de
+# complétion du test du filleul (validated/<account> ou enregistrements)
+# avant de créditer un parrainage. Anti-fraude — cf. _shared/completion_proof.js.
+[[r2_buckets]]
+binding = "AUDIO_BUCKET"
+bucket_name = "mentality-audio"
+jurisdiction = "eu"
+
 [vars]
 # Délai (minutes) entre la soumission du pseudo Instagram et le déblocage
 # (« vérification en cours »). Réduire pour tester le parcours de bout en bout.
 INSTA_UNLOCK_DELAY_MINUTES = "120"
+# Enregistrements minimum sous le compte pour prouver un test complété
+# (miroir de workers/tokeniser — garder les deux valeurs alignées).
+MIN_RECORDINGS = "1"

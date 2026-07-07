@@ -24,12 +24,19 @@ class UnlockProgress {
   final int requiredReferrals;
   final bool instagramSubmitted;
 
+  /// Le lien filleul→parrain est-il enregistré côté serveur ? `false` tant que
+  /// la preuve de complétion du test n'est pas visible (le code de parrainage
+  /// local doit alors être CONSERVÉ pour re-tenter). `null` = worker antérieur
+  /// au champ (comportement historique : considérer comme enregistré).
+  final bool? refereeRecorded;
+
   const UnlockProgress({
     required this.stage,
     required this.referralCode,
     required this.completedReferrals,
     required this.requiredReferrals,
     required this.instagramSubmitted,
+    this.refereeRecorded,
   });
 
   factory UnlockProgress.fromJson(Map<String, dynamic> j) => UnlockProgress(
@@ -38,6 +45,7 @@ class UnlockProgress {
         completedReferrals: (j['completedReferrals'] as num?)?.toInt() ?? 0,
         requiredReferrals: (j['requiredReferrals'] as num?)?.toInt() ?? 3,
         instagramSubmitted: j['instagramSubmitted'] as bool? ?? false,
+        refereeRecorded: j['refereeRecorded'] as bool?,
       );
 
   bool get unlocked => stage >= 4;
@@ -79,11 +87,16 @@ class UnlockService {
         body: jsonEncode({if (referrer != null) 'referrerCode': referrer}),
       );
       if (resp.statusCode != 200) return null;
-      if (referrer != null) {
+      final progress = UnlockProgress.fromJson(
+          jsonDecode(resp.body) as Map<String, dynamic>);
+      // N'effacer le code de parrainage local que si le serveur a bien
+      // enregistré le lien (refereeRecorded). S'il vaut false, la preuve de
+      // complétion n'était pas encore visible côté worker (course /validate ou
+      // uploads en retard) : on garde le code et le prochain passage re-tente.
+      if (referrer != null && progress.refereeRecorded != false) {
         await AuthLocalStore.instance.clearPendingReferrerCode();
       }
-      return UnlockProgress.fromJson(
-          jsonDecode(resp.body) as Map<String, dynamic>);
+      return progress;
     } catch (_) {
       return null;
     }
@@ -93,6 +106,11 @@ class UnlockService {
   Future<UnlockProgress?> getProgress() async {
     final headers = await _authHeaders();
     if (!isConfigured || headers == null) return null;
+    // Un code de parrainage attend toujours d'être validé ? Repasser par
+    // /progress/init (idempotent) : c'est lui qui porte le referrerCode.
+    if (await AuthLocalStore.instance.getPendingReferrerCode() != null) {
+      return initProgress();
+    }
     try {
       final resp = await http.get(
         Uri.parse('${AppConstants.referralWorkerUrl}/progress'),
