@@ -19,17 +19,20 @@ compatibility_date = "2025-01-01"
 # (preuve de complétion) avant de valider le token, et pour écrire le marqueur
 # validated/<account>. jurisdiction = "eu" OBLIGATOIRE (résidence RGPD).
 #
-# ⚠️ TEMPORAIREMENT DÉSACTIVÉ (2026-07-03) : R2 n'est pas encore activé sur le
-# compte Cloudflare (1 clic dashboard requis). L'émission (POST /) fonctionne
-# sans ; seul POST /validate répond 503 (le code garde env.AUDIO_BUCKET).
-# → RÉACTIVER ces 4 lignes + `wrangler r2 bucket create mentality-audio
-#   --jurisdiction eu` + redéployer, dès que R2 est activé.
-# [[r2_buckets]]
-# binding = "AUDIO_BUCKET"
-# bucket_name = "mentality-audio"
-# jurisdiction = "eu"
+[[r2_buckets]]
+binding = "AUDIO_BUCKET"
+bucket_name = "mentality-audio"
+jurisdiction = "eu"
+
+# Rate-limiting d'émission (rl:<sha256(ip)>, TTL 1 h — IP jamais en clair).
+# Namespace créé via : wrangler kv namespace create RATE_KV
+[[kv_namespaces]]
+binding = "RATE_KV"
+id = "RATE_KV_NAMESPACE_ID_PLACEHOLDER"
 
 # Nombre minimal d'enregistrements exigé sous le compte pour valider le token
 # (proxy de « test complété » ; best-effort uploads → garder bas, ajustable).
 [vars]
 MIN_RECORDINGS = "1"
+# Tokens émis max par IP et par heure (fail-open si RATE_KV absent).
+RATE_LIMIT_PER_HOUR = "5"

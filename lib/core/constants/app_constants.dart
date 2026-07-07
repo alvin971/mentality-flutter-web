@@ -63,11 +63,10 @@ class AppConstants {
       'https://claude-proxy.YOUR_SUBDOMAIN.workers.dev';
 
   /// URL du Cloudflare Worker qui écrit les enregistrements audio dans R2.
-  /// Déployer workers/r2-upload/ et remplacer cette valeur. Tant que l'URL
-  /// reste le placeholder, l'upload est désactivé (no-op) et l'app fonctionne
-  /// normalement en stockage local seulement.
+  /// Ces enregistrements servent aussi de PREUVE DE COMPLÉTION du test
+  /// (parrainage anti-fraude, tokeniser /validate).
   static const String r2UploadWorkerUrl =
-      'https://mentality-r2-upload.YOUR_SUBDOMAIN.workers.dev';
+      'https://mentality-r2-upload.devgreenpro.workers.dev';
 
   /// URL du Cloudflare Worker qui SIGNE le token anonyme (Ed25519).
   /// Déployer workers/tokeniser/ et remplacer cette valeur.
@@ -304,11 +303,11 @@ class AppConstants {
   /// Le flux téléphone/OTP est supprimé (remplacé par le token anonyme).
   static const bool kSkipRegistrationGate = false;
 
-  /// MODE TEST : autorise un token LOCAL NON SIGNÉ en release tant que le worker
-  /// tokeniseur n'est pas déployé — permet de tester l'onboarding (le formulaire
-  /// + le flux) sur TestFlight sans backend. ⚠️ Repasser à `false` AVANT la prod
-  /// (une fois les workers déployés) pour n'accepter que des tokens signés.
-  static const bool kAllowUnsignedTokenInRelease = true;
+  /// Tokens SIGNÉS Ed25519 obligatoires en release (tokeniser déployé).
+  /// `true` = mode test historique (tokens locaux non signés, forgeables) —
+  /// ne réactiver qu'en connaissance de cause : les workers referral/r2-upload
+  /// rejettent désormais les tokens non signés.
+  static const bool kAllowUnsignedTokenInRelease = false;
   static const bool enableVoiceRecognition = true;
   static const bool enable3DCubes = true;
   static const bool enableAnalytics = true;

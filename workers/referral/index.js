@@ -31,6 +31,7 @@
  */
 
 import { verifyToken, TOKEN_SIGNING_PUBLIC_KEYS, sha256hex } from '../_shared/token_verify.js';
+import { hasCompletionProof } from '../_shared/completion_proof.js';
 
 const REQUIRED_REFERRALS = 3;
 
@@ -96,47 +97,17 @@ export default {
   },
 };
 
-// Versions de schéma de claims supportées (miroir de kTokenSchemaVersion).
-const SUPPORTED_SV = new Set([2]);
-const B64URL = /^[A-Za-z0-9\-_]+$/;
-
 /**
- * Extrait le nonce (claim `n`) d'un token, quelle que soit sa forme :
- *   1. Token signé Ed25519 (chemin nominal si le tokeniser est déployé).
- *   2. Token DEV non signé « M2.<base64url(claims)> ».
- * L'app Mentality accepte volontairement les tokens non signés en release tant
- * que le tokeniser n'est pas déployé (AppConstants.kAllowUnsignedTokenInRelease)
- * — ce gate marketing (données non sensibles) applique le même modèle de
- * confiance pour ne bloquer aucun utilisateur réel. Renvoie null si inexploitable.
+ * Extrait le nonce (claim `n`) d'un token SIGNÉ Ed25519 — seul format accepté
+ * depuis le durcissement anti-fraude (2026-07-07) : les tokens DEV « M2. » non
+ * signés étaient forgeables à volonté et permettaient de créditer de faux
+ * filleuls. Le tokeniser est déployé ; l'app émet des tokens signés
+ * (kAllowUnsignedTokenInRelease=false). Renvoie null si inexploitable.
  */
 async function resolveNonce(token) {
   if (typeof token !== 'string' || token.length === 0) return null;
   const v = await verifyToken(token, TOKEN_SIGNING_PUBLIC_KEYS);
-  if (v.valid) return v.nonce;
-  if (token.startsWith('M2.')) {
-    const claims = decodeB64urlJson(token.slice(3));
-    if (claims &&
-        typeof claims.n === 'string' &&
-        B64URL.test(claims.n) &&
-        SUPPORTED_SV.has(claims.sv)) {
-      return claims.n;
-    }
-  }
-  return null;
-}
-
-function decodeB64urlJson(seg) {
-  try {
-    let b64 = seg.replace(/-/g, '+').replace(/_/g, '/');
-    while (b64.length % 4 !== 0) b64 += '=';
-    const bin = atob(b64);
-    const bytes = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-    const obj = JSON.parse(new TextDecoder().decode(bytes));
-    return obj && typeof obj === 'object' && !Array.isArray(obj) ? obj : null;
-  } catch {
-    return null;
-  }
+  return v.valid ? v.nonce : null;
 }
 
 function emptyProgress(account, code, nowIso) {
@@ -193,8 +164,20 @@ async function handleInit(env, origin, account, body) {
     if (!already) {
       const parentAccount = await env.REFERRAL_KV.get(`code:${refCode}`);
       if (parentAccount && parentAccount !== account) {
-        await env.REFERRAL_KV.put(`referee:${account}`, refCode);
-        await env.REFERRAL_KV.put(`ref:${refCode}:${account}`, nowIso);
+        // ─── Anti-fraude : le crédit exige la PREUVE que le filleul a
+        // réellement complété son test (marqueur validated/<account> posé par
+        // le tokeniser, ou enregistrements présents dans R2 — couvre la course
+        // où /validate n'est pas encore passé). Sans preuve : pas de crédit,
+        // mais réponse 200 — le client conserve son referrerCode et re-tentera
+        // (cf. UnlockService.initProgress, champ refereeRecorded).
+        const min = parseInt(env.MIN_RECORDINGS || '1', 10);
+        const proven = env.AUDIO_BUCKET
+          ? await hasCompletionProof(env.AUDIO_BUCKET, account, min)
+          : false;
+        if (proven) {
+          await env.REFERRAL_KV.put(`referee:${account}`, refCode);
+          await env.REFERRAL_KV.put(`ref:${refCode}:${account}`, nowIso);
+        }
       }
     }
   }
@@ -262,8 +245,14 @@ async function buildProgressResponse(env, origin, row) {
 
   if (dirty) await putProgress(env, row);
 
+  // Le lien filleul→parrain a-t-il été enregistré ? (false tant que la preuve
+  // de complétion du test n'est pas visible — le client re-tentera.)
+  const refereeRecorded =
+    (await env.REFERRAL_KV.get(`referee:${row.account}`)) !== null;
+
   return json({
     stage,
+    refereeRecorded,
     referralCode: row.referralCode,
     // completedReferrals = filleuls ayant réellement terminé leur test.
     completedReferrals: completedCount,
