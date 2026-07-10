@@ -93,6 +93,11 @@ class AppConstants {
   /// l'inscription dans l'app mobile.
   static const String inviteBaseUrl = 'https://mental-et.com/invite';
 
+  /// Page d'inscription sur le site web. L'inscription (et la génération du
+  /// token anonyme) se fait DÉSORMAIS UNIQUEMENT sur le site : l'app ne fait
+  /// plus que la CONNEXION (l'utilisateur y colle le token reçu ici).
+  static const String inscriptionUrl = 'https://mental-et.com/inscription/';
+
   /// Compte Instagram à suivre pour le dernier palier de déblocage.
   static const String instagramHandle = 'mental_e.t';
   static const String instagramUrl =
@@ -298,10 +303,11 @@ class AppConstants {
   /// Gate d'accès par token anonyme.
   /// `true` = le splash route directement vers /home (accès libre).
   /// `false` = vérifie la VALIDITÉ du token local (signature), route vers
-  ///           /register (écran de connexion démographique) si absent/invalide.
+  ///           /register (écran de connexion par token) si absent/invalide.
   ///
-  /// `false` = le formulaire de connexion (TokenLoginPage) s'affiche au début.
-  /// Le flux téléphone/OTP est supprimé (remplacé par le token anonyme).
+  /// `false` = l'écran de connexion par token (TokenLoginPage) s'affiche au
+  /// début : l'utilisateur y colle le token reçu lors de son inscription sur le
+  /// site web. L'app ne génère plus de token (inscription = site uniquement).
   static const bool kSkipRegistrationGate = false;
 
   /// MODE TEST : autorise un token LOCAL NON SIGNÉ en release tant que le worker
