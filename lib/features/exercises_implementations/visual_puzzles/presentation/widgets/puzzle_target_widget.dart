@@ -12,17 +12,28 @@ import '../../domain/puzzle_generator.dart';
 /// couleur du dessin visibles, frontières de découpe invisibles) — c'est au
 /// sujet de décomposer mentalement la figure et de retrouver les 3 pièces,
 /// en vérifiant à la fois la GÉOMÉTRIE et la CONTINUITÉ DU MOTIF.
+///
+/// ÉCHELLE UNIFIÉE : si [pixelsPerUnit] est fourni (px par unité normalisée,
+/// calculé depuis la taille des cases via [PuzzlePieceWidget.pixelsPerUnit]),
+/// la cible est dessinée à la MÊME échelle que les 6 pièces — additionner
+/// visuellement les 3 bonnes pièces redonne exactement la taille affichée
+/// de la figure. Le cadre se dimensionne alors au contenu.
 class PuzzleTargetWidget extends StatelessWidget {
   const PuzzleTargetWidget({
     super.key,
     required this.item,
     this.maxWidth = 330,
     this.maxHeight = 250,
+    this.pixelsPerUnit,
   });
 
   final PuzzleItem item;
   final double maxWidth;
   final double maxHeight;
+
+  /// Échelle commune avec les pièces (px / unité normalisée), ou null pour
+  /// l'ancien comportement « remplir le cadre ».
+  final double? pixelsPerUnit;
 
   @override
   Widget build(BuildContext context) {
@@ -30,13 +41,28 @@ class PuzzleTargetWidget extends StatelessWidget {
     final accent = AppColors.accentForBrightness(
         AppColors.indexVSI, Theme.of(context).brightness);
 
+    // Cadre ajusté au contenu quand l'échelle est unifiée (padding du
+    // dessin : 18/28/18/14 ; largeur minimale pour le libellé du cartouche).
+    final ppu = pixelsPerUnit;
+    final BoxConstraints frame;
+    if (ppu != null) {
+      final bb = item.targetPolygon.bbox();
+      final w = (bb.width * ppu + 40).clamp(150.0, maxWidth).toDouble();
+      final h = (bb.height * ppu + 46).clamp(96.0, maxHeight).toDouble();
+      frame = BoxConstraints.tightFor(width: w, height: h);
+    } else {
+      frame = BoxConstraints(maxWidth: maxWidth, maxHeight: maxHeight);
+    }
+
     return Semantics(
       label: 'Figure cible, item ${item.index}',
       child: Center(
         child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: maxWidth, maxHeight: maxHeight),
+          constraints: frame,
           child: AspectRatio(
-            aspectRatio: 4 / 3,
+            aspectRatio: ppu != null
+                ? frame.maxWidth / frame.maxHeight
+                : 4 / 3,
             child: Container(
               decoration: BoxDecoration(
                 color: cs.surfaceContainerHighest,
@@ -63,6 +89,7 @@ class PuzzleTargetWidget extends StatelessWidget {
                         zones: item.colorZones,
                         palette: item.palette,
                         outlineColor: cs.outline.withValues(alpha: 0.55),
+                        pixelsPerUnit: ppu,
                       ),
                     ),
                   ),
@@ -84,12 +111,16 @@ class _TargetPainter extends CustomPainter {
     required this.zones,
     required this.palette,
     required this.outlineColor,
+    this.pixelsPerUnit,
   });
 
   final Polygon target;
   final List<ColoredRegion> zones;
   final List<Color> palette;
   final Color outlineColor;
+
+  /// Échelle unifiée avec les pièces ; null = remplir la zone (legacy).
+  final double? pixelsPerUnit;
 
   static const double _padding = 0.09;
 
@@ -105,7 +136,11 @@ class _TargetPainter extends CustomPainter {
 
     final availW = size.width * (1 - 2 * _padding);
     final availH = size.height * (1 - 2 * _padding);
-    final scale = math.min(availW / polyW, availH / polyH);
+    final fitScale = math.min(availW / polyW, availH / polyH);
+    // Échelle unifiée : même px/unité que les pièces, bornée par la place
+    // disponible (le fit ne sert alors que de garde anti-débordement).
+    final scale =
+        pixelsPerUnit == null ? fitScale : math.min(fitScale, pixelsPerUnit!);
 
     final ox = size.width / 2 - (bbox.left + bbox.right) / 2 * scale;
     final oy = size.height / 2 - (bbox.top + bbox.bottom) / 2 * scale;
@@ -154,5 +189,8 @@ class _TargetPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_TargetPainter old) =>
-      old.target != target || old.zones != zones || old.palette != palette;
+      old.target != target ||
+      old.zones != zones ||
+      old.palette != palette ||
+      old.pixelsPerUnit != pixelsPerUnit;
 }

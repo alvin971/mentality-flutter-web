@@ -390,16 +390,23 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
       builder: (context, constraints) {
         // Hauteur consommée par les éléments fixes (slots + consigne + gaps).
         const fixedChrome = 110.0;
-        // Hauteur minimale réservée à la cible.
-        const minTarget = 120.0;
+        // Hauteur minimale réservée à la cible (réduite depuis l'échelle
+        // unifiée : la cible est plus petite, la grille récupère la place —
+        // donc TOUT est dessiné plus grand).
+        const minTarget = 100.0;
         // Budget hauteur pour la grille d'options (2 rangées de 3).
         final gridHeightBudget =
             (constraints.maxHeight - fixedChrome - minTarget)
-                .clamp(150.0, 320.0);
+                .clamp(150.0, 380.0);
         // Largeur de grille correspondante : 2 rangées + espacement 10.
         final gridWidth = ((gridHeightBudget - 10) / 2) * 3 + 20;
         final effectiveGridWidth =
             gridWidth.clamp(210.0, constraints.maxWidth).toDouble();
+        // Échelle UNIFIÉE cible/pièces : additionner les 3 bonnes pièces
+        // redonne exactement la taille affichée de la figure.
+        final tileSide = (effectiveGridWidth - 20) / 3;
+        final ppu =
+            PuzzlePieceWidget.pixelsPerUnit(tileSide, item.maxPieceExtent);
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -407,7 +414,8 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
             const SizedBox(height: 4),
             // La cible absorbe l'espace restant et se réduit si besoin.
             Expanded(
-              child: PuzzleTargetWidget(item: item, maxWidth: 400),
+              child: PuzzleTargetWidget(
+                  item: item, maxWidth: 400, pixelsPerUnit: ppu),
             ),
             const SizedBox(height: 8),
             PuzzleSlotIndicator(filled: _selectedIds.length, total: 3),
@@ -426,6 +434,9 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
   /// tout visible sans défilement (important pour un test chronométré).
   /// FittedBox : sur fenêtre basse, l'ensemble est réduit plutôt que coupé.
   Widget _buildWide(BuildContext context, PuzzleItem item) {
+    // Échelle UNIFIÉE cible/pièces (cases de (470−20)/3 = 150 px).
+    final ppu =
+        PuzzlePieceWidget.pixelsPerUnit(150, item.maxPieceExtent);
     return Center(
       child: FittedBox(
         fit: BoxFit.scaleDown,
@@ -443,7 +454,10 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       PuzzleTargetWidget(
-                          item: item, maxWidth: 400, maxHeight: 320),
+                          item: item,
+                          maxWidth: 400,
+                          maxHeight: 320,
+                          pixelsPerUnit: ppu),
                       const SizedBox(height: 16),
                       PuzzleSlotIndicator(
                           filled: _selectedIds.length, total: 3),
