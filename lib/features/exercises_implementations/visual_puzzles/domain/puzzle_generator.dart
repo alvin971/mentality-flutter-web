@@ -2,16 +2,27 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'base_shapes.dart';
 import 'cut_engine.dart';
+import 'difficulty_ladder.dart';
 import 'geometry.dart';
 import 'trap_engine.dart';
 
 export 'base_shapes.dart' show BaseShape, BaseShapeX;
 export 'cut_engine.dart' show CutStrategy;
+export 'difficulty_ladder.dart' show ItemRecipe, ColorMode, kLadder;
 export 'geometry.dart'
-    show Polygon, ColoredRegion, congruent, isReconstruction, intersectConvex;
+    show
+        Polygon,
+        ColoredRegion,
+        congruent,
+        perceptuallyIdentical,
+        visuallyConfusable,
+        isReconstruction,
+        intersectConvex;
 export 'trap_engine.dart' show TrapKind, TrapResult;
 
-/// Niveau de difficulté d'un item (progression type WAIS-IV).
+/// Niveau de difficulté d'un item, DÉRIVÉ du palier de sa recette
+/// (P1-P2 → veryEasy, P3-P4 → easy, P5-P6 → medium, P7-P8 → hard).
+/// Conservé pour l'affichage et le mode entraînement (`filterLevel`).
 enum DifficultyLevel { veryEasy, easy, medium, hard }
 
 extension DifficultyLevelX on DifficultyLevel {
@@ -33,6 +44,7 @@ class PuzzlePiece {
     this.displayRotationDeg = 0,
     this.isCorrect = false,
     this.trapKind,
+    this.isTwin = false,
   });
 
   final String id;
@@ -56,6 +68,11 @@ class PuzzlePiece {
 
   /// Pour les distracteurs : type de piège (debug/analytique).
   final TrapKind? trapKind;
+
+  /// Vrai si ce piège est un « jumeau » : sourcé sur une vraie pièce
+  /// AFFICHÉE (paire repérable dans les 6 cases). Plafonné par palier via
+  /// `ItemRecipe.maxTwins` — analytique/journal, invisible pour le sujet.
+  final bool isTwin;
 
   /// Polygone tel qu'affiché (rotation incluse).
   Polygon get displayPolygon => displayRotationDeg == 0
@@ -81,6 +98,7 @@ class PuzzlePiece {
 class PuzzleItem {
   const PuzzleItem({
     required this.index,
+    required this.palier,
     required this.level,
     required this.baseShape,
     required this.targetPolygon,
@@ -91,10 +109,18 @@ class PuzzleItem {
     required this.timeLimitSeconds,
     required this.cutStrategy,
     required this.maxPieceExtent,
+    this.fallbackUsed = false,
   });
 
   final int index;
+
+  /// Palier 1..8 de l'échelle de difficulté (radical, identique pour tous
+  /// les patients à la même position — voir [kLadder]).
+  final int palier;
+
+  /// Niveau dérivé du palier (affichage, mode entraînement).
   final DifficultyLevel level;
+
   final BaseShape baseShape;
 
   /// Silhouette complète (affichée SANS lignes internes, comme dans le vrai
@@ -120,6 +146,11 @@ class PuzzleItem {
   /// échelle — c'est ce qui rend les pièges de taille détectables.
   final double maxPieceExtent;
 
+  /// Vrai si la génération a dû recourir à un plan B (piège de dernier
+  /// recours, couleurs relaxées vers monochrome). Journalisé : un taux
+  /// élevé signalerait une recette trop contrainte.
+  final bool fallbackUsed;
+
   List<PuzzlePiece> get correctPieces =>
       options.where((p) => p.isCorrect).toList();
 }
@@ -131,15 +162,15 @@ class PuzzleItem {
 /// reconstituent. Les pièces peuvent être tournées mentalement, jamais
 /// retournées.
 ///
-/// Difficulté progressive sur 26 items :
-/// - formes de base de plus en plus complexes ;
-/// - découpes de plus en plus obliques ;
-/// - rotations d'affichage de plus en plus libres ;
-/// - distracteurs de plus en plus subtils (subtlety 0 → 1) ;
-/// - temps : 20 s (items 1-7) puis 30 s (items 8-26), comme le vrai test.
+/// Depuis la refonte 2026-07 la difficulté n'est PLUS tirée au sort : chaque
+/// item suit la RECETTE de sa position dans l'échelle [kLadder] (26 items,
+/// 8 paliers). Les radicaux (forme, découpe, rotations minimales, indices
+/// couleur, types de pièges, budget de jumeaux) sont fixés par la recette ;
+/// seuls les incidentaux (forme précise du pool, angles, couleurs, ordre des
+/// cases) sont aléatoires → contenu différent par patient, difficulté
+/// équivalente (formes parallèles).
 ///
-/// La génération est entièrement paramétrique et aléatoire (seed optionnel)
-/// → banque d'items virtuellement illimitée.
+/// La génération est paramétrique et reproductible (`seed`).
 class PuzzleGenerator {
   PuzzleGenerator({int? seed})
       : _seed = seed ?? DateTime.now().microsecondsSinceEpoch {
@@ -152,6 +183,12 @@ class PuzzleGenerator {
   }
 
   final int _seed;
+
+  /// Graine de la banque générée — à JOURNALISER avec les résultats : c'est
+  /// elle qui rend une session reproductible (debug d'un item suspect,
+  /// ré-analyse des données par item).
+  int get seed => _seed;
+
   late final math.Random _rng;
   late final CutEngine _cutEngine;
   late final TrapEngine _trapEngine;
@@ -159,91 +196,122 @@ class PuzzleGenerator {
 
   static const int totalItems = 26;
 
+  /// Pièges « jumeaux » : ceux qui copient la géométrie d'une pièce source.
+  /// Sourcés sur une vraie pièce AFFICHÉE, ils créent une paire repérable —
+  /// leur nombre est plafonné par `recipe.maxTwins`.
+  static const Set<TrapKind> _twinKinds = {
+    TrapKind.scaled,
+    TrapKind.mirrored,
+    TrapKind.stretched,
+    TrapKind.wrongColors,
+  };
+
   String _uuid() {
     _idCounter++;
     return 'p$_idCounter-${_rng.nextInt(1 << 30).toRadixString(36)}';
   }
 
+  /// La batterie complète : un item par recette de l'échelle.
   List<PuzzleItem> generateComplete26Items() {
+    assert(kLadder.length == totalItems);
     final items = <PuzzleItem>[];
-    void add(int count, DifficultyLevel level) {
-      for (int i = 0; i < count; i++) {
-        items.add(generateItem(items.length + 1, level));
-      }
+    for (int i = 0; i < kLadder.length; i++) {
+      items.add(generateItemFromRecipe(i + 1, kLadder[i]));
     }
-
-    add(6, DifficultyLevel.veryEasy);
-    add(8, DifficultyLevel.easy);
-    add(6, DifficultyLevel.medium);
-    add(6, DifficultyLevel.hard);
-    assert(items.length == totalItems);
     return items;
   }
 
-  /// Subtilité des pièges pour l'item `index` (1-based) :
-  /// 0.05 (item 1, pièges énormes) → 0.95 (item 26, pièges quasi invisibles).
-  static double subtletyForItem(int index) {
-    final t = ((index - 1) / (totalItems - 1)).clamp(0.0, 1.0);
-    return 0.05 + 0.90 * t;
+  /// API héritée : génère l'item de la position [index] de l'échelle.
+  ///
+  /// [level] est IGNORÉ — la difficulté est entièrement portée par la
+  /// recette du palier correspondant à [index]. Paramètre conservé pour
+  /// compatibilité (démo, tests existants).
+  PuzzleItem generateItem(int index, DifficultyLevel level) {
+    final recipe = kLadder[(index - 1).clamp(0, kLadder.length - 1)];
+    return generateItemFromRecipe(index, recipe);
   }
 
-  /// Temps limite WAIS-IV : 20 s pour les items 1-7, 30 s ensuite.
-  static int timeLimitForIndex(int index) => index <= 7 ? 20 : 30;
-
-  PuzzleItem generateItem(int index, DifficultyLevel level) {
-    final subtlety = subtletyForItem(index);
-
-    for (int attempt = 0; attempt < 12; attempt++) {
-      final item = _tryGenerateItem(index, level, subtlety);
+  /// Génère un item conforme à [recipe].
+  ///
+  /// Politique de recours (JAMAIS de dégradation d'un radical vers plus
+  /// facile) : on retente d'abord d'autres incidentaux du même palier ;
+  /// en dernier recours les couleurs sont relaxées vers monochrome (plus
+  /// dur, pas plus facile) et l'item est marqué `fallbackUsed`.
+  PuzzleItem generateItemFromRecipe(int index, ItemRecipe recipe) {
+    for (int attempt = 0; attempt < 24; attempt++) {
+      final item = _tryGenerateFromRecipe(index, recipe);
       if (item != null) return item;
     }
-    // Dernier recours : item le plus simple possible (toujours valide).
-    return _tryGenerateItem(index, DifficultyLevel.veryEasy, 0.1)!;
+    for (int attempt = 0; attempt < 40; attempt++) {
+      final item = _tryGenerateFromRecipe(index, recipe, relaxColors: true);
+      if (item != null) return item;
+    }
+    // Jamais observé (le CutEngine et les pièges ont leurs propres recours
+    // garantis) — si on arrive ici, un invariant géométrique est cassé.
+    throw StateError(
+        'PuzzleGenerator : génération impossible pour le palier '
+        '${recipe.palier} (seed $_seed, item $index)');
   }
 
-  PuzzleItem? _tryGenerateItem(
-      int index, DifficultyLevel level, double subtlety) {
-    // 1. Forme de base
-    final baseShape = _pickShape(level);
-    final targetPolygon = buildBaseShape(baseShape);
+  DifficultyLevel _levelForPalier(int palier) => switch (palier) {
+        1 || 2 => DifficultyLevel.veryEasy,
+        3 || 4 => DifficultyLevel.easy,
+        5 || 6 => DifficultyLevel.medium,
+        _ => DifficultyLevel.hard,
+      };
 
-    // 2. Découpe en 3 pièces équilibrées
-    final strategy = _pickStrategy(level);
+  PuzzleItem? _tryGenerateFromRecipe(int index, ItemRecipe recipe,
+      {bool relaxColors = false}) {
+    bool fallbackUsed = false;
+
+    // 1. Forme de base et découpe — incidentaux tirés dans les pools de la
+    // recette (radicaux : les pools eux-mêmes).
+    final baseShape = recipe.shapes[_rng.nextInt(recipe.shapes.length)];
+    final targetPolygon = buildBaseShape(baseShape);
+    final strategy = recipe.strategies[_rng.nextInt(recipe.strategies.length)];
     final cuts = _cutEngine.cut(targetPolygon, strategy);
     if (!isReconstruction(cuts, targetPolygon,
         areaTolerance: 0.03, minAreaShare: CutEngine.minShare)) {
       return null;
     }
 
-    // 2b. Zones de couleur du motif — INDÉPENDANTES des lignes de découpe.
+    // 2. Zones de couleur du motif — INDÉPENDANTES des lignes de découpe.
     // Exigence (items multicolores) : au moins une vraie pièce bicolore,
     // sinon les couleurs trahiraient la correspondance pièce ↔ zone.
-    final zoneInfo = _buildColorZones(targetPolygon, level, cuts);
-    if (zoneInfo == null) return null;
+    var zoneInfo = _buildColorZones(targetPolygon, recipe.colorMode, cuts);
+    if (zoneInfo == null) {
+      if (!relaxColors) return null;
+      // Recours : monochrome — retire des indices, ne dégrade jamais la
+      // difficulté vers le bas.
+      zoneInfo = ([ColoredRegion(targetPolygon, 0)], 1);
+      fallbackUsed = true;
+    }
     final (zones, paletteSize) = zoneInfo;
     final palette = _pickPalette(paletteSize);
 
-    // 2c. Coloration des vraies pièces (fragments du motif).
-    final trueRegions =
-        cuts.map((poly) => clipToZones(poly, zones)).toList();
+    // 2b. Coloration des vraies pièces (fragments du motif).
+    final trueRegions = cuts.map((poly) => clipToZones(poly, zones)).toList();
 
-    // 3. Vraies pièces avec rotation d'affichage selon le niveau
-    final rotationPool = _rotationPool(level);
+    // 3. Vraies pièces — rotations d'affichage garanties par construction
+    // (minimums de la recette imposés, pas espérés du tirage).
+    final rotations = _drawRotationsFor3(recipe);
     final truePieces = <PuzzlePiece>[];
     for (int i = 0; i < cuts.length; i++) {
       truePieces.add(PuzzlePiece(
         id: _uuid(),
         polygon: cuts[i],
         regions: trueRegions[i],
-        displayRotationDeg: rotationPool[_rng.nextInt(rotationPool.length)],
+        displayRotationDeg: rotations[i],
         isCorrect: true,
       ));
     }
 
-    // 4. Distracteurs
-    final distractors = _buildDistractors(cuts, trueRegions, targetPolygon,
-        zones, paletteSize, level, subtlety, rotationPool, baseShape);
-    if (distractors == null) return null;
+    // 4. Distracteurs (budget de jumeaux de la recette).
+    final distractorInfo = _buildDistractors(cuts, trueRegions, targetPolygon,
+        zones, paletteSize, recipe, baseShape);
+    if (distractorInfo == null) return null;
+    final (distractors, trapFallback) = distractorInfo;
+    fallbackUsed = fallbackUsed || trapFallback;
 
     // 5. Mélange + échelle commune
     final options = [...truePieces, ...distractors]..shuffle(_rng);
@@ -256,17 +324,56 @@ class PuzzleGenerator {
 
     return PuzzleItem(
       index: index,
-      level: level,
+      palier: recipe.palier,
+      level: _levelForPalier(recipe.palier),
       baseShape: baseShape,
       targetPolygon: targetPolygon,
       colorZones: zones,
       palette: palette,
       options: options,
       correctIds: truePieces.map((p) => p.id).toSet(),
-      timeLimitSeconds: timeLimitForIndex(index),
+      timeLimitSeconds: recipe.timeLimitSeconds,
       cutStrategy: strategy,
       maxPieceExtent: maxExtent,
+      fallbackUsed: fallbackUsed,
     );
+  }
+
+  /// Tire les 3 rotations d'affichage des vraies pièces en GARANTISSANT les
+  /// minimums de la recette (pièces tournées, pièces à angle diagonal) :
+  /// on tire librement puis on force des cases jusqu'au compte — aucune
+  /// possibilité d'échec, la rotation n'est jamais une cause de re-tirage.
+  List<double> _drawRotationsFor3(ItemRecipe recipe) {
+    final pool = recipe.rotationAngles;
+    final rots =
+        List<double>.generate(3, (_) => pool[_rng.nextInt(pool.length)]);
+
+    final nonZero = pool.where((a) => a != 0).toList();
+    if (nonZero.isNotEmpty && recipe.minRotatedPieces > 0) {
+      var count = rots.where((a) => a != 0).length;
+      final order = [0, 1, 2]..shuffle(_rng);
+      for (final i in order) {
+        if (count >= recipe.minRotatedPieces) break;
+        if (rots[i] == 0) {
+          rots[i] = nonZero[_rng.nextInt(nonZero.length)];
+          count++;
+        }
+      }
+    }
+
+    final diagonals = pool.where((a) => a % 90 != 0).toList();
+    if (diagonals.isNotEmpty && recipe.minDiagonalPieces > 0) {
+      var count = rots.where((a) => a % 90 != 0).length;
+      final order = [0, 1, 2]..shuffle(_rng);
+      for (final i in order) {
+        if (count >= recipe.minDiagonalPieces) break;
+        if (rots[i] % 90 == 0) {
+          rots[i] = diagonals[_rng.nextInt(diagonals.length)];
+          count++;
+        }
+      }
+    }
+    return rots;
   }
 
   // ---------- Zones de couleur ----------
@@ -329,41 +436,35 @@ class PuzzleGenerator {
     return [colorPool[1], colorPool[3], colorPool[2]].take(size).toList();
   }
 
-  /// Construit les zones de couleur de l'item.
-  ///
-  /// Nombre de zones par niveau :
-  /// - veryEasy/easy : 2 (frontière simple, axiale au tout début)
-  /// - medium        : 2 ou 3
-  /// - hard          : 3, ou 1 (monochrome, ~25 % — difficulté purement
-  ///   géométrique, comme dans les items difficiles du subtest réel)
+  /// Construit les zones de couleur de l'item selon le mode de la recette.
   ///
   /// Items multicolores : on retente jusqu'à obtenir AU MOINS une vraie
   /// pièce bicolore (frontière de couleur ≠ lignes de découpe).
   (List<ColoredRegion>, int)? _buildColorZones(
-      Polygon target, DifficultyLevel level, List<Polygon> cuts) {
-    final nZones = switch (level) {
-      DifficultyLevel.veryEasy || DifficultyLevel.easy => 2,
-      DifficultyLevel.medium => 2 + _rng.nextInt(2),
-      DifficultyLevel.hard => _rng.nextDouble() < 0.25 ? 1 : 3,
+      Polygon target, ColorMode mode, List<Polygon> cuts) {
+    final nZones = switch (mode) {
+      ColorMode.monochrome => 1,
+      ColorMode.twoZonesAxial || ColorMode.twoZones => 2,
+      ColorMode.threeZones => 3,
     };
     if (nZones == 1) return ([ColoredRegion(target, 0)], 1);
 
     for (int attempt = 0; attempt < 16; attempt++) {
-      final zones = _tryZones(target, nZones, level);
+      final zones = _tryZones(target, nZones,
+          axial: mode == ColorMode.twoZonesAxial);
       if (zones == null) continue;
       if (_hasBicolorPiece(cuts, zones)) return (zones, nZones);
     }
     return null;
   }
 
-  List<ColoredRegion>? _tryZones(
-      Polygon target, int nZones, DifficultyLevel level) {
+  List<ColoredRegion>? _tryZones(Polygon target, int nZones,
+      {required bool axial}) {
     final totalArea = target.area();
     if (totalArea < kGeomEps) return null;
 
-    // Première frontière : axiale en veryEasy (motif très lisible),
-    // oblique libre ensuite.
-    final angle1 = level == DifficultyLevel.veryEasy
+    // Première frontière : axiale (motif très lisible) ou oblique libre.
+    final angle1 = axial
         ? (_rng.nextBool() ? 0.0 : math.pi / 2)
         : _rng.nextDouble() * math.pi;
     final parts1 = _splitByLine(target, angle1);
@@ -426,67 +527,116 @@ class PuzzleGenerator {
     return false;
   }
 
-  /// Génère les 3 distracteurs pour un item.
+  // ---------- Distracteurs ----------
+
+  /// Pièce d'une AUTRE découpe valide de la cible, NON confusable avec une
+  /// vraie pièce affichée : la source des pièges « sans jumeau » (budget
+  /// maxTwins épuisé). Le piège transformé qui en dérive est plausible
+  /// (motif réel de la cible via clipToZones) mais n'a AUCUNE paire visible
+  /// dans les 6 cases → l'élimination par doublons ne s'applique pas.
+  Polygon? _altSourcePiece(Polygon target, List<Polygon> truePieces) {
+    for (int attempt = 0; attempt < 6; attempt++) {
+      final strategy =
+          CutStrategy.values[_rng.nextInt(CutStrategy.values.length)];
+      final pieces = _cutEngine.cut(target, strategy);
+      if (pieces.length != 3) continue;
+      final candidates = pieces.where((p) {
+        if (p.vertices.length < 3) return false;
+        for (final tp in truePieces) {
+          if (visuallyConfusable(p, tp, allowMirror: true)) return false;
+        }
+        return true;
+      }).toList();
+      if (candidates.isNotEmpty) {
+        return candidates[_rng.nextInt(candidates.length)];
+      }
+    }
+    return null;
+  }
+
+  /// Génère les 3 distracteurs d'un item selon la recette.
   ///
-  /// Logique par niveau (ordre prioritaire des types de pièges) :
-  /// - veryEasy → wrongColors + foreignShape + scaled
-  ///   Le trio classique des premiers items du subtest réel : bonne forme
-  ///   mauvaise couleur, forme clairement étrangère, pièce trop petite.
-  /// - easy     → wrongColors + scaled + mirrored
-  /// - medium   → scaled + wrongColors/mirrored + alternativeCut
-  /// - hard     → mirrored + alternativeCut + wrongColors/stretched
-  ///   Tous les pièges subtils ; le joueur doit analyser finement.
-  List<PuzzlePiece>? _buildDistractors(
+  /// Retourne (pièges, fallbackUsed) ou null si un slot n'a rien produit
+  /// (l'appelant retente d'autres incidentaux).
+  ///
+  /// Budget de jumeaux : les pièges de [_twinKinds] sourcés sur une vraie
+  /// pièce affichée comptent dans `recipe.maxTwins` ; au-delà,
+  /// scaled/mirrored/stretched sont sourcés sur [_altSourcePiece] et
+  /// wrongColors (géométrie d'une vraie pièce PAR DÉFINITION) est sauté.
+  (List<PuzzlePiece>, bool)? _buildDistractors(
     List<Polygon> truePieces,
     List<List<ColoredRegion>> trueRegions,
     Polygon target,
     List<ColoredRegion> zones,
     int paletteSize,
-    DifficultyLevel level,
-    double subtlety,
-    List<double> rotationPool,
+    ItemRecipe recipe,
     BaseShape baseShape,
   ) {
-    // Chaque slot a une liste ordonnée de types à essayer (fallbacks inclus).
-    final slots = _trapSlotsFor(level);
+    final slots = recipe.trapSlots;
+    final subtlety = recipe.subtlety;
     final result = <PuzzlePiece>[];
     final produced = <Polygon>[];
     bool wrongColorsUsed = false;
+    bool fallbackUsed = false;
+    int twinsUsed = 0;
 
     for (int slot = 0; slot < 3; slot++) {
       TrapResult? trap;
       TrapKind? usedKind;
+      bool trapIsTwin = false;
 
       outer:
       for (final kind in slots[slot]) {
         // Un seul piège "couleurs fausses" par item : deux pièces identiques
         // aux couleurs près seraient déroutantes sans valeur diagnostique.
-        if (kind == TrapKind.wrongColors && wrongColorsUsed) continue;
+        // Et wrongColors est un jumeau par construction → budget requis.
+        if (kind == TrapKind.wrongColors &&
+            (wrongColorsUsed || twinsUsed >= recipe.maxTwins)) {
+          continue;
+        }
 
         for (int attempt = 0; attempt < 6; attempt++) {
-          final srcIdx = _rng.nextInt(truePieces.length);
+          final needAltSource = _twinKinds.contains(kind) &&
+              kind != TrapKind.wrongColors &&
+              twinsUsed >= recipe.maxTwins;
 
-          // wrongColors garde la géométrie EXACTE d'une vraie pièce : la
-          // source ne doit donc être QUASI congruente (seuil perceptuel) à
-          // aucune AUTRE vraie pièce, sinon le piège recoloré pourrait se
-          // confondre avec cette autre pièce → deux réponses valides.
-          if (kind == TrapKind.wrongColors) {
-            bool unique = true;
-            for (int j = 0; j < truePieces.length; j++) {
-              if (j != srcIdx &&
-                  congruent(truePieces[srcIdx], truePieces[j],
-                      allowMirror: true, relTol: kPerceptualTol)) {
-                unique = false;
-                break;
+          final Polygon source;
+          final List<ColoredRegion> sourceRegions;
+          final bool sourcedOnTruePiece;
+          if (needAltSource) {
+            final alt = _altSourcePiece(target, truePieces);
+            if (alt == null) continue;
+            source = alt;
+            sourceRegions = clipToZones(alt, zones);
+            sourcedOnTruePiece = false;
+          } else {
+            final srcIdx = _rng.nextInt(truePieces.length);
+
+            // wrongColors garde la géométrie EXACTE d'une vraie pièce : la
+            // source ne doit donc être QUASI confusable à aucune AUTRE vraie
+            // pièce, sinon le piège recoloré pourrait se confondre avec
+            // cette autre pièce → deux réponses valides.
+            if (kind == TrapKind.wrongColors) {
+              bool unique = true;
+              for (int j = 0; j < truePieces.length; j++) {
+                if (j != srcIdx &&
+                    visuallyConfusable(truePieces[srcIdx], truePieces[j],
+                        allowMirror: true)) {
+                  unique = false;
+                  break;
+                }
               }
+              if (!unique) continue;
             }
-            if (!unique) continue;
+            source = truePieces[srcIdx];
+            sourceRegions = trueRegions[srcIdx];
+            sourcedOnTruePiece = true;
           }
 
           final candidate = _trapEngine.tryTrap(
             kind: kind,
-            source: truePieces[srcIdx],
-            sourceRegions: trueRegions[srcIdx],
+            source: source,
+            sourceRegions: sourceRegions,
             target: target,
             truePieces: truePieces,
             zones: zones,
@@ -515,20 +665,19 @@ class PuzzleGenerator {
             }
           }
 
-          // Validation au seuil PERCEPTUEL : pas quasi-congruent aux vraies
-          // pièces ni aux distracteurs déjà retenus (un écart < ~8 % est
-          // invisible sur une case d'option). Exceptions : mirrored (miroir
-          // d'une vraie pièce = valide par définition, tant qu'il n'est pas
+          // Validation au seuil PERCEPTUEL (garde combinée signature +
+          // contour) : pas quasi-confusable aux vraies pièces ni aux
+          // distracteurs déjà retenus. Exceptions : mirrored (miroir d'une
+          // vraie pièce = valide par définition, tant qu'il n'est pas
           // superposable par simple rotation) et wrongColors (congruence
           // voulue, la différence est dans les couleurs).
           bool clash = false;
           if (kind != TrapKind.wrongColors) {
             for (final tp in truePieces) {
-              if (congruent(candidate.polygon, tp,
-                  allowMirror: true, relTol: kPerceptualTol)) {
+              if (visuallyConfusable(candidate.polygon, tp,
+                  allowMirror: true)) {
                 if (kind == TrapKind.mirrored &&
-                    !congruent(candidate.polygon, tp,
-                        relTol: kPerceptualTol)) {
+                    !visuallyConfusable(candidate.polygon, tp)) {
                   continue;
                 }
                 clash = true;
@@ -538,8 +687,7 @@ class PuzzleGenerator {
           }
           if (clash) continue;
           for (final d in produced) {
-            if (congruent(candidate.polygon, d,
-                allowMirror: true, relTol: kPerceptualTol)) {
+            if (visuallyConfusable(candidate.polygon, d, allowMirror: true)) {
               clash = true;
               break;
             }
@@ -558,39 +706,60 @@ class PuzzleGenerator {
 
           trap = candidate;
           usedKind = kind;
+          trapIsTwin = sourcedOnTruePiece && _twinKinds.contains(kind);
           if (kind == TrapKind.wrongColors) wrongColorsUsed = true;
           break outer;
         }
       }
 
-      // Fallback garanti : pièce réduite à une taille distincte par slot.
+      // Dernier recours GARANTI, à la subtilité de la recette (jamais un
+      // piège de niveau débutant dans un item dur) : pièce réduite selon
+      // l'amplitude scaled du palier, jitter par slot pour éviter deux
+      // recours identiques. Marqué fallbackUsed pour le journal.
       if (trap == null) {
-        final fallbackFactors = [0.42, 0.50, 0.58];
-        final srcIdx = slot % truePieces.length;
-        final source = truePieces[srcIdx];
-        final f = fallbackFactors[slot];
-        final c = source.centroid();
+        fallbackUsed = true;
+        final mag = 0.56 + (0.12 - 0.56) * subtlety;
+        final f = (1.0 - mag) * const [0.94, 1.0, 1.06][slot];
+        // Source : hors affichage si le budget de jumeaux est épuisé.
+        Polygon? src = twinsUsed >= recipe.maxTwins
+            ? _altSourcePiece(target, truePieces)
+            : null;
+        List<ColoredRegion>? srcRegions;
+        bool srcIsTwin = false;
+        if (src == null) {
+          final srcIdx = slot % truePieces.length;
+          src = truePieces[srcIdx];
+          srcRegions = trueRegions[srcIdx];
+          srcIsTwin = true;
+        } else {
+          srcRegions = clipToZones(src, zones);
+        }
+        final c = src.centroid();
         trap = TrapResult(
-          source.transform(scale: f),
-          trueRegions[srcIdx]
+          src.transform(scale: f),
+          srcRegions
               .map((r) => ColoredRegion(
                   r.polygon.transform(scale: f, center: c), r.colorIndex))
               .toList(),
         );
         usedKind = TrapKind.scaled;
+        trapIsTwin = srcIsTwin;
       }
 
+      if (trapIsTwin) twinsUsed++;
       produced.add(trap.polygon);
       result.add(PuzzlePiece(
         id: _uuid(),
         polygon: trap.polygon,
         regions: trap.regions,
-        displayRotationDeg: rotationPool[_rng.nextInt(rotationPool.length)],
+        displayRotationDeg: recipe
+            .rotationAngles[_rng.nextInt(recipe.rotationAngles.length)],
         isCorrect: false,
         trapKind: usedKind,
+        isTwin: trapIsTwin,
       ));
     }
-    return result.length == 3 ? result : null;
+    return result.length == 3 ? (result, fallbackUsed) : null;
   }
 
   /// Couleur d'une pièce visuellement UNIE : l'index de couleur qui couvre
@@ -607,138 +776,4 @@ class PuzzleGenerator {
     }
     return null;
   }
-
-  // ---------- Pools par niveau ----------
-
-  BaseShape _pickShape(DifficultyLevel level) {
-    final pool = switch (level) {
-      DifficultyLevel.veryEasy => [
-          BaseShape.square,
-          BaseShape.rectangleWide,
-          BaseShape.rectangleTall,
-          BaseShape.diamond,
-        ],
-      DifficultyLevel.easy => [
-          BaseShape.square,
-          BaseShape.rectangleWide,
-          BaseShape.rectangleTall,
-          BaseShape.diamond,
-          BaseShape.triangleEq,
-          BaseShape.triangleRight,
-          BaseShape.trapezoid,
-          BaseShape.house,
-        ],
-      DifficultyLevel.medium => [
-          BaseShape.triangleEq,
-          BaseShape.triangleRight,
-          BaseShape.trapezoid,
-          BaseShape.parallelogram,
-          BaseShape.house,
-          BaseShape.pentagon,
-          BaseShape.hexagon,
-          BaseShape.semicircle,
-        ],
-      DifficultyLevel.hard => [
-          BaseShape.parallelogram,
-          BaseShape.pentagon,
-          BaseShape.hexagon,
-          BaseShape.octagon,
-          BaseShape.semicircle,
-          BaseShape.circle,
-        ],
-    };
-    return pool[_rng.nextInt(pool.length)];
-  }
-
-  CutStrategy _pickStrategy(DifficultyLevel level) {
-    final pool = switch (level) {
-      DifficultyLevel.veryEasy => [
-          CutStrategy.twoParallel,
-          CutStrategy.perpendicularL,
-        ],
-      DifficultyLevel.easy => [
-          CutStrategy.twoParallel,
-          CutStrategy.perpendicularL,
-          CutStrategy.oneStraightOneOblique,
-        ],
-      DifficultyLevel.medium => [
-          CutStrategy.perpendicularL,
-          CutStrategy.oneStraightOneOblique,
-          CutStrategy.twoOblique,
-          CutStrategy.fan,
-        ],
-      DifficultyLevel.hard => [
-          CutStrategy.oneStraightOneOblique,
-          CutStrategy.twoOblique,
-          CutStrategy.fan,
-        ],
-    };
-    return pool[_rng.nextInt(pool.length)];
-  }
-
-  /// Rotations d'affichage possibles : aucune au début (correspondance
-  /// directe avec la cible), puis de plus en plus libres (rotation mentale).
-  List<double> _rotationPool(DifficultyLevel level) => switch (level) {
-        DifficultyLevel.veryEasy => const [0.0],
-        DifficultyLevel.easy => const [0.0, 90.0, 270.0],
-        DifficultyLevel.medium => const [0.0, 90.0, 180.0, 270.0],
-        DifficultyLevel.hard => const [
-            0.0,
-            45.0,
-            90.0,
-            135.0,
-            180.0,
-            225.0,
-            270.0,
-            315.0,
-          ],
-      };
-
-  /// Slots ordonnés de types de pièges par niveau de difficulté.
-  ///
-  /// Chaque slot est une liste PRIORITAIRE : le premier type est essayé en
-  /// premier ; si tryTrap retourne null, on essaie le suivant.
-  ///
-  /// Règles cardinales :
-  ///   - veryEasy / easy → PAS d'alternativeCut (trop dur à distinguer)
-  ///   - medium / hard   → alternativeCut autorisé en complément
-  ///   - wrongColors apparaît dans UN slot par niveau (verrou anti-doublon
-  ///     dans _buildDistractors) ; impossible sur item monochrome → fallback
-  List<List<TrapKind>> _trapSlotsFor(DifficultyLevel level) => switch (level) {
-        DifficultyLevel.veryEasy => [
-            // Slot 0 : bonne forme, MAUVAISE couleur (piège classique des
-            // premiers items réels — facile à voir, apprend la mécanique)
-            [TrapKind.wrongColors, TrapKind.foreignShape, TrapKind.scaled],
-            // Slot 1 : forme clairement étrangère (arc courbe vs angulaire)
-            [TrapKind.foreignShape, TrapKind.scaled],
-            // Slot 2 : pièce vraie mais clairement trop petite (~44 % taille)
-            [TrapKind.scaled],
-          ],
-        DifficultyLevel.easy => [
-            // Slot 0 : couleurs fausses, sinon forme étrangère
-            [TrapKind.wrongColors, TrapKind.foreignShape, TrapKind.scaled],
-            // Slot 1 : pièce trop petite (~55 % taille)
-            [TrapKind.scaled, TrapKind.stretched],
-            // Slot 2 : miroir si asymétrique, sinon étirement (évite doublon
-            // scaled quand la pièce est symétrique comme un rectangle)
-            [TrapKind.mirrored, TrapKind.stretched, TrapKind.foreignShape],
-          ],
-        DifficultyLevel.medium => [
-            // Slot 0 : taille modérément différente (~70 %)
-            [TrapKind.scaled, TrapKind.alternativeCut],
-            // Slot 1 : couleurs fausses ou miroir
-            [TrapKind.wrongColors, TrapKind.mirrored, TrapKind.alternativeCut],
-            // Slot 2 : découpe alternative (même cible, autre décomposition)
-            [TrapKind.alternativeCut, TrapKind.stretched],
-          ],
-        DifficultyLevel.hard => [
-            // Slot 0 : miroir subtil
-            [TrapKind.mirrored, TrapKind.alternativeCut],
-            // Slot 1 : découpe alternative indétectable
-            [TrapKind.alternativeCut, TrapKind.stretched],
-            // Slot 2 : couleurs fausses (subtil sur motif 3 couleurs), sinon
-            // étirement à aire constante (piège le plus fin)
-            [TrapKind.wrongColors, TrapKind.stretched, TrapKind.alternativeCut],
-          ],
-      };
 }

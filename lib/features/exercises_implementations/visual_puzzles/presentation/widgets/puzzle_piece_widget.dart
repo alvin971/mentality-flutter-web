@@ -93,8 +93,12 @@ class PuzzlePieceWidget extends StatelessWidget {
             ),
             child: Stack(
               children: [
+                // Bande haute réservée à la pastille (20 px + marge) : le
+                // numéro ne recouvre JAMAIS le dessin de la pièce. Padding
+                // identique sur les 6 cases → l'échelle commune (et donc la
+                // détection des pièges de taille) est préservée.
                 Padding(
-                  padding: const EdgeInsets.all(4),
+                  padding: const EdgeInsets.fromLTRB(6, 26, 6, 6),
                   child: CustomPaint(
                     size: Size.infinite,
                     painter: RegionedPolygonPainter(

@@ -344,6 +344,127 @@ bool congruent(Polygon a, Polygon b,
   return false;
 }
 
+/// Quasi-identité PERCEPTUELLE de deux polygones à rotation + translation
+/// près (et miroir si [allowMirror]), INSENSIBLE au nombre de sommets.
+///
+/// Complète [congruent], qui exige le même compte de sommets et échoue donc
+/// sur les formes courbes discrétisées : deux secteurs de cercle visuellement
+/// identiques peuvent différer d'un sommet d'échantillonnage (12 vs 13) —
+/// [congruent] répond « différents », l'œil répond « identiques ». C'est ce
+/// trou qui laissait passer des pièges indiscernables d'une vraie pièce sur
+/// les cibles cercle/demi-cercle.
+///
+/// Méthode : contours rééchantillonnés en [samples] points équirépartis par
+/// abscisse curviligne, centrés sur leur centroïde ; alignement optimal en
+/// rotation (Procrustes, forme close par corrélation complexe) minimisé sur
+/// tous les décalages de point de départ. Identiques si l'écart RMS rapporté
+/// à √aire est ≤ [relTol].
+bool perceptuallyIdentical(Polygon a, Polygon b,
+    {bool allowMirror = false,
+    double relTol = kPerceptualTol,
+    int samples = 64}) {
+  final pa = a.cleaned().ccw();
+  final pb = b.cleaned().ccw();
+  if (pa.vertices.length < 3 || pb.vertices.length < 3) return false;
+
+  final areaA = pa.area();
+  final areaB = pb.area();
+  final maxArea = math.max(areaA, areaB);
+  if (maxArea < kGeomEps) return true;
+  // Rejets rapides : aire ou périmètre trop différents (mêmes bornes que
+  // congruent — un écart d'aire relatif > 2·relTol se voit).
+  if ((areaA - areaB).abs() / maxArea > 2 * relTol) return false;
+  final perA = pa.perimeter();
+  final perB = pb.perimeter();
+  if (math.max(perA, perB) < kGeomEps) return false;
+  if ((perA - perB).abs() / math.max(perA, perB) > 2 * relTol) return false;
+
+  final scaleRef = math.sqrt(maxArea);
+  final tol = relTol * scaleRef;
+
+  final ca = _resampleContour(pa, samples);
+  if (_minRmsOverShifts(ca, _resampleContour(pb, samples)) <= tol) return true;
+  if (allowMirror) {
+    final mb = pb.transform(mirrored: true).ccw();
+    if (_minRmsOverShifts(ca, _resampleContour(mb, samples)) <= tol) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/// Garde anti-ambiguïté combinée : vrai si deux pièces sont indiscernables à
+/// l'œil par L'UNE OU L'AUTRE méthode — signature de sommets ([congruent]) ou
+/// contour rééchantillonné ([perceptuallyIdentical]).
+///
+/// C'est la fonction à utiliser dans TOUTES les gardes de génération :
+/// l'audit 2026-07-12 (ambiguity_audit_test) a mesuré que la signature seule
+/// laissait passer un piège indiscernable d'une vraie pièce dans 47 % des
+/// items medium/hard (miroirs quasi superposables par rotation, découpes
+/// alternatives sur formes symétriques ou courbes).
+bool visuallyConfusable(Polygon a, Polygon b, {bool allowMirror = false}) =>
+    congruent(a, b, allowMirror: allowMirror, relTol: kPerceptualTol) ||
+    perceptuallyIdentical(a, b, allowMirror: allowMirror);
+
+/// [samples] points équirépartis par longueur d'arc le long du contour,
+/// recentrés sur le centroïde (aire) du polygone.
+List<Offset> _resampleContour(Polygon p, int samples) {
+  final c = p.centroid();
+  final verts = p.vertices;
+  final n = verts.length;
+  final cum = List<double>.filled(n + 1, 0);
+  for (int i = 0; i < n; i++) {
+    cum[i + 1] = cum[i] + (verts[(i + 1) % n] - verts[i]).distance;
+  }
+  final total = cum[n];
+  final out = <Offset>[];
+  if (total < kGeomEps) {
+    return List.filled(samples, verts.first - c);
+  }
+  int seg = 0;
+  for (int k = 0; k < samples; k++) {
+    final target = total * k / samples;
+    while (seg < n - 1 && cum[seg + 1] < target) {
+      seg++;
+    }
+    final segLen = cum[seg + 1] - cum[seg];
+    final t = segLen < kGeomEps ? 0.0 : (target - cum[seg]) / segLen;
+    final a = verts[seg];
+    final b = verts[(seg + 1) % n];
+    out.add(Offset(a.dx + (b.dx - a.dx) * t, a.dy + (b.dy - a.dy) * t) - c);
+  }
+  return out;
+}
+
+/// RMS minimal entre deux contours rééchantillonnés (mêmes longueurs), sur
+/// tous les décalages de départ, avec rotation optimale par décalage.
+///
+/// Forme close : en complexes, pour un décalage s, la rotation optimale donne
+/// RMS² = (Σ|a|² + Σ|b|² − 2·|Σ conj(a_i)·b_{i+s}|) / K.
+double _minRmsOverShifts(List<Offset> a, List<Offset> b) {
+  final k = a.length;
+  double sa2 = 0, sb2 = 0;
+  for (int i = 0; i < k; i++) {
+    sa2 += a[i].dx * a[i].dx + a[i].dy * a[i].dy;
+    sb2 += b[i].dx * b[i].dx + b[i].dy * b[i].dy;
+  }
+  double best = double.infinity;
+  for (int s = 0; s < k; s++) {
+    double re = 0, im = 0;
+    for (int i = 0; i < k; i++) {
+      final p = a[i];
+      final q = b[(i + s) % k];
+      // conj(a) * b
+      re += p.dx * q.dx + p.dy * q.dy;
+      im += p.dx * q.dy - p.dy * q.dx;
+    }
+    final cross = math.sqrt(re * re + im * im);
+    final mse = (sa2 + sb2 - 2 * cross) / k;
+    if (mse < best) best = mse;
+  }
+  return best <= 0 ? 0 : math.sqrt(best);
+}
+
 List<(double, double)> _signature(Polygon p) {
   final n = p.vertices.length;
   final sig = <(double, double)>[];

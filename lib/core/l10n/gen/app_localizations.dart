@@ -3447,6 +3447,30 @@ abstract class AppLocalizations {
   /// **'Réessayer'**
   String get vpDemoRetry;
 
+  /// Puzzles visuels — libellé neutre du bouton après validation d'un item réel (aucun feedback correct/incorrect pendant le test, conforme au protocole)
+  ///
+  /// In fr, this message translates to:
+  /// **'Réponse enregistrée'**
+  String get vpRecorded;
+
+  /// Puzzles visuels — titre de l'écran intermédiaire entre la démonstration et le premier item chronométré
+  ///
+  /// In fr, this message translates to:
+  /// **'Prêt ?'**
+  String get vpReadyTitle;
+
+  /// Puzzles visuels — texte de l'écran Prêt ; le chrono ne démarre qu'à l'appui sur le bouton
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'entraînement est terminé. Le test commence : {count} puzzles, chacun avec son propre chrono. Le temps démarre dès que vous appuyez sur le bouton.'**
+  String vpReadyBody(int count);
+
+  /// Puzzles visuels — bouton de l'écran Prêt qui démarre l'item 1 et son chrono
+  ///
+  /// In fr, this message translates to:
+  /// **'Lancer le test'**
+  String get vpReadyStart;
+
   /// Puzzles visuels — étiquette d'accessibilité de l'indicateur de sélection
   ///
   /// In fr, this message translates to:

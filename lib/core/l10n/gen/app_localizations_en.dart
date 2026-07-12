@@ -1896,6 +1896,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get vpDemoRetry => 'Try again';
 
   @override
+  String get vpRecorded => 'Answer recorded';
+
+  @override
+  String get vpReadyTitle => 'Ready?';
+
+  @override
+  String vpReadyBody(int count) {
+    return 'Practice is over. The test begins: $count puzzles, each with its own timer. The clock starts as soon as you press the button.';
+  }
+
+  @override
+  String get vpReadyStart => 'Start now';
+
+  @override
   String vpSelectionSemantics(int filled, int total) {
     return 'Selection: $filled of $total pieces';
   }
@@ -4595,6 +4609,20 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get vpDemoRetry => 'Try again';
+
+  @override
+  String get vpRecorded => 'Answer recorded';
+
+  @override
+  String get vpReadyTitle => 'Ready?';
+
+  @override
+  String vpReadyBody(int count) {
+    return 'Practice is over. The test begins: $count puzzles, each with its own timer. The clock starts as soon as you press the button.';
+  }
+
+  @override
+  String get vpReadyStart => 'Start now';
 
   @override
   String vpSelectionSemantics(int filled, int total) {

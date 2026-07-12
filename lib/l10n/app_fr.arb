@@ -2611,6 +2611,27 @@
   "@vpDemoRetry": {
     "description": "Puzzles visuels — bouton après une démo ratée, réinitialise la démo"
   },
+  "vpRecorded": "Réponse enregistrée",
+  "@vpRecorded": {
+    "description": "Puzzles visuels — libellé neutre du bouton après validation d'un item réel (aucun feedback correct/incorrect pendant le test, conforme au protocole)"
+  },
+  "vpReadyTitle": "Prêt ?",
+  "@vpReadyTitle": {
+    "description": "Puzzles visuels — titre de l'écran intermédiaire entre la démonstration et le premier item chronométré"
+  },
+  "vpReadyBody": "L'entraînement est terminé. Le test commence : {count} puzzles, chacun avec son propre chrono. Le temps démarre dès que vous appuyez sur le bouton.",
+  "@vpReadyBody": {
+    "description": "Puzzles visuels — texte de l'écran Prêt ; le chrono ne démarre qu'à l'appui sur le bouton",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "vpReadyStart": "Lancer le test",
+  "@vpReadyStart": {
+    "description": "Puzzles visuels — bouton de l'écran Prêt qui démarre l'item 1 et son chrono"
+  },
   "vpSelectionSemantics": "Sélection : {filled} sur {total} pièces",
   "@vpSelectionSemantics": {
     "description": "Puzzles visuels — étiquette d'accessibilité de l'indicateur de sélection",

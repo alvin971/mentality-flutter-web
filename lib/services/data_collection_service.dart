@@ -1,11 +1,13 @@
 // lib/services/data_collection_service.dart
-// Singleton gérant la persistance Hive pour la collecte de données audio.
+// Singleton gérant la persistance Hive pour la collecte de données.
 //
 // Architecture des boxes :
 //   mentality_sell → couches C (audio) et D (paires NLU) — données licenciables
-//   mentality_keep → réservé aux données cognitives secrètes (ouvert, jamais écrit ici)
+//   mentality_keep → données cognitives secrètes (résultats par item des
+//                    sous-tests : temps de réponse, choix, graine, palier)
 //
-// CONTRAINTE : aucune méthode publique n'écrit dans _keepBox.
+// CONTRAINTE : les données de _keepBox ne QUITTENT JAMAIS l'appareil via ce
+// service — exportForUpload() / getSessionData() ne lisent que _sellBox.
 // La séparation est garantie structurellement, pas seulement par convention.
 //
 // Sécurité : les deux boxes sont chiffrées avec HiveAesCipher (AES-256-CBC).
@@ -28,9 +30,8 @@ class DataCollectionService {
   static const String _aesKeyPref = 'hive_aes_key';
 
   late Box<dynamic> _sellBox;
-  // _keepBox is opened to reserve the name and apply encryption,
-  // but never written to from public API (structural separation guarantee).
-  // ignore: unused_field
+  // _keepBox : données cognitives locales — écrite par saveCognitiveRecord,
+  // jamais lue par les chemins d'export (exportForUpload / getSessionData).
   late Box<dynamic> _keepBox;
   bool _initialized = false;
 
@@ -86,6 +87,39 @@ class DataCollectionService {
     await _sellBox.add(Map<String, dynamic>.from(record));
   }
 
+  // ─── Écriture — données cognitives (box keep, jamais exportée) ──────────────
+
+  /// Sauvegarde un enregistrement cognitif par item (résultats de sous-test :
+  /// réussite, temps de réponse, choix, graine du générateur, palier…).
+  ///
+  /// Ces données vont dans `mentality_keep` : elles ne sont JAMAIS incluses
+  /// dans [exportForUpload] ni [getSessionData] (qui ne lisent que la box
+  /// sell) — elles restent sur l'appareil.
+  Future<void> saveCognitiveRecord(Map<String, dynamic> record) async {
+    _assertReady();
+    await _keepBox.add(Map<String, dynamic>.from(record));
+  }
+
+  /// Lecture locale des enregistrements cognitifs d'une session (analyse
+  /// on-device, debug). Ne fait partie d'aucun chemin d'export.
+  Future<List<Map<String, dynamic>>> getCognitiveSessionData(
+      String sessionId) async {
+    _assertReady();
+    final results = <Map<String, dynamic>>[];
+    for (final value in _keepBox.values) {
+      if (value is Map && value['session_id'] == sessionId) {
+        results.add(Map<String, dynamic>.from(value));
+      }
+    }
+    return results;
+  }
+
+  /// Nombre total d'enregistrements cognitifs locaux.
+  int get cognitiveRecordCount {
+    _assertReady();
+    return _keepBox.length;
+  }
+
   // ─── Lecture ─────────────────────────────────────────────────────────────────
 
   /// Retourne tous les enregistrements d'une session donnée.
@@ -94,7 +128,7 @@ class DataCollectionService {
     final results = <Map<String, dynamic>>[];
     for (final value in _sellBox.values) {
       if (value is Map && value['session_id'] == sessionId) {
-        results.add(Map<String, dynamic>.from(value as Map));
+        results.add(Map<String, dynamic>.from(value));
       }
     }
     return results;

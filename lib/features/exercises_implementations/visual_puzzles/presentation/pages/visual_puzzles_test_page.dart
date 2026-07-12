@@ -7,6 +7,8 @@ import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
 import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
+import '../../../../../services/data_collection_service.dart';
+import '../../../../../services/session_manager.dart';
 import '../../domain/puzzle_generator.dart';
 import '../widgets/puzzle_piece_widget.dart';
 import '../widgets/puzzle_slot_indicator.dart';
@@ -46,9 +48,22 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
   Timer? _advanceTimer;
   bool _submitted = false;
 
+  /// Graine de la banque de cette session — journalisée avec chaque item
+  /// (rend la session reproductible pour le debug et la calibration).
+  late final int _sessionSeed;
+
+  /// Début de l'item courant, pour le temps de réponse journalisé.
+  DateTime _itemStartedAt = DateTime.now();
+
   /// Phase de DÉMONSTRATION : un item d'exemple fixe, sans chrono ni score,
   /// rejouable jusqu'à réussite — comme la démonstration du protocole réel.
   bool _demoPhase = true;
+
+  /// Écran « Prêt ? » entre la démo réussie et l'item 1 : le chrono du
+  /// premier item ne démarre qu'à l'appui explicite du sujet, jamais par
+  /// surprise (les 20 s de l'item 1 sont des données comme les autres).
+  bool _readyPhase = false;
+
   late final PuzzleItem _demoItem;
 
   /// Seed fixe de l'item de démonstration (contrôlé visuellement : pièges
@@ -69,6 +84,7 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
 
   void _generateItems() {
     final generator = PuzzleGenerator();
+    _sessionSeed = generator.seed;
     final all = generator.generateComplete26Items();
     final filter = widget.filterLevel;
     if (filter != null) {
@@ -86,8 +102,17 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
   PuzzleItem get _currentItem =>
       _demoPhase ? _demoItem : _items[_currentItemIndex];
 
+  void _goToReady() {
+    setState(() {
+      _demoPhase = false;
+      _readyPhase = true;
+      _selectedIds.clear();
+      _submitted = false;
+    });
+  }
+
   void _startRealTest() {
-    setState(() => _demoPhase = false);
+    setState(() => _readyPhase = false);
     _startItem();
   }
 
@@ -102,6 +127,7 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
     _selectedIds.clear();
     _submitted = false;
     _remainingSeconds = _currentItem.timeLimitSeconds;
+    _itemStartedAt = DateTime.now();
     _startTimer();
   }
 
@@ -160,6 +186,7 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
 
     final isCorrect = _selectedIds.length == 3 &&
         setEquals(_selectedIds, _currentItem.correctIds);
+    _logItemResult(isCorrect: isCorrect, autoSubmit: autoSubmit);
 
     setState(() {
       _submitted = true;
@@ -191,8 +218,76 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
   }
 
   void _finish() {
+    _logSummary();
     Navigator.of(context).pop(_score);
   }
+
+  // ---------- Journal par item (box cognitive locale, jamais exportée) ------
+
+  void _logItemResult({required bool isCorrect, required bool autoSubmit}) {
+    final item = _currentItem;
+    final options = <Map<String, dynamic>>[];
+    for (int i = 0; i < item.options.length; i++) {
+      final o = item.options[i];
+      options.add({
+        'label': _labels[i],
+        'trap': o.trapKind?.name,
+        'twin': o.isTwin,
+        'correct': o.isCorrect,
+        'selected': _selectedIds.contains(o.id),
+        'rotation_deg': o.displayRotationDeg,
+      });
+    }
+    _safeLog({
+      'type': 'vp_item',
+      'test': 'VP',
+      'session_id': SessionManager.instance.currentSessionId,
+      'seed': _sessionSeed,
+      'filter_level': widget.filterLevel,
+      'item_index': item.index,
+      'palier': item.palier,
+      'level': item.level.name,
+      'fallback_used': item.fallbackUsed,
+      'base_shape': item.baseShape.name,
+      'cut_strategy': item.cutStrategy.name,
+      'time_limit_s': item.timeLimitSeconds,
+      'rt_ms': DateTime.now().difference(_itemStartedAt).inMilliseconds,
+      'auto_submit': autoSubmit,
+      'is_correct': isCorrect,
+      'n_selected': _selectedIds.length,
+      'options': options,
+      'recorded_at': DateTime.now().toIso8601String(),
+    });
+  }
+
+  void _logSummary() {
+    _safeLog({
+      'type': 'vp_summary',
+      'test': 'VP',
+      'session_id': SessionManager.instance.currentSessionId,
+      'seed': _sessionSeed,
+      'filter_level': widget.filterLevel,
+      'score': _score,
+      'items_attempted': _currentItemIndex + 1,
+      'total_items': _items.length,
+      'stop_reason': _consecutiveFailures >= 3 ? 'discontinue' : 'completed',
+      'recorded_at': DateTime.now().toIso8601String(),
+    });
+  }
+
+  /// Écriture asynchrone best-effort : un échec de journalisation ne doit en
+  /// aucun cas perturber la passation.
+  Future<void> _safeLog(Map<String, dynamic> record) async {
+    try {
+      await DataCollectionService.instance.saveCognitiveRecord(record);
+    } catch (_) {
+      // Journal best-effort — jamais d'interruption du test pour un log.
+    }
+  }
+
+  /// Vrai quand un item réel chronométré est en cours (ni démo, ni écran
+  /// Prêt).
+  bool get _isPlaying => !_demoPhase && !_readyPhase;
 
   @override
   Widget build(BuildContext context) {
@@ -205,32 +300,40 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
       eyebrow:
           _demoPhase ? context.l10n.vpDemoEyebrow : context.l10n.vpEyebrow,
       accentColor: accent,
-      // Pas de barre de progression pendant la démo (hors des 26 items) :
-      // l'eyebrow « DÉMONSTRATION » s'affiche alors dans l'AppBar.
-      currentItem: _demoPhase ? null : _currentItemIndex + 1,
-      totalItems: _demoPhase ? null : _items.length,
+      // Pas de barre de progression pendant la démo ni l'écran Prêt (hors
+      // des 26 items) : l'eyebrow s'affiche alors seul dans l'AppBar.
+      currentItem: _isPlaying ? _currentItemIndex + 1 : null,
+      totalItems: _isPlaying ? _items.length : null,
       // Aucun défilement : cible et pièces se redimensionnent pour tenir
       // dans la hauteur de n'importe quel écran (test chronométré).
       scrollable: false,
-      trailing: _demoPhase
-          ? null
-          : [_TimerBadge(seconds: _remainingSeconds, accent: accent)],
+      trailing: _isPlaying
+          ? [_TimerBadge(seconds: _remainingSeconds, accent: accent)]
+          : null,
       bottomBar: KeplerTestButton.primary(
         label: _bottomBarLabel(context, item),
         accentColor: accent,
         onPressed: _bottomBarAction(item),
       ),
-      child: isWide ? _buildWide(context, item) : _buildNarrow(context, item),
+      child: _readyPhase
+          ? _buildReady(context)
+          : isWide
+              ? _buildWide(context, item)
+              : _buildNarrow(context, item),
     );
   }
 
   String _bottomBarLabel(BuildContext context, PuzzleItem item) {
+    if (_readyPhase) return context.l10n.vpReadyStart;
     if (_submitted) {
-      final ok = setEquals(_selectedIds, item.correctIds);
       if (_demoPhase) {
+        final ok = setEquals(_selectedIds, item.correctIds);
         return ok ? context.l10n.vpDemoStart : context.l10n.vpDemoRetry;
       }
-      return ok ? context.l10n.vpCorrect : context.l10n.vpIncorrect;
+      // Test réel : libellé NEUTRE — aucun retour correct/incorrect au
+      // sujet, conformément au protocole (la démo, elle, garde son
+      // feedback pédagogique complet).
+      return context.l10n.vpRecorded;
     }
     return _selectedIds.length == 3
         ? context.l10n.vpValidate
@@ -238,13 +341,46 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
   }
 
   VoidCallback? _bottomBarAction(PuzzleItem item) {
+    if (_readyPhase) return _startRealTest;
     if (_submitted) {
       if (!_demoPhase) return null;
       return setEquals(_selectedIds, item.correctIds)
-          ? _startRealTest
+          ? _goToReady
           : _retryDemo;
     }
     return _selectedIds.length == 3 ? () => _submit() : null;
+  }
+
+  /// Écran « Prêt ? » : l'item 1 n'est PAS affiché (aucune seconde de
+  /// prévisualisation gratuite) ; le chrono démarre au bouton.
+  Widget _buildReady(BuildContext context) {
+    final accent = AppColors.indexVSI;
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 420),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.timer_outlined, color: accent, size: 44),
+              const SizedBox(height: 16),
+              Text(
+                context.l10n.vpReadyTitle,
+                style: AppText.h2(),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 12),
+              Text(
+                context.l10n.vpReadyBody(_items.length),
+                style: AppText.body(),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   /// Mobile / fenêtre étroite : tout en colonne, dimensionné pour tenir
@@ -360,9 +496,15 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
         children: List.generate(item.options.length, (i) {
           final piece = item.options[i];
           final isSelected = _selectedIds.contains(piece.id);
-          final showCorrect =
-              _submitted && item.correctIds.contains(piece.id);
-          final showIncorrect = _submitted && isSelected && !showCorrect;
+          // Révélation des bonnes pièces UNIQUEMENT en démo (pédagogique).
+          // Pendant le test réel, aucun feedback visuel ne trahit la
+          // réponse — protocole respecté, pas d'apprentissage en cours de
+          // passation.
+          final showCorrect = _submitted &&
+              _demoPhase &&
+              item.correctIds.contains(piece.id);
+          final showIncorrect =
+              _submitted && _demoPhase && isSelected && !showCorrect;
           return PuzzlePieceWidget(
             piece: piece,
             label: _labels[i],

@@ -27,11 +27,17 @@ void main() {
         () {
       final items = PuzzleGenerator(seed: 42).generateComplete26Items();
       expect(items.length, 26);
+      // Niveaux dérivés des paliers : P1-P2 (7) / P3-P4 (7) / P5-P6 (6) /
+      // P7-P8 (6).
       expect(
-          items.where((i) => i.level == DifficultyLevel.veryEasy).length, 6);
-      expect(items.where((i) => i.level == DifficultyLevel.easy).length, 8);
+          items.where((i) => i.level == DifficultyLevel.veryEasy).length, 7);
+      expect(items.where((i) => i.level == DifficultyLevel.easy).length, 7);
       expect(items.where((i) => i.level == DifficultyLevel.medium).length, 6);
       expect(items.where((i) => i.level == DifficultyLevel.hard).length, 6);
+      // Et les paliers eux-mêmes suivent l'échelle.
+      for (int i = 0; i < items.length; i++) {
+        expect(items[i].palier, kLadder[i].palier, reason: 'item ${i + 1}');
+      }
     });
 
     test('temps limites conformes : 20 s items 1-7, 30 s items 8-26', () {
@@ -291,19 +297,18 @@ void main() {
   });
 
   group('PuzzleGenerator — progression de difficulté', () {
-    test('subtilité des pièges croissante de l\'item 1 à 26', () {
-      expect(PuzzleGenerator.subtletyForItem(1), closeTo(0.05, 1e-9));
-      expect(PuzzleGenerator.subtletyForItem(26), closeTo(0.95, 1e-9));
-      for (int i = 1; i < 26; i++) {
-        expect(PuzzleGenerator.subtletyForItem(i + 1),
-            greaterThan(PuzzleGenerator.subtletyForItem(i)));
+    test('subtilité des pièges croissante de l\'item 1 à 26 (kLadder)', () {
+      expect(kLadder.first.subtlety, closeTo(0.05, 1e-9));
+      expect(kLadder.last.subtlety, closeTo(0.95, 1e-9));
+      for (int i = 1; i < kLadder.length; i++) {
+        expect(kLadder[i].subtlety, greaterThan(kLadder[i - 1].subtlety));
       }
     });
 
-    test('items très faciles : aucune rotation d\'affichage', () {
+    test('palier 1 : aucune rotation d\'affichage (correspondance directe)',
+        () {
       final items = PuzzleGenerator(seed: 5).generateComplete26Items();
-      for (final item
-          in items.where((i) => i.level == DifficultyLevel.veryEasy)) {
+      for (final item in items.where((i) => i.palier == 1)) {
         for (final o in item.options) {
           expect(o.displayRotationDeg, 0.0,
               reason: 'item ${item.index} doit rester sans rotation');

@@ -1907,6 +1907,20 @@ class AppLocalizationsPt extends AppLocalizations {
   String get vpDemoRetry => 'Tentar novamente';
 
   @override
+  String get vpRecorded => 'Resposta registada';
+
+  @override
+  String get vpReadyTitle => 'Pronto?';
+
+  @override
+  String vpReadyBody(int count) {
+    return 'O treino terminou. O teste vai começar: $count puzzles, cada um com o seu próprio cronómetro. O tempo começa assim que tocar no botão.';
+  }
+
+  @override
+  String get vpReadyStart => 'Começar agora';
+
+  @override
   String vpSelectionSemantics(int filled, int total) {
     return 'Seleção: $filled de $total peças';
   }
