@@ -42,6 +42,21 @@ void main() {
         expect(item.options.length, 6, reason: ctx);
         expect(item.correctPieces.length, 3, reason: ctx);
 
+        // Refonte carré 2026-07 : cible unique + vraies pièces mutuellement
+        // discernables (garde du générateur, revérifiée ici en bout de
+        // chaîne — deux vraies pièces jumelles rendraient l'item ambigu).
+        expect(item.baseShape, BaseShape.square, reason: ctx);
+        final correct = item.correctPieces.toList();
+        for (int a = 0; a < correct.length; a++) {
+          for (int b = a + 1; b < correct.length; b++) {
+            expect(
+                visuallyConfusable(correct[a].polygon, correct[b].polygon,
+                    allowMirror: true),
+                isFalse,
+                reason: '$ctx : vraies pièces $a/$b confusables');
+          }
+        }
+
         // Rotations des vraies pièces : dans le pool + minimums imposés.
         final trueRots =
             item.correctPieces.map((p) => p.displayRotationDeg).toList();

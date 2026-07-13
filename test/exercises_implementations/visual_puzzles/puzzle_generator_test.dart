@@ -329,18 +329,30 @@ void main() {
       expect(hardRotations, greaterThan(0));
     });
 
-    test('diversité : 2 générateurs sans seed produisent des items variés',
-        () {
+    test('diversité : 2 graines produisent des découpes géométriquement '
+        'variées', () {
+      // La cible étant toujours le carré, la variété entre patients vient de
+      // la GÉOMÉTRIE des découpes (paramètres continus : fractions d'aire,
+      // angles, offsets) — pas d'un pool discret de formes. En P1/P2 les
+      // bandes sont tirées dans des fenêtres étroites (0.02) : des
+      // coïncidences d'aires à 0.01 près entre deux graines saines sont
+      // ATTENDUES sur quelques items (distribution mesurée : 19-26 items
+      // différents sur 26). Un vrai bug de dérivation du RNG (graines
+      // corrélées) donnerait ~0 item différent — d'où le seuil bas.
       final a = PuzzleGenerator(seed: 1).generateComplete26Items();
       final b = PuzzleGenerator(seed: 2).generateComplete26Items();
+      List<double> areas(PuzzleItem it) =>
+          (it.correctPieces.map((p) => p.polygon.area()).toList()..sort());
       int differing = 0;
       for (int i = 0; i < 26; i++) {
-        if (a[i].baseShape != b[i].baseShape ||
-            a[i].cutStrategy != b[i].cutStrategy) {
+        final aa = areas(a[i]);
+        final bb = areas(b[i]);
+        if (List.generate(3, (k) => (aa[k] - bb[k]).abs())
+            .any((d) => d > 0.01)) {
           differing++;
         }
       }
-      expect(differing, greaterThan(8));
+      expect(differing, greaterThanOrEqualTo(15));
     });
   });
 

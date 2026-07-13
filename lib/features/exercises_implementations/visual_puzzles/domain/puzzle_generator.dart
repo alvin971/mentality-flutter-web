@@ -275,6 +275,19 @@ class PuzzleGenerator {
       return null;
     }
 
+    // 1b. GARDE refonte carré : les 3 vraies pièces doivent être mutuellement
+    // discernables (à rotation ET miroir près) — sur un carré coupé en bandes,
+    // deux vraies pièces quasi identiques rendraient l'appariement ambigu et
+    // réactiveraient l'élimination par doublons. Rejet → autre tirage au même
+    // palier (jamais de dégradation de radical).
+    for (int i = 0; i < cuts.length; i++) {
+      for (int j = i + 1; j < cuts.length; j++) {
+        if (visuallyConfusable(cuts[i], cuts[j], allowMirror: true)) {
+          return null;
+        }
+      }
+    }
+
     // 2. Zones de couleur du motif — INDÉPENDANTES des lignes de découpe.
     // Exigence (items multicolores) : au moins une vraie pièce bicolore,
     // sinon les couleurs trahiraient la correspondance pièce ↔ zone.

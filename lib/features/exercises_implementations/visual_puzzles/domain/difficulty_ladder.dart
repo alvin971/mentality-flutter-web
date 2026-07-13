@@ -46,7 +46,12 @@ class ItemRecipe {
   /// Palier 1..8 (P1 = apprentissage, P8 = plafond).
   final int palier;
 
-  /// Pool de formes cibles autorisées (incidental : laquelle est tirée).
+  /// Pool de formes cibles autorisées. Toujours `[BaseShape.square]` depuis
+  /// la refonte 2026-07 : comme dans le WAIS-IV réel, un contour distinctif
+  /// (pointe de triangle, arc de cercle) donnerait des indices gratuits de
+  /// localisation — la difficulté vient exclusivement de la découpe, du
+  /// motif, des rotations et des pièges. (Les autres [BaseShape] restent
+  /// utilisées par le piège `foreignShape`.)
   final List<BaseShape> shapes;
 
   /// Pool de stratégies de découpe autorisées.
@@ -132,11 +137,7 @@ const List<List<TrapKind>> _slotsTop = [
 
 ItemRecipe _p1(double subtlety) => ItemRecipe(
       palier: 1,
-      shapes: const [
-        BaseShape.square,
-        BaseShape.rectangleWide,
-        BaseShape.rectangleTall,
-      ],
+      shapes: const [BaseShape.square],
       strategies: const [CutStrategy.twoParallel],
       rotationAngles: _rot0,
       minRotatedPieces: 0,
@@ -149,13 +150,7 @@ ItemRecipe _p1(double subtlety) => ItemRecipe(
 
 ItemRecipe _p2(double subtlety) => ItemRecipe(
       palier: 2,
-      shapes: const [
-        BaseShape.square,
-        BaseShape.rectangleWide,
-        BaseShape.diamond,
-        BaseShape.triangleEq,
-        BaseShape.triangleRight,
-      ],
+      shapes: const [BaseShape.square],
       strategies: const [CutStrategy.twoParallel, CutStrategy.perpendicularL],
       rotationAngles: _rotCard,
       minRotatedPieces: 1,
@@ -168,11 +163,7 @@ ItemRecipe _p2(double subtlety) => ItemRecipe(
 
 ItemRecipe _p3(double subtlety) => ItemRecipe(
       palier: 3,
-      shapes: const [
-        BaseShape.triangleEq,
-        BaseShape.triangleRight,
-        BaseShape.trapezoid,
-      ],
+      shapes: const [BaseShape.square],
       strategies: const [
         CutStrategy.perpendicularL,
         CutStrategy.oneStraightOneOblique,
@@ -188,11 +179,7 @@ ItemRecipe _p3(double subtlety) => ItemRecipe(
 
 ItemRecipe _p4(double subtlety) => ItemRecipe(
       palier: 4,
-      shapes: const [
-        BaseShape.house,
-        BaseShape.parallelogram,
-        BaseShape.trapezoid,
-      ],
+      shapes: const [BaseShape.square],
       strategies: const [
         CutStrategy.oneStraightOneOblique,
         CutStrategy.twoOblique,
@@ -208,7 +195,7 @@ ItemRecipe _p4(double subtlety) => ItemRecipe(
 
 ItemRecipe _p5(double subtlety) => ItemRecipe(
       palier: 5,
-      shapes: const [BaseShape.pentagon, BaseShape.hexagon],
+      shapes: const [BaseShape.square],
       strategies: const [CutStrategy.twoOblique, CutStrategy.fan],
       rotationAngles: _rotDiag1,
       minRotatedPieces: 2,
@@ -222,8 +209,11 @@ ItemRecipe _p5(double subtlety) => ItemRecipe(
 
 ItemRecipe _p6(double subtlety) => ItemRecipe(
       palier: 6,
-      shapes: const [BaseShape.hexagon, BaseShape.octagon],
-      strategies: const [CutStrategy.fan, CutStrategy.twoOblique],
+      shapes: const [BaseShape.square],
+      strategies: const [
+        CutStrategy.twoObliqueSteep,
+        CutStrategy.fanOffset,
+      ],
       rotationAngles: _rotFree,
       minRotatedPieces: 3,
       minDiagonalPieces: 2,
@@ -236,8 +226,11 @@ ItemRecipe _p6(double subtlety) => ItemRecipe(
 
 ItemRecipe _p7(double subtlety, ColorMode colorMode) => ItemRecipe(
       palier: 7,
-      shapes: const [BaseShape.octagon, BaseShape.semicircle],
-      strategies: const [CutStrategy.fan, CutStrategy.twoOblique],
+      shapes: const [BaseShape.square],
+      strategies: const [
+        CutStrategy.nearDiagonal,
+        CutStrategy.twoObliqueSteep,
+      ],
       rotationAngles: _rotFree,
       minRotatedPieces: 3,
       minDiagonalPieces: 2,
@@ -250,8 +243,12 @@ ItemRecipe _p7(double subtlety, ColorMode colorMode) => ItemRecipe(
 
 ItemRecipe _p8(double subtlety, ColorMode colorMode) => ItemRecipe(
       palier: 8,
-      shapes: const [BaseShape.semicircle, BaseShape.circle],
-      strategies: const [CutStrategy.fan],
+      shapes: const [BaseShape.square],
+      strategies: const [
+        CutStrategy.nearDiagonal,
+        CutStrategy.fanOffset,
+        CutStrategy.twoObliqueSteep,
+      ],
       rotationAngles: _rotFree,
       minRotatedPieces: 3,
       minDiagonalPieces: 2,
@@ -264,10 +261,13 @@ ItemRecipe _p8(double subtlety, ColorMode colorMode) => ItemRecipe(
 
 /// L'échelle des 26 items — la MÊME pour tous les patients.
 ///
-/// Progression des radicaux (voir tableau du plan de refonte) :
-/// P1 (1-4) → P8 (24-26) : formes de plus en plus symétriques/courbes,
-/// découpes de moins en moins alignées, rotations mentales croissantes,
-/// indices couleur retirés (monochrome au sommet), jumeaux 3 → 0.
+/// Cible = CARRÉ pour les 26 items (protocole WAIS-IV). Progression des
+/// radicaux, portée par la DÉCOUPE :
+/// P1 bandes parallèles · P2 + L perpendiculaire · P3 + 1 oblique ·
+/// P4 + 2 obliques · P5 + éventail · P6 obliques rapprochées / éventail
+/// décentré · P7 coupes quasi diagonales · P8 les découpes les plus
+/// trompeuses. S'y ajoutent : rotations mentales croissantes, indices
+/// couleur retirés (monochrome au sommet), jumeaux 3 → 0.
 ///
 /// Les items monochromes de P7/P8 sont placés DÉTERMINISTIQUEMENT (pas au
 /// hasard) : même dosage d'indices couleur pour tout le monde.

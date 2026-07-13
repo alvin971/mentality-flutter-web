@@ -94,6 +94,38 @@ void main() {
           2);
     });
 
+    test('refonte 2026-07 : toutes les recettes ciblent uniquement le carré',
+        () {
+      // Protocole WAIS-IV : un contour distinctif (triangle, arc) donnerait
+      // des indices gratuits de localisation. La difficulté vient de la
+      // découpe, du motif, des rotations et des pièges — jamais de la forme.
+      for (int i = 0; i < kLadder.length; i++) {
+        expect(kLadder[i].shapes, [BaseShape.square],
+            reason: 'item ${i + 1}');
+      }
+    });
+
+    test('progression des stratégies de découpe par palier', () {
+      const expected = <int, Set<CutStrategy>>{
+        1: {CutStrategy.twoParallel},
+        2: {CutStrategy.twoParallel, CutStrategy.perpendicularL},
+        3: {CutStrategy.perpendicularL, CutStrategy.oneStraightOneOblique},
+        4: {CutStrategy.oneStraightOneOblique, CutStrategy.twoOblique},
+        5: {CutStrategy.twoOblique, CutStrategy.fan},
+        6: {CutStrategy.twoObliqueSteep, CutStrategy.fanOffset},
+        7: {CutStrategy.nearDiagonal, CutStrategy.twoObliqueSteep},
+        8: {
+          CutStrategy.nearDiagonal,
+          CutStrategy.fanOffset,
+          CutStrategy.twoObliqueSteep,
+        },
+      };
+      for (int i = 0; i < kLadder.length; i++) {
+        expect(kLadder[i].strategies.toSet(), expected[kLadder[i].palier],
+            reason: 'item ${i + 1}');
+      }
+    });
+
     test('cohérence des slots de pièges avec le palier', () {
       for (int i = 0; i < kLadder.length; i++) {
         final r = kLadder[i];

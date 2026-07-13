@@ -1,10 +1,11 @@
 // Audit anti-ambiguïté des Puzzles Visuels.
 //
-// Hypothèse auditée (2026-07-12) : `congruent()` exige le même nombre de
-// sommets ; sur les cibles courbes discrétisées (cercle 36-gone, demi-cercle
-// 20-gone), deux pièces visuellement identiques peuvent différer d'un sommet
-// d'échantillonnage → un piège quasi identique à une vraie pièce passe les
-// gardes → l'item a deux réponses visuellement valides (loterie).
+// Depuis la refonte « cible carré unique » (2026-07), le risque auditée n'est
+// plus la discrétisation des cibles courbes mais la SYMÉTRIE D4 du carré :
+// découpes alternatives et miroirs y ont une probabilité élevée de
+// quasi-coïncidence à rotation près (un secteur recoupé autrement peut
+// retomber sur une vraie pièce). Ce test reste le filet de régression des
+// gardes perceptuelles branchées dans le générateur et le TrapEngine.
 //
 // Ce test génère des items medium/hard en masse et compte, avec la métrique
 // perceptuelle par rééchantillonnage de contour (`perceptuallyIdentical`),
@@ -44,7 +45,7 @@ void main() {
             if (perceptuallyIdentical(trap.polygon, truePiece.polygon,
                 relTol: tol)) {
               final key =
-                  '${item.baseShape.name}/${trap.trapKind?.name ?? "?"}';
+                  '${item.cutStrategy.name}/${trap.trapKind?.name ?? "?"}';
               final counts = ambiguousByTol[tol]!;
               counts[key] = (counts[key] ?? 0) + 1;
               if (tol == 0.08 && !itemFlagged) {
