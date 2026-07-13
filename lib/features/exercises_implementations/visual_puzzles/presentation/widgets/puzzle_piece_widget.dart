@@ -45,16 +45,16 @@ class PuzzlePieceWidget extends StatelessWidget {
   /// Pixels par unité normalisée pour une case CARRÉE de côté [tileSide].
   ///
   /// DOIT rester aligné sur la géométrie interne du widget : padding du
-  /// conteneur (4 de chaque côté), zone de dessin LTRB(6, 26, 6, 6) — bande
-  /// haute réservée à la pastille — et padding 0.06 du painter.
+  /// conteneur (4 de chaque côté), zone de dessin LTRB(4, 20, 4, 4) — bande
+  /// haute réservée à la pastille — et padding 0.03 du painter.
   ///
   /// Sert à dessiner la FIGURE CIBLE à la MÊME échelle que les pièces
   /// (échelle unifiée : les 3 bonnes pièces s'additionnent visuellement à
   /// la taille affichée de la cible).
   static double pixelsPerUnit(double tileSide, double unitsPerTile) {
-    // Côté le plus court de la zone de dessin : hauteur = tile − 8 − 32.
-    final paintShortest = math.max(tileSide - 40.0, 1.0);
-    return paintShortest * 0.88 / math.max(unitsPerTile, 1e-6);
+    // Côté le plus court de la zone de dessin : hauteur = tile − 8 − 24.
+    final paintShortest = math.max(tileSide - 32.0, 1.0);
+    return paintShortest * 0.94 / math.max(unitsPerTile, 1e-6);
   }
 
   @override
@@ -114,7 +114,7 @@ class PuzzlePieceWidget extends StatelessWidget {
                 // identique sur les 6 cases → l'échelle commune (et donc la
                 // détection des pièges de taille) est préservée.
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(6, 26, 6, 6),
+                  padding: const EdgeInsets.fromLTRB(4, 20, 4, 4),
                   child: CustomPaint(
                     size: Size.infinite,
                     painter: RegionedPolygonPainter(
@@ -122,6 +122,7 @@ class PuzzlePieceWidget extends StatelessWidget {
                       regions: piece.displayRegions,
                       palette: palette,
                       outlineColor: cs.outline.withValues(alpha: 0.55),
+                      padding: 0.03,
                       unitsPerTile: unitsPerTile,
                     ),
                   ),

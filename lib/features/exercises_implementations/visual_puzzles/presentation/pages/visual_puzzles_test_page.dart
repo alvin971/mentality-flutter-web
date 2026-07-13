@@ -415,7 +415,7 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
             // La cible absorbe l'espace restant et se réduit si besoin.
             Expanded(
               child: PuzzleTargetWidget(
-                  item: item, maxWidth: 400, pixelsPerUnit: ppu),
+                  item: item, maxWidth: 440, pixelsPerUnit: ppu),
             ),
             const SizedBox(height: 8),
             PuzzleSlotIndicator(filled: _selectedIds.length, total: 3),
@@ -434,14 +434,14 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
   /// tout visible sans défilement (important pour un test chronométré).
   /// FittedBox : sur fenêtre basse, l'ensemble est réduit plutôt que coupé.
   Widget _buildWide(BuildContext context, PuzzleItem item) {
-    // Échelle UNIFIÉE cible/pièces (cases de (470−20)/3 = 150 px).
+    // Échelle UNIFIÉE cible/pièces (cases de (560−20)/3 = 180 px).
     final ppu =
-        PuzzlePieceWidget.pixelsPerUnit(150, item.maxPieceExtent);
+        PuzzlePieceWidget.pixelsPerUnit(180, item.maxPieceExtent);
     return Center(
       child: FittedBox(
         fit: BoxFit.scaleDown,
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 980),
+          constraints: const BoxConstraints(maxWidth: 1120),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: Row(
@@ -449,14 +449,14 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
-                  width: 430,
+                  width: 500,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       PuzzleTargetWidget(
                           item: item,
-                          maxWidth: 400,
-                          maxHeight: 320,
+                          maxWidth: 470,
+                          maxHeight: 380,
                           pixelsPerUnit: ppu),
                       const SizedBox(height: 16),
                       PuzzleSlotIndicator(
@@ -467,7 +467,7 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
                   ),
                 ),
                 const SizedBox(width: 32),
-                SizedBox(width: 470, child: _optionsGrid(item, maxWidth: 470)),
+                SizedBox(width: 560, child: _optionsGrid(item, maxWidth: 560)),
               ],
             ),
           ),

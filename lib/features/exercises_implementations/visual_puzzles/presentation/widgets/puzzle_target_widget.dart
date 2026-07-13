@@ -81,7 +81,7 @@ class PuzzleTargetWidget extends StatelessWidget {
                         style: AppText.mono(color: accent, size: 10)),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(18, 28, 18, 14),
+                    padding: const EdgeInsets.fromLTRB(12, 24, 12, 10),
                     child: CustomPaint(
                       size: Size.infinite,
                       painter: _TargetPainter(
@@ -122,7 +122,7 @@ class _TargetPainter extends CustomPainter {
   /// Échelle unifiée avec les pièces ; null = remplir la zone (legacy).
   final double? pixelsPerUnit;
 
-  static const double _padding = 0.09;
+  static const double _padding = 0.05;
 
   @override
   void paint(Canvas canvas, Size size) {
