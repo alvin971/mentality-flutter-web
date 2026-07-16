@@ -11,7 +11,6 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mentality/features/exercises_implementations/visual_puzzles/domain/geometry.dart';
 import 'package:mentality/features/exercises_implementations/visual_puzzles/domain/puzzle_generator.dart';
 import 'package:mentality/features/exercises_implementations/visual_puzzles/presentation/widgets/puzzle_piece_widget.dart';
 import 'package:mentality/features/exercises_implementations/visual_puzzles/presentation/widgets/puzzle_target_widget.dart';
@@ -58,6 +57,68 @@ void main() {
           }
         }
       });
+    }
+  });
+
+  // Métriques VERROUILLÉES de l'audit visuel (60 seeds × 26 items) — toute
+  // régression sur l'un de ces invariants doit être un choix explicite.
+  test('métriques verrouillées : inflation, distinctness mono, fallback', () {
+    double worstInfl = 0;
+    int fallbacks = 0, monoViolations = 0, items = 0;
+    for (var seed = 1; seed <= 60; seed++) {
+      for (final it in PuzzleGenerator(seed: seed).generateComplete26Items()) {
+        items++;
+        if (it.fallbackUsed) fallbacks++;
+
+        // Inflation d'échelle par rotation (défaut L) : bbox affiché max /
+        // bbox non tourné max. Avant fix : 1,41 (cible ~53 px sur mobile).
+        double maxUnrot = 0, maxDisp = 0;
+        for (final o in it.options) {
+          final ub = o.polygon.bbox();
+          final db = o.displayPolygon.bbox();
+          maxUnrot = math.max(maxUnrot, math.max(ub.width, ub.height));
+          maxDisp = math.max(maxDisp, math.max(db.width, db.height));
+        }
+        worstInfl = math.max(worstInfl, maxDisp / maxUnrot);
+
+        // Distinctness monochrome (défaut mono) : aucun piège non-miroir
+        // quasi identique à une vraie pièce quand la couleur n'aide pas.
+        if (it.palette.length == 1) {
+          for (final o in it.options
+              .where((o) => !o.isCorrect && o.trapKind != TrapKind.mirrored)) {
+            for (final t in it.options.where((o) => o.isCorrect)) {
+              if (perceptuallyIdentical(o.polygon, t.polygon,
+                  allowMirror: true, relTol: kMonoDistinctTol)) {
+                monoViolations++;
+              }
+            }
+          }
+        }
+      }
+    }
+    expect(worstInfl, lessThanOrEqualTo(1.22),
+        reason: 'inflation d échelle par rotation (√2×0,8 + cas X-mode)');
+    expect(monoViolations, 0,
+        reason: 'piège quasi-jumeau d une vraie pièce sur item monochrome');
+    expect(fallbacks / items, lessThan(0.05),
+        reason: 'les gardes ne doivent pas asphyxier la génération');
+  });
+
+  test('perceptuallyIdentical est symétrique (paires d options réelles)', () {
+    for (final seed in [7, 23, 38, 53]) {
+      for (final it in PuzzleGenerator(seed: seed).generateComplete26Items()) {
+        for (int i = 0; i < it.options.length; i++) {
+          for (int j = i + 1; j < it.options.length; j++) {
+            final a = it.options[i].polygon;
+            final b = it.options[j].polygon;
+            expect(
+              perceptuallyIdentical(a, b, allowMirror: true),
+              perceptuallyIdentical(b, a, allowMirror: true),
+              reason: 'seed $seed item ${it.index} options ${i + 1}/${j + 1}',
+            );
+          }
+        }
+      }
     }
   });
 

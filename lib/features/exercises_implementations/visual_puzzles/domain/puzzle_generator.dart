@@ -16,6 +16,7 @@ export 'geometry.dart'
         congruent,
         perceptuallyIdentical,
         visuallyConfusable,
+        kMonoDistinctTol,
         isReconstruction,
         intersectConvex;
 export 'trap_engine.dart' show TrapKind, TrapResult;
@@ -171,6 +172,17 @@ class PuzzleItem {
 /// équivalente (formes parallèles).
 ///
 /// La génération est paramétrique et reproductible (`seed`).
+/// Plafond d'inflation de l'échelle d'affichage : le bbox TOURNÉ d'une
+/// option ne doit pas dépasser 1,15 × la plus grande dimension non tournée
+/// des vraies pièces. Une rotation diagonale ne coûte presque rien sur une
+/// bande fine ((L+l)/√2 < L) mais ×1,41 sur une pièce carrée — avant
+/// l'audit visuel 2026-07-16, ces ×1,41 écrasaient l'échelle commune de
+/// l'item (cible ~53 px sur mobile pour 26/260 items audités). Le choix
+/// pièce/angle se fait donc sur le bbox tourné RÉEL ; le minimum de
+/// diagonales de la recette prime toujours (violation minimisée si
+/// géométriquement inévitable).
+const double kMaxDisplayInflation = 1.15;
+
 class PuzzleGenerator {
   PuzzleGenerator({int? seed})
       : _seed = seed ?? DateTime.now().microsecondsSinceEpoch {
@@ -307,7 +319,7 @@ class PuzzleGenerator {
 
     // 3. Vraies pièces — rotations d'affichage garanties par construction
     // (minimums de la recette imposés, pas espérés du tirage).
-    final rotations = _drawRotationsFor3(recipe);
+    final rotations = _drawRotationsFor3(recipe, cuts);
     final truePieces = <PuzzlePiece>[];
     for (int i = 0; i < cuts.length; i++) {
       truePieces.add(PuzzlePiece(
@@ -356,11 +368,34 @@ class PuzzleGenerator {
   /// minimums de la recette (pièces tournées, pièces à angle diagonal) :
   /// on tire librement puis on force des cases jusqu'au compte — aucune
   /// possibilité d'échec, la rotation n'est jamais une cause de re-tirage.
-  List<double> _drawRotationsFor3(ItemRecipe recipe) {
+  ///
+  /// Les angles DIAGONAUX sont réservés aux pièces les plus PETITES : une
+  /// grande pièce tournée à 45° gonfle son bbox de ×√2, ce qui écrase
+  /// l'échelle commune de tout l'item (audit visuel 2026-07-16 : cible
+  /// réduite à ~53 px sur mobile pour 26/260 items). Le minimum de la
+  /// recette prime toujours : en dernier recours une grande pièce reçoit
+  /// quand même la diagonale.
+  List<double> _drawRotationsFor3(ItemRecipe recipe, List<Polygon> pieces) {
     final pool = recipe.rotationAngles;
-    final rots =
-        List<double>.generate(3, (_) => pool[_rng.nextInt(pool.length)]);
+    final maxDim = pieces.map(_maxDim).reduce(math.max);
+    final budget = kMaxDisplayInflation * maxDim;
 
+    // Bbox TOURNÉ réel : c'est lui qui dicte l'échelle commune, pas la
+    // taille brute (bande fine à 45° ≈ ×0,88, pièce carrée à 45° = ×1,41).
+    double rotDim(int i, double a) =>
+        _maxDim(a == 0 ? pieces[i] : pieces[i].transform(rotationDeg: a));
+    bool ok(int i, double a) => rotDim(i, a) <= budget;
+    // Les angles cardinaux préservent le bbox : toujours dans le budget.
+    List<double> okAngles(int i, Iterable<double> src) =>
+        src.where((a) => a % 90 == 0 || ok(i, a)).toList();
+
+    // 1. Tirage libre, borné au budget d'inflation.
+    final rots = List<double>.generate(3, (i) {
+      final allowed = okAngles(i, pool);
+      return allowed[_rng.nextInt(allowed.length)];
+    });
+
+    // 2. Minimum de pièces tournées (angle non nul, dans le budget).
     final nonZero = pool.where((a) => a != 0).toList();
     if (nonZero.isNotEmpty && recipe.minRotatedPieces > 0) {
       var count = rots.where((a) => a != 0).length;
@@ -368,25 +403,67 @@ class PuzzleGenerator {
       for (final i in order) {
         if (count >= recipe.minRotatedPieces) break;
         if (rots[i] == 0) {
-          rots[i] = nonZero[_rng.nextInt(nonZero.length)];
+          final allowed = okAngles(i, nonZero);
+          rots[i] = allowed.isNotEmpty
+              ? allowed[_rng.nextInt(allowed.length)]
+              : nonZero[_rng.nextInt(nonZero.length)];
           count++;
         }
       }
     }
 
+    // 3. Minimum de pièces à angle diagonal : on choisit le couple
+    //    pièce × angle de bbox tourné MINIMAL (le minimum de la recette
+    //    prime — si aucun couple ne tient dans le budget, on prend le
+    //    moins coûteux).
     final diagonals = pool.where((a) => a % 90 != 0).toList();
     if (diagonals.isNotEmpty && recipe.minDiagonalPieces > 0) {
       var count = rots.where((a) => a % 90 != 0).length;
-      final order = [0, 1, 2]..shuffle(_rng);
-      for (final i in order) {
-        if (count >= recipe.minDiagonalPieces) break;
-        if (rots[i] % 90 == 0) {
-          rots[i] = diagonals[_rng.nextInt(diagonals.length)];
-          count++;
+      while (count < recipe.minDiagonalPieces) {
+        int? bestI;
+        double? bestA;
+        var bestCost = double.infinity;
+        for (int i = 0; i < 3; i++) {
+          if (rots[i] % 90 != 0) continue;
+          for (final a in diagonals) {
+            final cost = rotDim(i, a);
+            // Léger bruit pour ne pas figer le choix à coût quasi égal.
+            final jitter = 1 + _rng.nextDouble() * 0.02;
+            if (cost * jitter < bestCost) {
+              bestCost = cost * jitter;
+              bestI = i;
+              bestA = a;
+            }
+          }
         }
+        if (bestI == null) break; // plus de case cardinale à convertir
+        rots[bestI] = bestA!;
+        count++;
       }
     }
     return rots;
+  }
+
+  /// Plus grande dimension du bbox d'une pièce (non tournée).
+  static double _maxDim(Polygon p) {
+    final bb = p.bbox();
+    return math.max(bb.width, bb.height);
+  }
+
+  /// Rotation d'affichage d'un PIÈGE : même budget d'inflation que les
+  /// vraies pièces (bbox tourné ≤ [kMaxDisplayInflation] × plus grande
+  /// vraie pièce) — un seul piège carré tourné à 45° suffirait à écraser
+  /// l'échelle commune de tout l'item.
+  double _trapRotation(ItemRecipe recipe, Polygon trapPoly, double maxTrueDim) {
+    final pool = recipe.rotationAngles;
+    final budget = kMaxDisplayInflation * maxTrueDim;
+    final allowed = pool
+        .where((a) =>
+            a % 90 == 0 ||
+            _maxDim(trapPoly.transform(rotationDeg: a)) <= budget)
+        .toList();
+    final src = allowed.isNotEmpty ? allowed : pool;
+    return src[_rng.nextInt(src.length)];
   }
 
   // ---------- Zones de couleur ----------
@@ -589,6 +666,7 @@ class PuzzleGenerator {
     final subtlety = recipe.subtlety;
     final result = <PuzzlePiece>[];
     final produced = <Polygon>[];
+    final maxTrueDim = truePieces.map(_maxDim).reduce(math.max);
     bool wrongColorsUsed = false;
     bool fallbackUsed = false;
     int twinsUsed = 0;
@@ -699,6 +777,26 @@ class PuzzleGenerator {
             }
           }
           if (clash) continue;
+
+          // Items MONOCHROMES : la couleur ne discrimine plus rien, la
+          // géométrie doit être NETTEMENT distincte des vraies pièces.
+          // Audit visuel 2026-07-16 : un piège alternativeCut « bande
+          // diagonale rectangle » à 4-13 % d'aire de la vraie bande
+          // hexagonale rendait l'item quasi indécidable en 30 s (2 items
+          // sur 11 exemplaires). Seuil élargi [kMonoDistinctTol]. Le miroir
+          // reste exempté : sa proximité à sa source EST le piège
+          // (chiralité), et il n'est jamais superposable par rotation.
+          if (paletteSize == 1 && kind != TrapKind.mirrored) {
+            for (final tp in truePieces) {
+              if (perceptuallyIdentical(candidate.polygon, tp,
+                  allowMirror: true, relTol: kMonoDistinctTol)) {
+                clash = true;
+                break;
+              }
+            }
+            if (clash) continue;
+          }
+
           for (final d in produced) {
             if (visuallyConfusable(candidate.polygon, d, allowMirror: true)) {
               clash = true;
@@ -748,11 +846,62 @@ class PuzzleGenerator {
           srcRegions = clipToZones(src, zones);
         }
         final c = src.centroid();
+
+        // Même le dernier recours reste soumis aux gardes de distinctness :
+        // sans cela, il réintroduisait exactement les quasi-jumeaux qu'on
+        // interdit (audit 2026-07-16 : 9 pièges scaled perceptuellement
+        // identiques à une vraie pièce sur items monochromes). On resserre
+        // le facteur d'échelle par paliers jusqu'à distinctness ; le plus
+        // petit facteur sert d'ultime filet (jamais d'échec).
+        bool tooClose(Polygon p) {
+          for (final tp in truePieces) {
+            if (visuallyConfusable(p, tp, allowMirror: true) ||
+                (paletteSize == 1 &&
+                    perceptuallyIdentical(p, tp,
+                        allowMirror: true, relTol: kMonoDistinctTol))) {
+              return true;
+            }
+          }
+          for (final d in produced) {
+            if (visuallyConfusable(p, d, allowMirror: true)) return true;
+          }
+          return false;
+        }
+
+        // L'échelle descend jusqu'à sortir de la porte d'aire de TOUTES les
+        // vraies pièces (une échelle fixe peut « traverser » la taille d'une
+        // petite vraie pièce en rétrécissant — 2 cas mesurés sur 60 seeds).
+        // Si aucune marche ne passe, on prend celle de marge d'aire maximale.
+        var fUsed = f;
+        var bestMargin = -1.0;
+        var found = false;
+        for (final shrink in const [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.42]) {
+          final cand = f * shrink;
+          final poly = src.transform(scale: cand);
+          if (!tooClose(poly)) {
+            fUsed = cand;
+            found = true;
+            break;
+          }
+          final aC = poly.area();
+          var margin = double.infinity;
+          for (final tp in truePieces) {
+            final aT = tp.area();
+            margin =
+                math.min(margin, (aC - aT).abs() / math.max(aC, aT));
+          }
+          if (margin > bestMargin) {
+            bestMargin = margin;
+            fUsed = cand;
+          }
+        }
+        assert(found || bestMargin >= 0);
+
         trap = TrapResult(
-          src.transform(scale: f),
+          src.transform(scale: fUsed),
           srcRegions
               .map((r) => ColoredRegion(
-                  r.polygon.transform(scale: f, center: c), r.colorIndex))
+                  r.polygon.transform(scale: fUsed, center: c), r.colorIndex))
               .toList(),
         );
         usedKind = TrapKind.scaled;
@@ -765,8 +914,7 @@ class PuzzleGenerator {
         id: _uuid(),
         polygon: trap.polygon,
         regions: trap.regions,
-        displayRotationDeg: recipe
-            .rotationAngles[_rng.nextInt(recipe.rotationAngles.length)],
+        displayRotationDeg: _trapRotation(recipe, trap.polygon, maxTrueDim),
         isCorrect: false,
         trapKind: usedKind,
         isTwin: trapIsTwin,

@@ -11,6 +11,13 @@ const double kGeomEps = 1e-6;
 /// réponses visuellement valides (mesuré : 4,6 % des items avant garde).
 const double kPerceptualTol = 0.08;
 
+/// Seuil de distinctness ÉLARGI pour les items MONOCHROMES : sans couleur,
+/// la géométrie doit discriminer seule. Calibré sur l'audit visuel
+/// 2026-07-16 : les pièges alternativeCut « bande diagonale » des items 22
+/// (seeds 1 et 7) devenaient quasi indécidables face à la vraie bande
+/// (déclenchement mesuré à relTol 0.15–0.18 selon la paire).
+const double kMonoDistinctTol = 0.18;
+
 /// Polygone simple (non auto-intersectant), sommets en coords normalisées
 /// [0,1] × [0,1].
 @immutable
@@ -359,10 +366,26 @@ bool congruent(Polygon a, Polygon b,
 /// rotation (Procrustes, forme close par corrélation complexe) minimisé sur
 /// tous les décalages de point de départ. Identiques si l'écart RMS rapporté
 /// à √aire est ≤ [relTol].
+/// SYMÉTRIQUE par construction : l'alignement sur 64 décalages discrets
+/// introduit une erreur de discrétisation dépendante du sens d'appel — sur
+/// une paire limite, (a,b) pouvait dire « identiques » et (b,a) « distincts »
+/// (bug latent exposé par l'audit 2026-07-16 : garde du générateur passée
+/// dans un sens, re-vérification de conformité rouge dans l'autre). Une
+/// garde anti-ambiguïté doit être conservatrice : identiques si L'UN OU
+/// L'AUTRE sens le dit.
 bool perceptuallyIdentical(Polygon a, Polygon b,
     {bool allowMirror = false,
     double relTol = kPerceptualTol,
-    int samples = 64}) {
+    int samples = 64}) =>
+    _perceptuallyIdenticalOneWay(a, b,
+        allowMirror: allowMirror, relTol: relTol, samples: samples) ||
+    _perceptuallyIdenticalOneWay(b, a,
+        allowMirror: allowMirror, relTol: relTol, samples: samples);
+
+bool _perceptuallyIdenticalOneWay(Polygon a, Polygon b,
+    {required bool allowMirror,
+    required double relTol,
+    required int samples}) {
   final pa = a.cleaned().ccw();
   final pb = b.cleaned().ccw();
   if (pa.vertices.length < 3 || pb.vertices.length < 3) return false;
