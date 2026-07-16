@@ -38,7 +38,6 @@ const double kAuditTargetMaxHeight = 380;
 /// DOIT rester alignée sur puzzle_target_widget.dart / puzzle_piece_widget.dart.
 const double _targetPadH = 24; // padding LTRB(12,24,12,10) → 12+12
 const double _targetPadV = 34; // 24+10
-const double _targetPainterPadding = 0.05;
 const double _tileInnerW = kAuditTileSide - 8 - 8; // container 4×2 + LTRB 4/4
 const double _tileInnerH = kAuditTileSide - 8 - 24; // LTRB 20 haut + 4 bas
 
@@ -389,15 +388,14 @@ Map<String, dynamic> itemMetadata(PuzzleItem item,
   final ppu = PuzzlePieceWidget.pixelsPerUnit(tileSide, item.maxPieceExtent);
   final targetArea = item.targetPolygon.area();
 
-  // Dérive d'échelle de la CIBLE : réplique du clamp du cadre + du
-  // min(fitScale, ppu) de _TargetPainter. 1.0 = aucune dérive.
+  // Dérive d'échelle de la CIBLE : cadre réel du widget (unifiedFrameSize)
+  // + réplique du min(fitScale, ppu) de _TargetPainter. 1.0 = aucune dérive.
   final bb = item.targetPolygon.bbox();
-  final frameW =
-      (bb.width * ppu + 40).clamp(150.0, kAuditTargetMaxWidth).toDouble();
-  final frameH =
-      (bb.height * ppu + 46).clamp(96.0, kAuditTargetMaxHeight).toDouble();
-  final availW = (frameW - _targetPadH) * (1 - 2 * _targetPainterPadding);
-  final availH = (frameH - _targetPadV) * (1 - 2 * _targetPainterPadding);
+  final frame = PuzzleTargetWidget.unifiedFrameSize(bb, ppu,
+      maxWidth: kAuditTargetMaxWidth, maxHeight: kAuditTargetMaxHeight);
+  final pad = PuzzleTargetWidget.painterPadding;
+  final availW = (frame.width - _targetPadH) * (1 - 2 * pad);
+  final availH = (frame.height - _targetPadV) * (1 - 2 * pad);
   final fitScale = math.min(availW / bb.width, availH / bb.height);
   final targetScale = math.min(fitScale, ppu);
   final targetScaleDrift = ppu / targetScale;

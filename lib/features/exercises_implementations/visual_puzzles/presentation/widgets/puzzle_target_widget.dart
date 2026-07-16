@@ -35,21 +35,45 @@ class PuzzleTargetWidget extends StatelessWidget {
   /// l'ancien comportement « remplir le cadre ».
   final double? pixelsPerUnit;
 
+  /// Marge fractionnaire du painter (part de la zone de dessin réservée de
+  /// chaque côté). Partagée avec [unifiedFrameSize] : les deux DOIVENT rester
+  /// alignées pour que la cible soit dessinée exactement à [pixelsPerUnit].
+  static const double painterPadding = 0.05;
+
+  /// Padding interne du cadre autour de la zone de dessin (LTRB 12,24,12,10).
+  static const double _framePadH = 24; // 12 + 12
+  static const double _framePadV = 34; // 24 + 10
+
+  /// Taille de cadre EXACTE pour que le painter dessine à [ppu] px/unité :
+  /// inverse du transform du painter (padding interne + marge fractionnaire),
+  /// +1 px de garde d'arrondi. L'ancien budget forfaitaire (+40/+46) était
+  /// trop juste en hauteur → `min(fitScale, ppu)` rétrécissait silencieusement
+  /// la cible de ~2,3 % (audit visuel 2026-07-16) : la somme des 3 bonnes
+  /// pièces dépassait la cible affichée.
+  static Size unifiedFrameSize(Rect bb, double ppu,
+      {required double maxWidth, required double maxHeight}) {
+    final w = (bb.width * ppu / (1 - 2 * painterPadding) + _framePadH + 1)
+        .clamp(150.0, maxWidth)
+        .toDouble();
+    final h = (bb.height * ppu / (1 - 2 * painterPadding) + _framePadV + 1)
+        .clamp(96.0, maxHeight)
+        .toDouble();
+    return Size(w, h);
+  }
+
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     final accent = AppColors.accentForBrightness(
         AppColors.indexVSI, Theme.of(context).brightness);
 
-    // Cadre ajusté au contenu quand l'échelle est unifiée (padding du
-    // dessin : 18/28/18/14 ; largeur minimale pour le libellé du cartouche).
+    // Cadre ajusté au contenu quand l'échelle est unifiée.
     final ppu = pixelsPerUnit;
     final BoxConstraints frame;
     if (ppu != null) {
-      final bb = item.targetPolygon.bbox();
-      final w = (bb.width * ppu + 40).clamp(150.0, maxWidth).toDouble();
-      final h = (bb.height * ppu + 46).clamp(96.0, maxHeight).toDouble();
-      frame = BoxConstraints.tightFor(width: w, height: h);
+      final size = unifiedFrameSize(item.targetPolygon.bbox(), ppu,
+          maxWidth: maxWidth, maxHeight: maxHeight);
+      frame = BoxConstraints.tightFor(width: size.width, height: size.height);
     } else {
       frame = BoxConstraints(maxWidth: maxWidth, maxHeight: maxHeight);
     }
@@ -74,11 +98,18 @@ class PuzzleTargetWidget extends StatelessWidget {
               ),
               child: Stack(
                 children: [
+                  // FittedBox : le cartouche se réduit au lieu d'être tronqué
+                  // quand le cadre est étroit (petites cibles, échelle unifiée).
                   Positioned(
                     top: 8,
                     left: 12,
-                    child: Text(context.l10n.vpTargetTitle,
-                        style: AppText.mono(color: accent, size: 10)),
+                    right: 12,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Text(context.l10n.vpTargetTitle,
+                          style: AppText.mono(color: accent, size: 10)),
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(12, 24, 12, 10),
@@ -122,7 +153,7 @@ class _TargetPainter extends CustomPainter {
   /// Échelle unifiée avec les pièces ; null = remplir la zone (legacy).
   final double? pixelsPerUnit;
 
-  static const double _padding = 0.05;
+  static const double _padding = PuzzleTargetWidget.painterPadding;
 
   @override
   void paint(Canvas canvas, Size size) {

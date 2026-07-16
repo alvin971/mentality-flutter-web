@@ -151,6 +151,27 @@ class RegionedPolygonPainter extends CustomPainter {
       return path;
     }
 
+    // Sous-peinture : la silhouette entière est d'abord remplie avec la
+    // couleur de la région dominante. Le clipping des régions laisse parfois
+    // un liseré non couvert aux sommets très aigus (epsilon géométrique) —
+    // sans cette couche, il apparaît comme une encoche blanche (audit visuel
+    // 2026-07-16, items twoObliqueSteep/nearDiagonal).
+    if (regions.isNotEmpty) {
+      ColoredRegion dominant = regions.first;
+      double best = -1;
+      for (final r in regions) {
+        final a = r.polygon.area();
+        if (a > best) {
+          best = a;
+          dominant = r;
+        }
+      }
+      canvas.drawPath(
+        makePath(polygon),
+        Paint()..color = palette[dominant.colorIndex % palette.length],
+      );
+    }
+
     // Régions colorées : aplats + stroke fin de la même couleur (scelle les
     // jointures entre régions d'une pièce bicolore).
     for (final r in regions) {
