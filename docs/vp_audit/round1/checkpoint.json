@@ -1,5 +1,5 @@
 {
- "derniere_maj": "2026-07-16T13:05Z — PAUSE demandée par le user, audit par style aux 3/4 fait",
+ "derniere_maj": "2026-07-16 — BOUCLE CONVERGÉE (G vrai tours 2 et 3)",
  "acquis": {
   "harnais": "commit 9dcc00a — render_item_cards_audit_test.dart + support/vp_audit_capture.dart, porte de sanité validée visuellement (seed 7 : fontes OK, échelle unifiée OK)",
   "rendu_tour1": "260 PNG + 10 sidecars dans vp_audit/round_1/fixed (seeds 1..10), re-générables à l identique en 60 s (déterministe par seed)",
@@ -223,5 +223,26 @@
   "4. VERIFIER: re-render exemplaires styles + 5 seeds frais (115-119), re-inspection, flutter test VP + analyze, suite complete",
   "5. G vrai 2 tours → merge main + push, rapport, vault"
  ],
- "commande_rendu": "export PATH=/home/ubuntu/flutter/bin:$PATH && flutter test test/exercises_implementations/visual_puzzles/render_item_cards_audit_test.dart --dart-define=VP_AUDIT_SEEDS=<csv> --dart-define=VP_AUDIT_OUT=<dir_absolu>  # deterministe par seed, ~6s/seed"
+ "commande_rendu": "export PATH=/home/ubuntu/flutter/bin:$PATH && flutter test test/exercises_implementations/visual_puzzles/render_item_cards_audit_test.dart --dart-define=VP_AUDIT_SEEDS=<csv> --dart-define=VP_AUDIT_OUT=<dir_absolu>  # deterministe par seed, ~6s/seed",
+ "tour2": {
+  "fixes": [
+   "c35e0a0 générateur (garde mono 0.18, budget inflation 1.15 sur bbox tourné, symétrisation perceptuallyIdentical, dernier recours gardé)",
+   "(commit précédent) painters (unifiedFrameSize exact, sous-peinture anti-encoches, cartouche FittedBox)"
+  ],
+  "precheck_390_items": "drift 1.0 partout · 0 screenIdentical · inflMax 1.216 · 0 clipped · 6 fallbacks mono (1.5%)",
+  "evaluateurs_separes": "6 agents frais : 4 SAIN, 2 DOUTEUX (mineurs seulement), 0 bloquant/majeur ; les 2 items mono jadis indécidables sont résolus à l aveugle",
+  "tests": "45 VP verts + 306 tests dépôt verts + analyze 0"
+ },
+ "tour3_confirmation": {
+  "precheck_260_items_seeds_210-219": "drift 1.0 · 0 screenIdentical · inflMax 1.224 · 3 fallbacks mono (1.2%)",
+  "evaluateurs": "5 agents frais sur seeds JAMAIS vus : 5/5 SAIN, 0 bloquant/majeur (2 mineurs cosmétiques consignés)",
+  "verdict": "G vrai 2 tours consécutifs → boucle terminée avec succès"
+ },
+ "mineurs_consignes_non_bloquants": [
+  "s2i26/s213i24 : pièges du dernier recours « inertes » (rectangles sans lien avec les vraies pièces) — piste : dernier recours multi-formes",
+  "s10i19 : discrimination aire fine (1.2%) entre 2 pièces unies de même couleur — loyal mais dur",
+  "s219i14 : piège scaled dilaté au-delà de la taille de la cible = éliminable trivialement (P4, acceptable)",
+  "s213i24 : piège mirrored à +11% d aire de sa source (impureté conceptuelle, effet conservateur)",
+  "inflation résiduelle ~1.22 sur nearDiagonal X-mode (plancher géométrique du minimum de diagonales de la recette)"
+ ]
 }

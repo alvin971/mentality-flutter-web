@@ -1,0 +1,2298 @@
+[
+  {
+    "seed": 8,
+    "item": 1,
+    "palier": 1,
+    "level": "veryEasy",
+    "strategy": "twoParallel",
+    "fallbackUsed": false,
+    "timeLimitSeconds": 20,
+    "maxPieceExtent": 1.0,
+    "ppu": 139.12,
+    "targetScaleDrift": 1.0,
+    "trueAreaSumRel": 1.0,
+    "rotationInflation": 1.0,
+    "paletteMinRgbDist": 176.2,
+    "cvdPairPresent": false,
+    "correctLabels": [
+      2,
+      5,
+      6
+    ],
+    "options": [
+      {
+        "label": 1,
+        "correct": false,
+        "trap": "foreignShape",
+        "twin": false,
+        "rotationDeg": 0.0,
+        "areaShare": 0.1717209302378863,
+        "clipped": false
+      },
+      {
+        "label": 2,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 0.0,
+        "areaShare": 0.2511361554158069,
+        "clipped": false
+      },
+      {
+        "label": 3,
+        "correct": false,
+        "trap": "scaled",
+        "twin": true,
+        "rotationDeg": 0.0,
+        "areaShare": 0.07034224779947551,
+        "clipped": false
+      },
+      {
+        "label": 4,
+        "correct": false,
+        "trap": "wrongColors",
+        "twin": true,
+        "rotationDeg": 0.0,
+        "areaShare": 0.2511361554158069,
+        "clipped": false
+      },
+      {
+        "label": 5,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 0.0,
+        "areaShare": 0.32955832817729935,
+        "clipped": false
+      },
+      {
+        "label": 6,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 0.0,
+        "areaShare": 0.41930551640689373,
+        "clipped": false
+      }
+    ],
+    "screenIdenticalPairs": [],
+    "screenNearIdenticalPairs": [],
+    "sameShapeColorTrapPairs": [
+      {
+        "pair": [
+          2,
+          4
+        ],
+        "colorDistance": 0.193
+      }
+    ],
+    "geomConfusablePairs": [
+      [
+        2,
+        4
+      ]
+    ],
+    "flags": []
+  },
+  {
+    "seed": 8,
+    "item": 2,
+    "palier": 1,
+    "level": "veryEasy",
+    "strategy": "twoParallel",
+    "fallbackUsed": false,
+    "timeLimitSeconds": 20,
+    "maxPieceExtent": 1.0,
+    "ppu": 139.12,
+    "targetScaleDrift": 1.0,
+    "trueAreaSumRel": 1.0,
+    "rotationInflation": 1.0,
+    "paletteMinRgbDist": 210.5,
+    "cvdPairPresent": false,
+    "correctLabels": [
+      1,
+      2,
+      4
+    ],
+    "options": [
+      {
+        "label": 1,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 0.0,
+        "areaShare": 0.3218694632361552,
+        "clipped": false
+      },
+      {
+        "label": 2,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 0.0,
+        "areaShare": 0.24626544253426585,
+        "clipped": false
+      },
+      {
+        "label": 3,
+        "correct": false,
+        "trap": "wrongColors",
+        "twin": true,
+        "rotationDeg": 0.0,
+        "areaShare": 0.3218694632361552,
+        "clipped": false
+      },
+      {
+        "label": 4,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 0.0,
+        "areaShare": 0.43186509422957897,
+        "clipped": false
+      },
+      {
+        "label": 5,
+        "correct": false,
+        "trap": "scaled",
+        "twin": true,
+        "rotationDeg": 0.0,
+        "areaShare": 0.09752163352805615,
+        "clipped": false
+      },
+      {
+        "label": 6,
+        "correct": false,
+        "trap": "foreignShape",
+        "twin": false,
+        "rotationDeg": 0.0,
+        "areaShare": 0.20612197008025723,
+        "clipped": false
+      }
+    ],
+    "screenIdenticalPairs": [],
+    "screenNearIdenticalPairs": [],
+    "sameShapeColorTrapPairs": [
+      {
+        "pair": [
+          1,
+          3
+        ],
+        "colorDistance": 0.565
+      }
+    ],
+    "geomConfusablePairs": [
+      [
+        1,
+        3
+      ]
+    ],
+    "flags": []
+  },
+  {
+    "seed": 8,
+    "item": 3,
+    "palier": 1,
+    "level": "veryEasy",
+    "strategy": "twoParallel",
+    "fallbackUsed": false,
+    "timeLimitSeconds": 20,
+    "maxPieceExtent": 1.0,
+    "ppu": 139.12,
+    "targetScaleDrift": 1.0,
+    "trueAreaSumRel": 1.0,
+    "rotationInflation": 1.0,
+    "paletteMinRgbDist": 163.9,
+    "cvdPairPresent": false,
+    "correctLabels": [
+      3,
+      5,
+      6
+    ],
+    "options": [
+      {
+        "label": 1,
+        "correct": false,
+        "trap": "scaled",
+        "twin": true,
+        "rotationDeg": 0.0,
+        "areaShare": 0.10466415612991242,
+        "clipped": false
+      },
+      {
+        "label": 2,
+        "correct": false,
+        "trap": "foreignShape",
+        "twin": false,
+        "rotationDeg": 0.0,
+        "areaShare": 0.22062209718400771,
+        "clipped": false
+      },
+      {
+        "label": 3,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 0.0,
+        "areaShare": 0.43877984024584293,
+        "clipped": false
+      },
+      {
+        "label": 4,
+        "correct": false,
+        "trap": "wrongColors",
+        "twin": true,
+        "rotationDeg": 0.0,
+        "areaShare": 0.31716482271363255,
+        "clipped": false
+      },
+      {
+        "label": 5,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 0.0,
+        "areaShare": 0.31716482271363255,
+        "clipped": false
+      },
+      {
+        "label": 6,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 0.0,
+        "areaShare": 0.2440553370405245,
+        "clipped": false
+      }
+    ],
+    "screenIdenticalPairs": [],
+    "screenNearIdenticalPairs": [],
+    "sameShapeColorTrapPairs": [
+      {
+        "pair": [
+          4,
+          5
+        ],
+        "colorDistance": 0.148
+      }
+    ],
+    "geomConfusablePairs": [
+      [
+        4,
+        5
+      ]
+    ],
+    "flags": []
+  },
+  {
+    "seed": 8,
+    "item": 4,
+    "palier": 1,
+    "level": "veryEasy",
+    "strategy": "twoParallel",
+    "fallbackUsed": false,
+    "timeLimitSeconds": 20,
+    "maxPieceExtent": 1.0,
+    "ppu": 139.12,
+    "targetScaleDrift": 1.0,
+    "trueAreaSumRel": 1.0,
+    "rotationInflation": 1.0,
+    "paletteMinRgbDist": 184.2,
+    "cvdPairPresent": false,
+    "correctLabels": [
+      1,
+      4,
+      5
+    ],
+    "options": [
+      {
+        "label": 1,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 0.0,
+        "areaShare": 0.32544329339608136,
+        "clipped": false
+      },
+      {
+        "label": 2,
+        "correct": false,
+        "trap": "foreignShape",
+        "twin": false,
+        "rotationDeg": 0.0,
+        "areaShare": 0.17000891579675237,
+        "clipped": false
+      },
+      {
+        "label": 3,
+        "correct": false,
+        "trap": "scaled",
+        "twin": true,
+        "rotationDeg": 0.0,
+        "areaShare": 0.08188236575328514,
+        "clipped": false
+      },
+      {
+        "label": 4,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 0.0,
+        "areaShare": 0.246585039421916,
+        "clipped": false
+      },
+      {
+        "label": 5,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 0.0,
+        "areaShare": 0.42797166718200264,
+        "clipped": false
+      },
+      {
+        "label": 6,
+        "correct": false,
+        "trap": "wrongColors",
+        "twin": true,
+        "rotationDeg": 0.0,
+        "areaShare": 0.246585039421916,
+        "clipped": false
+      }
+    ],
+    "screenIdenticalPairs": [],
+    "screenNearIdenticalPairs": [],
+    "sameShapeColorTrapPairs": [
+      {
+        "pair": [
+          4,
+          6
+        ],
+        "colorDistance": 0.17
+      }
+    ],
+    "geomConfusablePairs": [
+      [
+        4,
+        6
+      ]
+    ],
+    "flags": []
+  },
+  {
+    "seed": 8,
+    "item": 5,
+    "palier": 2,
+    "level": "veryEasy",
+    "strategy": "twoParallel",
+    "fallbackUsed": false,
+    "timeLimitSeconds": 20,
+    "maxPieceExtent": 1.0,
+    "ppu": 139.12,
+    "targetScaleDrift": 1.0,
+    "trueAreaSumRel": 1.0,
+    "rotationInflation": 1.0,
+    "paletteMinRgbDist": 210.5,
+    "cvdPairPresent": false,
+    "correctLabels": [
+      4,
+      5,
+      6
+    ],
+    "options": [
+      {
+        "label": 1,
+        "correct": false,
+        "trap": "wrongColors",
+        "twin": true,
+        "rotationDeg": 270.0,
+        "areaShare": 0.3122759683338255,
+        "clipped": false
+      },
+      {
+        "label": 2,
+        "correct": false,
+        "trap": "scaled",
+        "twin": true,
+        "rotationDeg": 270.0,
+        "areaShare": 0.12148268552660713,
+        "clipped": false
+      },
+      {
+        "label": 3,
+        "correct": false,
+        "trap": "stretched",
+        "twin": true,
+        "rotationDeg": 0.0,
+        "areaShare": 0.18811805321314784,
+        "clipped": false
+      },
+      {
+        "label": 4,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 0.0,
+        "areaShare": 0.251964857801795,
+        "clipped": false
+      },
+      {
+        "label": 5,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 90.0,
+        "areaShare": 0.43575917386437946,
+        "clipped": false
+      },
+      {
+        "label": 6,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 0.0,
+        "areaShare": 0.3122759683338255,
+        "clipped": false
+      }
+    ],
+    "screenIdenticalPairs": [],
+    "screenNearIdenticalPairs": [],
+    "sameShapeColorTrapPairs": [],
+    "geomConfusablePairs": [
+      [
+        1,
+        6
+      ]
+    ],
+    "flags": []
+  },
+  {
+    "seed": 8,
+    "item": 6,
+    "palier": 2,
+    "level": "veryEasy",
+    "strategy": "twoParallel",
+    "fallbackUsed": false,
+    "timeLimitSeconds": 20,
+    "maxPieceExtent": 1.0,
+    "ppu": 139.12,
+    "targetScaleDrift": 1.0,
+    "trueAreaSumRel": 1.0,
+    "rotationInflation": 1.0,
+    "paletteMinRgbDist": 205.1,
+    "cvdPairPresent": false,
+    "correctLabels": [
+      1,
+      4,
+      6
+    ],
+    "options": [
+      {
+        "label": 1,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 90.0,
+        "areaShare": 0.43256801180541515,
+        "clipped": false
+      },
+      {
+        "label": 2,
+        "correct": false,
+        "trap": "wrongColors",
+        "twin": true,
+        "rotationDeg": 0.0,
+        "areaShare": 0.31130246500776404,
+        "clipped": false
+      },
+      {
+        "label": 3,
+        "correct": false,
+        "trap": "stretched",
+        "twin": true,
+        "rotationDeg": 0.0,
+        "areaShare": 0.2653791483468805,
+        "clipped": false
+      },
+      {
+        "label": 4,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 270.0,
+        "areaShare": 0.31130246500776404,
+        "clipped": false
+      },
+      {
+        "label": 5,
+        "correct": false,
+        "trap": "scaled",
+        "twin": true,
+        "rotationDeg": 0.0,
+        "areaShare": 0.09416899566484857,
+        "clipped": false
+      },
+      {
+        "label": 6,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 270.0,
+        "areaShare": 0.2561295231868208,
+        "clipped": false
+      }
+    ],
+    "screenIdenticalPairs": [],
+    "screenNearIdenticalPairs": [],
+    "sameShapeColorTrapPairs": [],
+    "geomConfusablePairs": [
+      [
+        2,
+        4
+      ]
+    ],
+    "flags": []
+  },
+  {
+    "seed": 8,
+    "item": 7,
+    "palier": 2,
+    "level": "veryEasy",
+    "strategy": "twoParallel",
+    "fallbackUsed": false,
+    "timeLimitSeconds": 20,
+    "maxPieceExtent": 1.0,
+    "ppu": 139.12,
+    "targetScaleDrift": 1.0,
+    "trueAreaSumRel": 1.0,
+    "rotationInflation": 1.0,
+    "paletteMinRgbDist": 237.4,
+    "cvdPairPresent": false,
+    "correctLabels": [
+      2,
+      4,
+      6
+    ],
+    "options": [
+      {
+        "label": 1,
+        "correct": false,
+        "trap": "stretched",
+        "twin": true,
+        "rotationDeg": 0.0,
+        "areaShare": 0.26026758644535963,
+        "clipped": false
+      },
+      {
+        "label": 2,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 90.0,
+        "areaShare": 0.2543871227682857,
+        "clipped": false
+      },
+      {
+        "label": 3,
+        "correct": false,
+        "trap": "wrongColors",
+        "twin": true,
+        "rotationDeg": 270.0,
+        "areaShare": 0.2543871227682857,
+        "clipped": false
+      },
+      {
+        "label": 4,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 90.0,
+        "areaShare": 0.3291847389191389,
+        "clipped": false
+      },
+      {
+        "label": 5,
+        "correct": false,
+        "trap": "scaled",
+        "twin": true,
+        "rotationDeg": 90.0,
+        "areaShare": 0.08323139637581878,
+        "clipped": false
+      },
+      {
+        "label": 6,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 90.0,
+        "areaShare": 0.4164281383125754,
+        "clipped": false
+      }
+    ],
+    "screenIdenticalPairs": [],
+    "screenNearIdenticalPairs": [],
+    "sameShapeColorTrapPairs": [
+      {
+        "pair": [
+          2,
+          3
+        ],
+        "colorDistance": 0.545
+      }
+    ],
+    "geomConfusablePairs": [
+      [
+        2,
+        3
+      ]
+    ],
+    "flags": []
+  },
+  {
+    "seed": 8,
+    "item": 8,
+    "palier": 3,
+    "level": "easy",
+    "strategy": "perpendicularL",
+    "fallbackUsed": false,
+    "timeLimitSeconds": 30,
+    "maxPieceExtent": 1.0,
+    "ppu": 139.12,
+    "targetScaleDrift": 1.0,
+    "trueAreaSumRel": 1.0,
+    "rotationInflation": 1.0,
+    "paletteMinRgbDist": 178.8,
+    "cvdPairPresent": false,
+    "correctLabels": [
+      3,
+      5,
+      6
+    ],
+    "options": [
+      {
+        "label": 1,
+        "correct": false,
+        "trap": "mirrored",
+        "twin": false,
+        "rotationDeg": 90.0,
+        "areaShare": 0.2843985551730263,
+        "clipped": false
+      },
+      {
+        "label": 2,
+        "correct": false,
+        "trap": "wrongColors",
+        "twin": true,
+        "rotationDeg": 0.0,
+        "areaShare": 0.3589493352919817,
+        "clipped": false
+      },
+      {
+        "label": 3,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 90.0,
+        "areaShare": 0.4092880570188244,
+        "clipped": false
+      },
+      {
+        "label": 4,
+        "correct": false,
+        "trap": "scaled",
+        "twin": true,
+        "rotationDeg": 0.0,
+        "areaShare": 0.08299014787362222,
+        "clipped": false
+      },
+      {
+        "label": 5,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 0.0,
+        "areaShare": 0.23176260768919393,
+        "clipped": false
+      },
+      {
+        "label": 6,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 90.0,
+        "areaShare": 0.3589493352919817,
+        "clipped": false
+      }
+    ],
+    "screenIdenticalPairs": [],
+    "screenNearIdenticalPairs": [],
+    "sameShapeColorTrapPairs": [],
+    "geomConfusablePairs": [
+      [
+        2,
+        6
+      ]
+    ],
+    "flags": []
+  },
+  {
+    "seed": 8,
+    "item": 9,
+    "palier": 3,
+    "level": "easy",
+    "strategy": "oneStraightOneOblique",
+    "fallbackUsed": false,
+    "timeLimitSeconds": 30,
+    "maxPieceExtent": 1.0,
+    "ppu": 139.12,
+    "targetScaleDrift": 1.0,
+    "trueAreaSumRel": 1.0,
+    "rotationInflation": 1.0,
+    "paletteMinRgbDist": 163.9,
+    "cvdPairPresent": false,
+    "correctLabels": [
+      2,
+      3,
+      6
+    ],
+    "options": [
+      {
+        "label": 1,
+        "correct": false,
+        "trap": "mirrored",
+        "twin": false,
+        "rotationDeg": 0.0,
+        "areaShare": 0.46035627444975213,
+        "clipped": false
+      },
+      {
+        "label": 2,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 0.0,
+        "areaShare": 0.2405178183578942,
+        "clipped": false
+      },
+      {
+        "label": 3,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 270.0,
+        "areaShare": 0.3757570656127241,
+        "clipped": false
+      },
+      {
+        "label": 4,
+        "correct": false,
+        "trap": "scaled",
+        "twin": true,
+        "rotationDeg": 0.0,
+        "areaShare": 0.14258327308914182,
+        "clipped": false
+      },
+      {
+        "label": 5,
+        "correct": false,
+        "trap": "wrongColors",
+        "twin": true,
+        "rotationDeg": 0.0,
+        "areaShare": 0.2405178183578942,
+        "clipped": false
+      },
+      {
+        "label": 6,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 90.0,
+        "areaShare": 0.38372511602938175,
+        "clipped": false
+      }
+    ],
+    "screenIdenticalPairs": [],
+    "screenNearIdenticalPairs": [],
+    "sameShapeColorTrapPairs": [
+      {
+        "pair": [
+          2,
+          5
+        ],
+        "colorDistance": 1.0
+      }
+    ],
+    "geomConfusablePairs": [
+      [
+        2,
+        5
+      ]
+    ],
+    "flags": []
+  },
+  {
+    "seed": 8,
+    "item": 10,
+    "palier": 3,
+    "level": "easy",
+    "strategy": "oneStraightOneOblique",
+    "fallbackUsed": false,
+    "timeLimitSeconds": 30,
+    "maxPieceExtent": 1.0,
+    "ppu": 139.12,
+    "targetScaleDrift": 1.0,
+    "trueAreaSumRel": 1.0,
+    "rotationInflation": 1.0,
+    "paletteMinRgbDist": 104.1,
+    "cvdPairPresent": false,
+    "correctLabels": [
+      4,
+      5,
+      6
+    ],
+    "options": [
+      {
+        "label": 1,
+        "correct": false,
+        "trap": "scaled",
+        "twin": true,
+        "rotationDeg": 270.0,
+        "areaShare": 0.12546353392938578,
+        "clipped": false
+      },
+      {
+        "label": 2,
+        "correct": false,
+        "trap": "mirrored",
+        "twin": false,
+        "rotationDeg": 90.0,
+        "areaShare": 0.45472063761274617,
+        "clipped": false
+      },
+      {
+        "label": 3,
+        "correct": false,
+        "trap": "wrongColors",
+        "twin": true,
+        "rotationDeg": 270.0,
+        "areaShare": 0.31252673796784974,
+        "clipped": false
+      },
+      {
+        "label": 4,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 0.0,
+        "areaShare": 0.31252673796784974,
+        "clipped": false
+      },
+      {
+        "label": 5,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 270.0,
+        "areaShare": 0.37493815675902276,
+        "clipped": false
+      },
+      {
+        "label": 6,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 90.0,
+        "areaShare": 0.31253510527312756,
+        "clipped": false
+      }
+    ],
+    "screenIdenticalPairs": [],
+    "screenNearIdenticalPairs": [],
+    "sameShapeColorTrapPairs": [],
+    "geomConfusablePairs": [
+      [
+        3,
+        4
+      ]
+    ],
+    "flags": []
+  },
+  {
+    "seed": 8,
+    "item": 11,
+    "palier": 4,
+    "level": "easy",
+    "strategy": "twoOblique",
+    "fallbackUsed": false,
+    "timeLimitSeconds": 30,
+    "maxPieceExtent": 1.0,
+    "ppu": 139.12,
+    "targetScaleDrift": 1.0,
+    "trueAreaSumRel": 1.0,
+    "rotationInflation": 1.0,
+    "paletteMinRgbDist": 163.9,
+    "cvdPairPresent": false,
+    "correctLabels": [
+      1,
+      2,
+      3
+    ],
+    "options": [
+      {
+        "label": 1,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 180.0,
+        "areaShare": 0.2659431179300066,
+        "clipped": false
+      },
+      {
+        "label": 2,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 90.0,
+        "areaShare": 0.3216012279484028,
+        "clipped": false
+      },
+      {
+        "label": 3,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 270.0,
+        "areaShare": 0.41245565412159063,
+        "clipped": false
+      },
+      {
+        "label": 4,
+        "correct": false,
+        "trap": "wrongColors",
+        "twin": true,
+        "rotationDeg": 0.0,
+        "areaShare": 0.41245565412159063,
+        "clipped": false
+      },
+      {
+        "label": 5,
+        "correct": false,
+        "trap": "mirrored",
+        "twin": false,
+        "rotationDeg": 270.0,
+        "areaShare": 0.2262073685506385,
+        "clipped": false
+      },
+      {
+        "label": 6,
+        "correct": false,
+        "trap": "scaled",
+        "twin": true,
+        "rotationDeg": 0.0,
+        "areaShare": 0.17966568293536483,
+        "clipped": false
+      }
+    ],
+    "screenIdenticalPairs": [],
+    "screenNearIdenticalPairs": [],
+    "sameShapeColorTrapPairs": [],
+    "geomConfusablePairs": [
+      [
+        3,
+        4
+      ]
+    ],
+    "flags": []
+  },
+  {
+    "seed": 8,
+    "item": 12,
+    "palier": 4,
+    "level": "easy",
+    "strategy": "twoOblique",
+    "fallbackUsed": false,
+    "timeLimitSeconds": 30,
+    "maxPieceExtent": 1.0,
+    "ppu": 139.12,
+    "targetScaleDrift": 1.0,
+    "trueAreaSumRel": 1.0,
+    "rotationInflation": 1.0,
+    "paletteMinRgbDist": 134.2,
+    "cvdPairPresent": false,
+    "correctLabels": [
+      2,
+      3,
+      5
+    ],
+    "options": [
+      {
+        "label": 1,
+        "correct": false,
+        "trap": "wrongColors",
+        "twin": true,
+        "rotationDeg": 90.0,
+        "areaShare": 0.1983818075521407,
+        "clipped": false
+      },
+      {
+        "label": 2,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 180.0,
+        "areaShare": 0.1983818075521407,
+        "clipped": false
+      },
+      {
+        "label": 3,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 180.0,
+        "areaShare": 0.33449784207714506,
+        "clipped": false
+      },
+      {
+        "label": 4,
+        "correct": false,
+        "trap": "mirrored",
+        "twin": false,
+        "rotationDeg": 90.0,
+        "areaShare": 0.39756158336479397,
+        "clipped": false
+      },
+      {
+        "label": 5,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 90.0,
+        "areaShare": 0.4671203503707143,
+        "clipped": false
+      },
+      {
+        "label": 6,
+        "correct": false,
+        "trap": "scaled",
+        "twin": true,
+        "rotationDeg": 270.0,
+        "areaShare": 0.2144744598010264,
+        "clipped": false
+      }
+    ],
+    "screenIdenticalPairs": [],
+    "screenNearIdenticalPairs": [],
+    "sameShapeColorTrapPairs": [],
+    "geomConfusablePairs": [
+      [
+        1,
+        2
+      ]
+    ],
+    "flags": []
+  },
+  {
+    "seed": 8,
+    "item": 13,
+    "palier": 4,
+    "level": "easy",
+    "strategy": "oneStraightOneOblique",
+    "fallbackUsed": false,
+    "timeLimitSeconds": 30,
+    "maxPieceExtent": 1.0,
+    "ppu": 139.12,
+    "targetScaleDrift": 1.0,
+    "trueAreaSumRel": 1.0,
+    "rotationInflation": 1.0,
+    "paletteMinRgbDist": 119.3,
+    "cvdPairPresent": false,
+    "correctLabels": [
+      1,
+      5,
+      6
+    ],
+    "options": [
+      {
+        "label": 1,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 0.0,
+        "areaShare": 0.3845397285524795,
+        "clipped": false
+      },
+      {
+        "label": 2,
+        "correct": false,
+        "trap": "wrongColors",
+        "twin": true,
+        "rotationDeg": 270.0,
+        "areaShare": 0.3845397285524795,
+        "clipped": false
+      },
+      {
+        "label": 3,
+        "correct": false,
+        "trap": "scaled",
+        "twin": true,
+        "rotationDeg": 270.0,
+        "areaShare": 0.18584921981018815,
+        "clipped": false
+      },
+      {
+        "label": 4,
+        "correct": false,
+        "trap": "mirrored",
+        "twin": false,
+        "rotationDeg": 90.0,
+        "areaShare": 0.30888984883873977,
+        "clipped": false
+      },
+      {
+        "label": 5,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 180.0,
+        "areaShare": 0.32162812538444996,
+        "clipped": false
+      },
+      {
+        "label": 6,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 270.0,
+        "areaShare": 0.29383214606307057,
+        "clipped": false
+      }
+    ],
+    "screenIdenticalPairs": [],
+    "screenNearIdenticalPairs": [],
+    "sameShapeColorTrapPairs": [],
+    "geomConfusablePairs": [
+      [
+        1,
+        2
+      ]
+    ],
+    "flags": []
+  },
+  {
+    "seed": 8,
+    "item": 14,
+    "palier": 4,
+    "level": "easy",
+    "strategy": "twoOblique",
+    "fallbackUsed": false,
+    "timeLimitSeconds": 30,
+    "maxPieceExtent": 1.0,
+    "ppu": 139.12,
+    "targetScaleDrift": 1.0,
+    "trueAreaSumRel": 1.0,
+    "rotationInflation": 1.0,
+    "paletteMinRgbDist": 104.1,
+    "cvdPairPresent": false,
+    "correctLabels": [
+      1,
+      5,
+      6
+    ],
+    "options": [
+      {
+        "label": 1,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 90.0,
+        "areaShare": 0.2709244216236614,
+        "clipped": false
+      },
+      {
+        "label": 2,
+        "correct": false,
+        "trap": "scaled",
+        "twin": true,
+        "rotationDeg": 180.0,
+        "areaShare": 0.4488902960495912,
+        "clipped": false
+      },
+      {
+        "label": 3,
+        "correct": false,
+        "trap": "stretched",
+        "twin": false,
+        "rotationDeg": 90.0,
+        "areaShare": 0.37634715251624595,
+        "clipped": false
+      },
+      {
+        "label": 4,
+        "correct": false,
+        "trap": "wrongColors",
+        "twin": true,
+        "rotationDeg": 0.0,
+        "areaShare": 0.4452561618344818,
+        "clipped": false
+      },
+      {
+        "label": 5,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 0.0,
+        "areaShare": 0.4452561618344818,
+        "clipped": false
+      },
+      {
+        "label": 6,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 90.0,
+        "areaShare": 0.28381941654185683,
+        "clipped": false
+      }
+    ],
+    "screenIdenticalPairs": [],
+    "screenNearIdenticalPairs": [],
+    "sameShapeColorTrapPairs": [
+      {
+        "pair": [
+          4,
+          5
+        ],
+        "colorDistance": 0.723
+      }
+    ],
+    "geomConfusablePairs": [
+      [
+        4,
+        5
+      ]
+    ],
+    "flags": []
+  },
+  {
+    "seed": 8,
+    "item": 15,
+    "palier": 5,
+    "level": "medium",
+    "strategy": "twoOblique",
+    "fallbackUsed": false,
+    "timeLimitSeconds": 30,
+    "maxPieceExtent": 1.0,
+    "ppu": 139.12,
+    "targetScaleDrift": 1.0,
+    "trueAreaSumRel": 1.0,
+    "rotationInflation": 1.0,
+    "paletteMinRgbDist": 163.9,
+    "cvdPairPresent": false,
+    "correctLabels": [
+      1,
+      3,
+      5
+    ],
+    "options": [
+      {
+        "label": 1,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 45.0,
+        "areaShare": 0.18720558151333935,
+        "clipped": false
+      },
+      {
+        "label": 2,
+        "correct": false,
+        "trap": "wrongColors",
+        "twin": true,
+        "rotationDeg": 0.0,
+        "areaShare": 0.3177753035254063,
+        "clipped": false
+      },
+      {
+        "label": 3,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 180.0,
+        "areaShare": 0.4950191149612543,
+        "clipped": false
+      },
+      {
+        "label": 4,
+        "correct": false,
+        "trap": "alternativeCut",
+        "twin": false,
+        "rotationDeg": 180.0,
+        "areaShare": 0.4549313583369392,
+        "clipped": false
+      },
+      {
+        "label": 5,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 180.0,
+        "areaShare": 0.3177753035254063,
+        "clipped": false
+      },
+      {
+        "label": 6,
+        "correct": false,
+        "trap": "scaled",
+        "twin": false,
+        "rotationDeg": 180.0,
+        "areaShare": 0.23467299823504778,
+        "clipped": false
+      }
+    ],
+    "screenIdenticalPairs": [],
+    "screenNearIdenticalPairs": [],
+    "sameShapeColorTrapPairs": [],
+    "geomConfusablePairs": [
+      [
+        2,
+        5
+      ]
+    ],
+    "flags": []
+  },
+  {
+    "seed": 8,
+    "item": 16,
+    "palier": 5,
+    "level": "medium",
+    "strategy": "twoOblique",
+    "fallbackUsed": false,
+    "timeLimitSeconds": 30,
+    "maxPieceExtent": 1.1032,
+    "ppu": 126.11,
+    "targetScaleDrift": 1.0,
+    "trueAreaSumRel": 1.0,
+    "rotationInflation": 1.103,
+    "paletteMinRgbDist": 137.2,
+    "cvdPairPresent": false,
+    "correctLabels": [
+      1,
+      3,
+      5
+    ],
+    "options": [
+      {
+        "label": 1,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 45.0,
+        "areaShare": 0.2850816495167895,
+        "clipped": false
+      },
+      {
+        "label": 2,
+        "correct": false,
+        "trap": "alternativeCut",
+        "twin": false,
+        "rotationDeg": 45.0,
+        "areaShare": 0.49958442753413723,
+        "clipped": false
+      },
+      {
+        "label": 3,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 45.0,
+        "areaShare": 0.3588090916236244,
+        "clipped": false
+      },
+      {
+        "label": 4,
+        "correct": false,
+        "trap": "wrongColors",
+        "twin": true,
+        "rotationDeg": 90.0,
+        "areaShare": 0.3588090916236244,
+        "clipped": false
+      },
+      {
+        "label": 5,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 0.0,
+        "areaShare": 0.35610925885958605,
+        "clipped": false
+      },
+      {
+        "label": 6,
+        "correct": false,
+        "trap": "scaled",
+        "twin": false,
+        "rotationDeg": 90.0,
+        "areaShare": 0.2715899169272832,
+        "clipped": false
+      }
+    ],
+    "screenIdenticalPairs": [],
+    "screenNearIdenticalPairs": [],
+    "sameShapeColorTrapPairs": [],
+    "geomConfusablePairs": [
+      [
+        3,
+        4
+      ]
+    ],
+    "flags": []
+  },
+  {
+    "seed": 8,
+    "item": 17,
+    "palier": 5,
+    "level": "medium",
+    "strategy": "twoOblique",
+    "fallbackUsed": false,
+    "timeLimitSeconds": 30,
+    "maxPieceExtent": 1.1212,
+    "ppu": 124.08,
+    "targetScaleDrift": 1.0,
+    "trueAreaSumRel": 1.0,
+    "rotationInflation": 1.121,
+    "paletteMinRgbDist": 163.9,
+    "cvdPairPresent": false,
+    "correctLabels": [
+      1,
+      3,
+      5
+    ],
+    "options": [
+      {
+        "label": 1,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 45.0,
+        "areaShare": 0.48193926659759684,
+        "clipped": false
+      },
+      {
+        "label": 2,
+        "correct": false,
+        "trap": "alternativeCut",
+        "twin": false,
+        "rotationDeg": 90.0,
+        "areaShare": 0.23498855997735357,
+        "clipped": false
+      },
+      {
+        "label": 3,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 270.0,
+        "areaShare": 0.22631489932353016,
+        "clipped": false
+      },
+      {
+        "label": 4,
+        "correct": false,
+        "trap": "scaled",
+        "twin": false,
+        "rotationDeg": 180.0,
+        "areaShare": 0.27238313086339316,
+        "clipped": false
+      },
+      {
+        "label": 5,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 90.0,
+        "areaShare": 0.291745834078873,
+        "clipped": false
+      },
+      {
+        "label": 6,
+        "correct": false,
+        "trap": "wrongColors",
+        "twin": true,
+        "rotationDeg": 45.0,
+        "areaShare": 0.291745834078873,
+        "clipped": false
+      }
+    ],
+    "screenIdenticalPairs": [],
+    "screenNearIdenticalPairs": [],
+    "sameShapeColorTrapPairs": [],
+    "geomConfusablePairs": [
+      [
+        5,
+        6
+      ]
+    ],
+    "flags": []
+  },
+  {
+    "seed": 8,
+    "item": 18,
+    "palier": 6,
+    "level": "medium",
+    "strategy": "twoObliqueSteep",
+    "fallbackUsed": false,
+    "timeLimitSeconds": 30,
+    "maxPieceExtent": 1.0781,
+    "ppu": 129.05,
+    "targetScaleDrift": 1.0,
+    "trueAreaSumRel": 1.0,
+    "rotationInflation": 1.078,
+    "paletteMinRgbDist": 156.1,
+    "cvdPairPresent": false,
+    "correctLabels": [
+      1,
+      4,
+      6
+    ],
+    "options": [
+      {
+        "label": 1,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 45.0,
+        "areaShare": 0.2459457788135218,
+        "clipped": false
+      },
+      {
+        "label": 2,
+        "correct": false,
+        "trap": "alternativeCut",
+        "twin": false,
+        "rotationDeg": 0.0,
+        "areaShare": 0.3239033935159654,
+        "clipped": false
+      },
+      {
+        "label": 3,
+        "correct": false,
+        "trap": "wrongColors",
+        "twin": true,
+        "rotationDeg": 180.0,
+        "areaShare": 0.41517953346454034,
+        "clipped": false
+      },
+      {
+        "label": 4,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 315.0,
+        "areaShare": 0.3388746877219379,
+        "clipped": false
+      },
+      {
+        "label": 5,
+        "correct": false,
+        "trap": "alternativeCut",
+        "twin": false,
+        "rotationDeg": 270.0,
+        "areaShare": 0.4112262260168791,
+        "clipped": false
+      },
+      {
+        "label": 6,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 180.0,
+        "areaShare": 0.41517953346454034,
+        "clipped": false
+      }
+    ],
+    "screenIdenticalPairs": [],
+    "screenNearIdenticalPairs": [],
+    "sameShapeColorTrapPairs": [
+      {
+        "pair": [
+          3,
+          6
+        ],
+        "colorDistance": 0.489
+      }
+    ],
+    "geomConfusablePairs": [
+      [
+        3,
+        6
+      ]
+    ],
+    "flags": []
+  },
+  {
+    "seed": 8,
+    "item": 19,
+    "palier": 6,
+    "level": "medium",
+    "strategy": "twoObliqueSteep",
+    "fallbackUsed": false,
+    "timeLimitSeconds": 30,
+    "maxPieceExtent": 1.1285,
+    "ppu": 123.28,
+    "targetScaleDrift": 1.0,
+    "trueAreaSumRel": 1.0,
+    "rotationInflation": 1.129,
+    "paletteMinRgbDist": 137.2,
+    "cvdPairPresent": false,
+    "correctLabels": [
+      3,
+      5,
+      6
+    ],
+    "options": [
+      {
+        "label": 1,
+        "correct": false,
+        "trap": "alternativeCut",
+        "twin": false,
+        "rotationDeg": 90.0,
+        "areaShare": 0.3651059607039055,
+        "clipped": false
+      },
+      {
+        "label": 2,
+        "correct": false,
+        "trap": "mirrored",
+        "twin": true,
+        "rotationDeg": 90.0,
+        "areaShare": 0.46652536830058433,
+        "clipped": false
+      },
+      {
+        "label": 3,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 270.0,
+        "areaShare": 0.46652536830058433,
+        "clipped": false
+      },
+      {
+        "label": 4,
+        "correct": false,
+        "trap": "stretched",
+        "twin": false,
+        "rotationDeg": 180.0,
+        "areaShare": 0.2587740804620593,
+        "clipped": false
+      },
+      {
+        "label": 5,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 225.0,
+        "areaShare": 0.32416187317483514,
+        "clipped": false
+      },
+      {
+        "label": 6,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 225.0,
+        "areaShare": 0.20931275852458053,
+        "clipped": false
+      }
+    ],
+    "screenIdenticalPairs": [],
+    "screenNearIdenticalPairs": [],
+    "sameShapeColorTrapPairs": [],
+    "geomConfusablePairs": [
+      [
+        2,
+        3
+      ]
+    ],
+    "flags": []
+  },
+  {
+    "seed": 8,
+    "item": 20,
+    "palier": 6,
+    "level": "medium",
+    "strategy": "fanOffset",
+    "fallbackUsed": false,
+    "timeLimitSeconds": 30,
+    "maxPieceExtent": 1.2638,
+    "ppu": 110.08,
+    "targetScaleDrift": 1.0,
+    "trueAreaSumRel": 1.0,
+    "rotationInflation": 1.0,
+    "paletteMinRgbDist": 134.2,
+    "cvdPairPresent": false,
+    "correctLabels": [
+      1,
+      4,
+      5
+    ],
+    "options": [
+      {
+        "label": 1,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 270.0,
+        "areaShare": 0.34984547654949794,
+        "clipped": false
+      },
+      {
+        "label": 2,
+        "correct": false,
+        "trap": "mirrored",
+        "twin": true,
+        "rotationDeg": 0.0,
+        "areaShare": 0.34984547654949794,
+        "clipped": false
+      },
+      {
+        "label": 3,
+        "correct": false,
+        "trap": "stretched",
+        "twin": false,
+        "rotationDeg": 270.0,
+        "areaShare": 0.4739110953389352,
+        "clipped": false
+      },
+      {
+        "label": 4,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 225.0,
+        "areaShare": 0.17774909424921392,
+        "clipped": false
+      },
+      {
+        "label": 5,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 135.0,
+        "areaShare": 0.4724054292012882,
+        "clipped": false
+      },
+      {
+        "label": 6,
+        "correct": false,
+        "trap": "alternativeCut",
+        "twin": false,
+        "rotationDeg": 45.0,
+        "areaShare": 0.20287573241962814,
+        "clipped": false
+      }
+    ],
+    "screenIdenticalPairs": [],
+    "screenNearIdenticalPairs": [],
+    "sameShapeColorTrapPairs": [],
+    "geomConfusablePairs": [
+      [
+        1,
+        2
+      ]
+    ],
+    "flags": []
+  },
+  {
+    "seed": 8,
+    "item": 21,
+    "palier": 7,
+    "level": "hard",
+    "strategy": "twoObliqueSteep",
+    "fallbackUsed": false,
+    "timeLimitSeconds": 30,
+    "maxPieceExtent": 1.1428,
+    "ppu": 121.74,
+    "targetScaleDrift": 1.0,
+    "trueAreaSumRel": 1.0,
+    "rotationInflation": 1.0,
+    "paletteMinRgbDist": 137.2,
+    "cvdPairPresent": false,
+    "correctLabels": [
+      3,
+      5,
+      6
+    ],
+    "options": [
+      {
+        "label": 1,
+        "correct": false,
+        "trap": "scaled",
+        "twin": false,
+        "rotationDeg": 0.0,
+        "areaShare": 0.5848729482082782,
+        "clipped": false
+      },
+      {
+        "label": 2,
+        "correct": false,
+        "trap": "alternativeCut",
+        "twin": false,
+        "rotationDeg": 270.0,
+        "areaShare": 0.31560773571140993,
+        "clipped": false
+      },
+      {
+        "label": 3,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 225.0,
+        "areaShare": 0.19176273051003007,
+        "clipped": false
+      },
+      {
+        "label": 4,
+        "correct": false,
+        "trap": "alternativeCut",
+        "twin": false,
+        "rotationDeg": 270.0,
+        "areaShare": 0.4298245537674883,
+        "clipped": false
+      },
+      {
+        "label": 5,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 315.0,
+        "areaShare": 0.31809600532059856,
+        "clipped": false
+      },
+      {
+        "label": 6,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 90.0,
+        "areaShare": 0.49014126416937137,
+        "clipped": false
+      }
+    ],
+    "screenIdenticalPairs": [],
+    "screenNearIdenticalPairs": [],
+    "sameShapeColorTrapPairs": [],
+    "geomConfusablePairs": [],
+    "flags": []
+  },
+  {
+    "seed": 8,
+    "item": 22,
+    "palier": 7,
+    "level": "hard",
+    "strategy": "nearDiagonal",
+    "fallbackUsed": false,
+    "timeLimitSeconds": 30,
+    "maxPieceExtent": 1.2092,
+    "ppu": 115.05,
+    "targetScaleDrift": 1.0,
+    "trueAreaSumRel": 1.0,
+    "rotationInflation": 1.209,
+    "paletteMinRgbDist": 999.0,
+    "cvdPairPresent": false,
+    "correctLabels": [
+      1,
+      3,
+      4
+    ],
+    "options": [
+      {
+        "label": 1,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 90.0,
+        "areaShare": 0.46660314521869567,
+        "clipped": false
+      },
+      {
+        "label": 2,
+        "correct": false,
+        "trap": "alternativeCut",
+        "twin": false,
+        "rotationDeg": 315.0,
+        "areaShare": 0.2662064040753186,
+        "clipped": false
+      },
+      {
+        "label": 3,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 45.0,
+        "areaShare": 0.1690506414473547,
+        "clipped": false
+      },
+      {
+        "label": 4,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 45.0,
+        "areaShare": 0.3643462133339496,
+        "clipped": false
+      },
+      {
+        "label": 5,
+        "correct": false,
+        "trap": "mirrored",
+        "twin": false,
+        "rotationDeg": 180.0,
+        "areaShare": 0.47118795761370946,
+        "clipped": false
+      },
+      {
+        "label": 6,
+        "correct": false,
+        "trap": "mirrored",
+        "twin": false,
+        "rotationDeg": 315.0,
+        "areaShare": 0.3505510543819109,
+        "clipped": false
+      }
+    ],
+    "screenIdenticalPairs": [],
+    "screenNearIdenticalPairs": [],
+    "sameShapeColorTrapPairs": [],
+    "geomConfusablePairs": [],
+    "flags": []
+  },
+  {
+    "seed": 8,
+    "item": 23,
+    "palier": 7,
+    "level": "hard",
+    "strategy": "nearDiagonal",
+    "fallbackUsed": false,
+    "timeLimitSeconds": 30,
+    "maxPieceExtent": 0.9708,
+    "ppu": 143.3,
+    "targetScaleDrift": 1.0,
+    "trueAreaSumRel": 1.0,
+    "rotationInflation": 0.971,
+    "paletteMinRgbDist": 119.3,
+    "cvdPairPresent": false,
+    "correctLabels": [
+      4,
+      5,
+      6
+    ],
+    "options": [
+      {
+        "label": 1,
+        "correct": false,
+        "trap": "alternativeCut",
+        "twin": false,
+        "rotationDeg": 180.0,
+        "areaShare": 0.2204998860622729,
+        "clipped": false
+      },
+      {
+        "label": 2,
+        "correct": false,
+        "trap": "alternativeCut",
+        "twin": false,
+        "rotationDeg": 180.0,
+        "areaShare": 0.26694591112101296,
+        "clipped": false
+      },
+      {
+        "label": 3,
+        "correct": false,
+        "trap": "scaled",
+        "twin": false,
+        "rotationDeg": 0.0,
+        "areaShare": 0.33595401394487895,
+        "clipped": false
+      },
+      {
+        "label": 4,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 90.0,
+        "areaShare": 0.46872763699976333,
+        "clipped": false
+      },
+      {
+        "label": 5,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 45.0,
+        "areaShare": 0.36060149801480473,
+        "clipped": false
+      },
+      {
+        "label": 6,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 45.0,
+        "areaShare": 0.17067086498543194,
+        "clipped": false
+      }
+    ],
+    "screenIdenticalPairs": [],
+    "screenNearIdenticalPairs": [],
+    "sameShapeColorTrapPairs": [],
+    "geomConfusablePairs": [],
+    "flags": []
+  },
+  {
+    "seed": 8,
+    "item": 24,
+    "palier": 8,
+    "level": "hard",
+    "strategy": "fanOffset",
+    "fallbackUsed": false,
+    "timeLimitSeconds": 30,
+    "maxPieceExtent": 1.0,
+    "ppu": 139.12,
+    "targetScaleDrift": 1.0,
+    "trueAreaSumRel": 1.0,
+    "rotationInflation": 1.0,
+    "paletteMinRgbDist": 999.0,
+    "cvdPairPresent": false,
+    "correctLabels": [
+      2,
+      3,
+      5
+    ],
+    "options": [
+      {
+        "label": 1,
+        "correct": false,
+        "trap": "alternativeCut",
+        "twin": false,
+        "rotationDeg": 270.0,
+        "areaShare": 0.2818993546170827,
+        "clipped": false
+      },
+      {
+        "label": 2,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 315.0,
+        "areaShare": 0.1987554720991757,
+        "clipped": false
+      },
+      {
+        "label": 3,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 135.0,
+        "areaShare": 0.3265686891228952,
+        "clipped": false
+      },
+      {
+        "label": 4,
+        "correct": false,
+        "trap": "mirrored",
+        "twin": false,
+        "rotationDeg": 90.0,
+        "areaShare": 0.34825942405561044,
+        "clipped": false
+      },
+      {
+        "label": 5,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 90.0,
+        "areaShare": 0.474675838777929,
+        "clipped": false
+      },
+      {
+        "label": 6,
+        "correct": false,
+        "trap": "mirrored",
+        "twin": false,
+        "rotationDeg": 45.0,
+        "areaShare": 0.26192637441462774,
+        "clipped": false
+      }
+    ],
+    "screenIdenticalPairs": [],
+    "screenNearIdenticalPairs": [],
+    "sameShapeColorTrapPairs": [],
+    "geomConfusablePairs": [],
+    "flags": []
+  },
+  {
+    "seed": 8,
+    "item": 25,
+    "palier": 8,
+    "level": "hard",
+    "strategy": "nearDiagonal",
+    "fallbackUsed": false,
+    "timeLimitSeconds": 30,
+    "maxPieceExtent": 1.1788,
+    "ppu": 118.02,
+    "targetScaleDrift": 1.0,
+    "trueAreaSumRel": 1.0,
+    "rotationInflation": 1.179,
+    "paletteMinRgbDist": 119.3,
+    "cvdPairPresent": false,
+    "correctLabels": [
+      2,
+      5,
+      6
+    ],
+    "options": [
+      {
+        "label": 1,
+        "correct": false,
+        "trap": "alternativeCut",
+        "twin": false,
+        "rotationDeg": 225.0,
+        "areaShare": 0.33682375389024083,
+        "clipped": false
+      },
+      {
+        "label": 2,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 180.0,
+        "areaShare": 0.4582568222229719,
+        "clipped": false
+      },
+      {
+        "label": 3,
+        "correct": false,
+        "trap": "alternativeCut",
+        "twin": false,
+        "rotationDeg": 0.0,
+        "areaShare": 0.2711982061783523,
+        "clipped": false
+      },
+      {
+        "label": 4,
+        "correct": false,
+        "trap": "mirrored",
+        "twin": false,
+        "rotationDeg": 135.0,
+        "areaShare": 0.31302030751331844,
+        "clipped": false
+      },
+      {
+        "label": 5,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 135.0,
+        "areaShare": 0.19763590117919316,
+        "clipped": false
+      },
+      {
+        "label": 6,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 225.0,
+        "areaShare": 0.3441072765978349,
+        "clipped": false
+      }
+    ],
+    "screenIdenticalPairs": [],
+    "screenNearIdenticalPairs": [],
+    "sameShapeColorTrapPairs": [],
+    "geomConfusablePairs": [],
+    "flags": []
+  },
+  {
+    "seed": 8,
+    "item": 26,
+    "palier": 8,
+    "level": "hard",
+    "strategy": "fanOffset",
+    "fallbackUsed": false,
+    "timeLimitSeconds": 30,
+    "maxPieceExtent": 1.1095,
+    "ppu": 125.39,
+    "targetScaleDrift": 1.0,
+    "trueAreaSumRel": 1.0,
+    "rotationInflation": 0.917,
+    "paletteMinRgbDist": 999.0,
+    "cvdPairPresent": false,
+    "correctLabels": [
+      1,
+      2,
+      3
+    ],
+    "options": [
+      {
+        "label": 1,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 135.0,
+        "areaShare": 0.3133194534098701,
+        "clipped": false
+      },
+      {
+        "label": 2,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 315.0,
+        "areaShare": 0.34756736881109984,
+        "clipped": false
+      },
+      {
+        "label": 3,
+        "correct": true,
+        "trap": null,
+        "twin": false,
+        "rotationDeg": 45.0,
+        "areaShare": 0.33911317777903005,
+        "clipped": false
+      },
+      {
+        "label": 4,
+        "correct": false,
+        "trap": "mirrored",
+        "twin": false,
+        "rotationDeg": 90.0,
+        "areaShare": 0.2512637342041786,
+        "clipped": false
+      },
+      {
+        "label": 5,
+        "correct": false,
+        "trap": "mirrored",
+        "twin": false,
+        "rotationDeg": 135.0,
+        "areaShare": 0.23878474952833487,
+        "clipped": false
+      },
+      {
+        "label": 6,
+        "correct": false,
+        "trap": "stretched",
+        "twin": false,
+        "rotationDeg": 45.0,
+        "areaShare": 0.19709302600756934,
+        "clipped": false
+      }
+    ],
+    "screenIdenticalPairs": [],
+    "screenNearIdenticalPairs": [],
+    "sameShapeColorTrapPairs": [],
+    "geomConfusablePairs": [],
+    "flags": []
+  }
+]
