@@ -1,0 +1,6 @@
+Vérifications passe 2 terminées. Les zooms confirment :
+
+1. **Encoches fantômes** (coin blanc à l'intérieur du contour) sur des BONNES pièces — item 09 opt 5 et item 05 opt 5 le montrent nettement au zoom : le remplissage est chanfreiné alors que le contour dessine le rectangle complet → un candidat lit une « pièce défectueuse » et rejette la bonne réponse. Occurrences repérées : i05 (opt 1, 5), i07 (opt 6), i09 (opt 4, 5), i14 (opt 1), i15 (opt 4), i19 (opt 3, 6).
+2. **Item 18** : le twin miroir 3 (aire strictement identique à la bonne pièce 4, geomConfusable déclaré par le générateur) se lit comme une simple rotation de 4 à leurs rotations d'affichage — je suis tombé dessus en aveugle.
+3. **Items 17, 26, 25, 23** : les trios pièges forment des pseudo-solutions dont la somme des aires ≈ la cible (0.94, 1.01, 1.06, 0.93) avec budget couleurs compatible — en aveugle j'ai choisi exactement ces trios sur 17 et 26.
+4. Contrôles protocole : H (item 04, colorDistance 0.169) → discriminable (couleur majoritaire inversée), pas de finding ; L (items 20/22/23, rotationInflation 1.414) → lisibilité correcte, pas de finding ; M → aucun fallbackUsed ; E (item 21, minRgbDist 104) → rouge/orange bien distincts à l'écran.

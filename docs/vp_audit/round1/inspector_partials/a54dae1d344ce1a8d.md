@@ -1,0 +1,1 @@
+Item 03 : [3,5,6] sans hésitation. Item 04 : [1,4,5] sans hésitation (6 = proportions inversées, 3 = trop petit, 2 = forme étrangère).

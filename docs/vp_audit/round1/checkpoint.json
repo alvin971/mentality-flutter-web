@@ -1,0 +1,227 @@
+{
+ "derniere_maj": "2026-07-16T13:05Z — PAUSE demandée par le user, audit par style aux 3/4 fait",
+ "acquis": {
+  "harnais": "commit 9dcc00a — render_item_cards_audit_test.dart + support/vp_audit_capture.dart, porte de sanité validée visuellement (seed 7 : fontes OK, échelle unifiée OK)",
+  "rendu_tour1": "260 PNG + 10 sidecars dans vp_audit/round_1/fixed (seeds 1..10), re-générables à l identique en 60 s (déterministe par seed)",
+  "precheck_D_PROUVE": "cible dessinée 2,3% trop petite sur 130/260 items — budget vertical du cadre (+46px) insuffisant, il faut bb.height*ppu/0.9+34 ; fix = puzzle_target_widget.dart",
+  "precheck_L": "26/260 items avec inflation d échelle x1.41 (rotations 45° de pièces longues) — sévérité à juger sur exemplaire",
+  "precheck_H_faibles": "22 paires wrongColors avec distance couleur 0.10-0.18 à juger sur exemplaires",
+  "precheck_A": "0 paire identique à l écran sur 260 items (après prise en compte de la couleur)",
+  "precheck_K_clip": "0",
+  "precheck_sommes": "trueAreaSumRel = 1.0 partout",
+  "inspection_exhaustive": "INTERROMPUE volontairement (12 inspecteurs partiels, notes brutes dans state/inspector_partials/) — remplacée par audit PAR STYLE"
+ },
+ "nouvelle_strategie": "auditer 1 exemplaire par style (strategie de decoupe x mono) + exemplaires speciaux (weak-H, L, near-pair), inspectes directement par l orchestrateur, sceptiques seulement sur findings",
+ "styles": {
+  "fan": {
+   "n": 18,
+   "exemplaire": {
+    "seed": 6,
+    "item": 15,
+    "palier": 5,
+    "flags": [
+     "D_targetScaleDrift"
+    ],
+    "weakH": 0.538,
+    "near": []
+   }
+  },
+  "fanOffset": {
+   "n": 19,
+   "exemplaire": {
+    "seed": 10,
+    "item": 19,
+    "palier": 6,
+    "flags": [
+     "L_rotationInflation"
+    ],
+    "weakH": null,
+    "near": []
+   }
+  },
+  "fanOffset_mono": {
+   "n": 10,
+   "exemplaire": {
+    "seed": 7,
+    "item": 26,
+    "palier": 8,
+    "flags": [
+     "L_rotationInflation"
+    ],
+    "weakH": null,
+    "near": []
+   }
+  },
+  "nearDiagonal": {
+   "n": 15,
+   "exemplaire": {
+    "seed": 1,
+    "item": 23,
+    "palier": 7,
+    "flags": [
+     "L_rotationInflation"
+    ],
+    "weakH": null,
+    "near": []
+   }
+  },
+  "nearDiagonal_mono": {
+   "n": 12,
+   "exemplaire": {
+    "seed": 1,
+    "item": 22,
+    "palier": 7,
+    "flags": [
+     "L_rotationInflation"
+    ],
+    "weakH": null,
+    "near": []
+   }
+  },
+  "oneStraightOneOblique": {
+   "n": 24,
+   "exemplaire": {
+    "seed": 4,
+    "item": 10,
+    "palier": 3,
+    "flags": [
+     "D_targetScaleDrift"
+    ],
+    "weakH": 0.162,
+    "near": []
+   }
+  },
+  "perpendicularL": {
+   "n": 30,
+   "exemplaire": {
+    "seed": 4,
+    "item": 7,
+    "palier": 2,
+    "flags": [
+     "D_targetScaleDrift"
+    ],
+    "weakH": 0.224,
+    "near": []
+   }
+  },
+  "twoOblique": {
+   "n": 41,
+   "exemplaire": {
+    "seed": 9,
+    "item": 14,
+    "palier": 4,
+    "flags": [],
+    "weakH": 0.404,
+    "near": []
+   }
+  },
+  "twoObliqueSteep": {
+   "n": 26,
+   "exemplaire": {
+    "seed": 4,
+    "item": 20,
+    "palier": 6,
+    "flags": [],
+    "weakH": null,
+    "near": [
+     {
+      "pair": [
+       4,
+       6
+      ],
+      "distance": 0.149
+     }
+    ]
+   }
+  },
+  "twoObliqueSteep_mono": {
+   "n": 8,
+   "exemplaire": {
+    "seed": 7,
+    "item": 22,
+    "palier": 7,
+    "flags": [
+     "L_rotationInflation"
+    ],
+    "weakH": null,
+    "near": []
+   }
+  },
+  "twoParallel": {
+   "n": 57,
+   "exemplaire": {
+    "seed": 10,
+    "item": 4,
+    "palier": 1,
+    "flags": [
+     "D_targetScaleDrift"
+    ],
+    "weakH": 0.103,
+    "near": []
+   }
+  }
+ },
+ "fallback_items": [],
+ "verdicts_exemplaires": {
+  "twoParallel (s10 i04)": {
+   "blind": "REUSSI (2,3,6)",
+   "verdict": "SAIN — wrongColors inversé très discriminable; weak-H par histogramme = faux signal (aveugle à l arrangement spatial)"
+  },
+  "perpendicularL (s4 i07)": {
+   "blind": "RATE (pris le piège stretched 4)",
+   "verdict": "LOYAL mais exigeant pour P2/20s — somme des aires discrimine; doute calibration palier (mineur N)"
+  },
+  "oneStraightOneOblique (s4 i10)": {
+   "blind": "RATE (pris le miroir 5)",
+   "verdict": "LOYAL — miroir jamais posable par rotation; wrongColors 1/6 exige de defaire une rotation 270 (dur mais unique solution)"
+  },
+  "twoObliqueSteep (s4 i20)": {
+   "blind": "INDECIS (4 vs 6)",
+   "verdict": "LOYAL (4=miroir de la vraie bande 6, dist ecran 0.149) MAIS defaut rendu: ENCOCHES BLANCHES aux pointes aigues (options 4,5,6) — motif ne couvre pas les pointes"
+  },
+  "fan (s6 i15)": {
+   "blind": "choix 2,3,6 A VERIFIER",
+   "verdict": "PRELIMINAIRE — noter micro-fragment bleu ~3% sur option 6 (quasi invisible sur mobile, famille encoches/slivers)"
+  },
+  "twoOblique (s9 i14)": {
+   "blind": "choix 5,2,3 A VERIFIER",
+   "verdict": "PRELIMINAIRE — paire scaled 2/4 discriminable"
+  },
+  "fanOffset (s10 i19)": {
+   "blind": "INDECIS",
+   "verdict": "LOYAL (pieges alternativeCut/wrongColors), lisible en desktop; inflation 1.41 = cible ~53px SUR MOBILE (fix L cible)"
+  },
+  "nearDiagonal_mono (s1 i22)": {
+   "blind": "RATE (pris rectangle 6 au lieu de bande hexagonale 2)",
+   "verdict": "DEFAUT MAJEUR CANDIDAT — mono: piege alternativeCut a 3.6% d aire de la vraie bande, discrimination par chanfreins seuls ≈ pile-ou-face en 30s"
+  },
+  "twoObliqueSteep_mono (s7 i22)": {
+   "blind": "non fait (pause)",
+   "verdict": "VU: options 1 et 3 = deux rectangles bleus tournes tres proches → renforce le defaut mono-distinctness"
+  },
+  "nearDiagonal (s1 i23)": {
+   "blind": "non fait (pause)",
+   "verdict": "VU: encoche blanche sur option 2; paire 1/6 bandes similaires a examiner"
+  },
+  "fanOffset_mono (s7 i26)": {
+   "blind": "fait a la porte de sanite",
+   "verdict": "lisible, formes distinctes — OK provisoire"
+  }
+ },
+ "defauts_retenus_tour1": [
+  "D (PROUVE, majeur): cible dessinee 2.3% trop petite — puzzle_target_widget.dart, budget hauteur cadre +46 insuffisant (il faut bb*ppu/0.9+34+marge); fix + metrique verrouillee targetScaleDrift==1.0",
+  "RENDU (majeur/mineur): encoches blanches aux pointes aigues des pieces (regions ne couvrent pas les sommets aigus) — fix painter: sous-peindre le polygone avec la couleur de la region dominante avant les regions (polygon_painter.dart RegionedPolygonPainter, idem _TargetPainter?)",
+  "MONO (majeur, 2 occurrences vues): pieges geometriquement trop proches des vraies pieces sur items monochromes (bande rect vs bande hexagonale, 3.6% d aire) — fix generateur: garde de distinctness renforcee quand palette==1 (rejet si aire dans ±12% ET forme proche, seuil perceptuel eleve ~0.15)",
+  "L (majeur mobile): inflation d echelle x1.41 par rotations diagonales des grandes pieces → cible ~53px sur telephone — fix generateur: affecter les rotations diagonales aux PETITES pieces / plafonner inflation ~1.25 (attention conformite minRotated/minDiagonal)",
+  "G (mineur): cartouche FIGURE A RECONSTITUER tronque quand cadre etroit (min 150px) — reel aussi en app; fix simple: ellipsis/reduction auto de la police du cartouche",
+  "N (mineur, a discuter): charge cognitive P2 (20s) elevee - calibration paliers a confirmer par donnees reelles, pas par code"
+ ],
+ "reste_a_faire": [
+  "1. Verifier mes choix aveugles fan (s6 i15: 2,3,6?) et twoOblique (s9 i14: 5,2,3?) dans les sidecars",
+  "2. Finir blind-solve twoObliqueSteep_mono (s7 i22) et nearDiagonal (s1 i23)",
+  "3. AGIR: fixes cluster par cluster (D painter, encoches painter, mono-guard generateur, L rotations) chacun avec test/metrique",
+  "4. VERIFIER: re-render exemplaires styles + 5 seeds frais (115-119), re-inspection, flutter test VP + analyze, suite complete",
+  "5. G vrai 2 tours → merge main + push, rapport, vault"
+ ],
+ "commande_rendu": "export PATH=/home/ubuntu/flutter/bin:$PATH && flutter test test/exercises_implementations/visual_puzzles/render_item_cards_audit_test.dart --dart-define=VP_AUDIT_SEEDS=<csv> --dart-define=VP_AUDIT_OUT=<dir_absolu>  # deterministe par seed, ~6s/seed"
+}
