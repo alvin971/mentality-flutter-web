@@ -2708,6 +2708,20 @@ class AppLocalizationsEn extends AppLocalizations {
       'Verifying your follow… Your result will be unlocked within a few hours. You can close this page and come back later.';
 
   @override
+  String get ugResultsHubNotice =>
+      'Everything lives in “My results”: your missions, your invite link and your result (blurred until every mission is validated). You can leave this page and come back anytime.';
+
+  @override
+  String get histLockedTitle => 'Missions to complete';
+
+  @override
+  String get histLockedBody =>
+      'Your result is saved, but it stays blurred until every mission is validated.';
+
+  @override
+  String get histLockedCta => 'See my missions';
+
+  @override
   String get inviteLandingTitle => 'Invitation';
 
   @override
@@ -5421,6 +5435,20 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   @override
   String get ugInstaPending =>
       'Verifying your follow… Your result will be unlocked within a few hours. You can close this page and come back later.';
+
+  @override
+  String get ugResultsHubNotice =>
+      'Everything lives in “My results”: your missions, your invite link and your result (blurred until every mission is validated). You can leave this page and come back anytime.';
+
+  @override
+  String get histLockedTitle => 'Missions to complete';
+
+  @override
+  String get histLockedBody =>
+      'Your result is saved, but it stays blurred until every mission is validated.';
+
+  @override
+  String get histLockedCta => 'See my missions';
 
   @override
   String get inviteLandingTitle => 'Invitation';

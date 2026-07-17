@@ -787,6 +787,10 @@
   "ugInstaFieldLabel": "O teu utilizador do Instagram",
   "ugInstaSubmit": "Validar a minha subscrição",
   "ugInstaPending": "A verificar a tua subscrição… O teu resultado será desbloqueado dentro de algumas horas. Podes fechar esta página e voltar mais tarde.",
+  "ugResultsHubNotice": "Está tudo em «Os meus resultados»: as tuas missões, o teu link de convite e o teu resultado (desfocado até todas as missões serem validadas). Podes sair desta página e voltar quando quiseres.",
+  "histLockedTitle": "Missões por validar",
+  "histLockedBody": "O teu resultado está guardado, mas fica desfocado até todas as missões serem validadas.",
+  "histLockedCta": "Ver as minhas missões",
   "inviteLandingTitle": "Convite",
   "inviteLandingBody": "Um amigo convidou-te para fazer o teste de QI gratuito da Mentality. Ao terminares o teu teste, obténs o teu resultado e ajudas o teu amigo a desbloquear o dele.",
   "inviteLandingCta": "Começar o teste gratuito"

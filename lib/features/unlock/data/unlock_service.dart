@@ -57,6 +57,31 @@ class UnlockService {
   /// Le gate est actif seulement si le flag ET le worker sont configurés.
   bool get gateEnabled => AppConstants.unlockGateEnabled && isConfigured;
 
+  /// Les résultats doivent-ils être verrouillés (floutés) ?
+  ///
+  /// Fail-closed quand le gate est actif : seul un stage 4 confirmé — par le
+  /// serveur ou par le cache local (un déblocage acquis ne se re-verrouille
+  /// jamais) — déverrouille l'affichage.
+  Future<bool> isLocked() async {
+    if (!gateEnabled) return false;
+    try {
+      if (await AuthLocalStore.instance.getResultsUnlocked()) return false;
+      final p = await getProgress();
+      return !(p?.unlocked ?? false);
+    } catch (_) {
+      return true; // fail-closed : jamais de déblocage sur erreur.
+    }
+  }
+
+  /// Persiste le déblocage dès qu'une réponse serveur atteint le stage 4.
+  UnlockProgress _rememberIfUnlocked(UnlockProgress p) {
+    if (p.unlocked) {
+      // fire-and-forget : le cache est une optimisation, pas une autorité.
+      AuthLocalStore.instance.saveResultsUnlocked().catchError((_) {});
+    }
+    return p;
+  }
+
   Future<Map<String, String>?> _authHeaders() async {
     final token = await AuthLocalStore.instance.getToken();
     if (token == null || token.isEmpty) return null;
@@ -82,8 +107,8 @@ class UnlockService {
       if (referrer != null) {
         await AuthLocalStore.instance.clearPendingReferrerCode();
       }
-      return UnlockProgress.fromJson(
-          jsonDecode(resp.body) as Map<String, dynamic>);
+      return _rememberIfUnlocked(UnlockProgress.fromJson(
+          jsonDecode(resp.body) as Map<String, dynamic>));
     } catch (_) {
       return null;
     }
@@ -100,8 +125,8 @@ class UnlockService {
       );
       if (resp.statusCode == 404) return initProgress();
       if (resp.statusCode != 200) return null;
-      return UnlockProgress.fromJson(
-          jsonDecode(resp.body) as Map<String, dynamic>);
+      return _rememberIfUnlocked(UnlockProgress.fromJson(
+          jsonDecode(resp.body) as Map<String, dynamic>));
     } catch (_) {
       return null;
     }
@@ -118,8 +143,8 @@ class UnlockService {
         body: jsonEncode({'handle': handle}),
       );
       if (resp.statusCode != 200) return null;
-      return UnlockProgress.fromJson(
-          jsonDecode(resp.body) as Map<String, dynamic>);
+      return _rememberIfUnlocked(UnlockProgress.fromJson(
+          jsonDecode(resp.body) as Map<String, dynamic>));
     } catch (_) {
       return null;
     }

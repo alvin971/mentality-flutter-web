@@ -4827,6 +4827,30 @@ abstract class AppLocalizations {
   /// **'Vérification de ton abonnement en cours… Ton résultat sera débloqué d\'ici quelques heures. Tu peux fermer cette page et revenir plus tard.'**
   String get ugInstaPending;
 
+  /// No description provided for @ugResultsHubNotice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout se trouve dans « Mes résultats » : tes missions, ton lien d\'invitation et ton résultat (flouté tant que toutes les missions ne sont pas validées). Tu peux quitter cette page et revenir quand tu veux.'**
+  String get ugResultsHubNotice;
+
+  /// No description provided for @histLockedTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Missions à valider'**
+  String get histLockedTitle;
+
+  /// No description provided for @histLockedBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton résultat est enregistré, mais il reste flouté tant que toutes les missions ne sont pas validées.'**
+  String get histLockedBody;
+
+  /// No description provided for @histLockedCta.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir mes missions'**
+  String get histLockedCta;
+
   /// No description provided for @inviteLandingTitle.
   ///
   /// In fr, this message translates to:

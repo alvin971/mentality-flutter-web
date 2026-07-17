@@ -2716,6 +2716,20 @@ class AppLocalizationsFr extends AppLocalizations {
       'Vérification de ton abonnement en cours… Ton résultat sera débloqué d\'ici quelques heures. Tu peux fermer cette page et revenir plus tard.';
 
   @override
+  String get ugResultsHubNotice =>
+      'Tout se trouve dans « Mes résultats » : tes missions, ton lien d\'invitation et ton résultat (flouté tant que toutes les missions ne sont pas validées). Tu peux quitter cette page et revenir quand tu veux.';
+
+  @override
+  String get histLockedTitle => 'Missions à valider';
+
+  @override
+  String get histLockedBody =>
+      'Ton résultat est enregistré, mais il reste flouté tant que toutes les missions ne sont pas validées.';
+
+  @override
+  String get histLockedCta => 'Voir mes missions';
+
+  @override
   String get inviteLandingTitle => 'Invitation';
 
   @override

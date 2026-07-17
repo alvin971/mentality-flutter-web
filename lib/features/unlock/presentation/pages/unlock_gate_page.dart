@@ -155,6 +155,14 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
       children: [
         // Le test est gratuit : condition affichée clairement dès le départ.
         Text(l10n.ugFreeNotice, style: AppText.body()),
+        SizedBox(height: 10.h),
+        // Tout est persisté : l'utilisateur peut quitter et retrouver ses
+        // missions, son lien et son résultat (flouté) dans « Mes résultats ».
+        Text(
+          l10n.ugResultsHubNotice,
+          style: AppText.bodySmall(
+              color: Theme.of(context).colorScheme.onSurfaceVariant),
+        ),
         SizedBox(height: 20.h),
         if (!referralsDone && !showWaiting) _buildInviteStep(l10n, p),
         if (showWaiting) _buildWaitingStep(l10n, p),

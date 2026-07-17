@@ -59,4 +59,20 @@ class AuthLocalStore {
     final box = await _openBox();
     await box.delete(_referrerKey);
   }
+
+  static const _resultsUnlockedKey = 'results_unlocked';
+
+  /// Mémorise que le déblocage des résultats (stage 4) a été confirmé par le
+  /// serveur — un résultat débloqué ne se re-verrouille jamais, même si le
+  /// worker devient injoignable ensuite.
+  Future<void> saveResultsUnlocked() async {
+    final box = await _openBox();
+    await box.put(_resultsUnlockedKey, true);
+  }
+
+  /// True si le déblocage a déjà été confirmé une fois.
+  Future<bool> getResultsUnlocked() async {
+    final box = await _openBox();
+    return box.get(_resultsUnlockedKey) == true;
+  }
 }

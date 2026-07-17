@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
@@ -7,6 +9,8 @@ import '../../../../core/widgets/kepler_card.dart';
 import '../../../../core/widgets/kepler_scaffold.dart';
 import '../../../../services/session_history_service.dart';
 import '../../../../core/l10n/l10n_ext.dart';
+import '../../../unlock/data/unlock_service.dart';
+import '../../../unlock/presentation/pages/unlock_gate_page.dart';
 
 class ResultsHistoryPage extends StatefulWidget {
   const ResultsHistoryPage({super.key});
@@ -18,10 +22,42 @@ class ResultsHistoryPage extends StatefulWidget {
 class _ResultsHistoryPageState extends State<ResultsHistoryPage> {
   late List<SessionHistoryEntry> _entries;
 
+  /// Gate marketing : tant que les missions (parrainage + Instagram) ne sont
+  /// pas toutes validées côté serveur, les scores restent FLOUTÉS et les
+  /// cartes ouvrent les missions au lieu du détail. Fail-closed : verrouillé
+  /// par défaut dès que le gate est actif, déverrouillé seulement sur
+  /// confirmation (serveur ou cache local d'un déblocage déjà acquis).
+  bool _locked = UnlockService.instance.gateEnabled;
+
   @override
   void initState() {
     super.initState();
     _entries = SessionHistoryService.instance.getAll();
+    _refreshLock();
+  }
+
+  Future<void> _refreshLock() async {
+    if (!_locked) return;
+    final locked = await UnlockService.instance.isLocked();
+    if (mounted && locked != _locked) setState(() => _locked = locked);
+  }
+
+  /// Ouvre l'écran des missions ; se referme tout seul au déblocage.
+  Future<void> _openMissions() async {
+    var popped = false;
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (gateCtx) => UnlockGatePage(
+          onUnlocked: () {
+            if (popped) return;
+            popped = true;
+            Navigator.of(gateCtx).pop();
+          },
+        ),
+      ),
+    );
+    if (mounted) await _refreshLock();
   }
 
   Future<void> _deleteEntry(SessionHistoryEntry entry) async {
@@ -66,13 +102,22 @@ class _ResultsHistoryPageState extends State<ResultsHistoryPage> {
           ? _EmptyState(onStart: () => Navigator.pop(context))
           : ListView.separated(
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
-              itemCount: _entries.length,
+              // Une carte « missions » en tête de liste tant que verrouillé.
+              itemCount: _entries.length + (_locked ? 1 : 0),
               separatorBuilder: (_, __) => SizedBox(height: 12.h),
-              itemBuilder: (_, i) => _EntryCard(
-                entry: _entries[i],
-                onTap: () => _showDetail(_entries[i]),
-                onDelete: () => _deleteEntry(_entries[i]),
-              ),
+              itemBuilder: (_, i) {
+                if (_locked && i == 0) {
+                  return _MissionsBanner(onOpen: _openMissions);
+                }
+                final entry = _entries[_locked ? i - 1 : i];
+                return _EntryCard(
+                  entry: entry,
+                  locked: _locked,
+                  onTap: () =>
+                      _locked ? _openMissions() : _showDetail(entry),
+                  onDelete: () => _deleteEntry(entry),
+                );
+              },
             ),
     );
   }
@@ -99,7 +144,7 @@ class _ResultsHistoryPageState extends State<ResultsHistoryPage> {
                   color: AppColors.primary.withValues(alpha: 0.3)),
             ),
             SizedBox(height: 20.h),
-            Text('${_formatDate(e.date).toUpperCase()}',
+            Text(_formatDate(e.date).toUpperCase(),
                 style: AppText.monoLabel(color: AppColors.primary)),
             SizedBox(height: 8.h),
             Text(e.classification, style: AppText.h1Italic()),
@@ -132,17 +177,35 @@ class _ResultsHistoryPageState extends State<ResultsHistoryPage> {
 
 class _EntryCard extends StatelessWidget {
   const _EntryCard(
-      {required this.entry, required this.onTap, required this.onDelete});
+      {required this.entry,
+      required this.locked,
+      required this.onTap,
+      required this.onDelete});
   final SessionHistoryEntry entry;
+
+  /// Scores floutés + cadenas tant que les missions ne sont pas validées.
+  final bool locked;
   final VoidCallback onTap;
   final VoidCallback onDelete;
 
   String _formatDate(DateTime d) =>
       '${d.day.toString().padLeft(2, '0')}.${d.month.toString().padLeft(2, '0')}.${d.year}';
 
+  /// Floute le contenu (le score reste deviné, jamais lisible).
+  Widget _blur(Widget child) => ClipRect(
+        child: ImageFiltered(
+          imageFilter: ui.ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+          child: child,
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     final age = (entry.ageInMonths / 12).floor();
+    final fsiq = Text('${entry.fsiq}',
+        style: AppText.monoScore(color: AppColors.primary, size: 26.sp));
+    final classification =
+        Text(entry.classification, style: AppText.bodyStrong());
     return KeplerCard(
       onTap: onTap,
       child: Row(
@@ -152,12 +215,20 @@ class _EntryCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('FSIQ',
-                    style: AppText.monoLabel(color: Theme.of(context).colorScheme.outline)),
+                Row(
+                  children: [
+                    Text('FSIQ',
+                        style: AppText.monoLabel(
+                            color: Theme.of(context).colorScheme.outline)),
+                    if (locked) ...[
+                      SizedBox(width: 4.w),
+                      Icon(Icons.lock_outline,
+                          size: 12.sp, color: AppColors.primary),
+                    ],
+                  ],
+                ),
                 SizedBox(height: 4.h),
-                Text('${entry.fsiq}',
-                    style: AppText.monoScore(
-                        color: AppColors.primary, size: 26.sp)),
+                locked ? _blur(fsiq) : fsiq,
               ],
             ),
           ),
@@ -166,7 +237,7 @@ class _EntryCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(entry.classification, style: AppText.bodyStrong()),
+                locked ? _blur(classification) : classification,
                 SizedBox(height: 2.h),
                 Text('${_formatDate(entry.date)} · ${context.l10n.histAgeYears(age)}',
                     style: AppText.bodySmall()),
@@ -177,6 +248,44 @@ class _EntryCard extends StatelessWidget {
             icon: Icon(Icons.delete_outline,
                 color: Theme.of(context).colorScheme.outline, size: 18.sp),
             onPressed: onDelete,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Carte en tête de « Mes résultats » tant que les missions ne sont pas
+/// toutes validées : rappelle pourquoi le résultat est flouté et ouvre le
+/// parcours de déblocage (lien d'invitation, progression, Instagram).
+class _MissionsBanner extends StatelessWidget {
+  const _MissionsBanner({required this.onOpen});
+  final VoidCallback onOpen;
+
+  @override
+  Widget build(BuildContext context) {
+    return KeplerCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.lock_outline, size: 18.sp, color: AppColors.primary),
+              SizedBox(width: 8.w),
+              Expanded(
+                child: Text(context.l10n.histLockedTitle,
+                    style: AppText.bodyStrong()),
+              ),
+            ],
+          ),
+          SizedBox(height: 8.h),
+          Text(context.l10n.histLockedBody, style: AppText.bodySmall()),
+          SizedBox(height: 12.h),
+          KeplerButton(
+            label: context.l10n.histLockedCta,
+            icon: Icons.east,
+            expand: true,
+            onPressed: onOpen,
           ),
         ],
       ),

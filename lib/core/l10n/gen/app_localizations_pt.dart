@@ -2719,6 +2719,20 @@ class AppLocalizationsPt extends AppLocalizations {
       'A verificar a tua subscrição… O teu resultado será desbloqueado dentro de algumas horas. Podes fechar esta página e voltar mais tarde.';
 
   @override
+  String get ugResultsHubNotice =>
+      'Está tudo em «Os meus resultados»: as tuas missões, o teu link de convite e o teu resultado (desfocado até todas as missões serem validadas). Podes sair desta página e voltar quando quiseres.';
+
+  @override
+  String get histLockedTitle => 'Missões por validar';
+
+  @override
+  String get histLockedBody =>
+      'O teu resultado está guardado, mas fica desfocado até todas as missões serem validadas.';
+
+  @override
+  String get histLockedCta => 'Ver as minhas missões';
+
+  @override
   String get inviteLandingTitle => 'Convite';
 
   @override

@@ -2727,6 +2727,20 @@ class AppLocalizationsDe extends AppLocalizations {
       'Dein Abo wird überprüft … Dein Ergebnis wird in wenigen Stunden freigeschaltet. Du kannst diese Seite schließen und später zurückkommen.';
 
   @override
+  String get ugResultsHubNotice =>
+      'Alles findest du unter „Meine Ergebnisse“: deine Missionen, deinen Einladungslink und dein Ergebnis (unscharf, bis alle Missionen bestätigt sind). Du kannst diese Seite jederzeit verlassen und später zurückkommen.';
+
+  @override
+  String get histLockedTitle => 'Offene Missionen';
+
+  @override
+  String get histLockedBody =>
+      'Dein Ergebnis ist gespeichert, bleibt aber unscharf, bis alle Missionen bestätigt sind.';
+
+  @override
+  String get histLockedCta => 'Meine Missionen ansehen';
+
+  @override
   String get inviteLandingTitle => 'Einladung';
 
   @override
