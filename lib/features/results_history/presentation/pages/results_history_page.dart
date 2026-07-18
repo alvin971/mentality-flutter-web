@@ -20,7 +20,10 @@ class ResultsHistoryPage extends StatefulWidget {
 }
 
 class _ResultsHistoryPageState extends State<ResultsHistoryPage> {
-  late List<SessionHistoryEntry> _entries;
+  /// Résultats DU PASSE COURANT uniquement (jamais ceux d'un autre passe ayant
+  /// utilisé le même téléphone). Vide tant que le chargement n'a pas répondu.
+  List<SessionHistoryEntry> _entries = const [];
+  bool _loadingEntries = true;
 
   /// Gate marketing : tant que les missions (parrainage + Instagram) ne sont
   /// pas toutes validées côté serveur, les scores restent FLOUTÉS et les
@@ -32,8 +35,18 @@ class _ResultsHistoryPageState extends State<ResultsHistoryPage> {
   @override
   void initState() {
     super.initState();
-    _entries = SessionHistoryService.instance.getAll();
+    _loadEntries();
     _refreshLock();
+  }
+
+  Future<void> _loadEntries() async {
+    final entries =
+        await SessionHistoryService.instance.getAllForCurrentAccount();
+    if (!mounted) return;
+    setState(() {
+      _entries = entries;
+      _loadingEntries = false;
+    });
   }
 
   Future<void> _refreshLock() async {
@@ -87,7 +100,7 @@ class _ResultsHistoryPageState extends State<ResultsHistoryPage> {
 
     if (confirmed == true) {
       await SessionHistoryService.instance.deleteEntry(entry.id);
-      setState(() => _entries = SessionHistoryService.instance.getAll());
+      await _loadEntries();
     }
   }
 
@@ -98,9 +111,13 @@ class _ResultsHistoryPageState extends State<ResultsHistoryPage> {
       eyebrow: context.l10n.histEyebrow,
       scroll: false,
       padding: EdgeInsets.zero,
-      child: _entries.isEmpty
-          ? _EmptyState(onStart: () => Navigator.pop(context))
-          : ListView.separated(
+      child: _loadingEntries
+          // Sans cet état, l'écran « aucun résultat » clignoterait le temps de
+          // lire l'historique du passe courant.
+          ? const Center(child: CircularProgressIndicator())
+          : _entries.isEmpty
+              ? _EmptyState(onStart: () => Navigator.pop(context))
+              : ListView.separated(
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
               // Une carte « missions » en tête de liste tant que verrouillé.
               itemCount: _entries.length + (_locked ? 1 : 0),

@@ -5,11 +5,21 @@
 // Utilise la box Hive 'session_history' (chiffrée avec la même clé AES que sell).
 
 import 'dart:convert';
+import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:hive_flutter/hive_flutter.dart';
+
+import '../core/services/auth_local_store.dart';
+import '../core/services/token_account.dart';
 
 /// Un résumé de session sauvegardé dans l'historique.
 class SessionHistoryEntry {
   final String id;
+
+  /// Identité du passe (TokenAccount) qui a produit ce résultat. `null` pour
+  /// les entrées écrites avant l'introduction du tampon : impossible de
+  /// deviner leur propriétaire, elles ne sont donc affichées à PERSONNE
+  /// (fail-closed — cf. getAll()).
+  final String? account;
   final DateTime date;
   final int ageInMonths;
   final int fsiq;
@@ -22,6 +32,7 @@ class SessionHistoryEntry {
 
   const SessionHistoryEntry({
     required this.id,
+    this.account,
     required this.date,
     required this.ageInMonths,
     required this.fsiq,
@@ -35,6 +46,7 @@ class SessionHistoryEntry {
 
   Map<String, dynamic> toMap() => {
         'id': id,
+        if (account != null) 'account': account,
         'date': date.toIso8601String(),
         'ageInMonths': ageInMonths,
         'fsiq': fsiq,
@@ -46,9 +58,25 @@ class SessionHistoryEntry {
         'classification': classification,
       };
 
+  /// Copie tamponnée avec l'identité du passe [account].
+  SessionHistoryEntry withAccount(String? account) => SessionHistoryEntry(
+        id: id,
+        account: account,
+        date: date,
+        ageInMonths: ageInMonths,
+        fsiq: fsiq,
+        vci: vci,
+        vsi: vsi,
+        fri: fri,
+        wmi: wmi,
+        psi: psi,
+        classification: classification,
+      );
+
   static SessionHistoryEntry fromMap(Map<dynamic, dynamic> map) =>
       SessionHistoryEntry(
         id: map['id'] as String,
+        account: map['account'] as String?,
         date: DateTime.parse(map['date'] as String),
         ageInMonths: map['ageInMonths'] as int,
         fsiq: map['fsiq'] as int,
@@ -84,14 +112,54 @@ class SessionHistoryService {
     assert(_initialized, 'SessionHistoryService.initialize() n\'a pas été appelé.');
   }
 
-  /// Sauvegarde un résultat de session dans l'historique.
+  /// Sauvegarde un résultat de session dans l'historique, TAMPONNÉ avec
+  /// l'identité du passe courant (voir [SessionHistoryEntry.account]).
+  /// Le tampon fourni dans [entry] prime (utile aux tests) ; sinon il est
+  /// dérivé du token local.
   Future<void> saveEntry(SessionHistoryEntry entry) async {
     _assertReady();
-    await _box!.put(entry.id, jsonEncode(entry.toMap()));
+    final stamped = entry.account != null
+        ? entry
+        : entry.withAccount(await currentAccount());
+    await _box!.put(stamped.id, jsonEncode(stamped.toMap()));
   }
 
-  /// Retourne toutes les entrées, triées du plus récent au plus ancien.
-  List<SessionHistoryEntry> getAll() {
+  /// Identité du passe actuellement connecté, ou `null` si aucun token.
+  ///
+  /// Ne propage jamais d'exception : un incident de lecture du passe ne doit
+  /// ni faire perdre un résultat à l'écriture, ni révéler l'historique d'un
+  /// autre passe à la lecture (null ⇒ liste vide, fail-closed).
+  Future<String?> currentAccount() async {
+    try {
+      return await TokenAccount.fromToken(
+          await AuthLocalStore.instance.getToken());
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Résultats DU PASSE COURANT uniquement, du plus récent au plus ancien.
+  ///
+  /// Fail-closed : sans passe connecté, ou pour les entrées non tamponnées
+  /// (antérieures au tampon, propriétaire inconnu), rien n'est renvoyé — un
+  /// résultat n'est jamais montré à un passe qui ne l'a pas produit.
+  Future<List<SessionHistoryEntry>> getAllForCurrentAccount() async =>
+      entriesForAccount(await currentAccount());
+
+  /// Résultats appartenant à [account]. `account == null` (aucun passe) →
+  /// liste vide ; les entrées non tamponnées ne matchent jamais un compte
+  /// réel, donc restent invisibles.
+  List<SessionHistoryEntry> entriesForAccount(String? account) {
+    if (account == null) return const [];
+    return _decodeAll().where((e) => e.account == account).toList();
+  }
+
+  /// Toutes les entrées stockées, tous passes confondus (maintenance/tests).
+  /// L'UI doit utiliser [getAllForCurrentAccount].
+  @visibleForTesting
+  List<SessionHistoryEntry> getAll() => _decodeAll();
+
+  List<SessionHistoryEntry> _decodeAll() {
     _assertReady();
     final entries = <SessionHistoryEntry>[];
     for (final value in _box!.values) {
