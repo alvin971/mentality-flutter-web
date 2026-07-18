@@ -9,9 +9,13 @@
  *
  * Endpoints (auth = header X-Mentality-Token, signature Ed25519 re-vérifiée
  * serveur via workers/_shared/token_verify.js — cf. r2-upload) :
- *   POST /progress/init   → crée l'état (idempotent) ; si body.referrerCode
- *                           présent, valide le parrainage (le filleul vient de
- *                           FINIR son test → compté comme complété).
+ *   POST /link            → lie ce token à un parrain (appelé par le site à la
+ *                           CRÉATION du passe : le filleul arrive via
+ *                           /inscription?ref=<code>, liaison invisible).
+ *                           NE crédite PAS la complétion.
+ *   POST /progress/init   → crée l'état (idempotent) ; crédite la complétion
+ *                           du filleul (son test vient de FINIR) d'après le
+ *                           lien /link, ou body.referrerCode (legacy app).
  *   GET  /progress        → état courant + transitions de stage (autorité
  *                           serveur, jamais le client).
  *   POST /instagram       → enregistre le pseudo (palier parrainage requis).
@@ -23,7 +27,9 @@
  * Modèle de clés KV :
  *   progress:<account>        → JSON de l'état du parrain (voir emptyProgress)
  *   code:<referralCode>       → <account> propriétaire du code (unicité + resolve)
- *   referee:<account>         → <referrerCode> (écrit UNE fois : 1 filleul = 1 parrain)
+ *   referee:<account>         → <referrerCode> (écrit UNE fois : 1 filleul = 1
+ *                               parrain — via /link à la création du passe, ou
+ *                               /progress/init legacy)
  *   ref:<referrerCode>:<acct> → timestamp ISO (une entrée = un filleul ayant fini)
  *
  * ANONYMAT : seule la partition account = SHA256(nonce)[:32] est stockée —
@@ -38,10 +44,13 @@ const ALLOWED_ORIGINS = [
   'https://mental-et.com',
   'https://www.mental-et.com',
   'https://mental-et-web.pages.dev',
+  'https://mental-et.pages.dev',
   // Historique (app web retirée, liens d'invitation déjà partagés) :
   'https://mentality-flutter-web.pages.dev',
   'http://localhost:7357',
   'http://localhost:8080',
+  'http://localhost:4321',
+  'http://127.0.0.1:4321',
 ];
 
 export default {
@@ -74,6 +83,13 @@ export default {
     const account = (await sha256hex(nonce)).slice(0, 32);
 
     try {
+      if (request.method === 'POST' && path === '/link') {
+        let body;
+        try { body = await request.json(); } catch {
+          return json({ error: 'Corps JSON invalide' }, 400, origin);
+        }
+        return await handleLink(env, origin, account, body);
+      }
       if (request.method === 'POST' && path === '/progress/init') {
         let body = {};
         try { body = await request.json(); } catch { /* corps vide toléré */ }
@@ -168,10 +184,34 @@ async function countCompletedReferrals(env, code) {
 }
 
 /**
+ * POST /link — lie DÉFINITIVEMENT ce token à un parrain (1 filleul = 1 parrain,
+ * premier lien gagnant). Appelé par le site à la création du passe : le filleul
+ * est arrivé via /inscription?ref=<code>, la liaison est invisible pour lui.
+ * Ne crédite JAMAIS la complétion (le test n'est pas passé) — c'est
+ * /progress/init, à la fin du test, qui transforme le lien en crédit.
+ */
+async function handleLink(env, origin, account, body) {
+  const code = typeof body.referrerCode === 'string'
+    ? body.referrerCode.trim().toLowerCase()
+    : '';
+  if (!/^[a-z0-9]{8}$/.test(code)) {
+    return json({ linked: false, error: 'Code invalide' }, 400, origin);
+  }
+  const existing = await env.REFERRAL_KV.get(`referee:${account}`);
+  if (existing) return json({ linked: existing === code }, 200, origin);
+  const owner = await env.REFERRAL_KV.get(`code:${code}`);
+  // Code inconnu ou auto-parrainage : réponse 200 neutre (rien à exploiter).
+  if (!owner || owner === account) return json({ linked: false }, 200, origin);
+  await env.REFERRAL_KV.put(`referee:${account}`, code);
+  return json({ linked: true }, 200, origin);
+}
+
+/**
  * POST /progress/init — appelé à la FIN du test complet.
  * Idempotent : ne recrée jamais l'état, renvoie l'état courant.
- * Si referrerCode est fourni (arrivée via lien d'invitation), c'est le moment
- * où le filleul VALIDE son parrain : son test vient d'être terminé.
+ * C'est ici que la COMPLÉTION du filleul est créditée à son parrain : le lien
+ * vient de /link (création du passe sur le site) ou, legacy, de
+ * body.referrerCode (ancien champ code de l'app / landing /invite).
  */
 async function handleInit(env, origin, account, body) {
   const nowIso = isoNow();
@@ -183,20 +223,28 @@ async function handleInit(env, origin, account, body) {
     await env.REFERRAL_KV.put(`code:${code}`, account);
   }
 
-  // Validation du parrainage : une seule fois (referee:<account> écrit une
-  // fois), jamais soi-même, et le code doit exister.
-  const refCode = typeof body.referrerCode === 'string'
-    ? body.referrerCode.trim().toLowerCase()
-    : '';
-  if (/^[a-z0-9]{8}$/.test(refCode) && refCode !== row.referralCode) {
-    const already = await env.REFERRAL_KV.get(`referee:${account}`);
-    if (!already) {
-      const parentAccount = await env.REFERRAL_KV.get(`code:${refCode}`);
+  // 1) Lien de parrainage : d'abord celui établi à la création du passe…
+  let refCode = await env.REFERRAL_KV.get(`referee:${account}`);
+  // …sinon le code fourni dans le corps (legacy) : une seule fois, jamais
+  // soi-même, et le code doit exister.
+  if (!refCode) {
+    const bodyCode = typeof body.referrerCode === 'string'
+      ? body.referrerCode.trim().toLowerCase()
+      : '';
+    if (/^[a-z0-9]{8}$/.test(bodyCode) && bodyCode !== row.referralCode) {
+      const parentAccount = await env.REFERRAL_KV.get(`code:${bodyCode}`);
       if (parentAccount && parentAccount !== account) {
-        await env.REFERRAL_KV.put(`referee:${account}`, refCode);
-        await env.REFERRAL_KV.put(`ref:${refCode}:${account}`, nowIso);
+        refCode = bodyCode;
+        await env.REFERRAL_KV.put(`referee:${account}`, bodyCode);
       }
     }
+  }
+
+  // 2) Crédit de la complétion (le test du filleul vient de se terminer),
+  //    en préservant l'horodatage de la première complétion.
+  if (refCode && refCode !== row.referralCode) {
+    const done = await env.REFERRAL_KV.get(`ref:${refCode}:${account}`);
+    if (!done) await env.REFERRAL_KV.put(`ref:${refCode}:${account}`, nowIso);
   }
 
   return buildProgressResponse(env, origin, row);

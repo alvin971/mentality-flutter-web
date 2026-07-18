@@ -87,11 +87,12 @@ class AppConstants {
   /// Nécessite aussi une [referralWorkerUrl] réelle pour être effectif.
   static const bool unlockGateEnabled = true;
 
-  /// Base des liens d'invitation partagés (route /invite?ref=<code>).
-  /// Pointe sur le site vitrine (l'app web publique a été retirée) : la page
-  /// affiche le code + les liens stores ; le filleul saisit le code à
-  /// l'inscription dans l'app mobile.
-  static const String inviteBaseUrl = 'https://mental-et.com/invite';
+  /// Base des liens d'invitation partagés (?ref=<code>).
+  /// Pointe directement sur la création du passe du site vitrine : le filleul
+  /// arrive, crée son passe et il est lié à son parrain AUTOMATIQUEMENT
+  /// (POST /link du worker referral) — aucun code à recopier. L'ancienne
+  /// route /invite du site redirige elle aussi vers /inscription?ref=.
+  static const String inviteBaseUrl = 'https://mental-et.com/inscription';
 
   /// Compte Instagram à suivre pour le dernier palier de déblocage.
   static const String instagramHandle = 'mental_e.t';

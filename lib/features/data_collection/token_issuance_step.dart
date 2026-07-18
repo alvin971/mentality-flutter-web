@@ -63,17 +63,9 @@ class _TokenIssuanceStepState extends State<TokenIssuanceStep> {
   bool _busy = false;
   bool _regionAutodetected = false;
 
-  /// Code d'invitation (parrainage) — facultatif. En mobile-only il n'y a
-  /// plus de landing web qui mémorise le `?ref=` : le filleul saisit le code
-  /// affiché sur mental-et.com/invite. Format : 8 caractères [a-z0-9].
-  final _inviteCodeController = TextEditingController();
-  static final _inviteCodeRe = RegExp(r'^[a-z0-9]{8}$');
-
-  @override
-  void dispose() {
-    _inviteCodeController.dispose();
-    super.dispose();
-  }
+  // Le parrainage n'a plus de champ code : le filleul crée son passe sur
+  // mental-et.com/inscription?ref=<code> et la liaison est automatique
+  // (worker referral POST /link). L'app ne fait que restaurer le token.
 
   @override
   void initState() {
@@ -117,12 +109,6 @@ class _TokenIssuanceStepState extends State<TokenIssuanceStep> {
       // on ne persiste qu'un token confirmé.
       final token = await TokenIssuer.issue(demo);
       await AuthLocalStore.instance.saveToken(token);
-      // Code d'invitation saisi ? Mémorisé localement, consommé par
-      // UnlockService.initProgress() à la fin du test (pipeline existant).
-      final inviteCode = _inviteCodeController.text.trim().toLowerCase();
-      if (_inviteCodeRe.hasMatch(inviteCode)) {
-        await AuthLocalStore.instance.savePendingReferrerCode(inviteCode);
-      }
       if (!mounted) return;
       setState(() => _issuedToken = token);
     } catch (e) {
@@ -275,33 +261,6 @@ class _TokenIssuanceStepState extends State<TokenIssuanceStep> {
                   ),
                 ),
               ],
-            ),
-          ],
-          SizedBox(height: 16.h),
-
-          // Code d'invitation (parrainage) — facultatif
-          _label('Code d’invitation (facultatif)'),
-          SizedBox(height: 8.h),
-          TextField(
-            controller: _inviteCodeController,
-            maxLength: 8,
-            autocorrect: false,
-            enableSuggestions: false,
-            textInputAction: TextInputAction.done,
-            decoration: _dropdownDecoration('Ex. a1b2c3d4 — si un ami t’a invité')
-                .copyWith(counterText: ''),
-            onChanged: (_) => setState(() {}),
-          ),
-          if (_inviteCodeController.text.trim().isNotEmpty &&
-              !_inviteCodeRe.hasMatch(
-                  _inviteCodeController.text.trim().toLowerCase())) ...[
-            SizedBox(height: 4.h),
-            Text(
-              'Format attendu : 8 lettres/chiffres.',
-              style: TextStyle(
-                  fontSize: 11.sp,
-                  color: Theme.of(context).colorScheme.outline,
-                  fontStyle: FontStyle.italic),
             ),
           ],
           SizedBox(height: 32.h),
