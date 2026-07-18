@@ -1,29 +1,112 @@
+import 'dart:math';
+
 /// Générateur de séquences pour Mémoire des Chiffres (Digit Span - WAIS-IV)
 /// 3 parties : Empan Direct, Empan Inverse, Séquençage
 /// Mesure la mémoire de travail, l'attention auditive et le contrôle exécutif
+///
+/// Les séquences sont générées aléatoirement à chaque passation (contrairement
+/// aux banques déterministes des autres sous-tests : ici, des items fixes
+/// seraient mémorisables et fausseraient les repassations). La difficulté est
+/// portée par la longueur, pas par le contenu, donc le theta par longueur
+/// reste valide. Contraintes de qualité : chiffres 1-9 tous distincts, pas de
+/// suite de 3 chiffres consécutifs (ex. 3-4-5), et pour le séquençage la
+/// séquence présentée n'est jamais déjà triée.
 class DigitSpanGenerator {
+  final Random _random;
   final List<DigitSpanItem> _forwardItems = [];
   final List<DigitSpanItem> _backwardItems = [];
   final List<DigitSpanItem> _sequencingItems = [];
 
-  DigitSpanGenerator() {
+  /// [seed] est optionnel et n'est destiné qu'aux tests/diagnostics.
+  DigitSpanGenerator({int? seed}) : _random = Random(seed) {
     _initializeAllItems();
   }
 
-  /// Initialise TOUTES les séquences (46 items au total)
+  /// Génère TOUTES les séquences (46 items au total)
   void _initializeAllItems() {
     _forwardItems.clear();
     _backwardItems.clear();
     _sequencingItems.clear();
 
     // Partie A : Empan Direct (2-9 chiffres, 2 essais chacun = 16 items)
-    _forwardItems.addAll(_createForwardItems());
+    _forwardItems.addAll(_createItems(
+      type: SpanType.forward,
+      lengths: const [2, 3, 4, 5, 6, 7, 8, 9],
+      thetaByLength: const {
+        2: -2.0, 3: -1.5, 4: -1.0, 5: -0.5,
+        6: 0.0, 7: 0.5, 8: 1.0, 9: 1.5,
+      },
+    ));
 
     // Partie B : Empan Inverse (2-8 chiffres, 2 essais chacun = 14 items)
-    _backwardItems.addAll(_createBackwardItems());
+    _backwardItems.addAll(_createItems(
+      type: SpanType.backward,
+      lengths: const [2, 3, 4, 5, 6, 7, 8],
+      thetaByLength: const {
+        2: -1.5, 3: -1.0, 4: -0.5, 5: 0.0,
+        6: 0.5, 7: 1.0, 8: 1.5,
+      },
+    ));
 
     // Partie C : Séquençage (2-9 chiffres, 2 essais chacun = 16 items)
-    _sequencingItems.addAll(_createSequencingItems());
+    _sequencingItems.addAll(_createItems(
+      type: SpanType.sequencing,
+      lengths: const [2, 3, 4, 5, 6, 7, 8, 9],
+      thetaByLength: const {
+        2: -1.5, 3: -1.0, 4: -0.5, 5: 0.0,
+        6: 0.5, 7: 1.0, 8: 1.5, 9: 2.0,
+      },
+    ));
+  }
+
+  List<DigitSpanItem> _createItems({
+    required SpanType type,
+    required List<int> lengths,
+    required Map<int, double> thetaByLength,
+  }) {
+    final items = <DigitSpanItem>[];
+    for (final length in lengths) {
+      for (int trial = 1; trial <= 2; trial++) {
+        items.add(DigitSpanItem(
+          sequence: _generateSequence(length, type),
+          length: length,
+          trial: trial,
+          type: type,
+          thetaValue: thetaByLength[length]!,
+        ));
+      }
+    }
+    return items;
+  }
+
+  /// Tire une séquence de [length] chiffres distincts (1-9) satisfaisant les
+  /// contraintes de qualité.
+  List<int> _generateSequence(int length, SpanType type) {
+    while (true) {
+      final digits = [1, 2, 3, 4, 5, 6, 7, 8, 9]..shuffle(_random);
+      final sequence = digits.sublist(0, length);
+      if (_hasConsecutiveRun(sequence)) continue;
+      if (type == SpanType.sequencing && _isSorted(sequence)) continue;
+      return sequence;
+    }
+  }
+
+  /// Vrai si la séquence contient 3 chiffres consécutifs (montants ou
+  /// descendants, ex. 3-4-5 ou 7-6-5) — trop faciles à retenir.
+  bool _hasConsecutiveRun(List<int> sequence) {
+    for (int i = 0; i + 2 < sequence.length; i++) {
+      final d1 = sequence[i + 1] - sequence[i];
+      final d2 = sequence[i + 2] - sequence[i + 1];
+      if ((d1 == 1 && d2 == 1) || (d1 == -1 && d2 == -1)) return true;
+    }
+    return false;
+  }
+
+  bool _isSorted(List<int> sequence) {
+    for (int i = 0; i + 1 < sequence.length; i++) {
+      if (sequence[i] > sequence[i + 1]) return false;
+    }
+    return true;
   }
 
   /// Retourne les items de la partie Forward
@@ -35,388 +118,6 @@ class DigitSpanGenerator {
   /// Retourne les items de la partie Sequencing
   List<DigitSpanItem> getSequencingItems() => List.from(_sequencingItems);
 
-  // ========== PARTIE A : EMPAN DIRECT (Forward) ==========
-  List<DigitSpanItem> _createForwardItems() {
-    return [
-      // Longueur 2 (2 essais)
-      DigitSpanItem(
-        sequence: [5, 8],
-        length: 2,
-        trial: 1,
-        type: SpanType.forward,
-        thetaValue: -2.0,
-      ),
-      DigitSpanItem(
-        sequence: [6, 3],
-        length: 2,
-        trial: 2,
-        type: SpanType.forward,
-        thetaValue: -2.0,
-      ),
-
-      // Longueur 3 (2 essais)
-      DigitSpanItem(
-        sequence: [5, 8, 2],
-        length: 3,
-        trial: 1,
-        type: SpanType.forward,
-        thetaValue: -1.5,
-      ),
-      DigitSpanItem(
-        sequence: [6, 9, 4],
-        length: 3,
-        trial: 2,
-        type: SpanType.forward,
-        thetaValue: -1.5,
-      ),
-
-      // Longueur 4 (2 essais)
-      DigitSpanItem(
-        sequence: [7, 2, 8, 6],
-        length: 4,
-        trial: 1,
-        type: SpanType.forward,
-        thetaValue: -1.0,
-      ),
-      DigitSpanItem(
-        sequence: [4, 9, 3, 1],
-        length: 4,
-        trial: 2,
-        type: SpanType.forward,
-        thetaValue: -1.0,
-      ),
-
-      // Longueur 5 (2 essais)
-      DigitSpanItem(
-        sequence: [3, 8, 2, 9, 5],
-        length: 5,
-        trial: 1,
-        type: SpanType.forward,
-        thetaValue: -0.5,
-      ),
-      DigitSpanItem(
-        sequence: [7, 1, 4, 9, 3],
-        length: 5,
-        trial: 2,
-        type: SpanType.forward,
-        thetaValue: -0.5,
-      ),
-
-      // Longueur 6 (2 essais)
-      DigitSpanItem(
-        sequence: [5, 9, 1, 7, 4, 2],
-        length: 6,
-        trial: 1,
-        type: SpanType.forward,
-        thetaValue: 0.0,
-      ),
-      DigitSpanItem(
-        sequence: [4, 1, 7, 9, 3, 8],
-        length: 6,
-        trial: 2,
-        type: SpanType.forward,
-        thetaValue: 0.0,
-      ),
-
-      // Longueur 7 (2 essais)
-      DigitSpanItem(
-        sequence: [5, 8, 2, 9, 1, 6, 4],
-        length: 7,
-        trial: 1,
-        type: SpanType.forward,
-        thetaValue: 0.5,
-      ),
-      DigitSpanItem(
-        sequence: [3, 9, 2, 4, 8, 7, 1],
-        length: 7,
-        trial: 2,
-        type: SpanType.forward,
-        thetaValue: 0.5,
-      ),
-
-      // Longueur 8 (2 essais)
-      DigitSpanItem(
-        sequence: [5, 9, 1, 7, 4, 2, 8, 3],
-        length: 8,
-        trial: 1,
-        type: SpanType.forward,
-        thetaValue: 1.0,
-      ),
-      DigitSpanItem(
-        sequence: [3, 8, 2, 9, 5, 1, 7, 4],
-        length: 8,
-        trial: 2,
-        type: SpanType.forward,
-        thetaValue: 1.0,
-      ),
-
-      // Longueur 9 (2 essais)
-      DigitSpanItem(
-        sequence: [2, 7, 5, 8, 6, 3, 1, 9, 4],
-        length: 9,
-        trial: 1,
-        type: SpanType.forward,
-        thetaValue: 1.5,
-      ),
-      DigitSpanItem(
-        sequence: [7, 1, 3, 9, 4, 2, 5, 6, 8],
-        length: 9,
-        trial: 2,
-        type: SpanType.forward,
-        thetaValue: 1.5,
-      ),
-    ];
-  }
-
-  // ========== PARTIE B : EMPAN INVERSE (Backward) ==========
-  List<DigitSpanItem> _createBackwardItems() {
-    return [
-      // Longueur 2 (2 essais)
-      DigitSpanItem(
-        sequence: [2, 4],
-        length: 2,
-        trial: 1,
-        type: SpanType.backward,
-        thetaValue: -1.5,
-      ),
-      DigitSpanItem(
-        sequence: [5, 7],
-        length: 2,
-        trial: 2,
-        type: SpanType.backward,
-        thetaValue: -1.5,
-      ),
-
-      // Longueur 3 (2 essais)
-      DigitSpanItem(
-        sequence: [6, 2, 9],
-        length: 3,
-        trial: 1,
-        type: SpanType.backward,
-        thetaValue: -1.0,
-      ),
-      DigitSpanItem(
-        sequence: [4, 1, 5],
-        length: 3,
-        trial: 2,
-        type: SpanType.backward,
-        thetaValue: -1.0,
-      ),
-
-      // Longueur 4 (2 essais)
-      DigitSpanItem(
-        sequence: [3, 9, 1, 6],
-        length: 4,
-        trial: 1,
-        type: SpanType.backward,
-        thetaValue: -0.5,
-      ),
-      DigitSpanItem(
-        sequence: [7, 4, 2, 8],
-        length: 4,
-        trial: 2,
-        type: SpanType.backward,
-        thetaValue: -0.5,
-      ),
-
-      // Longueur 5 (2 essais)
-      DigitSpanItem(
-        sequence: [1, 5, 2, 8, 6],
-        length: 5,
-        trial: 1,
-        type: SpanType.backward,
-        thetaValue: 0.0,
-      ),
-      DigitSpanItem(
-        sequence: [6, 1, 9, 4, 7],
-        length: 5,
-        trial: 2,
-        type: SpanType.backward,
-        thetaValue: 0.0,
-      ),
-
-      // Longueur 6 (2 essais)
-      DigitSpanItem(
-        sequence: [5, 3, 9, 4, 1, 8],
-        length: 6,
-        trial: 1,
-        type: SpanType.backward,
-        thetaValue: 0.5,
-      ),
-      DigitSpanItem(
-        sequence: [7, 2, 4, 8, 5, 9],
-        length: 6,
-        trial: 2,
-        type: SpanType.backward,
-        thetaValue: 0.5,
-      ),
-
-      // Longueur 7 (2 essais)
-      DigitSpanItem(
-        sequence: [8, 1, 2, 9, 3, 6, 5],
-        length: 7,
-        trial: 1,
-        type: SpanType.backward,
-        thetaValue: 1.0,
-      ),
-      DigitSpanItem(
-        sequence: [4, 7, 3, 9, 1, 2, 8],
-        length: 7,
-        trial: 2,
-        type: SpanType.backward,
-        thetaValue: 1.0,
-      ),
-
-      // Longueur 8 (2 essais)
-      DigitSpanItem(
-        sequence: [9, 4, 3, 7, 6, 2, 5, 8],
-        length: 8,
-        trial: 1,
-        type: SpanType.backward,
-        thetaValue: 1.5,
-      ),
-      DigitSpanItem(
-        sequence: [7, 2, 8, 1, 9, 6, 5, 3],
-        length: 8,
-        trial: 2,
-        type: SpanType.backward,
-        thetaValue: 1.5,
-      ),
-    ];
-  }
-
-  // ========== PARTIE C : SÉQUENÇAGE (Sequencing) ==========
-  List<DigitSpanItem> _createSequencingItems() {
-    return [
-      // Longueur 2 (2 essais)
-      DigitSpanItem(
-        sequence: [8, 3],
-        length: 2,
-        trial: 1,
-        type: SpanType.sequencing,
-        thetaValue: -1.5,
-      ),
-      DigitSpanItem(
-        sequence: [5, 1],
-        length: 2,
-        trial: 2,
-        type: SpanType.sequencing,
-        thetaValue: -1.5,
-      ),
-
-      // Longueur 3 (2 essais)
-      DigitSpanItem(
-        sequence: [7, 2, 9],
-        length: 3,
-        trial: 1,
-        type: SpanType.sequencing,
-        thetaValue: -1.0,
-      ),
-      DigitSpanItem(
-        sequence: [4, 8, 1],
-        length: 3,
-        trial: 2,
-        type: SpanType.sequencing,
-        thetaValue: -1.0,
-      ),
-
-      // Longueur 4 (2 essais)
-      DigitSpanItem(
-        sequence: [7, 2, 8, 6],
-        length: 4,
-        trial: 1,
-        type: SpanType.sequencing,
-        thetaValue: -0.5,
-      ),
-      DigitSpanItem(
-        sequence: [5, 9, 1, 3],
-        length: 4,
-        trial: 2,
-        type: SpanType.sequencing,
-        thetaValue: -0.5,
-      ),
-
-      // Longueur 5 (2 essais)
-      DigitSpanItem(
-        sequence: [6, 1, 9, 4, 7],
-        length: 5,
-        trial: 1,
-        type: SpanType.sequencing,
-        thetaValue: 0.0,
-      ),
-      DigitSpanItem(
-        sequence: [3, 8, 2, 9, 5],
-        length: 5,
-        trial: 2,
-        type: SpanType.sequencing,
-        thetaValue: 0.0,
-      ),
-
-      // Longueur 6 (2 essais)
-      DigitSpanItem(
-        sequence: [5, 9, 1, 7, 4, 2],
-        length: 6,
-        trial: 1,
-        type: SpanType.sequencing,
-        thetaValue: 0.5,
-      ),
-      DigitSpanItem(
-        sequence: [8, 3, 6, 1, 9, 4],
-        length: 6,
-        trial: 2,
-        type: SpanType.sequencing,
-        thetaValue: 0.5,
-      ),
-
-      // Longueur 7 (2 essais)
-      DigitSpanItem(
-        sequence: [4, 7, 3, 9, 1, 2, 8],
-        length: 7,
-        trial: 1,
-        type: SpanType.sequencing,
-        thetaValue: 1.0,
-      ),
-      DigitSpanItem(
-        sequence: [6, 1, 8, 4, 3, 9, 5],
-        length: 7,
-        trial: 2,
-        type: SpanType.sequencing,
-        thetaValue: 1.0,
-      ),
-
-      // Longueur 8 (2 essais)
-      DigitSpanItem(
-        sequence: [9, 4, 3, 7, 6, 2, 5, 8],
-        length: 8,
-        trial: 1,
-        type: SpanType.sequencing,
-        thetaValue: 1.5,
-      ),
-      DigitSpanItem(
-        sequence: [5, 8, 1, 3, 9, 6, 2, 7],
-        length: 8,
-        trial: 2,
-        type: SpanType.sequencing,
-        thetaValue: 1.5,
-      ),
-
-      // Longueur 9 (2 essais)
-      DigitSpanItem(
-        sequence: [2, 7, 5, 8, 6, 3, 1, 9, 4],
-        length: 9,
-        trial: 1,
-        type: SpanType.sequencing,
-        thetaValue: 2.0,
-      ),
-      DigitSpanItem(
-        sequence: [7, 1, 3, 9, 4, 2, 5, 6, 8],
-        length: 9,
-        trial: 2,
-        type: SpanType.sequencing,
-        thetaValue: 2.0,
-      ),
-    ];
-  }
 }
 
 // ========== MODÈLES DE DONNÉES ==========
