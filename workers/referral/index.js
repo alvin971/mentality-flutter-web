@@ -13,9 +13,11 @@
  *                           CRÉATION du passe : le filleul arrive via
  *                           /inscription?ref=<code>, liaison invisible).
  *                           NE crédite PAS la complétion.
- *   POST /progress/init   → crée l'état (idempotent) ; crédite la complétion
- *                           du filleul (son test vient de FINIR) d'après le
- *                           lien /link, ou body.referrerCode (legacy app).
+ *   POST /progress/init   → crée l'état (idempotent). NE CRÉDITE RIEN : ouvrir
+ *                           un écran ne doit jamais valider un parrainage.
+ *   POST /complete        → SEULE porte de crédit : déclare le test terminé
+ *                           (charge utile de session vérifiée pour plausibilité)
+ *                           → crédite le parrain issu de /link. Idempotent.
  *   GET  /progress        → état courant + transitions de stage (autorité
  *                           serveur, jamais le client).
  *   POST /instagram       → enregistre le pseudo (palier parrainage requis).
@@ -31,6 +33,7 @@
  *                               parrain — via /link à la création du passe, ou
  *                               /progress/init legacy)
  *   ref:<referrerCode>:<acct> → timestamp ISO (une entrée = un filleul ayant fini)
+ *   completed:<account>       → JSON de la preuve de complétion (1re fois gagne)
  *
  * ANONYMAT : seule la partition account = SHA256(nonce)[:32] est stockée —
  * aucune donnée personnelle hormis le pseudo Instagram fourni volontairement.
@@ -94,6 +97,13 @@ export default {
         let body = {};
         try { body = await request.json(); } catch { /* corps vide toléré */ }
         return await handleInit(env, origin, account, body);
+      }
+      if (request.method === 'POST' && path === '/complete') {
+        let body;
+        try { body = await request.json(); } catch {
+          return json({ error: 'Corps JSON invalide' }, 400, origin);
+        }
+        return await handleComplete(env, origin, account, body);
       }
       if (request.method === 'GET' && path === '/progress') {
         return await handleProgress(env, origin, account);
@@ -207,11 +217,11 @@ async function handleLink(env, origin, account, body) {
 }
 
 /**
- * POST /progress/init — appelé à la FIN du test complet.
- * Idempotent : ne recrée jamais l'état, renvoie l'état courant.
- * C'est ici que la COMPLÉTION du filleul est créditée à son parrain : le lien
- * vient de /link (création du passe sur le site) ou, legacy, de
- * body.referrerCode (ancien champ code de l'app / landing /invite).
+ * POST /progress/init — crée l'état de suivi (idempotent) et enregistre, le cas
+ * échéant, le lien de parrainage legacy (`body.referrerCode`, anciennes builds
+ * sans /link). NE CRÉDITE JAMAIS : cet endpoint est appelé par le simple
+ * AFFICHAGE de l'écran des missions, et ouvrir un écran ne doit pas valider un
+ * parrainage. Le crédit passe exclusivement par /complete.
  */
 async function handleInit(env, origin, account, body) {
   const nowIso = isoNow();
@@ -223,28 +233,67 @@ async function handleInit(env, origin, account, body) {
     await env.REFERRAL_KV.put(`code:${code}`, account);
   }
 
-  // 1) Lien de parrainage : d'abord celui établi à la création du passe…
-  let refCode = await env.REFERRAL_KV.get(`referee:${account}`);
-  // …sinon le code fourni dans le corps (legacy) : une seule fois, jamais
-  // soi-même, et le code doit exister.
-  if (!refCode) {
+  // Lien legacy (build sans /link) : on LIE, on ne crédite pas.
+  const existing = await env.REFERRAL_KV.get(`referee:${account}`);
+  if (!existing) {
     const bodyCode = typeof body.referrerCode === 'string'
       ? body.referrerCode.trim().toLowerCase()
       : '';
     if (/^[a-z0-9]{8}$/.test(bodyCode) && bodyCode !== row.referralCode) {
       const parentAccount = await env.REFERRAL_KV.get(`code:${bodyCode}`);
       if (parentAccount && parentAccount !== account) {
-        refCode = bodyCode;
         await env.REFERRAL_KV.put(`referee:${account}`, bodyCode);
       }
     }
   }
 
-  // 2) Crédit de la complétion (le test du filleul vient de se terminer),
-  //    en préservant l'horodatage de la première complétion.
+  return buildProgressResponse(env, origin, row);
+}
+
+// Plausibilité d'une session de test complète. Un vrai passage dure ~60-90 min
+// et couvre les 12 sous-tests ; ces seuils écartent les déclarations grossières
+// (un écran ouvert, une session vide) sans pénaliser un passage rapide légitime.
+const MIN_SUBTESTS_COMPLETED = 10;
+const MIN_TEST_DURATION_S = 600; // 10 min plancher, très en dessous du réel
+
+/**
+ * POST /complete — SEULE porte par laquelle un parrainage est crédité.
+ *
+ * Le filleul déclare son test terminé avec un résumé de session, vérifié pour
+ * plausibilité. La preuve est stockée (`completed:<account>`, première fois
+ * gagnante) puis le parrain issu de /link est crédité — une seule fois.
+ *
+ * ⚠️ LIMITE ASSUMÉE : cette preuve reste DÉCLARÉE PAR LE CLIENT. Elle écarte la
+ * fraude opportuniste (ouvrir un écran, enchaîner des passes vides) mais pas un
+ * attaquant qui forge la requête. La preuve infalsifiable arrive avec le
+ * stockage serveur des résultats (R2/D1) : le crédit sera alors conditionné à
+ * l'EXISTENCE d'un résultat côté serveur. Cet endpoint est le point d'ancrage
+ * prévu pour ce durcissement.
+ */
+async function handleComplete(env, origin, account, body) {
+  const row = await getProgress(env, account);
+  if (!row) return json({ error: 'Aucun suivi — appeler /progress/init' }, 404, origin);
+
+  const already = await env.REFERRAL_KV.get(`completed:${account}`);
+  if (!already) {
+    const subtests = Number(body.subtestsCompleted);
+    const durationS = Number(body.durationSeconds);
+    if (!Number.isFinite(subtests) || subtests < MIN_SUBTESTS_COMPLETED ||
+        !Number.isFinite(durationS) || durationS < MIN_TEST_DURATION_S) {
+      return json({ error: 'Session non plausible', credited: false }, 400, origin);
+    }
+    await env.REFERRAL_KV.put(`completed:${account}`, JSON.stringify({
+      at: isoNow(),
+      subtests,
+      durationS,
+    }));
+  }
+
+  // Crédit du parrain — uniquement d'après le lien serveur, jamais le client.
+  const refCode = await env.REFERRAL_KV.get(`referee:${account}`);
   if (refCode && refCode !== row.referralCode) {
     const done = await env.REFERRAL_KV.get(`ref:${refCode}:${account}`);
-    if (!done) await env.REFERRAL_KV.put(`ref:${refCode}:${account}`, nowIso);
+    if (!done) await env.REFERRAL_KV.put(`ref:${refCode}:${account}`, isoNow());
   }
 
   return buildProgressResponse(env, origin, row);

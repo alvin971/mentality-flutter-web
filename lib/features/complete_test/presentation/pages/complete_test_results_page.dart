@@ -50,6 +50,20 @@ class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
       _iqScore = null;
     }
     _saveToHistory();
+    _declareCompletion();
+  }
+
+  /// Déclare la complétion au serveur — SEUL endroit qui crédite le parrain.
+  /// Ne doit jamais migrer vers l'écran des missions (celui-ci s'ouvre aussi
+  /// depuis « Mes résultats », où aucun test ne vient d'être passé).
+  Future<void> _declareCompletion() async {
+    if (!UnlockService.instance.gateEnabled) return;
+    final duration = widget.session.totalDuration ??
+        DateTime.now().difference(widget.session.startTime);
+    await UnlockService.instance.declareTestCompleted(
+      subtestsCompleted: widget.session.completedTestsCount,
+      durationSeconds: duration.inSeconds,
+    );
   }
 
   Future<void> _saveToHistory() async {

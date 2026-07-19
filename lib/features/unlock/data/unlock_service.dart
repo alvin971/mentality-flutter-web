@@ -114,6 +114,35 @@ class UnlockService {
     }
   }
 
+  /// Déclare au serveur que le test complet vient d'être TERMINÉ — seul appel
+  /// qui crédite le parrain du filleul.
+  ///
+  /// À n'appeler QUE depuis la fin réelle d'un test, jamais depuis un simple
+  /// affichage : ouvrir l'écran des missions ne doit pas valider un parrainage.
+  /// Le serveur vérifie la plausibilité de la session avant de créditer.
+  Future<UnlockProgress?> declareTestCompleted({
+    required int subtestsCompleted,
+    required int durationSeconds,
+  }) async {
+    final headers = await _authHeaders();
+    if (!isConfigured || headers == null) return null;
+    try {
+      final resp = await http.post(
+        Uri.parse('${AppConstants.referralWorkerUrl}/complete'),
+        headers: headers,
+        body: jsonEncode({
+          'subtestsCompleted': subtestsCompleted,
+          'durationSeconds': durationSeconds,
+        }),
+      );
+      if (resp.statusCode != 200) return null;
+      return _rememberIfUnlocked(UnlockProgress.fromJson(
+          jsonDecode(resp.body) as Map<String, dynamic>));
+    } catch (_) {
+      return null;
+    }
+  }
+
   /// État courant (les transitions de palier sont calculées côté serveur).
   Future<UnlockProgress?> getProgress() async {
     final headers = await _authHeaders();
