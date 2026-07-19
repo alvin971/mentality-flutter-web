@@ -2727,6 +2727,10 @@ class AppLocalizationsFr extends AppLocalizations {
       'Ton résultat est enregistré, mais il reste flouté tant que toutes les missions ne sont pas validées.';
 
   @override
+  String get histLockedBodyNoResult =>
+      'Tes missions et ton lien d\'invitation sont ici. Termine ton évaluation pour débloquer ton résultat.';
+
+  @override
   String get histLockedCta => 'Voir mes missions';
 
   @override

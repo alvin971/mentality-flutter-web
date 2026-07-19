@@ -2734,6 +2734,10 @@ class AppLocalizationsEs extends AppLocalizations {
       'Tu resultado está guardado, pero permanecerá difuminado hasta que todas las misiones estén validadas.';
 
   @override
+  String get histLockedBodyNoResult =>
+      'Tus misiones y tu enlace de invitación están aquí. Termina tu evaluación para desbloquear tu resultado.';
+
+  @override
   String get histLockedCta => 'Ver mis misiones';
 
   @override

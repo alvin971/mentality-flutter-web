@@ -4845,6 +4845,12 @@ abstract class AppLocalizations {
   /// **'Ton résultat est enregistré, mais il reste flouté tant que toutes les missions ne sont pas validées.'**
   String get histLockedBody;
 
+  /// No description provided for @histLockedBodyNoResult.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tes missions et ton lien d\'invitation sont ici. Termine ton évaluation pour débloquer ton résultat.'**
+  String get histLockedBodyNoResult;
+
   /// No description provided for @histLockedCta.
   ///
   /// In fr, this message translates to:

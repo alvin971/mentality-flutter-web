@@ -2719,6 +2719,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Your result is saved, but it stays blurred until every mission is validated.';
 
   @override
+  String get histLockedBodyNoResult =>
+      'Your missions and your invite link are here. Finish your assessment to unlock your result.';
+
+  @override
   String get histLockedCta => 'See my missions';
 
   @override
@@ -5446,6 +5450,10 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   @override
   String get histLockedBody =>
       'Your result is saved, but it stays blurred until every mission is validated.';
+
+  @override
+  String get histLockedBodyNoResult =>
+      'Your missions and your invite link are here. Finish your assessment to unlock your result.';
 
   @override
   String get histLockedCta => 'See my missions';

@@ -3765,6 +3765,7 @@
   "ugResultsHubNotice": "Tout se trouve dans « Mes résultats » : tes missions, ton lien d'invitation et ton résultat (flouté tant que toutes les missions ne sont pas validées). Tu peux quitter cette page et revenir quand tu veux.",
   "histLockedTitle": "Missions à valider",
   "histLockedBody": "Ton résultat est enregistré, mais il reste flouté tant que toutes les missions ne sont pas validées.",
+  "histLockedBodyNoResult": "Tes missions et ton lien d'invitation sont ici. Termine ton évaluation pour débloquer ton résultat.",
   "histLockedCta": "Voir mes missions",
   "inviteLandingTitle": "Invitation",
   "inviteLandingBody": "Un ami t'invite à passer le test de QI gratuit Mentality. En terminant ton test, tu obtiens ton propre résultat et tu aides ton ami à débloquer le sien.",

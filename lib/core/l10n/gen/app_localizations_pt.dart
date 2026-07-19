@@ -2730,6 +2730,10 @@ class AppLocalizationsPt extends AppLocalizations {
       'O teu resultado está guardado, mas fica desfocado até todas as missões serem validadas.';
 
   @override
+  String get histLockedBodyNoResult =>
+      'As tuas missões e o teu link de convite estão aqui. Termina a tua avaliação para desbloqueares o teu resultado.';
+
+  @override
   String get histLockedCta => 'Ver as minhas missões';
 
   @override

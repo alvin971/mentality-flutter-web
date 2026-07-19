@@ -790,6 +790,7 @@
   "ugResultsHubNotice": "Everything lives in “My results”: your missions, your invite link and your result (blurred until every mission is validated). You can leave this page and come back anytime.",
   "histLockedTitle": "Missions to complete",
   "histLockedBody": "Your result is saved, but it stays blurred until every mission is validated.",
+  "histLockedBodyNoResult": "Your missions and your invite link are here. Finish your assessment to unlock your result.",
   "histLockedCta": "See my missions",
   "inviteLandingTitle": "Invitation",
   "inviteLandingBody": "A friend invited you to take the free Mentality IQ test. By finishing your test, you get your own result and help your friend unlock theirs.",

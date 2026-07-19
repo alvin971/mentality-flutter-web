@@ -2738,6 +2738,10 @@ class AppLocalizationsDe extends AppLocalizations {
       'Dein Ergebnis ist gespeichert, bleibt aber unscharf, bis alle Missionen bestätigt sind.';
 
   @override
+  String get histLockedBodyNoResult =>
+      'Deine Missionen und dein Einladungslink sind hier. Schließe deine Auswertung ab, um dein Ergebnis freizuschalten.';
+
+  @override
   String get histLockedCta => 'Meine Missionen ansehen';
 
   @override

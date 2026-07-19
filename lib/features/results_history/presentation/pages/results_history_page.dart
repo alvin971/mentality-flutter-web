@@ -115,7 +115,10 @@ class _ResultsHistoryPageState extends State<ResultsHistoryPage> {
           // Sans cet état, l'écran « aucun résultat » clignoterait le temps de
           // lire l'historique du passe courant.
           ? const Center(child: CircularProgressIndicator())
-          : _entries.isEmpty
+          // Verrouillé ⇒ toujours la liste, même sans résultat : c'est le seul
+          // accès aux missions et au lien d'invitation. L'écran « aucun
+          // résultat » n'est montré que si rien n'est verrouillé.
+          : (_entries.isEmpty && !_locked)
               ? _EmptyState(onStart: () => Navigator.pop(context))
               : ListView.separated(
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
@@ -124,7 +127,10 @@ class _ResultsHistoryPageState extends State<ResultsHistoryPage> {
               separatorBuilder: (_, __) => SizedBox(height: 12.h),
               itemBuilder: (_, i) {
                 if (_locked && i == 0) {
-                  return _MissionsBanner(onOpen: _openMissions);
+                  return _MissionsBanner(
+                    onOpen: _openMissions,
+                    hasResults: _entries.isNotEmpty,
+                  );
                 }
                 final entry = _entries[_locked ? i - 1 : i];
                 return _EntryCard(
@@ -276,8 +282,12 @@ class _EntryCard extends StatelessWidget {
 /// toutes validées : rappelle pourquoi le résultat est flouté et ouvre le
 /// parcours de déblocage (lien d'invitation, progression, Instagram).
 class _MissionsBanner extends StatelessWidget {
-  const _MissionsBanner({required this.onOpen});
+  const _MissionsBanner({required this.onOpen, required this.hasResults});
   final VoidCallback onOpen;
+
+  /// Adapte le texte : parler d'un « résultat enregistré » serait faux quand
+  /// le passe courant n'a encore aucun résultat.
+  final bool hasResults;
 
   @override
   Widget build(BuildContext context) {
@@ -296,7 +306,12 @@ class _MissionsBanner extends StatelessWidget {
             ],
           ),
           SizedBox(height: 8.h),
-          Text(context.l10n.histLockedBody, style: AppText.bodySmall()),
+          Text(
+            hasResults
+                ? context.l10n.histLockedBody
+                : context.l10n.histLockedBodyNoResult,
+            style: AppText.bodySmall(),
+          ),
           SizedBox(height: 12.h),
           KeplerButton(
             label: context.l10n.histLockedCta,

@@ -790,6 +790,7 @@
   "ugResultsHubNotice": "Alles findest du unter „Meine Ergebnisse“: deine Missionen, deinen Einladungslink und dein Ergebnis (unscharf, bis alle Missionen bestätigt sind). Du kannst diese Seite jederzeit verlassen und später zurückkommen.",
   "histLockedTitle": "Offene Missionen",
   "histLockedBody": "Dein Ergebnis ist gespeichert, bleibt aber unscharf, bis alle Missionen bestätigt sind.",
+  "histLockedBodyNoResult": "Deine Missionen und dein Einladungslink sind hier. Schließe deine Auswertung ab, um dein Ergebnis freizuschalten.",
   "histLockedCta": "Meine Missionen ansehen",
   "inviteLandingTitle": "Einladung",
   "inviteLandingBody": "Ein Freund lädt dich zum kostenlosen Mentality-IQ-Test ein. Wenn du deinen Test abschließt, erhältst du dein eigenes Ergebnis und hilfst deinem Freund, seines freizuschalten.",

@@ -790,6 +790,7 @@
   "ugResultsHubNotice": "Todo está en «Mis resultados»: tus misiones, tu enlace de invitación y tu resultado (difuminado hasta que valides todas las misiones). Puedes salir de esta página y volver cuando quieras.",
   "histLockedTitle": "Misiones por validar",
   "histLockedBody": "Tu resultado está guardado, pero permanecerá difuminado hasta que todas las misiones estén validadas.",
+  "histLockedBodyNoResult": "Tus misiones y tu enlace de invitación están aquí. Termina tu evaluación para desbloquear tu resultado.",
   "histLockedCta": "Ver mis misiones",
   "inviteLandingTitle": "Invitación",
   "inviteLandingBody": "Un amigo te invita a hacer el test de CI gratuito de Mentality. Al terminar tu test, obtienes tu propio resultado y ayudas a tu amigo a desbloquear el suyo.",
