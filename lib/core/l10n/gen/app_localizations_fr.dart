@@ -2657,7 +2657,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get ugStep1Body =>
-      'Partage ton lien personnel avec 3 amis. Dès qu\'ils rejoignent le test avec ton lien, cette étape avance.';
+      'Partage ton lien personnel avec 3 amis. Cette étape avance quand ils TERMINENT leur test — pas seulement quand ils s\'inscrivent. Pense à les relancer.';
 
   @override
   String get ugCopyLink => 'Copier mon lien d\'invitation';
@@ -2667,7 +2667,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String ugInviteCounter(int joined, int required) {
-    return '$joined/$required amis ont rejoint avec ton lien';
+    return '$joined/$required amis ont terminé leur test';
   }
 
   @override
@@ -2714,6 +2714,18 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get ugInstaPending =>
       'Vérification de ton abonnement en cours… Ton résultat sera débloqué d\'ici quelques heures. Tu peux fermer cette page et revenir plus tard.';
+
+  @override
+  String get ugInstaErrorFormat =>
+      'Pseudo invalide : lettres, chiffres, point et tiret bas uniquement — pas de lien.';
+
+  @override
+  String get ugInstaErrorNetwork =>
+      'Impossible d\'envoyer ton pseudo. Vérifie ta connexion et réessaie.';
+
+  @override
+  String get ugRefreshFailed =>
+      'Impossible d\'actualiser. Vérifie ta connexion — les chiffres affichés datent de ta dernière connexion.';
 
   @override
   String get ugResultsHubNotice =>

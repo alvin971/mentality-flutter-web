@@ -38,6 +38,15 @@ class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
   /// résultat. Le score reste calculé et sauvegardé en historique (inchangé).
   bool _unlocked = !UnlockService.instance.gateEnabled;
 
+  /// Un déblocage DÉJÀ acquis par ce passe ne doit pas être re-demandé : sans
+  /// cette relecture du cache, un utilisateur débloqué qui repasse un test se
+  /// heurtait au mur d'erreur du gate dès que le worker était injoignable.
+  Future<void> _honorCachedUnlock() async {
+    if (_unlocked) return;
+    final locked = await UnlockService.instance.isLocked();
+    if (!locked && mounted) setState(() => _unlocked = true);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -51,6 +60,7 @@ class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
     }
     _saveToHistory();
     _declareCompletion();
+    _honorCachedUnlock();
   }
 
   /// Déclare la complétion au serveur — SEUL endroit qui crédite le parrain.

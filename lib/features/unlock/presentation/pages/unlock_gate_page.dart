@@ -25,6 +25,24 @@ import '../../data/unlock_service.dart';
 ///   3. Suivre le compte Instagram : pseudo + « vérification en cours »
 ///      (le délai est appliqué côté serveur, autorité worker).
 ///   4. Débloqué → [onUnlocked] est appelé (affiche le vrai résultat).
+/// Format de pseudo Instagram accepté par le serveur
+/// (miroir de `workers/referral/index.js` : `^[A-Za-z0-9._]{1,30}$`).
+final RegExp kInstagramHandleRe = RegExp(r'^[A-Za-z0-9._]{1,30}$');
+
+/// Extrait le pseudo d'une saisie libre : « @nom », une URL de profil collée
+/// ou des espaces parasites donnent tous « nom ».
+///
+/// Sans cette normalisation, coller son profil Instagram — le geste le plus
+/// naturel — était refusé par le serveur, et le refus était invisible.
+String normalizeInstagramHandle(String raw) {
+  var h = raw.trim();
+  h = h.replaceFirst(
+      RegExp(r'^(https?://)?(www\.)?instagram\.com/', caseSensitive: false), '');
+  h = h.split(RegExp(r'[/?#]')).first;
+  h = h.replaceFirst(RegExp(r'^@+'), '');
+  return h.trim();
+}
+
 class UnlockGatePage extends StatefulWidget {
   const UnlockGatePage({super.key, required this.onUnlocked});
 
@@ -43,6 +61,16 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
   Timer? _pollTimer;
   final _instaController = TextEditingController();
   bool _submittingInsta = false;
+
+  /// Message d'erreur sous le champ Instagram. Sans lui, un pseudo refusé par
+  /// le serveur (accents, tiret, URL collée) ou une coupure réseau rendaient le
+  /// bouton totalement inerte : dernier palier, aucune explication, impasse.
+  String? _instaError;
+
+  /// Vrai quand le dernier rafraîchissement a échoué alors qu'un état était
+  /// déjà affiché : les chiffres à l'écran sont périmés, il faut le dire.
+  bool _refreshFailed = false;
+
 
   @override
   void initState() {
@@ -72,6 +100,9 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
       setState(() {
         _loading = false;
         _error = _progress == null;
+        // Un état est déjà affiché : il est simplement PÉRIMÉ. Le signaler,
+        // au lieu de laisser croire que les compteurs sont à jour.
+        _refreshFailed = _progress != null;
       });
       return;
     }
@@ -79,6 +110,7 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
       _progress = p;
       _loading = false;
       _error = false;
+      _refreshFailed = false;
     });
     if (p.unlocked) widget.onUnlocked();
   }
@@ -95,14 +127,29 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
   }
 
   Future<void> _submitInstagram() async {
-    final handle = _instaController.text.trim();
-    if (handle.isEmpty || _submittingInsta) return;
-    setState(() => _submittingInsta = true);
+    if (_submittingInsta) return;
+    final handle = normalizeInstagramHandle(_instaController.text);
+    // Pré-validation locale : un format refusé n'a pas à faire l'aller-retour
+    // réseau pour se solder par un bouton inerte.
+    if (!kInstagramHandleRe.hasMatch(handle)) {
+      setState(() => _instaError = context.l10n.ugInstaErrorFormat);
+      return;
+    }
+    setState(() {
+      _submittingInsta = true;
+      _instaError = null;
+    });
     final p = await UnlockService.instance.submitInstagram(handle);
     if (!mounted) return;
     setState(() {
       _submittingInsta = false;
-      if (p != null) _progress = p;
+      if (p != null) {
+        _progress = p;
+        _instaError = null;
+      } else {
+        // Refus serveur ou réseau : toujours dire quelque chose.
+        _instaError = context.l10n.ugInstaErrorNetwork;
+      }
     });
   }
 
@@ -179,6 +226,21 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
         // affichée, plus aucune action possible). Tant que ce n'est pas
         // débloqué, il y a toujours une action.
         if (referralsDone && !p.unlocked) _buildInstagramStep(l10n, p),
+        if (_refreshFailed) ...[
+          SizedBox(height: 16.h),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(Icons.cloud_off_outlined,
+                  size: 16.sp, color: AppColors.warning),
+              SizedBox(width: 8.w),
+              Expanded(
+                child: Text(l10n.ugRefreshFailed,
+                    style: AppText.bodySmall(color: AppColors.warning)),
+              ),
+            ],
+          ),
+        ],
         SizedBox(height: 24.h),
         Center(
           child: KeplerButton(
@@ -319,9 +381,16 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
           SizedBox(height: 14.h),
           TextField(
             controller: _instaController,
+            autocorrect: false,
+            enableSuggestions: false,
+            onChanged: (_) {
+              if (_instaError != null) setState(() => _instaError = null);
+            },
+            onSubmitted: (_) => _submitInstagram(),
             decoration: InputDecoration(
               labelText: l10n.ugInstaFieldLabel,
               prefixText: '@',
+              errorText: _instaError,
               border: const OutlineInputBorder(),
             ),
           ),

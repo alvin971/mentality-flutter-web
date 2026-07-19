@@ -2660,7 +2660,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get ugStep1Body =>
-      'Partilha o teu link pessoal com 3 amigos. Assim que entrarem no teste com o teu link, esta etapa avança.';
+      'Partilha o teu link pessoal com 3 amigos. Este passo avança quando eles TERMINAM o teste — não apenas quando se inscrevem. Não hesites em lembrá-los.';
 
   @override
   String get ugCopyLink => 'Copiar o meu link de convite';
@@ -2670,7 +2670,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String ugInviteCounter(int joined, int required) {
-    return '$joined/$required amigos entraram com o teu link';
+    return '$joined/$required amigos terminaram o seu teste';
   }
 
   @override
@@ -2717,6 +2717,18 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get ugInstaPending =>
       'A verificar a tua subscrição… O teu resultado será desbloqueado dentro de algumas horas. Podes fechar esta página e voltar mais tarde.';
+
+  @override
+  String get ugInstaErrorFormat =>
+      'Nome de utilizador inválido: apenas letras, números, ponto e underscore — sem links.';
+
+  @override
+  String get ugInstaErrorNetwork =>
+      'Não foi possível enviar o teu nome de utilizador. Verifica a ligação e tenta de novo.';
+
+  @override
+  String get ugRefreshFailed =>
+      'Não foi possível atualizar. Verifica a tua ligação — os números mostrados são da última atualização.';
 
   @override
   String get ugResultsHubNotice =>

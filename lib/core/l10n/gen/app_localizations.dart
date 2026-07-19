@@ -4740,7 +4740,7 @@ abstract class AppLocalizations {
   /// No description provided for @ugStep1Body.
   ///
   /// In fr, this message translates to:
-  /// **'Partage ton lien personnel avec 3 amis. Dès qu\'ils rejoignent le test avec ton lien, cette étape avance.'**
+  /// **'Partage ton lien personnel avec 3 amis. Cette étape avance quand ils TERMINENT leur test — pas seulement quand ils s\'inscrivent. Pense à les relancer.'**
   String get ugStep1Body;
 
   /// No description provided for @ugCopyLink.
@@ -4758,7 +4758,7 @@ abstract class AppLocalizations {
   /// No description provided for @ugInviteCounter.
   ///
   /// In fr, this message translates to:
-  /// **'{joined}/{required} amis ont rejoint avec ton lien'**
+  /// **'{joined}/{required} amis ont terminé leur test'**
   String ugInviteCounter(int joined, int required);
 
   /// No description provided for @ugStep2Title.
@@ -4826,6 +4826,24 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Vérification de ton abonnement en cours… Ton résultat sera débloqué d\'ici quelques heures. Tu peux fermer cette page et revenir plus tard.'**
   String get ugInstaPending;
+
+  /// No description provided for @ugInstaErrorFormat.
+  ///
+  /// In fr, this message translates to:
+  /// **'Pseudo invalide : lettres, chiffres, point et tiret bas uniquement — pas de lien.'**
+  String get ugInstaErrorFormat;
+
+  /// No description provided for @ugInstaErrorNetwork.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible d\'envoyer ton pseudo. Vérifie ta connexion et réessaie.'**
+  String get ugInstaErrorNetwork;
+
+  /// No description provided for @ugRefreshFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible d\'actualiser. Vérifie ta connexion — les chiffres affichés datent de ta dernière connexion.'**
+  String get ugRefreshFailed;
 
   /// No description provided for @ugResultsHubNotice.
   ///

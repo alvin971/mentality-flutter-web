@@ -2649,7 +2649,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ugStep1Body =>
-      'Share your personal link with 3 friends. As soon as they join the test through your link, this step progresses.';
+      'Share your personal link with 3 friends. This step advances when they FINISH their test — not just when they sign up. Feel free to remind them.';
 
   @override
   String get ugCopyLink => 'Copy my invite link';
@@ -2659,7 +2659,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String ugInviteCounter(int joined, int required) {
-    return '$joined/$required friends joined with your link';
+    return '$joined/$required friends have finished their test';
   }
 
   @override
@@ -2706,6 +2706,18 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get ugInstaPending =>
       'Verifying your follow… Your result will be unlocked within a few hours. You can close this page and come back later.';
+
+  @override
+  String get ugInstaErrorFormat =>
+      'Invalid username: letters, numbers, dot and underscore only — no link.';
+
+  @override
+  String get ugInstaErrorNetwork =>
+      'Could not send your username. Check your connection and try again.';
+
+  @override
+  String get ugRefreshFailed =>
+      'Could not refresh. Check your connection — the numbers shown are from your last successful update.';
 
   @override
   String get ugResultsHubNotice =>
@@ -5382,7 +5394,7 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get ugStep1Body =>
-      'Share your personal link with 3 friends. As soon as they join the test through your link, this step progresses.';
+      'Share your personal link with 3 friends. This step advances when they FINISH their test — not just when they sign up. Feel free to remind them.';
 
   @override
   String get ugCopyLink => 'Copy my invite link';
@@ -5392,7 +5404,7 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String ugInviteCounter(int joined, int required) {
-    return '$joined/$required friends joined with your link';
+    return '$joined/$required friends have finished their test';
   }
 
   @override
@@ -5439,6 +5451,18 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   @override
   String get ugInstaPending =>
       'Verifying your follow… Your result will be unlocked within a few hours. You can close this page and come back later.';
+
+  @override
+  String get ugInstaErrorFormat =>
+      'Invalid username: letters, numbers, dot and underscore only — no link.';
+
+  @override
+  String get ugInstaErrorNetwork =>
+      'Could not send your username. Check your connection and try again.';
+
+  @override
+  String get ugRefreshFailed =>
+      'Could not refresh. Check your connection — the numbers shown are from your last successful update.';
 
   @override
   String get ugResultsHubNotice =>

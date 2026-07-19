@@ -1,5 +1,6 @@
 import 'package:hive/hive.dart';
 import '../../services/data_collection_service.dart' show DataCollectionService;
+import 'token_account.dart';
 
 /// Stockage local du token Mental E.T. dans une box Hive chiffrée AES-256.
 ///
@@ -60,19 +61,30 @@ class AuthLocalStore {
     await box.delete(_referrerKey);
   }
 
-  static const _resultsUnlockedKey = 'results_unlocked';
-
-  /// Mémorise que le déblocage des résultats (stage 4) a été confirmé par le
-  /// serveur — un résultat débloqué ne se re-verrouille jamais, même si le
-  /// worker devient injoignable ensuite.
-  Future<void> saveResultsUnlocked() async {
-    final box = await _openBox();
-    await box.put(_resultsUnlockedKey, true);
+  /// Clé du cache de déblocage, CLOISONNÉE PAR PASSE. Une clé globale faisait
+  /// hériter un passe neuf du déblocage acquis par un autre sur le même
+  /// téléphone : ses résultats s'affichaient en clair sans aucune mission.
+  /// `null` si aucun passe exploitable → aucun cache (fail-closed).
+  Future<String?> _resultsUnlockedKey() async {
+    final account = await TokenAccount.fromToken(await getToken());
+    return account == null ? null : 'results_unlocked:$account';
   }
 
-  /// True si le déblocage a déjà été confirmé une fois.
-  Future<bool> getResultsUnlocked() async {
+  /// Mémorise que le déblocage des résultats (stage 4) a été confirmé par le
+  /// serveur POUR LE PASSE COURANT — un déblocage acquis ne se re-verrouille
+  /// jamais, même si le worker devient injoignable ensuite.
+  Future<void> saveResultsUnlocked() async {
+    final key = await _resultsUnlockedKey();
+    if (key == null) return;
     final box = await _openBox();
-    return box.get(_resultsUnlockedKey) == true;
+    await box.put(key, true);
+  }
+
+  /// True si le passe courant a déjà vu son déblocage confirmé.
+  Future<bool> getResultsUnlocked() async {
+    final key = await _resultsUnlockedKey();
+    if (key == null) return false;
+    final box = await _openBox();
+    return box.get(key) == true;
   }
 }

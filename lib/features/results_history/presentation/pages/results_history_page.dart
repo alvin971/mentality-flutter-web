@@ -19,7 +19,8 @@ class ResultsHistoryPage extends StatefulWidget {
   State<ResultsHistoryPage> createState() => _ResultsHistoryPageState();
 }
 
-class _ResultsHistoryPageState extends State<ResultsHistoryPage> {
+class _ResultsHistoryPageState extends State<ResultsHistoryPage>
+    with WidgetsBindingObserver {
   /// Résultats DU PASSE COURANT uniquement (jamais ceux d'un autre passe ayant
   /// utilisé le même téléphone). Vide tant que le chargement n'a pas répondu.
   List<SessionHistoryEntry> _entries = const [];
@@ -35,8 +36,23 @@ class _ResultsHistoryPageState extends State<ResultsHistoryPage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _loadEntries();
     _refreshLock();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  /// Le déblocage se produit côté serveur (délai Instagram, filleuls qui
+  /// terminent). Sans cette relecture au retour au premier plan, les scores
+  /// restaient floutés jusqu'à la réouverture manuelle de la page.
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) _refreshLock();
   }
 
   Future<void> _loadEntries() async {

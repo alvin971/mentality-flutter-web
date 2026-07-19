@@ -3699,10 +3699,10 @@
   "ugRetry": "Réessayer",
   "ugRefresh": "Actualiser",
   "ugStep1Title": "Invite 3 amis",
-  "ugStep1Body": "Partage ton lien personnel avec 3 amis. Dès qu'ils rejoignent le test avec ton lien, cette étape avance.",
+  "ugStep1Body": "Partage ton lien personnel avec 3 amis. Cette étape avance quand ils TERMINENT leur test — pas seulement quand ils s'inscrivent. Pense à les relancer.",
   "ugCopyLink": "Copier mon lien d'invitation",
   "ugCopied": "Lien copié !",
-  "ugInviteCounter": "{joined}/{required} amis ont rejoint avec ton lien",
+  "ugInviteCounter": "{joined}/{required} amis ont terminé leur test",
   "@ugInviteCounter": {
     "placeholders": {
       "joined": {
@@ -3762,6 +3762,9 @@
   "ugInstaFieldLabel": "Ton pseudo Instagram",
   "ugInstaSubmit": "Valider mon abonnement",
   "ugInstaPending": "Vérification de ton abonnement en cours… Ton résultat sera débloqué d'ici quelques heures. Tu peux fermer cette page et revenir plus tard.",
+  "ugInstaErrorFormat": "Pseudo invalide : lettres, chiffres, point et tiret bas uniquement — pas de lien.",
+  "ugInstaErrorNetwork": "Impossible d'envoyer ton pseudo. Vérifie ta connexion et réessaie.",
+  "ugRefreshFailed": "Impossible d'actualiser. Vérifie ta connexion — les chiffres affichés datent de ta dernière connexion.",
   "ugResultsHubNotice": "Tout se trouve dans « Mes résultats » : tes missions, ton lien d'invitation et ton résultat (flouté tant que toutes les missions ne sont pas validées). Tu peux quitter cette page et revenir quand tu veux.",
   "histLockedTitle": "Missions à valider",
   "histLockedBody": "Ton résultat est enregistré, mais il reste flouté tant que toutes les missions ne sont pas validées.",

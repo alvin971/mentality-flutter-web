@@ -2668,7 +2668,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get ugStep1Body =>
-      'Teile deinen persönlichen Link mit 3 Freunden. Sobald sie über deinen Link am Test teilnehmen, geht dieser Schritt voran.';
+      'Teile deinen persönlichen Link mit 3 Freunden. Dieser Schritt geht weiter, wenn sie ihren Test BEENDEN — nicht schon bei der Anmeldung. Erinnere sie ruhig daran.';
 
   @override
   String get ugCopyLink => 'Meinen Einladungslink kopieren';
@@ -2678,7 +2678,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String ugInviteCounter(int joined, int required) {
-    return '$joined/$required Freunde sind über deinen Link beigetreten';
+    return '$joined/$required Freunde haben ihren Test beendet';
   }
 
   @override
@@ -2725,6 +2725,18 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get ugInstaPending =>
       'Dein Abo wird überprüft … Dein Ergebnis wird in wenigen Stunden freigeschaltet. Du kannst diese Seite schließen und später zurückkommen.';
+
+  @override
+  String get ugInstaErrorFormat =>
+      'Ungültiger Benutzername: nur Buchstaben, Zahlen, Punkt und Unterstrich — kein Link.';
+
+  @override
+  String get ugInstaErrorNetwork =>
+      'Dein Benutzername konnte nicht gesendet werden. Prüfe deine Verbindung und versuche es erneut.';
+
+  @override
+  String get ugRefreshFailed =>
+      'Aktualisierung fehlgeschlagen. Prüfe deine Verbindung — die angezeigten Zahlen stammen vom letzten erfolgreichen Abruf.';
 
   @override
   String get ugResultsHubNotice =>
