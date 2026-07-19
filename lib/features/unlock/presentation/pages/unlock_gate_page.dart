@@ -164,9 +164,21 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
               color: Theme.of(context).colorScheme.onSurfaceVariant),
         ),
         SizedBox(height: 20.h),
-        if (!referralsDone && !showWaiting) _buildInviteStep(l10n, p),
-        if (showWaiting) _buildWaitingStep(l10n, p),
-        if (referralsDone && p.stage >= 3) _buildInstagramStep(l10n, p),
+        // Le lien d'invitation reste affiché TANT QUE le palier n'est pas
+        // atteint : à 1/3 ou 2/3 c'est précisément le moment où l'utilisateur
+        // doit inviter les amis manquants. Le masquer l'enfermait dans un
+        // écran d'attente sans issue.
+        if (!referralsDone) _buildInviteStep(l10n, p),
+        if (showWaiting) ...[
+          SizedBox(height: 16.h),
+          _buildWaitingStep(l10n, p),
+        ],
+        // Condition volontairement indépendante de `stage` : le serveur promeut
+        // déjà en stage 3 dès que le parrainage est acquis, et se fier au stage
+        // créait une impasse (parrainage acquis + stage resté à 1 ⇒ AUCUNE carte
+        // affichée, plus aucune action possible). Tant que ce n'est pas
+        // débloqué, il y a toujours une action.
+        if (referralsDone && !p.unlocked) _buildInstagramStep(l10n, p),
         SizedBox(height: 24.h),
         Center(
           child: KeplerButton(
@@ -251,11 +263,8 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
                 ],
               ),
             ),
-          SizedBox(height: 8.h),
-          _progressCounter(
-            l10n.ugWaitingCounter(p.completedReferrals, p.requiredReferrals),
-            p.completedReferrals / p.requiredReferrals,
-          ),
+          // Pas de second compteur : le palier 1 (toujours affiché tant que le
+          // parrainage n'est pas acquis) porte déjà la barre de progression.
         ],
       ),
     );
