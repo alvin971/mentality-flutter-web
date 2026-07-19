@@ -55,10 +55,9 @@ class _CubesTestPageState extends State<CubesTestPage> {
   @override
   void initState() {
     super.initState();
-    // Graine versionnée explicite → banque déterministe (mêmes items,
-    // même ordre pour toutes les passations, comparabilité CTT).
-    _patternGenerator =
-        CubePatternGenerator(seed: CubePatternGenerator.kBankSeed);
+    // Sans seed → tirage aléatoire par passation : les motifs changent à
+    // chaque session, seule la progression de difficulté est fixe.
+    _patternGenerator = CubePatternGenerator();
     _demoPattern = CubePatternGenerator(seed: _demoSeed)
         .generatePattern(DifficultyLevel.veryEasy);
     _generateLevels();

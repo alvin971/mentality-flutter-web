@@ -1,22 +1,17 @@
 import 'dart:math';
 
-/// Générateur de matrices progressives DÉTERMINISTE et VERSIONNÉ.
-/// La banque des 26 items est identique pour TOUS les participants (comparabilité CTT) :
-/// même contenu, même ordre, à chaque passation. Toute l'aléa est dérivée d'une
-/// graine fixe ([kBankSeed]) — aucun item n'est généré « au hasard » par session.
+/// Générateur de matrices progressives ALÉATOIRE PAR PASSATION.
+/// Les 26 items sont générés paramétriquement à chaque session : deux
+/// passations ne présentent pas les mêmes items. L'échelle de difficulté,
+/// elle, est FIXE : chaque slot garde son niveau (règles, taille de grille)
+/// et son thêta quel que soit le tirage — seul change le contenu.
 class MatrixGenerator {
-  /// Graine de banque versionnée.
-  /// BUMPER cette valeur (changer la constante) est le SEUL moyen de régénérer
-  /// une nouvelle banque d'items ; tant qu'elle ne change pas, la banque est figée.
-  static const int kBankSeed = 20260616;
-
   final Random _random;
   final List<MatrixItem> _preGeneratedItems = [];
   final Set<String> _generatedItemsSignatures = {};  // Suivi des exercices générés
 
-  /// [seed] est optionnel et n'est destiné qu'aux tests/diagnostics.
-  /// En production il reste null → la banque utilise [kBankSeed] (déterministe).
-  MatrixGenerator({int? seed}) : _random = Random(seed ?? kBankSeed) {
+  /// [seed] optionnel : tirage reproductible (tests). null = aléatoire réel.
+  MatrixGenerator({int? seed}) : _random = Random(seed) {
     _initializeAllItems();
   }
 

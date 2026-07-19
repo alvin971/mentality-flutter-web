@@ -41,9 +41,9 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
   void initState() {
     super.initState();
     _generateItems();
-    // L'item de démonstration est le premier item (le plus facile) de la
-    // banque, déterministe (MatrixGenerator sans seed custom = kBankSeed
-    // fixe, banque identique à chaque passation).
+    // L'item de démonstration est le premier item (slot le plus facile) du
+    // tirage de cette passation : sa difficulté est fixe même si son contenu
+    // change d'une session à l'autre.
     _demoItem = _generatedItems.first;
     // La démonstration n'est pas chronométrée : le chrono d'item ne démarre
     // qu'au passage au premier item réel (_startRealTest).

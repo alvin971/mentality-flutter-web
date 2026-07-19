@@ -2,18 +2,15 @@ import 'dart:math';
 import '../presentation/widgets/cubes_exercise_widget.dart';
 
 /// Générateur procédural de patterns pour le test des Cubes
-/// Banque d'items DÉTERMINISTE et versionnée : tous les participants
-/// affrontent exactement les mêmes items dans le même ordre (comparabilité CTT).
+/// Génération ALÉATOIRE PAR PASSATION : les motifs sont tirés au hasard à
+/// chaque session — deux passations ne présentent pas les mêmes items. La
+/// PROGRESSION de difficulté, elle, est fixe ([kDifficultyProgression]) :
+/// chaque slot garde son niveau et son barème quel que soit le tirage.
 class CubePatternGenerator {
-  /// Graine de banque versionnée — bumper pour régénérer la banque.
-  /// Tant que cette valeur ne change pas, la banque reste identique pour
-  /// toutes les passations. La changer = régénérer (et invalider la
-  /// comparabilité avec les passations antérieures).
-  static const int kBankSeed = 20260616;
-
-  /// Progression de difficulté CANONIQUE de la banque (14 items, dont 12 cotés).
+  /// Progression de difficulté CANONIQUE (14 items, dont 12 cotés).
   /// 2 exemples (non cotés) + 3 très faciles + 4 modérés + 5 complexes.
-  /// L'ordre est FIGÉ : ne pas réordonner (comparabilité CTT).
+  /// L'ordre est FIGÉ : ne pas réordonner (échelle de difficulté commune
+  /// à toutes les passations, seul le CONTENU des items change).
   static const List<DifficultyLevel> kDifficultyProgression = <DifficultyLevel>[
     // Items 1-2 : Exemples (non cotés)
     DifficultyLevel.example,
@@ -40,13 +37,12 @@ class CubePatternGenerator {
 
   final Random _random;
 
-  /// Par défaut, la banque utilise [kBankSeed] → génération DÉTERMINISTE.
-  /// Un [seed] explicite (tests, debug) reste possible, mais `null` ne doit
-  /// JAMAIS retomber sur un Random non seedé : on garde [kBankSeed].
-  CubePatternGenerator({int? seed}) : _random = Random(seed ?? kBankSeed);
+  /// [seed] optionnel : tirage reproductible (tests, item de démonstration).
+  /// null = aléatoire réel → items différents à chaque passation.
+  CubePatternGenerator({int? seed}) : _random = Random(seed);
 
   /// Construit la banque complète des 14 items, dans l'ordre canonique
-  /// de [kDifficultyProgression]. Déterministe grâce à [kBankSeed].
+  /// de [kDifficultyProgression].
   List<CubePattern> generateBank() {
     return kDifficultyProgression
         .map((difficulty) => generatePattern(difficulty))
@@ -62,11 +58,11 @@ class CubePatternGenerator {
         return _generate2x2Simple();
       case DifficultyLevel.easy:
       case DifficultyLevel.medium:
-        return _generate3x3Moderate();
+        return _generate3x3Moderate(difficulty);
       case DifficultyLevel.mediumHard:
       case DifficultyLevel.hard:
       case DifficultyLevel.veryHard:
-        return _generate3x3Complex();
+        return _generate3x3Complex(difficulty);
     }
   }
 
@@ -104,7 +100,7 @@ class CubePatternGenerator {
   }
 
   /// Items 6-9 : 3×3 modéré avec diagonales
-  CubePattern _generate3x3Moderate() {
+  CubePattern _generate3x3Moderate(DifficultyLevel difficulty) {
     final pattern = _generateRandom3x3(useDiagonals: true, diagonalProbability: 0.4);
 
     return CubePattern(
@@ -113,12 +109,12 @@ class CubePatternGenerator {
       cohesionScore: _calculateCohesion(pattern),
       timeLimit: 60,
       description: 'Pattern 3×3 avec diagonales',
-      difficulty: DifficultyLevel.easy,
+      difficulty: difficulty,
     );
   }
 
   /// Items 10-14 : 3×3 complexe (BEAUCOUP de diagonales, toutes rotations)
-  CubePattern _generate3x3Complex() {
+  CubePattern _generate3x3Complex(DifficultyLevel difficulty) {
     final pattern = _generateRandom3x3(useDiagonals: true, diagonalProbability: 0.7);
 
     return CubePattern(
@@ -127,7 +123,7 @@ class CubePatternGenerator {
       cohesionScore: _calculateCohesion(pattern),
       timeLimit: 120,
       description: 'Pattern 3×3 complexe - Haute cohésion',
-      difficulty: DifficultyLevel.veryHard,
+      difficulty: difficulty,
     );
   }
 
