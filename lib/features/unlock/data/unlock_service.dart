@@ -59,17 +59,28 @@ class UnlockService {
 
   /// Les résultats doivent-ils être verrouillés (floutés) ?
   ///
-  /// Fail-closed quand le gate est actif : seul un stage 4 confirmé — par le
-  /// serveur ou par le cache local (un déblocage acquis ne se re-verrouille
-  /// jamais) — déverrouille l'affichage.
+  /// LE SERVEUR EST L'AUTORITÉ : tant qu'il répond, c'est lui qui tranche. Le
+  /// cache local n'est qu'un SECOURS hors-ligne, jamais un court-circuit.
+  ///
+  /// Consulter le cache en premier (ancien comportement) rendait le serveur
+  /// incapable de re-verrouiller : un compte remis à zéro ou un tricheur
+  /// invalidé côté serveur (`instagramVerified:false`) restait débloqué à vie
+  /// sur l'appareil, puisque le client ne redemandait plus rien.
   Future<bool> isLocked() async {
     if (!gateEnabled) return false;
     try {
-      if (await AuthLocalStore.instance.getResultsUnlocked()) return false;
       final p = await getProgress();
-      return !(p?.unlocked ?? false);
+      if (p != null) return !p.unlocked; // autorité serveur
     } catch (_) {
-      return true; // fail-closed : jamais de déblocage sur erreur.
+      // Réseau/serveur indisponible → on se rabat sur le cache ci-dessous.
+    }
+    // Serveur injoignable : un déblocage DÉJÀ acquis reste honoré (sinon une
+    // simple coupure re-flouterait un résultat légitimement gagné) ; sans
+    // cache, on reste verrouillé (fail-closed).
+    try {
+      return !(await AuthLocalStore.instance.getResultsUnlocked());
+    } catch (_) {
+      return true;
     }
   }
 
