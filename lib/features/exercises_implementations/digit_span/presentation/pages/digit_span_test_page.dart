@@ -191,40 +191,58 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
   }
 
   void _showFeedback(bool isCorrect, int points) {
+    // Ferme le dialogue PUIS avance. Passer par cette unique porte garantit
+    // que le retour Android ne peut pas fermer le feedback sans faire
+    // avancer le test (sinon l'utilisateur reste bloqué, quitte le sous-test
+    // et l'orchestrateur lui propose de tout recommencer).
+    void continueFlow(BuildContext dialogContext) {
+      Navigator.pop(dialogContext);
+      _nextItem();
+    }
+
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: Row(
-          children: [
-            Icon(
-              isCorrect ? Icons.check_circle : Icons.cancel,
-              color: isCorrect ? AppColors.success : AppColors.error,
-              size: 32.sp,
-            ),
-            SizedBox(width: 12.w),
-            Text(isCorrect ? context.l10n.dsCorrect : context.l10n.dsIncorrect),
-          ],
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(context.l10n.dsPointsEarned(points)),
-            SizedBox(height: 8.h),
-            Text(context.l10n.dsCorrectAnswer(_currentItem.getCorrectAnswer().join(' - '))),
-            Text(context.l10n.dsYourAnswer(_userAnswer.join(' - '))),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              _nextItem();
-            },
-            child: Text(context.l10n.commonContinue),
+      builder: (dialogContext) => PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, _) {
+          if (!didPop) continueFlow(dialogContext);
+        },
+        child: AlertDialog(
+          title: Row(
+            children: [
+              Icon(
+                isCorrect ? Icons.check_circle : Icons.cancel,
+                color: isCorrect ? AppColors.success : AppColors.error,
+                size: 32.sp,
+              ),
+              SizedBox(width: 12.w),
+              Flexible(
+                child: Text(isCorrect
+                    ? dialogContext.l10n.dsCorrect
+                    : dialogContext.l10n.dsIncorrect),
+              ),
+            ],
           ),
-        ],
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(dialogContext.l10n.dsPointsEarned(points)),
+              SizedBox(height: 8.h),
+              Text(dialogContext.l10n.dsCorrectAnswer(
+                  _currentItem.getCorrectAnswer().join(' - '))),
+              Text(dialogContext.l10n.dsYourAnswer(_userAnswer.join(' - '))),
+            ],
+          ),
+          actions: [
+            TextButton(
+              key: const Key('dsContinue'),
+              onPressed: () => continueFlow(dialogContext),
+              child: Text(dialogContext.l10n.commonContinue),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -275,10 +293,24 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
   void _showFinalResults() {
     final totalScore = _forwardScore + _backwardScore + _sequencingScore;
 
+    // Ferme le dialogue puis rend la main à l'orchestrateur AVEC le score.
+    // On pope la page avec le contexte de l'État (pas celui du dialogue,
+    // désactivé après le premier pop) : sans score retourné, l'orchestrateur
+    // croit à un abandon et propose de recommencer le sous-test.
+    void finish(BuildContext dialogContext) {
+      Navigator.pop(dialogContext);
+      if (mounted) Navigator.pop(context, totalScore);
+    }
+
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => AlertDialog(
+      builder: (dialogContext) => PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, _) {
+          if (!didPop) finish(dialogContext);
+        },
+        child: AlertDialog(
         title: Text(context.l10n.codingTestDoneTitle),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -305,14 +337,12 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
         ),
         actions: [
           TextButton(
-            onPressed: () {
-              final totalScore = _forwardScore + _backwardScore + _sequencingScore;
-              Navigator.pop(context);
-              Navigator.pop(context, totalScore);
-            },
+            key: const Key('dsResultsBack'),
+            onPressed: () => finish(dialogContext),
             child: Text(context.l10n.commonBack),
           ),
         ],
+        ),
       ),
     );
   }
@@ -445,6 +475,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                 width: double.infinity,
                 height: 50.h,
                 child: ElevatedButton(
+                  key: const Key('dsStartPart'),
                   onPressed: _startPart,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.indexWMI,
@@ -488,7 +519,23 @@ crossAxisAlignment: CrossAxisAlignment.start,
                 context.l10n.dsListenCarefully,
                 style: TextStyle(fontSize: 20.sp, color: AppColors.grey600),
               ),
-              SizedBox(height: 48.h),
+              SizedBox(height: 8.h),
+              // Rappel de la consigne de la partie en cours : sans lui,
+              // l'utilisateur qui a raté l'écran d'intro croit devoir répéter
+              // dans l'ordre entendu et vit l'inverse/le tri comme un bug.
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 32.w),
+                child: Text(
+                  _typeInstruction(_currentItem.type),
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.indexWMI,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              SizedBox(height: 32.h),
               if (_currentDigitIndex > 0 && _currentDigitIndex <= _currentItem.sequence.length)
                 TweenAnimationBuilder<double>(
                   tween: Tween(begin: 0.8, end: 1.2),
@@ -506,6 +553,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                         ),
                         child: Center(
                           child: Text(
+                            key: const Key('dsDigit'),
                             _currentItem.sequence[_currentDigitIndex - 1].toString(),
                             style: TextStyle(
                               fontSize: 64.sp,
@@ -655,13 +703,17 @@ crossAxisAlignment: CrossAxisAlignment.start,
                           backgroundColor: AppColors.error,
                           disabledBackgroundColor: AppColors.grey300,
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.backspace, size: 20.sp),
-                            SizedBox(width: 8.w),
-                            Text(context.l10n.codingClear, style: TextStyle(fontSize: 16.sp)),
-                          ],
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.backspace, size: 20.sp),
+                              SizedBox(width: 8.w),
+                              Text(context.l10n.codingClear,
+                                  style: TextStyle(fontSize: 16.sp)),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -672,6 +724,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                     child: SizedBox(
                       height: 50.h,
                       child: ElevatedButton(
+                        key: const Key('dsValidate'),
                         onPressed: _userAnswer.length == _currentItem.length
                             ? _submitAnswer
                             : null,
@@ -698,6 +751,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
   Widget _buildNumberButton(int number) {
     final isDisabled = _userAnswer.length >= _currentItem.length;
     return ElevatedButton(
+      key: Key('dsKey$number'),
       onPressed: isDisabled ? null : () => _addDigit(number),
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.indexWMI,

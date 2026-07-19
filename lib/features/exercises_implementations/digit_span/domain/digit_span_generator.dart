@@ -9,8 +9,13 @@ import 'dart:math';
 /// seraient mémorisables et fausseraient les repassations). La difficulté est
 /// portée par la longueur, pas par le contenu, donc le theta par longueur
 /// reste valide. Contraintes de qualité : chiffres 1-9 tous distincts, pas de
-/// suite de 3 chiffres consécutifs (ex. 3-4-5), et pour le séquençage la
-/// séquence présentée n'est jamais déjà triée.
+/// suite de 3 chiffres consécutifs (ex. 3-4-5), et pour le séquençage (longueur
+/// >= 3) la séquence présentée n'est jamais déjà triée NI triée en décroissant
+/// — sinon la bonne réponse serait l'inverse exact de ce qui a été entendu, ce
+/// qui se confond avec l'Empan Inverse et a été vécu comme un bug (« j'entends
+/// 2-4-9 mais c'est 9-4-2 qui est correct »). En longueur 2 les deux ordres
+/// sont l'un trié, l'autre décroissant : on présente l'ordre croissant (item
+/// basal trivial, la réponse est ce qui a été entendu).
 class DigitSpanGenerator {
   final Random _random;
   final List<DigitSpanItem> _forwardItems = [];
@@ -86,7 +91,16 @@ class DigitSpanGenerator {
       final digits = [1, 2, 3, 4, 5, 6, 7, 8, 9]..shuffle(_random);
       final sequence = digits.sublist(0, length);
       if (_hasConsecutiveRun(sequence)) continue;
-      if (type == SpanType.sequencing && _isSorted(sequence)) continue;
+      if (type == SpanType.sequencing) {
+        if (length == 2) {
+          // Longueur 2 : tout ordre non trié est exactement l'inverse de la
+          // réponse attendue — on présente donc l'ordre croissant.
+          sequence.sort();
+          return sequence;
+        }
+        if (_isSorted(sequence)) continue;
+        if (_isReverseSorted(sequence)) continue;
+      }
       return sequence;
     }
   }
@@ -105,6 +119,15 @@ class DigitSpanGenerator {
   bool _isSorted(List<int> sequence) {
     for (int i = 0; i + 1 < sequence.length; i++) {
       if (sequence[i] > sequence[i + 1]) return false;
+    }
+    return true;
+  }
+
+  /// Vrai si la séquence est strictement décroissante : la réponse attendue
+  /// (tri croissant) serait alors l'inverse exact de la présentation.
+  bool _isReverseSorted(List<int> sequence) {
+    for (int i = 0; i + 1 < sequence.length; i++) {
+      if (sequence[i] < sequence[i + 1]) return false;
     }
     return true;
   }
