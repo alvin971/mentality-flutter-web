@@ -61,12 +61,32 @@ void main() {
       }
     });
 
-    test('séquençage : jamais présenté déjà trié', () {
+    test('séquençage longueur >= 3 : jamais présenté déjà trié', () {
       for (final item in allItems) {
-        if (item.type != SpanType.sequencing) continue;
+        if (item.type != SpanType.sequencing || item.length < 3) continue;
         final sorted = List<int>.from(item.sequence)..sort();
         expect(item.sequence, isNot(equals(sorted)),
             reason: 'déjà triée: ${item.sequence}');
+      }
+    });
+
+    test(
+        'séquençage : la réponse (tri croissant) n\'est JAMAIS l\'inverse '
+        'exact de la présentation — bug « 249 entendu, 942 correct »', () {
+      for (final item in allItems) {
+        if (item.type != SpanType.sequencing) continue;
+        expect(item.getCorrectAnswer(),
+            isNot(equals(item.sequence.reversed.toList())),
+            reason: 'réponse = présentation inversée: ${item.sequence}');
+      }
+    });
+
+    test('séquençage longueur 2 : présenté croissant (réponse = entendu)', () {
+      for (final item in allItems) {
+        if (item.type != SpanType.sequencing || item.length != 2) continue;
+        expect(item.sequence.first < item.sequence.last, isTrue,
+            reason: 'longueur 2 non croissante: ${item.sequence}');
+        expect(item.getCorrectAnswer(), equals(item.sequence));
       }
     });
   });
