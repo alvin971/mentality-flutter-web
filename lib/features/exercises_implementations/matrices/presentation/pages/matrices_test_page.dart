@@ -112,83 +112,18 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
       }
     });
 
-    _showFeedbackDialog(isCorrect, timeSeconds);
-  }
-
-  void _showFeedbackDialog(bool isCorrect, int timeSeconds) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: Row(
-          children: [
-            Icon(
-              isCorrect ? Icons.check_circle : Icons.cancel,
-              color: isCorrect ? AppColors.success : AppColors.error,
-              size: 32.sp,
-            ),
-            SizedBox(width: 12.w),
-            Text(
-              isCorrect ? context.l10n.matCorrect : context.l10n.matIncorrect,
-              style: TextStyle(
-                color: isCorrect ? AppColors.success : AppColors.error,
-              ),
-            ),
-          ],
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(context.l10n.matResponseTime(timeSeconds)),
-            SizedBox(height: 8.h),
-            Text(context.l10n.matScoreFraction(score, currentLevel + 1)),
-            if (_consecutiveFailures >= 3) ...[
-              SizedBox(height: 12.h),
-              Container(
-                padding: EdgeInsets.all(8.w),
-                decoration: BoxDecoration(
-                  color: AppColors.warning.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(4.r),
-                ),
-                child: Text(
-                  context.l10n.matDiscontinue3,
-                  style: TextStyle(
-                    color: AppColors.warning,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-
-              // Règle de discontinuation WAIS-IV : 3 scores 0 consécutifs
-              if (_consecutiveFailures >= 3 || currentLevel >= _generatedItems.length - 1) {
-                _showFinalResults();
-              } else {
-                setState(() {
-                  currentLevel++;
-                  _selectedAnswer = null;
-                  _itemStartTime = DateTime.now();
-                });
-              }
-            },
-            child: Text(
-              _consecutiveFailures >= 3
-                  ? context.l10n.matSeeResultsEnded
-                  : (currentLevel < _generatedItems.length - 1
-                      ? context.l10n.matNextItem
-                      : context.l10n.matSeeResults),
-            ),
-          ),
-        ],
-      ),
-    );
+    // Test non noté à l'écran : aucun retour « juste/faux », on enchaîne.
+    // Discontinuation WAIS-IV : 3 scores 0 consécutifs.
+    if (_consecutiveFailures >= 3 ||
+        currentLevel >= _generatedItems.length - 1) {
+      _showFinalResults();
+    } else {
+      setState(() {
+        currentLevel++;
+        _selectedAnswer = null;
+        _itemStartTime = DateTime.now();
+      });
+    }
   }
 
   void _showFinalResults() {

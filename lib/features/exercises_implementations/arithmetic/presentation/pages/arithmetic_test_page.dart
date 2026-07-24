@@ -158,7 +158,6 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
 
   void _processAnswer(int? userAnswer) {
     final itemScore = _currentItem.calculateScore(userAnswer, _elapsedSeconds);
-    final isCorrect = userAnswer == _currentItem.correctAnswer;
 
     setState(() {
       if (itemScore == 0) {
@@ -169,47 +168,7 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
       }
     });
 
-    _showFeedback(isCorrect);
-  }
-
-  void _showFeedback(bool isCorrect) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: Row(
-          children: [
-            Icon(
-              isCorrect ? Icons.check_circle : Icons.cancel,
-              color: isCorrect ? AppColors.success : AppColors.error,
-              size: 32.sp,
-            ),
-            SizedBox(width: 12.w),
-            Text(isCorrect ? context.l10n.arithCorrect : context.l10n.arithIncorrect),
-          ],
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(context.l10n.arithCorrectAnswerLabel(_currentItem.correctAnswer)),
-            if (isCorrect) ...[
-              SizedBox(height: 8.h),
-              Text(context.l10n.arithTimeSpent(_elapsedSeconds)),
-            ],
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              _nextItem();
-            },
-            child: Text(context.l10n.commonContinue),
-          ),
-        ],
-      ),
-    );
+    _nextItem();
   }
 
   void _nextItem() {

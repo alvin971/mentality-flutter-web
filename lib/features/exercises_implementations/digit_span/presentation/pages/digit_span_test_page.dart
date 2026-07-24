@@ -187,64 +187,7 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
         break;
     }
 
-    _showFeedback(isCorrect, pointsEarned);
-  }
-
-  void _showFeedback(bool isCorrect, int points) {
-    // Ferme le dialogue PUIS avance. Passer par cette unique porte garantit
-    // que le retour Android ne peut pas fermer le feedback sans faire
-    // avancer le test (sinon l'utilisateur reste bloqué, quitte le sous-test
-    // et l'orchestrateur lui propose de tout recommencer).
-    void continueFlow(BuildContext dialogContext) {
-      Navigator.pop(dialogContext);
-      _nextItem();
-    }
-
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (dialogContext) => PopScope(
-        canPop: false,
-        onPopInvokedWithResult: (didPop, _) {
-          if (!didPop) continueFlow(dialogContext);
-        },
-        child: AlertDialog(
-          title: Row(
-            children: [
-              Icon(
-                isCorrect ? Icons.check_circle : Icons.cancel,
-                color: isCorrect ? AppColors.success : AppColors.error,
-                size: 32.sp,
-              ),
-              SizedBox(width: 12.w),
-              Flexible(
-                child: Text(isCorrect
-                    ? dialogContext.l10n.dsCorrect
-                    : dialogContext.l10n.dsIncorrect),
-              ),
-            ],
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(dialogContext.l10n.dsPointsEarned(points)),
-              SizedBox(height: 8.h),
-              Text(dialogContext.l10n.dsCorrectAnswer(
-                  _currentItem.getCorrectAnswer().join(' - '))),
-              Text(dialogContext.l10n.dsYourAnswer(_userAnswer.join(' - '))),
-            ],
-          ),
-          actions: [
-            TextButton(
-              key: const Key('dsContinue'),
-              onPressed: () => continueFlow(dialogContext),
-              child: Text(dialogContext.l10n.commonContinue),
-            ),
-          ],
-        ),
-      ),
-    );
+    _nextItem();
   }
 
   void _nextItem() {

@@ -5,7 +5,9 @@
 // mois (`m`) de naissance sont déjà encodés dans le token (cf. TokenIssuer /
 // TokenDemographics). Le test complet n'a donc plus à saisir l'âge.
 
-import 'package:flutter/foundation.dart' show kDebugMode;
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart' show kDebugMode, visibleForTesting;
 
 import '../constants/app_constants.dart';
 import 'auth_local_store.dart';
@@ -25,16 +27,46 @@ class TokenClaimsReader {
       final token = await AuthLocalStore.instance.getToken();
       if (token == null || token.isEmpty) return null;
 
+      // 1) Chemin nominal : token signé, signature vérifiée.
       final res = await TokenSignatureVerifier.verifyAndDecode(token);
       if (res.valid && res.claims != null) return res.claims;
 
+      // 2) Token DEV non signé « M2.… ».
       if (kDebugMode || AppConstants.kAllowUnsignedTokenInRelease) {
-        return TokenIssuer.tryDecode(token);
+        final dev = TokenIssuer.tryDecode(token);
+        if (dev != null) return dev;
       }
-      return null;
+
+      // 3) Dernier recours DÉMOGRAPHIQUE (jamais pour l'accès) : lire le
+      //    payload brut d'un token signé dont la signature ne se vérifie pas
+      //    côté client — typiquement une clé publique pas encore pinnée pour
+      //    ce `kid`, ou un `sv` plus récent que ceux supportés. L'âge ne sert
+      //    qu'aux normes de score : le falsifier ne fausserait que son propre
+      //    résultat, sans aucun gain d'accès (le verrou reste gouverné par la
+      //    vérification complète, ailleurs). Sans ce recours, un simple
+      //    décalage de clé/schéma ferait réapparaître la saisie manuelle.
+      return payloadClaimsUnverified(token);
     } catch (_) {
-      // Lecture/déchiffrement du store indisponible → aucun claim exploitable.
-      // L'appelant retombe alors sur la saisie manuelle (fail-safe).
+      // Store indisponible / token illisible → aucun claim exploitable ;
+      // l'appelant retombe sur la saisie manuelle (fail-safe).
+      return null;
+    }
+  }
+
+  /// Décode le payload (2ᵉ segment) d'un token signé à 3 segments SANS vérifier
+  /// la signature. Réservé à la lecture démographique (âge) : ne jamais s'en
+  /// servir pour une décision d'accès. Renvoie `null` si la forme n'est pas
+  /// exploitable (segment absent, base64/JSON invalide, racine non-objet).
+  @visibleForTesting
+  static Map<String, dynamic>? payloadClaimsUnverified(String token) {
+    final parts = token.split('.');
+    if (parts.length != 3) return null;
+    try {
+      final json =
+          utf8.decode(base64Url.decode(base64Url.normalize(parts[1])));
+      final decoded = jsonDecode(json);
+      return decoded is Map<String, dynamic> ? decoded : null;
+    } catch (_) {
       return null;
     }
   }

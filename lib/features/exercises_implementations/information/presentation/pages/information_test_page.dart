@@ -169,100 +169,17 @@ class _InformationTestPageState extends State<InformationTestPage> {
       timeSeconds: timeSeconds,
     ));
 
-    _showFeedbackDialog(isCorrect, timeSeconds, currentItem);
-  }
-
-  void _showFeedbackDialog(
-      bool isCorrect, int timeSeconds, InformationItem item) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: Text(
-          isCorrect ? context.l10n.infoCorrect : context.l10n.infoIncorrect,
-          style: TextStyle(
-            color: isCorrect ? AppColors.success : AppColors.error,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                isCorrect
-                    ? context.l10n.infoFeedbackRight
-                    : context.l10n.infoFeedbackWrong,
-              ),
-              SizedBox(height: 12.h),
-              Text(
-                context.l10n.infoQuestionLabel(item.question),
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 8.h),
-              if (!isCorrect) ...[
-                Text(
-                  context.l10n.infoCorrectAnswerLabel(
-                      item.options[item.correctAnswer]),
-                  style: TextStyle(
-                    color: AppColors.success,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 8.h),
-              ],
-              Text(context.l10n.infoTimeLabel(timeSeconds)),
-              Text(context.l10n.infoScoreLabel(score, currentLevel + 1)),
-              SizedBox(height: 8.h),
-              Text(
-                context.l10n.infoDomainLabel(_domainName(item.domain)),
-                style: TextStyle(
-                  fontSize: 12.sp,
-                  fontStyle: FontStyle.italic,
-                  color: AppColors.grey600,
-                ),
-              ),
-              if (_consecutiveFailures >= 3) ...[
-                SizedBox(height: 8.h),
-                Text(
-                  context.l10n.infoDiscontinue3,
-                  style: TextStyle(
-                    color: AppColors.warning,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14.sp,
-                  ),
-                ),
-              ],
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-
-              // Règle de discontinuation : 3 échecs consécutifs (WAIS-IV)
-              if (_consecutiveFailures >= 3 ||
-                  currentLevel >= _generatedItems.length - 1) {
-                _showFinalResults();
-              } else {
-                setState(() {
-                  currentLevel++;
-                  _startItem();
-                });
-              }
-            },
-            child: Text(
-              _consecutiveFailures >= 3 ||
-                      currentLevel >= _generatedItems.length - 1
-                  ? context.l10n.infoSeeResults
-                  : context.l10n.commonContinue,
-            ),
-          ),
-        ],
-      ),
-    );
+    // Test non noté à l'écran : on enchaîne sans retour « juste/faux ».
+    // Discontinuation WAIS-IV : 3 échecs consécutifs.
+    if (_consecutiveFailures >= 3 ||
+        currentLevel >= _generatedItems.length - 1) {
+      _showFinalResults();
+    } else {
+      setState(() {
+        currentLevel++;
+        _startItem();
+      });
+    }
   }
 
   void _showFinalResults() {

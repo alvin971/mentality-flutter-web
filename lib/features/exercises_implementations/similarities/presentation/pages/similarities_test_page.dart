@@ -192,116 +192,17 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
       timeSeconds: timeSeconds,
     ));
 
-    _showFeedbackDialog(itemScore, timeSeconds, currentItem);
-  }
-
-  void _showFeedbackDialog(int itemScore, int timeSeconds, SimilarityItem item) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: Text(
-          itemScore == 2
-              ? context.l10n.simFeedbackExcellent
-              : itemScore == 1
-                  ? context.l10n.simFeedbackCorrect
-                  : context.l10n.simFeedbackIncomplete,
-          style: TextStyle(
-            color: itemScore == 2
-                ? AppColors.success
-                : itemScore == 1
-                    ? AppColors.warning
-                    : AppColors.error,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                itemScore == 2
-                    ? context.l10n.simFeedbackMsg2pts
-                    : itemScore == 1
-                        ? context.l10n.simFeedbackMsg1pt
-                        : context.l10n.simFeedbackMsg0pt,
-              ),
-              SizedBox(height: 12.h),
-              Text(
-                context.l10n.simYourAnswerQuoted(_answerController.text),
-                style: const TextStyle(fontStyle: FontStyle.italic),
-              ),
-              SizedBox(height: 12.h),
-              if (itemScore < 2) ...[
-                Text(
-                  context.l10n.simExamples2pts,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.success,
-                  ),
-                ),
-                ...item.twoPointAnswers.take(2).map((ans) => Padding(
-                      padding: EdgeInsets.only(left: 8.w, top: 4.h),
-                      child: Text('• $ans'),
-                    )),
-              ],
-              if (itemScore == 0) ...[
-                SizedBox(height: 8.h),
-                Text(
-                  context.l10n.simExamples1pt,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.warning,
-                  ),
-                ),
-                ...item.onePointAnswers.take(2).map((ans) => Padding(
-                      padding: EdgeInsets.only(left: 8.w, top: 4.h),
-                      child: Text('• $ans'),
-                    )),
-              ],
-              SizedBox(height: 12.h),
-              Text(context.l10n.simTimeSeconds(timeSeconds)),
-              Text(context.l10n.simTotalScore(score)),
-              if (_consecutiveZeros >= 3) ...[
-                SizedBox(height: 8.h),
-                Text(
-                  context.l10n.simDiscontinue,
-                  style: TextStyle(
-                    color: AppColors.warning,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14.sp,
-                  ),
-                ),
-              ],
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-
-              // Règle de discontinuation : 3 scores de 0 consécutifs (WAIS-IV)
-              if (_consecutiveZeros >= 3 || currentLevel >= _generatedItems.length - 1) {
-                _showFinalResults();
-              } else {
-                setState(() {
-                  currentLevel++;
-                  _startItem();
-                });
-              }
-            },
-            child: Text(
-              _consecutiveZeros >= 3 ||
-                      currentLevel >= _generatedItems.length - 1
-                  ? context.l10n.simSeeResults
-                  : context.l10n.commonContinue,
-            ),
-          ),
-        ],
-      ),
-    );
+    // Test non noté à l'écran : on enchaîne sans retour de score.
+    // Discontinuation WAIS-IV : 3 scores de 0 consécutifs.
+    if (_consecutiveZeros >= 3 ||
+        currentLevel >= _generatedItems.length - 1) {
+      _showFinalResults();
+    } else {
+      setState(() {
+        currentLevel++;
+        _startItem();
+      });
+    }
   }
 
   void _showFinalResults() {

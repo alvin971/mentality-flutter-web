@@ -155,131 +155,17 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
       timeSeconds: timeSeconds,
     ));
 
-    _showFeedbackDialog(itemScore, timeSeconds, currentItem);
-  }
-
-  void _showFeedbackDialog(
-      int itemScore, int timeSeconds, VocabularyItem item) {
-    final l10n = context.l10n;
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: Text(
-          itemScore == 2
-              ? l10n.vocabFeedbackExcellent
-              : itemScore == 1
-                  ? l10n.vocabFeedbackCorrect
-                  : l10n.vocabFeedbackIncomplete,
-          style: TextStyle(
-            color: itemScore == 2
-                ? AppColors.success
-                : itemScore == 1
-                    ? AppColors.warning
-                    : AppColors.error,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                itemScore == 2
-                    ? l10n.vocabFeedbackTwoPoints
-                    : itemScore == 1
-                        ? l10n.vocabFeedbackOnePoint
-                        : l10n.vocabFeedbackZeroPoint,
-              ),
-              SizedBox(height: 12.h),
-              Text(
-                l10n.vocabWordLabel(item.word),
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-              SizedBox(height: 8.h),
-              Text(
-                l10n.vocabYourAnswerLabel(
-                  _answerController.text.isEmpty
-                      ? l10n.vocabEmptyAnswer
-                      : _answerController.text,
-                ),
-                style: const TextStyle(fontStyle: FontStyle.italic),
-              ),
-              SizedBox(height: 12.h),
-              if (itemScore < 2) ...[
-                Text(
-                  l10n.vocabTwoPointExamples,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.success,
-                  ),
-                ),
-                ...item.twoPointAnswers.take(2).map((ans) => Padding(
-                      padding: EdgeInsets.only(left: 8.w, top: 4.h),
-                      child: Text('• $ans'),
-                    )),
-              ],
-              if (itemScore == 0) ...[
-                SizedBox(height: 8.h),
-                Text(
-                  l10n.vocabOnePointExamples,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.warning,
-                  ),
-                ),
-                ...item.onePointAnswers.take(2).map((ans) => Padding(
-                      padding: EdgeInsets.only(left: 8.w, top: 4.h),
-                      child: Text('• $ans'),
-                    )),
-              ],
-              SizedBox(height: 12.h),
-              Text(l10n.vocabTimeSeconds(timeSeconds)),
-              Text(l10n.vocabTotalScore(score)),
-              if (_consecutiveZeros >= 3) ...[
-                SizedBox(height: 8.h),
-                Text(
-                  l10n.vocabDiscontinued,
-                  style: TextStyle(
-                    color: AppColors.warning,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14.sp,
-                  ),
-                ),
-              ],
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-
-              // Règle de discontinuation : 3 scores de 0 consécutifs (WAIS-IV)
-              if (_consecutiveZeros >= 3 ||
-                  currentLevel >= _generatedItems.length - 1) {
-                _showFinalResults();
-              } else {
-                setState(() {
-                  currentLevel++;
-                  _startItem();
-                });
-              }
-            },
-            child: Text(
-              _consecutiveZeros >= 3 ||
-                      currentLevel >= _generatedItems.length - 1
-                  ? l10n.vocabViewResults
-                  : l10n.commonContinue,
-            ),
-          ),
-        ],
-      ),
-    );
+    // Test non noté à l'écran : on enchaîne sans retour de score.
+    // Discontinuation WAIS-IV : 3 scores de 0 consécutifs.
+    if (_consecutiveZeros >= 3 ||
+        currentLevel >= _generatedItems.length - 1) {
+      _showFinalResults();
+    } else {
+      setState(() {
+        currentLevel++;
+        _startItem();
+      });
+    }
   }
 
   void _showFinalResults() {

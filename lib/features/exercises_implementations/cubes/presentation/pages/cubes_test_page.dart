@@ -119,8 +119,18 @@ class _CubesTestPageState extends State<CubesTestPage> {
       }
     });
 
-    // Afficher le feedback
-    _showFeedbackDialog(isCorrect, timeSeconds);
+    // Test non noté à l'écran : aucun retour « juste/faux », on enchaîne.
+    // Discontinuation : 2 échecs consécutifs.
+    if (_consecutiveFailures >= 2 ||
+        currentLevel >= _generatedPatterns.length - 1) {
+      _showFinalResults();
+    } else {
+      setState(() {
+        currentLevel++;
+        showResult = false;
+        lastAnswerCorrect = null;
+      });
+    }
   }
 
   int _calculatePoints(int timeSeconds) {
@@ -130,75 +140,6 @@ class _CubesTestPageState extends State<CubesTestPage> {
       return 2;
     }
     return 4;
-  }
-
-  void _showFeedbackDialog(bool isCorrect, int timeSeconds) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: Row(
-          children: [
-            Icon(
-              isCorrect ? Icons.check_circle : Icons.cancel,
-              color: isCorrect ? AppColors.success : AppColors.error,
-              size: 32.sp,
-            ),
-            SizedBox(width: 12.w),
-            Text(
-              isCorrect ? context.l10n.cubesBravo : context.l10n.matIncorrect,
-              style: TextStyle(
-                color: isCorrect ? AppColors.success : AppColors.error,
-              ),
-            ),
-          ],
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(context.l10n.cubesElapsedTime(_formatTime(timeSeconds))),
-            if (isCorrect) ...[
-              SizedBox(height: 8.h),
-              Text(
-                context.l10n.cubesPointsEarned(_calculatePoints(timeSeconds)),
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.success,
-                ),
-              ),
-            ],
-            SizedBox(height: 8.h),
-            Text(context.l10n.cubesTotalScore(score)),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-
-              // Vérifier règle de discontinuation (2 échecs consécutifs)
-              if (_consecutiveFailures >= 2 || currentLevel >= _generatedPatterns.length - 1) {
-                _showFinalResults();
-              } else {
-                setState(() {
-                  currentLevel++;
-                  showResult = false;
-                  lastAnswerCorrect = null;
-                });
-              }
-            },
-            child: Text(
-              _consecutiveFailures >= 2
-                  ? context.l10n.matSeeResultsEnded
-                  : (currentLevel < _generatedPatterns.length - 1
-                      ? context.l10n.matNextItem
-                      : context.l10n.matSeeResults),
-            ),
-          ),
-        ],
-      ),
-    );
   }
 
   void _showFinalResults() {

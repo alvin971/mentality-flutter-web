@@ -162,7 +162,17 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
       _consecutiveFailures++;
     }
 
-    _showFeedbackDialog(isCorrect, timeSeconds);
+    // Test non noté à l'écran : on enchaîne sans retour « juste/faux ».
+    // Discontinuation WAIS-IV : 3 échecs consécutifs.
+    if (_consecutiveFailures >= 3 ||
+        currentLevel >= _generatedItems.length - 1) {
+      _showFinalResults();
+    } else {
+      setState(() {
+        currentLevel++;
+        _startItem();
+      });
+    }
   }
 
   bool _listsEqual(List<Token> a, List<Token> b) {
@@ -171,73 +181,6 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
       if (a[i] != b[i]) return false;
     }
     return true;
-  }
-
-  void _showFeedbackDialog(bool isCorrect, int timeSeconds) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: Text(
-          isCorrect ? context.l10n.matCorrect : context.l10n.matIncorrect,
-          style: TextStyle(
-            color: isCorrect ? AppColors.success : AppColors.error,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              isCorrect
-                  ? context.l10n.fwCorrectAnswerPoint
-                  : context.l10n.fwWrongAnswer,
-            ),
-            if (!isCorrect) ...[
-              SizedBox(height: 8.h),
-              _buildTokenList(_generatedItems[currentLevel].correctAnswer),
-            ],
-            SizedBox(height: 12.h),
-            Text(context.l10n.fwTime(timeSeconds)),
-            Text(context.l10n.matScoreFraction(score, currentLevel + 1)),
-            if (_consecutiveFailures >= 3) ...[
-              SizedBox(height: 8.h),
-              Text(
-                context.l10n.fwDiscontinue3,
-                style: TextStyle(
-                  color: AppColors.warning,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14.sp,
-                ),
-              ),
-            ],
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-
-              // Règle de discontinuation : 3 échecs consécutifs (WAIS-IV)
-              if (_consecutiveFailures >= 3 || currentLevel >= _generatedItems.length - 1) {
-                _showFinalResults();
-              } else {
-                setState(() {
-                  currentLevel++;
-                  _startItem();
-                });
-              }
-            },
-            child: Text(
-              _consecutiveFailures >= 3 ||
-                      currentLevel >= _generatedItems.length - 1
-                  ? context.l10n.fwSeeResults
-                  : context.l10n.commonContinue,
-            ),
-          ),
-        ],
-      ),
-    );
   }
 
   void _showFinalResults() {

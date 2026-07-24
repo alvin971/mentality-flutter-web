@@ -129,9 +129,8 @@ void main() {
   Future<void> failItem(WidgetTester tester, SpanTypeUi part) async {
     final seq = await watchSequence(tester);
     await enterAndSubmit(tester, wrongAnswer(part, seq));
-    expect(find.text('Incorrect'), findsOneWidget,
-        reason: 'la réponse fausse devrait être comptée fausse');
-    await tester.tap(find.byKey(const Key('dsContinue')));
+    // Plus aucun pop-up « Incorrect » : la soumission enchaîne directement
+    // (test de QI non noté à l'écran).
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
   }
@@ -195,16 +194,14 @@ void main() {
     expect(seq1, sortedAsc(seq1),
         reason: 'longueur 2 : présentation croissante attendue');
     await enterAndSubmit(tester, sortedAsc(seq1));
-    expect(find.text('Correct !'), findsOneWidget);
-    await tester.tap(find.byKey(const Key('dsContinue')));
+    // Plus de pop-up « Correct ! » : la soumission enchaîne directement.
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
 
     // Longueur 2, essai 2 : idem.
     final seq2 = await watchSequence(tester);
     await enterAndSubmit(tester, sortedAsc(seq2));
-    expect(find.text('Correct !'), findsOneWidget);
-    await tester.tap(find.byKey(const Key('dsContinue')));
+    // Plus de pop-up « Correct ! » : la soumission enchaîne directement.
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
 
@@ -217,33 +214,30 @@ void main() {
     expect(seq3, isNot(equals(sortedDesc(seq3))),
         reason: 'longueur >= 3 : jamais l\'inverse exact de la réponse');
     await enterAndSubmit(tester, sortedAsc(seq3));
-    expect(find.text('Correct !'), findsOneWidget);
-    await tester.tap(find.byKey(const Key('dsContinue')));
+    // Plus de pop-up « Correct ! » : la soumission enchaîne directement.
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
   });
 
   testWidgets(
-      'BUG 1 (cause racine) — le retour Android sur le dialogue de feedback '
-      'ne bloque pas le flux : il vaut « Continuer »', (tester) async {
+      'Aucun pop-up de correction : soumettre une réponse enchaîne '
+      'directement sur l\'essai suivant (test non noté à l\'écran)',
+      (tester) async {
     await launchToPartIntro(tester);
     await startPart(tester);
 
     final seq = await watchSequence(tester);
     await enterAndSubmit(tester, seq.reversed.toList()); // faux exprès
-    expect(find.text('Incorrect'), findsOneWidget);
-
-    // Simule le bouton/geste retour Android sur le dialogue.
-    final navigator = tester.state<NavigatorState>(find.byType(Navigator));
-    await navigator.maybePop();
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 300));
 
-    // Le dialogue est fermé ET le test a avancé (essai suivant présenté),
-    // au lieu de laisser un écran mort menant à « Reprendre le sous-test ».
+    // Aucun retour « juste/faux », aucun bouton « Continuer » de feedback :
+    // le test enchaîne tout seul sur la présentation de l'essai suivant.
     expect(find.text('Incorrect'), findsNothing);
+    expect(find.text('Correct !'), findsNothing);
+    expect(find.byKey(const Key('dsContinue')), findsNothing);
     expect(find.text('Écoutez attentivement'), findsOneWidget,
-        reason: 'le retour doit faire avancer, pas bloquer');
+        reason: 'la soumission doit faire avancer, pas afficher un pop-up');
   });
 }
 
