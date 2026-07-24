@@ -166,38 +166,13 @@ class _CodingTestPageState extends State<CodingTestPage> {
   void _finishTest() {
     _countdownTimer?.cancel();
 
-    final score = _generator.calculateScore(_userAnswers);
-    final completedCells = _userAnswers.where((answer) => answer != null).length;
-
+    // Test non noté à l'écran : aucun récapitulatif de points/temps/réussite,
+    // simple confirmation de fin — le score repart vers l'appelant, sans être montré.
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
         title: Text(context.l10n.codingTestDoneTitle),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(context.l10n.codingTimeElapsed, style: TextStyle(fontSize: 16.sp)),
-            SizedBox(height: 12.h),
-            Text(context.l10n.codingCellsCompleted(completedCells)),
-            Text(context.l10n.codingCellsCorrect(score)),
-            SizedBox(height: 16.h),
-            Text(
-              context.l10n.codingScorePoints(score),
-              style: TextStyle(
-                fontSize: 20.sp,
-                fontWeight: FontWeight.bold,
-                color: AppColors.indexPSI,
-              ),
-            ),
-            SizedBox(height: 12.h),
-            Text(
-              _getPerformanceMessage(context, score),
-              style: TextStyle(fontSize: 14.sp, color: AppColors.grey700),
-            ),
-          ],
-        ),
         actions: [
           TextButton(
             onPressed: () {
@@ -210,14 +185,6 @@ class _CodingTestPageState extends State<CodingTestPage> {
         ],
       ),
     );
-  }
-
-  String _getPerformanceMessage(BuildContext context, int score) {
-    if (score >= 100) return context.l10n.codingPerfExceptional;
-    if (score >= 80) return context.l10n.codingPerfVeryGood;
-    if (score >= 60) return context.l10n.codingPerfAboveAverage;
-    if (score >= 40) return context.l10n.codingPerfAverage;
-    return context.l10n.codingPerfBelowAverage;
   }
 
   @override

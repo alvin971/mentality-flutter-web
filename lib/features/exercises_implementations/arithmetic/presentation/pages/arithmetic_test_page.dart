@@ -192,33 +192,13 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
   void _showFinalResults() {
     _countdownTimer?.cancel();
 
-    final totalScore = _score;
-
+    // Test non noté à l'écran : aucun récapitulatif de points/temps/réussite,
+    // simple confirmation de fin — le score repart vers l'appelant, sans être montré.
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
         title: Text(context.l10n.arithTestEnded),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              context.l10n.arithItemsCompleted(
-                  _currentItemIndex + 1, _generatedItems.length),
-              style: TextStyle(fontSize: 16.sp),
-            ),
-            SizedBox(height: 16.h),
-            Text(
-              context.l10n.arithTotalScore(totalScore),
-              style: TextStyle(
-                fontSize: 20.sp,
-                fontWeight: FontWeight.bold,
-                color: AppColors.indexWMI,
-              ),
-            ),
-          ],
-        ),
         actions: [
           TextButton(
             onPressed: () {

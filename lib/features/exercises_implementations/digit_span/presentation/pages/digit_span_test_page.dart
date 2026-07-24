@@ -245,6 +245,8 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
       if (mounted) Navigator.pop(context, totalScore);
     }
 
+    // Test non noté à l'écran : aucun récapitulatif de points/temps/réussite,
+    // simple confirmation de fin — le score repart vers l'appelant, sans être montré.
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -254,37 +256,14 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
           if (!didPop) finish(dialogContext);
         },
         child: AlertDialog(
-        title: Text(context.l10n.codingTestDoneTitle),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              context.l10n.dsResultsByPart,
-              style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 12.h),
-            Text(context.l10n.dsForwardScore(_forwardScore)),
-            Text(context.l10n.dsBackwardScore(_backwardScore)),
-            Text(context.l10n.dsSequencingScore(_sequencingScore)),
-            SizedBox(height: 16.h),
-            Text(
-              context.l10n.dsTotalScore(totalScore),
-              style: TextStyle(
-                fontSize: 18.sp,
-                fontWeight: FontWeight.bold,
-                color: AppColors.indexWMI,
-              ),
+          title: Text(context.l10n.codingTestDoneTitle),
+          actions: [
+            TextButton(
+              key: const Key('dsResultsBack'),
+              onPressed: () => finish(dialogContext),
+              child: Text(context.l10n.commonBack),
             ),
           ],
-        ),
-        actions: [
-          TextButton(
-            key: const Key('dsResultsBack'),
-            onPressed: () => finish(dialogContext),
-            child: Text(context.l10n.commonBack),
-          ),
-        ],
         ),
       ),
     );

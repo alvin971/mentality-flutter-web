@@ -149,41 +149,13 @@ class _SymbolSearchTestPageState extends State<SymbolSearchTestPage> {
 
     final score = _generator.calculateScore(_userAnswers);
 
+    // Test non noté à l'écran : aucun récapitulatif de points/temps/réussite,
+    // simple confirmation de fin — le score repart vers l'appelant, sans être montré.
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
         title: Text(context.l10n.codingTestDoneTitle),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(context.l10n.ssItemsAnswered(score.totalAnswered), style: TextStyle(fontSize: 16.sp)),
-            SizedBox(height: 8.h),
-            Text(context.l10n.ssCorrectAnswers(score.correct)),
-            Text(context.l10n.ssIncorrectAnswers(score.incorrect), style: TextStyle(color: AppColors.error)),
-            Text(context.l10n.ssNotAnswered(score.notAnswered), style: TextStyle(color: AppColors.grey600)),
-            SizedBox(height: 16.h),
-            Text(
-              context.l10n.ssRawScore(score.rawScore),
-              style: TextStyle(
-                fontSize: 20.sp,
-                fontWeight: FontWeight.bold,
-                color: AppColors.indexPSI,
-              ),
-            ),
-            SizedBox(height: 4.h),
-            Text(
-              context.l10n.ssScoreFormulaShort,
-              style: TextStyle(fontSize: 12.sp, color: AppColors.grey600),
-            ),
-            SizedBox(height: 12.h),
-            Text(
-              _getPerformanceMessage(context, score.rawScore),
-              style: TextStyle(fontSize: 14.sp, color: AppColors.grey700),
-            ),
-          ],
-        ),
         actions: [
           TextButton(
             onPressed: () {
@@ -195,14 +167,6 @@ class _SymbolSearchTestPageState extends State<SymbolSearchTestPage> {
         ],
       ),
     );
-  }
-
-  String _getPerformanceMessage(BuildContext context, int score) {
-    if (score >= 58) return context.l10n.codingPerfExceptional;
-    if (score >= 50) return context.l10n.codingPerfVeryGood;
-    if (score >= 40) return context.l10n.ssPerfGood;
-    if (score >= 30) return context.l10n.codingPerfAverage;
-    return context.l10n.codingPerfBelowAverage;
   }
 
   @override

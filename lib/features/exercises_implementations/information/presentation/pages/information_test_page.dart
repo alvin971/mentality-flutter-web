@@ -183,57 +183,13 @@ class _InformationTestPageState extends State<InformationTestPage> {
   }
 
   void _showFinalResults() {
-    final maxScore = _generatedItems.length; // 28 items × 1 point = 28 max
-    final percentageScore = (score / maxScore * 100).round();
-
+    // Test non noté à l'écran : aucun récapitulatif de points/temps/réussite,
+    // simple confirmation de fin — le score repart vers l'appelant, sans être montré.
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: Text(
-          context.l10n.infoResultsTitle,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(context.l10n.infoRawScore(score, maxScore)),
-              Text(context.l10n
-                  .infoItemsCompleted(currentLevel + 1, _generatedItems.length)),
-              Text(context.l10n.infoPercentage(percentageScore)),
-              Text(context.l10n.infoTotalTime(totalTime)),
-              SizedBox(height: 12.h),
-              Text(
-                _getPerformanceLevel(score),
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: _getPerformanceColor(score),
-                ),
-              ),
-              SizedBox(height: 8.h),
-              Text(
-                context.l10n.infoTestSubtitle,
-                style: TextStyle(
-                  fontSize: 12.sp,
-                  fontStyle: FontStyle.italic,
-                  color: AppColors.grey600,
-                ),
-              ),
-              SizedBox(height: 16.h),
-              Text(
-                context.l10n.infoDomainBreakdownTitle,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14.sp,
-                ),
-              ),
-              SizedBox(height: 8.h),
-              ..._buildDomainBreakdown(),
-            ],
-          ),
-        ),
+        title: Text(context.l10n.infoResultsTitle),
         actions: [
           TextButton(
             onPressed: () {
@@ -245,31 +201,6 @@ class _InformationTestPageState extends State<InformationTestPage> {
         ],
       ),
     );
-  }
-
-  List<Widget> _buildDomainBreakdown() {
-    final domainScores = <KnowledgeDomain, List<bool>>{};
-
-    for (int i = 0; i < _results.length; i++) {
-      final result = _results[i];
-      final item = _generatedItems[i];
-      domainScores.putIfAbsent(item.domain, () => []);
-      domainScores[item.domain]!.add(result.isCorrect);
-    }
-
-    return domainScores.entries.map((entry) {
-      final correctCount = entry.value.where((isCorrect) => isCorrect).length;
-      final total = entry.value.length;
-      final domainName = _domainName(entry.key);
-
-      return Padding(
-        padding: EdgeInsets.only(bottom: 4.h),
-        child: Text(
-          context.l10n.infoDomainBreakdownRow(domainName, correctCount, total),
-          style: TextStyle(fontSize: 13.sp),
-        ),
-      );
-    }).toList();
   }
 
   /// Nom localisé du domaine de connaissance.
@@ -298,22 +229,6 @@ class _InformationTestPageState extends State<InformationTestPage> {
       case DifficultyLevel.hard:
         return context.l10n.infoDifficultyHard;
     }
-  }
-
-  String _getPerformanceLevel(int score) {
-    if (score >= 24) return context.l10n.infoPerfExceptional;
-    if (score >= 20) return context.l10n.infoPerfSuperior;
-    if (score >= 14) return context.l10n.infoPerfAverage;
-    if (score >= 8) return context.l10n.infoPerfBelow;
-    return context.l10n.infoPerfLow;
-  }
-
-  Color _getPerformanceColor(int score) {
-    if (score >= 24) return AppColors.indexFSIQ;
-    if (score >= 20) return AppColors.success;
-    if (score >= 14) return AppColors.info;
-    if (score >= 8) return AppColors.warning;
-    return AppColors.error;
   }
 
   String _bottomBarLabel(BuildContext context) {

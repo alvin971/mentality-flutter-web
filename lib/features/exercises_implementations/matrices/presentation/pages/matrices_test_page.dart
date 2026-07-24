@@ -127,49 +127,13 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
   }
 
   void _showFinalResults() {
-    final completedItems = currentLevel + 1;
-    final avgTime = completedItems > 0 ? totalTime ~/ completedItems : 0;
-    final percentageCorrect = (score / completedItems * 100).round();
-
+    // Test non noté à l'écran : aucun récapitulatif de points/temps/réussite,
+    // simple confirmation de fin — le score repart vers l'appelant, sans être montré.
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
         title: Text(context.l10n.matFinishedTitle),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _resultRow(context.l10n.matRawScore, '$score/$completedItems'),
-            _resultRow(context.l10n.matSuccessRate, '$percentageCorrect%'),
-            _resultRow(context.l10n.matAvgTimePerItem, '${avgTime}s'),
-            SizedBox(height: 16.h),
-            Container(
-              padding: EdgeInsets.all(12.w),
-              decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(8.r),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    context.l10n.matEvaluation,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14.sp,
-                    ),
-                  ),
-                  SizedBox(height: 4.h),
-                  Text(
-                    _getPerformanceLevel(context, percentageCorrect),
-                    style: TextStyle(fontSize: 13.sp),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
         actions: [
           TextButton(
             onPressed: () {
@@ -196,31 +160,6 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
         ],
       ),
     );
-  }
-
-  Widget _resultRow(String label, String value) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 4.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label),
-          Text(
-            value,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
-    );
-  }
-
-  String _getPerformanceLevel(BuildContext context, int percentage) {
-    final l10n = context.l10n;
-    if (percentage >= 90) return l10n.matPerfExcellent;
-    if (percentage >= 75) return l10n.matPerfVeryGood;
-    if (percentage >= 60) return l10n.matPerfGood;
-    if (percentage >= 40) return l10n.matPerfAverage;
-    return l10n.matPerfBelowAverage;
   }
 
   @override

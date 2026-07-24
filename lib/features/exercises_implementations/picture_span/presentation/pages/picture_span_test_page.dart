@@ -154,32 +154,13 @@ class _PictureSpanTestPageState extends State<PictureSpanTestPage> {
   void _showFinalResults() {
     _presentationTimer?.cancel();
 
+    // Test non noté à l'écran : aucun récapitulatif de points/temps/réussite,
+    // simple confirmation de fin — le score repart vers l'appelant, sans être montré.
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
         title: Text(context.l10n.codingTestDoneTitle),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              context.l10n.psTrialsCompleted(_currentItemIndex + 1),
-              style: TextStyle(fontSize: 16.sp),
-            ),
-            SizedBox(height: 12.h),
-            Text(
-              context.l10n.psScorePoints(_score),
-              style: TextStyle(
-                fontSize: 20.sp,
-                fontWeight: FontWeight.bold,
-                color: AppColors.indexWMI,
-              ),
-            ),
-            SizedBox(height: 12.h),
-            Text(context.l10n.psMaxLevel(_currentLevel)),
-          ],
-        ),
         actions: [
           TextButton(
             onPressed: () {

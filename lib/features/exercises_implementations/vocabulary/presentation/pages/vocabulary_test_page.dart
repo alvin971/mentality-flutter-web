@@ -169,94 +169,24 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
   }
 
   void _showFinalResults() {
-    final l10n = context.l10n;
-    final maxScore = _generatedItems.length * 2; // 30 items × 2 points = 60 max
-    final percentageScore = (score / maxScore * 100).round();
-
+    // Test non noté à l'écran : aucun récapitulatif de points/temps/réussite,
+    // simple confirmation de fin — le score repart vers l'appelant, sans être montré.
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: Text(
-          l10n.vocabResultsTitle,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(l10n.vocabRawScore(score, maxScore)),
-              Text(l10n.vocabItemsCompleted(
-                  currentLevel + 1, _generatedItems.length)),
-              Text(l10n.vocabPercentage(percentageScore)),
-              Text(l10n.vocabTotalTime(totalTime)),
-              SizedBox(height: 12.h),
-              Text(
-                _getPerformanceLevel(score),
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: _getPerformanceColor(score),
-                ),
-              ),
-              SizedBox(height: 8.h),
-              Text(
-                l10n.vocabTestCaption,
-                style: TextStyle(
-                  fontSize: 12.sp,
-                  fontStyle: FontStyle.italic,
-                  color: AppColors.grey600,
-                ),
-              ),
-              SizedBox(height: 16.h),
-              Text(
-                l10n.vocabFrequencyBreakdownTitle,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14.sp,
-                ),
-              ),
-              SizedBox(height: 8.h),
-              ..._buildFrequencyBreakdown(),
-            ],
-          ),
-        ),
+        title: Text(context.l10n.vocabResultsTitle),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
               Navigator.of(context).pop(score);
             },
-            child: Text(l10n.commonBack),
+            child: Text(context.l10n.commonBack),
           ),
         ],
       ),
     );
-  }
-
-  List<Widget> _buildFrequencyBreakdown() {
-    final frequencyScores = <WordFrequency, List<int>>{};
-
-    for (int i = 0; i < _results.length; i++) {
-      final result = _results[i];
-      final item = _generatedItems[i];
-      frequencyScores.putIfAbsent(item.frequency, () => []);
-      frequencyScores[item.frequency]!.add(result.score);
-    }
-
-    return frequencyScores.entries.map((entry) {
-      final total = entry.value.fold(0, (sum, score) => sum + score);
-      final max = entry.value.length * 2;
-      final frequencyName = _frequencyName(entry.key);
-
-      return Padding(
-        padding: EdgeInsets.only(bottom: 4.h),
-        child: Text(
-          context.l10n.vocabFrequencyBreakdownRow(frequencyName, total, max),
-          style: TextStyle(fontSize: 13.sp),
-        ),
-      );
-    }).toList();
   }
 
   /// Nom localisé du niveau de fréquence (FR/EN selon la locale courante).
@@ -274,23 +204,6 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
       case WordFrequency.veryLow:
         return l10n.vocabFreqVeryLow;
     }
-  }
-
-  String _getPerformanceLevel(int score) {
-    final l10n = context.l10n;
-    if (score >= 50) return l10n.vocabPerfExceptional;
-    if (score >= 40) return l10n.vocabPerfSuperior;
-    if (score >= 28) return l10n.vocabPerfAverage;
-    if (score >= 18) return l10n.vocabPerfBelowAverage;
-    return l10n.vocabPerfLow;
-  }
-
-  Color _getPerformanceColor(int score) {
-    if (score >= 50) return AppColors.indexFSIQ;
-    if (score >= 40) return AppColors.success;
-    if (score >= 28) return AppColors.info;
-    if (score >= 18) return AppColors.warning;
-    return AppColors.error;
   }
 
   @override

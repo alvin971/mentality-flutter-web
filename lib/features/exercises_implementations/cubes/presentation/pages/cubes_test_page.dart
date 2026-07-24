@@ -143,56 +143,13 @@ class _CubesTestPageState extends State<CubesTestPage> {
   }
 
   void _showFinalResults() {
-    final completedItems = currentLevel + 1;
-    final avgTime = completedItems > 0 ? totalTime ~/ completedItems : 0;
-
-    // Score max : Items 3-5 = 2 pts × 3 = 6, Items 6-14 = 4 pts × 9 = 36, Total = 42
-    final maxScore = 42;
-    final percentageCorrect = (score / maxScore * 100).round();
-
+    // Test non noté à l'écran : aucun récapitulatif de points/temps/réussite,
+    // simple confirmation de fin — le score repart vers l'appelant, sans être montré.
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
         title: Text(context.l10n.cubesFinishedTitle),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _resultRow(context.l10n.cubesTotalScoreLabel,
-                context.l10n.cubesTotalScoreValue(score, maxScore)),
-            _resultRow(context.l10n.cubesItemsCompletedLabel,
-                context.l10n.cubesItemsCompletedValue(completedItems)),
-            _resultRow(
-                context.l10n.matSuccessRate, '$percentageCorrect%'),
-            _resultRow(context.l10n.cubesAvgTime, _formatTime(avgTime)),
-            SizedBox(height: 16.h),
-            Container(
-              padding: EdgeInsets.all(12.w),
-              decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(8.r),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    context.l10n.matEvaluation,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14.sp,
-                    ),
-                  ),
-                  SizedBox(height: 4.h),
-                  Text(
-                    _getPerformanceLevel(context, percentageCorrect),
-                    style: TextStyle(fontSize: 13.sp),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
         actions: [
           TextButton(
             onPressed: () {
@@ -218,37 +175,6 @@ class _CubesTestPageState extends State<CubesTestPage> {
         ],
       ),
     );
-  }
-
-  Widget _resultRow(String label, String value) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 4.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label),
-          Text(
-            value,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
-    );
-  }
-
-  String _getPerformanceLevel(BuildContext context, int percentage) {
-    final l10n = context.l10n;
-    if (percentage >= 90) return l10n.cubesPerfExcellent;
-    if (percentage >= 75) return l10n.cubesPerfVeryGood;
-    if (percentage >= 60) return l10n.matPerfGood;
-    if (percentage >= 40) return l10n.matPerfAverage;
-    return l10n.matPerfBelowAverage;
-  }
-
-  String _formatTime(int seconds) {
-    final mins = seconds ~/ 60;
-    final secs = seconds % 60;
-    return '$mins:${secs.toString().padLeft(2, '0')}';
   }
 
   @override

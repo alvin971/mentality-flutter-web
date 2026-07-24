@@ -184,43 +184,13 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
   }
 
   void _showFinalResults() {
-    final percentageScore = (score / _generatedItems.length * 100).round();
-
+    // Test non noté à l'écran : aucun récapitulatif de points/temps/réussite,
+    // simple confirmation de fin — le score repart vers l'appelant, sans être montré.
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: Text(
-          context.l10n.fwResultsTitle,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(context.l10n.fwRawScorePoints(score)),
-            Text(context.l10n.fwItemsCompleted(currentLevel + 1)),
-            Text(context.l10n.fwPercentage(percentageScore)),
-            Text(context.l10n.fwTotalTime(totalTime)),
-            SizedBox(height: 12.h),
-            Text(
-              _getPerformanceLevel(context, score),
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: _getPerformanceColor(score),
-              ),
-            ),
-            SizedBox(height: 8.h),
-            Text(
-              context.l10n.fwGLoading,
-              style: TextStyle(
-                fontSize: 12.sp,
-                fontStyle: FontStyle.italic,
-                color: AppColors.grey600,
-              ),
-            ),
-          ],
-        ),
+        title: Text(context.l10n.fwResultsTitle),
         actions: [
           TextButton(
             onPressed: () {
@@ -232,23 +202,6 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
         ],
       ),
     );
-  }
-
-  String _getPerformanceLevel(BuildContext context, int score) {
-    final l10n = context.l10n;
-    if (score >= 23) return l10n.fwPerfExceptional;
-    if (score >= 18) return l10n.fwPerfSuperior;
-    if (score >= 12) return l10n.fwPerfAverage;
-    if (score >= 7) return l10n.fwPerfInferior;
-    return l10n.fwPerfLow;
-  }
-
-  Color _getPerformanceColor(int score) {
-    if (score >= 23) return AppColors.indexFSIQ;
-    if (score >= 18) return AppColors.success;
-    if (score >= 12) return AppColors.info;
-    if (score >= 7) return AppColors.warning;
-    return AppColors.error;
   }
 
   @override

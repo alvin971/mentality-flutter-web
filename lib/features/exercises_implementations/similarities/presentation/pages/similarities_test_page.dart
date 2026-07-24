@@ -206,57 +206,13 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
   }
 
   void _showFinalResults() {
-    final maxScore = _generatedItems.length * 2; // 21 items × 2 points = 42 max
-    final percentageScore = (score / maxScore * 100).round();
-
+    // Test non noté à l'écran : aucun récapitulatif de points/temps/réussite,
+    // simple confirmation de fin — le score repart vers l'appelant, sans être montré.
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: Text(
-          context.l10n.simResultsTitle,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(context.l10n.simRawScore(score, maxScore)),
-              Text(context.l10n
-                  .simItemsCompleted(currentLevel + 1, _generatedItems.length)),
-              Text(context.l10n.simPercentage(percentageScore)),
-              Text(context.l10n.simTotalTime(totalTime)),
-              SizedBox(height: 12.h),
-              Text(
-                _getPerformanceLevel(score),
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: _getPerformanceColor(score),
-                ),
-              ),
-              SizedBox(height: 8.h),
-              Text(
-                context.l10n.simSubtitle,
-                style: TextStyle(
-                  fontSize: 12.sp,
-                  fontStyle: FontStyle.italic,
-                  color: AppColors.grey600,
-                ),
-              ),
-              SizedBox(height: 16.h),
-              Text(
-                context.l10n.simBreakdownTitle,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14.sp,
-                ),
-              ),
-              SizedBox(height: 8.h),
-              ..._buildLevelBreakdown(),
-            ],
-          ),
-        ),
+        title: Text(context.l10n.simResultsTitle),
         actions: [
           TextButton(
             onPressed: () {
@@ -268,31 +224,6 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
         ],
       ),
     );
-  }
-
-  List<Widget> _buildLevelBreakdown() {
-    final levelScores = <AbstractionLevel, List<int>>{};
-
-    for (int i = 0; i < _results.length; i++) {
-      final result = _results[i];
-      final item = _generatedItems[i];
-      levelScores.putIfAbsent(item.level, () => []);
-      levelScores[item.level]!.add(result.score);
-    }
-
-    return levelScores.entries.map((entry) {
-      final total = entry.value.fold(0, (sum, score) => sum + score);
-      final max = entry.value.length * 2;
-      final levelName = _levelName(entry.key);
-
-      return Padding(
-        padding: EdgeInsets.only(bottom: 4.h),
-        child: Text(
-          context.l10n.simBreakdownLine(levelName, total, max),
-          style: TextStyle(fontSize: 13.sp),
-        ),
-      );
-    }).toList();
   }
 
   /// Nom localisé du niveau d'abstraction (remplace [SimilarityItem.levelName]
@@ -308,22 +239,6 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
       case AbstractionLevel.abstract:
         return context.l10n.simLevelAbstract;
     }
-  }
-
-  String _getPerformanceLevel(int score) {
-    if (score >= 36) return context.l10n.simPerfExceptional;
-    if (score >= 28) return context.l10n.simPerfSuperior;
-    if (score >= 20) return context.l10n.simPerfAverage;
-    if (score >= 12) return context.l10n.simPerfBelow;
-    return context.l10n.simPerfLow;
-  }
-
-  Color _getPerformanceColor(int score) {
-    if (score >= 36) return AppColors.indexFSIQ;
-    if (score >= 28) return AppColors.success;
-    if (score >= 20) return AppColors.info;
-    if (score >= 12) return AppColors.warning;
-    return AppColors.error;
   }
 
   @override

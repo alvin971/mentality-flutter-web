@@ -160,8 +160,9 @@ void main() {
     await failItem(tester, SpanTypeUi.sequencing);
     await failItem(tester, SpanTypeUi.sequencing);
 
-    // Fin du test : dialogue de résultats, puis retour AVEC un score.
-    expect(find.text('Résultats par partie :'), findsOneWidget);
+    // Fin du test : dialogue de fin SANS métriques (test non noté à l'écran),
+    // puis retour AVEC un score.
+    expect(find.text('Résultats par partie :'), findsNothing);
     await tester.tap(find.byKey(const Key('dsResultsBack')));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 600));
