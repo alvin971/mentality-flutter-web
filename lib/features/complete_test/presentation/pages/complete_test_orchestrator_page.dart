@@ -93,6 +93,9 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
   /// Vrai si l'âge a pu être dérivé du token → aucune saisie demandée.
   bool _ageFromToken = false;
 
+  /// Diagnostic terrain (temporaire) : pourquoi l'âge n'a pas été dérivé.
+  String? _ageDiag;
+
   /// Garde anti-double-lancement de l'étape orale finale (le listener BLoC
   /// peut se déclencher plusieurs fois pour un même état).
   bool _postBatteryStarted = false;
@@ -108,12 +111,16 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
   /// cohérent avec les tables normatives.
   Future<void> _loadAgeFromToken() async {
     final months = await TokenClaimsReader.currentAgeInMonths();
+    final diag = await TokenClaimsReader.ageDiagnostic();
     if (!mounted) return;
     setState(() {
-      if (months != null && months >= 16 * 12 && months <= 90 * 12) {
+      // Plage alignée sur l'émetteur du token (5–100 ans) : ne pas rejeter un
+      // âge pourtant valide par une borne trop étroite.
+      if (months != null && months >= 5 * 12 && months <= 100 * 12) {
         _ageInMonths = months;
         _ageFromToken = true;
       }
+      _ageDiag = diag;
       _ageLoading = false;
     });
   }
@@ -335,6 +342,11 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
                   SizedBox(height: 12.h),
                   Text(context.l10n.ctPatientAgeHint,
                       style: AppText.bodySmall()),
+                  if (_ageDiag != null) ...[
+                    SizedBox(height: 8.h),
+                    Text('Diagnostic (temporaire) : $_ageDiag',
+                        style: AppText.bodySmall(color: AppColors.error)),
+                  ],
                   SizedBox(height: 12.h),
                   TextField(
                     controller: _ageController,
