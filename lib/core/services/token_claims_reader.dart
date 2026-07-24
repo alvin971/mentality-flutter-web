@@ -83,28 +83,6 @@ class TokenClaimsReader {
     return ageInMonthsFrom(y, m, now ?? DateTime.now());
   }
 
-  /// Diagnostic LISIBLE de la dérivation d'âge — sert à tracer un cas terrain
-  /// où la saisie manuelle réapparaît (temporaire). Renvoie une courte chaîne
-  /// décrivant l'étape qui échoue, sans jamais exposer le token en clair.
-  static Future<String> ageDiagnostic({DateTime? now}) async {
-    try {
-      final token = await AuthLocalStore.instance.getToken();
-      if (token == null || token.isEmpty) return 'aucun-token';
-      final segs = token.split('.').length;
-      final claims = await currentClaims();
-      if (claims == null) return 'token-non-décodé (seg=$segs)';
-      final y = claims['y'];
-      final m = claims['m'];
-      if (y is! int || m is! int) {
-        return 'claims-sans-âge (clés=${claims.keys.join("|")})';
-      }
-      final months = ageInMonthsFrom(y, m, now ?? DateTime.now());
-      return 'ok y=$y m=$m → ${months == null ? "?" : (months ~/ 12)} ans';
-    } catch (e) {
-      return 'exception ${e.runtimeType}';
-    }
-  }
-
   /// Calcul PUR (testable) de l'âge en mois depuis l'année/mois de naissance.
   /// Renvoie `null` si le résultat est négatif (date incohérente).
   static int? ageInMonthsFrom(int birthYear, int birthMonth, DateTime now) {
