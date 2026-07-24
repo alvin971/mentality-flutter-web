@@ -22,6 +22,8 @@ import '../../../exercises_implementations/information/presentation/pages/inform
 import '../../../exercises_implementations/coding/presentation/pages/coding_test_page.dart';
 import '../../../exercises_implementations/picture_span/presentation/pages/picture_span_test_page.dart';
 import '../../../exercises_implementations/figure_weights/presentation/pages/figure_weights_test_page.dart';
+import '../../../data_collection/oral_test_flow.dart';
+import '../../../../core/services/token_claims_reader.dart';
 import 'complete_test_results_page.dart';
 import '../../../../core/l10n/l10n_ext.dart';
 
@@ -79,8 +81,42 @@ class _OrchestratorView extends StatefulWidget {
 }
 
 class _OrchestratorViewState extends State<_OrchestratorView> {
+  /// Champ de secours UNIQUEMENT : sert si le token est indécodable (cas qui
+  /// ne devrait pas arriver, l'accès étant déjà verrouillé par un token
+  /// valide). En temps normal l'âge vient du token, sans aucune saisie.
   final TextEditingController _ageController = TextEditingController();
   int? _ageInMonths;
+
+  /// Vrai tant qu'on lit l'âge depuis le token (spinner court à l'écran).
+  bool _ageLoading = true;
+
+  /// Vrai si l'âge a pu être dérivé du token → aucune saisie demandée.
+  bool _ageFromToken = false;
+
+  /// Garde anti-double-lancement de l'étape orale finale (le listener BLoC
+  /// peut se déclencher plusieurs fois pour un même état).
+  bool _postBatteryStarted = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAgeFromToken();
+  }
+
+  /// Dérive l'âge (en mois) depuis l'année/mois de naissance du token.
+  /// Plage acceptée identique à l'ancienne saisie (16–90 ans) pour rester
+  /// cohérent avec les tables normatives.
+  Future<void> _loadAgeFromToken() async {
+    final months = await TokenClaimsReader.currentAgeInMonths();
+    if (!mounted) return;
+    setState(() {
+      if (months != null && months >= 16 * 12 && months <= 90 * 12) {
+        _ageInMonths = months;
+        _ageFromToken = true;
+      }
+      _ageLoading = false;
+    });
+  }
 
   @override
   void dispose() {
@@ -137,6 +173,36 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
     }
   }
 
+  /// Étape FINALE non notée : compréhension orale (collecte audio).
+  ///
+  /// Elle ne produit aucun score → elle n'entre pas dans la séquence notée ni
+  /// dans le calcul du QI. On l'exécute une fois les 12 sous-tests terminés,
+  /// juste avant les résultats. Le consentement est géré par [OralTestFlow] ;
+  /// un refus la fait simplement sauter (pop immédiat) → on passe aux résultats.
+  Future<void> _finishWithOralThenResults(
+    BuildContext context,
+    CompleteTestDoneState state,
+  ) async {
+    if (_postBatteryStarted) return;
+    _postBatteryStarted = true;
+
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const OralTestFlow()),
+    );
+    if (!context.mounted) return;
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (_) => CompleteTestResultsPage(
+          session: state.session,
+          ageInMonths: state.ageInMonths,
+        ),
+      ),
+    );
+  }
+
   Widget _getTestPage(BuildContext context, String testName) {
     switch (testName) {
       case 'Cubes':
@@ -181,17 +247,7 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
           });
         } else if (state is CompleteTestDoneState) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (context.mounted) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => CompleteTestResultsPage(
-                    session: state.session,
-                    ageInMonths: state.ageInMonths,
-                  ),
-                ),
-              );
-            }
+            if (context.mounted) _finishWithOralThenResults(context, state);
           });
         }
       },
@@ -255,65 +311,80 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
               eyebrow: context.l10n.ctIntroImportantEyebrow,
               title: context.l10n.ctIntroImportantTitle,
               body: context.l10n.ctIntroImportantBody),
-          SizedBox(height: 24.h),
-          KeplerCard(
-            surface: true,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(context.l10n.ctPatientAgeHeader,
-                    style: AppText.monoLabel(color: AppColors.primary)),
-                SizedBox(height: 12.h),
-                Text(
-                    context.l10n.ctPatientAgeHint,
-                    style: AppText.bodySmall()),
-                SizedBox(height: 12.h),
-                TextField(
-                  controller: _ageController,
-                  keyboardType: TextInputType.number,
-                  style: AppText.monoScore(size: 22.sp),
-                  decoration: InputDecoration(
-                    hintText: '00',
-                    hintStyle: AppText.monoScore(
-                        color: Theme.of(context).colorScheme.outline, size: 22.sp),
-                    suffixText: context.l10n.ctAgeSuffix,
-                    suffixStyle:
-                        AppText.monoLabel(color: Theme.of(context).colorScheme.outline),
-                    filled: true,
-                    fillColor: Theme.of(context).scaffoldBackgroundColor,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(6.r),
-                      borderSide: BorderSide.none,
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(6.r),
-                      borderSide:
-                          BorderSide(color: Colors.black.withValues(alpha: 0.07)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(6.r),
-                      borderSide: const BorderSide(
-                          color: AppColors.primary, width: 2),
-                    ),
-                  ),
-                  onChanged: (v) {
-                    final years = int.tryParse(v);
-                    setState(() {
-                      _ageInMonths = (years != null && years >= 16 && years <= 90)
-                          ? years * 12
-                          : null;
-                    });
-                  },
-                ),
-                if (_ageController.text.isNotEmpty && _ageInMonths == null)
-                  Padding(
-                    padding: EdgeInsets.only(top: 8.h),
-                    child: Text(context.l10n.ctAgeRangeError,
-                        style: AppText.bodySmall(color: AppColors.error)),
-                  ),
-              ],
+          // L'âge n'est plus SAISI : il est dérivé du token (année + mois de
+          // naissance). Le champ manuel ne réapparaît qu'en secours si le
+          // token est indécodable — situation anormale, l'accès étant déjà
+          // verrouillé par un token valide en amont.
+          if (_ageLoading) ...[
+            SizedBox(height: 24.h),
+            const Center(
+              child: Padding(
+                padding: EdgeInsets.all(8),
+                child: CircularProgressIndicator(color: AppColors.primary),
+              ),
             ),
-          ),
+          ] else if (!_ageFromToken) ...[
+            SizedBox(height: 24.h),
+            KeplerCard(
+              surface: true,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(context.l10n.ctPatientAgeHeader,
+                      style: AppText.monoLabel(color: AppColors.primary)),
+                  SizedBox(height: 12.h),
+                  Text(context.l10n.ctPatientAgeHint,
+                      style: AppText.bodySmall()),
+                  SizedBox(height: 12.h),
+                  TextField(
+                    controller: _ageController,
+                    keyboardType: TextInputType.number,
+                    style: AppText.monoScore(size: 22.sp),
+                    decoration: InputDecoration(
+                      hintText: '00',
+                      hintStyle: AppText.monoScore(
+                          color: Theme.of(context).colorScheme.outline,
+                          size: 22.sp),
+                      suffixText: context.l10n.ctAgeSuffix,
+                      suffixStyle: AppText.monoLabel(
+                          color: Theme.of(context).colorScheme.outline),
+                      filled: true,
+                      fillColor: Theme.of(context).scaffoldBackgroundColor,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(6.r),
+                        borderSide: BorderSide.none,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(6.r),
+                        borderSide: BorderSide(
+                            color: Colors.black.withValues(alpha: 0.07)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(6.r),
+                        borderSide: const BorderSide(
+                            color: AppColors.primary, width: 2),
+                      ),
+                    ),
+                    onChanged: (v) {
+                      final years = int.tryParse(v);
+                      setState(() {
+                        _ageInMonths =
+                            (years != null && years >= 16 && years <= 90)
+                                ? years * 12
+                                : null;
+                      });
+                    },
+                  ),
+                  if (_ageController.text.isNotEmpty && _ageInMonths == null)
+                    Padding(
+                      padding: EdgeInsets.only(top: 8.h),
+                      child: Text(context.l10n.ctAgeRangeError,
+                          style: AppText.bodySmall(color: AppColors.error)),
+                    ),
+                ],
+              ),
+            ),
+          ],
           SizedBox(height: 24.h),
           KeplerButton(
             label: context.l10n.ctLaunchFullTest,
@@ -413,7 +484,7 @@ class _InfoCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('$eyebrow',
+                Text(eyebrow,
                     style: AppText.monoLabel(color: AppColors.primary)),
                 SizedBox(height: 4.h),
                 Text(title, style: AppText.bodyStrong()),
