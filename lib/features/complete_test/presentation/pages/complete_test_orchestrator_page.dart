@@ -110,8 +110,13 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
     final months = await TokenClaimsReader.currentAgeInMonths();
     if (!mounted) return;
     setState(() {
-      if (months != null && months >= 16 * 12 && months <= 90 * 12) {
-        _ageInMonths = months;
+      if (months != null) {
+        // L'âge du token est TOUJOURS accepté — l'émetteur borne déjà la
+        // naissance à 5–100 ans, et rejeter ici (ex. <16 ans) faisait
+        // réapparaître la saisie manuelle alors qu'un token valide existe.
+        // On le ramène aux bornes des tables normatives (16–90) pour le
+        // scoring ; la saisie ne sert plus qu'au cas sans token exploitable.
+        _ageInMonths = months.clamp(16 * 12, 90 * 12);
         _ageFromToken = true;
       }
       _ageLoading = false;
