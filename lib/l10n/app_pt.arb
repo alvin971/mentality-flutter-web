@@ -797,5 +797,7 @@
   "histLockedCta": "Ver as minhas missões",
   "inviteLandingTitle": "Convite",
   "inviteLandingBody": "Um amigo convidou-te para fazer o teste de QI gratuito da Mentality. Ao terminares o teu teste, obténs o teu resultado e ajudas o teu amigo a desbloquear o dele.",
-  "inviteLandingCta": "Começar o teste gratuito"
+  "inviteLandingCta": "Começar o teste gratuito",
+  "completionPendingNotice": "O servidor ainda não confirmou o fim do teu teste. Continuamos a tentar — mantém a ligação e reabre a app se necessário.",
+  "completionRejectedNotice": "Esta tentativa não pôde ser validada: foi demasiado curta. Não conta para a missão de convites."
 }

@@ -1,3 +1,5 @@
+import 'dart:async' show unawaited;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,6 +25,7 @@ import '../../../exercises_implementations/coding/presentation/pages/coding_test
 import '../../../exercises_implementations/picture_span/presentation/pages/picture_span_test_page.dart';
 import '../../../exercises_implementations/figure_weights/presentation/pages/figure_weights_test_page.dart';
 import '../../../data_collection/oral_test_flow.dart';
+import '../../../unlock/data/completion_reporter.dart';
 import '../../../../core/services/token_claims_reader.dart';
 import 'complete_test_results_page.dart';
 import '../../../../core/l10n/l10n_ext.dart';
@@ -190,6 +193,21 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
   ) async {
     if (_postBatteryStarted) return;
     _postBatteryStarted = true;
+
+    // LE TEST EST TERMINÉ ICI : on le déclare au serveur MAINTENANT, avant
+    // toute étape facultative. Cette déclaration est la seule porte qui
+    // crédite le parrain d'un filleul ; tant qu'elle vivait sur l'écran de
+    // résultats, l'étape orale ci-dessous (~10 min, micro, consentement)
+    // s'intercalait entre la fin du test et le crédit : une app fermée là et
+    // le parrainage était perdu définitivement, sans aucun message.
+    // Elle est persistée et rejouée jusqu'à confirmation (CompletionReporter).
+    final session = state.session;
+    final duree = session.totalDuration ??
+        DateTime.now().difference(session.startTime);
+    unawaited(CompletionReporter.instance.declare(
+      subtestsCompleted: session.completedTestsCount,
+      durationSeconds: duree.inSeconds,
+    ));
 
     await Navigator.push(
       context,

@@ -2757,4 +2757,12 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get inviteLandingCta => 'Começar o teste gratuito';
+
+  @override
+  String get completionPendingNotice =>
+      'O servidor ainda não confirmou o fim do teu teste. Continuamos a tentar — mantém a ligação e reabre a app se necessário.';
+
+  @override
+  String get completionRejectedNotice =>
+      'Esta tentativa não pôde ser validada: foi demasiado curta. Não conta para a missão de convites.';
 }

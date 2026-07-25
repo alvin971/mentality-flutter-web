@@ -797,5 +797,7 @@
   "histLockedCta": "Meine Missionen ansehen",
   "inviteLandingTitle": "Einladung",
   "inviteLandingBody": "Ein Freund lädt dich zum kostenlosen Mentality-IQ-Test ein. Wenn du deinen Test abschließt, erhältst du dein eigenes Ergebnis und hilfst deinem Freund, seines freizuschalten.",
-  "inviteLandingCta": "Kostenlosen Test starten"
+  "inviteLandingCta": "Kostenlosen Test starten",
+  "completionPendingNotice": "Der Abschluss deines Tests wurde vom Server noch nicht bestätigt. Wir versuchen es weiter — bleib online und öffne die App bei Bedarf erneut.",
+  "completionRejectedNotice": "Dieser Durchgang konnte nicht bestätigt werden: Er war zu kurz. Er zählt nicht für die Empfehlungsmission."
 }

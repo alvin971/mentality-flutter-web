@@ -87,4 +87,81 @@ class AuthLocalStore {
     final box = await _openBox();
     return box.get(key) == true;
   }
+
+  // ─── Déclaration de fin de test en attente ──────────────────────────────
+  //
+  // La déclaration de complétion (POST /complete) est la SEULE porte qui
+  // crédite le parrain d'un filleul. Elle était émise une fois, sans filet :
+  // une coupure réseau, ou l'app fermée avant qu'elle ne parte, et le
+  // parrainage était perdu DÉFINITIVEMENT, sans le moindre message.
+  //
+  // On la persiste donc dès la fin de la batterie et on la rejoue à chaque
+  // occasion (ouverture de l'app, écran des missions, page de résultats)
+  // jusqu'à confirmation du serveur. Cloisonnée par passe, comme le cache de
+  // déblocage : la fin de test d'un passe ne doit jamais créditer un autre.
+
+  Future<String?> _pendingCompletionKey() async {
+    final account = await TokenAccount.fromToken(await getToken());
+    return account == null ? null : 'pending_completion:$account';
+  }
+
+  /// Mémorise une fin de test à déclarer (ou re-déclarer) au serveur.
+  Future<void> savePendingCompletion({
+    required int subtestsCompleted,
+    required int durationSeconds,
+  }) async {
+    final key = await _pendingCompletionKey();
+    if (key == null) return;
+    final box = await _openBox();
+    await box.put(key, {
+      'subtestsCompleted': subtestsCompleted,
+      'durationSeconds': durationSeconds,
+    });
+  }
+
+  /// Fin de test restant à déclarer pour le passe courant, ou `null`.
+  Future<({int subtestsCompleted, int durationSeconds})?>
+      getPendingCompletion() async {
+    final key = await _pendingCompletionKey();
+    if (key == null) return null;
+    final box = await _openBox();
+    final raw = box.get(key);
+    if (raw is! Map) return null;
+    final subtests = (raw['subtestsCompleted'] as num?)?.toInt();
+    final duration = (raw['durationSeconds'] as num?)?.toInt();
+    if (subtests == null || duration == null) return null;
+    return (subtestsCompleted: subtests, durationSeconds: duration);
+  }
+
+  /// Efface la déclaration en attente (confirmée, ou définitivement refusée).
+  Future<void> clearPendingCompletion() async {
+    final key = await _pendingCompletionKey();
+    if (key == null) return;
+    final box = await _openBox();
+    await box.delete(key);
+  }
+
+  /// Mémorise qu'une déclaration a été REFUSÉE par le serveur (session jugée
+  /// non plausible). Sert à l'expliquer à l'utilisateur au lieu de le laisser
+  /// croire que sa mission est validée.
+  Future<void> saveCompletionRejected() async {
+    final account = await TokenAccount.fromToken(await getToken());
+    if (account == null) return;
+    final box = await _openBox();
+    await box.put('completion_rejected:$account', true);
+  }
+
+  Future<bool> getCompletionRejected() async {
+    final account = await TokenAccount.fromToken(await getToken());
+    if (account == null) return false;
+    final box = await _openBox();
+    return box.get('completion_rejected:$account') == true;
+  }
+
+  Future<void> clearCompletionRejected() async {
+    final account = await TokenAccount.fromToken(await getToken());
+    if (account == null) return;
+    final box = await _openBox();
+    await box.delete('completion_rejected:$account');
+  }
 }

@@ -2765,4 +2765,12 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get inviteLandingCta => 'Kostenlosen Test starten';
+
+  @override
+  String get completionPendingNotice =>
+      'Der Abschluss deines Tests wurde vom Server noch nicht bestätigt. Wir versuchen es weiter — bleib online und öffne die App bei Bedarf erneut.';
+
+  @override
+  String get completionRejectedNotice =>
+      'Dieser Durchgang konnte nicht bestätigt werden: Er war zu kurz. Er zählt nicht für die Empfehlungsmission.';
 }

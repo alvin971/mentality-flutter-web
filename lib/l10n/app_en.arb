@@ -797,5 +797,7 @@
   "histLockedCta": "See my missions",
   "inviteLandingTitle": "Invitation",
   "inviteLandingBody": "A friend invited you to take the free Mentality IQ test. By finishing your test, you get your own result and help your friend unlock theirs.",
-  "inviteLandingCta": "Start the free test"
+  "inviteLandingCta": "Start the free test",
+  "completionPendingNotice": "Your test completion hasn't been confirmed by the server yet. We keep retrying — stay connected and reopen the app if needed.",
+  "completionRejectedNotice": "This attempt could not be validated: it was too short. It does not count towards the referral mission."
 }

@@ -2746,6 +2746,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get inviteLandingCta => 'Start the free test';
+
+  @override
+  String get completionPendingNotice =>
+      'Your test completion hasn\'t been confirmed by the server yet. We keep retrying — stay connected and reopen the app if needed.';
+
+  @override
+  String get completionRejectedNotice =>
+      'This attempt could not be validated: it was too short. It does not count towards the referral mission.';
 }
 
 /// The translations for English, as used in the United Kingdom (`en_GB`).
@@ -5491,4 +5499,12 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get inviteLandingCta => 'Start the free test';
+
+  @override
+  String get completionPendingNotice =>
+      'Your test completion hasn\'t been confirmed by the server yet. We keep retrying — stay connected and reopen the app if needed.';
+
+  @override
+  String get completionRejectedNotice =>
+      'This attempt could not be validated: it was too short. It does not count towards the referral mission.';
 }

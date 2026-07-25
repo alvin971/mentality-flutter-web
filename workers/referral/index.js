@@ -254,7 +254,13 @@ async function handleInit(env, origin, account, body) {
 // et couvre les 12 sous-tests ; ces seuils écartent les déclarations grossières
 // (un écran ouvert, une session vide) sans pénaliser un passage rapide légitime.
 const MIN_SUBTESTS_COMPLETED = 10;
-const MIN_TEST_DURATION_S = 600; // 10 min plancher, très en dessous du réel
+// 5 min. L'ancien plancher de 10 min rejetait des passations RÉELLES mais
+// rapides — d'autant plus depuis la suppression des récapitulatifs de fin de
+// sous-test, qui a raccourci le parcours. Le refus étant alors avalé en
+// silence par le client, le parrain n'était jamais crédité et personne ne le
+// savait. 5 min reste très en dessous d'un passage sincère (12 sous-tests,
+// dont plusieurs chronométrés) tout en écartant les déclarations grossières.
+const MIN_TEST_DURATION_S = 300;
 
 /**
  * POST /complete — SEULE porte par laquelle un parrainage est crédité.
@@ -271,8 +277,18 @@ const MIN_TEST_DURATION_S = 600; // 10 min plancher, très en dessous du réel
  * prévu pour ce durcissement.
  */
 async function handleComplete(env, origin, account, body) {
-  const row = await getProgress(env, account);
-  if (!row) return json({ error: 'Aucun suivi — appeler /progress/init' }, 404, origin);
+  // Le suivi est créé À LA VOLÉE s'il n'existe pas (comportement déjà déployé,
+  // que ce fichier ne reflétait plus). Renvoyer 404 ici serait une régression
+  // grave : l'app déclare la fin de test dès le dernier sous-test, AVANT tout
+  // écran de missions — un tout premier test n'a donc pas encore de suivi, et
+  // son parrainage serait perdu à chaque fois.
+  let row = await getProgress(env, account);
+  if (!row) {
+    const code = await generateUniqueCode(env);
+    row = emptyProgress(account, code, isoNow());
+    await putProgress(env, row);
+    await env.REFERRAL_KV.put(`code:${code}`, account);
+  }
 
   const already = await env.REFERRAL_KV.get(`completed:${account}`);
   if (!already) {

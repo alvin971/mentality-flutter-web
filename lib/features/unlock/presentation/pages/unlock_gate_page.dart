@@ -13,6 +13,7 @@ import '../../../../core/theme/kepler_colors.dart';
 import '../../../../core/widgets/kepler_button.dart';
 import '../../../../core/widgets/kepler_card.dart';
 import '../../../../core/widgets/kepler_scaffold.dart';
+import '../../data/completion_reporter.dart';
 import '../../data/unlock_service.dart';
 
 /// Écran des paliers de déblocage du résultat, affiché à la FIN du test
@@ -91,7 +92,27 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
     super.dispose();
   }
 
+  /// Le serveur a refusé la fin de test de ce passe.
+  bool _completionRejected = false;
+
+  /// La fin de test n'est pas encore confirmée — on rejoue à chaque passage.
+  bool _completionPending = false;
+
   Future<void> _load({bool init = false}) async {
+    // Rattrapage : une fin de test qui n'a pas abouti (réseau coupé, app
+    // fermée avant confirmation) est rejouée à chaque ouverture de cet écran.
+    // C'est la principale seconde chance de créditer le parrain.
+    await CompletionReporter.instance.retryPending();
+    if (mounted) {
+      final refuse = await CompletionReporter.instance.wasRejected();
+      final attente = await CompletionReporter.instance.hasPending();
+      if (mounted) {
+        setState(() {
+          _completionRejected = refuse;
+          _completionPending = attente;
+        });
+      }
+    }
     final p = init
         ? await UnlockService.instance.initProgress()
         : await UnlockService.instance.getProgress();
@@ -171,6 +192,41 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
     );
   }
 
+  /// Avertissement sur la fin de test : refus définitif (session trop courte)
+  /// ou confirmation encore en attente. Jamais silencieux — c'est ce silence
+  /// qui faisait perdre des parrainages sans que personne ne le sache.
+  Widget _buildCompletionNotice(dynamic l10n) {
+    final refuse = _completionRejected;
+    return KeplerCard(
+      surface: true,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(
+            refuse ? Icons.error_outline : Icons.sync_problem_outlined,
+            size: 18.sp,
+            color: refuse
+                ? KeplerColors.of(context).error
+                : Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
+          SizedBox(width: 10.w),
+          Expanded(
+            child: Text(
+              refuse
+                  ? l10n.completionRejectedNotice
+                  : l10n.completionPendingNotice,
+              style: AppText.of(context).bodySmall(
+                color: refuse
+                    ? KeplerColors.of(context).error
+                    : Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildError(dynamic l10n) {
     return Column(
       children: [
@@ -200,6 +256,13 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // La fin de test de CE passe n'a pas abouti : le dire ici, c'est le
+        // seul écran que voit un filleul après sa passation. Sans ça, il
+        // repartait convaincu d'avoir validé la mission de son parrain.
+        if (_completionRejected || _completionPending) ...[
+          _buildCompletionNotice(l10n),
+          SizedBox(height: 16.h),
+        ],
         // Le test est gratuit : condition affichée clairement dès le départ.
         Text(l10n.ugFreeNotice, style: AppText.of(context).body()),
         SizedBox(height: 10.h),

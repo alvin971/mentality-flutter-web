@@ -4892,6 +4892,18 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Commencer le test gratuit'**
   String get inviteLandingCta;
+
+  /// Avertissement affiché quand la déclaration de fin de test n'a pas abouti.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fin de test pas encore confirmée par le serveur. Nous réessayons automatiquement — garde une connexion et rouvre l\'app si besoin.'**
+  String get completionPendingNotice;
+
+  /// Avertissement affiché quand la déclaration de fin de test n'a pas abouti.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette passation n\'a pas pu être validée : elle a été jugée trop courte. Elle ne compte pas pour la mission de parrainage.'**
+  String get completionRejectedNotice;
 }
 
 class _AppLocalizationsDelegate

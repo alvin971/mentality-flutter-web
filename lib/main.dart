@@ -1,3 +1,5 @@
+import 'dart:async' show unawaited;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -14,6 +16,7 @@ import 'core/router/app_router.dart';
 import 'core/constants/app_constants.dart';
 import 'core/services/remote_config_service.dart';
 import 'services/data_collection_service.dart';
+import 'features/unlock/data/completion_reporter.dart';
 import 'services/session_history_service.dart';
 import 'services/session_persistence_service.dart';
 
@@ -56,6 +59,12 @@ Future<void> _configureApp() async {
   } catch (_) {
     // Ne pas bloquer le démarrage si Hive échoue
   }
+
+  // Rattrapage : une fin de test qui n'a pas pu être déclarée (réseau coupé,
+  // app fermée juste après la batterie) est rejouée ici. Sans ce filet, le
+  // parrainage du filleul était perdu définitivement et sans aucun message.
+  // Volontairement NON attendu : le démarrage ne dépend pas du réseau.
+  unawaited(CompletionReporter.instance.retryPending());
 
   // Initialiser Supabase (auth OTP email + phone)
   try {

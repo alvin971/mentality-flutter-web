@@ -12,6 +12,7 @@ import '../../../../services/session_history_service.dart';
 import '../../../scoring/domain/entities/iq_score.dart';
 import '../../../scoring/domain/services/scoring_service.dart';
 import '../../domain/services/pdf_report_service.dart';
+import '../../../unlock/data/completion_reporter.dart';
 import '../../../unlock/data/unlock_service.dart';
 import '../../../unlock/presentation/pages/unlock_gate_page.dart';
 import '../../../../core/l10n/l10n_ext.dart';
@@ -39,6 +40,15 @@ class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
   /// résultat. Le score reste calculé et sauvegardé en historique (inchangé).
   bool _unlocked = !UnlockService.instance.gateEnabled;
 
+  /// Le serveur a REFUSÉ la fin de test (session jugée non plausible) : il
+  /// faut le dire, sinon l'utilisateur croit sa mission validée alors que son
+  /// parrain ne sera jamais crédité.
+  bool _completionRejected = false;
+
+  /// La fin de test n'est pas encore confirmée (serveur injoignable) : on
+  /// rejouera, mais l'utilisateur doit savoir que ce n'est pas acquis.
+  bool _completionPending = false;
+
   /// Un déblocage DÉJÀ acquis par ce passe ne doit pas être re-demandé : sans
   /// cette relecture du cache, un utilisateur débloqué qui repasse un test se
   /// heurtait au mur d'erreur du gate dès que le worker était injoignable.
@@ -60,21 +70,27 @@ class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
       _iqScore = null;
     }
     _saveToHistory();
-    _declareCompletion();
+    _retryPendingCompletion();
     _honorCachedUnlock();
   }
 
-  /// Déclare la complétion au serveur — SEUL endroit qui crédite le parrain.
-  /// Ne doit jamais migrer vers l'écran des missions (celui-ci s'ouvre aussi
-  /// depuis « Mes résultats », où aucun test ne vient d'être passé).
-  Future<void> _declareCompletion() async {
-    if (!UnlockService.instance.gateEnabled) return;
-    final duration = widget.session.totalDuration ??
-        DateTime.now().difference(widget.session.startTime);
-    await UnlockService.instance.declareTestCompleted(
-      subtestsCompleted: widget.session.completedTestsCount,
-      durationSeconds: duration.inSeconds,
-    );
+  /// Rejoue la déclaration de fin de test si le serveur ne l'a pas encore
+  /// confirmée.
+  ///
+  /// La déclaration elle-même n'a plus lieu ici : elle part désormais dès le
+  /// dernier sous-test (orchestrateur), avant l'étape orale. Cet écran n'est
+  /// plus qu'une occasion de plus de rattraper un envoi qui n'a pas abouti —
+  /// il ne doit surtout pas redevenir le seul point d'émission.
+  Future<void> _retryPendingCompletion() async {
+    await CompletionReporter.instance.retryPending();
+    if (!mounted) return;
+    final refuse = await CompletionReporter.instance.wasRejected();
+    final attente = await CompletionReporter.instance.hasPending();
+    if (!mounted) return;
+    setState(() {
+      _completionRejected = refuse;
+      _completionPending = attente;
+    });
   }
 
   Future<void> _saveToHistory() async {
@@ -115,6 +131,12 @@ class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
         children: [
           _Header(),
           SizedBox(height: 24.h),
+          // Fin de test non aboutie : le dire, même ici. Un résultat affiché
+          // ne prouve pas que la complétion a été enregistrée côté serveur.
+          if (_completionRejected || _completionPending) ...[
+            _CompletionNotice(rejected: _completionRejected),
+            SizedBox(height: 20.h),
+          ],
           _SessionMeta(
             date: _formatDate(session.startTime),
             duration: _formatDuration(session.totalDuration),
@@ -158,6 +180,38 @@ class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
     if (h > 0) return '${h}h ${m}min ${s}s';
     if (m > 0) return '${m}min ${s}s';
     return '${s}s';
+  }
+}
+
+/// Fin de test refusée (session trop courte) ou pas encore confirmée.
+class _CompletionNotice extends StatelessWidget {
+  const _CompletionNotice({required this.rejected});
+  final bool rejected;
+
+  @override
+  Widget build(BuildContext context) {
+    final couleur = rejected
+        ? KeplerColors.of(context).error
+        : Theme.of(context).colorScheme.onSurfaceVariant;
+    return KeplerCard(
+      surface: true,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(rejected ? Icons.error_outline : Icons.sync_problem_outlined,
+              size: 18.sp, color: couleur),
+          SizedBox(width: 10.w),
+          Expanded(
+            child: Text(
+              rejected
+                  ? context.l10n.completionRejectedNotice
+                  : context.l10n.completionPendingNotice,
+              style: AppText.of(context).bodySmall(color: couleur),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 

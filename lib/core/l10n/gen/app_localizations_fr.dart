@@ -2754,4 +2754,12 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get inviteLandingCta => 'Commencer le test gratuit';
+
+  @override
+  String get completionPendingNotice =>
+      'Fin de test pas encore confirmée par le serveur. Nous réessayons automatiquement — garde une connexion et rouvre l\'app si besoin.';
+
+  @override
+  String get completionRejectedNotice =>
+      'Cette passation n\'a pas pu être validée : elle a été jugée trop courte. Elle ne compte pas pour la mission de parrainage.';
 }

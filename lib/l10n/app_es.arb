@@ -797,5 +797,7 @@
   "histLockedCta": "Ver mis misiones",
   "inviteLandingTitle": "Invitación",
   "inviteLandingBody": "Un amigo te invita a hacer el test de CI gratuito de Mentality. Al terminar tu test, obtienes tu propio resultado y ayudas a tu amigo a desbloquear el suyo.",
-  "inviteLandingCta": "Empezar el test gratuito"
+  "inviteLandingCta": "Empezar el test gratuito",
+  "completionPendingNotice": "El servidor aún no ha confirmado el final de tu prueba. Seguimos reintentando: mantén la conexión y vuelve a abrir la app si hace falta.",
+  "completionRejectedNotice": "Este intento no se ha podido validar: ha sido demasiado corto. No cuenta para la misión de invitaciones."
 }

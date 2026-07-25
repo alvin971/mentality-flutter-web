@@ -3772,5 +3772,13 @@
   "histLockedCta": "Voir mes missions",
   "inviteLandingTitle": "Invitation",
   "inviteLandingBody": "Un ami t'invite à passer le test de QI gratuit Mentality. En terminant ton test, tu obtiens ton propre résultat et tu aides ton ami à débloquer le sien.",
-  "inviteLandingCta": "Commencer le test gratuit"
+  "inviteLandingCta": "Commencer le test gratuit",
+  "completionPendingNotice": "Fin de test pas encore confirmée par le serveur. Nous réessayons automatiquement — garde une connexion et rouvre l'app si besoin.",
+  "@completionPendingNotice": {
+    "description": "Avertissement affiché quand la déclaration de fin de test n'a pas abouti."
+  },
+  "completionRejectedNotice": "Cette passation n'a pas pu être validée : elle a été jugée trop courte. Elle ne compte pas pour la mission de parrainage.",
+  "@completionRejectedNotice": {
+    "description": "Avertissement affiché quand la déclaration de fin de test n'a pas abouti."
+  }
 }

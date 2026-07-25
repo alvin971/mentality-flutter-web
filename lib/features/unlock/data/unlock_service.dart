@@ -46,6 +46,25 @@ class UnlockProgress {
   String get inviteLink => '${AppConstants.inviteBaseUrl}?ref=$referralCode';
 }
 
+/// Issue d'une déclaration de fin de test.
+enum CompletionOutcome {
+  /// Le serveur a enregistré la complétion (le parrain est crédité).
+  confirmed,
+
+  /// Le serveur refuse la session (non plausible) : inutile de réessayer.
+  rejected,
+
+  /// Rien n'a pu être établi (hors-ligne, panne, worker non configuré) :
+  /// la déclaration reste à rejouer.
+  unreachable,
+}
+
+class CompletionResult {
+  final CompletionOutcome outcome;
+  final UnlockProgress? progress;
+  const CompletionResult(this.outcome, [this.progress]);
+}
+
 class UnlockService {
   static final UnlockService instance = UnlockService._();
   UnlockService._();
@@ -131,12 +150,18 @@ class UnlockService {
   /// À n'appeler QUE depuis la fin réelle d'un test, jamais depuis un simple
   /// affichage : ouvrir l'écran des missions ne doit pas valider un parrainage.
   /// Le serveur vérifie la plausibilité de la session avant de créditer.
-  Future<UnlockProgress?> declareTestCompleted({
+  ///
+  /// Le résultat DISTINGUE les trois issues, là où l'ancien `null` fourre-tout
+  /// les confondait : un refus définitif ne doit pas être rejoué indéfiniment,
+  /// et une coupure réseau ne doit pas faire perdre le parrainage.
+  Future<CompletionResult> declareTestCompleted({
     required int subtestsCompleted,
     required int durationSeconds,
   }) async {
     final headers = await _authHeaders();
-    if (!isConfigured || headers == null) return null;
+    if (!isConfigured || headers == null) {
+      return const CompletionResult(CompletionOutcome.unreachable);
+    }
     try {
       final resp = await http.post(
         Uri.parse('${AppConstants.referralWorkerUrl}/complete'),
@@ -146,11 +171,21 @@ class UnlockService {
           'durationSeconds': durationSeconds,
         }),
       );
-      if (resp.statusCode != 200) return null;
-      return _rememberIfUnlocked(UnlockProgress.fromJson(
-          jsonDecode(resp.body) as Map<String, dynamic>));
+      if (resp.statusCode == 200) {
+        return CompletionResult(
+          CompletionOutcome.confirmed,
+          _rememberIfUnlocked(UnlockProgress.fromJson(
+              jsonDecode(resp.body) as Map<String, dynamic>)),
+        );
+      }
+      // 4xx = le serveur a compris et refuse (session jugée non plausible) :
+      // rejouer la même charge utile donnera éternellement le même refus.
+      if (resp.statusCode >= 400 && resp.statusCode < 500) {
+        return const CompletionResult(CompletionOutcome.rejected);
+      }
+      return const CompletionResult(CompletionOutcome.unreachable);
     } catch (_) {
-      return null;
+      return const CompletionResult(CompletionOutcome.unreachable);
     }
   }
 
