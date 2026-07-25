@@ -80,8 +80,8 @@ class KeplerColors {
     textPrimary: AppColors.textPrimary,
     textSecondary: AppColors.textSecondary,
     textTertiary: AppColors.textTertiary,
-    border: Color(0x12000000), // noir 7 %
-    divider: Color(0x0F000000), // noir 6 %
+    border: AppColors.borderLight, // Lc 32
+    divider: AppColors.dividerLight, // Lc 30
     primary: AppColors.primary,
     accentFill: AppColors.primary,
     onAccentFill: AppColors.background,

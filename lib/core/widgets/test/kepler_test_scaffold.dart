@@ -5,6 +5,7 @@ import '../../theme/app_typography.dart';
 import '../../theme/kepler_colors.dart';
 import '../et_logo_animated.dart';
 import '../kepler_progress.dart';
+import 'kepler_stimulus_surface.dart';
 
 /// Scaffold unifié pour les 12 pages de tests cognitifs.
 ///
@@ -26,6 +27,7 @@ class KeplerTestScaffold extends StatelessWidget {
     this.padding,
     this.scrollable = true,
     this.trailing,
+    this.stimulusSurface = false,
   });
 
   /// Nom du test (ex: "Matrices Progressives").
@@ -59,15 +61,42 @@ class KeplerTestScaffold extends StatelessWidget {
   /// Apparaissent APRÈS le logo.
   final List<Widget>? trailing;
 
+  /// Pose le contenu sur un [KeplerStimulusSurface] — panneau à luminance
+  /// CONSTANTE, identique en clair et en sombre.
+  ///
+  /// À activer sur les épreuves **perceptives** (Cubes, Matrices, Puzzles
+  /// Visuels, Balances, Mémoire des Images), dont les stimuli sont dessinés
+  /// en couleurs fixes. Sans ce panneau, le rapport figure/fond varie avec le
+  /// thème — une cellule blanche passe de Lc 47 sur crème à Lc 107 sur fond
+  /// sombre — et la difficulté perçue de l'item change avec un réglage
+  /// d'affichage, ce que les normes ne prévoient pas.
+  ///
+  /// Laisser à `false` pour les épreuves verbales ou numériques, où le
+  /// matériel est du texte : il suit le thème sans conséquence sur la mesure.
+  final bool stimulusSurface;
+
   @override
   Widget build(BuildContext context) {
     final colors = KeplerColors.of(context);
     final hasProgress = currentItem != null && totalItems != null;
 
+    final inner = stimulusSurface
+        ? KeplerStimulusSurface(
+            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+            child: child,
+          )
+        : child;
+
+    // Quand le panneau est actif, il REPREND une partie du padding du
+    // scaffold au lieu de s'y ajouter : sinon la largeur utile perdue fait
+    // déborder les épreuves déjà serrées (cf. responsive_layout_test).
+    final defaultPadding = stimulusSurface
+        ? EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h)
+        : EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h);
+
     final content = Padding(
-      padding:
-          padding ?? EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
-      child: child,
+      padding: padding ?? defaultPadding,
+      child: inner,
     );
 
     final body = Column(

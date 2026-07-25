@@ -296,6 +296,7 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
     final isWide = MediaQuery.sizeOf(context).width >= 900;
 
     return KeplerTestScaffold(
+      stimulusSurface: true,
       testName: context.l10n.vpTestName,
       eyebrow:
           _demoPhase ? context.l10n.vpDemoEyebrow : context.l10n.vpEyebrow,

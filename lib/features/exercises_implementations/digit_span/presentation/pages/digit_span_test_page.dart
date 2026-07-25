@@ -624,7 +624,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                         onPressed: _userAnswer.isNotEmpty ? _removeLastDigit : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.error,
-                          disabledBackgroundColor: KeplerColors.of(context).border,
+                          disabledBackgroundColor: KeplerColors.of(context).surface,
                         ),
                         child: FittedBox(
                           fit: BoxFit.scaleDown,
@@ -653,7 +653,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                             : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.indexWMI,
-                          disabledBackgroundColor: KeplerColors.of(context).border,
+                          disabledBackgroundColor: KeplerColors.of(context).surface,
                         ),
                         child: Text(
                           context.l10n.dsValidateProgress(_userAnswer.length, _currentItem.length),
@@ -678,7 +678,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
       onPressed: isDisabled ? null : () => _addDigit(number),
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.indexWMI,
-        disabledBackgroundColor: KeplerColors.of(context).border,
+        disabledBackgroundColor: KeplerColors.of(context).surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.r),
         ),

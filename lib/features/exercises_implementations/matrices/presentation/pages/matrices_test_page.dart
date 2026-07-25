@@ -154,6 +154,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
     final item = _currentItem;
 
     return KeplerTestScaffold(
+      stimulusSurface: true,
       testName: context.l10n.matTestName,
       eyebrow: _demoPhase ? context.l10n.demoBadge : context.l10n.matEyebrow,
       accentColor: AppColors.indexFSIQ,

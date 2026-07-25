@@ -209,6 +209,7 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
     final currentItem = _currentItem;
 
     return KeplerTestScaffold(
+      stimulusSurface: true,
       testName: context.l10n.fwTestName,
       eyebrow: _demoPhase ? context.l10n.demoBadge : context.l10n.fwEyebrow,
       accentColor: AppColors.indexFRI,

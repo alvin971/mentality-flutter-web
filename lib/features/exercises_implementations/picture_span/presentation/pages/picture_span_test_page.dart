@@ -189,6 +189,7 @@ class _PictureSpanTestPageState extends State<PictureSpanTestPage> {
 
   Widget _buildIntroScreen() {
     return KeplerTestScaffold(
+      stimulusSurface: true,
       testName: context.l10n.psTestName,
       eyebrow: context.l10n.dsEyebrow,
       accentColor: AppColors.indexWMI,
@@ -545,7 +546,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.error,
-                    disabledBackgroundColor: KeplerColors.of(context).border,
+                    disabledBackgroundColor: KeplerColors.of(context).surface,
                   ),
                 ),
               ),

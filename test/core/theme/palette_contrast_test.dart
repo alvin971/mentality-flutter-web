@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mentality/core/theme/app_colors.dart';
 import 'package:mentality/core/theme/kepler_colors.dart';
 
-/// Verrou de contraste de la palette sombre.
+/// Verrou de contraste des DEUX palettes, claire et sombre.
 ///
 /// ## Pourquoi APCA et pas le ratio WCAG 2.x
 ///
@@ -34,8 +34,13 @@ import 'package:mentality/core/theme/kepler_colors.dart';
 /// * 30 — éléments non textuels : bordures, filets, fills
 /// * 15 — seuil d'invisibilité
 ///
-/// Toucher une constante de `AppColors.*Dark` sans faire tourner ce test,
-/// c'est rouvrir la régression.
+/// La palette CLAIRE souffrait du même mal, découvert en la mesurant :
+/// 17 couples en échec sur 23, dont `textTertiary` à Lc 56 (couleur par
+/// défaut des eyebrows en 11 sp) et les couleurs d'indices entre Lc 38 et 67.
+/// Ses bordures noir 7 % étaient elles aussi à Lc 0.
+///
+/// Toucher une constante d'`AppColors` sans faire tourner ce test, c'est
+/// rouvrir la régression.
 
 // --- constantes APCA 0.1.9 (W3 mode) ---
 const _mainTrc = 2.4;
@@ -95,6 +100,7 @@ void expectContrast(String label, Color text, Color bg, Usage usage) {
 
 void main() {
   final dark = KeplerColors.forBrightness(Brightness.dark);
+  final light = KeplerColors.forBrightness(Brightness.light);
 
   group('Palette sombre — texte', () {
     test('corps principal atteint la cible préférée (Lc 90)', () {
@@ -158,6 +164,67 @@ void main() {
     });
   });
 
+  group('Palette claire — texte', () {
+    test('corps principal et secondaire lisibles', () {
+      expectContrast('primaire/crème', light.textPrimary, light.background,
+          Usage.body);
+      expectContrast('primaire/carte', light.textPrimary, light.cardSurface,
+          Usage.body);
+      expectContrast('secondaire/crème', light.textSecondary, light.background,
+          Usage.body);
+      expectContrast('secondaire/carte', light.textSecondary,
+          light.cardSurface, Usage.body);
+    });
+
+    test('tertiaire tient le seuil sur les trois surfaces — régression Lc 56',
+        () {
+      expectContrast(
+          'tertiaire/crème', light.textTertiary, light.background, Usage.large);
+      expectContrast('tertiaire/carte', light.textTertiary, light.cardSurface,
+          Usage.large);
+      expectContrast(
+          'tertiaire/surface', light.textTertiary, light.surface, Usage.large);
+    });
+  });
+
+  group('Palette claire — marque, feedback et structure', () {
+    test('accent lisible en texte — régression Lc 70', () {
+      expectContrast('accent/crème', light.primary, light.background,
+          Usage.body);
+      expectContrast('accent/carte', light.primary, light.cardSurface,
+          Usage.body);
+    });
+
+    test('label de bouton lisible sur le fill accent', () {
+      expectContrast(
+          'label/fill', light.onAccentFill, light.accentFill, Usage.body);
+    });
+
+    test('couleurs de feedback lisibles sur carte', () {
+      expectContrast('success', light.success, light.cardSurface, Usage.body);
+      expectContrast('error', light.error, light.cardSurface, Usage.body);
+      expectContrast('warning', light.warning, light.cardSurface, Usage.body);
+      expectContrast('info', light.info, light.cardSurface, Usage.body);
+    });
+
+    test('bordures et filets existent pour l\'œil — régression Lc 0', () {
+      expectContrast('bordure/crème', light.border, light.background, Usage.ui);
+      expectContrast(
+          'bordure/carte', light.border, light.cardSurface, Usage.ui);
+      expectContrast('divider/crème', light.divider, light.background,
+          Usage.ui);
+    });
+  });
+
+  group('Classification QI — mode clair', () {
+    test('chaque palier est lisible sur crème', () {
+      for (final iq in [65, 75, 85, 100, 115, 125, 140]) {
+        expectContrast('QI $iq', AppColors.getIQClassificationColor(iq),
+            AppColors.background, Usage.body);
+      }
+    });
+  });
+
   group('Indices cognitifs', () {
     final indices = <String, Color>{
       'VCI': AppColors.indexVCIDark,
@@ -168,11 +235,19 @@ void main() {
       'FSIQ': AppColors.indexFSIQDark,
     };
 
-    test('chaque indice est lisible sur carte et sur fond', () {
+    test('chaque indice sombre est lisible sur carte et sur fond', () {
       indices.forEach((code, color) {
         expectContrast('$code/carte', color, AppColors.cardDark, Usage.body);
         expectContrast('$code/fond', color, AppColors.backgroundDark, Usage.body);
       });
+    });
+
+    test('chaque indice clair est lisible sur crème et sur carte', () {
+      for (final code in ['VCI', 'VSI', 'FRI', 'WMI', 'PSI', 'FSIQ']) {
+        final c = AppColors.getIndexColor(code);
+        expectContrast('$code/crème', c, AppColors.background, Usage.body);
+        expectContrast('$code/carte', c, AppColors.white, Usage.body);
+      }
     });
 
     test('accentForBrightness renvoie bien la variante sombre', () {

@@ -12,10 +12,10 @@ class AppColors {
   // ========================================
 
   /// Couleur primaire principale (vert forêt — style Kepler)
-  static const Color primary = Color(0xFF4D7C4A); // Vert forêt
+  static const Color primary = Color(0xFF446D41); // Vert forêt
 
   /// Variante plus claire de la couleur primaire
-  static const Color primaryLight = Color(0xFF6AB060); // Vert clair
+  static const Color primaryLight = Color(0xFF4B8542); // Vert clair
 
   /// Variante plus foncée de la couleur primaire
   static const Color primaryDark = Color(0xFF22805A); // Vert foncé
@@ -44,7 +44,7 @@ class AppColors {
   // ========================================
 
   /// Couleur tertiaire (olive chaud — accent analogique)
-  static const Color tertiary = Color(0xFF8A7C4A);
+  static const Color tertiary = Color(0xFF6F633B);
 
   /// Variante claire
   static const Color tertiaryLight = Color(0xFFB8A86A);
@@ -57,22 +57,22 @@ class AppColors {
   // ========================================
 
   /// Succès (vert)
-  static const Color success = Color(0xFF10B981); // Green-500
+  static const Color success = Color(0xFF0B7A55); // Green-500
   static const Color successLight = Color(0xFF34D399); // Green-400
   static const Color successContainer = Color(0xFFD1FAE5); // Green-100
 
   /// Erreur (rouge)
-  static const Color error = Color(0xFFEF4444); // Red-500
+  static const Color error = Color(0xFFCD1212); // Red-500
   static const Color errorLight = Color(0xFFF87171); // Red-400
   static const Color errorContainer = Color(0xFFFEE2E2); // Red-100
 
   /// Avertissement (orange)
-  static const Color warning = Color(0xFFF59E0B); // Amber-500
+  static const Color warning = Color(0xFF956006); // Amber-500
   static const Color warningLight = Color(0xFFFBBF24); // Amber-400
   static const Color warningContainer = Color(0xFFFEF3C7); // Amber-100
 
   /// Information (bleu)
-  static const Color info = Color(0xFF3B82F6); // Blue-500
+  static const Color info = Color(0xFF0B60EA); // Blue-500
   static const Color infoLight = Color(0xFF60A5FA); // Blue-400
   static const Color infoContainer = Color(0xFFDBEAFE); // Blue-100
 
@@ -214,22 +214,22 @@ class AppColors {
   // ========================================
 
   /// Compréhension Verbale (bleu-violet)
-  static const Color indexVCI = Color(0xFF8B5CF6); // Violet-500
+  static const Color indexVCI = Color(0xFF6C31F4); // Violet-500
 
   /// Visuo-Spatial (cyan)
-  static const Color indexVSI = Color(0xFF06B6D4); // Cyan-500
+  static const Color indexVSI = Color(0xFF046C7E); // Cyan-500
 
   /// Raisonnement Fluide (indigo)
-  static const Color indexFRI = Color(0xFF6366F1); // Indigo-500
+  static const Color indexFRI = Color(0xFF4549EE); // Indigo-500
 
   /// Mémoire de Travail (vert)
-  static const Color indexWMI = Color(0xFF10B981); // Green-500
+  static const Color indexWMI = Color(0xFF0A714F); // Green-500
 
   /// Vitesse de Traitement (orange)
-  static const Color indexPSI = Color(0xFFF59E0B); // Amber-500
+  static const Color indexPSI = Color(0xFF8A5906); // Amber-500
 
   /// QI Total (violet foncé)
-  static const Color indexFSIQ = Color(0xFF7C3AED); // Violet-600
+  static const Color indexFSIQ = Color(0xFF446D41); // Violet-600
 
   // ========================================
   // COULEURS PAR GROUPE D'ÂGE (UI)
@@ -246,7 +246,7 @@ class AppColors {
   static const Color childAccent = Color(0xFF06B6D4); // Cyan
 
   /// Adulte (palette verte Kepler)
-  static const Color adultPrimary = Color(0xFF4D7C4A); // Vert forêt
+  static const Color adultPrimary = Color(0xFF446D41); // Vert forêt
   static const Color adultSecondary = Color(0xFF22805A); // Vert profond
   static const Color adultAccent = Color(0xFF7A9488); // Gris-vert
 
@@ -261,13 +261,21 @@ class AppColors {
   static const Color textSecondary = Color(0xFF3D5248);
 
   /// Texte tertiaire (labels, méta)
-  static const Color textTertiary = Color(0xFF7A9488);
+  static const Color textTertiary = Color(0xFF52655C);
 
   /// Fond accent translucide (50%)
   static const Color accentLight = Color(0x80D7E8D2);
 
   /// Bordure accent subtile (12%)
-  static const Color accentDim = Color(0x1F4D7C4A);
+  static const Color accentDim = Color(0x1F446D41);
+
+  /// Bordure de carte, mode clair — Lc 32. L'ancien noir 7 % était à Lc 0,
+  /// donc invisible : la structure de page n'existait pas plus en clair
+  /// qu'en sombre.
+  static const Color borderLight = Color(0xFFABC3A9);
+
+  /// Filet de séparation, mode clair — Lc 30.
+  static const Color dividerLight = Color(0xFFB2C6B1);
 
   // ========================================
   // GRADIENTS
@@ -296,25 +304,25 @@ class AppColors {
   // ========================================
 
   /// Extrêmement bas (<70)
-  static const Color iqExtremelyLow = Color(0xFFDC2626); // Red-600
+  static const Color iqExtremelyLow = Color(0xFFBB1E1E); // Red-600
 
   /// Limite (70-79)
-  static const Color iqBorderline = Color(0xFFF59E0B); // Amber-500
+  static const Color iqBorderline = Color(0xFF8A5906); // Amber-500
 
   /// Moyen faible (80-89)
-  static const Color iqLowAverage = Color(0xFFFBBF24); // Amber-400
+  static const Color iqLowAverage = Color(0xFF815D02); // Amber-400
 
   /// Moyen (90-109)
-  static const Color iqAverage = Color(0xFF10B981); // Green-500
+  static const Color iqAverage = Color(0xFF0A714F); // Green-500
 
   /// Moyen fort (110-119)
-  static const Color iqHighAverage = Color(0xFF06B6D4); // Cyan-500
+  static const Color iqHighAverage = Color(0xFF046C7E); // Cyan-500
 
   /// Supérieur (120-129)
-  static const Color iqSuperior = Color(0xFF3B82F6); // Blue-500
+  static const Color iqSuperior = Color(0xFF0A58D9); // Blue-500
 
   /// Très supérieur (130+)
-  static const Color iqVerySuperior = Color(0xFF8B5CF6); // Violet-500
+  static const Color iqVerySuperior = Color(0xFF6C31F4); // Violet-500
 
   // ========================================
   // OPACITÉS

@@ -411,7 +411,9 @@ crossAxisAlignment: CrossAxisAlignment.start,
                             style: TextStyle(
                               fontSize: 24.sp,
                               fontWeight: FontWeight.bold,
-                              color: userAnswer != null ? Colors.black : KeplerColors.of(context).textTertiary,
+                              color: userAnswer != null
+                                  ? KeplerColors.of(context).textPrimary
+                                  : KeplerColors.of(context).textTertiary,
                             ),
                           ),
                         ],

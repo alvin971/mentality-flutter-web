@@ -471,7 +471,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                             : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.indexWMI,
-                          disabledBackgroundColor: KeplerColors.of(context).border,
+                          disabledBackgroundColor: KeplerColors.of(context).surface,
                         ),
                         child: Text(
                           context.l10n.commonValidate,
