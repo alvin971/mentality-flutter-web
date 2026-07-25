@@ -144,6 +144,8 @@ class _CubesTestPageState extends State<CubesTestPage> {
   void _showFinalResults() {
     // Test non noté à l'écran : aucun récapitulatif de points/temps/réussite,
     // simple confirmation de fin — le score repart vers l'appelant, sans être montré.
+    // Aucune option « Recommencer » : un sous-test WAIS-IV ne se repasse pas
+    // (effet d'apprentissage sur des items déjà vus → normes invalidées).
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -156,20 +158,6 @@ class _CubesTestPageState extends State<CubesTestPage> {
               Navigator.pop(context, score); // Retourne le score final
             },
             child: Text(context.l10n.commonFinish),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              setState(() {
-                currentLevel = 0;
-                score = 0;
-                totalTime = 0;
-                showResult = false;
-                lastAnswerCorrect = null;
-                _generateLevels(); // Régénérer des patterns aléatoires
-              });
-            },
-            child: Text(context.l10n.matRestart),
           ),
         ],
       ),
