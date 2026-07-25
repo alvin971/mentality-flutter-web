@@ -227,7 +227,7 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
           : [
               Padding(
                 padding: EdgeInsets.only(left: 8.w),
-                child: Text(l10n.vocabTimerScore(_elapsedSeconds, score),
+                child: Text(l10n.commonSeconds(_elapsedSeconds),
                     style: AppText.monoLabel(color: AppColors.indexVCI)),
               ),
             ],

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/l10n/l10n_ext.dart';
 import '../../../../../core/theme/app_colors.dart';
-import '../../../../../core/theme/app_typography.dart';
 import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../widgets/cubes_exercise_widget.dart';
@@ -192,15 +191,8 @@ class _CubesTestPageState extends State<CubesTestPage> {
       // Tout tient à l'écran : les deux grilles se redimensionnent à la
       // hauteur disponible, les boutons restent toujours visibles.
       scrollable: false,
-      trailing: _demoPhase
-          ? null
-          : [
-              Padding(
-                padding: EdgeInsets.only(left: 8.w),
-                child: Text(context.l10n.matPoints(score),
-                    style: AppText.monoLabel(color: AppColors.indexFRI)),
-              ),
-            ],
+      // Aucun score visible pendant la passation (protocole WAIS-IV) : seule
+      // la progression d'items est affichée, jamais les points obtenus.
       bottomBar: _demoPhase && _demoLastCorrect != null
           ? KeplerTestButton.primary(
               label: _demoLastCorrect!
@@ -277,8 +269,7 @@ class _CubesTestPageState extends State<CubesTestPage> {
         SizedBox(width: 8.w),
         Expanded(
           child: Text(
-            '${_getPatternDescription(context, pattern.difficulty)} · '
-            '${context.l10n.cubesCohesion(pattern.cohesionScore)}',
+            _getPatternDescription(context, pattern.difficulty),
             style: TextStyle(
               fontSize: 11.sp,
               color: AppColors.grey600,

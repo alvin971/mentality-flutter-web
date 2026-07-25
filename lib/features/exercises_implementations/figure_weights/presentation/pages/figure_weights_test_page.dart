@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/l10n/l10n_ext.dart';
 import '../../../../../core/theme/app_colors.dart';
-import '../../../../../core/theme/app_typography.dart';
 import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/balance_generator.dart';
@@ -216,20 +215,16 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
       // l'eyebrow « PRACTICE » s'affiche alors dans l'AppBar.
       currentItem: _demoPhase ? null : currentLevel + 1,
       totalItems: _demoPhase ? null : _generatedItems.length,
-      // Timer + score dans l'AppBar (gain de hauteur) et bouton Valider
-      // sticky en bas : plus jamais besoin de scroller pour valider.
-      // Aucun badge chrono/score pendant la démo (non chronométrée, non notée).
+      // Chrono seul dans l'AppBar (gain de hauteur) et bouton Valider sticky
+      // en bas : plus jamais besoin de scroller pour valider. Aucun score
+      // visible pendant la passation (protocole WAIS-IV), et pas de chrono
+      // pendant la démo (non chronométrée, non notée).
       trailing: _demoPhase
           ? null
           : [
               Padding(
                 padding: EdgeInsets.only(left: 8.w),
                 child: _buildTimerBadge(context),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 6.w),
-                child: Text(context.l10n.fwScoreFraction(score, currentLevel + 1),
-                    style: AppText.monoLabel(color: AppColors.indexFRI)),
               ),
             ],
       bottomBar: KeplerTestButton.primary(

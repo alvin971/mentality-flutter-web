@@ -131,8 +131,8 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
             Text(context.l10n.arithTimeUp),
           ],
         ),
-        content:
-            Text(context.l10n.arithCorrectAnswerLabel(_currentItem.correctAnswer)),
+        // Pas de révélation de la bonne réponse : le participant ne reçoit
+        // aucun retour de justesse pendant la passation (protocole WAIS-IV).
         actions: [
           TextButton(
             onPressed: () {

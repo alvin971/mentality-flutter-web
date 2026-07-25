@@ -260,7 +260,7 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
           : [
               Padding(
                 padding: EdgeInsets.only(left: 8.w),
-                child: Text(context.l10n.simStatusBar(_elapsedSeconds, score),
+                child: Text(context.l10n.commonSeconds(_elapsedSeconds),
                     style: AppText.monoLabel(color: AppColors.indexVCI)),
               ),
             ],

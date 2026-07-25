@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/l10n/l10n_ext.dart';
 import '../../../../../core/theme/app_colors.dart';
-import '../../../../../core/theme/app_typography.dart';
 import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/matrix_generator.dart';
@@ -176,15 +175,8 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
       // Tout tient à l'écran : matrice redimensionnée à la hauteur disponible,
       // bouton Valider sticky en bas (jamais besoin de scroller).
       scrollable: false,
-      trailing: _demoPhase
-          ? null
-          : [
-              Padding(
-                padding: EdgeInsets.only(left: 8.w),
-                child: Text(context.l10n.matPoints(score),
-                    style: AppText.monoLabel(color: AppColors.indexFSIQ)),
-              ),
-            ],
+      // Aucun score visible pendant la passation (protocole WAIS-IV) : seule
+      // la progression d'items est affichée, jamais les points obtenus.
       bottomBar: KeplerTestButton.primary(
         label: _bottomBarLabel(context, item),
         accentColor: AppColors.indexFSIQ,

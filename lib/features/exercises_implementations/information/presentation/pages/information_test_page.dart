@@ -267,9 +267,7 @@ class _InformationTestPageState extends State<InformationTestPage> {
           : [
               Padding(
                 padding: EdgeInsets.only(left: 8.w),
-                child: Text(
-                    context.l10n.infoTrailingStatus(
-                        _elapsedSeconds, score, currentLevel + 1),
+                child: Text(context.l10n.commonSeconds(_elapsedSeconds),
                     style: AppText.monoLabel(color: AppColors.indexVCI)),
               ),
             ],
