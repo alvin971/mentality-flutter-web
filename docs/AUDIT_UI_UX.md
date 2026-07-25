@@ -374,10 +374,22 @@ Les boutons ne changent plus de forme selon le thème.
    `lib/core/widgets/` tout appel `AppText.<méthode>()` statique et tout
    `AppColors.grey*`. Les répertoires de stimuli sont exclus explicitement.
 
-**Reste ouvert** : la palette **claire** n'a toujours pas reçu ce traitement
-(`textTertiary` à 3,11:1, indices à 2,0–2,4:1) — Lot 5.
+**Suite traitée le même jour** (commits `af13690`, `ffc50d8`) : palette claire
+recalibrée (17 échecs sur 23 → 0 sur 33), réponse invisible du sous-test Code,
+fonds de boutons désactivés, panneau de stimulus à luminance constante pour les
+5 épreuves perceptives, et polices embarquées.
 
-### 5.3 🔴 Bloquant — les polices ne sont pas embarquées
+### 5.3 ✅ CORRIGÉ (2026-07-25) — les polices n'étaient pas embarquées
+
+> **Statut : traité** (commit `ffc50d8`). Les trois familles sont dans
+> `assets/fonts/`, déclarées au pubspec, allégées de 2,4 Mo à 472 Ko (latin +
+> graisses utilisées, couverture des 6 langues vérifiée). `app_typography.dart`
+> n'appelle plus `GoogleFonts` : fabriques locales pilotant l'axe `wght` via
+> `fontVariations`. `scripts/subset_fonts.py` rend l'opération reproductible.
+> Contradiction « DM Mono » vs Roboto Mono tranchée en faveur de Roboto Mono.
+> Build web vérifié, 398 tests verts.
+
+#### Diagnostic d'origine
 
 `pubspec.yaml` déclare `google_fonts` mais **aucune section `fonts:`** ; le seul fichier de police du
 build est `MaterialIcons-Regular.otf`. Source Serif 4, DM Sans et Roboto Mono sont téléchargées au
