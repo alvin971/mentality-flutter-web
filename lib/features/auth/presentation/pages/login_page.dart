@@ -8,8 +8,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/app_typography.dart';
 import '../../../../core/config/firebase_config.dart';
 import '../../../../core/l10n/l10n_ext.dart';
+import '../../../../core/theme/kepler_colors.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -154,13 +156,13 @@ class _LoginPageState extends State<LoginPage> {
         Icon(
           Icons.psychology_rounded,
           size: 64.sp,
-          color: AppColors.primary,
+          color: KeplerColors.of(context).primary,
         ),
         SizedBox(height: 16.h),
         Text(
           'Mental E.T.',
           style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                color: AppColors.primary,
+                color: KeplerColors.of(context).primary,
                 fontWeight: FontWeight.bold,
               ),
         ),
@@ -218,7 +220,7 @@ class _LoginPageState extends State<LoginPage> {
       padding: EdgeInsets.symmetric(vertical: 8.h),
       child: Text(
         _errorMessage!,
-        style: TextStyle(color: AppColors.error, fontSize: 13.sp),
+        style: TextStyle(color: KeplerColors.of(context).error, fontSize: 13.sp),
         textAlign: TextAlign.center,
       ),
     );
@@ -249,7 +251,7 @@ class _LoginPageState extends State<LoginPage> {
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 12.w),
           child: Text(context.l10n.authOrDivider,
-              style: TextStyle(color: AppColors.grey500, fontSize: 13.sp)),
+              style: AppText.of(context).bodySmall()),
         ),
         const Expanded(child: Divider()),
       ],

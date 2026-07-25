@@ -6,8 +6,8 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/l10n/l10n_ext.dart';
 import '../../../../core/services/auth_local_store.dart';
 import '../../../../core/services/token_access.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/theme/kepler_colors.dart';
 import '../../../../core/widgets/et_logo_animated.dart';
 
 class SplashPage extends StatefulWidget {
@@ -79,20 +79,20 @@ class _SplashPageState extends State<SplashPage>
                 EtLogoAnimated(size: 140.w),
                 SizedBox(height: 36.h),
                 Text('MENTAL E.T.',
-                    style: AppText.monoLabel(color: AppColors.primary)),
+                    style: AppText.of(context).monoLabel(color: KeplerColors.of(context).primary)),
                 SizedBox(height: 14.h),
-                Text(context.l10n.coreSplashTitleLine1, style: AppText.h1()),
+                Text(context.l10n.coreSplashTitleLine1, style: AppText.of(context).h1()),
                 Text(context.l10n.coreSplashTitleLine2,
-                    style: AppText.h1Italic()),
+                    style: AppText.of(context).h1Italic()),
                 SizedBox(height: 28.h),
                 Container(
                   width: 32.w,
                   height: 1,
-                  color: AppColors.primary.withValues(alpha: 0.3),
+                  color: KeplerColors.of(context).primary.withValues(alpha: 0.3),
                 ),
                 SizedBox(height: 14.h),
                 Text('WAIS-IV · WISC-V · WPPSI-IV',
-                    style: AppText.monoLabel(
+                    style: AppText.of(context).monoLabel(
                         color: Theme.of(context).colorScheme.outline)),
               ],
             ),

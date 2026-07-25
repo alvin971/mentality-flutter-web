@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/theme/kepler_colors.dart';
 import '../../../../core/widgets/kepler_button.dart';
 import '../../../../core/widgets/kepler_card.dart';
 import '../../../../core/widgets/kepler_scaffold.dart';
@@ -58,13 +58,13 @@ class _RegistrationEmailPageState extends State<RegistrationEmailPage> {
                     EtLogoAnimated(size: 32.w),
                     SizedBox(width: 12.w),
                     Text(context.l10n.regEmailHeading,
-                        style: AppText.h2Italic(color: AppColors.primary)),
+                        style: AppText.of(context).h2Italic(color: KeplerColors.of(context).primary)),
                   ],
                 ),
                 SizedBox(height: 8.h),
                 Text(
                   context.l10n.regEmailIntro,
-                  style: AppText.body(),
+                  style: AppText.of(context).body(),
                 ),
                 SizedBox(height: 20.h),
                 KeplerCard(
@@ -87,7 +87,7 @@ class _RegistrationEmailPageState extends State<RegistrationEmailPage> {
                 if (state.errorMessage != null) ...[
                   SizedBox(height: 12.h),
                   Text(state.errorMessage!,
-                      style: AppText.bodySmall(color: AppColors.error)),
+                      style: AppText.of(context).bodySmall(color: KeplerColors.of(context).error)),
                 ],
                 SizedBox(height: 24.h),
                 KeplerButton(
@@ -108,7 +108,7 @@ class _RegistrationEmailPageState extends State<RegistrationEmailPage> {
                 SizedBox(height: 16.h),
                 Text(
                   context.l10n.regEmailPrivacyNote,
-                  style: AppText.bodySmall(color: AppColors.textTertiary),
+                  style: AppText.of(context).bodySmall(color: KeplerColors.of(context).textTertiary),
                 ),
               ],
             ),

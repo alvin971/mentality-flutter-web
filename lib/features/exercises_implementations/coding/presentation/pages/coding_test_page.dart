@@ -4,6 +4,7 @@ import 'dart:async';
 import '../../../../../core/l10n/l10n_ext.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
+import '../../../../../core/theme/kepler_colors.dart';
 import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/coding_generator.dart';
@@ -297,7 +298,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                   decoration: BoxDecoration(
                     color: _remainingSeconds <= 10
                         ? AppColors.errorContainer
-                        : AppColors.grey200,
+                        : KeplerColors.of(context).border,
                     borderRadius: BorderRadius.circular(20.r),
                   ),
                   child: Row(
@@ -358,7 +359,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                       _userAnswers.take(maxCells).where((a) => a != null).length,
                       maxCells,
                     ),
-                    style: TextStyle(fontSize: 14.sp, color: AppColors.grey600),
+                    style: TextStyle(fontSize: 14.sp, color: KeplerColors.of(context).textSecondary),
                   ),
                 ],
               ),
@@ -386,10 +387,10 @@ crossAxisAlignment: CrossAxisAlignment.start,
                       decoration: BoxDecoration(
                         color: isSelected
                             ? AppColors.indexPSI.withValues(alpha: 0.2)
-                            : AppColors.grey100,
+                            : KeplerColors.of(context).surface,
                         borderRadius: BorderRadius.circular(8.r),
                         border: Border.all(
-                          color: isSelected ? AppColors.indexPSI : AppColors.grey300,
+                          color: isSelected ? AppColors.indexPSI : KeplerColors.of(context).border,
                           width: isSelected ? 3 : 2,
                         ),
                       ),
@@ -410,7 +411,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                             style: TextStyle(
                               fontSize: 24.sp,
                               fontWeight: FontWeight.bold,
-                              color: userAnswer != null ? Colors.black : AppColors.grey400,
+                              color: userAnswer != null ? Colors.black : KeplerColors.of(context).textTertiary,
                             ),
                           ),
                         ],
@@ -427,8 +428,8 @@ crossAxisAlignment: CrossAxisAlignment.start,
             Container(
               padding: EdgeInsets.all(16.w),
               decoration: BoxDecoration(
-                color: AppColors.grey50,
-                border: Border(top: BorderSide(color: AppColors.grey300, width: 2)),
+                color: KeplerColors.of(context).surface,
+                border: Border(top: BorderSide(color: KeplerColors.of(context).border, width: 2)),
               ),
               child: Column(
                 children: [
@@ -475,7 +476,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                           label: Text(context.l10n.codingClear),
                           style: OutlinedButton.styleFrom(
                             foregroundColor: AppColors.error,
-                            side: BorderSide(color: AppColors.error, width: 2),
+                            side: BorderSide(color: KeplerColors.of(context).error, width: 2),
                           ),
                         ),
                       ),
@@ -560,7 +561,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                 SizedBox(height: 4.h),
                 Text(
                   subtitle,
-                  style: TextStyle(fontSize: 13.sp, color: AppColors.grey700),
+                  style: TextStyle(fontSize: 13.sp, color: KeplerColors.of(context).textPrimary),
                 ),
               ],
             ),

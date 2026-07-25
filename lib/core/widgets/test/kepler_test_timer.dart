@@ -45,7 +45,7 @@ class KeplerTestTimer extends StatelessWidget {
           Icon(Icons.timer_outlined, size: compact ? 14.sp : 16.sp, color: tint),
           SizedBox(width: 6.w),
           Text(label,
-              style: AppText.mono(
+              style: AppText.of(context).mono(
                 color: tint,
                 size: compact ? 12.sp : 14.sp,
               )),

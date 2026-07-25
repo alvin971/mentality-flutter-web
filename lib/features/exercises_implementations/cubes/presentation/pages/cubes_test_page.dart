@@ -6,6 +6,7 @@ import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../widgets/cubes_exercise_widget.dart';
 import '../../domain/pattern_generator.dart';
+import '../../../../../core/theme/kepler_colors.dart';
 
 /// Page de test des Cubes avec progression par niveaux
 class CubesTestPage extends StatefulWidget {
@@ -228,7 +229,7 @@ class _CubesTestPageState extends State<CubesTestPage> {
       textAlign: TextAlign.center,
       style: TextStyle(
         fontSize: 12.sp,
-        color: AppColors.grey600,
+        color: KeplerColors.of(context).textSecondary,
         fontStyle: FontStyle.italic,
       ),
     );
@@ -260,7 +261,7 @@ class _CubesTestPageState extends State<CubesTestPage> {
             _getPatternDescription(context, pattern.difficulty),
             style: TextStyle(
               fontSize: 11.sp,
-              color: AppColors.grey600,
+              color: KeplerColors.of(context).textSecondary,
               fontStyle: FontStyle.italic,
             ),
             maxLines: 1,

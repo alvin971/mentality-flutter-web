@@ -1,5 +1,25 @@
 # Timing du test complet — estimation sourcée
 
+> ⚠️ **PÉRIMÈTRE — LIRE AVANT DE CITER CE DOCUMENT** (ajouté le 2026-07-25)
+>
+> Ce document ne couvre **que les 12 sous-tests notés** de `testSequence`. Il a été établi le
+> 2026-07-02, **avant** l'ajout de la compréhension orale au bilan (commit `9881f47`).
+>
+> **Ne jamais s'en servir pour répondre « combien de sous-tests ? » ni « quelle durée totale ? ».**
+> Le compte de sous-tests visible par l'utilisateur est **13** (liste de l'écran « Passer un test »,
+> `assessment_intro_page.dart:154-179`, la Compréhension Orale en 13ᵉ avec le code `LO`), et
+> l'étape orale ajoute **~8-10 min** non comptées ici (5 textes × ~1 min de lecture + ~40 s de
+> résumé, cf. `oralConsentRecordBody`).
+>
+> **Sources de vérité, dans cet ordre :**
+> 1. `assessment_intro_page.dart:154-179` — ce que l'app **affiche** comme liste de sous-tests (13)
+> 2. `complete_test_orchestrator_page.dart` — ce qui est **exécuté** dans le bilan
+>    (12 de `testSequence`, **puis** `OralTestFlow` via `_finishWithOralThenResults`, l.255)
+> 3. `complete_test_session.dart:53-66` — `testSequence`, **les 12 notés uniquement**
+>
+> L'incohérence 13 / 12 / 12 entre ces sources est un constat d'audit ouvert :
+> voir `docs/AUDIT_UI_UX.md` §2.0, décision produit A / B / C en attente.
+
 > Établi le 2026-07-02 à partir du code réel. Justifie la durée annoncée
 > « 60 à 90 minutes » affichée sur l'accueil, l'intro d'évaluation et
 > l'intro du test complet (clés ARB `homeActionStartSubtitle`,
@@ -7,8 +27,10 @@
 
 ## Séquence
 
-12 sous-tests, ordre défini dans
+12 sous-tests **notés**, ordre défini dans
 `lib/core/models/complete_test_session.dart` (`testSequence`, l.53).
+**+ 1 étape orale non notée** appendue après la boucle — hors de ce tableau, hors du compteur
+« xx / 12 » affiché, et hors de la durée annoncée.
 
 ## Paramètres par sous-test
 

@@ -4,6 +4,7 @@ import 'dart:async';
 import '../../../../../core/l10n/l10n_ext.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
+import '../../../../../core/theme/kepler_colors.dart';
 import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/symbol_search_generator.dart';
@@ -238,7 +239,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                         Container(
                           padding: EdgeInsets.all(12.w),
                           decoration: BoxDecoration(
-                            color: AppColors.grey100,
+                            color: KeplerColors.of(context).surface,
                             borderRadius: BorderRadius.circular(8.r),
                             border: Border.all(color: AppColors.indexPSI, width: 2),
                           ),
@@ -264,7 +265,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                           child: Container(
                             padding: EdgeInsets.all(12.w),
                             decoration: BoxDecoration(
-                              color: AppColors.grey100,
+                              color: KeplerColors.of(context).surface,
                               borderRadius: BorderRadius.circular(8.r),
                             ),
                             child: Column(
@@ -286,7 +287,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                     SizedBox(height: 12.h),
                     Text(
                       context.l10n.ssExampleAnswer,
-                      style: TextStyle(fontSize: 14.sp, color: AppColors.success, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 14.sp, color: KeplerColors.of(context).success, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -337,7 +338,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                   decoration: BoxDecoration(
                     color: _remainingSeconds <= 10
                         ? AppColors.errorContainer
-                        : AppColors.grey200,
+                        : KeplerColors.of(context).border,
                     borderRadius: BorderRadius.circular(20.r),
                   ),
                   child: Row(
@@ -376,7 +377,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                   if (!_isTraining)
                     Text(
                       context.l10n.ssAnsweredProgress(_userAnswers.where((a) => a != null).length),
-                      style: TextStyle(fontSize: 14.sp, color: AppColors.grey600),
+                      style: TextStyle(fontSize: 14.sp, color: KeplerColors.of(context).textSecondary),
                     ),
                 ],
               ),
@@ -447,16 +448,16 @@ crossAxisAlignment: CrossAxisAlignment.start,
                     style: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.grey700,
+                      color: KeplerColors.of(context).textPrimary,
                     ),
                   ),
                   SizedBox(height: 12.h),
                   Container(
                     padding: EdgeInsets.all(20.w),
                     decoration: BoxDecoration(
-                      color: AppColors.grey100,
+                      color: KeplerColors.of(context).surface,
                       borderRadius: BorderRadius.circular(16.r),
-                      border: Border.all(color: AppColors.grey400, width: 2),
+                      border: Border.all(color: KeplerColors.of(context).textTertiary, width: 2),
                     ),
                     child: Wrap(
                       spacing: 16.w,
@@ -562,7 +563,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                 SizedBox(height: 4.h),
                 Text(
                   subtitle,
-                  style: TextStyle(fontSize: 13.sp, color: AppColors.grey700),
+                  style: TextStyle(fontSize: 13.sp, color: KeplerColors.of(context).textPrimary),
                 ),
               ],
             ),

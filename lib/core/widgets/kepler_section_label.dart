@@ -22,6 +22,6 @@ class KeplerSectionLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = color ?? AppColors.primary;
     final label = text.toUpperCase();
-    return Text(label, style: AppText.monoLabel(color: c));
+    return Text(label, style: AppText.of(context).monoLabel(color: c));
   }
 }

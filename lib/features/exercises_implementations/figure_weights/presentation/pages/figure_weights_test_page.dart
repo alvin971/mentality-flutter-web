@@ -8,6 +8,7 @@ import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/balance_generator.dart';
 import '../widgets/balance_widget.dart';
 import '../widgets/token_widget.dart';
+import '../../../../../core/theme/kepler_colors.dart';
 
 /// Page du test des Balances Quantitatives (Figure Weights)
 /// WAIS-IV : 27 items, g-loading = 0.78
@@ -260,7 +261,7 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                   style: TextStyle(
                     fontSize: 12.sp,
                     fontStyle: FontStyle.italic,
-                    color: AppColors.grey600,
+                    color: KeplerColors.of(context).textSecondary,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -364,7 +365,7 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                                 ? AppColors.errorContainer
                                 : isSelected
                                     ? AppColors.infoContainer
-                                    : AppColors.grey50,
+                                    : KeplerColors.of(context).surface,
                         borderRadius: BorderRadius.circular(12.r),
                         border: Border.all(
                           color: demoResult == true
@@ -373,7 +374,7 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                                   ? AppColors.error
                                   : isSelected
                                       ? AppColors.info
-                                      : AppColors.grey300,
+                                      : KeplerColors.of(context).border,
                           width: isSelected ? 3 : 2,
                         ),
                       ),

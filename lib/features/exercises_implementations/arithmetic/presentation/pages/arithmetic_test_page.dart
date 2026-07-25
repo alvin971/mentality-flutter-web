@@ -7,6 +7,7 @@ import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/arithmetic_generator.dart';
+import '../../../../../core/theme/kepler_colors.dart';
 
 /// Page du test Arithmétique (Arithmetic)
 /// Résolution mentale de 22 problèmes sous contrainte de temps
@@ -126,7 +127,7 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
       builder: (context) => AlertDialog(
         title: Row(
           children: [
-            Icon(Icons.timer_off, color: AppColors.error, size: 32.sp),
+            Icon(Icons.timer_off, color: KeplerColors.of(context).error, size: 32.sp),
             SizedBox(width: 12.w),
             Text(context.l10n.arithTimeUp),
           ],
@@ -276,18 +277,18 @@ crossAxisAlignment: CrossAxisAlignment.start,
               Container(
                 padding: EdgeInsets.all(16.w),
                 decoration: BoxDecoration(
-                  color: AppColors.info.withValues(alpha: 0.1),
+                  color: KeplerColors.of(context).info.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12.r),
-                  border: Border.all(color: AppColors.info.withValues(alpha: 0.3)),
+                  border: Border.all(color: KeplerColors.of(context).info.withValues(alpha: 0.3)),
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.info_outline, color: AppColors.info, size: 24.sp),
+                    Icon(Icons.info_outline, color: KeplerColors.of(context).info, size: 24.sp),
                     SizedBox(width: 12.w),
                     Expanded(
                       child: Text(
                         context.l10n.arithIntroDiscontinueNote,
-                        style: TextStyle(color: AppColors.info, fontSize: 14.sp),
+                        style: TextStyle(color: KeplerColors.of(context).info, fontSize: 14.sp),
                       ),
                     ),
                   ],
@@ -418,10 +419,10 @@ crossAxisAlignment: CrossAxisAlignment.start,
                   hintText: context.l10n.arithAnswerHint,
                   hintStyle: TextStyle(
                     fontSize: 24.sp,
-                    color: AppColors.grey400,
+                    color: KeplerColors.of(context).textTertiary,
                   ),
                   filled: true,
-                  fillColor: AppColors.grey50,
+                  fillColor: KeplerColors.of(context).surface,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.r),
                     borderSide: BorderSide(color: AppColors.indexWMI, width: 2),
@@ -454,7 +455,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                         style: OutlinedButton.styleFrom(
                           foregroundColor: AppColors.indexWMI,
                           side: BorderSide(color: AppColors.indexWMI, width: 2),
-                          disabledForegroundColor: AppColors.grey400,
+                          disabledForegroundColor: KeplerColors.of(context).textTertiary,
                         ),
                       ),
                     ),
@@ -470,7 +471,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                             : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.indexWMI,
-                          disabledBackgroundColor: AppColors.grey300,
+                          disabledBackgroundColor: KeplerColors.of(context).border,
                         ),
                         child: Text(
                           context.l10n.commonValidate,
@@ -518,7 +519,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                 SizedBox(height: 4.h),
                 Text(
                   subtitle,
-                  style: TextStyle(fontSize: 13.sp, color: AppColors.grey700),
+                  style: TextStyle(fontSize: 13.sp, color: KeplerColors.of(context).textPrimary),
                 ),
               ],
             ),

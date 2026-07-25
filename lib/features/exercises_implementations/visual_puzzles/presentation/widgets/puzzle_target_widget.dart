@@ -108,7 +108,7 @@ class PuzzleTargetWidget extends StatelessWidget {
                       fit: BoxFit.scaleDown,
                       alignment: Alignment.centerLeft,
                       child: Text(context.l10n.vpTargetTitle,
-                          style: AppText.mono(color: accent, size: 10)),
+                          style: AppText.of(context).mono(color: accent, size: 10)),
                     ),
                   ),
                   Padding(

@@ -16,6 +16,7 @@ import '../../data/reading_texts.dart';
 import '../../services/data_collection_service.dart';
 import '../../services/r2_upload_service.dart';
 import 'widgets/adaptive_reading_text.dart';
+import '../../core/theme/kepler_colors.dart';
 
 class OralReadingTest extends StatefulWidget {
   final ReadingText text;
@@ -66,7 +67,7 @@ class _OralReadingTestState extends State<OralReadingTest> {
       builder: (context) => AlertDialog(
         title: Row(
           children: [
-            Icon(Icons.mic, color: AppColors.primary, size: 24.sp),
+            Icon(Icons.mic, color: KeplerColors.of(context).primary, size: 24.sp),
             SizedBox(width: 8.w),
             Text(context.l10n.oralMicAccessTitle),
           ],
@@ -107,7 +108,7 @@ class _OralReadingTestState extends State<OralReadingTest> {
             label: Text(context.l10n.oralAllowMicrophone),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
+              foregroundColor: KeplerColors.of(context).onAccentFill,
             ),
           ),
         ],
@@ -159,7 +160,7 @@ class _OralReadingTestState extends State<OralReadingTest> {
         duration: const Duration(seconds: 5),
         action: SnackBarAction(
           label: context.l10n.oralSkip,
-          textColor: Colors.white,
+          textColor: KeplerColors.of(context).onAccentFill,
           onPressed: () => widget.onCompleted(widget.text.id, widget.sessionId),
         ),
       ),
@@ -302,14 +303,14 @@ class _OralReadingTestState extends State<OralReadingTest> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 9.h),
       decoration: BoxDecoration(
-        color: AppColors.primary.withValues(alpha: 0.08),
+        color: KeplerColors.of(context).primary.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
+        border: Border.all(color: KeplerColors.of(context).primary.withValues(alpha: 0.3)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.record_voice_over, color: AppColors.primary, size: 18.sp),
+          Icon(Icons.record_voice_over, color: KeplerColors.of(context).primary, size: 18.sp),
           SizedBox(width: 8.w),
           Expanded(
             child: Text(
@@ -343,7 +344,7 @@ class _OralReadingTestState extends State<OralReadingTest> {
                 style: TextStyle(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w600,
-                  color: AppColors.primary,
+                  color: KeplerColors.of(context).primary,
                 ),
               ),
               SizedBox(height: 8.h),
@@ -454,7 +455,7 @@ class _OralReadingTestState extends State<OralReadingTest> {
         label: Text(context.l10n.oralStartReading),
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,
-          foregroundColor: Colors.white,
+          foregroundColor: KeplerColors.of(context).onAccentFill,
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
           textStyle: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
         ),
@@ -470,16 +471,16 @@ class _OralReadingTestState extends State<OralReadingTest> {
           ? SizedBox(
               width: 16.w,
               height: 16.w,
-              child: const CircularProgressIndicator(
-                  strokeWidth: 2, color: Colors.white),
+              child: CircularProgressIndicator(
+                  strokeWidth: 2, color: KeplerColors.of(context).onAccentFill),
             )
           : const Icon(Icons.stop_circle, size: 20),
       label: Text(_isSaving ? context.l10n.oralSaving : context.l10n.oralFinish),
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.red,
-        foregroundColor: Colors.white,
+        foregroundColor: KeplerColors.of(context).onAccentFill,
         disabledBackgroundColor: Colors.red.withValues(alpha: 0.4),
-        disabledForegroundColor: Colors.white70,
+        disabledForegroundColor: KeplerColors.of(context).textTertiary,
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
         textStyle: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
       ),

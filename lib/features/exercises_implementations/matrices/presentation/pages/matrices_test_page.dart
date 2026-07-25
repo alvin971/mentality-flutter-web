@@ -6,6 +6,7 @@ import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/matrix_generator.dart';
 import '../widgets/matrix_cell_widget.dart';
+import '../../../../../core/theme/kepler_colors.dart';
 
 /// Page de test des Matrices Progressives (WAIS-IV: 26 items, WISC-V: 32 items)
 class MatricesTestPage extends StatefulWidget {
@@ -230,7 +231,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
         style: TextStyle(
           fontSize: 11.sp,
           fontStyle: FontStyle.italic,
-          color: AppColors.grey600,
+          color: KeplerColors.of(context).textSecondary,
         ),
         textAlign: TextAlign.center,
       ),
@@ -265,7 +266,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
                 item.rules.length, item.thetaValue.toStringAsFixed(1)),
             style: TextStyle(
               fontSize: 11.sp,
-              color: AppColors.grey600,
+              color: KeplerColors.of(context).textSecondary,
               fontStyle: FontStyle.italic,
             ),
             overflow: TextOverflow.ellipsis,
@@ -279,13 +280,13 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
       decoration: BoxDecoration(
-        color: AppColors.info.withValues(alpha: 0.1),
+        color: KeplerColors.of(context).info.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(color: AppColors.info.withValues(alpha: 0.3)),
+        border: Border.all(color: KeplerColors.of(context).info.withValues(alpha: 0.3)),
       ),
       child: Row(
         children: [
-          Icon(Icons.info_outline, color: AppColors.info, size: 18.sp),
+          Icon(Icons.info_outline, color: KeplerColors.of(context).info, size: 18.sp),
           SizedBox(width: 8.w),
           Expanded(
             child: Text(
@@ -305,7 +306,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(4.r),
-          border: Border.all(color: AppColors.grey800, width: 3),
+          border: Border.all(color: KeplerColors.of(context).textPrimary, width: 3),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.2),

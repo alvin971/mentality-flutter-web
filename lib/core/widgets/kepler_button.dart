@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../theme/app_colors.dart';
 import '../theme/app_typography.dart';
 import '../theme/kepler_colors.dart';
 
@@ -66,7 +65,7 @@ class KeplerButton extends StatelessWidget {
             Icon(icon, color: fg, size: 18.sp),
             SizedBox(width: 8.w),
           ],
-          Text(label, style: AppText.button(color: fg)),
+          Text(label, style: AppText.of(context).button(color: fg)),
         ],
       ),
     );

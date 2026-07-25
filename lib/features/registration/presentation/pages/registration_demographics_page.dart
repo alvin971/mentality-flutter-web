@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/theme/kepler_colors.dart';
 import '../../../../core/widgets/kepler_button.dart';
 import '../../../../core/widgets/kepler_card.dart';
 import '../../../../core/widgets/kepler_scaffold.dart';
@@ -84,7 +85,7 @@ class _RegistrationDemographicsPageState
               SizedBox(height: 12.h),
               Text(
                 context.l10n.regDemoIntro,
-                style: AppText.body(),
+                style: AppText.of(context).body(),
               ),
               SizedBox(height: 24.h),
               _sectionLabel(context.l10n.regSectionSex),
@@ -96,7 +97,7 @@ class _RegistrationDemographicsPageState
                             value: s,
                             groupValue: _sex,
                             title: Text(s.label(context.l10n),
-                                style: AppText.bodyStrong()),
+                                style: AppText.of(context).bodyStrong()),
                             activeColor: AppColors.primary,
                             onChanged: (v) => setState(() => _sex = v),
                           ))
@@ -159,9 +160,9 @@ class _RegistrationDemographicsPageState
                       return ListTile(
                         dense: true,
                         title: Text('${s.postalCode} — ${s.placeName}',
-                            style: AppText.bodyStrong()),
+                            style: AppText.of(context).bodyStrong()),
                         subtitle: s.admin1 != null
-                            ? Text(s.admin1!, style: AppText.bodySmall())
+                            ? Text(s.admin1!, style: AppText.of(context).bodySmall())
                             : null,
                         onTap: () {
                           setState(() {
@@ -178,7 +179,7 @@ class _RegistrationDemographicsPageState
               if (state.errorMessage != null) ...[
                 SizedBox(height: 16.h),
                 Text(state.errorMessage!,
-                    style: AppText.bodySmall(color: AppColors.error)),
+                    style: AppText.of(context).bodySmall(color: KeplerColors.of(context).error)),
               ],
               SizedBox(height: 24.h),
               KeplerButton(
@@ -208,6 +209,6 @@ class _RegistrationDemographicsPageState
 
   Widget _sectionLabel(String label) => Text(
         label,
-        style: AppText.monoLabel(color: AppColors.primary),
+        style: AppText.of(context).monoLabel(color: KeplerColors.of(context).primary),
       );
 }

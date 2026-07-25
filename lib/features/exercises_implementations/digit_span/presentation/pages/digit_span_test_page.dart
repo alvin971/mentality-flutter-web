@@ -4,6 +4,7 @@ import 'dart:async';
 import '../../../../../core/l10n/l10n_ext.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
+import '../../../../../core/theme/kepler_colors.dart';
 import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/digit_span_generator.dart';
@@ -338,18 +339,18 @@ crossAxisAlignment: CrossAxisAlignment.start,
               Container(
                 padding: EdgeInsets.all(16.w),
                 decoration: BoxDecoration(
-                  color: AppColors.info.withValues(alpha: 0.1),
+                  color: KeplerColors.of(context).info.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12.r),
-                  border: Border.all(color: AppColors.info.withValues(alpha: 0.3)),
+                  border: Border.all(color: KeplerColors.of(context).info.withValues(alpha: 0.3)),
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.info_outline, color: AppColors.info, size: 24.sp),
+                    Icon(Icons.info_outline, color: KeplerColors.of(context).info, size: 24.sp),
                     SizedBox(width: 12.w),
                     Expanded(
                       child: Text(
                         context.l10n.dsPresentationInfo,
-                        style: TextStyle(color: AppColors.info, fontSize: 14.sp),
+                        style: TextStyle(color: KeplerColors.of(context).info, fontSize: 14.sp),
                       ),
                     ),
                   ],
@@ -439,7 +440,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 context.l10n.dsListenCarefully,
-                style: TextStyle(fontSize: 20.sp, color: AppColors.grey600),
+                style: TextStyle(fontSize: 20.sp, color: KeplerColors.of(context).textSecondary),
               ),
               SizedBox(height: 8.h),
               // Rappel de la consigne de la partie en cours : sans lui,
@@ -494,7 +495,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                   height: 150.w,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: AppColors.grey200,
+                    color: KeplerColors.of(context).border,
                   ),
                   child: Center(
                     child: CircularProgressIndicator(
@@ -508,7 +509,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                 '${_currentDigitIndex} / ${_currentItem.sequence.length}',
                 style: TextStyle(
                   fontSize: 18.sp,
-                  color: AppColors.grey600,
+                  color: KeplerColors.of(context).textSecondary,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -561,7 +562,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                       ? [
                           Text(
                             context.l10n.dsEnterAnswer,
-                            style: TextStyle(fontSize: 18.sp, color: AppColors.grey500),
+                            style: TextStyle(fontSize: 18.sp, color: KeplerColors.of(context).textSecondary),
                           )
                         ]
                       : _userAnswer.map((digit) {
@@ -623,7 +624,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                         onPressed: _userAnswer.isNotEmpty ? _removeLastDigit : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.error,
-                          disabledBackgroundColor: AppColors.grey300,
+                          disabledBackgroundColor: KeplerColors.of(context).border,
                         ),
                         child: FittedBox(
                           fit: BoxFit.scaleDown,
@@ -652,7 +653,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                             : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.indexWMI,
-                          disabledBackgroundColor: AppColors.grey300,
+                          disabledBackgroundColor: KeplerColors.of(context).border,
                         ),
                         child: Text(
                           context.l10n.dsValidateProgress(_userAnswer.length, _currentItem.length),
@@ -677,7 +678,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
       onPressed: isDisabled ? null : () => _addDigit(number),
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.indexWMI,
-        disabledBackgroundColor: AppColors.grey300,
+        disabledBackgroundColor: KeplerColors.of(context).border,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12.r),
         ),
@@ -719,7 +720,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                 SizedBox(height: 4.h),
                 Text(
                   subtitle,
-                  style: TextStyle(fontSize: 14.sp, color: AppColors.grey700),
+                  style: TextStyle(fontSize: 14.sp, color: KeplerColors.of(context).textPrimary),
                 ),
               ],
             ),

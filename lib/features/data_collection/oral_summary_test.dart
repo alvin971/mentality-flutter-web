@@ -18,6 +18,7 @@ import '../../data/reading_texts.dart';
 import '../../services/data_collection_service.dart';
 import '../../services/r2_upload_service.dart';
 import 'widgets/adaptive_reading_text.dart';
+import '../../core/theme/kepler_colors.dart';
 
 class OralSummaryTest extends StatefulWidget {
   final ReadingText originalText;
@@ -68,7 +69,7 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
       builder: (context) => AlertDialog(
         title: Row(
           children: [
-            Icon(Icons.mic, color: AppColors.primary, size: 24.sp),
+            Icon(Icons.mic, color: KeplerColors.of(context).primary, size: 24.sp),
             SizedBox(width: 8.w),
             Text(context.l10n.oralMicAccessTitle),
           ],
@@ -101,7 +102,7 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
             label: Text(context.l10n.oralStartSummary),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
+              foregroundColor: KeplerColors.of(context).onAccentFill,
             ),
           ),
         ],
@@ -151,7 +152,7 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
         duration: const Duration(seconds: 5),
         action: SnackBarAction(
           label: context.l10n.oralSkip,
-          textColor: Colors.white,
+          textColor: KeplerColors.of(context).onAccentFill,
           onPressed: () =>
               widget.onCompleted(widget.originalText.id, widget.sessionId),
         ),
@@ -486,7 +487,7 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
         label: Text(context.l10n.oralStartSummary),
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.teal,
-          foregroundColor: Colors.white,
+          foregroundColor: KeplerColors.of(context).onAccentFill,
           padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
           textStyle: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
         ),
@@ -502,17 +503,17 @@ class _OralSummaryTestState extends State<OralSummaryTest> {
           ? SizedBox(
               width: 16.w,
               height: 16.w,
-              child: const CircularProgressIndicator(
-                  strokeWidth: 2, color: Colors.white),
+              child: CircularProgressIndicator(
+                  strokeWidth: 2, color: KeplerColors.of(context).onAccentFill),
             )
           : const Icon(Icons.stop_circle, size: 20),
       label: Text(
           _isSaving ? context.l10n.oralSaving : context.l10n.oralFinishSummary),
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.red,
-        foregroundColor: Colors.white,
+        foregroundColor: KeplerColors.of(context).onAccentFill,
         disabledBackgroundColor: Colors.red.withValues(alpha: 0.4),
-        disabledForegroundColor: Colors.white70,
+        disabledForegroundColor: KeplerColors.of(context).textTertiary,
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
         textStyle: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
       ),

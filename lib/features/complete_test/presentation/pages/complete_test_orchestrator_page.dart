@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/theme/kepler_colors.dart';
 import '../../../../core/widgets/kepler_button.dart';
 import '../../../../core/widgets/kepler_card.dart';
 import '../../../../core/widgets/kepler_progress.dart';
@@ -267,10 +267,10 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const CircularProgressIndicator(color: AppColors.primary),
+                  CircularProgressIndicator(color: KeplerColors.of(context).primary),
                   SizedBox(height: 20.h),
                   Text(context.l10n.ctProcessing,
-                      style: AppText.monoLabel(color: AppColors.primary)),
+                      style: AppText.of(context).monoLabel(color: KeplerColors.of(context).primary)),
                 ],
               ),
             ),
@@ -289,17 +289,17 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(context.l10n.ctIntroHero1, style: AppText.heroDisplay()),
-          Text(context.l10n.ctIntroHero2, style: AppText.heroItalic()),
+          Text(context.l10n.ctIntroHero1, style: AppText.of(context).heroDisplay()),
+          Text(context.l10n.ctIntroHero2, style: AppText.of(context).heroItalic()),
           SizedBox(height: 16.h),
           Container(
               width: 36.w,
               height: 1,
-              color: AppColors.primary.withValues(alpha: 0.4)),
+              color: KeplerColors.of(context).primary.withValues(alpha: 0.4)),
           SizedBox(height: 16.h),
           Text(
             context.l10n.ctIntroDescription,
-            style: AppText.body(),
+            style: AppText.of(context).body(),
           ),
           SizedBox(height: 24.h),
           _InfoCard(
@@ -322,10 +322,10 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
           // verrouillé par un token valide en amont.
           if (_ageLoading) ...[
             SizedBox(height: 24.h),
-            const Center(
+            Center(
               child: Padding(
-                padding: EdgeInsets.all(8),
-                child: CircularProgressIndicator(color: AppColors.primary),
+                padding: const EdgeInsets.all(8),
+                child: CircularProgressIndicator(color: KeplerColors.of(context).primary),
               ),
             ),
           ] else if (!_ageFromToken) ...[
@@ -336,22 +336,22 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(context.l10n.ctPatientAgeHeader,
-                      style: AppText.monoLabel(color: AppColors.primary)),
+                      style: AppText.of(context).monoLabel(color: KeplerColors.of(context).primary)),
                   SizedBox(height: 12.h),
                   Text(context.l10n.ctPatientAgeHint,
-                      style: AppText.bodySmall()),
+                      style: AppText.of(context).bodySmall()),
                   SizedBox(height: 12.h),
                   TextField(
                     controller: _ageController,
                     keyboardType: TextInputType.number,
-                    style: AppText.monoScore(size: 22.sp),
+                    style: AppText.of(context).monoScore(size: 22.sp),
                     decoration: InputDecoration(
                       hintText: '00',
-                      hintStyle: AppText.monoScore(
+                      hintStyle: AppText.of(context).monoScore(
                           color: Theme.of(context).colorScheme.outline,
                           size: 22.sp),
                       suffixText: context.l10n.ctAgeSuffix,
-                      suffixStyle: AppText.monoLabel(
+                      suffixStyle: AppText.of(context).monoLabel(
                           color: Theme.of(context).colorScheme.outline),
                       filled: true,
                       fillColor: Theme.of(context).scaffoldBackgroundColor,
@@ -366,8 +366,8 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(6.r),
-                        borderSide: const BorderSide(
-                            color: AppColors.primary, width: 2),
+                        borderSide: BorderSide(
+                            color: KeplerColors.of(context).primary, width: 2),
                       ),
                     ),
                     onChanged: (v) {
@@ -384,7 +384,7 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
                     Padding(
                       padding: EdgeInsets.only(top: 8.h),
                       child: Text(context.l10n.ctAgeRangeError,
-                          style: AppText.bodySmall(color: AppColors.error)),
+                          style: AppText.of(context).bodySmall(color: KeplerColors.of(context).error)),
                     ),
                 ],
               ),
@@ -444,9 +444,9 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
           SizedBox(height: 40.h),
           if (next != null) ...[
             Text(context.l10n.ctNextSubtest,
-                style: AppText.monoLabel(color: AppColors.primary)),
+                style: AppText.of(context).monoLabel(color: KeplerColors.of(context).primary)),
             SizedBox(height: 8.h),
-            Text(_localizedTestName(context, next), style: AppText.h1Italic()),
+            Text(_localizedTestName(context, next), style: AppText.of(context).h1Italic()),
             SizedBox(height: 24.h),
           ],
           Row(
@@ -454,14 +454,14 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
               SizedBox(
                 width: 18.w,
                 height: 18.w,
-                child: const CircularProgressIndicator(
+                child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  color: AppColors.primary,
+                  color: KeplerColors.of(context).primary,
                 ),
               ),
               SizedBox(width: 12.w),
               Text(context.l10n.ctLaunching,
-                  style: AppText.monoLabel(color: Theme.of(context).colorScheme.onSurfaceVariant)),
+                  style: AppText.of(context).monoLabel(color: Theme.of(context).colorScheme.onSurfaceVariant)),
             ],
           ),
         ],
@@ -483,18 +483,18 @@ class _InfoCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(width: 3.w, height: 36.h, color: AppColors.primary),
+          Container(width: 3.w, height: 36.h, color: KeplerColors.of(context).primary),
           SizedBox(width: 14.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(eyebrow,
-                    style: AppText.monoLabel(color: AppColors.primary)),
+                    style: AppText.of(context).monoLabel(color: KeplerColors.of(context).primary)),
                 SizedBox(height: 4.h),
-                Text(title, style: AppText.bodyStrong()),
+                Text(title, style: AppText.of(context).bodyStrong()),
                 SizedBox(height: 4.h),
-                Text(body, style: AppText.bodySmall()),
+                Text(body, style: AppText.of(context).bodySmall()),
               ],
             ),
           ),

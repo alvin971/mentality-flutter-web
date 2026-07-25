@@ -8,6 +8,7 @@ import '../../../../../core/theme/app_typography.dart';
 import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/information_generator.dart';
+import '../../../../../core/theme/kepler_colors.dart';
 
 /// Page du test d'Information (Connaissances générales)
 /// WAIS-IV : 28 questions
@@ -268,7 +269,7 @@ class _InformationTestPageState extends State<InformationTestPage> {
               Padding(
                 padding: EdgeInsets.only(left: 8.w),
                 child: Text(context.l10n.commonSeconds(_elapsedSeconds),
-                    style: AppText.monoLabel(color: AppColors.indexVCI)),
+                    style: AppText.of(context).monoLabel(color: AppColors.indexVCI)),
               ),
             ],
       bottomBar: KeplerTestButton.primary(
@@ -284,10 +285,10 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                   padding: EdgeInsets.only(bottom: 8.h),
                   child: Text(
                     context.l10n.demoNotice,
-                    style: AppText.body().copyWith(
+                    style: AppText.of(context).body().copyWith(
                       fontSize: 12.5,
                       fontStyle: FontStyle.italic,
-                      color: AppColors.grey600,
+                      color: KeplerColors.of(context).textSecondary,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -398,7 +399,7 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                         ? AppColors.error
                         : isSelected
                             ? AppColors.indexVCI
-                            : AppColors.grey300;
+                            : KeplerColors.of(context).border;
                 return Padding(
                   padding: EdgeInsets.only(bottom: 8.h),
                   child: InkWell(
@@ -412,7 +413,7 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                             ? optionColor.withValues(alpha: 0.15)
                             : isSelected
                                 ? AppColors.indexVCI.withValues(alpha: 0.15)
-                                : AppColors.grey50,
+                                : KeplerColors.of(context).surface,
                         borderRadius: BorderRadius.circular(12.r),
                         border: Border.all(
                           color: optionColor,
@@ -430,7 +431,7 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                                   ? optionColor
                                   : isSelected
                                       ? AppColors.indexVCI
-                                      : AppColors.grey300,
+                                      : KeplerColors.of(context).border,
                             ),
                             child: Center(
                               child: Text(

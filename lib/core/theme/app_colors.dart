@@ -107,58 +107,107 @@ class AppColors {
   static const Color surfaceVariant = Color(0xFFEEF1EC); // Vert-crème Kepler
 
   // ========================================
-  // COULEURS DE SURFACE (Dark Mode)
+  // PALETTE SOMBRE — calibrée en APCA (2026-07-25)
   // ========================================
+  //
+  // POURQUOI APCA ET PAS WCAG 2.x : le ratio WCAG est symétrique, alors que
+  // la perception ne l'est pas. Il SURESTIME systématiquement le contraste du
+  // texte clair sur fond sombre — l'ancienne palette affichait 4.6:1 à 10.3:1
+  // « conformes AA » pour des couples réellement à Lc 36-68, sous le seuil de
+  // lecture. D'où le symptôme utilisateur : « les couleurs ne sont pas
+  // réellement visibles ».
+  //
+  // Seuils APCA appliqués (valeur absolue de Lc) :
+  //   90 → corps de texte, cible préférée
+  //   75 → corps de texte, minimum
+  //   60 → texte de grande taille
+  //   30 → éléments non textuels (bordures, filets, fills)
+  //   15 → seuil d'invisibilité
+  //
+  // Chaque constante ci-dessous est VÉRIFIÉE par
+  // `test/core/theme/dark_palette_contrast_test.dart`, qui recalcule l'APCA
+  // et échoue si un couple repasse sous son seuil. Ne pas modifier une valeur
+  // sans faire tourner ce test.
 
-  static const Color backgroundDark = Color(0xFF121212);
-  static const Color surfaceDark = Color(0xFF1C1C1C);
-  static const Color surfaceVariantDark = Color(0xFF2C2C2C);
-  static const Color cardDark = Color(0xFF1F1F1F);
+  // ---- Socle neutre : échelle d'élévation ----
+  // Jamais de noir pur (#000) : halation sur OLED et fatigue oculaire.
+  // Teinte très légèrement verte, en écho au crème/vert forêt du mode clair.
 
-  // ========================================
-  // COULEURS TEXTE DARK (WCAG AA / AAA sur #121212)
-  // ========================================
+  static const Color backgroundDark = Color(0xFF101312);
+  static const Color surfaceDark = Color(0xFF181C1A);
+  static const Color cardDark = Color(0xFF1E2321);
+  static const Color surfaceVariantDark = Color(0xFF272D2A);
 
-  /// Off-white — 14.5:1 sur #121212 (AAA)
-  static const Color textPrimaryDark = Color(0xFFEEEEEE);
+  /// Surface haute : dialogues, bottom sheets, menus.
+  static const Color raisedDark = Color(0xFF272D2A);
 
-  /// Light grey — 8.4:1 (AA)
-  static const Color textSecondaryDark = Color(0xFFC0C0C0);
+  // ---- Texte ----
+  // Pas de blanc pur non plus : #FFF sur fond sombre « bave » (halation).
 
-  /// Mid grey — 4.6:1 (AA)
-  static const Color textTertiaryDark = Color(0xFF888888);
+  /// Corps principal — Lc 90 sur carte, 92 sur fond.
+  static const Color textPrimaryDark = Color(0xFFE2E9E5);
 
-  // ========================================
-  // VARIANTES DARK DES INDICES COGNITIFS (+ luminance pour AA)
-  // ========================================
+  /// Corps secondaire — Lc 78 sur carte, 80 sur fond.
+  static const Color textSecondaryDark = Color(0xFFCBD7D1);
 
-  /// VCI dark — 7.8:1
-  static const Color indexVCIDark = Color(0xFFA78BFF);
+  /// Méta, eyebrows, compteurs — Lc 72 sur carte, 74 sur fond.
+  /// (l'ancien #888888 était à Lc 37 : illisible en 11 sp)
+  static const Color textTertiaryDark = Color(0xFFC1CDC7);
 
-  /// VSI dark — 8.2:1
-  static const Color indexVSIDark = Color(0xFF4EC9DD);
+  // ---- Marque ----
 
-  /// FRI dark — 7.1:1
-  static const Color indexFRIDark = Color(0xFF8A8DFF);
+  /// Accent texte / icônes — Lc 76 sur carte, 78 sur fond.
+  static const Color primaryLightDark = Color(0xFFB9DAB6);
 
-  /// WMI dark — 9.2:1
-  static const Color indexWMIDark = Color(0xFF48D597);
+  /// Fond de bouton primaire : c'est le label sombre posé dessus qui porte
+  /// le contraste (Lc 80).
+  static const Color accentFillDark = Color(0xFFC0DCBD);
 
-  /// PSI dark — 12.1:1
-  static const Color indexPSIDark = Color(0xFFFBD361);
+  /// Bordure de carte — Lc 32 sur carte, 34 sur fond.
+  /// L'ancienne bordure (blanc 20 %) était à Lc 0 : la structure de la page
+  /// n'existait tout simplement pas pour l'œil.
+  static const Color borderDark = Color(0xFF5C8B59);
 
-  /// FSIQ dark — 8.5:1
-  static const Color indexFSIQDark = Color(0xFF9D5FFF);
+  /// Filet de séparation — Lc 30 sur fond.
+  static const Color dividerDark = Color(0xFF598156);
 
-  // ========================================
-  // FEEDBACK DARK (AA garanti)
-  // ========================================
+  // ---- Indices cognitifs ----
+  // Teintes espacées d'au moins 35° et écart perceptuel ΔE OKLab ≥ 0.06.
+  // FSIQ ne prend pas de 6ᵉ teinte : c'est le score GLOBAL, il porte la
+  // couleur de marque — ce qui règle au passage la collision violet
+  // VCI/FSIQ présente aussi en mode clair (ΔE 0.005).
 
-  static const Color successDark = Color(0xFF5FDD9C);
-  static const Color errorDark = Color(0xFFFF9999);
-  static const Color warningDark = Color(0xFFFFD580);
-  static const Color infoDark = Color(0xFF89B4FF);
-  static const Color primaryLightDark = Color(0xFF7CB58A);
+  /// VCI dark — Lc 76.
+  static const Color indexVCIDark = Color(0xFFE3C7F2);
+
+  /// VSI dark — Lc 76.
+  static const Color indexVSIDark = Color(0xFF9FDAE9);
+
+  /// FRI dark — Lc 88.
+  static const Color indexFRIDark = Color(0xFFDEE4F9);
+
+  /// WMI dark — Lc 88.
+  static const Color indexWMIDark = Color(0xFFC0EEDD);
+
+  /// PSI dark — Lc 76.
+  static const Color indexPSIDark = Color(0xFFECCD8D);
+
+  /// FSIQ dark — Lc 76 (identique à l'accent de marque).
+  static const Color indexFSIQDark = Color(0xFFB9DAB6);
+
+  // ---- Feedback ----
+
+  /// Lc 76 sur carte.
+  static const Color successDark = Color(0xFF94E0C0);
+
+  /// Lc 76 sur carte.
+  static const Color errorDark = Color(0xFFF4C6C0);
+
+  /// Lc 76 sur carte.
+  static const Color warningDark = Color(0xFFECCD95);
+
+  /// Lc 76 sur carte.
+  static const Color infoDark = Color(0xFFBDD3F1);
 
   // ========================================
   // COULEURS PAR INDICE COGNITIF

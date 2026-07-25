@@ -7,6 +7,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'core/l10n/gen/app_localizations.dart';
 import 'core/l10n/locale_notifier.dart';
 import 'core/theme/app_colors.dart';
+import 'core/theme/app_theme.dart';
 import 'core/theme/app_typography.dart';
 import 'core/theme/theme_notifier.dart';
 import 'core/router/app_router.dart';
@@ -107,8 +108,8 @@ class MentalityApp extends StatelessWidget {
                 GlobalWidgetsLocalizations.delegate,
                 GlobalCupertinoLocalizations.delegate,
               ],
-              theme: _buildLightTheme(),
-              darkTheme: _buildDarkTheme(),
+              theme: AppTheme.light(),
+              darkTheme: AppTheme.dark(),
               themeMode: themeMode,
               routerConfig: appRouter,
             ),
@@ -118,192 +119,6 @@ class MentalityApp extends StatelessWidget {
     );
   }
 
-  ThemeData _buildLightTheme() {
-    return ThemeData(
-      useMaterial3: true,
-      brightness: Brightness.light,
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: AppColors.primary,
-        primary: AppColors.primary,
-        onPrimary: AppColors.background,
-        secondary: AppColors.secondary,
-        tertiary: AppColors.tertiary,
-        error: AppColors.error,
-        onError: AppColors.white,
-        surface: AppColors.surface,
-        onSurface: AppColors.textPrimary,
-        onSurfaceVariant: AppColors.textSecondary,
-        outline: AppColors.textTertiary,
-      ),
-      scaffoldBackgroundColor: AppColors.background,
-      appBarTheme: AppBarTheme(
-        centerTitle: false,
-        elevation: 0,
-        backgroundColor: AppColors.background,
-        foregroundColor: AppColors.textPrimary,
-        surfaceTintColor: Colors.transparent,
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
-        titleTextStyle: AppText.h3(),
-        toolbarHeight: 56,
-        iconTheme: const IconThemeData(
-          color: AppColors.textPrimary,
-          size: 20,
-        ),
-      ),
-      textTheme: AppText.buildTextTheme(),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary, // Vert sauge Kepler
-          foregroundColor: AppColors.background,
-          elevation: 0,
-          padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 14.h),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(6.r),
-          ),
-          textStyle: AppText.button(),
-        ),
-      ),
-      cardTheme: CardThemeData(
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.r),
-          side: BorderSide(color: Colors.black.withValues(alpha: 0.07)),
-        ),
-        color: AppColors.white,
-      ),
-      inputDecorationTheme: InputDecorationTheme(
-        filled: true,
-        fillColor: AppColors.background,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(4.r),
-          borderSide: BorderSide.none,
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(4.r),
-          borderSide: BorderSide(color: AppColors.grey200),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(4.r),
-          borderSide: const BorderSide(color: AppColors.primary, width: 2),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(4.r),
-          borderSide: const BorderSide(color: AppColors.error),
-        ),
-      ),
-      progressIndicatorTheme: const ProgressIndicatorThemeData(
-        color: AppColors.primary,
-        linearTrackColor: AppColors.grey200,
-      ),
-    );
-  }
 
-  ThemeData _buildDarkTheme() {
-    return ThemeData(
-      useMaterial3: true,
-      brightness: Brightness.dark,
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: AppColors.primary,
-        brightness: Brightness.dark,
-        primary: AppColors.primaryLightDark,
-        onPrimary: AppColors.backgroundDark,
-        secondary: AppColors.indexWMIDark,
-        tertiary: AppColors.indexPSIDark,
-        error: AppColors.errorDark,
-        onError: AppColors.backgroundDark,
-        surface: AppColors.surfaceDark,
-        onSurface: AppColors.textPrimaryDark,
-        onSurfaceVariant: AppColors.textSecondaryDark,
-        outline: AppColors.textTertiaryDark,
-      ),
-      scaffoldBackgroundColor: AppColors.backgroundDark,
-      appBarTheme: AppBarTheme(
-        centerTitle: false,
-        elevation: 0,
-        backgroundColor: AppColors.backgroundDark,
-        foregroundColor: AppColors.textPrimaryDark,
-        surfaceTintColor: Colors.transparent,
-        systemOverlayStyle: SystemUiOverlayStyle.light,
-        titleTextStyle: AppText.h3(color: AppColors.textPrimaryDark),
-        toolbarHeight: 56,
-        iconTheme: const IconThemeData(
-          color: AppColors.textPrimaryDark,
-          size: 20,
-        ),
-      ),
-      textTheme: AppText.buildTextTheme().apply(
-        bodyColor: AppColors.textPrimaryDark,
-        displayColor: AppColors.textPrimaryDark,
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primaryLightDark,
-          foregroundColor: AppColors.backgroundDark,
-          elevation: 0,
-          padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 14.h),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(6.r),
-          ),
-          textStyle: AppText.button(color: AppColors.backgroundDark),
-        ),
-      ),
-      outlinedButtonTheme: OutlinedButtonThemeData(
-        style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.primaryLightDark,
-          side: const BorderSide(color: AppColors.primaryLightDark, width: 1.5),
-          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(6.r),
-          ),
-          textStyle: AppText.button(color: AppColors.primaryLightDark),
-        ),
-      ),
-      cardTheme: CardThemeData(
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.r),
-          side: BorderSide(color: Colors.white.withValues(alpha: 0.12)),
-        ),
-        color: AppColors.cardDark,
-      ),
-      inputDecorationTheme: InputDecorationTheme(
-        filled: true,
-        fillColor: AppColors.surfaceDark,
-        hintStyle: AppText.body(color: AppColors.textSecondaryDark),
-        labelStyle: AppText.body(color: AppColors.textSecondaryDark),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(4.r),
-          borderSide: BorderSide.none,
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(4.r),
-          borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.18)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(4.r),
-          borderSide:
-              const BorderSide(color: AppColors.primaryLightDark, width: 2),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(4.r),
-          borderSide: const BorderSide(color: AppColors.errorDark),
-        ),
-      ),
-      dividerTheme: DividerThemeData(
-        color: Colors.white.withValues(alpha: 0.12),
-        thickness: 1,
-        space: 1,
-      ),
-      progressIndicatorTheme: ProgressIndicatorThemeData(
-        color: AppColors.primaryLightDark,
-        linearTrackColor: Colors.white.withValues(alpha: 0.12),
-      ),
-      dialogTheme: DialogThemeData(
-        backgroundColor: AppColors.surfaceDark,
-        titleTextStyle: AppText.h3(color: AppColors.textPrimaryDark),
-        contentTextStyle: AppText.body(color: AppColors.textPrimaryDark),
-      ),
-    );
-  }
 
 }

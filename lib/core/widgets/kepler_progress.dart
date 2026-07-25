@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../theme/app_colors.dart';
 import '../theme/app_typography.dart';
 import '../theme/kepler_colors.dart';
 
@@ -44,7 +43,7 @@ class KeplerProgress extends StatelessWidget {
                 child: Text(label!.toUpperCase(),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: AppText.monoLabel(color: accent)),
+                    style: AppText.of(context).monoLabel(color: accent)),
               )
             else
               const SizedBox.shrink(),
@@ -52,7 +51,7 @@ class KeplerProgress extends StatelessWidget {
               SizedBox(width: 8.w),
               Text(
                 '${current.toString().padLeft(2, '0')} / ${total.toString().padLeft(2, '0')}',
-                style: AppText.monoLabel(color: colors.textTertiary),
+                style: AppText.of(context).monoLabel(color: colors.textTertiary),
               ),
             ],
           ],

@@ -104,7 +104,7 @@ class KeplerTestButton extends StatelessWidget {
           Flexible(
             child: FittedBox(
               fit: BoxFit.scaleDown,
-              child: Text(label, style: AppText.button(color: fg)),
+              child: Text(label, style: AppText.of(context).button(color: fg)),
             ),
           ),
         ],

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/theme/kepler_colors.dart';
 import '../../../../core/widgets/kepler_button.dart';
 
 /// Onboarding Kepler — 3 slides éditoriales (serif + mono).
@@ -75,12 +76,12 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 children: [
                   Text(
                     '${(_currentPage + 1).toString().padLeft(2, '0')} / ${_slides.length.toString().padLeft(2, '0')}',
-                    style: AppText.monoLabel(color: Theme.of(context).colorScheme.outline),
+                    style: AppText.of(context).monoLabel(color: Theme.of(context).colorScheme.outline),
                   ),
                   TextButton(
                     onPressed: () => context.go(AppConstants.routeHome),
                     child: Text('Passer',
-                        style: AppText.bodySmall(
+                        style: AppText.of(context).bodySmall(
                             color: Theme.of(context).colorScheme.onSurfaceVariant)),
                   ),
                 ],
@@ -153,17 +154,17 @@ class _SlideView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text('${slide.eyebrow}',
-              style: AppText.monoLabel(color: AppColors.primary)),
+              style: AppText.of(context).monoLabel(color: KeplerColors.of(context).primary)),
           SizedBox(height: 24.h),
-          Text(slide.titleA, style: AppText.heroDisplay()),
-          Text(slide.titleB, style: AppText.heroItalic()),
+          Text(slide.titleA, style: AppText.of(context).heroDisplay()),
+          Text(slide.titleB, style: AppText.of(context).heroItalic()),
           SizedBox(height: 28.h),
           Container(
               width: 40.w,
               height: 1,
-              color: AppColors.primary.withValues(alpha: 0.4)),
+              color: KeplerColors.of(context).primary.withValues(alpha: 0.4)),
           SizedBox(height: 28.h),
-          Text(slide.body, style: AppText.body()),
+          Text(slide.body, style: AppText.of(context).body()),
         ],
       ),
     );

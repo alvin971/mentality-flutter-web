@@ -179,7 +179,7 @@ class _TestAppBar extends StatelessWidget implements PreferredSizeWidget {
                           if (eyebrow != null)
                             Text(
                               eyebrow!.toUpperCase(),
-                              style: AppText.monoLabel(color: effectiveAccent),
+                              style: AppText.of(context).monoLabel(color: effectiveAccent),
                             ),
                           if (eyebrow != null) SizedBox(height: 2.h),
                           // FittedBox borné en hauteur : ne peut que RÉDUIRE
@@ -193,7 +193,7 @@ class _TestAppBar extends StatelessWidget implements PreferredSizeWidget {
                               alignment: Alignment.centerLeft,
                               child: Text(
                                 title,
-                                style: AppText.h2Italic(
+                                style: AppText.of(context).h2Italic(
                                     color: colors.textPrimary),
                                 maxLines: 1,
                               ),

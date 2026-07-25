@@ -367,13 +367,13 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
               const SizedBox(height: 16),
               Text(
                 context.l10n.vpReadyTitle,
-                style: AppText.h2(),
+                style: AppText.of(context).h2(),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 12),
               Text(
                 context.l10n.vpReadyBody(_items.length),
-                style: AppText.body(),
+                style: AppText.of(context).body(),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -489,7 +489,7 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
             _demoPhase
                 ? context.l10n.vpDemoInstruction
                 : context.l10n.vpInstruction,
-            style: AppText.body().copyWith(fontSize: 13.5),
+            style: AppText.of(context).body().copyWith(fontSize: 13.5),
             textAlign: TextAlign.center,
           ),
         ),
@@ -564,7 +564,7 @@ class _TimerBadge extends StatelessWidget {
         children: [
           Icon(Icons.timer_outlined, color: color, size: 14),
           const SizedBox(width: 4),
-          Text('$mm:$ss', style: AppText.mono(color: color, size: 12)),
+          Text('$mm:$ss', style: AppText.of(context).mono(color: color, size: 12)),
         ],
       ),
     );

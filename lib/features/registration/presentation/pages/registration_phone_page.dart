@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/theme/kepler_colors.dart';
 import '../../../../core/widgets/kepler_button.dart';
 import '../../../../core/widgets/kepler_card.dart';
 import '../../../../core/widgets/kepler_scaffold.dart';
@@ -56,7 +56,7 @@ class _RegistrationPhonePageState extends State<RegistrationPhonePage> {
               SizedBox(height: 12.h),
               Text(
                 context.l10n.regPhoneIntro,
-                style: AppText.body(),
+                style: AppText.of(context).body(),
               ),
               SizedBox(height: 20.h),
               KeplerCard(
@@ -89,7 +89,7 @@ class _RegistrationPhonePageState extends State<RegistrationPhonePage> {
               if (state.errorMessage != null) ...[
                 SizedBox(height: 12.h),
                 Text(state.errorMessage!,
-                    style: AppText.bodySmall(color: AppColors.error)),
+                    style: AppText.of(context).bodySmall(color: KeplerColors.of(context).error)),
               ],
               SizedBox(height: 24.h),
               KeplerButton(

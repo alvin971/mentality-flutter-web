@@ -13,6 +13,7 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/services/auth_local_store.dart';
 import '../../../../core/services/token_access.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/theme/kepler_colors.dart';
 
 class TokenRestorePage extends StatefulWidget {
   const TokenRestorePage({super.key});
@@ -68,7 +69,7 @@ class _TokenRestorePageState extends State<TokenRestorePage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SizedBox(height: 12.h),
-              Icon(Icons.vpn_key_outlined, size: 56.sp, color: AppColors.primary),
+              Icon(Icons.vpn_key_outlined, size: 56.sp, color: KeplerColors.of(context).primary),
               SizedBox(height: 16.h),
               Text(
                 'Colle ton token',

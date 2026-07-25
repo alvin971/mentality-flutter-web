@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/theme/kepler_colors.dart';
 import '../../../../core/widgets/kepler_button.dart';
 import '../../../../core/widgets/kepler_card.dart';
 import '../../../../core/widgets/kepler_scaffold.dart';
@@ -96,19 +97,19 @@ class _ResultsHistoryPageState extends State<ResultsHistoryPage>
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12.r)),
-        title: Text(context.l10n.histDeleteResultTitle, style: AppText.h3()),
+        title: Text(context.l10n.histDeleteResultTitle, style: AppText.of(context).h3()),
         content:
-            Text(context.l10n.histDeleteResultBody, style: AppText.body()),
+            Text(context.l10n.histDeleteResultBody, style: AppText.of(context).body()),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
             child: Text(context.l10n.commonCancel,
-                style: AppText.bodySmall(color: Theme.of(context).colorScheme.onSurfaceVariant)),
+                style: AppText.of(context).bodySmall(color: Theme.of(context).colorScheme.onSurfaceVariant)),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
             child: Text(context.l10n.histDelete,
-                style: AppText.bodySmall(color: AppColors.error)),
+                style: AppText.of(context).bodySmall(color: KeplerColors.of(context).error)),
           ),
         ],
       ),
@@ -180,15 +181,15 @@ class _ResultsHistoryPageState extends State<ResultsHistoryPage>
               child: Container(
                   width: 40.w,
                   height: 3.h,
-                  color: AppColors.primary.withValues(alpha: 0.3)),
+                  color: KeplerColors.of(context).primary.withValues(alpha: 0.3)),
             ),
             SizedBox(height: 20.h),
             Text(_formatDate(e.date).toUpperCase(),
-                style: AppText.monoLabel(color: AppColors.primary)),
+                style: AppText.of(context).monoLabel(color: KeplerColors.of(context).primary)),
             SizedBox(height: 8.h),
-            Text(e.classification, style: AppText.h1Italic()),
+            Text(e.classification, style: AppText.of(context).h1Italic()),
             SizedBox(height: 6.h),
-            Text(context.l10n.histAgeYears(age), style: AppText.bodySmall()),
+            Text(context.l10n.histAgeYears(age), style: AppText.of(context).bodySmall()),
             SizedBox(height: 24.h),
             _ScoreRow(
                 label: context.l10n.histScoreFsiq,
@@ -242,9 +243,9 @@ class _EntryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final age = (entry.ageInMonths / 12).floor();
     final fsiq = Text('${entry.fsiq}',
-        style: AppText.monoScore(color: AppColors.primary, size: 26.sp));
+        style: AppText.of(context).monoScore(color: KeplerColors.of(context).primary, size: 26.sp));
     final classification =
-        Text(entry.classification, style: AppText.bodyStrong());
+        Text(entry.classification, style: AppText.of(context).bodyStrong());
     return KeplerCard(
       onTap: onTap,
       child: Row(
@@ -257,12 +258,12 @@ class _EntryCard extends StatelessWidget {
                 Row(
                   children: [
                     Text('FSIQ',
-                        style: AppText.monoLabel(
+                        style: AppText.of(context).monoLabel(
                             color: Theme.of(context).colorScheme.outline)),
                     if (locked) ...[
                       SizedBox(width: 4.w),
                       Icon(Icons.lock_outline,
-                          size: 12.sp, color: AppColors.primary),
+                          size: 12.sp, color: KeplerColors.of(context).primary),
                     ],
                   ],
                 ),
@@ -279,7 +280,7 @@ class _EntryCard extends StatelessWidget {
                 locked ? _blur(classification) : classification,
                 SizedBox(height: 2.h),
                 Text('${_formatDate(entry.date)} · ${context.l10n.histAgeYears(age)}',
-                    style: AppText.bodySmall()),
+                    style: AppText.of(context).bodySmall()),
               ],
             ),
           ),
@@ -313,11 +314,11 @@ class _MissionsBanner extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(Icons.lock_outline, size: 18.sp, color: AppColors.primary),
+              Icon(Icons.lock_outline, size: 18.sp, color: KeplerColors.of(context).primary),
               SizedBox(width: 8.w),
               Expanded(
                 child: Text(context.l10n.histLockedTitle,
-                    style: AppText.bodyStrong()),
+                    style: AppText.of(context).bodyStrong()),
               ),
             ],
           ),
@@ -326,7 +327,7 @@ class _MissionsBanner extends StatelessWidget {
             hasResults
                 ? context.l10n.histLockedBody
                 : context.l10n.histLockedBodyNoResult,
-            style: AppText.bodySmall(),
+            style: AppText.of(context).bodySmall(),
           ),
           SizedBox(height: 12.h),
           KeplerButton(
@@ -355,14 +356,14 @@ class _EmptyState extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(context.l10n.histEmptyEyebrow,
-                style: AppText.monoLabel(color: AppColors.primary)),
+                style: AppText.of(context).monoLabel(color: KeplerColors.of(context).primary)),
             SizedBox(height: 12.h),
-            Text(context.l10n.histEmptyHero1, style: AppText.heroDisplay()),
-            Text(context.l10n.histEmptyHero2, style: AppText.heroItalic()),
+            Text(context.l10n.histEmptyHero1, style: AppText.of(context).heroDisplay()),
+            Text(context.l10n.histEmptyHero2, style: AppText.of(context).heroItalic()),
             SizedBox(height: 16.h),
             Text(
               context.l10n.histEmptyDescription,
-              style: AppText.body(),
+              style: AppText.of(context).body(),
             ),
             SizedBox(height: 28.h),
             KeplerButton(
@@ -391,11 +392,11 @@ class _ScoreRow extends StatelessWidget {
         children: [
           Expanded(
             child: Text(label,
-                style: highlight ? AppText.bodyStrong() : AppText.body()),
+                style: highlight ? AppText.of(context).bodyStrong() : AppText.of(context).body()),
           ),
           Text(
             value.toString(),
-            style: AppText.monoScore(
+            style: AppText.of(context).monoScore(
               color: highlight
                   ? AppColors.primary
                   : Theme.of(context).colorScheme.onSurface,

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:uuid/uuid.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/theme/kepler_colors.dart';
 import '../../../../core/widgets/kepler_button.dart';
 import '../../../../core/widgets/kepler_card.dart';
 import '../../../../core/widgets/kepler_scaffold.dart';
@@ -166,17 +167,17 @@ class _Header extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(context.l10n.ctResultsHero1, style: AppText.heroDisplay()),
-        Text(context.l10n.ctResultsHero2, style: AppText.heroItalic()),
+        Text(context.l10n.ctResultsHero1, style: AppText.of(context).heroDisplay()),
+        Text(context.l10n.ctResultsHero2, style: AppText.of(context).heroItalic()),
         SizedBox(height: 12.h),
         Container(
             width: 36.w,
             height: 1,
-            color: AppColors.primary.withValues(alpha: 0.4)),
+            color: KeplerColors.of(context).primary.withValues(alpha: 0.4)),
         SizedBox(height: 12.h),
         Text(
           context.l10n.ctResultsSummary,
-          style: AppText.body(),
+          style: AppText.of(context).body(),
         ),
       ],
     );
@@ -200,24 +201,24 @@ class _SessionMeta extends StatelessWidget {
       surface: true,
       child: Column(
         children: [
-          _row(context.l10n.ctMetaDate, date),
-          _row(context.l10n.ctMetaDuration, duration),
-          _row(context.l10n.ctMetaSubtests, completed),
-          if (age != null) _row(context.l10n.ctMetaAge, age!),
+          _row(context, context.l10n.ctMetaDate, date),
+          _row(context, context.l10n.ctMetaDuration, duration),
+          _row(context, context.l10n.ctMetaSubtests, completed),
+          if (age != null) _row(context, context.l10n.ctMetaAge, age!),
         ],
       ),
     );
   }
 
-  Widget _row(String label, String value) {
+  Widget _row(BuildContext context, String label, String value) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 6.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label,
-              style: AppText.monoLabel(color: AppColors.textTertiary)),
-          Text(value, style: AppText.bodyStrong()),
+              style: AppText.of(context).monoLabel(color: KeplerColors.of(context).textTertiary)),
+          Text(value, style: AppText.of(context).bodyStrong()),
         ],
       ),
     );
@@ -240,18 +241,18 @@ class _FSIQCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(context.l10n.ctFsiqCardLabel,
-              style: AppText.monoLabel(color: AppColors.primary)),
+              style: AppText.of(context).monoLabel(color: KeplerColors.of(context).primary)),
           SizedBox(height: 16.h),
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text('${iq.fsiq}',
-                  style: AppText.monoScore(
-                      color: AppColors.primary, size: 80.sp)),
+                  style: AppText.of(context).monoScore(
+                      color: KeplerColors.of(context).primary, size: 80.sp)),
               SizedBox(width: 12.w),
               Padding(
                 padding: EdgeInsets.only(bottom: 12.h),
-                child: Text(classif, style: AppText.h2Italic()),
+                child: Text(classif, style: AppText.of(context).h2Italic()),
               ),
             ],
           ),
@@ -259,17 +260,17 @@ class _FSIQCard extends StatelessWidget {
           Container(
               width: 36.w,
               height: 1,
-              color: AppColors.primary.withValues(alpha: 0.4)),
+              color: KeplerColors.of(context).primary.withValues(alpha: 0.4)),
           SizedBox(height: 12.h),
           if (ci != null)
             Text(
                 context.l10n
                     .ctConfidenceInterval95(ci.lowerBound, ci.upperBound),
-                style: AppText.monoLabel(color: Theme.of(context).colorScheme.onSurfaceVariant)),
+                style: AppText.of(context).monoLabel(color: Theme.of(context).colorScheme.onSurfaceVariant)),
           SizedBox(height: 4.h),
           Text(
               context.l10n.ctPercentileLabel(percentile),
-              style: AppText.monoLabel(color: Theme.of(context).colorScheme.onSurfaceVariant)),
+              style: AppText.of(context).monoLabel(color: Theme.of(context).colorScheme.onSurfaceVariant)),
         ],
       ),
     );
@@ -295,7 +296,7 @@ class _IndexProfile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(context.l10n.ctIndexProfileHeader,
-              style: AppText.monoLabel(color: AppColors.primary)),
+              style: AppText.of(context).monoLabel(color: KeplerColors.of(context).primary)),
           SizedBox(height: 16.h),
           for (final e in indices) ...[
             if (e.$3 != null) _row(context, e.$1, e.$2, e.$3!, iq),
@@ -324,13 +325,13 @@ class _IndexProfile extends StatelessWidget {
                 SizedBox(
                     width: 44.w,
                     child: Text(code,
-                        style: AppText.monoLabel(color: AppColors.primary))),
-                Text(label, style: AppText.bodyStrong()),
+                        style: AppText.of(context).monoLabel(color: KeplerColors.of(context).primary))),
+                Text(label, style: AppText.of(context).bodyStrong()),
               ],
             ),
             Text('$score',
-                style: AppText.monoScore(
-                    color: AppColors.primary, size: 22.sp)),
+                style: AppText.of(context).monoScore(
+                    color: KeplerColors.of(context).primary, size: 22.sp)),
           ],
         ),
         SizedBox(height: 6.h),
@@ -348,13 +349,13 @@ class _IndexProfile extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(classif, style: AppText.bodySmall()),
+            Text(classif, style: AppText.of(context).bodySmall()),
             Text(
               ci != null
                   ? context.l10n.ctIndexCiPercentile(
                       ci.lowerBound, ci.upperBound, percentile)
                   : context.l10n.ctIndexPercentile(percentile),
-              style: AppText.monoLabel(color: AppColors.textTertiary),
+              style: AppText.of(context).monoLabel(color: KeplerColors.of(context).textTertiary),
             ),
           ],
         ),
@@ -415,10 +416,10 @@ class _SubtestDetails extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(context.l10n.ctStandardizedScoresHeader,
-              style: AppText.monoLabel(color: AppColors.primary)),
+              style: AppText.of(context).monoLabel(color: KeplerColors.of(context).primary)),
           SizedBox(height: 16.h),
           for (var i = 0; i < groups.length; i++) ...[
-            Text(groups[i].$1, style: AppText.bodyStrong()),
+            Text(groups[i].$1, style: AppText.of(context).bodyStrong()),
             SizedBox(height: 8.h),
             for (final s in groups[i].$2)
               if (s.$3 != null)
@@ -446,29 +447,29 @@ class _SubtestDetails extends StatelessWidget {
           Expanded(
               flex: 3,
               child: Text(name,
-                  style: AppText.body(color: AppColors.textPrimary))),
+                  style: AppText.of(context).body(color: KeplerColors.of(context).textPrimary))),
           Text(context.l10n.ctRawScore(raw),
-              style: AppText.monoLabel(color: AppColors.textTertiary)),
+              style: AppText.of(context).monoLabel(color: KeplerColors.of(context).textTertiary)),
           SizedBox(width: 12.w),
           Container(
             width: 36.w,
             height: 28.h,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.08),
+              color: KeplerColors.of(context).primary.withValues(alpha: 0.08),
               border: Border.all(
-                  color: AppColors.primary.withValues(alpha: 0.4)),
+                  color: KeplerColors.of(context).primary.withValues(alpha: 0.4)),
               borderRadius: BorderRadius.circular(4.r),
             ),
             child: Text('${scaled ?? '-'}',
-                style: AppText.monoScore(
-                    color: AppColors.primary, size: 14.sp)),
+                style: AppText.of(context).monoScore(
+                    color: KeplerColors.of(context).primary, size: 14.sp)),
           ),
           SizedBox(width: 10.w),
           Expanded(
             flex: 2,
             child: Text(classif,
-                style: AppText.bodySmall(color: AppColors.textTertiary),
+                style: AppText.of(context).bodySmall(color: KeplerColors.of(context).textTertiary),
                 textAlign: TextAlign.right),
           ),
         ],
@@ -510,42 +511,42 @@ class _StrengthsWeaknesses extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(context.l10n.ctCognitiveProfileHeader,
-              style: AppText.monoLabel(color: AppColors.primary)),
+              style: AppText.of(context).monoLabel(color: KeplerColors.of(context).primary)),
           SizedBox(height: 12.h),
           Text(
             homogeneous
                 ? context.l10n.ctProfileHomogeneous
                 : context.l10n.ctProfileHeterogeneous,
-            style: AppText.body(),
+            style: AppText.of(context).body(),
           ),
           SizedBox(height: 4.h),
           Text(context.l10n.ctMaxDiscrepancy(iq.maxIndexDiscrepancy),
-              style: AppText.monoLabel(color: Theme.of(context).colorScheme.outline)),
+              style: AppText.of(context).monoLabel(color: Theme.of(context).colorScheme.outline)),
           if (strengths.isNotEmpty) ...[
             SizedBox(height: 16.h),
             Text(context.l10n.ctRelativeStrengths,
-                style: AppText.bodyStrong(color: AppColors.success)),
+                style: AppText.of(context).bodyStrong(color: KeplerColors.of(context).success)),
             SizedBox(height: 6.h),
             Wrap(
               spacing: 8.w,
               runSpacing: 6.h,
               children: strengths
                   .map((c) =>
-                      _chip(_indexLabel(context, c), AppColors.success))
+                      _chip(context, _indexLabel(context, c), KeplerColors.of(context).success))
                   .toList(),
             ),
           ],
           if (weaknesses.isNotEmpty) ...[
             SizedBox(height: 16.h),
             Text(context.l10n.ctVigilancePoints,
-                style: AppText.bodyStrong(color: AppColors.warning)),
+                style: AppText.of(context).bodyStrong(color: KeplerColors.of(context).warning)),
             SizedBox(height: 6.h),
             Wrap(
               spacing: 8.w,
               runSpacing: 6.h,
               children: weaknesses
                   .map((c) =>
-                      _chip(_indexLabel(context, c), AppColors.warning))
+                      _chip(context, _indexLabel(context, c), KeplerColors.of(context).warning))
                   .toList(),
             ),
           ],
@@ -554,12 +555,12 @@ class _StrengthsWeaknesses extends StatelessWidget {
             padding: EdgeInsets.all(12.w),
             decoration: BoxDecoration(
               border: Border.all(
-                  color: AppColors.primary.withValues(alpha: 0.2)),
+                  color: KeplerColors.of(context).primary.withValues(alpha: 0.2)),
               borderRadius: BorderRadius.circular(6.r),
             ),
             child: Text(
               context.l10n.ctIndicativeDisclaimer,
-              style: AppText.bodySmall(color: Theme.of(context).colorScheme.onSurfaceVariant),
+              style: AppText.of(context).bodySmall(color: Theme.of(context).colorScheme.onSurfaceVariant),
             ),
           ),
         ],
@@ -567,7 +568,7 @@ class _StrengthsWeaknesses extends StatelessWidget {
     );
   }
 
-  Widget _chip(String label, Color c) {
+  Widget _chip(BuildContext context, String label, Color c) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
       decoration: BoxDecoration(
@@ -575,7 +576,7 @@ class _StrengthsWeaknesses extends StatelessWidget {
         border: Border.all(color: c.withValues(alpha: 0.3)),
         borderRadius: BorderRadius.circular(4.r),
       ),
-      child: Text(label, style: AppText.bodySmall(color: c)),
+      child: Text(label, style: AppText.of(context).bodySmall(color: c)),
     );
   }
 }
@@ -591,34 +592,34 @@ class _RawFallback extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(context.l10n.ctRawScoresHeader,
-              style: AppText.monoLabel(color: AppColors.primary)),
+              style: AppText.of(context).monoLabel(color: KeplerColors.of(context).primary)),
           SizedBox(height: 16.h),
-          _row(context.l10n.ctTestSimilarities, session.similaritiesScore),
-          _row(context.l10n.ctTestVocabulary, session.vocabularyScore),
-          _row(context.l10n.ctTestInformation, session.informationScore),
-          _row(context.l10n.ctTestCubes, session.cubesScore),
-          _row(context.l10n.ctTestMatrices, session.matricesScore),
-          _row(context.l10n.ctTestVisualPuzzles, session.visualPuzzlesScore),
-          _row(context.l10n.ctTestDigitSpan, session.digitSpanScore),
-          _row(context.l10n.ctTestArithmetic, session.arithmeticScore),
-          _row(context.l10n.ctTestPictureSpan, session.pictureSpanScore),
-          _row(context.l10n.ctTestCoding, session.codingScore),
-          _row(context.l10n.ctTestSymbolSearch, session.symbolSearchScore),
-          _row(context.l10n.ctTestFigureWeights, session.figureWeightsScore),
+          _row(context, context.l10n.ctTestSimilarities, session.similaritiesScore),
+          _row(context, context.l10n.ctTestVocabulary, session.vocabularyScore),
+          _row(context, context.l10n.ctTestInformation, session.informationScore),
+          _row(context, context.l10n.ctTestCubes, session.cubesScore),
+          _row(context, context.l10n.ctTestMatrices, session.matricesScore),
+          _row(context, context.l10n.ctTestVisualPuzzles, session.visualPuzzlesScore),
+          _row(context, context.l10n.ctTestDigitSpan, session.digitSpanScore),
+          _row(context, context.l10n.ctTestArithmetic, session.arithmeticScore),
+          _row(context, context.l10n.ctTestPictureSpan, session.pictureSpanScore),
+          _row(context, context.l10n.ctTestCoding, session.codingScore),
+          _row(context, context.l10n.ctTestSymbolSearch, session.symbolSearchScore),
+          _row(context, context.l10n.ctTestFigureWeights, session.figureWeightsScore),
         ],
       ),
     );
   }
 
-  Widget _row(String name, int? score) {
+  Widget _row(BuildContext context, String name, int? score) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 6.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(name, style: AppText.body()),
+          Text(name, style: AppText.of(context).body()),
           Text(score?.toString() ?? '—',
-              style: AppText.monoScore(size: 18.sp)),
+              style: AppText.of(context).monoScore(size: 18.sp)),
         ],
       ),
     );
@@ -633,18 +634,18 @@ class _NoScoreNotice extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(width: 3.w, height: 36.h, color: AppColors.warning),
+          Container(width: 3.w, height: 36.h, color: KeplerColors.of(context).warning),
           SizedBox(width: 14.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(context.l10n.ctMissingAgeHeader,
-                    style: AppText.monoLabel(color: AppColors.warning)),
+                    style: AppText.of(context).monoLabel(color: KeplerColors.of(context).warning)),
                 SizedBox(height: 6.h),
                 Text(
                   context.l10n.ctMissingAgeBody,
-                  style: AppText.bodySmall(),
+                  style: AppText.of(context).bodySmall(),
                 ),
               ],
             ),

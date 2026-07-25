@@ -138,7 +138,7 @@ class PuzzlePieceWidget extends StatelessWidget {
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(label,
-                        style: AppText.mono(color: accent, size: 11)),
+                        style: AppText.of(context).mono(color: accent, size: 11)),
                   ),
                 ),
               ],

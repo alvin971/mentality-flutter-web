@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/theme/kepler_colors.dart';
 import '../../../../core/widgets/et_logo_animated.dart';
 import '../../../../core/widgets/kepler_button.dart';
 import '../../../../core/widgets/kepler_card.dart';
@@ -25,13 +25,13 @@ class RegistrationSuccessPage extends StatelessWidget {
           SizedBox(height: 24.h),
           Text(
             context.l10n.regSuccessTokenSaved,
-            style: AppText.bodyStrong(),
+            style: AppText.of(context).bodyStrong(),
             textAlign: TextAlign.center,
           ),
           SizedBox(height: 12.h),
           Text(
             context.l10n.regSuccessTokenDetails,
-            style: AppText.body(),
+            style: AppText.of(context).body(),
             textAlign: TextAlign.center,
           ),
           SizedBox(height: 24.h),
@@ -41,11 +41,11 @@ class RegistrationSuccessPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(context.l10n.regImportantLabel,
-                    style: AppText.monoLabel(color: AppColors.warning)),
+                    style: AppText.of(context).monoLabel(color: KeplerColors.of(context).warning)),
                 SizedBox(height: 8.h),
                 Text(
                   context.l10n.regSuccessWarning,
-                  style: AppText.bodySmall(),
+                  style: AppText.of(context).bodySmall(),
                 ),
               ],
             ),

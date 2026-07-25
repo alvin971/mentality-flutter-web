@@ -5,6 +5,7 @@ import '../../../../../core/l10n/l10n_ext.dart';
 import '../../../../../core/l10n/locale_notifier.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
+import '../../../../../core/theme/kepler_colors.dart';
 import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/similarities_generator.dart';
@@ -261,7 +262,7 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
               Padding(
                 padding: EdgeInsets.only(left: 8.w),
                 child: Text(context.l10n.commonSeconds(_elapsedSeconds),
-                    style: AppText.monoLabel(color: AppColors.indexVCI)),
+                    style: AppText.of(context).monoLabel(color: AppColors.indexVCI)),
               ),
             ],
       bottomBar: _demoPhase
@@ -430,7 +431,7 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                     borderRadius: BorderRadius.circular(8.r),
                   ),
                   filled: true,
-                  fillColor: AppColors.grey50,
+                  fillColor: KeplerColors.of(context).surface,
                 ),
                 textCapitalization: TextCapitalization.sentences,
               ),
@@ -456,7 +457,7 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 13.sp,
-                          color: AppColors.success,
+                          color: KeplerColors.of(context).success,
                         ),
                       ),
                       SizedBox(height: 4.h),

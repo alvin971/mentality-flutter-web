@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/l10n/l10n_ext.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/theme/kepler_colors.dart';
 import '../../../../core/widgets/et_logo_animated.dart';
 import '../../../../core/widgets/kepler_app_bar.dart';
 import '../../bloc/chat_bloc.dart';
@@ -128,20 +129,20 @@ class _Empty extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(context.l10n.chatAssistantLabel,
-              style: AppText.monoLabel(color: AppColors.primary)),
+              style: AppText.of(context).monoLabel(color: KeplerColors.of(context).primary)),
           SizedBox(height: 16.h),
-          Text(context.l10n.chatHeroTitle1, style: AppText.heroDisplay()),
-          Text(context.l10n.chatHeroTitle2, style: AppText.heroItalic()),
+          Text(context.l10n.chatHeroTitle1, style: AppText.of(context).heroDisplay()),
+          Text(context.l10n.chatHeroTitle2, style: AppText.of(context).heroItalic()),
           SizedBox(height: 16.h),
           Container(
             width: 40.w,
             height: 1,
-            color: AppColors.primary.withValues(alpha: 0.4),
+            color: KeplerColors.of(context).primary.withValues(alpha: 0.4),
           ),
           SizedBox(height: 16.h),
           Text(
             context.l10n.chatEmptyIntro,
-            style: AppText.body(),
+            style: AppText.of(context).body(),
           ),
         ],
       ),
@@ -173,7 +174,7 @@ class _MessageBubble extends StatelessWidget {
             user ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Text(user ? context.l10n.chatUserLabel : context.l10n.chatAssistantLabel,
-              style: AppText.monoLabel(
+              style: AppText.of(context).monoLabel(
                   color: err
                       ? AppColors.error
                       : (user
@@ -196,7 +197,7 @@ class _MessageBubble extends StatelessWidget {
             ),
             child: Text(
               message.text,
-              style: AppText.body(
+              style: AppText.of(context).body(
                 color: user
                     ? Theme.of(context).scaffoldBackgroundColor
                     : err
@@ -207,7 +208,7 @@ class _MessageBubble extends StatelessWidget {
           ),
           SizedBox(height: 4.h),
           Text(_ts(context, message.timestamp),
-              style: AppText.monoLabel(color: Theme.of(context).colorScheme.outline)),
+              style: AppText.of(context).monoLabel(color: Theme.of(context).colorScheme.outline)),
         ],
       ),
     );
@@ -223,7 +224,7 @@ class _LoadingBubble extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(context.l10n.chatAssistantLabel,
-              style: AppText.monoLabel(color: AppColors.primary)),
+              style: AppText.of(context).monoLabel(color: KeplerColors.of(context).primary)),
           SizedBox(height: 6.h),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
@@ -238,14 +239,14 @@ class _LoadingBubble extends StatelessWidget {
                 SizedBox(
                   width: 14.w,
                   height: 14.w,
-                  child: const CircularProgressIndicator(
+                  child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    color: AppColors.primary,
+                    color: KeplerColors.of(context).primary,
                   ),
                 ),
                 SizedBox(width: 10.w),
                 Text(context.l10n.chatThinking,
-                    style: AppText.body(color: Theme.of(context).colorScheme.onSurfaceVariant)),
+                    style: AppText.of(context).body(color: Theme.of(context).colorScheme.onSurfaceVariant)),
               ],
             ),
           ),
@@ -282,11 +283,11 @@ class _InputBar extends StatelessWidget {
                   child: TextField(
                     controller: controller,
                     enabled: !isLoading,
-                    style: AppText.body(color: Theme.of(context).colorScheme.onSurface),
+                    style: AppText.of(context).body(color: Theme.of(context).colorScheme.onSurface),
                     decoration: InputDecoration(
                       hintText: context.l10n.chatInputHint,
                       hintStyle:
-                          AppText.body(color: Theme.of(context).colorScheme.outline),
+                          AppText.of(context).body(color: Theme.of(context).colorScheme.outline),
                       filled: true,
                       fillColor: Theme.of(context).colorScheme.surface,
                       contentPadding: EdgeInsets.symmetric(
@@ -303,8 +304,8 @@ class _InputBar extends StatelessWidget {
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(6.r),
-                        borderSide: const BorderSide(
-                            color: AppColors.primary, width: 2),
+                        borderSide: BorderSide(
+                            color: KeplerColors.of(context).primary, width: 2),
                       ),
                     ),
                     maxLines: null,
@@ -314,7 +315,7 @@ class _InputBar extends StatelessWidget {
                 ),
                 SizedBox(width: 10.w),
                 Material(
-                  color: AppColors.primary,
+                  color: KeplerColors.of(context).primary,
                   borderRadius: BorderRadius.circular(6.r),
                   child: InkWell(
                     borderRadius: BorderRadius.circular(6.r),

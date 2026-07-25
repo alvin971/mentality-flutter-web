@@ -42,16 +42,16 @@ class KeplerInstructionCard extends StatelessWidget {
         children: [
           if (eyebrow != null) ...[
             Text(eyebrow!.toUpperCase(),
-                style: AppText.monoLabel(color: accent)),
+                style: AppText.of(context).monoLabel(color: accent)),
             SizedBox(height: 8.h),
           ],
           if (title != null) ...[
             Text(title!,
-                style: AppText.h3(color: colors.textPrimary)),
+                style: AppText.of(context).h3(color: colors.textPrimary)),
             SizedBox(height: 8.h),
           ],
           Text(body,
-              style: AppText.body(color: colors.textSecondary)),
+              style: AppText.of(context).body(color: colors.textSecondary)),
         ],
       ),
     );

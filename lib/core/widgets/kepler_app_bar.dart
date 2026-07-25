@@ -74,12 +74,12 @@ class KeplerAppBar extends StatelessWidget implements PreferredSizeWidget {
                     children: [
                       if (eyebrow != null)
                         Text(eyebrow!.toUpperCase(),
-                            style: AppText.monoLabel(
-                                color: AppColors.primary)),
+                            style: AppText.of(context).monoLabel(
+                                color: KeplerColors.of(context).primary)),
                       if (title != null) ...[
                         if (eyebrow != null) SizedBox(height: 2.h),
                         Text(title!,
-                            style: AppText.h2Italic()
+                            style: AppText.of(context).h2Italic()
                                 .copyWith(color: colors.textPrimary),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis),

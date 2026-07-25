@@ -176,7 +176,7 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
       children: [
         SizedBox(height: 40.h),
         Text(l10n.ugErrorBody,
-            style: AppText.body(), textAlign: TextAlign.center),
+            style: AppText.of(context).body(), textAlign: TextAlign.center),
         SizedBox(height: 20.h),
         KeplerButton(
           label: l10n.ugRetry,
@@ -201,13 +201,13 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Le test est gratuit : condition affichée clairement dès le départ.
-        Text(l10n.ugFreeNotice, style: AppText.body()),
+        Text(l10n.ugFreeNotice, style: AppText.of(context).body()),
         SizedBox(height: 10.h),
         // Tout est persisté : l'utilisateur peut quitter et retrouver ses
         // missions, son lien et son résultat (flouté) dans « Mes résultats ».
         Text(
           l10n.ugResultsHubNotice,
-          style: AppText.bodySmall(
+          style: AppText.of(context).bodySmall(
               color: Theme.of(context).colorScheme.onSurfaceVariant),
         ),
         SizedBox(height: 20.h),
@@ -232,11 +232,11 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Icon(Icons.cloud_off_outlined,
-                  size: 16.sp, color: AppColors.warning),
+                  size: 16.sp, color: KeplerColors.of(context).warning),
               SizedBox(width: 8.w),
               Expanded(
                 child: Text(l10n.ugRefreshFailed,
-                    style: AppText.bodySmall(color: AppColors.warning)),
+                    style: AppText.of(context).bodySmall(color: KeplerColors.of(context).warning)),
               ),
             ],
           ),
@@ -262,14 +262,14 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
         children: [
           _stepHeader('1', l10n.ugStep1Title),
           SizedBox(height: 10.h),
-          Text(l10n.ugStep1Body, style: AppText.bodySmall()),
+          Text(l10n.ugStep1Body, style: AppText.of(context).bodySmall()),
           SizedBox(height: 16.h),
           KeplerCard(
             surface: true,
             padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
             child: SelectableText(
               p.inviteLink,
-              style: AppText.bodySmall().copyWith(
+              style: AppText.of(context).bodySmall().copyWith(
                 fontFeatures: const [FontFeature.tabularFigures()],
               ),
             ),
@@ -299,7 +299,7 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
         children: [
           _stepHeader('2', l10n.ugStep2Title),
           SizedBox(height: 10.h),
-          Text(l10n.ugStep2Body, style: AppText.bodySmall()),
+          Text(l10n.ugStep2Body, style: AppText.of(context).bodySmall()),
           SizedBox(height: 16.h),
           for (var i = 0; i < p.requiredReferrals; i++)
             Padding(
@@ -320,7 +320,7 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
                     i < p.completedReferrals
                         ? l10n.ugFriendDone(i + 1)
                         : l10n.ugFriendPending(i + 1),
-                    style: AppText.bodySmall(),
+                    style: AppText.of(context).bodySmall(),
                   ),
                 ],
               ),
@@ -351,7 +351,7 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
                 SizedBox(width: 10.w),
                 Expanded(
                   child: Text(l10n.ugInstaPending,
-                      style: AppText.bodySmall()),
+                      style: AppText.of(context).bodySmall()),
                 ),
               ],
             ),
@@ -366,7 +366,7 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
           _stepHeader('3', l10n.ugStep3Title),
           SizedBox(height: 10.h),
           Text(l10n.ugStep3Body(AppConstants.instagramHandle),
-              style: AppText.bodySmall()),
+              style: AppText.of(context).bodySmall()),
           SizedBox(height: 14.h),
           KeplerButton(
             label: l10n.ugFollowButton(AppConstants.instagramHandle),
@@ -419,7 +419,7 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
           ),
           child: Text(
             number,
-            style: AppText.bodySmall().copyWith(
+            style: AppText.of(context).bodySmall().copyWith(
               color: colors.background,
               fontWeight: FontWeight.w700,
             ),
@@ -428,7 +428,7 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
         SizedBox(width: 10.w),
         Expanded(
           child: Text(title,
-              style: AppText.h3()
+              style: AppText.of(context).h3()
                   .copyWith(fontWeight: FontWeight.w600)),
         ),
       ],
@@ -439,7 +439,7 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: AppText.bodySmall()),
+        Text(label, style: AppText.of(context).bodySmall()),
         SizedBox(height: 6.h),
         ClipRRect(
           borderRadius: BorderRadius.circular(4.r),

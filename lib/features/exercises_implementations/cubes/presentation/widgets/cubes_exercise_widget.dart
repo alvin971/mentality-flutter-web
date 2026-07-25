@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:math' as math;
 import '../../../../../core/l10n/l10n_ext.dart';
 import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/theme/kepler_colors.dart';
 
 /// Widget d'exercice des Cubes (Block Design)
 ///
@@ -162,7 +163,7 @@ class _CubesExerciseWidgetState extends State<CubesExerciseWidget> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
       decoration: BoxDecoration(
-        color: AppColors.primary.withValues(alpha: 0.1),
+        color: KeplerColors.of(context).primary.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: Column(
@@ -174,7 +175,7 @@ class _CubesExerciseWidgetState extends State<CubesExerciseWidget> {
                 children: [
                   Icon(
                     Icons.timer_outlined,
-                    color: AppColors.primary,
+                    color: KeplerColors.of(context).primary,
                     size: 20.sp,
                   ),
                   SizedBox(width: 6.w),
@@ -183,7 +184,7 @@ class _CubesExerciseWidgetState extends State<CubesExerciseWidget> {
                     style: TextStyle(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.primary,
+                      color: KeplerColors.of(context).primary,
                     ),
                   ),
                 ],

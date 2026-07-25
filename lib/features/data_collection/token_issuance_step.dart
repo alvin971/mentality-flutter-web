@@ -19,6 +19,7 @@ import '../../core/services/auth_local_store.dart';
 import '../../core/services/token_issuer.dart';
 import '../../core/theme/app_colors.dart';
 import '../../services/tokeniser_service.dart';
+import '../../core/theme/kepler_colors.dart';
 import '../registration/domain/entities/registration_form.dart' show Sex, SexX;
 
 const List<String> _kMonths = [
@@ -137,7 +138,7 @@ class _TokenIssuanceStepState extends State<TokenIssuanceStep> {
       appBar: AppBar(
         title: const Text('DEV — Token'),
         backgroundColor: AppColors.primary,
-        foregroundColor: Colors.white,
+        foregroundColor: KeplerColors.of(context).onAccentFill,
       ),
       body: SafeArea(child: content),
     );
@@ -157,7 +158,7 @@ class _TokenIssuanceStepState extends State<TokenIssuanceStep> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SizedBox(height: 12.h),
-          Icon(Icons.badge_outlined, size: 56.sp, color: AppColors.primary),
+          Icon(Icons.badge_outlined, size: 56.sp, color: KeplerColors.of(context).primary),
           SizedBox(height: 16.h),
           Text(
             'Dernière étape',
@@ -271,16 +272,16 @@ class _TokenIssuanceStepState extends State<TokenIssuanceStep> {
                 ? SizedBox(
                     width: 18.w,
                     height: 18.w,
-                    child: const CircularProgressIndicator(
-                        strokeWidth: 2, color: Colors.white),
+                    child: CircularProgressIndicator(
+                        strokeWidth: 2, color: KeplerColors.of(context).onAccentFill),
                   )
                 : const Icon(Icons.vpn_key_outlined),
             label: const Text('Générer mon token'),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
+              foregroundColor: KeplerColors.of(context).onAccentFill,
               disabledBackgroundColor: AppColors.primary.withValues(alpha: 0.35),
-              disabledForegroundColor: Colors.white70,
+              disabledForegroundColor: KeplerColors.of(context).textTertiary,
               padding: EdgeInsets.symmetric(vertical: 16.h),
               textStyle: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
             ),
@@ -319,7 +320,7 @@ class _TokenIssuanceStepState extends State<TokenIssuanceStep> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SizedBox(height: 12.h),
-          Icon(Icons.vpn_key_rounded, size: 56.sp, color: AppColors.success),
+          Icon(Icons.vpn_key_rounded, size: 56.sp, color: KeplerColors.of(context).success),
           SizedBox(height: 16.h),
           Text(
             'Voici ton token',
@@ -332,15 +333,15 @@ class _TokenIssuanceStepState extends State<TokenIssuanceStep> {
           Container(
             padding: EdgeInsets.all(14.w),
             decoration: BoxDecoration(
-              color: AppColors.error.withValues(alpha: 0.08),
+              color: KeplerColors.of(context).error.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(12.r),
-              border: Border.all(color: AppColors.error.withValues(alpha: 0.4)),
+              border: Border.all(color: KeplerColors.of(context).error.withValues(alpha: 0.4)),
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Icon(Icons.warning_amber_rounded,
-                    size: 22.sp, color: AppColors.error),
+                    size: 22.sp, color: KeplerColors.of(context).error),
                 SizedBox(width: 12.w),
                 Expanded(
                   child: Text(
@@ -389,7 +390,7 @@ class _TokenIssuanceStepState extends State<TokenIssuanceStep> {
             label: Text(widget.standalone ? 'Terminer' : 'J’ai sauvegardé, continuer'),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
+              foregroundColor: KeplerColors.of(context).onAccentFill,
               padding: EdgeInsets.symmetric(vertical: 16.h),
               textStyle: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w600),
             ),

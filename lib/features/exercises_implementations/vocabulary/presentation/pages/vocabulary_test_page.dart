@@ -5,6 +5,7 @@ import '../../../../../core/l10n/l10n_ext.dart';
 import '../../../../../core/l10n/locale_notifier.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/theme/app_typography.dart';
+import '../../../../../core/theme/kepler_colors.dart';
 import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/vocabulary_generator.dart';
@@ -228,7 +229,7 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
               Padding(
                 padding: EdgeInsets.only(left: 8.w),
                 child: Text(l10n.commonSeconds(_elapsedSeconds),
-                    style: AppText.monoLabel(color: AppColors.indexVCI)),
+                    style: AppText.of(context).monoLabel(color: AppColors.indexVCI)),
               ),
             ],
       bottomBar: _demoPhase
@@ -272,7 +273,7 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
               style: TextStyle(
                 fontSize: 12.sp,
                 fontStyle: FontStyle.italic,
-                color: AppColors.grey600,
+                color: KeplerColors.of(context).textSecondary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -385,14 +386,14 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
               hintText: l10n.vocabDefinitionHint,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12.r),
-                borderSide: BorderSide(color: AppColors.grey300, width: 2),
+                borderSide: BorderSide(color: KeplerColors.of(context).border, width: 2),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12.r),
                 borderSide: BorderSide(color: AppColors.indexVCI, width: 2),
               ),
               filled: true,
-              fillColor: AppColors.grey50,
+              fillColor: KeplerColors.of(context).surface,
               contentPadding: EdgeInsets.all(16.w),
             ),
             textCapitalization: TextCapitalization.sentences,
@@ -416,7 +417,7 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
                   children: [
                     Icon(
                       Icons.lightbulb_outline,
-                      color: AppColors.warning,
+                      color: KeplerColors.of(context).warning,
                       size: 20.sp,
                     ),
                     SizedBox(width: 8.w),

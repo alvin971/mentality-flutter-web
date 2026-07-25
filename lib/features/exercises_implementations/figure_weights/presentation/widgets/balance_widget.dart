@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../domain/balance_generator.dart';
 import 'token_widget.dart';
+import '../../../../../core/theme/kepler_colors.dart';
 
 /// Widget pour afficher une balance (équation visuelle + équation textuelle).
 ///
@@ -107,7 +108,7 @@ class BalanceWidget extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 36.sp,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.warning,
+                  color: KeplerColors.of(context).warning,
                 ),
               )
             : _buildTokenList(context, tokens),
@@ -146,7 +147,7 @@ class BalanceWidget extends StatelessWidget {
             style: TextStyle(
               fontSize: 24.sp,
               fontWeight: FontWeight.bold,
-              color: AppColors.warning,
+              color: KeplerColors.of(context).warning,
             ),
           )
         else

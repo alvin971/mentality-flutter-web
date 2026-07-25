@@ -24,6 +24,7 @@ import '../../data/reading_texts.dart';
 import '../../services/session_manager.dart';
 import 'oral_reading_test.dart';
 import 'oral_summary_test.dart';
+import '../../core/theme/kepler_colors.dart';
 
 enum _FlowStep {
   checkingConsent,
@@ -189,7 +190,7 @@ class _OralTestFlowState extends State<OralTestFlow> {
         appBar: AppBar(
           title: Text(context.l10n.oralFlowTitle),
           backgroundColor: AppColors.primary,
-          foregroundColor: Colors.white,
+          foregroundColor: KeplerColors.of(context).onAccentFill,
           elevation: 0,
         ),
         body: SafeArea(
@@ -220,7 +221,7 @@ class _OralTestFlowState extends State<OralTestFlow> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SizedBox(height: 20.h),
-          Icon(Icons.record_voice_over, size: 64.sp, color: AppColors.primary),
+          Icon(Icons.record_voice_over, size: 64.sp, color: KeplerColors.of(context).primary),
           SizedBox(height: 24.h),
           Text(
             context.l10n.oralConsentTitle,
@@ -280,10 +281,10 @@ class _OralTestFlowState extends State<OralTestFlow> {
             label: Text(context.l10n.oralAcceptAndStart),
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
+              foregroundColor: KeplerColors.of(context).onAccentFill,
               disabledBackgroundColor:
                   AppColors.primary.withValues(alpha: 0.35),
-              disabledForegroundColor: Colors.white70,
+              disabledForegroundColor: KeplerColors.of(context).textTertiary,
               padding: EdgeInsets.symmetric(vertical: 16.h),
               textStyle:
                   TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
@@ -373,7 +374,7 @@ class _OralTestFlowState extends State<OralTestFlow> {
                   : context.l10n.oralStepSummary,
               style: TextStyle(
                   fontSize: 14.sp,
-                  color: AppColors.primary,
+                  color: KeplerColors.of(context).primary,
                   fontWeight: FontWeight.w600),
             ),
           ],
@@ -402,7 +403,7 @@ class _OralTestFlowState extends State<OralTestFlow> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.hourglass_top_rounded,
-                size: 56.sp, color: AppColors.primary),
+                size: 56.sp, color: KeplerColors.of(context).primary),
             SizedBox(height: 24.h),
             Text(
               context.l10n.oralPauseWellDone,
@@ -429,7 +430,7 @@ class _OralTestFlowState extends State<OralTestFlow> {
               style: TextStyle(
                 fontSize: 64.sp,
                 fontWeight: FontWeight.bold,
-                color: AppColors.primary,
+                color: KeplerColors.of(context).primary,
               ),
             ),
           ],
@@ -448,7 +449,7 @@ class _OralTestFlowState extends State<OralTestFlow> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.check_circle_rounded,
-                size: 72.sp, color: AppColors.success),
+                size: 72.sp, color: KeplerColors.of(context).success),
             SizedBox(height: 24.h),
             Text(
               context.l10n.oralCompletedThanks,
@@ -470,7 +471,7 @@ class _OralTestFlowState extends State<OralTestFlow> {
               label: Text(context.l10n.oralBackToHome),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
-                foregroundColor: Colors.white,
+                foregroundColor: KeplerColors.of(context).onAccentFill,
                 padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 14.h),
                 textStyle: TextStyle(fontSize: 15.sp),
               ),
@@ -534,7 +535,7 @@ class _ConsentSection extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 20.sp, color: AppColors.primary),
+          Icon(icon, size: 20.sp, color: KeplerColors.of(context).primary),
           SizedBox(width: 12.w),
           Expanded(
             child: Column(

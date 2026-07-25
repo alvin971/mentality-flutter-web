@@ -6,6 +6,7 @@ import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/picture_span_generator.dart';
+import '../../../../../core/theme/kepler_colors.dart';
 
 /// Page du test Mémoire des Images (Picture Span)
 /// Présentation séquentielle puis rappel ordonné sur grille
@@ -241,18 +242,18 @@ crossAxisAlignment: CrossAxisAlignment.start,
               Container(
                 padding: EdgeInsets.all(16.w),
                 decoration: BoxDecoration(
-                  color: AppColors.info.withValues(alpha: 0.1),
+                  color: KeplerColors.of(context).info.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12.r),
-                  border: Border.all(color: AppColors.info.withValues(alpha: 0.3)),
+                  border: Border.all(color: KeplerColors.of(context).info.withValues(alpha: 0.3)),
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.info_outline, color: AppColors.info, size: 24.sp),
+                    Icon(Icons.info_outline, color: KeplerColors.of(context).info, size: 24.sp),
                     SizedBox(width: 12.w),
                     Expanded(
                       child: Text(
                         context.l10n.psTrialsInfo,
-                        style: TextStyle(color: AppColors.info, fontSize: 14.sp),
+                        style: TextStyle(color: KeplerColors.of(context).info, fontSize: 14.sp),
                       ),
                     ),
                   ],
@@ -292,7 +293,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 context.l10n.psMemorizeImages,
-                style: TextStyle(fontSize: 20.sp, color: AppColors.grey600),
+                style: TextStyle(fontSize: 20.sp, color: KeplerColors.of(context).textSecondary),
               ),
               SizedBox(height: 16.h),
               Text(
@@ -344,7 +345,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                   width: 200.w,
                   height: 200.w,
                   decoration: BoxDecoration(
-                    color: AppColors.grey200,
+                    color: KeplerColors.of(context).border,
                     borderRadius: BorderRadius.circular(20.r),
                   ),
                   child: Center(
@@ -409,7 +410,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                         ? Center(
                             child: Text(
                               context.l10n.psNoSelection,
-                              style: TextStyle(fontSize: 14.sp, color: AppColors.grey500),
+                              style: TextStyle(fontSize: 14.sp, color: KeplerColors.of(context).textSecondary),
                             ),
                           )
                         : ListView.builder(
@@ -497,10 +498,10 @@ crossAxisAlignment: CrossAxisAlignment.start,
                       decoration: BoxDecoration(
                         color: isSelected
                             ? AppColors.indexWMI.withValues(alpha: 0.3)
-                            : AppColors.grey100,
+                            : KeplerColors.of(context).surface,
                         borderRadius: BorderRadius.circular(12.r),
                         border: Border.all(
-                          color: isSelected ? AppColors.indexWMI : AppColors.grey300,
+                          color: isSelected ? AppColors.indexWMI : KeplerColors.of(context).border,
                           width: isSelected ? 3 : 2,
                         ),
                       ),
@@ -517,7 +518,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                             errorBuilder: (_, __, ___) => Icon(
                               image.icon,
                               size: 48.sp,
-                              color: isSelected ? AppColors.indexWMI : AppColors.grey600,
+                              color: isSelected ? AppColors.indexWMI : KeplerColors.of(context).textSecondary,
                             ),
                           ),
                         ),
@@ -544,7 +545,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.error,
-                    disabledBackgroundColor: AppColors.grey300,
+                    disabledBackgroundColor: KeplerColors.of(context).border,
                   ),
                 ),
               ),
@@ -582,7 +583,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                 SizedBox(height: 4.h),
                 Text(
                   subtitle,
-                  style: TextStyle(fontSize: 13.sp, color: AppColors.grey700),
+                  style: TextStyle(fontSize: 13.sp, color: KeplerColors.of(context).textPrimary),
                 ),
               ],
             ),

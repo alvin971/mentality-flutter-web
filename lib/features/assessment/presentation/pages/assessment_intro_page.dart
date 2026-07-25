@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/theme/kepler_colors.dart';
 import '../../../../core/widgets/kepler_button.dart';
 import '../../../../core/widgets/kepler_card.dart';
 import '../../../../core/widgets/kepler_scaffold.dart';
@@ -41,17 +41,17 @@ class AssessmentIntroPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(context.l10n.assessIntroHero1, style: AppText.heroDisplay()),
-          Text(context.l10n.assessIntroHero2, style: AppText.heroItalic()),
+          Text(context.l10n.assessIntroHero1, style: AppText.of(context).heroDisplay()),
+          Text(context.l10n.assessIntroHero2, style: AppText.of(context).heroItalic()),
           SizedBox(height: 16.h),
           Container(
               width: 36.w,
               height: 1,
-              color: AppColors.primary.withValues(alpha: 0.4)),
+              color: KeplerColors.of(context).primary.withValues(alpha: 0.4)),
           SizedBox(height: 16.h),
           Text(
             context.l10n.assessIntroDescription,
-            style: AppText.body(),
+            style: AppText.of(context).body(),
           ),
           SizedBox(height: 28.h),
           KeplerCard(
@@ -60,7 +60,7 @@ class AssessmentIntroPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(context.l10n.assessDomainsHeader,
-                    style: AppText.monoLabel(color: AppColors.primary)),
+                    style: AppText.of(context).monoLabel(color: KeplerColors.of(context).primary)),
                 SizedBox(height: 16.h),
                 for (final d in domains) _DomainRow(code: d.$1, label: d.$2),
               ],
@@ -70,18 +70,18 @@ class AssessmentIntroPage extends StatelessWidget {
           KeplerCard(
             child: Row(
               children: [
-                Container(width: 3.w, height: 32.h, color: AppColors.primary),
+                Container(width: 3.w, height: 32.h, color: KeplerColors.of(context).primary),
                 SizedBox(width: 14.w),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(context.l10n.assessBeforeStartHeader,
-                          style: AppText.monoLabel(color: AppColors.primary)),
+                          style: AppText.of(context).monoLabel(color: KeplerColors.of(context).primary)),
                       SizedBox(height: 4.h),
                       Text(
                         context.l10n.assessBeforeStartBody,
-                        style: AppText.bodySmall(),
+                        style: AppText.of(context).bodySmall(),
                       ),
                     ],
                   ),
@@ -110,7 +110,7 @@ class AssessmentIntroPage extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12.w),
                 child: Text(context.l10n.assessOrIndividualSubtest,
-                    style: AppText.monoLabel()),
+                    style: AppText.of(context).monoLabel()),
               ),
               Expanded(
                   child: Container(
@@ -141,8 +141,8 @@ class _DomainRow extends StatelessWidget {
           SizedBox(
               width: 48.w,
               child: Text(code,
-                  style: AppText.monoLabel(color: AppColors.primary))),
-          Expanded(child: Text(label, style: AppText.body())),
+                  style: AppText.of(context).monoLabel(color: KeplerColors.of(context).primary))),
+          Expanded(child: Text(label, style: AppText.of(context).body())),
         ],
       ),
     );
@@ -192,9 +192,9 @@ class _IndividualTests extends StatelessWidget {
                 SizedBox(
                     width: 40.w,
                     child: Text(t.$1,
-                        style: AppText.monoLabel(color: AppColors.primary))),
-                Expanded(child: Text(t.$2, style: AppText.bodyStrong())),
-                Icon(Icons.east, size: 16.sp, color: AppColors.primary),
+                        style: AppText.of(context).monoLabel(color: KeplerColors.of(context).primary))),
+                Expanded(child: Text(t.$2, style: AppText.of(context).bodyStrong())),
+                Icon(Icons.east, size: 16.sp, color: KeplerColors.of(context).primary),
               ],
             ),
           ),

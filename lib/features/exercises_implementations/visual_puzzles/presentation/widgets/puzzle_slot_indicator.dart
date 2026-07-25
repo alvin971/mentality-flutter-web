@@ -32,7 +32,7 @@ class PuzzleSlotIndicator extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(context.l10n.vpSelectionLabel,
-              style: AppText.mono(color: cs.outline, size: 11)),
+              style: AppText.of(context).mono(color: cs.outline, size: 11)),
           const SizedBox(width: 12),
           for (int i = 0; i < total; i++) ...[
             AnimatedContainer(
@@ -53,7 +53,7 @@ class PuzzleSlotIndicator extends StatelessWidget {
           ],
           const SizedBox(width: 10),
           Text('$filled / $total',
-              style: AppText.mono(color: accent, size: 11)),
+              style: AppText.of(context).mono(color: accent, size: 11)),
         ],
       ),
     );

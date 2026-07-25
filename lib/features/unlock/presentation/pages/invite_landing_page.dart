@@ -52,7 +52,7 @@ class _InviteLandingPageState extends State<InviteLandingPage> {
                 SizedBox(height: 16.h),
                 Text(
                   l10n.inviteLandingBody,
-                  style: AppText.body(),
+                  style: AppText.of(context).body(),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 24.h),

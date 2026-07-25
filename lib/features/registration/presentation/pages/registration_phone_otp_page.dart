@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/theme/kepler_colors.dart';
 import '../../../../core/widgets/kepler_button.dart';
 import '../../../../core/widgets/kepler_card.dart';
 import '../../../../core/widgets/kepler_scaffold.dart';
@@ -48,9 +48,9 @@ class _RegistrationPhoneOtpPageState extends State<RegistrationPhoneOtpPage> {
             children: [
               SizedBox(height: 12.h),
               Text(context.l10n.regSmsSentTo,
-                  style: AppText.monoLabel(color: AppColors.primary)),
+                  style: AppText.of(context).monoLabel(color: KeplerColors.of(context).primary)),
               SizedBox(height: 4.h),
-              Text(phone, style: AppText.h3()),
+              Text(phone, style: AppText.of(context).h3()),
               SizedBox(height: 24.h),
               KeplerCard(
                 child: TextField(
@@ -75,7 +75,7 @@ class _RegistrationPhoneOtpPageState extends State<RegistrationPhoneOtpPage> {
               if (state.errorMessage != null) ...[
                 SizedBox(height: 12.h),
                 Text(state.errorMessage!,
-                    style: AppText.bodySmall(color: AppColors.error)),
+                    style: AppText.of(context).bodySmall(color: KeplerColors.of(context).error)),
               ],
               SizedBox(height: 24.h),
               KeplerButton(

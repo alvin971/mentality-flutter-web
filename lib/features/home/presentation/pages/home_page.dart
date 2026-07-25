@@ -5,6 +5,7 @@ import '../../../../core/constants/app_constants.dart';
 import '../../../../core/services/auth_local_store.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
+import '../../../../core/theme/kepler_colors.dart';
 import '../../../../core/theme/theme_notifier.dart';
 import '../../../../core/l10n/l10n_ext.dart';
 import '../../../../core/widgets/et_logo_animated.dart';
@@ -62,7 +63,7 @@ class HomePage extends StatelessWidget {
             child: Row(
               children: [
                 Text('MENTAL E.T.',
-                    style: AppText.monoLabel(color: AppColors.primary)),
+                    style: AppText.of(context).monoLabel(color: KeplerColors.of(context).primary)),
                 SizedBox(width: 10.w),
                 EtLogoAnimated(size: 28.w),
                 const Spacer(),
@@ -133,18 +134,18 @@ class _Hero extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(context.l10n.homeHeroTitle, style: AppText.heroDisplay()),
-        Text(context.l10n.homeHeroTitleItalic, style: AppText.heroItalic()),
+        Text(context.l10n.homeHeroTitle, style: AppText.of(context).heroDisplay()),
+        Text(context.l10n.homeHeroTitleItalic, style: AppText.of(context).heroItalic()),
         SizedBox(height: 16.h),
         Container(
           width: 36.w,
           height: 1,
-          color: AppColors.primary.withValues(alpha: 0.4),
+          color: KeplerColors.of(context).primary.withValues(alpha: 0.4),
         ),
         SizedBox(height: 16.h),
         Text(
           context.l10n.homeHeroBody,
-          style: AppText.body(),
+          style: AppText.of(context).body(),
         ),
       ],
     );
@@ -217,7 +218,7 @@ class _ActionCard extends StatelessWidget {
           SizedBox(
             width: 32.w,
             child: Text(eyebrow,
-                style: AppText.monoLabel(color: AppColors.primary)),
+                style: AppText.of(context).monoLabel(color: KeplerColors.of(context).primary)),
           ),
           SizedBox(width: 12.w),
           Expanded(
@@ -226,12 +227,12 @@ class _ActionCard extends StatelessWidget {
               children: [
                 if (comingSoon) ...[
                   Text(context.l10n.homeComingSoon,
-                      style: AppText.monoLabel(color: AppColors.warning)),
+                      style: AppText.of(context).monoLabel(color: KeplerColors.of(context).warning)),
                   SizedBox(height: 4.h),
                 ],
-                Text(title, style: AppText.h3()),
+                Text(title, style: AppText.of(context).h3()),
                 SizedBox(height: 2.h),
-                Text(subtitle, style: AppText.bodySmall()),
+                Text(subtitle, style: AppText.of(context).bodySmall()),
               ],
             ),
           ),
@@ -275,7 +276,7 @@ class _About extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(context.l10n.homeAboutEyebrow,
-              style: AppText.monoLabel(color: AppColors.primary)),
+              style: AppText.of(context).monoLabel(color: KeplerColors.of(context).primary)),
           SizedBox(height: 16.h),
           for (var i = 0; i < tiles.length; i++) ...[
             tiles[i],
@@ -313,16 +314,16 @@ class _InfoTile extends StatelessWidget {
         SizedBox(
           width: 24.w,
           child: Text(eyebrow,
-              style: AppText.monoLabel(color: Theme.of(context).colorScheme.outline)),
+              style: AppText.of(context).monoLabel(color: Theme.of(context).colorScheme.outline)),
         ),
         SizedBox(width: 12.w),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title, style: AppText.bodyStrong()),
+              Text(title, style: AppText.of(context).bodyStrong()),
               SizedBox(height: 2.h),
-              Text(body, style: AppText.bodySmall()),
+              Text(body, style: AppText.of(context).bodySmall()),
             ],
           ),
         ),
@@ -340,7 +341,7 @@ class _ResumeBanner extends StatelessWidget {
           Container(
             width: 3.w,
             height: 36.h,
-            color: AppColors.primary,
+            color: KeplerColors.of(context).primary,
           ),
           SizedBox(width: 14.w),
           Expanded(
@@ -348,9 +349,9 @@ class _ResumeBanner extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(context.l10n.homeResumeEyebrow,
-                    style: AppText.monoLabel(color: AppColors.primary)),
+                    style: AppText.of(context).monoLabel(color: KeplerColors.of(context).primary)),
                 SizedBox(height: 4.h),
-                Text(context.l10n.homeResumeTitle, style: AppText.bodyStrong()),
+                Text(context.l10n.homeResumeTitle, style: AppText.of(context).bodyStrong()),
               ],
             ),
           ),
