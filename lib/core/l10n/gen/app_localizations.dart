@@ -666,13 +666,13 @@ abstract class AppLocalizations {
   /// Titre de la carte contenu
   ///
   /// In fr, this message translates to:
-  /// **'12 subtests inclus'**
+  /// **'13 subtests inclus'**
   String get ctIntroContentTitle;
 
   /// Liste des subtests dans la carte contenu
   ///
   /// In fr, this message translates to:
-  /// **'Cubes · Similitudes · Mémoire · Matrices · Vocabulaire · Arithmétique · Symboles · Puzzles · Information · Code · Images · Balances.'**
+  /// **'Cubes · Similitudes · Mémoire · Matrices · Vocabulaire · Arithmétique · Symboles · Puzzles · Information · Code · Images · Balances · Langage oral.'**
   String get ctIntroContentBody;
 
   /// Eyebrow de la carte avertissement
@@ -870,7 +870,7 @@ abstract class AppLocalizations {
   /// Paragraphe de synthèse en tête de page de résultats
   ///
   /// In fr, this message translates to:
-  /// **'Synthèse de vos performances cognitives sur les douze subtests WAIS-IV.'**
+  /// **'Synthèse de vos performances cognitives sur les subtests notés du WAIS-IV.'**
   String get ctResultsSummary;
 
   /// Âge en années affiché dans les résultats
@@ -1398,7 +1398,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeHeroBody.
   ///
   /// In fr, this message translates to:
-  /// **'Une évaluation scientifique adaptative, inspirée des échelles Wechsler. 12 sous-tests, 5 indices, un score global.'**
+  /// **'Une évaluation scientifique adaptative, inspirée des échelles Wechsler. 13 sous-tests, 5 indices, un score global.'**
   String get homeHeroBody;
 
   /// Home action card 1 title
@@ -1452,7 +1452,7 @@ abstract class AppLocalizations {
   /// About tile 1 title
   ///
   /// In fr, this message translates to:
-  /// **'12 sous-tests'**
+  /// **'13 sous-tests'**
   String get homeAboutSubtestsTitle;
 
   /// No description provided for @homeAboutSubtestsBody.

@@ -7,7 +7,8 @@ import '../et_logo_animated.dart';
 import '../kepler_progress.dart';
 import 'kepler_stimulus_surface.dart';
 
-/// Scaffold unifié pour les 12 pages de tests cognitifs.
+/// Scaffold unifié pour les 12 pages de sous-tests NOTÉS (le langage oral,
+/// 13e épreuve, a sa propre mise en page).
 ///
 /// - Fond Kepler (light/dark via [KeplerColors.of]).
 /// - AppBar Kepler : eyebrow mono + titre serif italique

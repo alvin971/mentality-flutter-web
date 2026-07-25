@@ -305,11 +305,11 @@ class AppLocalizationsDe extends AppLocalizations {
   String get ctIntroContentEyebrow => 'INHALT';
 
   @override
-  String get ctIntroContentTitle => '12 Untertests enthalten';
+  String get ctIntroContentTitle => '13 Untertests enthalten';
 
   @override
   String get ctIntroContentBody =>
-      'Mosaik-Test · Gemeinsamkeiten · Gedächtnis · Matrizen · Wortschatz · Rechnen · Symbole · Puzzles · Wissen · Zahlen-Symbol · Bilder · Figurenwaagen.';
+      'Mosaik-Test · Gemeinsamkeiten · Gedächtnis · Matrizen · Wortschatz · Rechnen · Symbole · Puzzles · Wissen · Zahlen-Symbol · Bilder · Figurenwaagen · Mündliche Sprache.';
 
   @override
   String get ctIntroImportantEyebrow => 'WICHTIG';
@@ -413,7 +413,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get ctResultsSummary =>
-      'Zusammenfassung Ihrer kognitiven Leistungen in den zwölf WAIS-IV-Untertests.';
+      'Zusammenfassung Ihrer kognitiven Leistungen in den bewerteten WAIS-IV-Untertests.';
 
   @override
   String ctAgeYears(int age) {
@@ -718,7 +718,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get homeHeroBody =>
-      'Eine adaptive, wissenschaftliche Untersuchung, angelehnt an die Wechsler-Skalen. 12 Untertests, 5 Indizes, ein Gesamtwert.';
+      'Eine adaptive, wissenschaftliche Untersuchung, angelehnt an die Wechsler-Skalen. 13 Untertests, 5 Indizes, ein Gesamtwert.';
 
   @override
   String get homeActionStartTitle => 'Untersuchung beginnen';
@@ -745,7 +745,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get homeAboutEyebrow => 'ÜBER UNS';
 
   @override
-  String get homeAboutSubtestsTitle => '12 Untertests';
+  String get homeAboutSubtestsTitle => '13 Untertests';
 
   @override
   String get homeAboutSubtestsBody =>

@@ -303,11 +303,11 @@ class AppLocalizationsEs extends AppLocalizations {
   String get ctIntroContentEyebrow => 'CONTENIDO';
 
   @override
-  String get ctIntroContentTitle => '12 subpruebas incluidas';
+  String get ctIntroContentTitle => '13 subpruebas incluidas';
 
   @override
   String get ctIntroContentBody =>
-      'Cubos · Semejanzas · Memoria · Matrices · Vocabulario · Aritmética · Símbolos · Rompecabezas · Información · Clave · Imágenes · Balanzas.';
+      'Cubos · Semejanzas · Memoria · Matrices · Vocabulario · Aritmética · Símbolos · Rompecabezas · Información · Clave · Imágenes · Balanzas · Lenguaje oral.';
 
   @override
   String get ctIntroImportantEyebrow => 'IMPORTANTE';
@@ -410,7 +410,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get ctResultsSummary =>
-      'Síntesis de tu rendimiento cognitivo en las doce subpruebas del WAIS-IV.';
+      'Síntesis de tu rendimiento cognitivo en las subpruebas puntuadas del WAIS-IV.';
 
   @override
   String ctAgeYears(int age) {
@@ -715,7 +715,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get homeHeroBody =>
-      'Una evaluación científica y adaptativa, inspirada en las escalas Wechsler. 12 subpruebas, 5 índices, una puntuación global.';
+      'Una evaluación científica y adaptativa, inspirada en las escalas Wechsler. 13 subpruebas, 5 índices, una puntuación global.';
 
   @override
   String get homeActionStartTitle => 'Comenzar una evaluación';
@@ -743,7 +743,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get homeAboutEyebrow => 'ACERCA DE';
 
   @override
-  String get homeAboutSubtestsTitle => '12 subpruebas';
+  String get homeAboutSubtestsTitle => '13 subpruebas';
 
   @override
   String get homeAboutSubtestsBody =>

@@ -330,11 +330,11 @@
   "@ctIntroContentEyebrow": {
     "description": "Eyebrow de la carte contenu"
   },
-  "ctIntroContentTitle": "12 subtests inclus",
+  "ctIntroContentTitle": "13 subtests inclus",
   "@ctIntroContentTitle": {
     "description": "Titre de la carte contenu"
   },
-  "ctIntroContentBody": "Cubes · Similitudes · Mémoire · Matrices · Vocabulaire · Arithmétique · Symboles · Puzzles · Information · Code · Images · Balances.",
+  "ctIntroContentBody": "Cubes · Similitudes · Mémoire · Matrices · Vocabulaire · Arithmétique · Symboles · Puzzles · Information · Code · Images · Balances · Langage oral.",
   "@ctIntroContentBody": {
     "description": "Liste des subtests dans la carte contenu"
   },
@@ -471,7 +471,7 @@
   "@ctResultsHero2": {
     "description": "Titre hero ligne 2 (italique) de la page de résultats"
   },
-  "ctResultsSummary": "Synthèse de vos performances cognitives sur les douze subtests WAIS-IV.",
+  "ctResultsSummary": "Synthèse de vos performances cognitives sur les subtests notés du WAIS-IV.",
   "@ctResultsSummary": {
     "description": "Paragraphe de synthèse en tête de page de résultats"
   },
@@ -910,7 +910,7 @@
   "@homeHeroTitleItalic": {
     "description": "Home hero, line 2 (italic)"
   },
-  "homeHeroBody": "Une évaluation scientifique adaptative, inspirée des échelles Wechsler. 12 sous-tests, 5 indices, un score global.",
+  "homeHeroBody": "Une évaluation scientifique adaptative, inspirée des échelles Wechsler. 13 sous-tests, 5 indices, un score global.",
   "homeActionStartTitle": "Commencer une évaluation",
   "@homeActionStartTitle": {
     "description": "Home action card 1 title"
@@ -943,7 +943,7 @@
   "@homeAboutEyebrow": {
     "description": "About section eyebrow"
   },
-  "homeAboutSubtestsTitle": "12 sous-tests",
+  "homeAboutSubtestsTitle": "13 sous-tests",
   "@homeAboutSubtestsTitle": {
     "description": "About tile 1 title"
   },

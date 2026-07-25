@@ -291,7 +291,9 @@ Future<bool> resteEnAttente(WidgetTester tester) async =>
     (await tester.runAsync(() => CompletionReporter.instance.hasPending())) ??
     false;
 
-/// Joue les 12 sous-tests dans le VRAI BLoC (hors test de widget).
+/// Joue les 12 sous-tests NOTÉS dans le VRAI BLoC (hors test de widget).
+/// La 13e épreuve du bilan — le langage oral — n'est pas notée et n'est pas
+/// pilotée par le BLoC : elle est lancée par l'orchestrateur.
 // ignore: unintended_html_in_doc_comment
 Future<void> joueLaBatterie(CompleteTestBloc bloc) async {
   bloc.add(const StartTestEvent(300));
@@ -307,7 +309,7 @@ Future<void> joueLaBatterie(CompleteTestBloc bloc) async {
   }
 }
 
-/// Même chose, mais DANS un test de widget. Deux horloges coexistent : celle,
+/// Même chose (les 12 sous-tests notés), mais DANS un test de widget. Deux horloges coexistent : celle,
 /// simulée, qui fait tourner les widgets et le BLoC (avancee par `pump`), et le
 /// temps réel dont les écritures Hive du BLoC ont besoin (`runAsync`). On
 /// alterne les deux SANS jamais avancer l'horloge simulée, pour ne pas

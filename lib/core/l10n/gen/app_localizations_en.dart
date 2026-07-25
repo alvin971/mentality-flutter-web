@@ -300,11 +300,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ctIntroContentEyebrow => 'CONTENT';
 
   @override
-  String get ctIntroContentTitle => '12 subtests included';
+  String get ctIntroContentTitle => '13 subtests included';
 
   @override
   String get ctIntroContentBody =>
-      'Block Design · Similarities · Memory · Matrix Reasoning · Vocabulary · Arithmetic · Symbols · Puzzles · Information · Coding · Pictures · Figure Weights.';
+      'Block Design · Similarities · Memory · Matrix Reasoning · Vocabulary · Arithmetic · Symbols · Puzzles · Information · Coding · Pictures · Figure Weights · Oral language.';
 
   @override
   String get ctIntroImportantEyebrow => 'IMPORTANT';
@@ -407,7 +407,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ctResultsSummary =>
-      'Summary of your cognitive performance across the twelve WAIS-IV subtests.';
+      'Summary of your cognitive performance across the scored WAIS-IV subtests.';
 
   @override
   String ctAgeYears(int age) {
@@ -711,7 +711,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeHeroBody =>
-      'An adaptive, scientific assessment inspired by the Wechsler scales. 12 subtests, 5 indices, one global score.';
+      'An adaptive, scientific assessment inspired by the Wechsler scales. 13 subtests, 5 indices, one global score.';
 
   @override
   String get homeActionStartTitle => 'Start an assessment';
@@ -738,7 +738,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeAboutEyebrow => 'ABOUT';
 
   @override
-  String get homeAboutSubtestsTitle => '12 subtests';
+  String get homeAboutSubtestsTitle => '13 subtests';
 
   @override
   String get homeAboutSubtestsBody =>
@@ -3052,11 +3052,11 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get ctIntroContentEyebrow => 'CONTENT';
 
   @override
-  String get ctIntroContentTitle => '12 subtests included';
+  String get ctIntroContentTitle => '13 subtests included';
 
   @override
   String get ctIntroContentBody =>
-      'Block Design · Similarities · Memory · Matrix Reasoning · Vocabulary · Arithmetic · Symbols · Puzzles · Information · Coding · Pictures · Figure Weights.';
+      'Block Design · Similarities · Memory · Matrix Reasoning · Vocabulary · Arithmetic · Symbols · Puzzles · Information · Coding · Pictures · Figure Weights · Oral language.';
 
   @override
   String get ctIntroImportantEyebrow => 'IMPORTANT';
@@ -3159,7 +3159,7 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get ctResultsSummary =>
-      'A summary of your cognitive performance across the twelve WAIS-IV subtests.';
+      'A summary of your cognitive performance across the scored WAIS-IV subtests.';
 
   @override
   String ctAgeYears(int age) {
@@ -3464,7 +3464,7 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get homeHeroBody =>
-      'An adaptive, scientific assessment inspired by the Wechsler scales. 12 subtests, 5 indices, one overall score.';
+      'An adaptive, scientific assessment inspired by the Wechsler scales. 13 subtests, 5 indices, one overall score.';
 
   @override
   String get homeActionStartTitle => 'Start an assessment';
@@ -3491,7 +3491,7 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get homeAboutEyebrow => 'ABOUT';
 
   @override
-  String get homeAboutSubtestsTitle => '12 subtests';
+  String get homeAboutSubtestsTitle => '13 subtests';
 
   @override
   String get homeAboutSubtestsBody =>

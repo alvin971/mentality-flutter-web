@@ -184,7 +184,9 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
   /// Étape FINALE non notée : compréhension orale (collecte audio).
   ///
   /// Elle ne produit aucun score → elle n'entre pas dans la séquence notée ni
-  /// dans le calcul du QI. On l'exécute une fois les 12 sous-tests terminés,
+  /// dans le calcul du QI — mais elle FAIT PARTIE du bilan : c'est la 13e
+  /// épreuve, et le 6e domaine (LO) annoncé dès l'écran d'entrée. On l'exécute
+  /// une fois les 12 sous-tests notés terminés,
   /// juste avant les résultats. Le consentement est géré par [OralTestFlow] ;
   /// un refus la fait simplement sauter (pop immédiat) → on passe aux résultats.
   Future<void> _finishWithOralThenResults(
