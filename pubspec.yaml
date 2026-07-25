@@ -79,3 +79,25 @@ flutter:
     - icons/
     - images/picture_span/
     - assets/reading_corpus/
+
+  # Polices EMBARQUÉES (2026-07-25). Auparavant récupérées au runtime par
+  # google_fonts : sans réseau au premier lancement, l'app retombait sur la
+  # police système et perdait toute son identité éditoriale — plus un
+  # changement de fonte visible au démarrage et une requête vers
+  # fonts.gstatic.com à chaque ouverture.
+  #
+  # Ce sont des polices VARIABLES : un seul fichier couvre toutes les
+  # graisses, pilotées par l'axe `wght` via TextStyle.fontVariations
+  # (cf. app_typography.dart). D'où l'absence de déclaration `weight:` ici.
+  fonts:
+    - family: SourceSerif4
+      fonts:
+        - asset: assets/fonts/SourceSerif4.ttf
+        - asset: assets/fonts/SourceSerif4-Italic.ttf
+          style: italic
+    - family: DMSans
+      fonts:
+        - asset: assets/fonts/DMSans.ttf
+    - family: RobotoMono
+      fonts:
+        - asset: assets/fonts/RobotoMono.ttf

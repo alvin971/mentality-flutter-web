@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
 import 'kepler_colors.dart';
 
@@ -31,9 +30,86 @@ class AppText {
   static KeplerText of(BuildContext context) =>
       KeplerText._(KeplerColors.of(context));
 
+
+  // ---- Fabriques de familles ----
+  //
+  // Les trois familles sont EMBARQUÉES (cf. `pubspec.yaml`) et variables :
+  // un seul fichier par famille, la graisse étant pilotée par l'axe `wght`.
+  // On renseigne donc `fontVariations` en plus de `fontWeight` — le second
+  // seul ne suffit pas à instancier l'axe sur toutes les plateformes.
+  //
+  // Ne pas revenir à `GoogleFonts.*` : cela réintroduirait le téléchargement
+  // au lancement, la police système en secours hors réseau et la requête à
+  // fonts.gstatic.com.
+
+  static TextStyle _face(
+    String family, {
+    required double fontSize,
+    required FontWeight fontWeight,
+    double? height,
+    double? letterSpacing,
+    FontStyle? fontStyle,
+    Color? color,
+  }) =>
+      TextStyle(
+        fontFamily: family,
+        fontSize: fontSize,
+        height: height,
+        fontWeight: fontWeight,
+        fontStyle: fontStyle,
+        letterSpacing: letterSpacing,
+        color: color,
+        fontVariations: [FontVariation('wght', fontWeight.value.toDouble())],
+      );
+
+  /// Source Serif 4 — titres éditoriaux.
+  static TextStyle _serif({
+    required double fontSize,
+    required FontWeight fontWeight,
+    double? height,
+    double? letterSpacing,
+    FontStyle? fontStyle,
+    Color? color,
+  }) =>
+      _face('SourceSerif4',
+          fontSize: fontSize,
+          fontWeight: fontWeight,
+          height: height,
+          letterSpacing: letterSpacing,
+          fontStyle: fontStyle,
+          color: color);
+
+  /// DM Sans — corps de texte et UI.
+  static TextStyle _sans({
+    required double fontSize,
+    required FontWeight fontWeight,
+    double? height,
+    double? letterSpacing,
+    Color? color,
+  }) =>
+      _face('DMSans',
+          fontSize: fontSize,
+          fontWeight: fontWeight,
+          height: height,
+          letterSpacing: letterSpacing,
+          color: color);
+
+  /// Roboto Mono — labels mono et scores psychométriques.
+  static TextStyle _mono({
+    required double fontSize,
+    required FontWeight fontWeight,
+    double? letterSpacing,
+    Color? color,
+  }) =>
+      _face('RobotoMono',
+          fontSize: fontSize,
+          fontWeight: fontWeight,
+          letterSpacing: letterSpacing,
+          color: color);
+
   // ---- Source Serif 4 : titres éditoriaux ----
 
-  static TextStyle heroDisplay({Color? color}) => GoogleFonts.sourceSerif4(
+  static TextStyle heroDisplay({Color? color}) => _serif(
         fontSize: 40.sp,
         height: 1.1,
         fontWeight: FontWeight.w500,
@@ -41,7 +117,7 @@ class AppText {
         color: color ?? AppColors.textPrimary,
       );
 
-  static TextStyle heroItalic({Color? color}) => GoogleFonts.sourceSerif4(
+  static TextStyle heroItalic({Color? color}) => _serif(
         fontSize: 40.sp,
         height: 1.1,
         fontStyle: FontStyle.italic,
@@ -50,7 +126,7 @@ class AppText {
         color: color ?? AppColors.primary,
       );
 
-  static TextStyle h1({Color? color}) => GoogleFonts.sourceSerif4(
+  static TextStyle h1({Color? color}) => _serif(
         fontSize: 30.sp,
         height: 1.15,
         fontWeight: FontWeight.w500,
@@ -58,7 +134,7 @@ class AppText {
         color: color ?? AppColors.textPrimary,
       );
 
-  static TextStyle h1Italic({Color? color}) => GoogleFonts.sourceSerif4(
+  static TextStyle h1Italic({Color? color}) => _serif(
         fontSize: 30.sp,
         height: 1.15,
         fontStyle: FontStyle.italic,
@@ -67,7 +143,7 @@ class AppText {
         color: color ?? AppColors.primary,
       );
 
-  static TextStyle h2({Color? color}) => GoogleFonts.sourceSerif4(
+  static TextStyle h2({Color? color}) => _serif(
         fontSize: 24.sp,
         height: 1.2,
         fontWeight: FontWeight.w500,
@@ -75,7 +151,7 @@ class AppText {
         color: color ?? AppColors.textPrimary,
       );
 
-  static TextStyle h2Italic({Color? color}) => GoogleFonts.sourceSerif4(
+  static TextStyle h2Italic({Color? color}) => _serif(
         fontSize: 24.sp,
         height: 1.2,
         fontStyle: FontStyle.italic,
@@ -84,7 +160,7 @@ class AppText {
         color: color ?? AppColors.primary,
       );
 
-  static TextStyle h3({Color? color}) => GoogleFonts.sourceSerif4(
+  static TextStyle h3({Color? color}) => _serif(
         fontSize: 19.sp,
         height: 1.25,
         fontWeight: FontWeight.w500,
@@ -93,28 +169,28 @@ class AppText {
 
   // ---- DM Sans : corps & UI ----
 
-  static TextStyle body({Color? color}) => GoogleFonts.dmSans(
+  static TextStyle body({Color? color}) => _sans(
         fontSize: 15.sp,
         height: 1.65,
         fontWeight: FontWeight.w400,
         color: color ?? AppColors.textSecondary,
       );
 
-  static TextStyle bodyStrong({Color? color}) => GoogleFonts.dmSans(
+  static TextStyle bodyStrong({Color? color}) => _sans(
         fontSize: 15.sp,
         height: 1.55,
         fontWeight: FontWeight.w500,
         color: color ?? AppColors.textPrimary,
       );
 
-  static TextStyle bodySmall({Color? color}) => GoogleFonts.dmSans(
+  static TextStyle bodySmall({Color? color}) => _sans(
         fontSize: 13.sp,
         height: 1.55,
         fontWeight: FontWeight.w400,
         color: color ?? AppColors.textSecondary,
       );
 
-  static TextStyle button({Color? color}) => GoogleFonts.dmSans(
+  static TextStyle button({Color? color}) => _sans(
         fontSize: 14.sp,
         fontWeight: FontWeight.w600,
         letterSpacing: 0.2,
@@ -123,14 +199,14 @@ class AppText {
 
   // ---- DM Mono : labels mono, scores ----
 
-  static TextStyle mono({Color? color, double? size}) => GoogleFonts.robotoMono(
+  static TextStyle mono({Color? color, double? size}) => _mono(
         fontSize: size ?? 11.sp,
         fontWeight: FontWeight.w500,
         letterSpacing: 2.0,
         color: color ?? AppColors.textTertiary,
       );
 
-  static TextStyle monoLabel({Color? color}) => GoogleFonts.robotoMono(
+  static TextStyle monoLabel({Color? color}) => _mono(
         fontSize: 11.sp,
         fontWeight: FontWeight.w600,
         letterSpacing: 2.4,
@@ -138,7 +214,7 @@ class AppText {
       );
 
   static TextStyle monoScore({Color? color, double? size}) =>
-      GoogleFonts.robotoMono(
+      _mono(
         fontSize: size ?? 28.sp,
         fontWeight: FontWeight.w500,
         letterSpacing: -0.5,

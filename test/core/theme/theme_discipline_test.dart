@@ -24,6 +24,12 @@ import 'package:flutter_test/flutter_test.dart';
 
 const _scannedRoots = ['lib/features', 'lib/core/widgets'];
 
+/// Les trois familles sont embarquées depuis le 2026-07-25 : plus aucun
+/// appel à google_fonts ne doit subsister dans `lib/`, sous peine de
+/// réintroduire le téléchargement au lancement, le repli sur la police
+/// système hors réseau et la requête vers fonts.gstatic.com.
+final _googleFonts = RegExp(r'\bGoogleFonts\.\w+\(');
+
 /// Rendu de stimuli : hors charte, volontairement.
 bool _isStimulusFile(String path) =>
     path.contains('/exercises_implementations/') &&
@@ -70,6 +76,36 @@ void main() {
           'invisibles en sombre. Utiliser AppText.of(context).<méthode>() :\n'
           '${offenders.join('\n')}',
     );
+  });
+
+  test('aucun appel à google_fonts dans lib/ — les polices sont embarquées',
+      () {
+    final offenders = <String>[];
+    for (final e in Directory('lib').listSync(recursive: true)) {
+      if (e is! File || !e.path.endsWith('.dart')) continue;
+      final lines = e.readAsLinesSync();
+      for (var i = 0; i < lines.length; i++) {
+        if (_googleFonts.hasMatch(lines[i])) {
+          offenders.add('${e.path}:${i + 1}  ${lines[i].trim()}');
+        }
+      }
+    }
+    expect(offenders, isEmpty,
+        reason: 'Les polices sont déclarées dans pubspec.yaml et pilotées par '
+            'AppText._face(). Repasser par GoogleFonts rouvrirait la '
+            'dépendance réseau :\n${offenders.join('\n')}');
+  });
+
+  test('les trois familles embarquées sont bien déclarées dans pubspec', () {
+    final pubspec = File('pubspec.yaml').readAsStringSync();
+    for (final family in ['SourceSerif4', 'DMSans', 'RobotoMono']) {
+      expect(pubspec, contains('family: $family'),
+          reason: '$family absente de la section fonts: du pubspec');
+      expect(File('assets/fonts/$family.ttf').existsSync(), isTrue,
+          reason: 'fichier assets/fonts/$family.ttf manquant');
+    }
+    expect(File('assets/fonts/SourceSerif4-Italic.ttf').existsSync(), isTrue,
+        reason: 'l\'italique de Source Serif 4 porte les accents de titre');
   });
 
   test('aucun gris figé dans le chrome', () {
