@@ -3692,6 +3692,24 @@
   "@demoTryAgain": {
     "description": "Phase d'entraînement — retour après un essai incorrect"
   },
+  "ctShareScore": "Partager mon score",
+  "shareTitle": "Partager mon score",
+  "shareEyebrow": "Aperçu",
+  "shareIntro": "Voici l'image qui sera partagée. Rien n'est publié tant que tu n'as pas confirmé.",
+  "shareConfirm": "Partager cette image",
+  "shareCancel": "Annuler",
+  "shareScoreLabel": "Score global",
+  "sharePercentile": "Plus élevé que {rank} % des participants",
+  "@sharePercentile": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      }
+    }
+  },
+  "shareCodeLabel": "Code d'invitation",
+  "shareLinkCopied": "Ton lien est copié — ajoute-le en sticker Lien sur ta story",
+  "shareError": "Impossible de préparer l'image. Réessaie.",
   "ugTitle": "Ton résultat est prêt",
   "ugEyebrow": "Dernières étapes",
   "ugFreeNotice": "Le test est 100 % gratuit. Pour recevoir ton résultat, il te reste quelques étapes simples : elles se valident automatiquement.",

@@ -2644,6 +2644,44 @@ class AppLocalizationsDe extends AppLocalizations {
   String get demoTryAgain => 'Nicht ganz – versuchen Sie es erneut';
 
   @override
+  String get ctShareScore => 'Mein Ergebnis teilen';
+
+  @override
+  String get shareTitle => 'Mein Ergebnis teilen';
+
+  @override
+  String get shareEyebrow => 'Vorschau';
+
+  @override
+  String get shareIntro =>
+      'Das ist das Bild, das geteilt wird. Es wird nichts veröffentlicht, bevor du bestätigst.';
+
+  @override
+  String get shareConfirm => 'Dieses Bild teilen';
+
+  @override
+  String get shareCancel => 'Abbrechen';
+
+  @override
+  String get shareScoreLabel => 'Gesamtergebnis';
+
+  @override
+  String sharePercentile(int rank) {
+    return 'Höher als $rank % der Teilnehmenden';
+  }
+
+  @override
+  String get shareCodeLabel => 'Einladungscode';
+
+  @override
+  String get shareLinkCopied =>
+      'Dein Link ist kopiert — füge ihn als Link-Sticker in deine Story ein';
+
+  @override
+  String get shareError =>
+      'Das Bild konnte nicht erstellt werden. Bitte versuche es erneut.';
+
+  @override
   String get ugTitle => 'Dein Ergebnis ist bereit';
 
   @override

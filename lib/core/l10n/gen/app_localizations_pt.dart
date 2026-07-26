@@ -2636,6 +2636,44 @@ class AppLocalizationsPt extends AppLocalizations {
   String get demoTryAgain => 'Quase… tente novamente';
 
   @override
+  String get ctShareScore => 'Partilhar a minha pontuação';
+
+  @override
+  String get shareTitle => 'Partilhar a minha pontuação';
+
+  @override
+  String get shareEyebrow => 'Pré-visualização';
+
+  @override
+  String get shareIntro =>
+      'Esta é a imagem que será partilhada. Nada é publicado até confirmares.';
+
+  @override
+  String get shareConfirm => 'Partilhar esta imagem';
+
+  @override
+  String get shareCancel => 'Cancelar';
+
+  @override
+  String get shareScoreLabel => 'Pontuação global';
+
+  @override
+  String sharePercentile(int rank) {
+    return 'Mais alta do que a de $rank % dos participantes';
+  }
+
+  @override
+  String get shareCodeLabel => 'Código de convite';
+
+  @override
+  String get shareLinkCopied =>
+      'O teu link está copiado — adiciona-o como sticker de Link na tua story';
+
+  @override
+  String get shareError =>
+      'Não foi possível preparar a imagem. Tenta novamente.';
+
+  @override
   String get ugTitle => 'O teu resultado está pronto';
 
   @override

@@ -4695,6 +4695,72 @@ abstract class AppLocalizations {
   /// **'Pas tout à fait — réessayez'**
   String get demoTryAgain;
 
+  /// No description provided for @ctShareScore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partager mon score'**
+  String get ctShareScore;
+
+  /// No description provided for @shareTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partager mon score'**
+  String get shareTitle;
+
+  /// No description provided for @shareEyebrow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aperçu'**
+  String get shareEyebrow;
+
+  /// No description provided for @shareIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voici l\'image qui sera partagée. Rien n\'est publié tant que tu n\'as pas confirmé.'**
+  String get shareIntro;
+
+  /// No description provided for @shareConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partager cette image'**
+  String get shareConfirm;
+
+  /// No description provided for @shareCancel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annuler'**
+  String get shareCancel;
+
+  /// No description provided for @shareScoreLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Score global'**
+  String get shareScoreLabel;
+
+  /// No description provided for @sharePercentile.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus élevé que {rank} % des participants'**
+  String sharePercentile(int rank);
+
+  /// No description provided for @shareCodeLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code d\'invitation'**
+  String get shareCodeLabel;
+
+  /// No description provided for @shareLinkCopied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton lien est copié — ajoute-le en sticker Lien sur ta story'**
+  String get shareLinkCopied;
+
+  /// No description provided for @shareError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible de préparer l\'image. Réessaie.'**
+  String get shareError;
+
   /// No description provided for @ugTitle.
   ///
   /// In fr, this message translates to:

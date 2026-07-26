@@ -2625,6 +2625,43 @@ class AppLocalizationsEn extends AppLocalizations {
   String get demoTryAgain => 'Not quite — try again';
 
   @override
+  String get ctShareScore => 'Share my score';
+
+  @override
+  String get shareTitle => 'Share my score';
+
+  @override
+  String get shareEyebrow => 'Preview';
+
+  @override
+  String get shareIntro =>
+      'This is the image that will be shared. Nothing is posted until you confirm.';
+
+  @override
+  String get shareConfirm => 'Share this image';
+
+  @override
+  String get shareCancel => 'Cancel';
+
+  @override
+  String get shareScoreLabel => 'Overall score';
+
+  @override
+  String sharePercentile(int rank) {
+    return 'Higher than $rank% of participants';
+  }
+
+  @override
+  String get shareCodeLabel => 'Invite code';
+
+  @override
+  String get shareLinkCopied =>
+      'Your link is copied — add it as a Link sticker on your story';
+
+  @override
+  String get shareError => 'Could not prepare the image. Please try again.';
+
+  @override
   String get ugTitle => 'Your result is ready';
 
   @override
@@ -5390,6 +5427,43 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get demoTryAgain => 'Not quite — try again';
+
+  @override
+  String get ctShareScore => 'Share my score';
+
+  @override
+  String get shareTitle => 'Share my score';
+
+  @override
+  String get shareEyebrow => 'Preview';
+
+  @override
+  String get shareIntro =>
+      'This is the image that will be shared. Nothing is posted until you confirm.';
+
+  @override
+  String get shareConfirm => 'Share this image';
+
+  @override
+  String get shareCancel => 'Cancel';
+
+  @override
+  String get shareScoreLabel => 'Overall score';
+
+  @override
+  String sharePercentile(int rank) {
+    return 'Higher than $rank% of participants';
+  }
+
+  @override
+  String get shareCodeLabel => 'Invite code';
+
+  @override
+  String get shareLinkCopied =>
+      'Your link is copied — add it as a Link sticker on your story';
+
+  @override
+  String get shareError => 'Could not prepare the image. Please try again.';
 
   @override
   String get ugTitle => 'Your result is ready';

@@ -2633,6 +2633,43 @@ class AppLocalizationsFr extends AppLocalizations {
   String get demoTryAgain => 'Pas tout à fait — réessayez';
 
   @override
+  String get ctShareScore => 'Partager mon score';
+
+  @override
+  String get shareTitle => 'Partager mon score';
+
+  @override
+  String get shareEyebrow => 'Aperçu';
+
+  @override
+  String get shareIntro =>
+      'Voici l\'image qui sera partagée. Rien n\'est publié tant que tu n\'as pas confirmé.';
+
+  @override
+  String get shareConfirm => 'Partager cette image';
+
+  @override
+  String get shareCancel => 'Annuler';
+
+  @override
+  String get shareScoreLabel => 'Score global';
+
+  @override
+  String sharePercentile(int rank) {
+    return 'Plus élevé que $rank % des participants';
+  }
+
+  @override
+  String get shareCodeLabel => 'Code d\'invitation';
+
+  @override
+  String get shareLinkCopied =>
+      'Ton lien est copié — ajoute-le en sticker Lien sur ta story';
+
+  @override
+  String get shareError => 'Impossible de préparer l\'image. Réessaie.';
+
+  @override
   String get ugTitle => 'Ton résultat est prêt';
 
   @override
