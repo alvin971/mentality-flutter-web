@@ -3731,39 +3731,8 @@
       }
     }
   },
-  "ugWaitingCounter": "{done}/{required} tests terminés",
-  "@ugWaitingCounter": {
-    "placeholders": {
-      "done": {
-        "type": "int"
-      },
-      "required": {
-        "type": "int"
-      }
-    }
-  },
-  "ugStep3Title": "Dernière étape : Instagram",
-  "ugStep3Body": "Abonne-toi à notre compte @{handle} puis indique ton pseudo. On vérifie ton abonnement et ton résultat est débloqué.",
-  "@ugStep3Body": {
-    "placeholders": {
-      "handle": {
-        "type": "String"
-      }
-    }
-  },
-  "ugFollowButton": "Suivre @{handle} sur Instagram",
-  "@ugFollowButton": {
-    "placeholders": {
-      "handle": {
-        "type": "String"
-      }
-    }
-  },
-  "ugInstaFieldLabel": "Ton pseudo Instagram",
-  "ugInstaSubmit": "Valider mon abonnement",
-  "ugInstaPending": "Vérification de ton abonnement en cours… Ton résultat sera débloqué d'ici quelques heures. Tu peux fermer cette page et revenir plus tard.",
-  "ugInstaErrorFormat": "Pseudo invalide : lettres, chiffres, point et tiret bas uniquement — pas de lien.",
-  "ugInstaErrorNetwork": "Impossible d'envoyer ton pseudo. Vérifie ta connexion et réessaie.",
+  "ugWaitTitle": "Tes résultats arrivent",
+  "ugWaitBody": "Ton résultat est en préparation. Il sera publié automatiquement — tu n'as plus rien à faire. Tu peux fermer cette page.",
   "ugRefreshFailed": "Impossible d'actualiser. Vérifie ta connexion — les chiffres affichés datent de ta dernière connexion.",
   "ugResultsHubNotice": "Tout se trouve dans « Mes résultats » : tes missions, ton lien d'invitation et ton résultat (flouté tant que toutes les missions ne sont pas validées). Tu peux quitter cette page et revenir quand tu veux.",
   "histLockedTitle": "Missions à valider",

@@ -34,7 +34,7 @@ class CompleteTestResultsPage extends StatefulWidget {
 class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
   late final IQScore? _iqScore;
 
-  /// Gate marketing : tant que les paliers (parrainage + Instagram) ne sont
+  /// Gate marketing : tant que les paliers (parrainage + attente) ne sont
   /// pas franchis côté serveur, la page affiche UnlockGatePage à la place du
   /// résultat. Le score reste calculé et sauvegardé en historique (inchangé).
   bool _unlocked = !UnlockService.instance.gateEnabled;

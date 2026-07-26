@@ -2695,40 +2695,11 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String ugWaitingCounter(int done, int required) {
-    return '$done/$required tests terminados';
-  }
+  String get ugWaitTitle => 'Tus resultados están en camino';
 
   @override
-  String get ugStep3Title => 'Último paso: Instagram';
-
-  @override
-  String ugStep3Body(String handle) {
-    return 'Sigue nuestra cuenta @$handle e indica tu usuario. Verificamos tu suscripción y tu resultado se desbloquea.';
-  }
-
-  @override
-  String ugFollowButton(String handle) {
-    return 'Seguir a @$handle en Instagram';
-  }
-
-  @override
-  String get ugInstaFieldLabel => 'Tu usuario de Instagram';
-
-  @override
-  String get ugInstaSubmit => 'Validar mi suscripción';
-
-  @override
-  String get ugInstaPending =>
-      'Verificando tu suscripción… Tu resultado se desbloqueará en unas horas. Puedes cerrar esta página y volver más tarde.';
-
-  @override
-  String get ugInstaErrorFormat =>
-      'Usuario no válido: solo letras, números, punto y guion bajo — sin enlaces.';
-
-  @override
-  String get ugInstaErrorNetwork =>
-      'No se pudo enviar tu usuario. Comprueba tu conexión e inténtalo de nuevo.';
+  String get ugWaitBody =>
+      'Tu resultado se está preparando. Se publicará automáticamente: no tienes que hacer nada más. Puedes cerrar esta página.';
 
   @override
   String get ugRefreshFailed =>

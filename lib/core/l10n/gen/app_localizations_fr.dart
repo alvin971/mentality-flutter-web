@@ -2688,40 +2688,11 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String ugWaitingCounter(int done, int required) {
-    return '$done/$required tests terminés';
-  }
+  String get ugWaitTitle => 'Tes résultats arrivent';
 
   @override
-  String get ugStep3Title => 'Dernière étape : Instagram';
-
-  @override
-  String ugStep3Body(String handle) {
-    return 'Abonne-toi à notre compte @$handle puis indique ton pseudo. On vérifie ton abonnement et ton résultat est débloqué.';
-  }
-
-  @override
-  String ugFollowButton(String handle) {
-    return 'Suivre @$handle sur Instagram';
-  }
-
-  @override
-  String get ugInstaFieldLabel => 'Ton pseudo Instagram';
-
-  @override
-  String get ugInstaSubmit => 'Valider mon abonnement';
-
-  @override
-  String get ugInstaPending =>
-      'Vérification de ton abonnement en cours… Ton résultat sera débloqué d\'ici quelques heures. Tu peux fermer cette page et revenir plus tard.';
-
-  @override
-  String get ugInstaErrorFormat =>
-      'Pseudo invalide : lettres, chiffres, point et tiret bas uniquement — pas de lien.';
-
-  @override
-  String get ugInstaErrorNetwork =>
-      'Impossible d\'envoyer ton pseudo. Vérifie ta connexion et réessaie.';
+  String get ugWaitBody =>
+      'Ton résultat est en préparation. Il sera publié automatiquement — tu n\'as plus rien à faire. Tu peux fermer cette page.';
 
   @override
   String get ugRefreshFailed =>

@@ -25,12 +25,13 @@ class Paliers {
   /// Carte contenant le lien d'invitation + le bouton copier.
   bool get afficheLien => !parrainageAcquis;
 
+  /// Carte du palier 3 (attente du délai de publication).
   /// Volontairement indépendant de `stage` : s'y fier créait une impasse
   /// (parrainage acquis mais stage non promu ⇒ aucune carte).
-  bool get afficheInstagram => parrainageAcquis && !debloque;
+  bool get afficheAttenteFinale => parrainageAcquis && !debloque;
 
   /// Au moins une action possible pour avancer.
-  bool get peutAvancer => afficheLien || afficheInstagram;
+  bool get peutAvancer => afficheLien || afficheAttenteFinale;
 }
 
 void main() {
@@ -54,10 +55,10 @@ void main() {
       expect(p.afficheAttente, isFalse);
     });
 
-    test('à 3/3 : le lien laisse place à Instagram', () {
+    test('à 3/3 : le lien laisse place au palier d\'attente', () {
       final p = Paliers(completed: 3, required: 3, stage: 3);
       expect(p.afficheLien, isFalse);
-      expect(p.afficheInstagram, isTrue);
+      expect(p.afficheAttenteFinale, isTrue);
       expect(p.peutAvancer, isTrue);
     });
 
@@ -72,7 +73,7 @@ void main() {
             p.peutAvancer,
             isTrue,
             reason: 'impasse à completed=$completed, stage=$stage : '
-                'ni lien ni Instagram affiché',
+                'ni lien ni palier d\'attente affiché',
           );
         }
       }
@@ -81,7 +82,7 @@ void main() {
     test('une fois débloqué, plus aucune carte de mission', () {
       final p = Paliers(completed: 3, required: 3, stage: 4);
       expect(p.debloque, isTrue);
-      expect(p.afficheInstagram, isFalse);
+      expect(p.afficheAttenteFinale, isFalse);
       expect(p.afficheLien, isFalse);
     });
 

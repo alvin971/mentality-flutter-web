@@ -2691,40 +2691,11 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String ugWaitingCounter(int done, int required) {
-    return '$done/$required testes terminados';
-  }
+  String get ugWaitTitle => 'Os teus resultados estão a chegar';
 
   @override
-  String get ugStep3Title => 'Última etapa: Instagram';
-
-  @override
-  String ugStep3Body(String handle) {
-    return 'Segue a nossa conta @$handle e indica o teu nome de utilizador. Verificamos e o teu resultado é desbloqueado.';
-  }
-
-  @override
-  String ugFollowButton(String handle) {
-    return 'Seguir @$handle no Instagram';
-  }
-
-  @override
-  String get ugInstaFieldLabel => 'O teu utilizador do Instagram';
-
-  @override
-  String get ugInstaSubmit => 'Validar a minha subscrição';
-
-  @override
-  String get ugInstaPending =>
-      'A verificar a tua subscrição… O teu resultado será desbloqueado dentro de algumas horas. Podes fechar esta página e voltar mais tarde.';
-
-  @override
-  String get ugInstaErrorFormat =>
-      'Nome de utilizador inválido: apenas letras, números, ponto e underscore — sem links.';
-
-  @override
-  String get ugInstaErrorNetwork =>
-      'Não foi possível enviar o teu nome de utilizador. Verifica a ligação e tenta de novo.';
+  String get ugWaitBody =>
+      'O teu resultado está a ser preparado. Será publicado automaticamente — não tens de fazer mais nada. Podes fechar esta página.';
 
   @override
   String get ugRefreshFailed =>

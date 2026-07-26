@@ -2680,40 +2680,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String ugWaitingCounter(int done, int required) {
-    return '$done/$required tests completed';
-  }
+  String get ugWaitTitle => 'Your results are on the way';
 
   @override
-  String get ugStep3Title => 'Last step: Instagram';
-
-  @override
-  String ugStep3Body(String handle) {
-    return 'Follow our account @$handle then enter your username. We verify your follow and your result is unlocked.';
-  }
-
-  @override
-  String ugFollowButton(String handle) {
-    return 'Follow @$handle on Instagram';
-  }
-
-  @override
-  String get ugInstaFieldLabel => 'Your Instagram username';
-
-  @override
-  String get ugInstaSubmit => 'Confirm my follow';
-
-  @override
-  String get ugInstaPending =>
-      'Verifying your follow… Your result will be unlocked within a few hours. You can close this page and come back later.';
-
-  @override
-  String get ugInstaErrorFormat =>
-      'Invalid username: letters, numbers, dot and underscore only — no link.';
-
-  @override
-  String get ugInstaErrorNetwork =>
-      'Could not send your username. Check your connection and try again.';
+  String get ugWaitBody =>
+      'Your result is being prepared. It will be published automatically — there is nothing left for you to do. You can close this page.';
 
   @override
   String get ugRefreshFailed =>
@@ -5425,40 +5396,11 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   }
 
   @override
-  String ugWaitingCounter(int done, int required) {
-    return '$done/$required tests completed';
-  }
+  String get ugWaitTitle => 'Your results are on the way';
 
   @override
-  String get ugStep3Title => 'Last step: Instagram';
-
-  @override
-  String ugStep3Body(String handle) {
-    return 'Follow our account @$handle then enter your username. We verify your follow and your result is unlocked.';
-  }
-
-  @override
-  String ugFollowButton(String handle) {
-    return 'Follow @$handle on Instagram';
-  }
-
-  @override
-  String get ugInstaFieldLabel => 'Your Instagram username';
-
-  @override
-  String get ugInstaSubmit => 'Confirm my follow';
-
-  @override
-  String get ugInstaPending =>
-      'Verifying your follow… Your result will be unlocked within a few hours. You can close this page and come back later.';
-
-  @override
-  String get ugInstaErrorFormat =>
-      'Invalid username: letters, numbers, dot and underscore only — no link.';
-
-  @override
-  String get ugInstaErrorNetwork =>
-      'Could not send your username. Check your connection and try again.';
+  String get ugWaitBody =>
+      'Your result is being prepared. It will be published automatically — there is nothing left for you to do. You can close this page.';
 
   @override
   String get ugRefreshFailed =>

@@ -15,21 +15,19 @@ import '../../../core/services/auth_local_store.dart';
 
 /// État du déblocage renvoyé par le worker (autorité serveur sur `stage`).
 class UnlockProgress {
-  /// 1=inviter, 2=attente filleuls, 3=instagram, 4=débloqué.
+  /// 1=inviter, 2=attente filleuls, 3=délai d'attente serveur, 4=débloqué.
   final int stage;
   final String referralCode;
 
   /// Nombre de filleuls ayant réellement TERMINÉ leur test complet.
   final int completedReferrals;
   final int requiredReferrals;
-  final bool instagramSubmitted;
 
   const UnlockProgress({
     required this.stage,
     required this.referralCode,
     required this.completedReferrals,
     required this.requiredReferrals,
-    required this.instagramSubmitted,
   });
 
   factory UnlockProgress.fromJson(Map<String, dynamic> j) => UnlockProgress(
@@ -37,7 +35,6 @@ class UnlockProgress {
         referralCode: j['referralCode'] as String? ?? '',
         completedReferrals: (j['completedReferrals'] as num?)?.toInt() ?? 0,
         requiredReferrals: (j['requiredReferrals'] as num?)?.toInt() ?? 3,
-        instagramSubmitted: j['instagramSubmitted'] as bool? ?? false,
       );
 
   bool get unlocked => stage >= 4;
@@ -63,9 +60,8 @@ class UnlockService {
   /// cache local n'est qu'un SECOURS hors-ligne, jamais un court-circuit.
   ///
   /// Consulter le cache en premier (ancien comportement) rendait le serveur
-  /// incapable de re-verrouiller : un compte remis à zéro ou un tricheur
-  /// invalidé côté serveur (`instagramVerified:false`) restait débloqué à vie
-  /// sur l'appareil, puisque le client ne redemandait plus rien.
+  /// incapable de re-verrouiller : un compte remis à zéro côté serveur restait
+  /// débloqué à vie sur l'appareil, puisque le client ne redemandait plus rien.
   Future<bool> isLocked() async {
     if (!gateEnabled) return false;
     try {
@@ -164,24 +160,6 @@ class UnlockService {
         headers: headers,
       );
       if (resp.statusCode == 404) return initProgress();
-      if (resp.statusCode != 200) return null;
-      return _rememberIfUnlocked(UnlockProgress.fromJson(
-          jsonDecode(resp.body) as Map<String, dynamic>));
-    } catch (_) {
-      return null;
-    }
-  }
-
-  /// Soumet le pseudo Instagram (palier 3) — démarre la « vérification ».
-  Future<UnlockProgress?> submitInstagram(String handle) async {
-    final headers = await _authHeaders();
-    if (!isConfigured || headers == null) return null;
-    try {
-      final resp = await http.post(
-        Uri.parse('${AppConstants.referralWorkerUrl}/instagram'),
-        headers: headers,
-        body: jsonEncode({'handle': handle}),
-      );
       if (resp.statusCode != 200) return null;
       return _rememberIfUnlocked(UnlockProgress.fromJson(
           jsonDecode(resp.body) as Map<String, dynamic>));

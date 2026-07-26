@@ -4,7 +4,7 @@
 // disait « débloqué ». Le serveur n'était alors plus jamais interrogé, ce qui
 // avait deux conséquences graves :
 //   - un compte remis à zéro côté serveur restait débloqué à vie sur l'appareil ;
-//   - re-verrouiller un tricheur (`instagramVerified:false`) n'avait aucun effet.
+//   - re-verrouiller un compte côté serveur (remise à zéro) restait sans effet.
 //
 // Nouvelle règle : le SERVEUR tranche tant qu'il répond ; le cache n'est qu'un
 // secours hors-ligne. Sans l'un ni l'autre → verrouillé (fail-closed).
@@ -29,7 +29,7 @@ void main() {
     });
 
     test('tricheur invalidé côté serveur ⇒ re-verrouillé', () {
-      // instagramVerified:false ⇒ le serveur repasse sous stage 4.
+      // Compte invalidé côté serveur ⇒ le serveur repasse sous stage 4.
       expect(estVerrouille(serveurDit: false, cacheDebloque: true), isTrue);
     });
 

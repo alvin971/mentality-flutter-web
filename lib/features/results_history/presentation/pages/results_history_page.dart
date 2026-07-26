@@ -27,7 +27,7 @@ class _ResultsHistoryPageState extends State<ResultsHistoryPage>
   List<SessionHistoryEntry> _entries = const [];
   bool _loadingEntries = true;
 
-  /// Gate marketing : tant que les missions (parrainage + Instagram) ne sont
+  /// Gate marketing : tant que les missions (parrainage + attente) ne sont
   /// pas toutes validées côté serveur, les scores restent FLOUTÉS et les
   /// cartes ouvrent les missions au lieu du détail. Fail-closed : verrouillé
   /// par défaut dès que le gate est actif, déverrouillé seulement sur
@@ -48,7 +48,7 @@ class _ResultsHistoryPageState extends State<ResultsHistoryPage>
     super.dispose();
   }
 
-  /// Le déblocage se produit côté serveur (délai Instagram, filleuls qui
+  /// Le déblocage se produit côté serveur (délai d'attente, filleuls qui
   /// terminent). Sans cette relecture au retour au premier plan, les scores
   /// restaient floutés jusqu'à la réouverture manuelle de la page.
   @override
@@ -297,7 +297,7 @@ class _EntryCard extends StatelessWidget {
 
 /// Carte en tête de « Mes résultats » tant que les missions ne sont pas
 /// toutes validées : rappelle pourquoi le résultat est flouté et ouvre le
-/// parcours de déblocage (lien d'invitation, progression, Instagram).
+/// parcours de déblocage (lien d'invitation, progression, attente).
 class _MissionsBanner extends StatelessWidget {
   const _MissionsBanner({required this.onOpen, required this.hasResults});
   final VoidCallback onOpen;

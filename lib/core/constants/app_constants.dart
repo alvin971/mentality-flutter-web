@@ -83,7 +83,7 @@ class AppConstants {
   static const String referralWorkerUrl =
       'https://mentality-referral.devgreenpro.workers.dev';
 
-  /// Active le déblocage des résultats par paliers (parrainage + Instagram).
+  /// Active le déblocage des résultats par paliers (parrainage + attente).
   /// Nécessite aussi une [referralWorkerUrl] réelle pour être effectif.
   static const bool unlockGateEnabled = true;
 
@@ -93,11 +93,6 @@ class AppConstants {
   /// (POST /link du worker referral) — aucun code à recopier. L'ancienne
   /// route /invite du site redirige elle aussi vers /inscription?ref=.
   static const String inviteBaseUrl = 'https://mental-et.com/inscription';
-
-  /// Compte Instagram à suivre pour le dernier palier de déblocage.
-  static const String instagramHandle = 'mental_e.t';
-  static const String instagramUrl =
-      'https://www.instagram.com/mental_e.t?igsh=b3hvM25zdHh2bm0y';
 
   /// Clés PUBLIQUES Ed25519 (32 octets, base64url) pour vérifier les tokens
   /// signés, indexées par `kid`. Ce n'est PAS un secret.

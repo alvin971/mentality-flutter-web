@@ -4785,59 +4785,17 @@ abstract class AppLocalizations {
   /// **'Ami {n} : test en cours'**
   String ugFriendPending(int n);
 
-  /// No description provided for @ugWaitingCounter.
+  /// No description provided for @ugWaitTitle.
   ///
   /// In fr, this message translates to:
-  /// **'{done}/{required} tests terminés'**
-  String ugWaitingCounter(int done, int required);
+  /// **'Tes résultats arrivent'**
+  String get ugWaitTitle;
 
-  /// No description provided for @ugStep3Title.
+  /// No description provided for @ugWaitBody.
   ///
   /// In fr, this message translates to:
-  /// **'Dernière étape : Instagram'**
-  String get ugStep3Title;
-
-  /// No description provided for @ugStep3Body.
-  ///
-  /// In fr, this message translates to:
-  /// **'Abonne-toi à notre compte @{handle} puis indique ton pseudo. On vérifie ton abonnement et ton résultat est débloqué.'**
-  String ugStep3Body(String handle);
-
-  /// No description provided for @ugFollowButton.
-  ///
-  /// In fr, this message translates to:
-  /// **'Suivre @{handle} sur Instagram'**
-  String ugFollowButton(String handle);
-
-  /// No description provided for @ugInstaFieldLabel.
-  ///
-  /// In fr, this message translates to:
-  /// **'Ton pseudo Instagram'**
-  String get ugInstaFieldLabel;
-
-  /// No description provided for @ugInstaSubmit.
-  ///
-  /// In fr, this message translates to:
-  /// **'Valider mon abonnement'**
-  String get ugInstaSubmit;
-
-  /// No description provided for @ugInstaPending.
-  ///
-  /// In fr, this message translates to:
-  /// **'Vérification de ton abonnement en cours… Ton résultat sera débloqué d\'ici quelques heures. Tu peux fermer cette page et revenir plus tard.'**
-  String get ugInstaPending;
-
-  /// No description provided for @ugInstaErrorFormat.
-  ///
-  /// In fr, this message translates to:
-  /// **'Pseudo invalide : lettres, chiffres, point et tiret bas uniquement — pas de lien.'**
-  String get ugInstaErrorFormat;
-
-  /// No description provided for @ugInstaErrorNetwork.
-  ///
-  /// In fr, this message translates to:
-  /// **'Impossible d\'envoyer ton pseudo. Vérifie ta connexion et réessaie.'**
-  String get ugInstaErrorNetwork;
+  /// **'Ton résultat est en préparation. Il sera publié automatiquement — tu n\'as plus rien à faire. Tu peux fermer cette page.'**
+  String get ugWaitBody;
 
   /// No description provided for @ugRefreshFailed.
   ///

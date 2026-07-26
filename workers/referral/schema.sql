@@ -10,9 +10,15 @@
 --   code:<referralCode>       compte propriétaire du code (unicité + resolve)
 --   referee:<account>         referrerCode validé (écrit une fois : 1 filleul = 1 parrain)
 --   ref:<referrerCode>:<acct> filleul ayant terminé son test (comptage)
+--   completed:<account>       preuve de complétion du test (première fois gagne)
 --
--- Consulter les pseudos Instagram soumis (contrôle manuel) :
+-- Inspecter l'état d'un compte (stage, stage3StartedAt, unlockedAt) :
 --   wrangler kv key list  --binding REFERRAL_KV | grep '^progress:'
 --   wrangler kv key get   --binding REFERRAL_KV "progress:<account>"
--- Invalider un abonnement non tenu (re-verrouille) : remettre instagramVerified
--- à false dans le JSON puis wrangler kv key put.
+--
+-- Il n'existe PLUS de levier de re-verrouillage manuel : le champ
+-- instagramVerified a disparu avec l'étape Instagram. Le palier 3 est un simple
+-- délai (UNLOCK_DELAY_MINUTES), personne n'est « vérifié ».
+-- Purge RGPD des champs Instagram des lignes déjà en production :
+--   CF_API_TOKEN=… CF_ACCOUNT_ID=… node scripts/purge-instagram.js          # dry-run
+--   CF_API_TOKEN=… CF_ACCOUNT_ID=… node scripts/purge-instagram.js --apply

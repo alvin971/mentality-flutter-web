@@ -2699,40 +2699,11 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
-  String ugWaitingCounter(int done, int required) {
-    return '$done/$required Tests abgeschlossen';
-  }
+  String get ugWaitTitle => 'Deine Ergebnisse sind unterwegs';
 
   @override
-  String get ugStep3Title => 'Letzter Schritt: Instagram';
-
-  @override
-  String ugStep3Body(String handle) {
-    return 'Folge unserem Konto @$handle und gib deinen Benutzernamen an. Wir prüfen dein Abo und dein Ergebnis wird freigeschaltet.';
-  }
-
-  @override
-  String ugFollowButton(String handle) {
-    return '@$handle auf Instagram folgen';
-  }
-
-  @override
-  String get ugInstaFieldLabel => 'Dein Instagram-Benutzername';
-
-  @override
-  String get ugInstaSubmit => 'Mein Abo bestätigen';
-
-  @override
-  String get ugInstaPending =>
-      'Dein Abo wird überprüft … Dein Ergebnis wird in wenigen Stunden freigeschaltet. Du kannst diese Seite schließen und später zurückkommen.';
-
-  @override
-  String get ugInstaErrorFormat =>
-      'Ungültiger Benutzername: nur Buchstaben, Zahlen, Punkt und Unterstrich — kein Link.';
-
-  @override
-  String get ugInstaErrorNetwork =>
-      'Dein Benutzername konnte nicht gesendet werden. Prüfe deine Verbindung und versuche es erneut.';
+  String get ugWaitBody =>
+      'Dein Ergebnis wird vorbereitet. Es wird automatisch veröffentlicht – du musst nichts weiter tun. Du kannst diese Seite schließen.';
 
   @override
   String get ugRefreshFailed =>
