@@ -2,6 +2,25 @@ name = "mentality-referral"
 main = "index.js"
 compatibility_date = "2025-01-01"
 
+# ═════════════════════════════════════════════════════════════════════════════
+# ⚠️  AVANT TOUT DÉPLOIEMENT EN PRODUCTION : AUCUNE VARIABLE
+#     DEBUG_DISPLAY_DELAY_DAYS NE DOIT FIGURER DANS CE FICHIER.
+#
+#     Tant qu'elle est présente, le worker renvoie debugDelayOverride:true et
+#     l'app affiche à TOUS les utilisateurs une bannière « MODE TEST — délai
+#     réel : N min ». C'est voulu : il doit être impossible d'oublier en
+#     production un délai réglé pour la recette.
+#
+#     Recette de bout en bout SANS rien committer — vérifie le rendu « 8 jours »
+#     en n'attendant qu'une minute :
+#       wrangler deploy --var UNLOCK_DELAY_MINUTES:1 --var DEBUG_DISPLAY_DELAY_DAYS:8
+#     Un `wrangler deploy` nu restaure ensuite les valeurs ci-dessous.
+#
+#     (Pas de section [env.test] : les environnements nommés wrangler n'héritent
+#     pas des bindings et déploient sous une AUTRE URL, que l'app — qui pointe
+#     AppConstants.referralWorkerUrl en dur — n'atteindrait jamais.)
+# ═════════════════════════════════════════════════════════════════════════════
+
 # ─────────────────────────────────────────────────────────────────────────────
 # Worker du système de déblocage des résultats par paliers (referral).
 # Stockage : Cloudflare KV (aucun secret externe requis).
@@ -13,6 +32,7 @@ binding = "REFERRAL_KV"
 id = "6c70f3aab78c4aeb92d1255f62edbafd"
 
 [vars]
-# Délai (minutes) entre la soumission du pseudo Instagram et le déblocage
-# (« vérification en cours »). Réduire pour tester le parcours de bout en bout.
-INSTA_UNLOCK_DELAY_MINUTES = "120"
+# Durée du palier 3, en minutes : délai entre l'obtention du palier parrainage
+# (passage en stage 3) et la publication du résultat (stage 4).
+# 11520 min = 8 jours. Rien n'est vérifié pendant ce délai — on attend, c'est tout.
+UNLOCK_DELAY_MINUTES = "11520"

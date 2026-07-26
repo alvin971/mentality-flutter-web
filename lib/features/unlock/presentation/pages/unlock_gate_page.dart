@@ -25,6 +25,32 @@ import '../../data/unlock_service.dart';
 ///      l'échéance (autorité worker).
 ///   4. Débloqué → [onUnlocked] est appelé (affiche le vrai résultat).
 
+/// Granularité d'affichage du compte à rebours.
+enum CountdownUnit { zero, minutes, hours, days }
+
+/// Unité et valeur à afficher pour [remaining] : des JOURS au-delà de 48 h, des
+/// HEURES en dessous, des MINUTES sous une heure.
+///
+/// Arrondi AU SUPÉRIEUR partout : on n'annonce jamais moins de temps qu'il n'en
+/// reste. Les seuils portent sur les minutes DÉJÀ arrondies, ce qui interdit les
+/// affichages absurdes du type « encore 60 minutes ».
+({CountdownUnit unit, int value}) countdownParts(Duration remaining) {
+  final secs = remaining.inSeconds;
+  if (secs <= 0) return (unit: CountdownUnit.zero, value: 0);
+  final minutes = (secs / 60).ceil();
+  if (minutes > 2880) return (unit: CountdownUnit.days, value: (minutes / 1440).ceil());
+  if (minutes >= 60) return (unit: CountdownUnit.hours, value: (minutes / 60).ceil());
+  return (unit: CountdownUnit.minutes, value: minutes);
+}
+
+/// Bannière affichée quand le serveur tourne avec un délai d'affichage forcé.
+///
+/// VOLONTAIREMENT non traduite : ce n'est pas un message produit mais le signal
+/// d'un défaut de configuration, et il ne doit jamais pouvoir se fondre dans
+/// l'interface.
+String debugDelayBannerText(int delayMinutes) =>
+    'MODE TEST — délai réel : $delayMinutes min';
+
 class UnlockGatePage extends StatefulWidget {
   const UnlockGatePage({super.key, required this.onUnlocked});
 
@@ -35,7 +61,8 @@ class UnlockGatePage extends StatefulWidget {
   State<UnlockGatePage> createState() => _UnlockGatePageState();
 }
 
-class _UnlockGatePageState extends State<UnlockGatePage> {
+class _UnlockGatePageState extends State<UnlockGatePage>
+    with WidgetsBindingObserver {
   UnlockProgress? _progress;
   bool _loading = true;
   bool _error = false;
@@ -46,10 +73,21 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
   /// déjà affiché : les chiffres à l'écran sont périmés, il faut le dire.
   bool _refreshFailed = false;
 
+  /// Rythme d'AFFICHAGE du compte à rebours. Ne fait aucun appel réseau.
+  Timer? _tick;
+  Duration _remaining = Duration.zero;
+
+  /// Le compteur local est à zéro mais le serveur n'a pas encore confirmé le
+  /// stage 4. C'est le seul état où l'écran annonce la fin de l'attente sans
+  /// débloquer — et c'est exactement ce que voit quelqu'un qui a avancé
+  /// l'horloge de son téléphone : le serveur, lui, n'a pas bougé.
+  bool _awaitingServer = false;
+  int _confirmBackoffS = 5;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _load(init: true);
     // Polling léger : les validations des filleuls et le délai d'attente
     // avancent côté serveur pendant que la page est ouverte.
@@ -61,8 +99,17 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _pollTimer?.cancel();
+    _tick?.cancel();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Au retour au premier plan, le compteur monotone peut avoir pris du retard
+    // (processus suspendu) : on se recale sur le serveur avant de réafficher.
+    if (state == AppLifecycleState.resumed) _load();
   }
 
   Future<void> _load({bool init = false}) async {
@@ -86,7 +133,57 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
       _error = false;
       _refreshFailed = false;
     });
+    _syncCountdown(p);
     if (p.unlocked) widget.onUnlocked();
+  }
+
+  /// Ré-ancre le compte à rebours sur la valeur que vient de donner le serveur.
+  void _syncCountdown(UnlockProgress p) {
+    _tick?.cancel();
+    if (!p.countdownApplicable) {
+      _awaitingServer = false;
+      return;
+    }
+    _remaining = p.remainingAt(UnlockService.instance.monotonicNow);
+    if (_remaining > Duration.zero) {
+      // Le serveur redonne du temps : on quitte l'état « attente de
+      // confirmation » et on repart de SA valeur, jamais de la nôtre.
+      _awaitingServer = false;
+      _confirmBackoffS = 5;
+      _tick = Timer.periodic(const Duration(seconds: 1), (_) => _onTick());
+    } else {
+      _enterAwaitingServer();
+    }
+  }
+
+  void _onTick() {
+    final p = _progress;
+    if (p == null) return;
+    final r = p.remainingAt(UnlockService.instance.monotonicNow);
+    if (r <= Duration.zero) {
+      _tick?.cancel();
+      _enterAwaitingServer();
+      return;
+    }
+    setState(() => _remaining = r);
+  }
+
+  /// Compteur local épuisé : on ne débloque RIEN, on redemande au serveur.
+  ///
+  /// [_awaitingServer] n'est levé que d'ici, et n'est baissé que par une
+  /// réponse serveur — stage 4 (déblocage) ou secondsRemaining positif
+  /// (le ticker repart de la valeur serveur). Le client n'a aucun chemin qui
+  /// débloque de lui-même.
+  void _enterAwaitingServer() {
+    setState(() {
+      _remaining = Duration.zero;
+      _awaitingServer = true;
+    });
+    _load();
+    _confirmBackoffS = (_confirmBackoffS * 2).clamp(5, 30);
+    Timer(Duration(seconds: _confirmBackoffS), () {
+      if (mounted && _awaitingServer) _load();
+    });
   }
 
   Future<void> _copyLink() async {
@@ -147,6 +244,7 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        if (p.debugDelayOverride) _buildDebugDelayBanner(p),
         // Le test est gratuit : condition affichée clairement dès le départ.
         Text(l10n.ugFreeNotice, style: AppText.of(context).body()),
         SizedBox(height: 10.h),
@@ -284,23 +382,72 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
   /// AUCUN indicateur d'activité ici : rien n'est en cours de traitement et
   /// personne n'est vérifié. On attend une date, on le dit.
   Widget _buildWaitStep(AppLocalizations l10n, UnlockProgress p) {
+    final colors = KeplerColors.of(context);
     return KeplerCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _stepHeader('3', l10n.ugWaitTitle),
           SizedBox(height: 10.h),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(Icons.schedule_outlined,
-                  size: 18.sp, color: KeplerColors.of(context).primary),
-              SizedBox(width: 10.w),
-              Expanded(
-                child: Text(l10n.ugWaitBody,
-                    style: AppText.of(context).bodySmall()),
-              ),
-            ],
+          Text(l10n.ugWaitBody(p.displayDelayDays),
+              style: AppText.of(context).bodySmall()),
+          if (p.countdownApplicable) ...[
+            SizedBox(height: 14.h),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(Icons.schedule_outlined, size: 18.sp, color: colors.primary),
+                SizedBox(width: 10.w),
+                Expanded(
+                  child: Text(
+                    _countdownLabel(l10n),
+                    style: AppText.of(context)
+                        .bodyStrong(color: colors.primary),
+                  ),
+                ),
+              ],
+            ),
+          ],
+          if (_awaitingServer) ...[
+            SizedBox(height: 8.h),
+            Text(l10n.ugWaitConfirming,
+                style: AppText.of(context)
+                    .bodySmall(color: colors.textSecondary)),
+          ],
+        ],
+      ),
+    );
+  }
+
+  String _countdownLabel(AppLocalizations l10n) {
+    final parts = countdownParts(_remaining);
+    return switch (parts.unit) {
+      CountdownUnit.days => l10n.ugWaitCountdownDays(parts.value),
+      CountdownUnit.hours => l10n.ugWaitCountdownHours(parts.value),
+      CountdownUnit.minutes => l10n.ugWaitCountdownMinutes(parts.value),
+      CountdownUnit.zero => l10n.ugWaitCountdownDone,
+    };
+  }
+
+  /// Bannière de recette. Affichée à TOUT stage, non traduite, non contournable :
+  /// tant que le worker tourne avec DEBUG_DISPLAY_DELAY_DAYS, le délai annoncé
+  /// est un mensonge et cela doit se voir.
+  Widget _buildDebugDelayBanner(UnlockProgress p) {
+    final colors = KeplerColors.of(context);
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+      margin: EdgeInsets.only(bottom: 12.h),
+      color: colors.warning.withValues(alpha: 0.15),
+      child: Row(
+        children: [
+          Icon(Icons.bug_report_outlined, size: 16.sp, color: colors.warning),
+          SizedBox(width: 8.w),
+          Expanded(
+            child: Text(
+              debugDelayBannerText(p.delayMinutes),
+              style: AppText.of(context).bodySmall(color: colors.warning),
+            ),
           ),
         ],
       ),

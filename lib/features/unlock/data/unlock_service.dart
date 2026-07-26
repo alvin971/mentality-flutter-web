@@ -23,21 +23,82 @@ class UnlockProgress {
   final int completedReferrals;
   final int requiredReferrals;
 
+  /// Fin de l'attente telle que le SERVEUR la date. Sert de discriminant
+  /// (« un compte à rebours s'applique-t-il ? »), jamais de base de calcul :
+  /// le comparer à `DateTime.now()` rendrait le compteur manipulable en
+  /// avançant l'horloge du téléphone.
+  final DateTime? unlockAt;
+
+  /// Secondes restantes AU MOMENT DE LA RÉPONSE, calculées par le serveur.
+  final int secondsRemaining;
+
+  /// Nombre de jours que l'UI doit annoncer.
+  final int displayDelayDays;
+
+  /// Délai réel en minutes — n'est affiché que dans la bannière MODE TEST.
+  final int delayMinutes;
+
+  /// Le serveur tourne avec un délai d'affichage forcé (recette). L'UI DOIT
+  /// alors afficher une bannière visible : voir [debugDelayBannerText].
+  final bool debugDelayOverride;
+
+  /// Repère MONOTONE (pas une date) du moment où cette réponse est arrivée.
+  final Duration anchor;
+
   const UnlockProgress({
     required this.stage,
     required this.referralCode,
     required this.completedReferrals,
     required this.requiredReferrals,
+    this.unlockAt,
+    this.secondsRemaining = 0,
+    this.displayDelayDays = 0,
+    this.delayMinutes = 0,
+    this.debugDelayOverride = false,
+    this.anchor = Duration.zero,
   });
 
-  factory UnlockProgress.fromJson(Map<String, dynamic> j) => UnlockProgress(
+  /// [anchor] : valeur du compteur monotone au moment de la réception.
+  ///
+  /// Chaque nouveau champ a un défaut : face à un worker plus ancien encore
+  /// déployé, `unlockAt` est absent, [countdownApplicable] est faux et la carte
+  /// s'affiche sans décompte — pas de plantage.
+  factory UnlockProgress.fromJson(
+    Map<String, dynamic> j, {
+    Duration anchor = Duration.zero,
+  }) =>
+      UnlockProgress(
         stage: (j['stage'] as num?)?.toInt() ?? 1,
         referralCode: j['referralCode'] as String? ?? '',
         completedReferrals: (j['completedReferrals'] as num?)?.toInt() ?? 0,
         requiredReferrals: (j['requiredReferrals'] as num?)?.toInt() ?? 3,
+        unlockAt: DateTime.tryParse(j['unlockAt'] as String? ?? ''),
+        secondsRemaining: (j['secondsRemaining'] as num?)?.toInt() ?? 0,
+        displayDelayDays: (j['displayDelayDays'] as num?)?.toInt() ?? 0,
+        delayMinutes: (j['delayMinutes'] as num?)?.toInt() ?? 0,
+        debugDelayOverride: j['debugDelayOverride'] as bool? ?? false,
+        anchor: anchor,
       );
 
   bool get unlocked => stage >= 4;
+
+  /// Un compte à rebours a-t-il un sens dans cet état ?
+  ///
+  /// Jamais déduit de `secondsRemaining == 0`, qui vaut aussi bien « l'attente
+  /// n'a pas commencé » que « l'attente est finie ».
+  bool get countdownApplicable => stage == 3 && unlockAt != null;
+
+  /// Temps restant, dérivé du COMPTEUR MONOTONE — aucune horloge murale.
+  ///
+  /// C'est ce qui rend le décompte insensible à un changement de date système :
+  /// [monotonicNow] vient d'un [Stopwatch], que modifier l'heure du téléphone
+  /// ne déplace pas. Ne jamais « simplifier » en `unlockAt.difference(
+  /// DateTime.now())` : ce serait rouvrir exactement la faille.
+  Duration remainingAt(Duration monotonicNow) {
+    if (unlocked) return Duration.zero;
+    final left = Duration(seconds: secondsRemaining) - (monotonicNow - anchor);
+    return left.isNegative ? Duration.zero : left;
+  }
 
   /// Lien d'invitation à partager, lié au token du parrain.
   String get inviteLink => '${AppConstants.inviteBaseUrl}?ref=$referralCode';
@@ -46,6 +107,19 @@ class UnlockProgress {
 class UnlockService {
   static final UnlockService instance = UnlockService._();
   UnlockService._();
+
+  /// Horloge MONOTONE du processus — l'UNIQUE référence temporelle du compte à
+  /// rebours. Adossée à une source monotone (`CLOCK_MONOTONIC` sur mobile,
+  /// `performance.now()` sur le web), elle est insensible à un changement de
+  /// date système.
+  ///
+  /// Effet de bord connu, et il échoue du bon côté : en veille profonde le
+  /// compteur n'avance pas, donc l'UI annonce PLUS de temps restant que la
+  /// réalité, jamais moins. Le rafraîchissement au retour en avant-plan
+  /// recale en un aller-retour.
+  static final Stopwatch _monotonic = Stopwatch()..start();
+
+  Duration get monotonicNow => _monotonic.elapsed;
 
   /// `true` si une URL de worker réelle est configurée (pas le placeholder).
   bool get isConfigured =>
@@ -115,7 +189,8 @@ class UnlockService {
         await AuthLocalStore.instance.clearPendingReferrerCode();
       }
       return _rememberIfUnlocked(UnlockProgress.fromJson(
-          jsonDecode(resp.body) as Map<String, dynamic>));
+          jsonDecode(resp.body) as Map<String, dynamic>,
+          anchor: monotonicNow));
     } catch (_) {
       return null;
     }
@@ -144,7 +219,8 @@ class UnlockService {
       );
       if (resp.statusCode != 200) return null;
       return _rememberIfUnlocked(UnlockProgress.fromJson(
-          jsonDecode(resp.body) as Map<String, dynamic>));
+          jsonDecode(resp.body) as Map<String, dynamic>,
+          anchor: monotonicNow));
     } catch (_) {
       return null;
     }
@@ -162,7 +238,8 @@ class UnlockService {
       if (resp.statusCode == 404) return initProgress();
       if (resp.statusCode != 200) return null;
       return _rememberIfUnlocked(UnlockProgress.fromJson(
-          jsonDecode(resp.body) as Map<String, dynamic>));
+          jsonDecode(resp.body) as Map<String, dynamic>,
+          anchor: monotonicNow));
     } catch (_) {
       return null;
     }

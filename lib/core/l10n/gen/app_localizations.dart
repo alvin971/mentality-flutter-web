@@ -4794,8 +4794,38 @@ abstract class AppLocalizations {
   /// No description provided for @ugWaitBody.
   ///
   /// In fr, this message translates to:
-  /// **'Ton résultat est en préparation. Il sera publié automatiquement — tu n\'as plus rien à faire. Tu peux fermer cette page.'**
-  String get ugWaitBody;
+  /// **'{days, plural, =0{Ton résultat est en préparation. Il sera publié automatiquement — tu n\'as plus rien à faire.} one{Ton résultat est en préparation. Il sera publié dans {days} jour, automatiquement — tu n\'as plus rien à faire.} other{Ton résultat est en préparation. Il sera publié dans {days} jours, automatiquement — tu n\'as plus rien à faire.}}'**
+  String ugWaitBody(int days);
+
+  /// No description provided for @ugWaitCountdownDays.
+  ///
+  /// In fr, this message translates to:
+  /// **'{days, plural, one{Encore {days} jour} other{Encore {days} jours}}'**
+  String ugWaitCountdownDays(int days);
+
+  /// No description provided for @ugWaitCountdownHours.
+  ///
+  /// In fr, this message translates to:
+  /// **'{hours, plural, one{Encore {hours} heure} other{Encore {hours} heures}}'**
+  String ugWaitCountdownHours(int hours);
+
+  /// No description provided for @ugWaitCountdownMinutes.
+  ///
+  /// In fr, this message translates to:
+  /// **'{minutes, plural, one{Encore {minutes} minute} other{Encore {minutes} minutes}}'**
+  String ugWaitCountdownMinutes(int minutes);
+
+  /// No description provided for @ugWaitCountdownDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le délai est écoulé.'**
+  String get ugWaitCountdownDone;
+
+  /// No description provided for @ugWaitConfirming.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton résultat se débloque dès la confirmation du serveur — cet écran s\'actualise tout seul.'**
+  String get ugWaitConfirming;
 
   /// No description provided for @ugRefreshFailed.
   ///

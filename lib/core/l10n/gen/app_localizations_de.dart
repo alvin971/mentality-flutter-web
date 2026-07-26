@@ -2702,8 +2702,59 @@ class AppLocalizationsDe extends AppLocalizations {
   String get ugWaitTitle => 'Deine Ergebnisse sind unterwegs';
 
   @override
-  String get ugWaitBody =>
-      'Dein Ergebnis wird vorbereitet. Es wird automatisch veröffentlicht – du musst nichts weiter tun. Du kannst diese Seite schließen.';
+  String ugWaitBody(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other:
+          'Dein Ergebnis wird vorbereitet. Es wird in $days Tagen automatisch veröffentlicht – du musst nichts weiter tun.',
+      one:
+          'Dein Ergebnis wird vorbereitet. Es wird in $days Tag automatisch veröffentlicht – du musst nichts weiter tun.',
+      zero:
+          'Dein Ergebnis wird vorbereitet. Es wird automatisch veröffentlicht – du musst nichts weiter tun.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String ugWaitCountdownDays(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Noch $days Tage',
+      one: 'Noch $days Tag',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String ugWaitCountdownHours(int hours) {
+    String _temp0 = intl.Intl.pluralLogic(
+      hours,
+      locale: localeName,
+      other: 'Noch $hours Stunden',
+      one: 'Noch $hours Stunde',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String ugWaitCountdownMinutes(int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: 'Noch $minutes Minuten',
+      one: 'Noch $minutes Minute',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get ugWaitCountdownDone => 'Die Wartezeit ist vorbei.';
+
+  @override
+  String get ugWaitConfirming =>
+      'Dein Ergebnis wird freigeschaltet, sobald der Server bestätigt – diese Seite aktualisiert sich von selbst.';
 
   @override
   String get ugRefreshFailed =>

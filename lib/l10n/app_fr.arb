@@ -3732,7 +3732,40 @@
     }
   },
   "ugWaitTitle": "Tes résultats arrivent",
-  "ugWaitBody": "Ton résultat est en préparation. Il sera publié automatiquement — tu n'as plus rien à faire. Tu peux fermer cette page.",
+  "ugWaitBody": "{days, plural, =0{Ton résultat est en préparation. Il sera publié automatiquement — tu n'as plus rien à faire.} one{Ton résultat est en préparation. Il sera publié dans {days} jour, automatiquement — tu n'as plus rien à faire.} other{Ton résultat est en préparation. Il sera publié dans {days} jours, automatiquement — tu n'as plus rien à faire.}}",
+  "@ugWaitBody": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "ugWaitCountdownDays": "{days, plural, one{Encore {days} jour} other{Encore {days} jours}}",
+  "@ugWaitCountdownDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "ugWaitCountdownHours": "{hours, plural, one{Encore {hours} heure} other{Encore {hours} heures}}",
+  "@ugWaitCountdownHours": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "ugWaitCountdownMinutes": "{minutes, plural, one{Encore {minutes} minute} other{Encore {minutes} minutes}}",
+  "@ugWaitCountdownMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "ugWaitCountdownDone": "Le délai est écoulé.",
+  "ugWaitConfirming": "Ton résultat se débloque dès la confirmation du serveur — cet écran s'actualise tout seul.",
   "ugRefreshFailed": "Impossible d'actualiser. Vérifie ta connexion — les chiffres affichés datent de ta dernière connexion.",
   "ugResultsHubNotice": "Tout se trouve dans « Mes résultats » : tes missions, ton lien d'invitation et ton résultat (flouté tant que toutes les missions ne sont pas validées). Tu peux quitter cette page et revenir quand tu veux.",
   "histLockedTitle": "Missions à valider",

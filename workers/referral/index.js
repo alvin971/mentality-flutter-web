@@ -334,7 +334,8 @@ async function handleProgress(env, origin, account) {
  */
 async function buildProgressResponse(env, origin, row) {
   const completedCount = await countCompletedReferrals(env, row.referralCode);
-  const delayMin = parseInt(env.UNLOCK_DELAY_MINUTES || '11520', 10);
+  const cfg = delayConfig(env);
+  const delayMin = cfg.minutes;
   const now = Date.now();
   let dirty = false;
 
@@ -367,6 +368,19 @@ async function buildProgressResponse(env, origin, row) {
     }
   }
 
+  // AUTORITÉ SERVEUR sur le temps : secondsRemaining est calculé ICI, sur
+  // l'horloge du worker. Le client ne le recalcule jamais depuis sa propre
+  // date — sinon avancer l'horloge du téléphone débloquerait le résultat.
+  let unlockAt = null;
+  let secondsRemaining = 0;
+  if (row.stage === 3) {
+    const endMs = Date.parse(row.stage3StartedAt) + delayMin * 60000;
+    unlockAt = new Date(endMs).toISOString();
+    secondsRemaining = Math.max(0, Math.ceil((endMs - now) / 1000));
+  } else if (row.stage >= 4) {
+    unlockAt = row.unlockedAt || null;
+  }
+
   if (dirty) await putProgress(env, row);
 
   return json({
@@ -375,11 +389,57 @@ async function buildProgressResponse(env, origin, row) {
     // completedReferrals = filleuls ayant réellement terminé leur test.
     completedReferrals: completedCount,
     requiredReferrals: REQUIRED_REFERRALS,
+    // `null` tant que stage < 3 : c'est CE champ, et non secondsRemaining == 0
+    // (qui vaut aussi bien « pas commencé » que « terminé »), qui dit au client
+    // si un compte à rebours s'applique.
+    unlockAt,
+    secondsRemaining,
+    displayDelayDays: cfg.displayDelayDays,
+    // Alimente la bannière « MODE TEST — délai réel : N min ». Constante de
+    // déploiement, identique pour tout le monde : rien de sensible.
+    delayMinutes: delayMin,
+    debugDelayOverride: cfg.debugDelayOverride,
     // COMPAT — à retirer avec la pierre tombale /instagram : les builds déjà
     // installées basculent ainsi sur leur carte « en cours », sémantiquement
     // équivalente à la nouvelle attente, au lieu d'un formulaire mort.
     instagramSubmitted: row.stage >= 3,
   }, 200, origin);
+}
+
+/** Délai par défaut si la variable est absente ou illisible : 8 jours. */
+const DEFAULT_UNLOCK_DELAY_MINUTES = 11520;
+
+/**
+ * Délai RÉEL (minutes) et délai AFFICHÉ (jours).
+ *
+ * Les deux ne peuvent diverger que par DEBUG_DISPLAY_DELAY_DAYS, qui sert à
+ * recetter le rendu « 8 jours » en attendant une minute. Dans ce cas le worker
+ * le SIGNALE (debugDelayOverride), et le client affiche une bannière
+ * incontournable : un délai de test ne doit jamais passer inaperçu en prod.
+ */
+function delayConfig(env) {
+  const parsed = parseInt(env.UNLOCK_DELAY_MINUTES ?? '', 10);
+  const minutes = Number.isFinite(parsed) && parsed >= 0
+    ? parsed
+    : DEFAULT_UNLOCK_DELAY_MINUTES;
+
+  const rawDbg = env.DEBUG_DISPLAY_DELAY_DAYS;
+  const dbg = (rawDbg === undefined || rawDbg === null || rawDbg === '')
+    ? NaN
+    : parseInt(rawDbg, 10);
+  if (Number.isFinite(dbg) && dbg >= 0) {
+    return { minutes, displayDelayDays: dbg, debugDelayOverride: true };
+  }
+
+  // ARRONDI AU SUPÉRIEUR, jamais au plus proche : le nombre de jours annoncé
+  // doit toujours être ≥ au délai réel. Au plus proche, un délai de 8 j 10 h
+  // annoncerait « 8 jours » alors que le compte à rebours tournerait encore le
+  // 8e jour — l'annonce contredirait le compteur affiché juste en dessous.
+  return {
+    minutes,
+    displayDelayDays: Math.max(0, Math.ceil(minutes / 1440)),
+    debugDelayOverride: false,
+  };
 }
 
 /** Code court a-z0-9 (8 chars, ~41 bits) unique en KV. */
