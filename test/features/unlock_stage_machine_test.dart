@@ -32,7 +32,12 @@ class Ligne {
 }
 
 /// État renvoyé au client, en plus des mutations appliquées à la ligne.
-typedef Reponse = ({int stage, int secondsRemaining, String? unlockAt});
+typedef Reponse = ({
+  int stage,
+  int secondsRemaining,
+  String? unlockAt,
+  int? dayIndex,
+});
 
 bool _isValidIso(String? s) => s != null && DateTime.tryParse(s) != null;
 
@@ -66,16 +71,31 @@ Reponse avancer(
   }
 
   if (row.stage == 3) {
-    final fin = DateTime.parse(row.stage3StartedAt!)
-        .add(Duration(minutes: delaiMinutes));
+    final debut = DateTime.parse(row.stage3StartedAt!);
+    final fin = debut.add(Duration(minutes: delaiMinutes));
     final restantMs = fin.difference(maintenant).inMilliseconds;
+    // Un « jour » vaut 1/8 du délai réel : exactement 24 h en production, et
+    // en recette les 8 jours restent traversables au lieu de rester figés au
+    // jour 1. Le clamp absorbe les deux bords — une ancre légèrement future
+    // (dérive d'horloge) comme un délai dépassé dont la promotion en stage 4
+    // n'est pas encore écrite.
+    final jourMs = delaiMinutes <= 0 ? 1 : (delaiMinutes * 60000 / 8).round();
+    final ecouleMs = maintenant.difference(debut).inMilliseconds;
     return (
       stage: row.stage,
       secondsRemaining: restantMs <= 0 ? 0 : (restantMs / 1000).ceil(),
       unlockAt: fin.toIso8601String(),
+      dayIndex: ((ecouleMs / jourMs).floor() + 1).clamp(1, 9),
     );
   }
-  return (stage: row.stage, secondsRemaining: 0, unlockAt: row.unlockedAt);
+  return (
+    stage: row.stage,
+    secondsRemaining: 0,
+    unlockAt: row.unlockedAt,
+    // Débloqué : l'événement est derrière, tout est ouvert. Jamais déduit de
+    // l'ancre — une ligne héritée en stage 4 n'en a pas forcément.
+    dayIndex: row.stage >= 4 ? 9 : null,
+  );
 }
 
 /// Réplique de `delayConfig()` (workers/referral/index.js).
@@ -111,6 +131,7 @@ void main() {
       expect(r.stage, 3, reason: 'promu au palier d\'attente, pas débloqué');
       expect(row.stage3StartedAt, t0.toIso8601String());
       expect(r.secondsRemaining, _huitJoursMin * 60);
+      expect(r.dayIndex, 1, reason: 'l\'événement s\'ouvre au premier jour');
     });
 
     test('à une seconde du terme, TOUJOURS verrouillé', () {
@@ -124,6 +145,8 @@ void main() {
               .subtract(const Duration(seconds: 1)));
       expect(r.stage, 3);
       expect(r.secondsRemaining, 1);
+      expect(r.dayIndex, 8,
+          reason: 'le 9 est réservé au déblocage, jamais atteint en attente');
     });
 
     test('à l\'échéance exacte, débloqué', () {
@@ -136,6 +159,7 @@ void main() {
       expect(r.stage, 4);
       expect(row.unlockedAt, isNotNull);
       expect(r.secondsRemaining, 0);
+      expect(r.dayIndex, 9, reason: 'débloqué : tout l\'événement est ouvert');
     });
 
     test('HORLOGE CLIENT MANIPULÉE : le serveur ne bouge pas', () {
@@ -150,6 +174,8 @@ void main() {
           maintenant: t0.add(const Duration(hours: 1)));
       expect(r.stage, 3, reason: 'seule l\'horloge du serveur compte');
       expect(r.secondsRemaining, greaterThan(0));
+      expect(r.dayIndex, 1,
+          reason: 'le jour suit l\'ancre serveur, pas la date du téléphone');
     });
   });
 
@@ -164,6 +190,67 @@ void main() {
           maintenant: t0.subtract(const Duration(days: 30)));
       expect(r.stage, 4);
       expect(row.unlockedAt, _t0, reason: 'pas ré-horodaté');
+      expect(r.dayIndex, 9,
+          reason: 'un jour ne se recalcule pas depuis une ancre périmée');
+    });
+  });
+
+  // Le jour courant de l'événement des 8 jours. Il obéit exactement à la même
+  // règle que secondsRemaining — dérivé de l'ancre serveur — et c'est ce qui
+  // le rend inmanipulable : rien, côté client, n'entre dans son calcul.
+  group('jour courant de l\'événement (dayIndex)', () {
+    Reponse jourA(Duration ecoule, {int delaiMinutes = _huitJoursMin}) =>
+        avancer(Ligne(stage: 3, stage3StartedAt: _t0),
+            filleulsTermines: 3,
+            requis: 3,
+            delaiMinutes: delaiMinutes,
+            maintenant: t0.add(ecoule));
+
+    test('tant que l\'attente n\'a pas commencé, aucun jour', () {
+      final r = avancer(Ligne(stage: 1),
+          filleulsTermines: 2, // parrainage incomplet
+          requis: 3,
+          delaiMinutes: _huitJoursMin,
+          maintenant: t0);
+      expect(r.stage, 1);
+      expect(r.dayIndex, isNull,
+          reason: 'pas d\'ancre, donc pas de jour — jamais un jour 1 inventé');
+    });
+
+    test('un jour civil par jour, du premier au huitième', () {
+      // Comparaison en bloc : un échec montre d'emblée TOUTE la trajectoire.
+      final trajectoire = {
+        for (final h in [0, 1, 23, 24, 25, 48, 167, 168, 191])
+          h: jourA(Duration(hours: h)).dayIndex,
+      };
+      expect(trajectoire, {
+        0: 1, // h+0 : premier jour
+        1: 1,
+        23: 1, // la frontière est à 24 h, pas à minuit
+        24: 2,
+        25: 2,
+        48: 3,
+        167: 7,
+        168: 8, // h+168 = 7 jours pleins → huitième jour
+        191: 8, // dernière heure de l'attente
+      });
+    });
+
+    test('ancre dans le futur (dérive d\'horloge) : clampé au jour 1', () {
+      final r = jourA(const Duration(hours: -5));
+      expect(r.dayIndex, 1, reason: 'jamais 0, jamais négatif');
+    });
+
+    test('en recette, les 8 jours restent traversables', () {
+      // Un « jour » vaut 1/8 du délai : avec un délai d'une minute, il dure
+      // 7,5 s. Sans cette dérivation, toute la recette resterait au jour 1.
+      expect(jourA(const Duration(seconds: 31), delaiMinutes: 1).dayIndex, 5);
+      expect(jourA(const Duration(seconds: 0), delaiMinutes: 1).dayIndex, 1);
+    });
+
+    test('en production, un jour vaut exactement 24 h', () {
+      // Garde-fou de la dérivation : 11520 min / 8 = 1440 min = 24 h pile.
+      expect(_huitJoursMin * 60000 / 8, Duration.millisecondsPerDay);
     });
   });
 

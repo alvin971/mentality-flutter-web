@@ -373,12 +373,31 @@ async function buildProgressResponse(env, origin, row) {
   // date — sinon avancer l'horloge du téléphone débloquerait le résultat.
   let unlockAt = null;
   let secondsRemaining = 0;
+  let dayIndex = null;
   if (row.stage === 3) {
-    const endMs = Date.parse(row.stage3StartedAt) + delayMin * 60000;
+    const startMs = Date.parse(row.stage3StartedAt);
+    const endMs = startMs + delayMin * 60000;
     unlockAt = new Date(endMs).toISOString();
     secondsRemaining = Math.max(0, Math.ceil((endMs - now) / 1000));
+    // Jour courant de l'événement d'attente, MÊME AUTORITÉ que
+    // secondsRemaining : dérivé de l'ancre sur l'horloge du worker.
+    //
+    // Un « jour » vaut 1/8 du délai réel : en production (11520 min) c'est
+    // exactement 24 h, et en recette (délai raccourci) les 8 jours restent
+    // traversables au lieu de rester figés au jour 1.
+    //
+    // Le clamp absorbe les deux bords : une ancre légèrement dans le futur
+    // (dérive d'horloge entre instances) comme un délai déjà dépassé alors
+    // que la promotion en stage 4 n'a pas encore été écrite.
+    const dayMs = Math.max(1, Math.round((delayMin * 60000) / 8));
+    dayIndex = Math.min(9, Math.max(1, Math.floor((now - startMs) / dayMs) + 1));
   } else if (row.stage >= 4) {
     unlockAt = row.unlockedAt || null;
+    // Débloqué : l'événement est derrière, tout est ouvert. INCONDITIONNEL —
+    // une ligne héritée en stage 4 n'a pas forcément d'ancre (le bloc
+    // d'ancrage est court-circuité par `row.stage < 4`), et Date.parse(null)
+    // vaudrait NaN, sérialisé silencieusement en null.
+    dayIndex = 9;
   }
 
   if (dirty) await putProgress(env, row);
@@ -394,6 +413,11 @@ async function buildProgressResponse(env, origin, row) {
     // si un compte à rebours s'applique.
     unlockAt,
     secondsRemaining,
+    // Jour courant de l'événement des 8 jours : 1..8 pendant l'attente, 9 une
+    // fois débloqué, `null` tant qu'elle n'a pas commencé — même sémantique de
+    // discriminant qu'unlockAt. Le client ne le dérive JAMAIS de son horloge :
+    // c'est ici, et nulle part ailleurs, que le jour est décidé.
+    dayIndex,
     displayDelayDays: cfg.displayDelayDays,
     // Alimente la bannière « MODE TEST — délai réel : N min ». Constante de
     // déploiement, identique pour tout le monde : rien de sensible.

@@ -170,6 +170,79 @@ console.log('\nDélai annoncé');
   verifie('recette : 60 s restantes', corps.secondsRemaining === 60, `= ${corps.secondsRemaining}`);
 }
 
+// Jour courant de l'événement des 8 jours. Le serveur en est la SEULE
+// autorité : le client ne le dérive jamais de son horloge.
+//
+// Les ancres sont posées à au moins une heure d'une frontière de jour —
+// l'horloge réelle tourne pendant le run, et un test qui se joue à la
+// milliseconde près deviendrait intermittent.
+console.log('\nJour courant (dayIndex)');
+{
+  const s = kv({ stage: 1 }, 2);
+  const { corps } = await appel(s, PROD);
+  verifie("attente pas commencée → null, et le champ est bien émis",
+    corps.dayIndex === null && 'dayIndex' in corps, `= ${JSON.stringify(corps.dayIndex)}`);
+}
+{
+  const s = kv({ stage: 1 }, 3);
+  const { corps } = await appel(s, PROD);
+  verifie('promotion fraîche au palier 3 → jour 1',
+    corps.stage === 3 && corps.dayIndex === 1, `stage ${corps.stage}, jour ${corps.dayIndex}`);
+}
+{
+  const s = kv({ stage: 3, stage3StartedAt: iso(maintenant - 25 * 3600000) });
+  const { corps } = await appel(s, PROD);
+  verifie('h+25 h → jour 2', corps.dayIndex === 2, `= ${corps.dayIndex}`);
+}
+{
+  const s = kv({ stage: 3, stage3StartedAt: iso(maintenant - 167 * 3600000) });
+  const { corps } = await appel(s, PROD);
+  verifie('h+167 h → jour 7', corps.dayIndex === 7, `= ${corps.dayIndex}`);
+}
+{
+  const s = kv({ stage: 3, stage3StartedAt: iso(maintenant - 191 * 3600000) });
+  const { corps } = await appel(s, PROD);
+  verifie('veille du terme → jour 8, et JAMAIS 9 tant que l\'attente court',
+    corps.stage === 3 && corps.dayIndex === 8, `stage ${corps.stage}, jour ${corps.dayIndex}`);
+}
+{
+  const s = kv({ stage: 3, stage3StartedAt: iso(maintenant - HUIT_JOURS_MIN * 60000) });
+  const { corps } = await appel(s, PROD);
+  verifie('terme atteint → stage 4 et jour 9',
+    corps.stage === 4 && corps.dayIndex === 9, `stage ${corps.stage}, jour ${corps.dayIndex}`);
+}
+{
+  // Ligne héritée débloquée AVANT l'existence de l'ancre : Date.parse(null)
+  // vaudrait NaN, sérialisé silencieusement en null par JSON.stringify.
+  const s = kv({ stage: 4, unlockedAt: iso(maintenant - 1000) }, 0);
+  const { corps } = await appel(s, PROD);
+  verifie('ligne héritée en stage 4 sans ancre → jour 9, jamais NaN',
+    corps.dayIndex === 9, `= ${JSON.stringify(corps.dayIndex)}`);
+}
+{
+  // Dérive d'horloge entre instances : l'ancre peut être légèrement future.
+  const s = kv({ stage: 3, stage3StartedAt: iso(maintenant + 3600000) });
+  const { corps } = await appel(s, PROD);
+  verifie('ancre dans le futur → clampé au jour 1, jamais 0 ni négatif',
+    corps.dayIndex === 1, `= ${corps.dayIndex}`);
+}
+{
+  // Deux lectures de suite sur la MÊME ancre : le jour ne dépend que d'elle.
+  const s = kv({ stage: 3, stage3StartedAt: iso(maintenant - 73 * 3600000) });
+  const premier = (await appel(s, PROD)).corps.dayIndex;
+  const second = (await appel(s, PROD)).corps.dayIndex;
+  verifie('jour stable d\'une lecture à l\'autre (dérivé de l\'ancre seule)',
+    premier === 4 && second === 4, `${premier} puis ${second}`);
+}
+{
+  // Un « jour » vaut 1/8 du délai réel : en recette le compteur reste
+  // traversable au lieu de rester figé au jour 1 pendant tout le test.
+  const s = kv({ stage: 3, stage3StartedAt: iso(maintenant - 31000) });
+  const { corps } = await appel(s, { UNLOCK_DELAY_MINUTES: '1' });
+  verifie('recette (délai 1 min) : 31 s écoulées → jour 5',
+    corps.dayIndex === 5, `= ${corps.dayIndex}`);
+}
+
 console.log('\nPierre tombale POST /instagram');
 {
   const s = kv({ stage: 3 });

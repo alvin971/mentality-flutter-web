@@ -141,6 +141,49 @@ void main() {
       expect(p.countdownApplicable, isFalse);
       expect(p.displayDelayDays, 0);
       expect(p.debugDelayOverride, isFalse);
+      expect(p.dayIndex, isNull,
+          reason: 'champ absent → null : un jour 1 inventé ouvrirait '
+              'l\'événement à contretemps');
+    });
+  });
+
+  // Le jour de l'événement d'attente est une DONNÉE SERVEUR, au même titre que
+  // secondsRemaining : le client le lit, ne le calcule ni ne le complète.
+  group('jour de l\'événement (dayIndex)', () {
+    test('lu tel quel depuis la réponse serveur', () {
+      final p = UnlockProgress.fromJson(const {
+        'stage': 3,
+        'referralCode': 'abcd1234',
+        'completedReferrals': 3,
+        'requiredReferrals': 3,
+        'unlockAt': '2026-08-03T12:00:00.000Z',
+        'secondsRemaining': 60,
+        'dayIndex': 3,
+      });
+      expect(p.dayIndex, 3);
+    });
+
+    test('null explicite (attente pas commencée) reste null', () {
+      final p = UnlockProgress.fromJson(const {
+        'stage': 1,
+        'referralCode': 'abcd1234',
+        'completedReferrals': 0,
+        'requiredReferrals': 3,
+        'dayIndex': null,
+      });
+      expect(p.dayIndex, isNull);
+    });
+
+    test('9 = débloqué, transmis sans réinterprétation', () {
+      final p = UnlockProgress.fromJson(const {
+        'stage': 4,
+        'referralCode': 'abcd1234',
+        'completedReferrals': 3,
+        'requiredReferrals': 3,
+        'dayIndex': 9,
+      });
+      expect(p.dayIndex, 9);
+      expect(p.unlocked, isTrue);
     });
   });
 

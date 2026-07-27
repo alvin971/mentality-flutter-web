@@ -42,6 +42,17 @@ class UnlockProgress {
   /// alors afficher une bannière visible : voir [debugDelayBannerText].
   final bool debugDelayOverride;
 
+  /// Jour courant de l'événement d'attente : 1..8 pendant l'attente, 9 une
+  /// fois débloqué. Calculé PAR LE SERVEUR depuis son ancre — même autorité
+  /// que [secondsRemaining], et pour la même raison : un jour déduit de
+  /// `DateTime.now()` s'ouvrirait en avançant l'horloge du téléphone.
+  ///
+  /// `null` dans deux cas qu'il est inutile de distinguer côté UI : l'attente
+  /// n'a pas commencé (stage < 3), ou le worker déployé est antérieur au
+  /// champ. Dans les deux cas l'événement ne s'affiche pas — dégradation
+  /// silencieuse, jamais un jour inventé.
+  final int? dayIndex;
+
   /// Repère MONOTONE (pas une date) du moment où cette réponse est arrivée.
   final Duration anchor;
 
@@ -55,6 +66,7 @@ class UnlockProgress {
     this.displayDelayDays = 0,
     this.delayMinutes = 0,
     this.debugDelayOverride = false,
+    this.dayIndex,
     this.anchor = Duration.zero,
   });
 
@@ -62,7 +74,9 @@ class UnlockProgress {
   ///
   /// Chaque nouveau champ a un défaut : face à un worker plus ancien encore
   /// déployé, `unlockAt` est absent, [countdownApplicable] est faux et la carte
-  /// s'affiche sans décompte — pas de plantage.
+  /// s'affiche sans décompte — pas de plantage. Même principe pour
+  /// [dayIndex], à ceci près que son défaut est `null` et non un nombre :
+  /// inventer un jour 1 ouvrirait l'événement à contretemps.
   factory UnlockProgress.fromJson(
     Map<String, dynamic> j, {
     Duration anchor = Duration.zero,
@@ -77,6 +91,10 @@ class UnlockProgress {
         displayDelayDays: (j['displayDelayDays'] as num?)?.toInt() ?? 0,
         delayMinutes: (j['delayMinutes'] as num?)?.toInt() ?? 0,
         debugDelayOverride: j['debugDelayOverride'] as bool? ?? false,
+        // Volontairement SANS valeur de repli : champ absent (vieux worker) et
+        // `null` explicite (attente pas commencée) mènent au même refus
+        // d'afficher l'événement.
+        dayIndex: (j['dayIndex'] as num?)?.toInt(),
         anchor: anchor,
       );
 
