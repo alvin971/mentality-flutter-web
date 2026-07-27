@@ -108,6 +108,27 @@ void main() {
     }
   });
 
+  test('les identifiants sont transportables : le worker les refuserait sinon',
+      () {
+    // Un identifiant d'item ou de module part tel quel dans la charge utile, et
+    // le module devient un segment de la clé R2. Le worker (workers/event)
+    // borne leur longueur et exige un module en slug ; un refus de sa part est
+    // DÉFINITIF côté client — la donnée serait perdue. Cette garde attrape la
+    // faute au moment où le contenu est écrit, pas en production.
+    final slug = RegExp(r'^[A-Za-z0-9_-]+$');
+    for (final m in modules) {
+      expect(slug.hasMatch(m.id), isTrue,
+          reason: 'module ${m.id} : identifiant non transportable (il devient '
+              'un segment de la clé R2)');
+      for (final i in m.items) {
+        expect(i.id.length, lessThanOrEqualTo(64),
+            reason: 'module ${m.id} : item ${i.id} — identifiant trop long, '
+                'le worker refuserait tout le module (400)');
+        expect(i.id, isNotEmpty, reason: 'module ${m.id} : item sans id');
+      }
+    }
+  });
+
   test('une cotation inversée n\'existe que dans un bloc validé', () {
     for (final m in modules) {
       for (final bloc in m.instruments) {

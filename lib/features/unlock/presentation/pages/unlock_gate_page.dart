@@ -11,6 +11,7 @@ import '../../../../core/theme/kepler_colors.dart';
 import '../../../../core/widgets/kepler_button.dart';
 import '../../../../core/widgets/kepler_card.dart';
 import '../../../../core/widgets/kepler_scaffold.dart';
+import '../../../waiting_event/_shared/data/event_upload_service.dart';
 import '../../../waiting_event/day_hub/presentation/pages/day_hub_page.dart';
 import '../../data/unlock_service.dart';
 
@@ -110,7 +111,15 @@ class _UnlockGatePageState extends State<UnlockGatePage>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     // Au retour au premier plan, le compteur monotone peut avoir pris du retard
     // (processus suspendu) : on se recale sur le serveur avant de réafficher.
-    if (state == AppLifecycleState.resumed) _load();
+    if (state != AppLifecycleState.resumed) return;
+    _load();
+    // Deuxième occasion de rejeu, après le démarrage de l'app (main.dart) : une
+    // app gardée en arrière-plan des jours durant ne redémarre jamais, et les
+    // réponses en attente n'auraient sinon aucune fenêtre pour partir. Non
+    // attendu — l'affichage ne dépend pas du réseau.
+    EventUploadService.instance.retryPending().catchError(
+          (_) => const <String, EventUploadOutcome>{},
+        );
   }
 
   Future<void> _load({bool init = false}) async {

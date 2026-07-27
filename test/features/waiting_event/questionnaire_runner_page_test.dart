@@ -121,6 +121,9 @@ Widget runner(StoreMemoire store, {QModule? module, ValueChanged<QAnswerSet>? on
       store: store,
       title: 'Bilan factice',
       onFinished: onFinished,
+      // Le moteur ne doit rien savoir du réseau : l'envoi est neutralisé ici et
+      // vérifié à part (questionnaire_runner_upload_test.dart).
+      submit: (_) async {},
     );
 
 /// Ferme l'écran pour de bon.

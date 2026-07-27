@@ -29,13 +29,22 @@ import '../../../../core/widgets/kepler_card.dart';
 import '../../../../core/widgets/kepler_progress.dart';
 import '../../../../core/widgets/kepler_scaffold.dart';
 import '../data/event_local_store.dart';
+import '../data/event_upload_service.dart';
 import '../domain/models/event_day.dart';
+import '../domain/models/event_submission.dart';
 import '../domain/models/q_answer_set.dart';
 import '../domain/models/q_instrument.dart';
 import '../domain/models/q_module.dart';
 
 /// Ce que l'écran affiche à un instant donné.
 enum _Phase { loading, transition, question, done }
+
+/// Ce qui emporte les réponses vers le serveur. Injecté pour que les tests du
+/// moteur n'aient pas de réseau à simuler.
+typedef EventSubmitter = Future<void> Function(EventSubmission submission);
+
+Future<void> _envoiParDefaut(EventSubmission submission) =>
+    EventUploadService.instance.submit(submission);
 
 class QuestionnaireRunnerPage extends StatefulWidget {
   const QuestionnaireRunnerPage({
@@ -44,6 +53,7 @@ class QuestionnaireRunnerPage extends StatefulWidget {
     required this.store,
     required this.title,
     this.onFinished,
+    this.submit = _envoiParDefaut,
   });
 
   final QModule module;
@@ -57,6 +67,13 @@ class QuestionnaireRunnerPage extends StatefulWidget {
 
   /// Notifié une seule fois, quand le questionnaire est terminé.
   final ValueChanged<QAnswerSet>? onFinished;
+
+  /// Emporte les réponses vers le serveur — à la dernière question comme à
+  /// l'abandon. Appelé DEPUIS CET ÉCRAN, jamais depuis un écran ultérieur :
+  /// une action critique placée derrière une étape facultative finit par ne
+  /// jamais être émise (le parrainage l'a prouvé). L'appel n'est pas attendu :
+  /// l'envoi est durable et rejoué, il n'a pas à retarder l'affichage.
+  final EventSubmitter submit;
 
   @override
   State<QuestionnaireRunnerPage> createState() =>
@@ -72,7 +89,17 @@ class _QuestionnaireRunnerPageState extends State<QuestionnaireRunnerPage> {
   /// pourquoi on n'ouvre pas à la question 1.
   bool _reprise = false;
 
+  /// La langue de passation, capturée tant que le contexte vit : un abandon
+  /// déclenche l'envoi au moment où l'écran se ferme.
+  String? _locale;
+
   QModule get _module => widget.module;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _locale = Localizations.localeOf(context).toString();
+  }
 
   @override
   void initState() {
@@ -99,6 +126,18 @@ class _QuestionnaireRunnerPageState extends State<QuestionnaireRunnerPage> {
         _phase = _phaseFor(index);
       }
     });
+
+    // RATTRAPAGE. Toutes les questions ont une réponse, mais le jeu est encore
+    // `inProgress` : `_terminer()` n'a donc jamais abouti (app tuée entre la
+    // dernière réponse et « Terminer »), et ces réponses n'ont JAMAIS été
+    // confiées au service d'envoi. L'écran de fin n'offrant aucun second
+    // chemin, sans ce rattrapage elles ne partiraient plus jamais.
+    if (index >= _module.questionCount && answers.isPartial) {
+      final termine = answers.markCompleted();
+      _answers = termine;
+      await widget.store.save(termine);
+      _emporter(termine);
+    }
   }
 
   /// Un bloc qui déclare un écran de transition l'affiche avant sa première
@@ -141,7 +180,18 @@ class _QuestionnaireRunnerPageState extends State<QuestionnaireRunnerPage> {
       _phase = _Phase.done;
     });
     await widget.store.save(termine);
+    _emporter(termine);
     widget.onFinished?.call(termine);
+  }
+
+  /// Confie les réponses au service d'envoi. Rien n'est attendu ici : le
+  /// service enregistre d'abord, envoie ensuite, et rejoue tant que le serveur
+  /// n'a pas confirmé.
+  void _emporter(QAnswerSet answers) {
+    if (answers.answeredCount == 0) return;
+    final locale = _locale;
+    if (locale == null) return;
+    widget.submit(EventSubmission.of(_module, answers, locale: locale));
   }
 
   /// Quitter en cours de route : on prévient que rien n'est perdu, ce qui est
@@ -165,7 +215,11 @@ class _QuestionnaireRunnerPageState extends State<QuestionnaireRunnerPage> {
         ],
       ),
     );
-    if (partir == true && mounted) Navigator.of(context).pop();
+    if (partir != true) return;
+    // Ce qui a déjà été répondu part MAINTENANT, marqué partiel — avant la
+    // fermeture, pas depuis un écran qu'on n'atteindra peut-être jamais.
+    _emporter(_answers);
+    if (mounted) Navigator.of(context).pop();
   }
 
   @override

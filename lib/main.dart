@@ -13,6 +13,7 @@ import 'core/theme/theme_notifier.dart';
 import 'core/router/app_router.dart';
 import 'core/constants/app_constants.dart';
 import 'core/services/remote_config_service.dart';
+import 'features/waiting_event/_shared/data/event_upload_service.dart';
 import 'services/data_collection_service.dart';
 import 'services/session_history_service.dart';
 import 'services/session_persistence_service.dart';
@@ -30,6 +31,14 @@ void main() async {
   } catch (_) {
     // Ne pas bloquer le démarrage si la config échoue
   }
+
+  // Rejeu des réponses de l'événement que le serveur n'a pas encore
+  // confirmées. Lancé APRÈS la config (le stockage chiffré doit être prêt) et
+  // sans être attendu : le démarrage ne dépend pas du réseau. Sans
+  // consentement, ou sans worker déployé, l'appel ne fait rien.
+  EventUploadService.instance.retryPending().catchError(
+        (_) => const <String, EventUploadOutcome>{},
+      );
 
   runApp(const MentalityApp());
 }

@@ -11,6 +11,15 @@
 /// les utilisateurs ayant consenti à une version antérieure seront re-sollicités.
 const String kConsentVersion = '2026-06-12.v1';
 
+/// Finalité art. 9 des réponses de l'événement des 8 jours, telle qu'elle
+/// voyage jusqu'au worker (`X-Consent-Purpose`).
+///
+/// ⚠️ Doit rester identique à `EXPECTED_PURPOSE` dans workers/event/index.js.
+/// Le worker REFUSE (403) un envoi qui ne porte pas exactement cette chaîne :
+/// c'est ce qui empêche un consentement recueilli pour l'audio d'autoriser un
+/// envoi de données de santé.
+const String kEventDataPurpose = 'event-health-research';
+
 /// Un consentement granulaire, horodaté et versionné.
 class ConsentRecord {
   /// Identifiant de session auquel ce consentement se rattache.
@@ -39,6 +48,20 @@ class ConsentRecord {
   /// a été recueilli. `null` tant que le flux mineurs n'est pas activé.
   final bool? parentalConsent;
 
+  /// OPTIONNEL, art. 9 RGPD : réponses aux questionnaires de l'événement des
+  /// 8 jours (santé mentale, neurodiversité, bloc diagnostic) envoyées pour
+  /// « dépistage informatif + construction/amélioration de nos échelles ».
+  ///
+  /// Finalité DISTINCTE de [recordingAndAnalysis] et jamais impliquée par lui :
+  /// une donnée de santé exige un consentement EXPLICITE et propre. Défaut
+  /// `false`, y compris pour tout enregistrement relu d'une version antérieure
+  /// — un consentement audio déjà donné ne doit pas se transformer
+  /// rétroactivement en consentement de santé.
+  ///
+  /// Sans lui : les questionnaires restent jouables et le score s'affiche,
+  /// mais **rien n'est envoyé**.
+  final bool eventHealthData;
+
   const ConsentRecord({
     required this.sessionId,
     required this.version,
@@ -47,6 +70,7 @@ class ConsentRecord {
     required this.recordingAndAnalysis,
     required this.commercialReuse,
     this.parentalConsent,
+    this.eventHealthData = false,
   });
 
   Map<String, dynamic> toMap() => {
@@ -57,6 +81,7 @@ class ConsentRecord {
         'recording_and_analysis': recordingAndAnalysis,
         'commercial_reuse': commercialReuse,
         if (parentalConsent != null) 'parental_consent': parentalConsent,
+        'event_health_data': eventHealthData,
       };
 
   static ConsentRecord fromMap(Map<dynamic, dynamic> map) => ConsentRecord(
@@ -69,9 +94,23 @@ class ConsentRecord {
         recordingAndAnalysis: map['recording_and_analysis'] as bool? ?? false,
         commercialReuse: map['commercial_reuse'] as bool? ?? false,
         parentalConsent: map['parental_consent'] as bool?,
+        // Absent = false : fail-closed. Un enregistrement écrit avant que cette
+        // finalité n'existe n'autorise aucun envoi de santé.
+        eventHealthData: map['event_health_data'] as bool? ?? false,
       );
 
   /// `true` si ce consentement correspond à la version courante du texte.
   /// Sert à re-solliciter l'utilisateur quand la politique change.
   bool get isCurrentVersion => version == kConsentVersion;
+
+  ConsentRecord copyWith({bool? eventHealthData}) => ConsentRecord(
+        sessionId: sessionId,
+        version: version,
+        grantedAt: grantedAt,
+        locale: locale,
+        recordingAndAnalysis: recordingAndAnalysis,
+        commercialReuse: commercialReuse,
+        parentalConsent: parentalConsent,
+        eventHealthData: eventHealthData ?? this.eventHealthData,
+      );
 }

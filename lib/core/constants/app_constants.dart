@@ -76,6 +76,14 @@ class AppConstants {
   static const String tokeniserWorkerUrl =
       'https://mentality-tokeniser.devgreenpro.workers.dev';
 
+  /// URL du Cloudflare Worker qui reçoit les réponses de l'événement des
+  /// 8 jours (questionnaires, questions candidates, bloc diagnostic).
+  /// Déployer workers/event/ et remplacer cette valeur. Tant que l'URL reste
+  /// le placeholder, RIEN n'est envoyé : les questionnaires se passent, le
+  /// score s'affiche, et les réponses restent en local (chiffrées).
+  static const String eventWorkerUrl =
+      'https://mentality-event.YOUR_SUBDOMAIN.workers.dev';
+
   /// URL du Cloudflare Worker referral (déblocage des résultats par paliers).
   /// Déployer workers/referral/ et remplacer cette valeur. Tant que l'URL
   /// reste le placeholder, le gate est désactivé (résultats affichés

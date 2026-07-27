@@ -1,0 +1,57 @@
+name = "mentality-event"
+main = "index.js"
+compatibility_date = "2025-01-01"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Binding R2 — le bucket est résolu côté serveur, aucune clé n'atteint le client.
+#
+# `jurisdiction = "eu"` est OBLIGATOIRE : sans cette ligne, le Worker ne se lie
+# PAS à un bucket EU (il chercherait un bucket standard du même nom). C'est ce
+# qui garantit techniquement la résidence des données en Europe (RGPD).
+#
+# BUCKET DISTINCT DE L'AUDIO, VOLONTAIREMENT : ce sont des données de santé
+# (art. 9) avec leur propre base légale. Séparer les buckets rend l'effacement
+# et l'export séparables, et évite qu'une purge d'audio touche des réponses de
+# questionnaire (ou l'inverse).
+# ─────────────────────────────────────────────────────────────────────────────
+[[r2_buckets]]
+binding = "EVENT_BUCKET"
+bucket_name = "mentality-event"
+jurisdiction = "eu"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Mise en place (RGPD : résidence des données dans l'UE)
+#
+#   1. Créer le bucket en JURIDICTION EU (obligatoire pour la conformité) :
+#        wrangler r2 bucket create mentality-event --jurisdiction eu
+#      Puis dans le dashboard, vérifier que la juridiction affichée est « EU ».
+#
+#   2. AVANT tout déploiement, lancer l'auto-test :
+#        node workers/event/scripts/selftest.mjs
+#
+#   3. Déployer le worker :
+#        cd workers/event
+#        wrangler deploy
+#
+#   4. Copier l'URL du worker dans :
+#        lib/core/constants/app_constants.dart → eventWorkerUrl
+#      Tant que la valeur reste le placeholder `YOUR_SUBDOMAIN`, l'app
+#      fonctionne normalement : rien n'est envoyé, les réponses restent en
+#      local (chiffrées) et le rejeu attend.
+#
+#   5. Ajouter le domaine Pages de l'app dans ALLOWED_ORIGINS (index.js).
+#
+# PAS d'environnements nommés (`[env.xxx]`) : ils n'héritent pas des bindings
+# et déploient sous une AUTRE URL, que l'app — qui pointe `eventWorkerUrl` en
+# dur — n'atteindrait jamais.
+#
+# Aucun secret n'est requis : le worker ne fait que VÉRIFIER des signatures
+# (clés publiques, dans workers/_shared/token_verify.js). Il ne signe rien.
+#
+# Pas de cron de purge ici, contrairement à `r2-upload` : celui-ci s'appuie sur
+# le marqueur `validated/<account>` écrit par le tokeniser dans le bucket AUDIO,
+# marqueur qui n'existe pas dans ce bucket. Et l'événement ne s'ouvre qu'au
+# palier 3, c'est-à-dire APRÈS un test complet : il n'y a pas de compte
+# provisoire abandonné à nettoyer ici. Une politique de rétention propre à ces
+# données reste à décider (elle relève de la page Méthodologie, pas du code).
+# ─────────────────────────────────────────────────────────────────────────────
