@@ -541,16 +541,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get ctBackToHome => 'Retour à l\'accueil';
 
   @override
-  String get ctSubtestExitTitle => 'Sous-test interrompu';
-
-  @override
-  String get ctSubtestExitBody =>
-      'Vous avez quitté ce sous-test avant de le terminer. Voulez-vous le reprendre ou arrêter l\'évaluation ?';
-
-  @override
-  String get ctSubtestExitResume => 'Reprendre le sous-test';
-
-  @override
   String get ctPdfSubtitle => 'Rapport d\'évaluation cognitive WAIS-IV';
 
   @override
@@ -1890,33 +1880,6 @@ class AppLocalizationsFr extends AppLocalizations {
       'Choisissez les 3 pièces qui forment la figure (rotations permises, retournements interdits).';
 
   @override
-  String get vpDemoEyebrow => 'DÉMONSTRATION';
-
-  @override
-  String get vpDemoInstruction =>
-      'Entraînement sans chrono : choisissez les 3 pièces qui forment la figure, puis validez.';
-
-  @override
-  String get vpDemoStart => 'Commencer le test';
-
-  @override
-  String get vpDemoRetry => 'Réessayer';
-
-  @override
-  String get vpRecorded => 'Réponse enregistrée';
-
-  @override
-  String get vpReadyTitle => 'Prêt ?';
-
-  @override
-  String vpReadyBody(int count) {
-    return 'L\'entraînement est terminé. Le test commence : $count puzzles, chacun avec son propre chrono. Le temps démarre dès que vous appuyez sur le bouton.';
-  }
-
-  @override
-  String get vpReadyStart => 'Lancer le test';
-
-  @override
   String vpSelectionSemantics(int filled, int total) {
     return 'Sélection : $filled sur $total pièces';
   }
@@ -2458,6 +2421,246 @@ class AppLocalizationsFr extends AppLocalizations {
   String get psImgFusee => 'Fusée';
 
   @override
+  String get ctShareScore => 'Partager mon score';
+
+  @override
+  String get ctSubtestExitBody =>
+      'Vous avez quitté ce sous-test avant de le terminer. Voulez-vous le reprendre ou arrêter l\'évaluation ?';
+
+  @override
+  String get ctSubtestExitResume => 'Reprendre le sous-test';
+
+  @override
+  String get ctSubtestExitTitle => 'Sous-test interrompu';
+
+  @override
+  String get demoBadge => 'ENTRAÎNEMENT';
+
+  @override
+  String get demoContinue => 'Continuer';
+
+  @override
+  String get demoNotice => 'Entraînement — cet essai ne compte pas.';
+
+  @override
+  String get demoRetry => 'Réessayer';
+
+  @override
+  String get demoStart => 'Commencer le test';
+
+  @override
+  String get demoTryAgain => 'Pas tout à fait — réessayez';
+
+  @override
+  String get demoWellDone => 'Bonne réponse !';
+
+  @override
+  String get histLockedBody =>
+      'Ton résultat est enregistré, mais il reste flouté tant que toutes les missions ne sont pas validées.';
+
+  @override
+  String get histLockedBodyNoResult =>
+      'Tes missions et ton lien d\'invitation sont ici. Termine ton évaluation pour débloquer ton résultat.';
+
+  @override
+  String get histLockedCta => 'Voir mes missions';
+
+  @override
+  String get histLockedTitle => 'Missions à valider';
+
+  @override
+  String get inviteLandingBody =>
+      'Un ami t\'invite à passer le test de QI gratuit Mentality. En terminant ton test, tu obtiens ton propre résultat et tu aides ton ami à débloquer le sien.';
+
+  @override
+  String get inviteLandingCta => 'Commencer le test gratuit';
+
+  @override
+  String get inviteLandingTitle => 'Invitation';
+
+  @override
+  String get shareCancel => 'Annuler';
+
+  @override
+  String get shareCodeLabel => 'Code d\'invitation';
+
+  @override
+  String get shareConfirm => 'Partager cette image';
+
+  @override
+  String get shareError => 'Impossible de préparer l\'image. Réessaie.';
+
+  @override
+  String get shareEyebrow => 'Aperçu';
+
+  @override
+  String get shareIntro =>
+      'Voici l\'image qui sera partagée. Rien n\'est publié tant que tu n\'as pas confirmé.';
+
+  @override
+  String get shareLinkCopied =>
+      'Ton lien est copié — ajoute-le en sticker Lien sur ta story';
+
+  @override
+  String sharePercentile(int rank) {
+    return 'Plus élevé que $rank % des participants';
+  }
+
+  @override
+  String get shareScoreLabel => 'Score global';
+
+  @override
+  String get shareTitle => 'Partager mon score';
+
+  @override
+  String get ugCopied => 'Lien copié !';
+
+  @override
+  String get ugCopyLink => 'Copier mon lien d\'invitation';
+
+  @override
+  String get ugErrorBody =>
+      'Impossible de récupérer l\'état de ton déblocage. Vérifie ta connexion puis réessaie.';
+
+  @override
+  String get ugEyebrow => 'Dernières étapes';
+
+  @override
+  String get ugFreeNotice =>
+      'Le test est 100 % gratuit. Pour recevoir ton résultat, il te reste quelques étapes simples : elles se valident automatiquement.';
+
+  @override
+  String ugFriendDone(int n) {
+    return 'Ami $n : test terminé';
+  }
+
+  @override
+  String ugFriendPending(int n) {
+    return 'Ami $n : test en cours';
+  }
+
+  @override
+  String ugInviteCounter(int joined, int required) {
+    return '$joined/$required amis ont terminé leur test';
+  }
+
+  @override
+  String get ugRefresh => 'Actualiser';
+
+  @override
+  String get ugRefreshFailed =>
+      'Impossible d\'actualiser. Vérifie ta connexion — les chiffres affichés datent de ta dernière connexion.';
+
+  @override
+  String get ugResultsHubNotice =>
+      'Tout se trouve dans « Mes résultats » : tes missions, ton lien d\'invitation et ton résultat (flouté tant que toutes les missions ne sont pas validées). Tu peux quitter cette page et revenir quand tu veux.';
+
+  @override
+  String get ugRetry => 'Réessayer';
+
+  @override
+  String get ugStep1Body =>
+      'Partage ton lien personnel avec 3 amis. Cette étape avance quand ils TERMINENT leur test — pas seulement quand ils s\'inscrivent. Pense à les relancer.';
+
+  @override
+  String get ugStep1Title => 'Invite 3 amis';
+
+  @override
+  String get ugStep2Body =>
+      'Tes amis doivent maintenant terminer leur test de QI. On attend leurs résultats — n\'hésite pas à les relancer !';
+
+  @override
+  String get ugStep2Title => 'Tes amis passent leur test';
+
+  @override
+  String get ugTitle => 'Ton résultat est prêt';
+
+  @override
+  String ugWaitBody(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other:
+          'Ton résultat est en préparation. Il sera publié dans $days jours, automatiquement — tu n\'as plus rien à faire.',
+      one:
+          'Ton résultat est en préparation. Il sera publié dans $days jour, automatiquement — tu n\'as plus rien à faire.',
+      zero:
+          'Ton résultat est en préparation. Il sera publié automatiquement — tu n\'as plus rien à faire.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get ugWaitConfirming =>
+      'Ton résultat se débloque dès la confirmation du serveur — cet écran s\'actualise tout seul.';
+
+  @override
+  String ugWaitCountdownDays(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Encore $days jours',
+      one: 'Encore $days jour',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get ugWaitCountdownDone => 'Le délai est écoulé.';
+
+  @override
+  String ugWaitCountdownHours(int hours) {
+    String _temp0 = intl.Intl.pluralLogic(
+      hours,
+      locale: localeName,
+      other: 'Encore $hours heures',
+      one: 'Encore $hours heure',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String ugWaitCountdownMinutes(int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: 'Encore $minutes minutes',
+      one: 'Encore $minutes minute',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get ugWaitTitle => 'Tes résultats arrivent';
+
+  @override
+  String get vpDemoEyebrow => 'DÉMONSTRATION';
+
+  @override
+  String get vpDemoInstruction =>
+      'Entraînement sans chrono : choisissez les 3 pièces qui forment la figure, puis validez.';
+
+  @override
+  String get vpDemoRetry => 'Réessayer';
+
+  @override
+  String get vpDemoStart => 'Commencer le test';
+
+  @override
+  String vpReadyBody(int count) {
+    return 'L\'entraînement est terminé. Le test commence : $count puzzles, chacun avec son propre chrono. Le temps démarre dès que vous appuyez sur le bouton.';
+  }
+
+  @override
+  String get vpReadyStart => 'Lancer le test';
+
+  @override
+  String get vpReadyTitle => 'Prêt ?';
+
+  @override
+  String get vpRecorded => 'Réponse enregistrée';
+
+  @override
   String get vocabTestName => 'Vocabulaire';
 
   @override
@@ -2610,207 +2813,4 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get vocabTipContext => '• Expliquez le sens avec contexte';
-
-  @override
-  String get demoBadge => 'ENTRAÎNEMENT';
-
-  @override
-  String get demoNotice => 'Entraînement — cet essai ne compte pas.';
-
-  @override
-  String get demoStart => 'Commencer le test';
-
-  @override
-  String get demoRetry => 'Réessayer';
-
-  @override
-  String get demoContinue => 'Continuer';
-
-  @override
-  String get demoWellDone => 'Bonne réponse !';
-
-  @override
-  String get demoTryAgain => 'Pas tout à fait — réessayez';
-
-  @override
-  String get ctShareScore => 'Partager mon score';
-
-  @override
-  String get shareTitle => 'Partager mon score';
-
-  @override
-  String get shareEyebrow => 'Aperçu';
-
-  @override
-  String get shareIntro =>
-      'Voici l\'image qui sera partagée. Rien n\'est publié tant que tu n\'as pas confirmé.';
-
-  @override
-  String get shareConfirm => 'Partager cette image';
-
-  @override
-  String get shareCancel => 'Annuler';
-
-  @override
-  String get shareScoreLabel => 'Score global';
-
-  @override
-  String sharePercentile(int rank) {
-    return 'Plus élevé que $rank % des participants';
-  }
-
-  @override
-  String get shareCodeLabel => 'Code d\'invitation';
-
-  @override
-  String get shareLinkCopied =>
-      'Ton lien est copié — ajoute-le en sticker Lien sur ta story';
-
-  @override
-  String get shareError => 'Impossible de préparer l\'image. Réessaie.';
-
-  @override
-  String get ugTitle => 'Ton résultat est prêt';
-
-  @override
-  String get ugEyebrow => 'Dernières étapes';
-
-  @override
-  String get ugFreeNotice =>
-      'Le test est 100 % gratuit. Pour recevoir ton résultat, il te reste quelques étapes simples : elles se valident automatiquement.';
-
-  @override
-  String get ugErrorBody =>
-      'Impossible de récupérer l\'état de ton déblocage. Vérifie ta connexion puis réessaie.';
-
-  @override
-  String get ugRetry => 'Réessayer';
-
-  @override
-  String get ugRefresh => 'Actualiser';
-
-  @override
-  String get ugStep1Title => 'Invite 3 amis';
-
-  @override
-  String get ugStep1Body =>
-      'Partage ton lien personnel avec 3 amis. Cette étape avance quand ils TERMINENT leur test — pas seulement quand ils s\'inscrivent. Pense à les relancer.';
-
-  @override
-  String get ugCopyLink => 'Copier mon lien d\'invitation';
-
-  @override
-  String get ugCopied => 'Lien copié !';
-
-  @override
-  String ugInviteCounter(int joined, int required) {
-    return '$joined/$required amis ont terminé leur test';
-  }
-
-  @override
-  String get ugStep2Title => 'Tes amis passent leur test';
-
-  @override
-  String get ugStep2Body =>
-      'Tes amis doivent maintenant terminer leur test de QI. On attend leurs résultats — n\'hésite pas à les relancer !';
-
-  @override
-  String ugFriendDone(int n) {
-    return 'Ami $n : test terminé';
-  }
-
-  @override
-  String ugFriendPending(int n) {
-    return 'Ami $n : test en cours';
-  }
-
-  @override
-  String get ugWaitTitle => 'Tes résultats arrivent';
-
-  @override
-  String ugWaitBody(int days) {
-    String _temp0 = intl.Intl.pluralLogic(
-      days,
-      locale: localeName,
-      other:
-          'Ton résultat est en préparation. Il sera publié dans $days jours, automatiquement — tu n\'as plus rien à faire.',
-      one:
-          'Ton résultat est en préparation. Il sera publié dans $days jour, automatiquement — tu n\'as plus rien à faire.',
-      zero:
-          'Ton résultat est en préparation. Il sera publié automatiquement — tu n\'as plus rien à faire.',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String ugWaitCountdownDays(int days) {
-    String _temp0 = intl.Intl.pluralLogic(
-      days,
-      locale: localeName,
-      other: 'Encore $days jours',
-      one: 'Encore $days jour',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String ugWaitCountdownHours(int hours) {
-    String _temp0 = intl.Intl.pluralLogic(
-      hours,
-      locale: localeName,
-      other: 'Encore $hours heures',
-      one: 'Encore $hours heure',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String ugWaitCountdownMinutes(int minutes) {
-    String _temp0 = intl.Intl.pluralLogic(
-      minutes,
-      locale: localeName,
-      other: 'Encore $minutes minutes',
-      one: 'Encore $minutes minute',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get ugWaitCountdownDone => 'Le délai est écoulé.';
-
-  @override
-  String get ugWaitConfirming =>
-      'Ton résultat se débloque dès la confirmation du serveur — cet écran s\'actualise tout seul.';
-
-  @override
-  String get ugRefreshFailed =>
-      'Impossible d\'actualiser. Vérifie ta connexion — les chiffres affichés datent de ta dernière connexion.';
-
-  @override
-  String get ugResultsHubNotice =>
-      'Tout se trouve dans « Mes résultats » : tes missions, ton lien d\'invitation et ton résultat (flouté tant que toutes les missions ne sont pas validées). Tu peux quitter cette page et revenir quand tu veux.';
-
-  @override
-  String get histLockedTitle => 'Missions à valider';
-
-  @override
-  String get histLockedBody =>
-      'Ton résultat est enregistré, mais il reste flouté tant que toutes les missions ne sont pas validées.';
-
-  @override
-  String get histLockedBodyNoResult =>
-      'Tes missions et ton lien d\'invitation sont ici. Termine ton évaluation pour débloquer ton résultat.';
-
-  @override
-  String get histLockedCta => 'Voir mes missions';
-
-  @override
-  String get inviteLandingTitle => 'Invitation';
-
-  @override
-  String get inviteLandingBody =>
-      'Un ami t\'invite à passer le test de QI gratuit Mentality. En terminant ton test, tu obtiens ton propre résultat et tu aides ton ami à débloquer le sien.';
-
-  @override
-  String get inviteLandingCta => 'Commencer le test gratuit';
 }

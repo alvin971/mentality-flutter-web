@@ -1089,24 +1089,6 @@ abstract class AppLocalizations {
   /// **'Retour à l\'accueil'**
   String get ctBackToHome;
 
-  /// Titre du dialogue affiché quand l'utilisateur quitte un sous-test sans le terminer
-  ///
-  /// In fr, this message translates to:
-  /// **'Sous-test interrompu'**
-  String get ctSubtestExitTitle;
-
-  /// Corps du dialogue de sortie d'un sous-test
-  ///
-  /// In fr, this message translates to:
-  /// **'Vous avez quitté ce sous-test avant de le terminer. Voulez-vous le reprendre ou arrêter l\'évaluation ?'**
-  String get ctSubtestExitBody;
-
-  /// Bouton pour reprendre le sous-test interrompu
-  ///
-  /// In fr, this message translates to:
-  /// **'Reprendre le sous-test'**
-  String get ctSubtestExitResume;
-
   /// Sous-titre du rapport PDF (sous le titre de marque)
   ///
   /// In fr, this message translates to:
@@ -3423,54 +3405,6 @@ abstract class AppLocalizations {
   /// **'Choisissez les 3 pièces qui forment la figure (rotations permises, retournements interdits).'**
   String get vpInstruction;
 
-  /// Puzzles visuels — eyebrow de la phase de démonstration non chronométrée
-  ///
-  /// In fr, this message translates to:
-  /// **'DÉMONSTRATION'**
-  String get vpDemoEyebrow;
-
-  /// Puzzles visuels — consigne de l'item de démonstration
-  ///
-  /// In fr, this message translates to:
-  /// **'Entraînement sans chrono : choisissez les 3 pièces qui forment la figure, puis validez.'**
-  String get vpDemoInstruction;
-
-  /// Puzzles visuels — bouton après une démo réussie, lance les items chronométrés
-  ///
-  /// In fr, this message translates to:
-  /// **'Commencer le test'**
-  String get vpDemoStart;
-
-  /// Puzzles visuels — bouton après une démo ratée, réinitialise la démo
-  ///
-  /// In fr, this message translates to:
-  /// **'Réessayer'**
-  String get vpDemoRetry;
-
-  /// Puzzles visuels — libellé neutre du bouton après validation d'un item réel (aucun feedback correct/incorrect pendant le test, conforme au protocole)
-  ///
-  /// In fr, this message translates to:
-  /// **'Réponse enregistrée'**
-  String get vpRecorded;
-
-  /// Puzzles visuels — titre de l'écran intermédiaire entre la démonstration et le premier item chronométré
-  ///
-  /// In fr, this message translates to:
-  /// **'Prêt ?'**
-  String get vpReadyTitle;
-
-  /// Puzzles visuels — texte de l'écran Prêt ; le chrono ne démarre qu'à l'appui sur le bouton
-  ///
-  /// In fr, this message translates to:
-  /// **'L\'entraînement est terminé. Le test commence : {count} puzzles, chacun avec son propre chrono. Le temps démarre dès que vous appuyez sur le bouton.'**
-  String vpReadyBody(int count);
-
-  /// Puzzles visuels — bouton de l'écran Prêt qui démarre l'item 1 et son chrono
-  ///
-  /// In fr, this message translates to:
-  /// **'Lancer le test'**
-  String get vpReadyStart;
-
   /// Puzzles visuels — étiquette d'accessibilité de l'indicateur de sélection
   ///
   /// In fr, this message translates to:
@@ -4395,6 +4329,366 @@ abstract class AppLocalizations {
   /// **'Fusée'**
   String get psImgFusee;
 
+  /// No description provided for @ctShareScore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partager mon score'**
+  String get ctShareScore;
+
+  /// Corps du dialogue de sortie d'un sous-test
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous avez quitté ce sous-test avant de le terminer. Voulez-vous le reprendre ou arrêter l\'évaluation ?'**
+  String get ctSubtestExitBody;
+
+  /// Bouton pour reprendre le sous-test interrompu
+  ///
+  /// In fr, this message translates to:
+  /// **'Reprendre le sous-test'**
+  String get ctSubtestExitResume;
+
+  /// Titre du dialogue affiché quand l'utilisateur quitte un sous-test sans le terminer
+  ///
+  /// In fr, this message translates to:
+  /// **'Sous-test interrompu'**
+  String get ctSubtestExitTitle;
+
+  /// Phase d'entraînement — libellé d'en-tête générique (partagé entre exercices)
+  ///
+  /// In fr, this message translates to:
+  /// **'ENTRAÎNEMENT'**
+  String get demoBadge;
+
+  /// Phase d'entraînement — bouton neutre pour poursuivre (exercices sans bonne/mauvaise réponse automatique)
+  ///
+  /// In fr, this message translates to:
+  /// **'Continuer'**
+  String get demoContinue;
+
+  /// Phase d'entraînement — bandeau expliquant que l'essai n'est pas noté
+  ///
+  /// In fr, this message translates to:
+  /// **'Entraînement — cet essai ne compte pas.'**
+  String get demoNotice;
+
+  /// Phase d'entraînement — bouton pour refaire l'essai
+  ///
+  /// In fr, this message translates to:
+  /// **'Réessayer'**
+  String get demoRetry;
+
+  /// Phase d'entraînement — bouton pour passer au test réel
+  ///
+  /// In fr, this message translates to:
+  /// **'Commencer le test'**
+  String get demoStart;
+
+  /// Phase d'entraînement — retour après un essai incorrect
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas tout à fait — réessayez'**
+  String get demoTryAgain;
+
+  /// Phase d'entraînement — retour positif après un essai correct
+  ///
+  /// In fr, this message translates to:
+  /// **'Bonne réponse !'**
+  String get demoWellDone;
+
+  /// No description provided for @histLockedBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton résultat est enregistré, mais il reste flouté tant que toutes les missions ne sont pas validées.'**
+  String get histLockedBody;
+
+  /// No description provided for @histLockedBodyNoResult.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tes missions et ton lien d\'invitation sont ici. Termine ton évaluation pour débloquer ton résultat.'**
+  String get histLockedBodyNoResult;
+
+  /// No description provided for @histLockedCta.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir mes missions'**
+  String get histLockedCta;
+
+  /// No description provided for @histLockedTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Missions à valider'**
+  String get histLockedTitle;
+
+  /// No description provided for @inviteLandingBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un ami t\'invite à passer le test de QI gratuit Mentality. En terminant ton test, tu obtiens ton propre résultat et tu aides ton ami à débloquer le sien.'**
+  String get inviteLandingBody;
+
+  /// No description provided for @inviteLandingCta.
+  ///
+  /// In fr, this message translates to:
+  /// **'Commencer le test gratuit'**
+  String get inviteLandingCta;
+
+  /// No description provided for @inviteLandingTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Invitation'**
+  String get inviteLandingTitle;
+
+  /// No description provided for @shareCancel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annuler'**
+  String get shareCancel;
+
+  /// No description provided for @shareCodeLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code d\'invitation'**
+  String get shareCodeLabel;
+
+  /// No description provided for @shareConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partager cette image'**
+  String get shareConfirm;
+
+  /// No description provided for @shareError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible de préparer l\'image. Réessaie.'**
+  String get shareError;
+
+  /// No description provided for @shareEyebrow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aperçu'**
+  String get shareEyebrow;
+
+  /// No description provided for @shareIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voici l\'image qui sera partagée. Rien n\'est publié tant que tu n\'as pas confirmé.'**
+  String get shareIntro;
+
+  /// No description provided for @shareLinkCopied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton lien est copié — ajoute-le en sticker Lien sur ta story'**
+  String get shareLinkCopied;
+
+  /// No description provided for @sharePercentile.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus élevé que {rank} % des participants'**
+  String sharePercentile(int rank);
+
+  /// No description provided for @shareScoreLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Score global'**
+  String get shareScoreLabel;
+
+  /// No description provided for @shareTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partager mon score'**
+  String get shareTitle;
+
+  /// No description provided for @ugCopied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lien copié !'**
+  String get ugCopied;
+
+  /// No description provided for @ugCopyLink.
+  ///
+  /// In fr, this message translates to:
+  /// **'Copier mon lien d\'invitation'**
+  String get ugCopyLink;
+
+  /// No description provided for @ugErrorBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible de récupérer l\'état de ton déblocage. Vérifie ta connexion puis réessaie.'**
+  String get ugErrorBody;
+
+  /// No description provided for @ugEyebrow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dernières étapes'**
+  String get ugEyebrow;
+
+  /// No description provided for @ugFreeNotice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le test est 100 % gratuit. Pour recevoir ton résultat, il te reste quelques étapes simples : elles se valident automatiquement.'**
+  String get ugFreeNotice;
+
+  /// No description provided for @ugFriendDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ami {n} : test terminé'**
+  String ugFriendDone(int n);
+
+  /// No description provided for @ugFriendPending.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ami {n} : test en cours'**
+  String ugFriendPending(int n);
+
+  /// No description provided for @ugInviteCounter.
+  ///
+  /// In fr, this message translates to:
+  /// **'{joined}/{required} amis ont terminé leur test'**
+  String ugInviteCounter(int joined, int required);
+
+  /// No description provided for @ugRefresh.
+  ///
+  /// In fr, this message translates to:
+  /// **'Actualiser'**
+  String get ugRefresh;
+
+  /// No description provided for @ugRefreshFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible d\'actualiser. Vérifie ta connexion — les chiffres affichés datent de ta dernière connexion.'**
+  String get ugRefreshFailed;
+
+  /// No description provided for @ugResultsHubNotice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout se trouve dans « Mes résultats » : tes missions, ton lien d\'invitation et ton résultat (flouté tant que toutes les missions ne sont pas validées). Tu peux quitter cette page et revenir quand tu veux.'**
+  String get ugResultsHubNotice;
+
+  /// No description provided for @ugRetry.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réessayer'**
+  String get ugRetry;
+
+  /// No description provided for @ugStep1Body.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partage ton lien personnel avec 3 amis. Cette étape avance quand ils TERMINENT leur test — pas seulement quand ils s\'inscrivent. Pense à les relancer.'**
+  String get ugStep1Body;
+
+  /// No description provided for @ugStep1Title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Invite 3 amis'**
+  String get ugStep1Title;
+
+  /// No description provided for @ugStep2Body.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tes amis doivent maintenant terminer leur test de QI. On attend leurs résultats — n\'hésite pas à les relancer !'**
+  String get ugStep2Body;
+
+  /// No description provided for @ugStep2Title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tes amis passent leur test'**
+  String get ugStep2Title;
+
+  /// No description provided for @ugTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton résultat est prêt'**
+  String get ugTitle;
+
+  /// No description provided for @ugWaitBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'{days, plural, =0{Ton résultat est en préparation. Il sera publié automatiquement — tu n\'as plus rien à faire.} one{Ton résultat est en préparation. Il sera publié dans {days} jour, automatiquement — tu n\'as plus rien à faire.} other{Ton résultat est en préparation. Il sera publié dans {days} jours, automatiquement — tu n\'as plus rien à faire.}}'**
+  String ugWaitBody(int days);
+
+  /// No description provided for @ugWaitConfirming.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton résultat se débloque dès la confirmation du serveur — cet écran s\'actualise tout seul.'**
+  String get ugWaitConfirming;
+
+  /// No description provided for @ugWaitCountdownDays.
+  ///
+  /// In fr, this message translates to:
+  /// **'{days, plural, one{Encore {days} jour} other{Encore {days} jours}}'**
+  String ugWaitCountdownDays(int days);
+
+  /// No description provided for @ugWaitCountdownDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le délai est écoulé.'**
+  String get ugWaitCountdownDone;
+
+  /// No description provided for @ugWaitCountdownHours.
+  ///
+  /// In fr, this message translates to:
+  /// **'{hours, plural, one{Encore {hours} heure} other{Encore {hours} heures}}'**
+  String ugWaitCountdownHours(int hours);
+
+  /// No description provided for @ugWaitCountdownMinutes.
+  ///
+  /// In fr, this message translates to:
+  /// **'{minutes, plural, one{Encore {minutes} minute} other{Encore {minutes} minutes}}'**
+  String ugWaitCountdownMinutes(int minutes);
+
+  /// No description provided for @ugWaitTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tes résultats arrivent'**
+  String get ugWaitTitle;
+
+  /// Puzzles visuels — eyebrow de la phase de démonstration non chronométrée
+  ///
+  /// In fr, this message translates to:
+  /// **'DÉMONSTRATION'**
+  String get vpDemoEyebrow;
+
+  /// Puzzles visuels — consigne de l'item de démonstration
+  ///
+  /// In fr, this message translates to:
+  /// **'Entraînement sans chrono : choisissez les 3 pièces qui forment la figure, puis validez.'**
+  String get vpDemoInstruction;
+
+  /// Puzzles visuels — bouton après une démo ratée, réinitialise la démo
+  ///
+  /// In fr, this message translates to:
+  /// **'Réessayer'**
+  String get vpDemoRetry;
+
+  /// Puzzles visuels — bouton après une démo réussie, lance les items chronométrés
+  ///
+  /// In fr, this message translates to:
+  /// **'Commencer le test'**
+  String get vpDemoStart;
+
+  /// Puzzles visuels — texte de l'écran Prêt ; le chrono ne démarre qu'à l'appui sur le bouton
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'entraînement est terminé. Le test commence : {count} puzzles, chacun avec son propre chrono. Le temps démarre dès que vous appuyez sur le bouton.'**
+  String vpReadyBody(int count);
+
+  /// Puzzles visuels — bouton de l'écran Prêt qui démarre l'item 1 et son chrono
+  ///
+  /// In fr, this message translates to:
+  /// **'Lancer le test'**
+  String get vpReadyStart;
+
+  /// Puzzles visuels — titre de l'écran intermédiaire entre la démonstration et le premier item chronométré
+  ///
+  /// In fr, this message translates to:
+  /// **'Prêt ?'**
+  String get vpReadyTitle;
+
+  /// Puzzles visuels — libellé neutre du bouton après validation d'un item réel (aucun feedback correct/incorrect pendant le test, conforme au protocole)
+  ///
+  /// In fr, this message translates to:
+  /// **'Réponse enregistrée'**
+  String get vpRecorded;
+
   /// Vocabulaire — nom du test affiché dans le scaffold
   ///
   /// In fr, this message translates to:
@@ -4652,300 +4946,6 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'• Expliquez le sens avec contexte'**
   String get vocabTipContext;
-
-  /// Phase d'entraînement — libellé d'en-tête générique (partagé entre exercices)
-  ///
-  /// In fr, this message translates to:
-  /// **'ENTRAÎNEMENT'**
-  String get demoBadge;
-
-  /// Phase d'entraînement — bandeau expliquant que l'essai n'est pas noté
-  ///
-  /// In fr, this message translates to:
-  /// **'Entraînement — cet essai ne compte pas.'**
-  String get demoNotice;
-
-  /// Phase d'entraînement — bouton pour passer au test réel
-  ///
-  /// In fr, this message translates to:
-  /// **'Commencer le test'**
-  String get demoStart;
-
-  /// Phase d'entraînement — bouton pour refaire l'essai
-  ///
-  /// In fr, this message translates to:
-  /// **'Réessayer'**
-  String get demoRetry;
-
-  /// Phase d'entraînement — bouton neutre pour poursuivre (exercices sans bonne/mauvaise réponse automatique)
-  ///
-  /// In fr, this message translates to:
-  /// **'Continuer'**
-  String get demoContinue;
-
-  /// Phase d'entraînement — retour positif après un essai correct
-  ///
-  /// In fr, this message translates to:
-  /// **'Bonne réponse !'**
-  String get demoWellDone;
-
-  /// Phase d'entraînement — retour après un essai incorrect
-  ///
-  /// In fr, this message translates to:
-  /// **'Pas tout à fait — réessayez'**
-  String get demoTryAgain;
-
-  /// No description provided for @ctShareScore.
-  ///
-  /// In fr, this message translates to:
-  /// **'Partager mon score'**
-  String get ctShareScore;
-
-  /// No description provided for @shareTitle.
-  ///
-  /// In fr, this message translates to:
-  /// **'Partager mon score'**
-  String get shareTitle;
-
-  /// No description provided for @shareEyebrow.
-  ///
-  /// In fr, this message translates to:
-  /// **'Aperçu'**
-  String get shareEyebrow;
-
-  /// No description provided for @shareIntro.
-  ///
-  /// In fr, this message translates to:
-  /// **'Voici l\'image qui sera partagée. Rien n\'est publié tant que tu n\'as pas confirmé.'**
-  String get shareIntro;
-
-  /// No description provided for @shareConfirm.
-  ///
-  /// In fr, this message translates to:
-  /// **'Partager cette image'**
-  String get shareConfirm;
-
-  /// No description provided for @shareCancel.
-  ///
-  /// In fr, this message translates to:
-  /// **'Annuler'**
-  String get shareCancel;
-
-  /// No description provided for @shareScoreLabel.
-  ///
-  /// In fr, this message translates to:
-  /// **'Score global'**
-  String get shareScoreLabel;
-
-  /// No description provided for @sharePercentile.
-  ///
-  /// In fr, this message translates to:
-  /// **'Plus élevé que {rank} % des participants'**
-  String sharePercentile(int rank);
-
-  /// No description provided for @shareCodeLabel.
-  ///
-  /// In fr, this message translates to:
-  /// **'Code d\'invitation'**
-  String get shareCodeLabel;
-
-  /// No description provided for @shareLinkCopied.
-  ///
-  /// In fr, this message translates to:
-  /// **'Ton lien est copié — ajoute-le en sticker Lien sur ta story'**
-  String get shareLinkCopied;
-
-  /// No description provided for @shareError.
-  ///
-  /// In fr, this message translates to:
-  /// **'Impossible de préparer l\'image. Réessaie.'**
-  String get shareError;
-
-  /// No description provided for @ugTitle.
-  ///
-  /// In fr, this message translates to:
-  /// **'Ton résultat est prêt'**
-  String get ugTitle;
-
-  /// No description provided for @ugEyebrow.
-  ///
-  /// In fr, this message translates to:
-  /// **'Dernières étapes'**
-  String get ugEyebrow;
-
-  /// No description provided for @ugFreeNotice.
-  ///
-  /// In fr, this message translates to:
-  /// **'Le test est 100 % gratuit. Pour recevoir ton résultat, il te reste quelques étapes simples : elles se valident automatiquement.'**
-  String get ugFreeNotice;
-
-  /// No description provided for @ugErrorBody.
-  ///
-  /// In fr, this message translates to:
-  /// **'Impossible de récupérer l\'état de ton déblocage. Vérifie ta connexion puis réessaie.'**
-  String get ugErrorBody;
-
-  /// No description provided for @ugRetry.
-  ///
-  /// In fr, this message translates to:
-  /// **'Réessayer'**
-  String get ugRetry;
-
-  /// No description provided for @ugRefresh.
-  ///
-  /// In fr, this message translates to:
-  /// **'Actualiser'**
-  String get ugRefresh;
-
-  /// No description provided for @ugStep1Title.
-  ///
-  /// In fr, this message translates to:
-  /// **'Invite 3 amis'**
-  String get ugStep1Title;
-
-  /// No description provided for @ugStep1Body.
-  ///
-  /// In fr, this message translates to:
-  /// **'Partage ton lien personnel avec 3 amis. Cette étape avance quand ils TERMINENT leur test — pas seulement quand ils s\'inscrivent. Pense à les relancer.'**
-  String get ugStep1Body;
-
-  /// No description provided for @ugCopyLink.
-  ///
-  /// In fr, this message translates to:
-  /// **'Copier mon lien d\'invitation'**
-  String get ugCopyLink;
-
-  /// No description provided for @ugCopied.
-  ///
-  /// In fr, this message translates to:
-  /// **'Lien copié !'**
-  String get ugCopied;
-
-  /// No description provided for @ugInviteCounter.
-  ///
-  /// In fr, this message translates to:
-  /// **'{joined}/{required} amis ont terminé leur test'**
-  String ugInviteCounter(int joined, int required);
-
-  /// No description provided for @ugStep2Title.
-  ///
-  /// In fr, this message translates to:
-  /// **'Tes amis passent leur test'**
-  String get ugStep2Title;
-
-  /// No description provided for @ugStep2Body.
-  ///
-  /// In fr, this message translates to:
-  /// **'Tes amis doivent maintenant terminer leur test de QI. On attend leurs résultats — n\'hésite pas à les relancer !'**
-  String get ugStep2Body;
-
-  /// No description provided for @ugFriendDone.
-  ///
-  /// In fr, this message translates to:
-  /// **'Ami {n} : test terminé'**
-  String ugFriendDone(int n);
-
-  /// No description provided for @ugFriendPending.
-  ///
-  /// In fr, this message translates to:
-  /// **'Ami {n} : test en cours'**
-  String ugFriendPending(int n);
-
-  /// No description provided for @ugWaitTitle.
-  ///
-  /// In fr, this message translates to:
-  /// **'Tes résultats arrivent'**
-  String get ugWaitTitle;
-
-  /// No description provided for @ugWaitBody.
-  ///
-  /// In fr, this message translates to:
-  /// **'{days, plural, =0{Ton résultat est en préparation. Il sera publié automatiquement — tu n\'as plus rien à faire.} one{Ton résultat est en préparation. Il sera publié dans {days} jour, automatiquement — tu n\'as plus rien à faire.} other{Ton résultat est en préparation. Il sera publié dans {days} jours, automatiquement — tu n\'as plus rien à faire.}}'**
-  String ugWaitBody(int days);
-
-  /// No description provided for @ugWaitCountdownDays.
-  ///
-  /// In fr, this message translates to:
-  /// **'{days, plural, one{Encore {days} jour} other{Encore {days} jours}}'**
-  String ugWaitCountdownDays(int days);
-
-  /// No description provided for @ugWaitCountdownHours.
-  ///
-  /// In fr, this message translates to:
-  /// **'{hours, plural, one{Encore {hours} heure} other{Encore {hours} heures}}'**
-  String ugWaitCountdownHours(int hours);
-
-  /// No description provided for @ugWaitCountdownMinutes.
-  ///
-  /// In fr, this message translates to:
-  /// **'{minutes, plural, one{Encore {minutes} minute} other{Encore {minutes} minutes}}'**
-  String ugWaitCountdownMinutes(int minutes);
-
-  /// No description provided for @ugWaitCountdownDone.
-  ///
-  /// In fr, this message translates to:
-  /// **'Le délai est écoulé.'**
-  String get ugWaitCountdownDone;
-
-  /// No description provided for @ugWaitConfirming.
-  ///
-  /// In fr, this message translates to:
-  /// **'Ton résultat se débloque dès la confirmation du serveur — cet écran s\'actualise tout seul.'**
-  String get ugWaitConfirming;
-
-  /// No description provided for @ugRefreshFailed.
-  ///
-  /// In fr, this message translates to:
-  /// **'Impossible d\'actualiser. Vérifie ta connexion — les chiffres affichés datent de ta dernière connexion.'**
-  String get ugRefreshFailed;
-
-  /// No description provided for @ugResultsHubNotice.
-  ///
-  /// In fr, this message translates to:
-  /// **'Tout se trouve dans « Mes résultats » : tes missions, ton lien d\'invitation et ton résultat (flouté tant que toutes les missions ne sont pas validées). Tu peux quitter cette page et revenir quand tu veux.'**
-  String get ugResultsHubNotice;
-
-  /// No description provided for @histLockedTitle.
-  ///
-  /// In fr, this message translates to:
-  /// **'Missions à valider'**
-  String get histLockedTitle;
-
-  /// No description provided for @histLockedBody.
-  ///
-  /// In fr, this message translates to:
-  /// **'Ton résultat est enregistré, mais il reste flouté tant que toutes les missions ne sont pas validées.'**
-  String get histLockedBody;
-
-  /// No description provided for @histLockedBodyNoResult.
-  ///
-  /// In fr, this message translates to:
-  /// **'Tes missions et ton lien d\'invitation sont ici. Termine ton évaluation pour débloquer ton résultat.'**
-  String get histLockedBodyNoResult;
-
-  /// No description provided for @histLockedCta.
-  ///
-  /// In fr, this message translates to:
-  /// **'Voir mes missions'**
-  String get histLockedCta;
-
-  /// No description provided for @inviteLandingTitle.
-  ///
-  /// In fr, this message translates to:
-  /// **'Invitation'**
-  String get inviteLandingTitle;
-
-  /// No description provided for @inviteLandingBody.
-  ///
-  /// In fr, this message translates to:
-  /// **'Un ami t\'invite à passer le test de QI gratuit Mentality. En terminant ton test, tu obtiens ton propre résultat et tu aides ton ami à débloquer le sien.'**
-  String get inviteLandingBody;
-
-  /// No description provided for @inviteLandingCta.
-  ///
-  /// In fr, this message translates to:
-  /// **'Commencer le test gratuit'**
-  String get inviteLandingCta;
 }
 
 class _AppLocalizationsDelegate

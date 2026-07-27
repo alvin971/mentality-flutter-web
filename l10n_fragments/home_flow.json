@@ -1,25 +1,125 @@
 {
-  "homeHeroTitle": {"fr": "Découvrez", "en": "Discover", "desc": "Home hero, line 1"},
-  "homeHeroTitleItalic": {"fr": "votre profil cognitif.", "en": "your cognitive profile.", "desc": "Home hero, line 2 (italic)"},
-  "homeHeroBody": {"fr": "Une évaluation scientifique adaptative, inspirée des échelles Wechsler. 12 sous-tests, 5 indices, un score global.", "en": "An adaptive, scientific assessment inspired by the Wechsler scales. 12 subtests, 5 indices, one global score."},
-  "homeActionStartTitle": {"fr": "Commencer une évaluation", "en": "Start an assessment", "desc": "Home action card 1 title"},
-  "homeActionStartSubtitle": {"fr": "Durée : 30 – 45 minutes", "en": "Duration: 30 – 45 minutes", "desc": "Home action card 1 subtitle"},
-  "homeActionResultsTitle": {"fr": "Mes résultats", "en": "My results", "desc": "Home action card 2 title"},
-  "homeActionResultsSubtitle": {"fr": "Historique des évaluations", "en": "Assessment history", "desc": "Home action card 2 subtitle"},
-  "homeActionChatTitle": {"fr": "Parler avec Mental E.T.", "en": "Talk with Mental E.T.", "desc": "Home action card 3 title"},
-  "homeActionChatSubtitle": {"fr": "Assistant IA, questions psychologiques", "en": "AI assistant, psychology questions", "desc": "Home action card 3 subtitle"},
-  "homeComingSoon": {"fr": "BIENTÔT DISPONIBLE", "en": "COMING SOON", "desc": "Badge on disabled action"},
-  "homeAboutEyebrow": {"fr": "À PROPOS", "en": "ABOUT", "desc": "About section eyebrow"},
-  "homeAboutSubtestsTitle": {"fr": "12 sous-tests", "en": "12 subtests", "desc": "About tile 1 title"},
-  "homeAboutSubtestsBody": {"fr": "Évaluation complète des cinq indices cognitifs WAIS-IV.", "en": "A complete assessment of the five WAIS-IV cognitive indices."},
-  "homeAboutAdaptiveTitle": {"fr": "IA adaptative", "en": "Adaptive AI", "desc": "About tile 2 title"},
-  "homeAboutAdaptiveBody": {"fr": "Difficulté ajustée en temps réel via inférence IRT.", "en": "Difficulty adjusted in real time through IRT inference."},
-  "homeAboutValidationTitle": {"fr": "Validation scientifique", "en": "Scientific validation", "desc": "About tile 3 title"},
-  "homeAboutValidationBody": {"fr": "Items inspirés des échelles Wechsler (WPPSI / WISC / WAIS).", "en": "Items inspired by the Wechsler scales (WPPSI / WISC / WAIS)."},
-  "homeResumeEyebrow": {"fr": "TEST EN COURS", "en": "TEST IN PROGRESS", "desc": "Resume banner eyebrow"},
-  "homeResumeTitle": {"fr": "Reprendre votre évaluation", "en": "Resume your assessment", "desc": "Resume banner title"},
-  "homeResumeButton": {"fr": "Reprendre", "en": "Resume", "desc": "Resume banner button"},
-  "homeLogoutTitle": {"fr": "Se déconnecter ?", "en": "Sign out?", "es": "¿Cerrar sesión?", "pt": "Terminar sessão?", "de": "Abmelden?", "en_GB": "Sign out?", "desc": "Logout confirmation dialog title"},
-  "homeLogoutBody": {"fr": "Ton token sera retiré de cet appareil. Assure-toi de l'avoir sauvegardé : sans lui, tu ne pourras pas te reconnecter à tes données.", "en": "Your token will be removed from this device. Make sure you have saved it: without it, you won't be able to reconnect to your data.", "es": "Tu token se eliminará de este dispositivo. Asegúrate de haberlo guardado: sin él, no podrás volver a acceder a tus datos.", "pt": "O teu token será removido deste dispositivo. Certifica-te de que o guardaste: sem ele, não poderás voltar a aceder aos teus dados.", "de": "Ihr Token wird von diesem Gerät entfernt. Stellen Sie sicher, dass Sie ihn gespeichert haben: Ohne ihn können Sie nicht mehr auf Ihre Daten zugreifen.", "en_GB": "Your token will be removed from this device. Make sure you have saved it: without it, you won't be able to reconnect to your data.", "desc": "Logout confirmation dialog body"},
-  "homeLogoutConfirm": {"fr": "Se déconnecter", "en": "Sign out", "es": "Cerrar sesión", "pt": "Terminar sessão", "de": "Abmelden", "en_GB": "Sign out", "desc": "Logout confirm/tooltip label"}
+  "homeHeroTitle": {
+    "fr": "Découvrez",
+    "en": "Discover",
+    "desc": "Home hero, line 1"
+  },
+  "homeHeroTitleItalic": {
+    "fr": "votre profil cognitif.",
+    "en": "your cognitive profile.",
+    "desc": "Home hero, line 2 (italic)"
+  },
+  "homeHeroBody": {
+    "fr": "Une évaluation scientifique adaptative, inspirée des échelles Wechsler. 12 sous-tests, 5 indices, un score global.",
+    "en": "An adaptive, scientific assessment inspired by the Wechsler scales. 12 subtests, 5 indices, one global score."
+  },
+  "homeActionStartTitle": {
+    "fr": "Commencer une évaluation",
+    "en": "Start an assessment",
+    "desc": "Home action card 1 title"
+  },
+  "homeActionStartSubtitle": {
+    "fr": "Durée : 60 – 90 minutes",
+    "en": "Duration: 60 – 90 minutes",
+    "desc": "Home action card 1 subtitle"
+  },
+  "homeActionResultsTitle": {
+    "fr": "Mes résultats",
+    "en": "My results",
+    "desc": "Home action card 2 title"
+  },
+  "homeActionResultsSubtitle": {
+    "fr": "Historique des évaluations",
+    "en": "Assessment history",
+    "desc": "Home action card 2 subtitle"
+  },
+  "homeActionChatTitle": {
+    "fr": "Parler avec Mental E.T.",
+    "en": "Talk with Mental E.T.",
+    "desc": "Home action card 3 title"
+  },
+  "homeActionChatSubtitle": {
+    "fr": "Assistant IA, questions psychologiques",
+    "en": "AI assistant, psychology questions",
+    "desc": "Home action card 3 subtitle"
+  },
+  "homeComingSoon": {
+    "fr": "BIENTÔT DISPONIBLE",
+    "en": "COMING SOON",
+    "desc": "Badge on disabled action"
+  },
+  "homeAboutEyebrow": {
+    "fr": "À PROPOS",
+    "en": "ABOUT",
+    "desc": "About section eyebrow"
+  },
+  "homeAboutSubtestsTitle": {
+    "fr": "12 sous-tests",
+    "en": "12 subtests",
+    "desc": "About tile 1 title"
+  },
+  "homeAboutSubtestsBody": {
+    "fr": "Évaluation complète des cinq indices cognitifs WAIS-IV.",
+    "en": "A complete assessment of the five WAIS-IV cognitive indices."
+  },
+  "homeAboutAdaptiveTitle": {
+    "fr": "IA adaptative",
+    "en": "Adaptive AI",
+    "desc": "About tile 2 title"
+  },
+  "homeAboutAdaptiveBody": {
+    "fr": "Difficulté ajustée en temps réel via inférence IRT.",
+    "en": "Difficulty adjusted in real time through IRT inference."
+  },
+  "homeAboutValidationTitle": {
+    "fr": "Validation scientifique",
+    "en": "Scientific validation",
+    "desc": "About tile 3 title"
+  },
+  "homeAboutValidationBody": {
+    "fr": "Items inspirés des échelles Wechsler (WPPSI / WISC / WAIS).",
+    "en": "Items inspired by the Wechsler scales (WPPSI / WISC / WAIS)."
+  },
+  "homeResumeEyebrow": {
+    "fr": "TEST EN COURS",
+    "en": "TEST IN PROGRESS",
+    "desc": "Resume banner eyebrow"
+  },
+  "homeResumeTitle": {
+    "fr": "Reprendre votre évaluation",
+    "en": "Resume your assessment",
+    "desc": "Resume banner title"
+  },
+  "homeResumeButton": {
+    "fr": "Reprendre",
+    "en": "Resume",
+    "desc": "Resume banner button"
+  },
+  "homeLogoutTitle": {
+    "fr": "Se déconnecter ?",
+    "en": "Sign out?",
+    "es": "¿Cerrar sesión?",
+    "pt": "Terminar sessão?",
+    "de": "Abmelden?",
+    "en_GB": "Sign out?",
+    "desc": "Logout confirmation dialog title"
+  },
+  "homeLogoutBody": {
+    "fr": "Ton token sera retiré de cet appareil. Assure-toi de l'avoir sauvegardé : sans lui, tu ne pourras pas te reconnecter à tes données.",
+    "en": "Your token will be removed from this device. Make sure you have saved it: without it, you won't be able to reconnect to your data.",
+    "es": "Tu token se eliminará de este dispositivo. Asegúrate de haberlo guardado: sin él, no podrás volver a acceder a tus datos.",
+    "pt": "O teu token será removido deste dispositivo. Certifica-te de que o guardaste: sem ele, não poderás voltar a aceder aos teus dados.",
+    "de": "Ihr Token wird von diesem Gerät entfernt. Stellen Sie sicher, dass Sie ihn gespeichert haben: Ohne ihn können Sie nicht mehr auf Ihre Daten zugreifen.",
+    "en_GB": "Your token will be removed from this device. Make sure you have saved it: without it, you won't be able to reconnect to your data.",
+    "desc": "Logout confirmation dialog body"
+  },
+  "homeLogoutConfirm": {
+    "fr": "Se déconnecter",
+    "en": "Sign out",
+    "es": "Cerrar sesión",
+    "pt": "Terminar sessão",
+    "de": "Abmelden",
+    "en_GB": "Sign out",
+    "desc": "Logout confirm/tooltip label"
+  }
 }

@@ -668,18 +668,6 @@
   "@ctBackToHome": {
     "description": "Bouton de retour à l'accueil depuis les résultats"
   },
-  "ctSubtestExitTitle": "Sous-test interrompu",
-  "@ctSubtestExitTitle": {
-    "description": "Titre du dialogue affiché quand l'utilisateur quitte un sous-test sans le terminer"
-  },
-  "ctSubtestExitBody": "Vous avez quitté ce sous-test avant de le terminer. Voulez-vous le reprendre ou arrêter l'évaluation ?",
-  "@ctSubtestExitBody": {
-    "description": "Corps du dialogue de sortie d'un sous-test"
-  },
-  "ctSubtestExitResume": "Reprendre le sous-test",
-  "@ctSubtestExitResume": {
-    "description": "Bouton pour reprendre le sous-test interrompu"
-  },
   "ctPdfSubtitle": "Rapport d'évaluation cognitive WAIS-IV",
   "@ctPdfSubtitle": {
     "description": "Sous-titre du rapport PDF (sous le titre de marque)"
@@ -2595,43 +2583,6 @@
   "@vpInstruction": {
     "description": "Puzzles visuels — consigne sous la figure cible"
   },
-  "vpDemoEyebrow": "DÉMONSTRATION",
-  "@vpDemoEyebrow": {
-    "description": "Puzzles visuels — eyebrow de la phase de démonstration non chronométrée"
-  },
-  "vpDemoInstruction": "Entraînement sans chrono : choisissez les 3 pièces qui forment la figure, puis validez.",
-  "@vpDemoInstruction": {
-    "description": "Puzzles visuels — consigne de l'item de démonstration"
-  },
-  "vpDemoStart": "Commencer le test",
-  "@vpDemoStart": {
-    "description": "Puzzles visuels — bouton après une démo réussie, lance les items chronométrés"
-  },
-  "vpDemoRetry": "Réessayer",
-  "@vpDemoRetry": {
-    "description": "Puzzles visuels — bouton après une démo ratée, réinitialise la démo"
-  },
-  "vpRecorded": "Réponse enregistrée",
-  "@vpRecorded": {
-    "description": "Puzzles visuels — libellé neutre du bouton après validation d'un item réel (aucun feedback correct/incorrect pendant le test, conforme au protocole)"
-  },
-  "vpReadyTitle": "Prêt ?",
-  "@vpReadyTitle": {
-    "description": "Puzzles visuels — titre de l'écran intermédiaire entre la démonstration et le premier item chronométré"
-  },
-  "vpReadyBody": "L'entraînement est terminé. Le test commence : {count} puzzles, chacun avec son propre chrono. Le temps démarre dès que vous appuyez sur le bouton.",
-  "@vpReadyBody": {
-    "description": "Puzzles visuels — texte de l'écran Prêt ; le chrono ne démarre qu'à l'appui sur le bouton",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "vpReadyStart": "Lancer le test",
-  "@vpReadyStart": {
-    "description": "Puzzles visuels — bouton de l'écran Prêt qui démarre l'item 1 et son chrono"
-  },
   "vpSelectionSemantics": "Sélection : {filled} sur {total} pièces",
   "@vpSelectionSemantics": {
     "description": "Puzzles visuels — étiquette d'accessibilité de l'indicateur de sélection",
@@ -3427,6 +3378,184 @@
   "@psImgFusee": {
     "description": "Picture Span image name - rocket"
   },
+  "ctShareScore": "Partager mon score",
+  "ctSubtestExitBody": "Vous avez quitté ce sous-test avant de le terminer. Voulez-vous le reprendre ou arrêter l'évaluation ?",
+  "@ctSubtestExitBody": {
+    "description": "Corps du dialogue de sortie d'un sous-test"
+  },
+  "ctSubtestExitResume": "Reprendre le sous-test",
+  "@ctSubtestExitResume": {
+    "description": "Bouton pour reprendre le sous-test interrompu"
+  },
+  "ctSubtestExitTitle": "Sous-test interrompu",
+  "@ctSubtestExitTitle": {
+    "description": "Titre du dialogue affiché quand l'utilisateur quitte un sous-test sans le terminer"
+  },
+  "demoBadge": "ENTRAÎNEMENT",
+  "@demoBadge": {
+    "description": "Phase d'entraînement — libellé d'en-tête générique (partagé entre exercices)"
+  },
+  "demoContinue": "Continuer",
+  "@demoContinue": {
+    "description": "Phase d'entraînement — bouton neutre pour poursuivre (exercices sans bonne/mauvaise réponse automatique)"
+  },
+  "demoNotice": "Entraînement — cet essai ne compte pas.",
+  "@demoNotice": {
+    "description": "Phase d'entraînement — bandeau expliquant que l'essai n'est pas noté"
+  },
+  "demoRetry": "Réessayer",
+  "@demoRetry": {
+    "description": "Phase d'entraînement — bouton pour refaire l'essai"
+  },
+  "demoStart": "Commencer le test",
+  "@demoStart": {
+    "description": "Phase d'entraînement — bouton pour passer au test réel"
+  },
+  "demoTryAgain": "Pas tout à fait — réessayez",
+  "@demoTryAgain": {
+    "description": "Phase d'entraînement — retour après un essai incorrect"
+  },
+  "demoWellDone": "Bonne réponse !",
+  "@demoWellDone": {
+    "description": "Phase d'entraînement — retour positif après un essai correct"
+  },
+  "histLockedBody": "Ton résultat est enregistré, mais il reste flouté tant que toutes les missions ne sont pas validées.",
+  "histLockedBodyNoResult": "Tes missions et ton lien d'invitation sont ici. Termine ton évaluation pour débloquer ton résultat.",
+  "histLockedCta": "Voir mes missions",
+  "histLockedTitle": "Missions à valider",
+  "inviteLandingBody": "Un ami t'invite à passer le test de QI gratuit Mentality. En terminant ton test, tu obtiens ton propre résultat et tu aides ton ami à débloquer le sien.",
+  "inviteLandingCta": "Commencer le test gratuit",
+  "inviteLandingTitle": "Invitation",
+  "shareCancel": "Annuler",
+  "shareCodeLabel": "Code d'invitation",
+  "shareConfirm": "Partager cette image",
+  "shareError": "Impossible de préparer l'image. Réessaie.",
+  "shareEyebrow": "Aperçu",
+  "shareIntro": "Voici l'image qui sera partagée. Rien n'est publié tant que tu n'as pas confirmé.",
+  "shareLinkCopied": "Ton lien est copié — ajoute-le en sticker Lien sur ta story",
+  "sharePercentile": "Plus élevé que {rank} % des participants",
+  "@sharePercentile": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      }
+    }
+  },
+  "shareScoreLabel": "Score global",
+  "shareTitle": "Partager mon score",
+  "ugCopied": "Lien copié !",
+  "ugCopyLink": "Copier mon lien d'invitation",
+  "ugErrorBody": "Impossible de récupérer l'état de ton déblocage. Vérifie ta connexion puis réessaie.",
+  "ugEyebrow": "Dernières étapes",
+  "ugFreeNotice": "Le test est 100 % gratuit. Pour recevoir ton résultat, il te reste quelques étapes simples : elles se valident automatiquement.",
+  "ugFriendDone": "Ami {n} : test terminé",
+  "@ugFriendDone": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "ugFriendPending": "Ami {n} : test en cours",
+  "@ugFriendPending": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "ugInviteCounter": "{joined}/{required} amis ont terminé leur test",
+  "@ugInviteCounter": {
+    "placeholders": {
+      "joined": {
+        "type": "int"
+      },
+      "required": {
+        "type": "int"
+      }
+    }
+  },
+  "ugRefresh": "Actualiser",
+  "ugRefreshFailed": "Impossible d'actualiser. Vérifie ta connexion — les chiffres affichés datent de ta dernière connexion.",
+  "ugResultsHubNotice": "Tout se trouve dans « Mes résultats » : tes missions, ton lien d'invitation et ton résultat (flouté tant que toutes les missions ne sont pas validées). Tu peux quitter cette page et revenir quand tu veux.",
+  "ugRetry": "Réessayer",
+  "ugStep1Body": "Partage ton lien personnel avec 3 amis. Cette étape avance quand ils TERMINENT leur test — pas seulement quand ils s'inscrivent. Pense à les relancer.",
+  "ugStep1Title": "Invite 3 amis",
+  "ugStep2Body": "Tes amis doivent maintenant terminer leur test de QI. On attend leurs résultats — n'hésite pas à les relancer !",
+  "ugStep2Title": "Tes amis passent leur test",
+  "ugTitle": "Ton résultat est prêt",
+  "ugWaitBody": "{days, plural, =0{Ton résultat est en préparation. Il sera publié automatiquement — tu n'as plus rien à faire.} one{Ton résultat est en préparation. Il sera publié dans {days} jour, automatiquement — tu n'as plus rien à faire.} other{Ton résultat est en préparation. Il sera publié dans {days} jours, automatiquement — tu n'as plus rien à faire.}}",
+  "@ugWaitBody": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "ugWaitConfirming": "Ton résultat se débloque dès la confirmation du serveur — cet écran s'actualise tout seul.",
+  "ugWaitCountdownDays": "{days, plural, one{Encore {days} jour} other{Encore {days} jours}}",
+  "@ugWaitCountdownDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "ugWaitCountdownDone": "Le délai est écoulé.",
+  "ugWaitCountdownHours": "{hours, plural, one{Encore {hours} heure} other{Encore {hours} heures}}",
+  "@ugWaitCountdownHours": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "ugWaitCountdownMinutes": "{minutes, plural, one{Encore {minutes} minute} other{Encore {minutes} minutes}}",
+  "@ugWaitCountdownMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "ugWaitTitle": "Tes résultats arrivent",
+  "vpDemoEyebrow": "DÉMONSTRATION",
+  "@vpDemoEyebrow": {
+    "description": "Puzzles visuels — eyebrow de la phase de démonstration non chronométrée"
+  },
+  "vpDemoInstruction": "Entraînement sans chrono : choisissez les 3 pièces qui forment la figure, puis validez.",
+  "@vpDemoInstruction": {
+    "description": "Puzzles visuels — consigne de l'item de démonstration"
+  },
+  "vpDemoRetry": "Réessayer",
+  "@vpDemoRetry": {
+    "description": "Puzzles visuels — bouton après une démo ratée, réinitialise la démo"
+  },
+  "vpDemoStart": "Commencer le test",
+  "@vpDemoStart": {
+    "description": "Puzzles visuels — bouton après une démo réussie, lance les items chronométrés"
+  },
+  "vpReadyBody": "L'entraînement est terminé. Le test commence : {count} puzzles, chacun avec son propre chrono. Le temps démarre dès que vous appuyez sur le bouton.",
+  "@vpReadyBody": {
+    "description": "Puzzles visuels — texte de l'écran Prêt ; le chrono ne démarre qu'à l'appui sur le bouton",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "vpReadyStart": "Lancer le test",
+  "@vpReadyStart": {
+    "description": "Puzzles visuels — bouton de l'écran Prêt qui démarre l'item 1 et son chrono"
+  },
+  "vpReadyTitle": "Prêt ?",
+  "@vpReadyTitle": {
+    "description": "Puzzles visuels — titre de l'écran intermédiaire entre la démonstration et le premier item chronométré"
+  },
+  "vpRecorded": "Réponse enregistrée",
+  "@vpRecorded": {
+    "description": "Puzzles visuels — libellé neutre du bouton après validation d'un item réel (aucun feedback correct/incorrect pendant le test, conforme au protocole)"
+  },
   "vocabTestName": "Vocabulaire",
   "@vocabTestName": {
     "description": "Vocabulaire — nom du test affiché dans le scaffold"
@@ -3663,134 +3792,5 @@
   "vocabTipContext": "• Expliquez le sens avec contexte",
   "@vocabTipContext": {
     "description": "Vocabulaire — conseil 3 de l'encart"
-  },
-  "demoBadge": "ENTRAÎNEMENT",
-  "@demoBadge": {
-    "description": "Phase d'entraînement — libellé d'en-tête générique (partagé entre exercices)"
-  },
-  "demoNotice": "Entraînement — cet essai ne compte pas.",
-  "@demoNotice": {
-    "description": "Phase d'entraînement — bandeau expliquant que l'essai n'est pas noté"
-  },
-  "demoStart": "Commencer le test",
-  "@demoStart": {
-    "description": "Phase d'entraînement — bouton pour passer au test réel"
-  },
-  "demoRetry": "Réessayer",
-  "@demoRetry": {
-    "description": "Phase d'entraînement — bouton pour refaire l'essai"
-  },
-  "demoContinue": "Continuer",
-  "@demoContinue": {
-    "description": "Phase d'entraînement — bouton neutre pour poursuivre (exercices sans bonne/mauvaise réponse automatique)"
-  },
-  "demoWellDone": "Bonne réponse !",
-  "@demoWellDone": {
-    "description": "Phase d'entraînement — retour positif après un essai correct"
-  },
-  "demoTryAgain": "Pas tout à fait — réessayez",
-  "@demoTryAgain": {
-    "description": "Phase d'entraînement — retour après un essai incorrect"
-  },
-  "ctShareScore": "Partager mon score",
-  "shareTitle": "Partager mon score",
-  "shareEyebrow": "Aperçu",
-  "shareIntro": "Voici l'image qui sera partagée. Rien n'est publié tant que tu n'as pas confirmé.",
-  "shareConfirm": "Partager cette image",
-  "shareCancel": "Annuler",
-  "shareScoreLabel": "Score global",
-  "sharePercentile": "Plus élevé que {rank} % des participants",
-  "@sharePercentile": {
-    "placeholders": {
-      "rank": {
-        "type": "int"
-      }
-    }
-  },
-  "shareCodeLabel": "Code d'invitation",
-  "shareLinkCopied": "Ton lien est copié — ajoute-le en sticker Lien sur ta story",
-  "shareError": "Impossible de préparer l'image. Réessaie.",
-  "ugTitle": "Ton résultat est prêt",
-  "ugEyebrow": "Dernières étapes",
-  "ugFreeNotice": "Le test est 100 % gratuit. Pour recevoir ton résultat, il te reste quelques étapes simples : elles se valident automatiquement.",
-  "ugErrorBody": "Impossible de récupérer l'état de ton déblocage. Vérifie ta connexion puis réessaie.",
-  "ugRetry": "Réessayer",
-  "ugRefresh": "Actualiser",
-  "ugStep1Title": "Invite 3 amis",
-  "ugStep1Body": "Partage ton lien personnel avec 3 amis. Cette étape avance quand ils TERMINENT leur test — pas seulement quand ils s'inscrivent. Pense à les relancer.",
-  "ugCopyLink": "Copier mon lien d'invitation",
-  "ugCopied": "Lien copié !",
-  "ugInviteCounter": "{joined}/{required} amis ont terminé leur test",
-  "@ugInviteCounter": {
-    "placeholders": {
-      "joined": {
-        "type": "int"
-      },
-      "required": {
-        "type": "int"
-      }
-    }
-  },
-  "ugStep2Title": "Tes amis passent leur test",
-  "ugStep2Body": "Tes amis doivent maintenant terminer leur test de QI. On attend leurs résultats — n'hésite pas à les relancer !",
-  "ugFriendDone": "Ami {n} : test terminé",
-  "@ugFriendDone": {
-    "placeholders": {
-      "n": {
-        "type": "int"
-      }
-    }
-  },
-  "ugFriendPending": "Ami {n} : test en cours",
-  "@ugFriendPending": {
-    "placeholders": {
-      "n": {
-        "type": "int"
-      }
-    }
-  },
-  "ugWaitTitle": "Tes résultats arrivent",
-  "ugWaitBody": "{days, plural, =0{Ton résultat est en préparation. Il sera publié automatiquement — tu n'as plus rien à faire.} one{Ton résultat est en préparation. Il sera publié dans {days} jour, automatiquement — tu n'as plus rien à faire.} other{Ton résultat est en préparation. Il sera publié dans {days} jours, automatiquement — tu n'as plus rien à faire.}}",
-  "@ugWaitBody": {
-    "placeholders": {
-      "days": {
-        "type": "int"
-      }
-    }
-  },
-  "ugWaitCountdownDays": "{days, plural, one{Encore {days} jour} other{Encore {days} jours}}",
-  "@ugWaitCountdownDays": {
-    "placeholders": {
-      "days": {
-        "type": "int"
-      }
-    }
-  },
-  "ugWaitCountdownHours": "{hours, plural, one{Encore {hours} heure} other{Encore {hours} heures}}",
-  "@ugWaitCountdownHours": {
-    "placeholders": {
-      "hours": {
-        "type": "int"
-      }
-    }
-  },
-  "ugWaitCountdownMinutes": "{minutes, plural, one{Encore {minutes} minute} other{Encore {minutes} minutes}}",
-  "@ugWaitCountdownMinutes": {
-    "placeholders": {
-      "minutes": {
-        "type": "int"
-      }
-    }
-  },
-  "ugWaitCountdownDone": "Le délai est écoulé.",
-  "ugWaitConfirming": "Ton résultat se débloque dès la confirmation du serveur — cet écran s'actualise tout seul.",
-  "ugRefreshFailed": "Impossible d'actualiser. Vérifie ta connexion — les chiffres affichés datent de ta dernière connexion.",
-  "ugResultsHubNotice": "Tout se trouve dans « Mes résultats » : tes missions, ton lien d'invitation et ton résultat (flouté tant que toutes les missions ne sont pas validées). Tu peux quitter cette page et revenir quand tu veux.",
-  "histLockedTitle": "Missions à valider",
-  "histLockedBody": "Ton résultat est enregistré, mais il reste flouté tant que toutes les missions ne sont pas validées.",
-  "histLockedBodyNoResult": "Tes missions et ton lien d'invitation sont ici. Termine ton évaluation pour débloquer ton résultat.",
-  "histLockedCta": "Voir mes missions",
-  "inviteLandingTitle": "Invitation",
-  "inviteLandingBody": "Un ami t'invite à passer le test de QI gratuit Mentality. En terminant ton test, tu obtiens ton propre résultat et tu aides ton ami à débloquer le sien.",
-  "inviteLandingCta": "Commencer le test gratuit"
+  }
 }
