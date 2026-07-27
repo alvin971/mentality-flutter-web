@@ -2923,4 +2923,55 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get weGameConfidence => 'Juego: calibración de la confianza';
+
+  @override
+  String get weRunnerNext => 'Siguiente';
+
+  @override
+  String get weRunnerFinish => 'Finalizar';
+
+  @override
+  String get weRunnerBack => 'Anterior';
+
+  @override
+  String get weRunnerScoredLabel => 'Test del día';
+
+  @override
+  String get weRunnerContributionLabel => 'Contribución';
+
+  @override
+  String get weRunnerResumed => 'Continúas donde lo dejaste.';
+
+  @override
+  String get weRunnerNoScoreNotice =>
+      'Estas preguntas no calculan ninguna puntuación para ti: sirven para construir la herramienta para los siguientes.';
+
+  @override
+  String get weRunnerQuitTitle => '¿Salir del cuestionario?';
+
+  @override
+  String get weRunnerQuitBody =>
+      'Tus respuestas están guardadas. Podrás continuar en la pregunta donde lo dejes.';
+
+  @override
+  String get weRunnerQuitStay => 'Continuar';
+
+  @override
+  String get weRunnerQuitLeave => 'Salir';
+
+  @override
+  String get weRunnerTransitionCta => 'Continuar';
+
+  @override
+  String get weRunnerDoneTitle => 'Has terminado';
+
+  @override
+  String get weRunnerDoneBody => 'Gracias: tus respuestas están guardadas.';
+
+  @override
+  String get weRunnerDoneContributionBody =>
+      'Gracias: tus respuestas ayudarán a construir nuestro test. No se calcula ninguna puntuación para ti.';
+
+  @override
+  String get weRunnerDoneCta => 'Volver al programa';
 }

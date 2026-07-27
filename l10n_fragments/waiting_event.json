@@ -164,5 +164,85 @@
     "fr": "Jeu : calibration de la confiance",
     "en": "Game: confidence calibration",
     "desc": "Nom du jeu du jour 6"
+  },
+  "weRunnerNext": {
+    "fr": "Suivant",
+    "en": "Next",
+    "desc": "Bouton d'avance du questionnaire — désactivé tant que la question n'a pas de réponse"
+  },
+  "weRunnerFinish": {
+    "fr": "Terminer",
+    "en": "Finish",
+    "desc": "Bouton d'avance sur la dernière question du questionnaire"
+  },
+  "weRunnerBack": {
+    "fr": "Précédent",
+    "en": "Back",
+    "desc": "Retour à la question précédente pour se corriger"
+  },
+  "weRunnerScoredLabel": {
+    "fr": "Test du jour",
+    "en": "Today's test",
+    "desc": "Étiquette de la barre de progression pour un test dont le résultat sera affiché"
+  },
+  "weRunnerContributionLabel": {
+    "fr": "Contribution",
+    "en": "Contribution",
+    "desc": "Étiquette de la barre de progression pour un questionnaire de contribution, sans score"
+  },
+  "weRunnerResumed": {
+    "fr": "Tu reprends là où tu t'étais arrêté.",
+    "en": "You're picking up where you left off.",
+    "desc": "Message affiché à la reprise d'un questionnaire commencé plus tôt"
+  },
+  "weRunnerNoScoreNotice": {
+    "fr": "Ces questions ne calculent aucun score pour toi : elles servent à construire l'outil pour les suivants.",
+    "en": "These questions don't calculate any score for you: they help build the tool for those who come next.",
+    "desc": "Cadrage honnête d'un bloc de questions candidates, affiché pendant la passation"
+  },
+  "weRunnerQuitTitle": {
+    "fr": "Quitter le questionnaire ?",
+    "en": "Leave the questionnaire?",
+    "desc": "Titre de la confirmation de sortie en cours de questionnaire"
+  },
+  "weRunnerQuitBody": {
+    "fr": "Tes réponses sont enregistrées. Tu pourras reprendre à la question où tu t'arrêtes.",
+    "en": "Your answers are saved. You can pick up again at the question where you stop.",
+    "desc": "Corps de la confirmation de sortie — dit que rien n'est perdu"
+  },
+  "weRunnerQuitStay": {
+    "fr": "Continuer",
+    "en": "Keep going",
+    "desc": "Bouton qui referme la confirmation et reprend le questionnaire"
+  },
+  "weRunnerQuitLeave": {
+    "fr": "Quitter",
+    "en": "Leave",
+    "desc": "Bouton qui confirme la sortie du questionnaire"
+  },
+  "weRunnerTransitionCta": {
+    "fr": "Continuer",
+    "en": "Continue",
+    "desc": "Bouton de l'écran de transition annonçant un changement d'échelle de réponse"
+  },
+  "weRunnerDoneTitle": {
+    "fr": "C'est terminé",
+    "en": "All done",
+    "desc": "Titre de l'écran de fin du questionnaire"
+  },
+  "weRunnerDoneBody": {
+    "fr": "Merci — tes réponses sont enregistrées.",
+    "en": "Thank you — your answers are saved.",
+    "desc": "Fin d'un questionnaire dont le résultat sera affiché"
+  },
+  "weRunnerDoneContributionBody": {
+    "fr": "Merci — tes réponses vont servir à construire notre test. Aucun score n'est calculé pour toi.",
+    "en": "Thank you — your answers will help build our test. No score is calculated for you.",
+    "desc": "Fin d'un questionnaire de contribution — rappelle qu'aucun score n'est promis"
+  },
+  "weRunnerDoneCta": {
+    "fr": "Revenir au programme",
+    "en": "Back to the programme",
+    "desc": "Bouton de sortie de l'écran de fin, vers le hub de l'événement"
   }
 }

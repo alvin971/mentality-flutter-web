@@ -2928,4 +2928,55 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get weGameConfidence => 'Spiel: Kalibrierung des Selbstvertrauens';
+
+  @override
+  String get weRunnerNext => 'Weiter';
+
+  @override
+  String get weRunnerFinish => 'Abschließen';
+
+  @override
+  String get weRunnerBack => 'Zurück';
+
+  @override
+  String get weRunnerScoredLabel => 'Test des Tages';
+
+  @override
+  String get weRunnerContributionLabel => 'Beitrag';
+
+  @override
+  String get weRunnerResumed => 'Du machst dort weiter, wo du aufgehört hast.';
+
+  @override
+  String get weRunnerNoScoreNotice =>
+      'Diese Fragen berechnen keinen Wert für dich: Sie helfen, das Instrument für die Nächsten zu entwickeln.';
+
+  @override
+  String get weRunnerQuitTitle => 'Fragebogen verlassen?';
+
+  @override
+  String get weRunnerQuitBody =>
+      'Deine Antworten sind gespeichert. Du kannst bei der Frage weitermachen, bei der du aufhörst.';
+
+  @override
+  String get weRunnerQuitStay => 'Weitermachen';
+
+  @override
+  String get weRunnerQuitLeave => 'Verlassen';
+
+  @override
+  String get weRunnerTransitionCta => 'Weiter';
+
+  @override
+  String get weRunnerDoneTitle => 'Geschafft';
+
+  @override
+  String get weRunnerDoneBody => 'Danke — deine Antworten sind gespeichert.';
+
+  @override
+  String get weRunnerDoneContributionBody =>
+      'Danke — deine Antworten helfen, unseren Test zu entwickeln. Für dich wird kein Wert berechnet.';
+
+  @override
+  String get weRunnerDoneCta => 'Zurück zum Programm';
 }

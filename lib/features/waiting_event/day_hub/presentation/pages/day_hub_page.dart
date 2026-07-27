@@ -6,9 +6,12 @@ import '../../../../../core/theme/app_typography.dart';
 import '../../../../../core/theme/kepler_colors.dart';
 import '../../../../../core/widgets/kepler_card.dart';
 import '../../../../../core/widgets/kepler_scaffold.dart';
+import '../../../_shared/data/event_local_store.dart';
 import '../../../_shared/domain/models/day_status.dart';
 import '../../../_shared/domain/models/event_day.dart';
 import '../../../_shared/domain/services/event_schedule.dart';
+import '../../../_shared/domain/services/q_module_registry.dart';
+import '../../../_shared/presentation/questionnaire_runner_page.dart';
 
 /// Hub de l'événement d'attente : le programme des 8 jours, et où l'on en est.
 ///
@@ -19,10 +22,23 @@ import '../../../_shared/domain/services/event_schedule.dart';
 /// avance — elle en montre un de moins, et le rafraîchissement de la carte
 /// d'attente la corrige au prochain aller-retour.
 class DayHubPage extends StatelessWidget {
-  const DayHubPage({super.key, required this.serverDayIndex});
+  const DayHubPage({
+    super.key,
+    required this.serverDayIndex,
+    this.moduleForDay = QModuleRegistry.forDay,
+    this.store,
+  });
 
   /// 1..8 pendant l'attente, 9 une fois le déblocage acquis.
   final int serverDayIndex;
+
+  /// Où le hub va chercher le questionnaire d'une journée. Injectable pour les
+  /// tests ; en production, le registre des modules livrés.
+  final QModuleResolver moduleForDay;
+
+  /// Stockage des réponses. `null` = le stockage chiffré de l'app (le défaut
+  /// n'est pas une constante : il ouvre une box Hive).
+  final EventAnswerStore? store;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +59,8 @@ class DayHubPage extends StatelessWidget {
                 day: jour.day,
                 serverDayIndex: serverDayIndex,
               ),
+              moduleForDay: moduleForDay,
+              store: store,
             ),
             SizedBox(height: 12.h),
           ],
@@ -55,10 +73,17 @@ class DayHubPage extends StatelessWidget {
 /// Une journée du programme. Les journées passées restent ouvertes — rien ne
 /// se perd à en manquer une.
 class _DayCard extends StatelessWidget {
-  const _DayCard({required this.day, required this.status});
+  const _DayCard({
+    required this.day,
+    required this.status,
+    required this.moduleForDay,
+    required this.store,
+  });
 
   final EventDay day;
   final DayStatus status;
+  final QModuleResolver moduleForDay;
+  final EventAnswerStore? store;
 
   @override
   Widget build(BuildContext context) {
@@ -117,9 +142,25 @@ class _DayCard extends StatelessWidget {
         : carte;
   }
 
-  /// Le contenu des journées arrive module par module ; d'ici là, la carte
-  /// s'ouvre sur une annonce honnête plutôt que sur un écran vide.
+  /// Ouvre la journée : son questionnaire s'il est livré, sinon l'annonce
+  /// honnête. Le contenu arrive module par module, et chaque journée s'active
+  /// d'elle-même dès que le sien est enregistré.
   void _ouvrir(BuildContext context) {
+    final module = moduleForDay(day.day);
+    if (module == null) return _annoncer(context);
+
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => QuestionnaireRunnerPage(
+          module: module,
+          store: store ?? EventLocalStore.instance,
+          title: _titre(context.l10n),
+        ),
+      ),
+    );
+  }
+
+  void _annoncer(BuildContext context) {
     final l10n = context.l10n;
     showModalBottomSheet<void>(
       context: context,

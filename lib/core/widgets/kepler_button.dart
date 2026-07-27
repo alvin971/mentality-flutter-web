@@ -65,7 +65,19 @@ class KeplerButton extends StatelessWidget {
             Icon(icon, color: fg, size: 18.sp),
             SizedBox(width: 8.w),
           ],
-          Text(label, style: AppText.of(context).button(color: fg)),
+          // Flexible + ellipsis : un libellé traduit est plus long que son
+          // original (« Finish » → « Abschließen »), et deux boutons côte à
+          // côte sur un écran étroit n'ont pas la largeur d'un seul. Sans
+          // cela, la langue décide si la mise en page déborde.
+          Flexible(
+            child: Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              style: AppText.of(context).button(color: fg),
+            ),
+          ),
         ],
       ),
     );

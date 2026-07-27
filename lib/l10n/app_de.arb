@@ -838,5 +838,21 @@
   "weGameStroop": "Spiel: Stroop",
   "weGameDelayChoice": "Spiel: Belohnungsaufschub",
   "weGameTimeEstimation": "Spiel: Zeitschätzung",
-  "weGameConfidence": "Spiel: Kalibrierung des Selbstvertrauens"
+  "weGameConfidence": "Spiel: Kalibrierung des Selbstvertrauens",
+  "weRunnerNext": "Weiter",
+  "weRunnerFinish": "Abschließen",
+  "weRunnerBack": "Zurück",
+  "weRunnerScoredLabel": "Test des Tages",
+  "weRunnerContributionLabel": "Beitrag",
+  "weRunnerResumed": "Du machst dort weiter, wo du aufgehört hast.",
+  "weRunnerNoScoreNotice": "Diese Fragen berechnen keinen Wert für dich: Sie helfen, das Instrument für die Nächsten zu entwickeln.",
+  "weRunnerQuitTitle": "Fragebogen verlassen?",
+  "weRunnerQuitBody": "Deine Antworten sind gespeichert. Du kannst bei der Frage weitermachen, bei der du aufhörst.",
+  "weRunnerQuitStay": "Weitermachen",
+  "weRunnerQuitLeave": "Verlassen",
+  "weRunnerTransitionCta": "Weiter",
+  "weRunnerDoneTitle": "Geschafft",
+  "weRunnerDoneBody": "Danke — deine Antworten sind gespeichert.",
+  "weRunnerDoneContributionBody": "Danke — deine Antworten helfen, unseren Test zu entwickeln. Für dich wird kein Wert berechnet.",
+  "weRunnerDoneCta": "Zurück zum Programm"
 }

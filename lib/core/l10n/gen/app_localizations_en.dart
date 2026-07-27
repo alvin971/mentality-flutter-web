@@ -2907,6 +2907,57 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get weGameConfidence => 'Game: confidence calibration';
+
+  @override
+  String get weRunnerNext => 'Next';
+
+  @override
+  String get weRunnerFinish => 'Finish';
+
+  @override
+  String get weRunnerBack => 'Back';
+
+  @override
+  String get weRunnerScoredLabel => 'Today\'s test';
+
+  @override
+  String get weRunnerContributionLabel => 'Contribution';
+
+  @override
+  String get weRunnerResumed => 'You\'re picking up where you left off.';
+
+  @override
+  String get weRunnerNoScoreNotice =>
+      'These questions don\'t calculate any score for you: they help build the tool for those who come next.';
+
+  @override
+  String get weRunnerQuitTitle => 'Leave the questionnaire?';
+
+  @override
+  String get weRunnerQuitBody =>
+      'Your answers are saved. You can pick up again at the question where you stop.';
+
+  @override
+  String get weRunnerQuitStay => 'Keep going';
+
+  @override
+  String get weRunnerQuitLeave => 'Leave';
+
+  @override
+  String get weRunnerTransitionCta => 'Continue';
+
+  @override
+  String get weRunnerDoneTitle => 'All done';
+
+  @override
+  String get weRunnerDoneBody => 'Thank you — your answers are saved.';
+
+  @override
+  String get weRunnerDoneContributionBody =>
+      'Thank you — your answers will help build our test. No score is calculated for you.';
+
+  @override
+  String get weRunnerDoneCta => 'Back to the programme';
 }
 
 /// The translations for English, as used in the United Kingdom (`en_GB`).
@@ -5813,4 +5864,55 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get weGameConfidence => 'Game: confidence calibration';
+
+  @override
+  String get weRunnerNext => 'Next';
+
+  @override
+  String get weRunnerFinish => 'Finish';
+
+  @override
+  String get weRunnerBack => 'Back';
+
+  @override
+  String get weRunnerScoredLabel => 'Today\'s test';
+
+  @override
+  String get weRunnerContributionLabel => 'Contribution';
+
+  @override
+  String get weRunnerResumed => 'You\'re picking up where you left off.';
+
+  @override
+  String get weRunnerNoScoreNotice =>
+      'These questions don\'t calculate any score for you: they help build the tool for those who come next.';
+
+  @override
+  String get weRunnerQuitTitle => 'Leave the questionnaire?';
+
+  @override
+  String get weRunnerQuitBody =>
+      'Your answers are saved. You can pick up again at the question where you stop.';
+
+  @override
+  String get weRunnerQuitStay => 'Keep going';
+
+  @override
+  String get weRunnerQuitLeave => 'Leave';
+
+  @override
+  String get weRunnerTransitionCta => 'Continue';
+
+  @override
+  String get weRunnerDoneTitle => 'All done';
+
+  @override
+  String get weRunnerDoneBody => 'Thank you — your answers are saved.';
+
+  @override
+  String get weRunnerDoneContributionBody =>
+      'Thank you — your answers will help build our test. No score is calculated for you.';
+
+  @override
+  String get weRunnerDoneCta => 'Back to the programme';
 }

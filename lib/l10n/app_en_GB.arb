@@ -838,5 +838,21 @@
   "weGameStroop": "Game: Stroop",
   "weGameDelayChoice": "Game: delay tolerance",
   "weGameTimeEstimation": "Game: time estimation",
-  "weGameConfidence": "Game: confidence calibration"
+  "weGameConfidence": "Game: confidence calibration",
+  "weRunnerNext": "Next",
+  "weRunnerFinish": "Finish",
+  "weRunnerBack": "Back",
+  "weRunnerScoredLabel": "Today's test",
+  "weRunnerContributionLabel": "Contribution",
+  "weRunnerResumed": "You're picking up where you left off.",
+  "weRunnerNoScoreNotice": "These questions don't calculate any score for you: they help build the tool for those who come next.",
+  "weRunnerQuitTitle": "Leave the questionnaire?",
+  "weRunnerQuitBody": "Your answers are saved. You can pick up again at the question where you stop.",
+  "weRunnerQuitStay": "Keep going",
+  "weRunnerQuitLeave": "Leave",
+  "weRunnerTransitionCta": "Continue",
+  "weRunnerDoneTitle": "All done",
+  "weRunnerDoneBody": "Thank you — your answers are saved.",
+  "weRunnerDoneContributionBody": "Thank you — your answers will help build our test. No score is calculated for you.",
+  "weRunnerDoneCta": "Back to the programme"
 }

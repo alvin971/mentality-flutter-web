@@ -5138,6 +5138,102 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Jeu : calibration de la confiance'**
   String get weGameConfidence;
+
+  /// Bouton d'avance du questionnaire — désactivé tant que la question n'a pas de réponse
+  ///
+  /// In fr, this message translates to:
+  /// **'Suivant'**
+  String get weRunnerNext;
+
+  /// Bouton d'avance sur la dernière question du questionnaire
+  ///
+  /// In fr, this message translates to:
+  /// **'Terminer'**
+  String get weRunnerFinish;
+
+  /// Retour à la question précédente pour se corriger
+  ///
+  /// In fr, this message translates to:
+  /// **'Précédent'**
+  String get weRunnerBack;
+
+  /// Étiquette de la barre de progression pour un test dont le résultat sera affiché
+  ///
+  /// In fr, this message translates to:
+  /// **'Test du jour'**
+  String get weRunnerScoredLabel;
+
+  /// Étiquette de la barre de progression pour un questionnaire de contribution, sans score
+  ///
+  /// In fr, this message translates to:
+  /// **'Contribution'**
+  String get weRunnerContributionLabel;
+
+  /// Message affiché à la reprise d'un questionnaire commencé plus tôt
+  ///
+  /// In fr, this message translates to:
+  /// **'Tu reprends là où tu t\'étais arrêté.'**
+  String get weRunnerResumed;
+
+  /// Cadrage honnête d'un bloc de questions candidates, affiché pendant la passation
+  ///
+  /// In fr, this message translates to:
+  /// **'Ces questions ne calculent aucun score pour toi : elles servent à construire l\'outil pour les suivants.'**
+  String get weRunnerNoScoreNotice;
+
+  /// Titre de la confirmation de sortie en cours de questionnaire
+  ///
+  /// In fr, this message translates to:
+  /// **'Quitter le questionnaire ?'**
+  String get weRunnerQuitTitle;
+
+  /// Corps de la confirmation de sortie — dit que rien n'est perdu
+  ///
+  /// In fr, this message translates to:
+  /// **'Tes réponses sont enregistrées. Tu pourras reprendre à la question où tu t\'arrêtes.'**
+  String get weRunnerQuitBody;
+
+  /// Bouton qui referme la confirmation et reprend le questionnaire
+  ///
+  /// In fr, this message translates to:
+  /// **'Continuer'**
+  String get weRunnerQuitStay;
+
+  /// Bouton qui confirme la sortie du questionnaire
+  ///
+  /// In fr, this message translates to:
+  /// **'Quitter'**
+  String get weRunnerQuitLeave;
+
+  /// Bouton de l'écran de transition annonçant un changement d'échelle de réponse
+  ///
+  /// In fr, this message translates to:
+  /// **'Continuer'**
+  String get weRunnerTransitionCta;
+
+  /// Titre de l'écran de fin du questionnaire
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est terminé'**
+  String get weRunnerDoneTitle;
+
+  /// Fin d'un questionnaire dont le résultat sera affiché
+  ///
+  /// In fr, this message translates to:
+  /// **'Merci — tes réponses sont enregistrées.'**
+  String get weRunnerDoneBody;
+
+  /// Fin d'un questionnaire de contribution — rappelle qu'aucun score n'est promis
+  ///
+  /// In fr, this message translates to:
+  /// **'Merci — tes réponses vont servir à construire notre test. Aucun score n\'est calculé pour toi.'**
+  String get weRunnerDoneContributionBody;
+
+  /// Bouton de sortie de l'écran de fin, vers le hub de l'événement
+  ///
+  /// In fr, this message translates to:
+  /// **'Revenir au programme'**
+  String get weRunnerDoneCta;
 }
 
 class _AppLocalizationsDelegate
