@@ -11,6 +11,7 @@ import '../../../../core/theme/kepler_colors.dart';
 import '../../../../core/widgets/kepler_button.dart';
 import '../../../../core/widgets/kepler_card.dart';
 import '../../../../core/widgets/kepler_scaffold.dart';
+import '../../../waiting_event/day_hub/presentation/pages/day_hub_page.dart';
 import '../../data/unlock_service.dart';
 
 /// Écran des paliers de déblocage du résultat, affiché à la FIN du test
@@ -413,6 +414,24 @@ class _UnlockGatePageState extends State<UnlockGatePage>
             Text(l10n.ugWaitConfirming,
                 style: AppText.of(context)
                     .bodySmall(color: colors.textSecondary)),
+          ],
+          // Le programme des 8 jours n'a de sens que si le serveur sait dire
+          // quel jour on est. Face à un worker antérieur au champ, `dayIndex`
+          // est nul et la carte reste exactement ce qu'elle était : pas de
+          // bouton qui mène nulle part. Rien ici n'avance le déblocage.
+          if (p.dayIndex != null) ...[
+            SizedBox(height: 16.h),
+            KeplerButton(
+              label: l10n.weGateCta,
+              icon: Icons.map_outlined,
+              expand: true,
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (_) => DayHubPage(serverDayIndex: p.dayIndex!),
+                ),
+              ),
+            ),
           ],
         ],
       ),

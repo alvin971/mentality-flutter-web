@@ -2805,6 +2805,108 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get vocabTipContext => '• Explain the meaning with context';
+
+  @override
+  String get weGateCta => 'See today\'s programme';
+
+  @override
+  String get weHubEyebrow => 'While you wait';
+
+  @override
+  String weHubTitle(int day) {
+    return 'Day $day';
+  }
+
+  @override
+  String get weHubTitleDone => 'Programme complete';
+
+  @override
+  String get weHubIntro =>
+      'Each day reveals a part of your results, along with an optional activity. Nothing here speeds up the unlock: time alone unlocks it.';
+
+  @override
+  String get weTodayTag => 'Today';
+
+  @override
+  String get wePastTag => 'Catch up';
+
+  @override
+  String weLockedTag(int day) {
+    return 'Opens on day $day';
+  }
+
+  @override
+  String get wePlaceholderTitle => 'Coming soon';
+
+  @override
+  String get wePlaceholderBody =>
+      'This day\'s content is coming in a future update.';
+
+  @override
+  String get weAnnouncedTag => 'Today\'s test — with your result';
+
+  @override
+  String get weContributionTag => 'Contribution — help us build our test';
+
+  @override
+  String get weShareTag => 'Final reward';
+
+  @override
+  String get weDay1Title => 'Your personality';
+
+  @override
+  String get weDay2Title => 'Build our reading test';
+
+  @override
+  String get weDay3Title => 'Your balance';
+
+  @override
+  String get weDay4Title => 'Build our attention test (1/2)';
+
+  @override
+  String get weDay5Title => 'Build our attention test (2/2)';
+
+  @override
+  String get weDay6Title => 'Your energy';
+
+  @override
+  String get weDay7Title => 'Autism profile';
+
+  @override
+  String get weDay8Title => 'Your overall IQ';
+
+  @override
+  String get weRevealVci => 'Your verbal index';
+
+  @override
+  String get weRevealPsi => 'Your processing speed';
+
+  @override
+  String get weRevealWmi => 'Your working memory';
+
+  @override
+  String get weRevealFri => 'Your reasoning';
+
+  @override
+  String get weRevealVsi => 'Your spatial index';
+
+  @override
+  String get weRevealStrengths => 'Your strengths and weaknesses';
+
+  @override
+  String get weRevealFullIq => 'Your overall IQ';
+
+  @override
+  String get weGameStroop => 'Game: Stroop';
+
+  @override
+  String get weGameDelayChoice => 'Game: delay tolerance';
+
+  @override
+  String get weGameTimeEstimation => 'Game: time estimation';
+
+  @override
+  String get weGameConfidence => 'Game: confidence calibration';
 }
 
 /// The translations for English, as used in the United Kingdom (`en_GB`).
@@ -5609,4 +5711,106 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get vocabTipContext => '• Explain the meaning with context';
+
+  @override
+  String get weGateCta => 'See today\'s programme';
+
+  @override
+  String get weHubEyebrow => 'While you wait';
+
+  @override
+  String weHubTitle(int day) {
+    return 'Day $day';
+  }
+
+  @override
+  String get weHubTitleDone => 'Programme complete';
+
+  @override
+  String get weHubIntro =>
+      'Each day reveals a part of your results, along with an optional activity. Nothing here speeds up the unlock: time alone unlocks it.';
+
+  @override
+  String get weTodayTag => 'Today';
+
+  @override
+  String get wePastTag => 'Catch up';
+
+  @override
+  String weLockedTag(int day) {
+    return 'Opens on day $day';
+  }
+
+  @override
+  String get wePlaceholderTitle => 'Coming soon';
+
+  @override
+  String get wePlaceholderBody =>
+      'This day\'s content is coming in a future update.';
+
+  @override
+  String get weAnnouncedTag => 'Today\'s test — with your result';
+
+  @override
+  String get weContributionTag => 'Contribution — help us build our test';
+
+  @override
+  String get weShareTag => 'Final reward';
+
+  @override
+  String get weDay1Title => 'Your personality';
+
+  @override
+  String get weDay2Title => 'Build our reading test';
+
+  @override
+  String get weDay3Title => 'Your balance';
+
+  @override
+  String get weDay4Title => 'Build our attention test (1/2)';
+
+  @override
+  String get weDay5Title => 'Build our attention test (2/2)';
+
+  @override
+  String get weDay6Title => 'Your energy';
+
+  @override
+  String get weDay7Title => 'Autism profile';
+
+  @override
+  String get weDay8Title => 'Your overall IQ';
+
+  @override
+  String get weRevealVci => 'Your verbal index';
+
+  @override
+  String get weRevealPsi => 'Your processing speed';
+
+  @override
+  String get weRevealWmi => 'Your working memory';
+
+  @override
+  String get weRevealFri => 'Your reasoning';
+
+  @override
+  String get weRevealVsi => 'Your spatial index';
+
+  @override
+  String get weRevealStrengths => 'Your strengths and weaknesses';
+
+  @override
+  String get weRevealFullIq => 'Your overall IQ';
+
+  @override
+  String get weGameStroop => 'Game: Stroop';
+
+  @override
+  String get weGameDelayChoice => 'Game: delay tolerance';
+
+  @override
+  String get weGameTimeEstimation => 'Game: time estimation';
+
+  @override
+  String get weGameConfidence => 'Game: confidence calibration';
 }

@@ -2813,4 +2813,107 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get vocabTipContext => '• Expliquez le sens avec contexte';
+
+  @override
+  String get weGateCta => 'Voir le programme du jour';
+
+  @override
+  String get weHubEyebrow => 'Pendant l\'attente';
+
+  @override
+  String weHubTitle(int day) {
+    return 'Jour $day';
+  }
+
+  @override
+  String get weHubTitleDone => 'Programme terminé';
+
+  @override
+  String get weHubIntro =>
+      'Chaque jour, une part de tes résultats se dévoile, avec une activité facultative. Rien ici n\'accélère le déblocage : seul le temps débloque.';
+
+  @override
+  String get weTodayTag => 'Aujourd\'hui';
+
+  @override
+  String get wePastTag => 'À rattraper';
+
+  @override
+  String weLockedTag(int day) {
+    return 'S\'ouvre au jour $day';
+  }
+
+  @override
+  String get wePlaceholderTitle => 'En préparation';
+
+  @override
+  String get wePlaceholderBody =>
+      'Le contenu de cette journée arrive dans une prochaine mise à jour.';
+
+  @override
+  String get weAnnouncedTag => 'Test du jour — avec ton résultat';
+
+  @override
+  String get weContributionTag =>
+      'Contribution — aide-nous à construire notre test';
+
+  @override
+  String get weShareTag => 'Récompense finale';
+
+  @override
+  String get weDay1Title => 'Ta personnalité';
+
+  @override
+  String get weDay2Title => 'Construis notre test de lecture';
+
+  @override
+  String get weDay3Title => 'Ton équilibre';
+
+  @override
+  String get weDay4Title => 'Construis notre test d\'attention (1/2)';
+
+  @override
+  String get weDay5Title => 'Construis notre test d\'attention (2/2)';
+
+  @override
+  String get weDay6Title => 'Ton énergie';
+
+  @override
+  String get weDay7Title => 'Bilan autisme';
+
+  @override
+  String get weDay8Title => 'Ton QI global';
+
+  @override
+  String get weRevealVci => 'Ton indice verbal';
+
+  @override
+  String get weRevealPsi => 'Ta vitesse de traitement';
+
+  @override
+  String get weRevealWmi => 'Ta mémoire de travail';
+
+  @override
+  String get weRevealFri => 'Ton raisonnement';
+
+  @override
+  String get weRevealVsi => 'Ton indice spatial';
+
+  @override
+  String get weRevealStrengths => 'Tes forces et tes faiblesses';
+
+  @override
+  String get weRevealFullIq => 'Ton QI global';
+
+  @override
+  String get weGameStroop => 'Jeu : Stroop';
+
+  @override
+  String get weGameDelayChoice => 'Jeu : tolérance au délai';
+
+  @override
+  String get weGameTimeEstimation => 'Jeu : estimation du temps';
+
+  @override
+  String get weGameConfidence => 'Jeu : calibration de la confiance';
 }

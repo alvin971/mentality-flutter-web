@@ -2820,4 +2820,107 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get vocabTipContext => '• Explica el significado con contexto';
+
+  @override
+  String get weGateCta => 'Ver el programa de hoy';
+
+  @override
+  String get weHubEyebrow => 'Durante la espera';
+
+  @override
+  String weHubTitle(int day) {
+    return 'Día $day';
+  }
+
+  @override
+  String get weHubTitleDone => 'Programa completado';
+
+  @override
+  String get weHubIntro =>
+      'Cada día se revela una parte de tus resultados, junto con una actividad opcional. Nada de esto acelera el desbloqueo: solo el tiempo desbloquea.';
+
+  @override
+  String get weTodayTag => 'Hoy';
+
+  @override
+  String get wePastTag => 'Para recuperar';
+
+  @override
+  String weLockedTag(int day) {
+    return 'Se abre el día $day';
+  }
+
+  @override
+  String get wePlaceholderTitle => 'En preparación';
+
+  @override
+  String get wePlaceholderBody =>
+      'El contenido de este día llegará en una próxima actualización.';
+
+  @override
+  String get weAnnouncedTag => 'Prueba del día — con tu resultado';
+
+  @override
+  String get weContributionTag =>
+      'Contribución — ayúdanos a construir nuestra prueba';
+
+  @override
+  String get weShareTag => 'Recompensa final';
+
+  @override
+  String get weDay1Title => 'Tu personalidad';
+
+  @override
+  String get weDay2Title => 'Construye nuestra prueba de lectura';
+
+  @override
+  String get weDay3Title => 'Tu equilibrio';
+
+  @override
+  String get weDay4Title => 'Construye nuestra prueba de atención (1/2)';
+
+  @override
+  String get weDay5Title => 'Construye nuestra prueba de atención (2/2)';
+
+  @override
+  String get weDay6Title => 'Tu energía';
+
+  @override
+  String get weDay7Title => 'Perfil de autismo';
+
+  @override
+  String get weDay8Title => 'Tu CI global';
+
+  @override
+  String get weRevealVci => 'Tu Comprensión Verbal';
+
+  @override
+  String get weRevealPsi => 'Tu Velocidad de Procesamiento';
+
+  @override
+  String get weRevealWmi => 'Tu Memoria de Trabajo';
+
+  @override
+  String get weRevealFri => 'Tu razonamiento';
+
+  @override
+  String get weRevealVsi => 'Tu índice espacial';
+
+  @override
+  String get weRevealStrengths => 'Tus fortalezas y debilidades';
+
+  @override
+  String get weRevealFullIq => 'Tu CI global';
+
+  @override
+  String get weGameStroop => 'Juego: Stroop';
+
+  @override
+  String get weGameDelayChoice => 'Juego: tolerancia a la espera';
+
+  @override
+  String get weGameTimeEstimation => 'Juego: estimación del tiempo';
+
+  @override
+  String get weGameConfidence => 'Juego: calibración de la confianza';
 }

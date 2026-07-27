@@ -4946,6 +4946,198 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'• Expliquez le sens avec contexte'**
   String get vocabTipContext;
+
+  /// Bouton de la carte d'attente qui ouvre le hub de l'événement des 8 jours
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir le programme du jour'**
+  String get weGateCta;
+
+  /// Surtitre du hub de l'événement
+  ///
+  /// In fr, this message translates to:
+  /// **'Pendant l\'attente'**
+  String get weHubEyebrow;
+
+  /// Titre du hub : le jour courant, décidé par le serveur
+  ///
+  /// In fr, this message translates to:
+  /// **'Jour {day}'**
+  String weHubTitle(int day);
+
+  /// Titre du hub une fois les résultats débloqués
+  ///
+  /// In fr, this message translates to:
+  /// **'Programme terminé'**
+  String get weHubTitleDone;
+
+  /// Introduction du hub — dit explicitement qu'aucune activité ne conditionne le déblocage
+  ///
+  /// In fr, this message translates to:
+  /// **'Chaque jour, une part de tes résultats se dévoile, avec une activité facultative. Rien ici n\'accélère le déblocage : seul le temps débloque.'**
+  String get weHubIntro;
+
+  /// Étiquette de la journée en cours
+  ///
+  /// In fr, this message translates to:
+  /// **'Aujourd\'hui'**
+  String get weTodayTag;
+
+  /// Étiquette d'une journée passée, qui reste accessible
+  ///
+  /// In fr, this message translates to:
+  /// **'À rattraper'**
+  String get wePastTag;
+
+  /// Étiquette d'une journée à venir
+  ///
+  /// In fr, this message translates to:
+  /// **'S\'ouvre au jour {day}'**
+  String weLockedTag(int day);
+
+  /// Titre affiché à l'ouverture d'une journée dont le contenu n'est pas encore disponible
+  ///
+  /// In fr, this message translates to:
+  /// **'En préparation'**
+  String get wePlaceholderTitle;
+
+  /// Corps du message d'une journée sans contenu disponible
+  ///
+  /// In fr, this message translates to:
+  /// **'Le contenu de cette journée arrive dans une prochaine mise à jour.'**
+  String get wePlaceholderBody;
+
+  /// Cadrage d'une journée dont le test affiche un score
+  ///
+  /// In fr, this message translates to:
+  /// **'Test du jour — avec ton résultat'**
+  String get weAnnouncedTag;
+
+  /// Cadrage d'une journée de questions candidates, sans score affiché
+  ///
+  /// In fr, this message translates to:
+  /// **'Contribution — aide-nous à construire notre test'**
+  String get weContributionTag;
+
+  /// Cadrage du dernier jour
+  ///
+  /// In fr, this message translates to:
+  /// **'Récompense finale'**
+  String get weShareTag;
+
+  /// Titre du jour 1
+  ///
+  /// In fr, this message translates to:
+  /// **'Ta personnalité'**
+  String get weDay1Title;
+
+  /// Titre du jour 2
+  ///
+  /// In fr, this message translates to:
+  /// **'Construis notre test de lecture'**
+  String get weDay2Title;
+
+  /// Titre du jour 3
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton équilibre'**
+  String get weDay3Title;
+
+  /// Titre du jour 4
+  ///
+  /// In fr, this message translates to:
+  /// **'Construis notre test d\'attention (1/2)'**
+  String get weDay4Title;
+
+  /// Titre du jour 5
+  ///
+  /// In fr, this message translates to:
+  /// **'Construis notre test d\'attention (2/2)'**
+  String get weDay5Title;
+
+  /// Titre du jour 6
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton énergie'**
+  String get weDay6Title;
+
+  /// Titre du jour 7
+  ///
+  /// In fr, this message translates to:
+  /// **'Bilan autisme'**
+  String get weDay7Title;
+
+  /// Titre du jour 8
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton QI global'**
+  String get weDay8Title;
+
+  /// Nom de la révélation du jour 1
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton indice verbal'**
+  String get weRevealVci;
+
+  /// Nom de la révélation du jour 2
+  ///
+  /// In fr, this message translates to:
+  /// **'Ta vitesse de traitement'**
+  String get weRevealPsi;
+
+  /// Nom de la révélation du jour 3
+  ///
+  /// In fr, this message translates to:
+  /// **'Ta mémoire de travail'**
+  String get weRevealWmi;
+
+  /// Nom de la révélation du jour 4
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton raisonnement'**
+  String get weRevealFri;
+
+  /// Nom de la révélation du jour 5
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton indice spatial'**
+  String get weRevealVsi;
+
+  /// Nom de la révélation du jour 6
+  ///
+  /// In fr, this message translates to:
+  /// **'Tes forces et tes faiblesses'**
+  String get weRevealStrengths;
+
+  /// Nom de la révélation du jour 8
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton QI global'**
+  String get weRevealFullIq;
+
+  /// Nom du jeu du jour 2
+  ///
+  /// In fr, this message translates to:
+  /// **'Jeu : Stroop'**
+  String get weGameStroop;
+
+  /// Nom du jeu du jour 4
+  ///
+  /// In fr, this message translates to:
+  /// **'Jeu : tolérance au délai'**
+  String get weGameDelayChoice;
+
+  /// Nom du jeu du jour 5
+  ///
+  /// In fr, this message translates to:
+  /// **'Jeu : estimation du temps'**
+  String get weGameTimeEstimation;
+
+  /// Nom du jeu du jour 6
+  ///
+  /// In fr, this message translates to:
+  /// **'Jeu : calibration de la confiance'**
+  String get weGameConfidence;
 }
 
 class _AppLocalizationsDelegate
