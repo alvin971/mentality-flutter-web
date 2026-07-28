@@ -3325,4 +3325,106 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get weDxQuitBody =>
       'Was du angekreuzt hast, wird nicht behalten: Dieser Teil wird am Ende in einem Zug gespeichert. Du kannst ihn vom Programm aus neu beginnen.';
+
+  @override
+  String get weGameCardSubtitle => 'Spiel des Tages · 2 Minuten · wiederholbar';
+
+  @override
+  String get weStroopEyebrow => 'Spiel';
+
+  @override
+  String get weStroopTitle => 'Farbenstreit';
+
+  @override
+  String get weStroopIntroTitle => 'Benenne die Farbe, nicht das Wort';
+
+  @override
+  String get weStroopIntroBody =>
+      'Ein Wort erscheint in einer bestimmten Farbe. Tippe auf die Farbe der TINTE, nicht auf das, was dasteht. Lesen läuft automatisch ab – genau das musst du beiseitelassen.';
+
+  @override
+  String get weStroopIntroPractice =>
+      'Wir beginnen mit drei Durchgängen, die nicht zählen – nur zum Warmwerden.';
+
+  @override
+  String get weStroopIntroExample =>
+      'Hier nennt das Wort eine Farbe und die Tinte eine andere: Es zählt die Tinte.';
+
+  @override
+  String get weStroopStart => 'Beginnen';
+
+  @override
+  String get weStroopLater => 'Später';
+
+  @override
+  String get weStroopPracticeTag => 'Übung';
+
+  @override
+  String get weStroopScoredTag => 'Zählt';
+
+  @override
+  String get weStroopPrompt => 'In welcher Farbe steht das?';
+
+  @override
+  String get weStroopBlockScoredTitle => 'Los geht\'s';
+
+  @override
+  String get weStroopBlockScoredBody =>
+      'Ab jetzt zählen die Durchgänge. Sei schnell, aber triff richtig: Ein Fehler bringt dir nichts.';
+
+  @override
+  String get weStroopBlockConflictTitle => 'Jetzt widersprechen dir die Wörter';
+
+  @override
+  String get weStroopBlockConflictBody =>
+      'Die Anweisung bleibt gleich: Es geht weiterhin um die Farbe der Tinte. Die Wörter sagen nur etwas anderes.';
+
+  @override
+  String get weStroopBlockCta => 'Weiter';
+
+  @override
+  String get weStroopResultTitle => 'Dein Abstand';
+
+  @override
+  String weStroopMilliseconds(int ms) {
+    return '$ms ms';
+  }
+
+  @override
+  String get weStroopResultCaption =>
+      'Das ist die zusätzliche Zeit, die du pro Durchgang gebraucht hast, wenn das Wort das Gegenteil der Tinte sagte.';
+
+  @override
+  String weStroopAccuracy(int correct, int total) {
+    return '$correct von $total richtig';
+  }
+
+  @override
+  String weStroopBest(int ms) {
+    return 'Dein bester Abstand: $ms ms';
+  }
+
+  @override
+  String get weStroopNewBest => 'Neuer bester Abstand';
+
+  @override
+  String get weStroopNotSpeed =>
+      'Diese Zahl ist nicht deine Geschwindigkeit. Sie ist der Unterschied zwischen zwei Serien: Wer insgesamt langsamer ist, kann durchaus einen kleineren Abstand haben.';
+
+  @override
+  String get weStroopNotClinical =>
+      'Das ist ein Spiel, keine klinische Messung: kein Schwellenwert, keine Rangliste, nichts, was du daraus über dich schließen solltest.';
+
+  @override
+  String get weStroopUnreliableTitle => 'Zu wenige Antworten, um zu zählen';
+
+  @override
+  String get weStroopUnreliableBody =>
+      'Es gibt nicht genug Antworten, die zugleich richtig und rechtzeitig waren, um einen ehrlichen Abstand zu berechnen. Dein bisher bester Abstand bleibt unberührt. Spiel noch einmal, wann du willst.';
+
+  @override
+  String get weStroopReplay => 'Noch einmal spielen';
+
+  @override
+  String get weStroopDone => 'Fertig';
 }

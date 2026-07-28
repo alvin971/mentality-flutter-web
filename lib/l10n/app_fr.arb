@@ -4436,5 +4436,139 @@
   "weDxQuitBody": "Ce que tu as coché ne sera pas conservé : ce bloc s'enregistre en une seule fois, à la fin. Tu pourras le reprendre depuis le programme.",
   "@weDxQuitBody": {
     "description": "Dit la vérité du tout-ou-rien — contrairement au moteur de questionnaire, rien n'est persisté en route"
+  },
+  "weGameCardSubtitle": "Jeu du jour · 2 minutes · rejouable",
+  "@weGameCardSubtitle": {
+    "description": "Sous-titre de la carte d'un jeu dans le hub de l'événement"
+  },
+  "weStroopEyebrow": "Jeu",
+  "@weStroopEyebrow": {
+    "description": "Surtitre des écrans du jeu Stroop"
+  },
+  "weStroopTitle": "Couleurs contrariées",
+  "@weStroopTitle": {
+    "description": "Nom du jeu Stroop tel qu'il est présenté (jamais « test de Stroop » : c'est un jeu, pas une mesure clinique)"
+  },
+  "weStroopIntroTitle": "Nomme la couleur, pas le mot",
+  "@weStroopIntroTitle": {
+    "description": "Titre de l'écran d'introduction du jeu Stroop — la consigne en une phrase"
+  },
+  "weStroopIntroBody": "Un mot va s'afficher dans une certaine couleur. Appuie sur la couleur de l'ENCRE, pas sur ce qui est écrit. Lire est automatique : c'est justement ce qu'il va falloir mettre de côté.",
+  "@weStroopIntroBody": {
+    "description": "Explication de la consigne du jeu Stroop"
+  },
+  "weStroopIntroPractice": "On commence par trois essais pour rien, le temps de prendre la main.",
+  "@weStroopIntroPractice": {
+    "description": "Annonce des essais d'entraînement non comptés"
+  },
+  "weStroopIntroExample": "Ici, le mot dit une couleur et l'encre en dit une autre : c'est l'encre qui compte.",
+  "@weStroopIntroExample": {
+    "description": "Légende de l'exemple de stimulus montré dans l'introduction"
+  },
+  "weStroopStart": "Commencer",
+  "@weStroopStart": {
+    "description": "Bouton qui lance la partie"
+  },
+  "weStroopLater": "Plus tard",
+  "@weStroopLater": {
+    "description": "Bouton qui quitte le jeu sans y jouer — le jeu est facultatif"
+  },
+  "weStroopPracticeTag": "Entraînement",
+  "@weStroopPracticeTag": {
+    "description": "Étiquette de progression pendant les essais non comptés"
+  },
+  "weStroopScoredTag": "Compté",
+  "@weStroopScoredTag": {
+    "description": "Étiquette de progression pendant les essais comptés"
+  },
+  "weStroopPrompt": "De quelle couleur est-ce écrit ?",
+  "@weStroopPrompt": {
+    "description": "Question rappelée au-dessus de chaque stimulus"
+  },
+  "weStroopBlockScoredTitle": "C'est parti",
+  "@weStroopBlockScoredTitle": {
+    "description": "Titre de l'écran annonçant la fin de l'entraînement"
+  },
+  "weStroopBlockScoredBody": "À partir de maintenant, les essais comptent. Va vite, mais vise juste : une erreur ne rapporte rien.",
+  "@weStroopBlockScoredBody": {
+    "description": "Corps de l'écran annonçant le premier bloc compté"
+  },
+  "weStroopBlockConflictTitle": "Maintenant, les mots te contredisent",
+  "@weStroopBlockConflictTitle": {
+    "description": "Titre de l'écran annonçant le bloc de conflit"
+  },
+  "weStroopBlockConflictBody": "La consigne ne change pas : c'est toujours la couleur de l'encre. Les mots vont simplement dire autre chose.",
+  "@weStroopBlockConflictBody": {
+    "description": "Corps de l'écran annonçant le bloc de conflit"
+  },
+  "weStroopBlockCta": "Continuer",
+  "@weStroopBlockCta": {
+    "description": "Bouton des écrans d'annonce de bloc"
+  },
+  "weStroopResultTitle": "Ton écart",
+  "@weStroopResultTitle": {
+    "description": "Titre de l'écran de résultat — le score est un ÉCART, jamais une vitesse"
+  },
+  "weStroopMilliseconds": "{ms} ms",
+  "@weStroopMilliseconds": {
+    "description": "Une durée en millisecondes — sert à afficher l'écart conflit/neutre",
+    "placeholders": {
+      "ms": {
+        "type": "int"
+      }
+    }
+  },
+  "weStroopResultCaption": "C'est le temps supplémentaire qu'il t'a fallu, à chaque essai, quand le mot disait le contraire de l'encre.",
+  "@weStroopResultCaption": {
+    "description": "Explication de ce que mesure l'écart affiché"
+  },
+  "weStroopAccuracy": "{correct} bonnes réponses sur {total}",
+  "@weStroopAccuracy": {
+    "description": "Justesse de la partie — rapportée à part, jamais fondue dans le temps",
+    "placeholders": {
+      "correct": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "weStroopBest": "Ton meilleur écart : {ms} ms",
+  "@weStroopBest": {
+    "description": "Record local du jeu — le plus PETIT écart obtenu",
+    "placeholders": {
+      "ms": {
+        "type": "int"
+      }
+    }
+  },
+  "weStroopNewBest": "Nouveau meilleur écart",
+  "@weStroopNewBest": {
+    "description": "Annonce d'un record battu"
+  },
+  "weStroopNotSpeed": "Ce chiffre n'est pas ta vitesse. C'est la différence entre deux séries : quelqu'un de globalement plus lent peut très bien avoir un écart plus petit.",
+  "@weStroopNotSpeed": {
+    "description": "Garde-fou de lecture du score — empêche de lire l'écart comme une vitesse (que la batterie mesure déjà)"
+  },
+  "weStroopNotClinical": "C'est un jeu, pas une mesure clinique : aucun seuil, aucun classement, rien à en conclure sur toi.",
+  "@weStroopNotClinical": {
+    "description": "Cadrage obligatoire des jeux — jamais présentés comme des mesures cliniques"
+  },
+  "weStroopUnreliableTitle": "Trop peu de réponses pour compter",
+  "@weStroopUnreliableTitle": {
+    "description": "Titre affiché quand la partie n'a pas assez d'essais valides pour un écart honnête"
+  },
+  "weStroopUnreliableBody": "Il n'y a pas assez de réponses justes et données dans les temps pour calculer un écart honnête. Ton meilleur écart précédent reste intact. Rejoue quand tu veux.",
+  "@weStroopUnreliableBody": {
+    "description": "Corps du message affiché quand la partie ne permet aucun écart fiable"
+  },
+  "weStroopReplay": "Rejouer",
+  "@weStroopReplay": {
+    "description": "Bouton qui relance une partie depuis l'écran de résultat"
+  },
+  "weStroopDone": "Terminer",
+  "@weStroopDone": {
+    "description": "Bouton qui referme le jeu depuis l'écran de résultat"
   }
 }

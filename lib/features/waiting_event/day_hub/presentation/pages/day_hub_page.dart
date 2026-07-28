@@ -12,6 +12,7 @@ import '../../../_shared/domain/models/event_day.dart';
 import '../../../_shared/domain/services/event_consent.dart';
 import '../../../_shared/domain/services/event_schedule.dart';
 import '../../../_shared/domain/services/q_module_registry.dart';
+import '../../../_shared/presentation/game_registry.dart';
 import '../../../_shared/presentation/questionnaire_runner_page.dart';
 import '../../../diagnostic_block/data/diagnostic_block_store.dart';
 import '../../../diagnostic_block/presentation/pages/diagnostic_block_page.dart';
@@ -34,6 +35,7 @@ class DayHubPage extends StatelessWidget {
     super.key,
     required this.serverDayIndex,
     this.moduleForDay = QModuleRegistry.forDay,
+    this.gameFor = GameRegistry.forGame,
     this.store,
     this.revealSource = const RevealSource(),
     this.selfEstimateStore = const SelfEstimateStore(),
@@ -47,6 +49,10 @@ class DayHubPage extends StatelessWidget {
   /// Où le hub va chercher le questionnaire d'une journée. Injectable pour les
   /// tests ; en production, le registre des modules livrés.
   final QModuleResolver moduleForDay;
+
+  /// Où le hub va chercher le jeu d'une journée. Injectable pour les tests ;
+  /// en production, le registre des jeux livrés.
+  final EventGameResolver gameFor;
 
   /// Stockage des réponses. `null` = le stockage chiffré de l'app (le défaut
   /// n'est pas une constante : il ouvre une box Hive).
@@ -85,11 +91,19 @@ class DayHubPage extends StatelessWidget {
                 serverDayIndex: serverDayIndex,
               ),
               moduleForDay: moduleForDay,
+              gameFor: gameFor,
               store: store,
               revealSource: revealSource,
               selfEstimateStore: selfEstimateStore,
             ),
             SizedBox(height: 12.h),
+            // Le jeu a sa propre carte, sous celle de la journée : il est
+            // REJOUABLE, alors que la journée s'enchaîne une fois. Sans elle,
+            // rejouer supposerait de retraverser la révélation.
+            if (jour.game != null &&
+                statusOfDay(day: jour.day, serverDayIndex: serverDayIndex) !=
+                    DayStatus.locked)
+              _GameCard(game: gameFor(jour.game!)),
             // Le bloc diagnostic se rattache au jour 1 — et il y reste, y
             // compris quand ce jour est rattrapé plus tard. Il vit à côté de
             // la carte du jour plutôt que dedans tant que le questionnaire du
@@ -245,6 +259,58 @@ class _DiagnosticCardState extends State<_DiagnosticCard> {
   }
 }
 
+/// La carte du jeu d'une journée. Rejouable, donc toujours là — contrairement
+/// à celle du bloc diagnostic, qui disparaît dès que la question est close.
+///
+/// Rend un espace VIDE quand le jeu n'est pas encore livré : le programme
+/// l'annonce quand même dans le sous-titre de la journée (« Jeu : tolérance au
+/// délai »), parce qu'il fait partie de ce qui est promis. Une carte qui
+/// ouvrirait un écran « en préparation » n'ajouterait qu'une déception à un
+/// clic près.
+class _GameCard extends StatelessWidget {
+  const _GameCard({required this.game});
+
+  final EventGame? game;
+
+  @override
+  Widget build(BuildContext context) {
+    final jeu = game;
+    if (jeu == null) return const SizedBox.shrink();
+    final l10n = context.l10n;
+    final colors = KeplerColors.of(context);
+    return Padding(
+      padding: EdgeInsets.only(bottom: 12.h),
+      child: KeplerCard(
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute<void>(builder: jeu.open),
+        ),
+        child: Row(
+          children: [
+            Icon(Icons.videogame_asset_outlined,
+                size: 20.sp, color: colors.primary),
+            SizedBox(width: 12.w),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(jeu.title(l10n), style: AppText.of(context).h3()),
+                  SizedBox(height: 2.h),
+                  Text(
+                    l10n.weGameCardSubtitle,
+                    style: AppText.of(context)
+                        .bodySmall(color: colors.textSecondary),
+                  ),
+                ],
+              ),
+            ),
+            Icon(Icons.east, size: 18.sp, color: colors.primary),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 /// Une journée du programme. Les journées passées restent ouvertes — rien ne
 /// se perd à en manquer une.
 class _DayCard extends StatelessWidget {
@@ -252,6 +318,7 @@ class _DayCard extends StatelessWidget {
     required this.day,
     required this.status,
     required this.moduleForDay,
+    required this.gameFor,
     required this.store,
     required this.revealSource,
     required this.selfEstimateStore,
@@ -260,6 +327,7 @@ class _DayCard extends StatelessWidget {
   final EventDay day;
   final DayStatus status;
   final QModuleResolver moduleForDay;
+  final EventGameResolver gameFor;
   final EventAnswerStore? store;
   final RevealSource revealSource;
   final SelfEstimateStore selfEstimateStore;
@@ -327,8 +395,14 @@ class _DayCard extends StatelessWidget {
   ///      passe avant TOUTE révélation, sans quoi elle serait ancrée par le
   ///      chiffre qu'on vient de montrer ;
   ///   2. la révélation du jour, le cadeau qui ne demande rien ;
-  ///   3. l'activité : le questionnaire s'il est livré, sinon l'annonce
+  ///   3. le jeu du jour, s'il y en a un et qu'il n'a JAMAIS été joué ;
+  ///   4. l'activité : le questionnaire s'il est livré, sinon l'annonce
   ///      honnête qu'il arrive.
+  ///
+  /// L'étape 3 ne s'impose qu'une fois, et elle n'arrête rien : refuser d'y
+  /// jouer (« Plus tard ») enchaîne quand même sur l'activité. Un jeu déclaré
+  /// facultatif qui barrerait la route au questionnaire ne le serait plus, et
+  /// le programme interdit qu'une activité en conditionne une autre.
   ///
   /// La garde de l'étape 1 porte sur « cette journée révèle-t-elle quelque
   /// chose », PAS sur « sommes-nous au jour 1 ». La nuance est tout sauf
@@ -343,6 +417,8 @@ class _DayCard extends StatelessWidget {
   /// révélation d'un geste de retour ramène au programme, ça n'enchaîne pas.
   Future<void> _ouvrir(BuildContext context) async {
     final reveal = day.reveal;
+    final kind = day.game;
+    final jeu = kind == null ? null : gameFor(kind);
 
     if (reveal != null) {
       final deja = await selfEstimateStore.read();
@@ -367,22 +443,37 @@ class _DayCard extends StatelessWidget {
           : SelfEstimate.absent;
       if (!context.mounted) return;
 
+      // Le libellé annonce ce qui SUIT réellement. Une journée sans
+      // questionnaire livré mais avec un jeu enchaîne bien sur quelque chose :
+      // promettre « retour au programme » y serait faux.
+      final suite = _aUneActivite || jeu != null;
       final lue = await Navigator.of(context).push<bool>(
         MaterialPageRoute<bool>(
           builder: (revealContext) => RevealPage(
             kind: reveal,
             data: profil,
             selfEstimate: estimation,
-            ctaLabel: _aUneActivite
+            ctaLabel: suite
                 ? revealContext.l10n.weRvContinue
                 : revealContext.l10n.weRvBackToHub,
           ),
         ),
       );
       if (!context.mounted || lue != true) return;
-      if (!_aUneActivite) return;
+      if (!suite) return;
     }
 
+    // Le jeu ne s'intercale que la PREMIÈRE fois. Ensuite il vit sur sa carte,
+    // et l'enchaînement de la journée l'ignore.
+    if (jeu != null && !await jeu.hasPlayed()) {
+      if (!context.mounted) return;
+      await Navigator.of(context).push(
+        MaterialPageRoute<void>(builder: jeu.open),
+      );
+    }
+    if (!context.mounted) return;
+
+    if (!_aUneActivite) return;
     _ouvrirActivite(context);
   }
 

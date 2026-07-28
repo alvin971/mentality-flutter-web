@@ -3301,6 +3301,108 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get weDxQuitBody =>
       'What you have ticked will not be kept: this block is saved in one go, at the end. You can start it again from the programme.';
+
+  @override
+  String get weGameCardSubtitle => 'Today\'s game · 2 minutes · replayable';
+
+  @override
+  String get weStroopEyebrow => 'Game';
+
+  @override
+  String get weStroopTitle => 'Color clash';
+
+  @override
+  String get weStroopIntroTitle => 'Name the color, not the word';
+
+  @override
+  String get weStroopIntroBody =>
+      'A word will appear in a certain color. Tap the color of the INK, not what the word says. Reading happens automatically: that is exactly what you will have to set aside.';
+
+  @override
+  String get weStroopIntroPractice =>
+      'We start with three trials that don\'t count, just to get the hang of it.';
+
+  @override
+  String get weStroopIntroExample =>
+      'Here the word says one color and the ink says another: the ink is what counts.';
+
+  @override
+  String get weStroopStart => 'Start';
+
+  @override
+  String get weStroopLater => 'Later';
+
+  @override
+  String get weStroopPracticeTag => 'Practice';
+
+  @override
+  String get weStroopScoredTag => 'Counted';
+
+  @override
+  String get weStroopPrompt => 'What color is this written in?';
+
+  @override
+  String get weStroopBlockScoredTitle => 'Here we go';
+
+  @override
+  String get weStroopBlockScoredBody =>
+      'From now on, the trials count. Go fast, but aim true: a mistake earns you nothing.';
+
+  @override
+  String get weStroopBlockConflictTitle => 'Now the words contradict you';
+
+  @override
+  String get weStroopBlockConflictBody =>
+      'The instruction doesn\'t change: it is still the color of the ink. The words will simply say something else.';
+
+  @override
+  String get weStroopBlockCta => 'Continue';
+
+  @override
+  String get weStroopResultTitle => 'Your gap';
+
+  @override
+  String weStroopMilliseconds(int ms) {
+    return '$ms ms';
+  }
+
+  @override
+  String get weStroopResultCaption =>
+      'That\'s the extra time you needed, on each trial, when the word said the opposite of the ink.';
+
+  @override
+  String weStroopAccuracy(int correct, int total) {
+    return '$correct correct out of $total';
+  }
+
+  @override
+  String weStroopBest(int ms) {
+    return 'Your best gap: $ms ms';
+  }
+
+  @override
+  String get weStroopNewBest => 'New best gap';
+
+  @override
+  String get weStroopNotSpeed =>
+      'This number is not your speed. It is the difference between two runs: someone slower overall can perfectly well have a smaller gap.';
+
+  @override
+  String get weStroopNotClinical =>
+      'This is a game, not a clinical measure: no threshold, no ranking, nothing to conclude about you.';
+
+  @override
+  String get weStroopUnreliableTitle => 'Too few answers to count';
+
+  @override
+  String get weStroopUnreliableBody =>
+      'There aren\'t enough answers that were both correct and given in time to work out an honest gap. Your previous best gap is untouched. Play again whenever you like.';
+
+  @override
+  String get weStroopReplay => 'Play again';
+
+  @override
+  String get weStroopDone => 'Done';
 }
 
 /// The translations for English, as used in the United Kingdom (`en_GB`).
@@ -6601,4 +6703,106 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   @override
   String get weDxQuitBody =>
       'What you have ticked will not be kept: this block is saved in one go, at the end. You can start it again from the programme.';
+
+  @override
+  String get weGameCardSubtitle => 'Today\'s game · 2 minutes · replayable';
+
+  @override
+  String get weStroopEyebrow => 'Game';
+
+  @override
+  String get weStroopTitle => 'Colour clash';
+
+  @override
+  String get weStroopIntroTitle => 'Name the colour, not the word';
+
+  @override
+  String get weStroopIntroBody =>
+      'A word will appear in a certain colour. Tap the colour of the INK, not what the word says. Reading happens automatically: that is exactly what you will have to set aside.';
+
+  @override
+  String get weStroopIntroPractice =>
+      'We start with three trials that don\'t count, just to find your feet.';
+
+  @override
+  String get weStroopIntroExample =>
+      'Here the word says one colour and the ink says another: the ink is what counts.';
+
+  @override
+  String get weStroopStart => 'Start';
+
+  @override
+  String get weStroopLater => 'Later';
+
+  @override
+  String get weStroopPracticeTag => 'Practice';
+
+  @override
+  String get weStroopScoredTag => 'Counted';
+
+  @override
+  String get weStroopPrompt => 'What colour is this written in?';
+
+  @override
+  String get weStroopBlockScoredTitle => 'Here we go';
+
+  @override
+  String get weStroopBlockScoredBody =>
+      'From now on, the trials count. Go quickly, but aim true: a mistake earns you nothing.';
+
+  @override
+  String get weStroopBlockConflictTitle => 'Now the words contradict you';
+
+  @override
+  String get weStroopBlockConflictBody =>
+      'The instruction doesn\'t change: it is still the colour of the ink. The words will simply say something else.';
+
+  @override
+  String get weStroopBlockCta => 'Continue';
+
+  @override
+  String get weStroopResultTitle => 'Your gap';
+
+  @override
+  String weStroopMilliseconds(int ms) {
+    return '$ms ms';
+  }
+
+  @override
+  String get weStroopResultCaption =>
+      'That\'s the extra time you needed, on each trial, when the word said the opposite of the ink.';
+
+  @override
+  String weStroopAccuracy(int correct, int total) {
+    return '$correct correct out of $total';
+  }
+
+  @override
+  String weStroopBest(int ms) {
+    return 'Your best gap: $ms ms';
+  }
+
+  @override
+  String get weStroopNewBest => 'New best gap';
+
+  @override
+  String get weStroopNotSpeed =>
+      'This number is not your speed. It is the difference between two runs: someone slower overall can perfectly well have a smaller gap.';
+
+  @override
+  String get weStroopNotClinical =>
+      'This is a game, not a clinical measure: no threshold, no ranking, nothing to conclude about you.';
+
+  @override
+  String get weStroopUnreliableTitle => 'Too few answers to count';
+
+  @override
+  String get weStroopUnreliableBody =>
+      'There aren\'t enough answers that were both correct and given in time to work out an honest gap. Your previous best gap is untouched. Play again whenever you like.';
+
+  @override
+  String get weStroopReplay => 'Play again';
+
+  @override
+  String get weStroopDone => 'Done';
 }

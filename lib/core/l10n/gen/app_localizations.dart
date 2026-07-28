@@ -5846,6 +5846,180 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Ce que tu as coché ne sera pas conservé : ce bloc s\'enregistre en une seule fois, à la fin. Tu pourras le reprendre depuis le programme.'**
   String get weDxQuitBody;
+
+  /// Sous-titre de la carte d'un jeu dans le hub de l'événement
+  ///
+  /// In fr, this message translates to:
+  /// **'Jeu du jour · 2 minutes · rejouable'**
+  String get weGameCardSubtitle;
+
+  /// Surtitre des écrans du jeu Stroop
+  ///
+  /// In fr, this message translates to:
+  /// **'Jeu'**
+  String get weStroopEyebrow;
+
+  /// Nom du jeu Stroop tel qu'il est présenté (jamais « test de Stroop » : c'est un jeu, pas une mesure clinique)
+  ///
+  /// In fr, this message translates to:
+  /// **'Couleurs contrariées'**
+  String get weStroopTitle;
+
+  /// Titre de l'écran d'introduction du jeu Stroop — la consigne en une phrase
+  ///
+  /// In fr, this message translates to:
+  /// **'Nomme la couleur, pas le mot'**
+  String get weStroopIntroTitle;
+
+  /// Explication de la consigne du jeu Stroop
+  ///
+  /// In fr, this message translates to:
+  /// **'Un mot va s\'afficher dans une certaine couleur. Appuie sur la couleur de l\'ENCRE, pas sur ce qui est écrit. Lire est automatique : c\'est justement ce qu\'il va falloir mettre de côté.'**
+  String get weStroopIntroBody;
+
+  /// Annonce des essais d'entraînement non comptés
+  ///
+  /// In fr, this message translates to:
+  /// **'On commence par trois essais pour rien, le temps de prendre la main.'**
+  String get weStroopIntroPractice;
+
+  /// Légende de l'exemple de stimulus montré dans l'introduction
+  ///
+  /// In fr, this message translates to:
+  /// **'Ici, le mot dit une couleur et l\'encre en dit une autre : c\'est l\'encre qui compte.'**
+  String get weStroopIntroExample;
+
+  /// Bouton qui lance la partie
+  ///
+  /// In fr, this message translates to:
+  /// **'Commencer'**
+  String get weStroopStart;
+
+  /// Bouton qui quitte le jeu sans y jouer — le jeu est facultatif
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus tard'**
+  String get weStroopLater;
+
+  /// Étiquette de progression pendant les essais non comptés
+  ///
+  /// In fr, this message translates to:
+  /// **'Entraînement'**
+  String get weStroopPracticeTag;
+
+  /// Étiquette de progression pendant les essais comptés
+  ///
+  /// In fr, this message translates to:
+  /// **'Compté'**
+  String get weStroopScoredTag;
+
+  /// Question rappelée au-dessus de chaque stimulus
+  ///
+  /// In fr, this message translates to:
+  /// **'De quelle couleur est-ce écrit ?'**
+  String get weStroopPrompt;
+
+  /// Titre de l'écran annonçant la fin de l'entraînement
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est parti'**
+  String get weStroopBlockScoredTitle;
+
+  /// Corps de l'écran annonçant le premier bloc compté
+  ///
+  /// In fr, this message translates to:
+  /// **'À partir de maintenant, les essais comptent. Va vite, mais vise juste : une erreur ne rapporte rien.'**
+  String get weStroopBlockScoredBody;
+
+  /// Titre de l'écran annonçant le bloc de conflit
+  ///
+  /// In fr, this message translates to:
+  /// **'Maintenant, les mots te contredisent'**
+  String get weStroopBlockConflictTitle;
+
+  /// Corps de l'écran annonçant le bloc de conflit
+  ///
+  /// In fr, this message translates to:
+  /// **'La consigne ne change pas : c\'est toujours la couleur de l\'encre. Les mots vont simplement dire autre chose.'**
+  String get weStroopBlockConflictBody;
+
+  /// Bouton des écrans d'annonce de bloc
+  ///
+  /// In fr, this message translates to:
+  /// **'Continuer'**
+  String get weStroopBlockCta;
+
+  /// Titre de l'écran de résultat — le score est un ÉCART, jamais une vitesse
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton écart'**
+  String get weStroopResultTitle;
+
+  /// Une durée en millisecondes — sert à afficher l'écart conflit/neutre
+  ///
+  /// In fr, this message translates to:
+  /// **'{ms} ms'**
+  String weStroopMilliseconds(int ms);
+
+  /// Explication de ce que mesure l'écart affiché
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est le temps supplémentaire qu\'il t\'a fallu, à chaque essai, quand le mot disait le contraire de l\'encre.'**
+  String get weStroopResultCaption;
+
+  /// Justesse de la partie — rapportée à part, jamais fondue dans le temps
+  ///
+  /// In fr, this message translates to:
+  /// **'{correct} bonnes réponses sur {total}'**
+  String weStroopAccuracy(int correct, int total);
+
+  /// Record local du jeu — le plus PETIT écart obtenu
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton meilleur écart : {ms} ms'**
+  String weStroopBest(int ms);
+
+  /// Annonce d'un record battu
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouveau meilleur écart'**
+  String get weStroopNewBest;
+
+  /// Garde-fou de lecture du score — empêche de lire l'écart comme une vitesse (que la batterie mesure déjà)
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce chiffre n\'est pas ta vitesse. C\'est la différence entre deux séries : quelqu\'un de globalement plus lent peut très bien avoir un écart plus petit.'**
+  String get weStroopNotSpeed;
+
+  /// Cadrage obligatoire des jeux — jamais présentés comme des mesures cliniques
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est un jeu, pas une mesure clinique : aucun seuil, aucun classement, rien à en conclure sur toi.'**
+  String get weStroopNotClinical;
+
+  /// Titre affiché quand la partie n'a pas assez d'essais valides pour un écart honnête
+  ///
+  /// In fr, this message translates to:
+  /// **'Trop peu de réponses pour compter'**
+  String get weStroopUnreliableTitle;
+
+  /// Corps du message affiché quand la partie ne permet aucun écart fiable
+  ///
+  /// In fr, this message translates to:
+  /// **'Il n\'y a pas assez de réponses justes et données dans les temps pour calculer un écart honnête. Ton meilleur écart précédent reste intact. Rejoue quand tu veux.'**
+  String get weStroopUnreliableBody;
+
+  /// Bouton qui relance une partie depuis l'écran de résultat
+  ///
+  /// In fr, this message translates to:
+  /// **'Rejouer'**
+  String get weStroopReplay;
+
+  /// Bouton qui referme le jeu depuis l'écran de résultat
+  ///
+  /// In fr, this message translates to:
+  /// **'Terminer'**
+  String get weStroopDone;
 }
 
 class _AppLocalizationsDelegate

@@ -3318,4 +3318,106 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get weDxQuitBody =>
       'Lo que has marcado no se guardará: este bloque se registra de una sola vez, al final. Podrás retomarlo desde el programa.';
+
+  @override
+  String get weGameCardSubtitle => 'Juego del día · 2 minutos · repetible';
+
+  @override
+  String get weStroopEyebrow => 'Juego';
+
+  @override
+  String get weStroopTitle => 'Colores en conflicto';
+
+  @override
+  String get weStroopIntroTitle => 'Nombra el color, no la palabra';
+
+  @override
+  String get weStroopIntroBody =>
+      'Aparecerá una palabra en un color determinado. Pulsa el color de la TINTA, no lo que pone. Leer es automático: justamente eso es lo que tendrás que dejar de lado.';
+
+  @override
+  String get weStroopIntroPractice =>
+      'Empezamos con tres intentos que no cuentan, para coger el ritmo.';
+
+  @override
+  String get weStroopIntroExample =>
+      'Aquí la palabra dice un color y la tinta dice otro: lo que cuenta es la tinta.';
+
+  @override
+  String get weStroopStart => 'Empezar';
+
+  @override
+  String get weStroopLater => 'Más tarde';
+
+  @override
+  String get weStroopPracticeTag => 'Práctica';
+
+  @override
+  String get weStroopScoredTag => 'Cuenta';
+
+  @override
+  String get weStroopPrompt => '¿De qué color está escrito?';
+
+  @override
+  String get weStroopBlockScoredTitle => 'Allá vamos';
+
+  @override
+  String get weStroopBlockScoredBody =>
+      'A partir de ahora los intentos cuentan. Ve rápido, pero acierta: un error no te aporta nada.';
+
+  @override
+  String get weStroopBlockConflictTitle => 'Ahora las palabras te contradicen';
+
+  @override
+  String get weStroopBlockConflictBody =>
+      'La consigna no cambia: sigue siendo el color de la tinta. Las palabras simplemente dirán otra cosa.';
+
+  @override
+  String get weStroopBlockCta => 'Continuar';
+
+  @override
+  String get weStroopResultTitle => 'Tu diferencia';
+
+  @override
+  String weStroopMilliseconds(int ms) {
+    return '$ms ms';
+  }
+
+  @override
+  String get weStroopResultCaption =>
+      'Es el tiempo de más que necesitaste, en cada intento, cuando la palabra decía lo contrario que la tinta.';
+
+  @override
+  String weStroopAccuracy(int correct, int total) {
+    return '$correct aciertos de $total';
+  }
+
+  @override
+  String weStroopBest(int ms) {
+    return 'Tu mejor diferencia: $ms ms';
+  }
+
+  @override
+  String get weStroopNewBest => 'Nueva mejor diferencia';
+
+  @override
+  String get weStroopNotSpeed =>
+      'Esta cifra no es tu velocidad. Es la diferencia entre dos series: alguien más lento en general puede tener perfectamente una diferencia más pequeña.';
+
+  @override
+  String get weStroopNotClinical =>
+      'Es un juego, no una medida clínica: ningún umbral, ninguna clasificación, nada que concluir sobre ti.';
+
+  @override
+  String get weStroopUnreliableTitle => 'Muy pocas respuestas para contar';
+
+  @override
+  String get weStroopUnreliableBody =>
+      'No hay suficientes respuestas correctas y dadas a tiempo para calcular una diferencia honesta. Tu mejor diferencia anterior queda intacta. Vuelve a jugar cuando quieras.';
+
+  @override
+  String get weStroopReplay => 'Volver a jugar';
+
+  @override
+  String get weStroopDone => 'Terminar';
 }

@@ -1,0 +1,157 @@
+{
+  "weGameCardSubtitle": {
+    "fr": "Jeu du jour · 2 minutes · rejouable",
+    "en": "Today's game · 2 minutes · replayable",
+    "desc": "Sous-titre de la carte d'un jeu dans le hub de l'événement"
+  },
+  "weStroopEyebrow": {
+    "fr": "Jeu",
+    "en": "Game",
+    "desc": "Surtitre des écrans du jeu Stroop"
+  },
+  "weStroopTitle": {
+    "fr": "Couleurs contrariées",
+    "en": "Color clash",
+    "desc": "Nom du jeu Stroop tel qu'il est présenté (jamais « test de Stroop » : c'est un jeu, pas une mesure clinique)"
+  },
+  "weStroopIntroTitle": {
+    "fr": "Nomme la couleur, pas le mot",
+    "en": "Name the color, not the word",
+    "desc": "Titre de l'écran d'introduction du jeu Stroop — la consigne en une phrase"
+  },
+  "weStroopIntroBody": {
+    "fr": "Un mot va s'afficher dans une certaine couleur. Appuie sur la couleur de l'ENCRE, pas sur ce qui est écrit. Lire est automatique : c'est justement ce qu'il va falloir mettre de côté.",
+    "en": "A word will appear in a certain color. Tap the color of the INK, not what the word says. Reading happens automatically: that is exactly what you will have to set aside.",
+    "desc": "Explication de la consigne du jeu Stroop"
+  },
+  "weStroopIntroPractice": {
+    "fr": "On commence par trois essais pour rien, le temps de prendre la main.",
+    "en": "We start with three trials that don't count, just to get the hang of it.",
+    "desc": "Annonce des essais d'entraînement non comptés"
+  },
+  "weStroopIntroExample": {
+    "fr": "Ici, le mot dit une couleur et l'encre en dit une autre : c'est l'encre qui compte.",
+    "en": "Here the word says one color and the ink says another: the ink is what counts.",
+    "desc": "Légende de l'exemple de stimulus montré dans l'introduction"
+  },
+  "weStroopStart": {
+    "fr": "Commencer",
+    "en": "Start",
+    "desc": "Bouton qui lance la partie"
+  },
+  "weStroopLater": {
+    "fr": "Plus tard",
+    "en": "Later",
+    "desc": "Bouton qui quitte le jeu sans y jouer — le jeu est facultatif"
+  },
+  "weStroopPracticeTag": {
+    "fr": "Entraînement",
+    "en": "Practice",
+    "desc": "Étiquette de progression pendant les essais non comptés"
+  },
+  "weStroopScoredTag": {
+    "fr": "Compté",
+    "en": "Counted",
+    "desc": "Étiquette de progression pendant les essais comptés"
+  },
+  "weStroopPrompt": {
+    "fr": "De quelle couleur est-ce écrit ?",
+    "en": "What color is this written in?",
+    "desc": "Question rappelée au-dessus de chaque stimulus"
+  },
+  "weStroopBlockScoredTitle": {
+    "fr": "C'est parti",
+    "en": "Here we go",
+    "desc": "Titre de l'écran annonçant la fin de l'entraînement"
+  },
+  "weStroopBlockScoredBody": {
+    "fr": "À partir de maintenant, les essais comptent. Va vite, mais vise juste : une erreur ne rapporte rien.",
+    "en": "From now on, the trials count. Go fast, but aim true: a mistake earns you nothing.",
+    "desc": "Corps de l'écran annonçant le premier bloc compté"
+  },
+  "weStroopBlockConflictTitle": {
+    "fr": "Maintenant, les mots te contredisent",
+    "en": "Now the words contradict you",
+    "desc": "Titre de l'écran annonçant le bloc de conflit"
+  },
+  "weStroopBlockConflictBody": {
+    "fr": "La consigne ne change pas : c'est toujours la couleur de l'encre. Les mots vont simplement dire autre chose.",
+    "en": "The instruction doesn't change: it is still the color of the ink. The words will simply say something else.",
+    "desc": "Corps de l'écran annonçant le bloc de conflit"
+  },
+  "weStroopBlockCta": {
+    "fr": "Continuer",
+    "en": "Continue",
+    "desc": "Bouton des écrans d'annonce de bloc"
+  },
+  "weStroopResultTitle": {
+    "fr": "Ton écart",
+    "en": "Your gap",
+    "desc": "Titre de l'écran de résultat — le score est un ÉCART, jamais une vitesse"
+  },
+  "weStroopMilliseconds": {
+    "fr": "{ms} ms",
+    "en": "{ms} ms",
+    "desc": "Une durée en millisecondes — sert à afficher l'écart conflit/neutre",
+    "placeholders": {
+      "ms": "int"
+    }
+  },
+  "weStroopResultCaption": {
+    "fr": "C'est le temps supplémentaire qu'il t'a fallu, à chaque essai, quand le mot disait le contraire de l'encre.",
+    "en": "That's the extra time you needed, on each trial, when the word said the opposite of the ink.",
+    "desc": "Explication de ce que mesure l'écart affiché"
+  },
+  "weStroopAccuracy": {
+    "fr": "{correct} bonnes réponses sur {total}",
+    "en": "{correct} correct out of {total}",
+    "desc": "Justesse de la partie — rapportée à part, jamais fondue dans le temps",
+    "placeholders": {
+      "correct": "int",
+      "total": "int"
+    }
+  },
+  "weStroopBest": {
+    "fr": "Ton meilleur écart : {ms} ms",
+    "en": "Your best gap: {ms} ms",
+    "desc": "Record local du jeu — le plus PETIT écart obtenu",
+    "placeholders": {
+      "ms": "int"
+    }
+  },
+  "weStroopNewBest": {
+    "fr": "Nouveau meilleur écart",
+    "en": "New best gap",
+    "desc": "Annonce d'un record battu"
+  },
+  "weStroopNotSpeed": {
+    "fr": "Ce chiffre n'est pas ta vitesse. C'est la différence entre deux séries : quelqu'un de globalement plus lent peut très bien avoir un écart plus petit.",
+    "en": "This number is not your speed. It is the difference between two runs: someone slower overall can perfectly well have a smaller gap.",
+    "desc": "Garde-fou de lecture du score — empêche de lire l'écart comme une vitesse (que la batterie mesure déjà)"
+  },
+  "weStroopNotClinical": {
+    "fr": "C'est un jeu, pas une mesure clinique : aucun seuil, aucun classement, rien à en conclure sur toi.",
+    "en": "This is a game, not a clinical measure: no threshold, no ranking, nothing to conclude about you.",
+    "desc": "Cadrage obligatoire des jeux — jamais présentés comme des mesures cliniques"
+  },
+  "weStroopUnreliableTitle": {
+    "fr": "Trop peu de réponses pour compter",
+    "en": "Too few answers to count",
+    "desc": "Titre affiché quand la partie n'a pas assez d'essais valides pour un écart honnête"
+  },
+  "weStroopUnreliableBody": {
+    "fr": "Il n'y a pas assez de réponses justes et données dans les temps pour calculer un écart honnête. Ton meilleur écart précédent reste intact. Rejoue quand tu veux.",
+    "en": "There aren't enough answers that were both correct and given in time to work out an honest gap. Your previous best gap is untouched. Play again whenever you like.",
+    "desc": "Corps du message affiché quand la partie ne permet aucun écart fiable"
+  },
+  "weStroopReplay": {
+    "fr": "Rejouer",
+    "en": "Play again",
+    "desc": "Bouton qui relance une partie depuis l'écran de résultat"
+  },
+  "weStroopDone": {
+    "fr": "Terminer",
+    "en": "Done",
+    "desc": "Bouton qui referme le jeu depuis l'écran de résultat"
+  }
+}
