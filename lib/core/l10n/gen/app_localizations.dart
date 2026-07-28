@@ -5444,6 +5444,408 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Augmenter d\'un point'**
   String get weRvSelfIncrease;
+
+  /// Surtitre de l'écran de recueil du consentement art. 9
+  ///
+  /// In fr, this message translates to:
+  /// **'Avant d\'aller plus loin'**
+  String get weCsEyebrow;
+
+  /// Titre de l'écran de consentement art. 9
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoyer tes réponses ?'**
+  String get weCsTitle;
+
+  /// Introduction du consentement art. 9 — dit pourquoi un accord distinct est requis
+  ///
+  /// In fr, this message translates to:
+  /// **'Les questions qui suivent portent sur ta santé mentale et ton neurodéveloppement. La loi protège ces réponses à part : elles ne peuvent quitter ton téléphone que si tu l\'acceptes ici, explicitement.'**
+  String get weCsIntro;
+
+  /// Titre de la section « données transmises »
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce qui part'**
+  String get weCsWhatTitle;
+
+  /// Ce qui est réellement transmis — miroir exact d'EventSubmission
+  ///
+  /// In fr, this message translates to:
+  /// **'Tes réponses, telles que tu les as données. Sans ton nom, sans ton numéro, sans date ni heure précises. Jamais tes scores : ils sont calculés sur ton téléphone et y restent.'**
+  String get weCsWhat;
+
+  /// Titre de la section « finalité »
+  ///
+  /// In fr, this message translates to:
+  /// **'À quoi elles servent'**
+  String get weCsPurposeTitle;
+
+  /// Finalité art. 9, y compris son versant commercial (un consentement qui le tairait ne serait pas éclairé)
+  ///
+  /// In fr, this message translates to:
+  /// **'À construire et améliorer nos propres tests de dépistage, et à comparer ce que les gens déclarent avec ce que la batterie mesure. Ces outils font partie de ce que nous vendons — le dire est la moindre des choses.'**
+  String get weCsPurpose;
+
+  /// Titre de la section « destinataire et localisation »
+  ///
+  /// In fr, this message translates to:
+  /// **'Où elles vont'**
+  String get weCsWhoTitle;
+
+  /// Destination des données — aucune promesse invérifiable de non-réidentification
+  ///
+  /// In fr, this message translates to:
+  /// **'Sur nos serveurs, en Europe. Rangées sous ton passe anonyme, jamais sous ton nom ni ton numéro.'**
+  String get weCsWho;
+
+  /// Titre de la section « droits »
+  ///
+  /// In fr, this message translates to:
+  /// **'Tu gardes la main'**
+  String get weCsRightsTitle;
+
+  /// Droit de retrait (art. 7-3), d'accès (art. 15) et d'effacement (art. 17)
+  ///
+  /// In fr, this message translates to:
+  /// **'Tu peux retirer ton accord quand tu veux : les envois suivants s\'arrêtent aussitôt. Tu peux aussi demander l\'accès à tes données ou leur effacement.'**
+  String get weCsRights;
+
+  /// Le caractère libre du consentement, dit là où la décision se prend
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est facultatif, et ça ne change rien au reste : ni ton déblocage, ni tes résultats, ni les tests du programme ne dépendent de cette réponse.'**
+  String get weCsOptional;
+
+  /// Bouton d'octroi du consentement art. 9 — acte positif, jamais présélectionné
+  ///
+  /// In fr, this message translates to:
+  /// **'J\'accepte l\'envoi de mes réponses'**
+  String get weCsAccept;
+
+  /// Bouton de refus du consentement art. 9
+  ///
+  /// In fr, this message translates to:
+  /// **'Non, garder mes réponses ici'**
+  String get weCsDecline;
+
+  /// Titre de la carte du bloc diagnostic dans le hub
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton parcours'**
+  String get weDxCardTitle;
+
+  /// Sous-titre de la carte du bloc diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Quelques questions, posées une seule fois · facultatif'**
+  String get weDxCardSubtitle;
+
+  /// Titre du message affiché quand le consentement art. 9 est refusé
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien ne partira'**
+  String get weDxDeclinedTitle;
+
+  /// Explique pourquoi le bloc n'est pas proposé après un refus de consentement
+  ///
+  /// In fr, this message translates to:
+  /// **'Ces questions ne servent qu\'à nos travaux : sans ton accord, on ne te les pose pas. Tu peux revenir quand tu veux — ça ne change rien au reste du programme.'**
+  String get weDxDeclinedBody;
+
+  /// Surtitre du bloc diagnostic — l'écriture est unique
+  ///
+  /// In fr, this message translates to:
+  /// **'Posé une seule fois'**
+  String get weDxEyebrow;
+
+  /// Titre court du bloc diagnostic (barre de titre, hauteur fixe)
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton parcours'**
+  String get weDxListTitle;
+
+  /// La question du bloc diagnostic, dans le CORPS de l'écran (trop longue pour la barre de titre, qui ellipse)
+  ///
+  /// In fr, this message translates to:
+  /// **'As-tu reçu un diagnostic — ou penses-tu être concerné — pour l\'un de ces troubles ?'**
+  String get weDxListQuestion;
+
+  /// Cadrage du bloc diagnostic — dit que rien n'en dépend pour l'utilisateur
+  ///
+  /// In fr, this message translates to:
+  /// **'Ces réponses ne changent rien à tes résultats. Elles servent à construire nos outils : sans savoir qui est concerné, il est impossible de repérer les questions qui distinguent vraiment quelque chose.'**
+  String get weDxListBody;
+
+  /// Consigne de sélection multiple
+  ///
+  /// In fr, this message translates to:
+  /// **'Coche tout ce qui s\'applique.'**
+  String get weDxListHint;
+
+  /// Trouble du bloc diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'TDAH'**
+  String get weDxAdhd;
+
+  /// Trouble du bloc diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Autisme / TSA'**
+  String get weDxAutism;
+
+  /// Trouble du bloc diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Dyslexie'**
+  String get weDxDyslexia;
+
+  /// Trouble du bloc diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Dyspraxie'**
+  String get weDxDyspraxia;
+
+  /// Trouble du bloc diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Dyscalculie'**
+  String get weDxDyscalculia;
+
+  /// Trouble du bloc diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Haut potentiel (HPI)'**
+  String get weDxHpi;
+
+  /// Trouble du bloc diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Dépression'**
+  String get weDxDepression;
+
+  /// Trouble du bloc diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Trouble anxieux'**
+  String get weDxAnxiety;
+
+  /// Trouble du bloc diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Bipolarité'**
+  String get weDxBipolar;
+
+  /// Trouble du bloc diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'TOC'**
+  String get weDxOcd;
+
+  /// Trouble du bloc diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Trouble du sommeil'**
+  String get weDxSleep;
+
+  /// Trouble du bloc diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Burn-out'**
+  String get weDxBurnout;
+
+  /// Case « autre » — SANS champ libre : un texte libre dans une charge utile art. 9 est un vecteur de ré-identification
+  ///
+  /// In fr, this message translates to:
+  /// **'Un autre trouble'**
+  String get weDxOther;
+
+  /// Case « aucun trouble » — le groupe témoin, exclusive des autres
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun'**
+  String get weDxNone;
+
+  /// Case de refus — nécessité technique : sans elle, qui ne veut pas se déclarer coche « aucun » et pollue le groupe témoin
+  ///
+  /// In fr, this message translates to:
+  /// **'Je préfère ne pas répondre'**
+  String get weDxPreferNotToSay;
+
+  /// Titre court de l'écran de détail d'un trouble
+  ///
+  /// In fr, this message translates to:
+  /// **'Le détail'**
+  String get weDxDetailTitle;
+
+  /// Progression dans les troubles à détailler
+  ///
+  /// In fr, this message translates to:
+  /// **'{current} sur {total}'**
+  String weDxDetailProgress(int current, int total);
+
+  /// Origine du diagnostic — sépare le critère dur de la simple croyance
+  ///
+  /// In fr, this message translates to:
+  /// **'Qui l\'a posé ?'**
+  String get weDxSourceQuestion;
+
+  /// Origine du diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Psychiatre ou neuropsychologue'**
+  String get weDxSourcePsychiatrist;
+
+  /// Origine du diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Médecin généraliste'**
+  String get weDxSourceGp;
+
+  /// Origine du diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Psychologue'**
+  String get weDxSourcePsychologist;
+
+  /// La TROISIÈME catégorie : une croyance, jamais mélangée aux diagnostics
+  ///
+  /// In fr, this message translates to:
+  /// **'Personne — je le pense, sans diagnostic'**
+  String get weDxSourceSelf;
+
+  /// Ancienneté par tranches — jamais l'année exacte (quasi-identifiant, et aucune horloge locale n'est lue)
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'était il y a combien de temps ?'**
+  String get weDxWhenQuestion;
+
+  /// Ancienneté du diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Moins d\'un an'**
+  String get weDxWhenUnder1;
+
+  /// Ancienneté du diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Entre 1 et 3 ans'**
+  String get weDxWhen1to3;
+
+  /// Ancienneté du diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Entre 3 et 10 ans'**
+  String get weDxWhen3to10;
+
+  /// Ancienneté du diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus de 10 ans'**
+  String get weDxWhenOver10;
+
+  /// Ancienneté du diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Je ne sais plus'**
+  String get weDxWhenUnknown;
+
+  /// Prise en charge
+  ///
+  /// In fr, this message translates to:
+  /// **'Un traitement ou un suivi ?'**
+  String get weDxTreatmentQuestion;
+
+  /// Prise en charge
+  ///
+  /// In fr, this message translates to:
+  /// **'Oui, en ce moment'**
+  String get weDxTreatmentYes;
+
+  /// Prise en charge
+  ///
+  /// In fr, this message translates to:
+  /// **'Non'**
+  String get weDxTreatmentNo;
+
+  /// Prise en charge
+  ///
+  /// In fr, this message translates to:
+  /// **'Par le passé'**
+  String get weDxTreatmentPast;
+
+  /// Profondeur de l'évaluation reçue
+  ///
+  /// In fr, this message translates to:
+  /// **'Un bilan complet a-t-il été fait ?'**
+  String get weDxAssessmentQuestion;
+
+  /// Profondeur de l'évaluation reçue
+  ///
+  /// In fr, this message translates to:
+  /// **'Oui'**
+  String get weDxAssessmentYes;
+
+  /// Profondeur de l'évaluation reçue
+  ///
+  /// In fr, this message translates to:
+  /// **'Non'**
+  String get weDxAssessmentNo;
+
+  /// Profondeur de l'évaluation reçue
+  ///
+  /// In fr, this message translates to:
+  /// **'Je ne sais pas'**
+  String get weDxAssessmentUnknown;
+
+  /// Titre de l'écran de fin du bloc
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est noté'**
+  String get weDxDoneTitle;
+
+  /// Fin du bloc diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Merci. Cette question ne te sera plus posée — elle ne se pose qu\'une fois. Elle ne change rien à tes résultats ni à ton déblocage.'**
+  String get weDxDoneBody;
+
+  /// Titre affiché si le bloc avait déjà été rempli
+  ///
+  /// In fr, this message translates to:
+  /// **'Déjà répondu'**
+  String get weDxAlreadyTitle;
+
+  /// Explique l'écriture unique plutôt que de reposer la question
+  ///
+  /// In fr, this message translates to:
+  /// **'Tu as déjà rempli cette partie. Elle ne se pose qu\'une fois, pour que ta réponse ne soit pas influencée par les tests des jours suivants.'**
+  String get weDxAlreadyBody;
+
+  /// Titre affiché quand l'écriture du bloc a échoué
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien n\'a pu être enregistré'**
+  String get weDxFailedTitle;
+
+  /// Échec d'écriture dit explicitement, jamais masqué par un remerciement
+  ///
+  /// In fr, this message translates to:
+  /// **'Tes réponses n\'ont pas été conservées, et rien n\'a été envoyé. Tu peux réessayer depuis le programme — la question reste ouverte.'**
+  String get weDxFailedBody;
+
+  /// Confirmation de sortie du bloc diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Quitter maintenant ?'**
+  String get weDxQuitTitle;
+
+  /// Dit la vérité du tout-ou-rien — contrairement au moteur de questionnaire, rien n'est persisté en route
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce que tu as coché ne sera pas conservé : ce bloc s\'enregistre en une seule fois, à la fin. Tu pourras le reprendre depuis le programme.'**
+  String get weDxQuitBody;
 }
 
 class _AppLocalizationsDelegate

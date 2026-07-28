@@ -3094,4 +3094,221 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get weRvSelfIncrease => 'Augmenter d\'un point';
+
+  @override
+  String get weCsEyebrow => 'Avant d\'aller plus loin';
+
+  @override
+  String get weCsTitle => 'Envoyer tes réponses ?';
+
+  @override
+  String get weCsIntro =>
+      'Les questions qui suivent portent sur ta santé mentale et ton neurodéveloppement. La loi protège ces réponses à part : elles ne peuvent quitter ton téléphone que si tu l\'acceptes ici, explicitement.';
+
+  @override
+  String get weCsWhatTitle => 'Ce qui part';
+
+  @override
+  String get weCsWhat =>
+      'Tes réponses, telles que tu les as données. Sans ton nom, sans ton numéro, sans date ni heure précises. Jamais tes scores : ils sont calculés sur ton téléphone et y restent.';
+
+  @override
+  String get weCsPurposeTitle => 'À quoi elles servent';
+
+  @override
+  String get weCsPurpose =>
+      'À construire et améliorer nos propres tests de dépistage, et à comparer ce que les gens déclarent avec ce que la batterie mesure. Ces outils font partie de ce que nous vendons — le dire est la moindre des choses.';
+
+  @override
+  String get weCsWhoTitle => 'Où elles vont';
+
+  @override
+  String get weCsWho =>
+      'Sur nos serveurs, en Europe. Rangées sous ton passe anonyme, jamais sous ton nom ni ton numéro.';
+
+  @override
+  String get weCsRightsTitle => 'Tu gardes la main';
+
+  @override
+  String get weCsRights =>
+      'Tu peux retirer ton accord quand tu veux : les envois suivants s\'arrêtent aussitôt. Tu peux aussi demander l\'accès à tes données ou leur effacement.';
+
+  @override
+  String get weCsOptional =>
+      'C\'est facultatif, et ça ne change rien au reste : ni ton déblocage, ni tes résultats, ni les tests du programme ne dépendent de cette réponse.';
+
+  @override
+  String get weCsAccept => 'J\'accepte l\'envoi de mes réponses';
+
+  @override
+  String get weCsDecline => 'Non, garder mes réponses ici';
+
+  @override
+  String get weDxCardTitle => 'Ton parcours';
+
+  @override
+  String get weDxCardSubtitle =>
+      'Quelques questions, posées une seule fois · facultatif';
+
+  @override
+  String get weDxDeclinedTitle => 'Rien ne partira';
+
+  @override
+  String get weDxDeclinedBody =>
+      'Ces questions ne servent qu\'à nos travaux : sans ton accord, on ne te les pose pas. Tu peux revenir quand tu veux — ça ne change rien au reste du programme.';
+
+  @override
+  String get weDxEyebrow => 'Posé une seule fois';
+
+  @override
+  String get weDxListTitle => 'Ton parcours';
+
+  @override
+  String get weDxListQuestion =>
+      'As-tu reçu un diagnostic — ou penses-tu être concerné — pour l\'un de ces troubles ?';
+
+  @override
+  String get weDxListBody =>
+      'Ces réponses ne changent rien à tes résultats. Elles servent à construire nos outils : sans savoir qui est concerné, il est impossible de repérer les questions qui distinguent vraiment quelque chose.';
+
+  @override
+  String get weDxListHint => 'Coche tout ce qui s\'applique.';
+
+  @override
+  String get weDxAdhd => 'TDAH';
+
+  @override
+  String get weDxAutism => 'Autisme / TSA';
+
+  @override
+  String get weDxDyslexia => 'Dyslexie';
+
+  @override
+  String get weDxDyspraxia => 'Dyspraxie';
+
+  @override
+  String get weDxDyscalculia => 'Dyscalculie';
+
+  @override
+  String get weDxHpi => 'Haut potentiel (HPI)';
+
+  @override
+  String get weDxDepression => 'Dépression';
+
+  @override
+  String get weDxAnxiety => 'Trouble anxieux';
+
+  @override
+  String get weDxBipolar => 'Bipolarité';
+
+  @override
+  String get weDxOcd => 'TOC';
+
+  @override
+  String get weDxSleep => 'Trouble du sommeil';
+
+  @override
+  String get weDxBurnout => 'Burn-out';
+
+  @override
+  String get weDxOther => 'Un autre trouble';
+
+  @override
+  String get weDxNone => 'Aucun';
+
+  @override
+  String get weDxPreferNotToSay => 'Je préfère ne pas répondre';
+
+  @override
+  String get weDxDetailTitle => 'Le détail';
+
+  @override
+  String weDxDetailProgress(int current, int total) {
+    return '$current sur $total';
+  }
+
+  @override
+  String get weDxSourceQuestion => 'Qui l\'a posé ?';
+
+  @override
+  String get weDxSourcePsychiatrist => 'Psychiatre ou neuropsychologue';
+
+  @override
+  String get weDxSourceGp => 'Médecin généraliste';
+
+  @override
+  String get weDxSourcePsychologist => 'Psychologue';
+
+  @override
+  String get weDxSourceSelf => 'Personne — je le pense, sans diagnostic';
+
+  @override
+  String get weDxWhenQuestion => 'C\'était il y a combien de temps ?';
+
+  @override
+  String get weDxWhenUnder1 => 'Moins d\'un an';
+
+  @override
+  String get weDxWhen1to3 => 'Entre 1 et 3 ans';
+
+  @override
+  String get weDxWhen3to10 => 'Entre 3 et 10 ans';
+
+  @override
+  String get weDxWhenOver10 => 'Plus de 10 ans';
+
+  @override
+  String get weDxWhenUnknown => 'Je ne sais plus';
+
+  @override
+  String get weDxTreatmentQuestion => 'Un traitement ou un suivi ?';
+
+  @override
+  String get weDxTreatmentYes => 'Oui, en ce moment';
+
+  @override
+  String get weDxTreatmentNo => 'Non';
+
+  @override
+  String get weDxTreatmentPast => 'Par le passé';
+
+  @override
+  String get weDxAssessmentQuestion => 'Un bilan complet a-t-il été fait ?';
+
+  @override
+  String get weDxAssessmentYes => 'Oui';
+
+  @override
+  String get weDxAssessmentNo => 'Non';
+
+  @override
+  String get weDxAssessmentUnknown => 'Je ne sais pas';
+
+  @override
+  String get weDxDoneTitle => 'C\'est noté';
+
+  @override
+  String get weDxDoneBody =>
+      'Merci. Cette question ne te sera plus posée — elle ne se pose qu\'une fois. Elle ne change rien à tes résultats ni à ton déblocage.';
+
+  @override
+  String get weDxAlreadyTitle => 'Déjà répondu';
+
+  @override
+  String get weDxAlreadyBody =>
+      'Tu as déjà rempli cette partie. Elle ne se pose qu\'une fois, pour que ta réponse ne soit pas influencée par les tests des jours suivants.';
+
+  @override
+  String get weDxFailedTitle => 'Rien n\'a pu être enregistré';
+
+  @override
+  String get weDxFailedBody =>
+      'Tes réponses n\'ont pas été conservées, et rien n\'a été envoyé. Tu peux réessayer depuis le programme — la question reste ouverte.';
+
+  @override
+  String get weDxQuitTitle => 'Quitter maintenant ?';
+
+  @override
+  String get weDxQuitBody =>
+      'Ce que tu as coché ne sera pas conservé : ce bloc s\'enregistre en une seule fois, à la fin. Tu pourras le reprendre depuis le programme.';
 }

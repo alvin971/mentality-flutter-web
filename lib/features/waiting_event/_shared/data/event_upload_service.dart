@@ -82,11 +82,13 @@ abstract interface class EventConsentGate {
 class _RealConsentGate implements EventConsentGate {
   const _RealConsentGate();
 
+  /// La version du texte ART. 9 — pas celle du texte audio. Les deux vivent
+  /// dans le même enregistrement mais ne désignent pas le même document ;
+  /// envoyer la seconde ferait pointer la preuve de consentement vers un texte
+  /// que la personne n'a jamais lu pour cette finalité.
   @override
-  Future<String?> consentVersion() async {
-    if (!await ConsentService.instance.hasEventDataConsent()) return null;
-    return ConsentService.instance.current?.version;
-  }
+  Future<String?> consentVersion() =>
+      ConsentService.instance.eventConsentVersion();
 }
 
 /// Le fil qui porte une soumission jusqu'au worker.

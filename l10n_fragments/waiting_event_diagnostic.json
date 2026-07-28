@@ -1,0 +1,341 @@
+{
+  "weCsEyebrow": {
+    "fr": "Avant d'aller plus loin",
+    "en": "Before going further",
+    "desc": "Surtitre de l'écran de recueil du consentement art. 9"
+  },
+  "weCsTitle": {
+    "fr": "Envoyer tes réponses ?",
+    "en": "Send your answers?",
+    "desc": "Titre de l'écran de consentement art. 9"
+  },
+  "weCsIntro": {
+    "fr": "Les questions qui suivent portent sur ta santé mentale et ton neurodéveloppement. La loi protège ces réponses à part : elles ne peuvent quitter ton téléphone que si tu l'acceptes ici, explicitement.",
+    "en": "The questions that follow are about your mental health and your neurodevelopment. The law protects these answers separately: they can only leave your phone if you explicitly agree here.",
+    "desc": "Introduction du consentement art. 9 — dit pourquoi un accord distinct est requis"
+  },
+  "weCsWhatTitle": {
+    "fr": "Ce qui part",
+    "en": "What is sent",
+    "desc": "Titre de la section « données transmises »"
+  },
+  "weCsWhat": {
+    "fr": "Tes réponses, telles que tu les as données. Sans ton nom, sans ton numéro, sans date ni heure précises. Jamais tes scores : ils sont calculés sur ton téléphone et y restent.",
+    "en": "Your answers, exactly as you gave them. Without your name, your number, or any precise date or time. Never your scores: they are calculated on your phone and stay there.",
+    "desc": "Ce qui est réellement transmis — miroir exact d'EventSubmission"
+  },
+  "weCsPurposeTitle": {
+    "fr": "À quoi elles servent",
+    "en": "What they are used for",
+    "desc": "Titre de la section « finalité »"
+  },
+  "weCsPurpose": {
+    "fr": "À construire et améliorer nos propres tests de dépistage, et à comparer ce que les gens déclarent avec ce que la batterie mesure. Ces outils font partie de ce que nous vendons — le dire est la moindre des choses.",
+    "en": "To build and improve our own screening tests, and to compare what people report with what the test battery measures. These tools are part of what we sell — it would be wrong not to say so.",
+    "desc": "Finalité art. 9, y compris son versant commercial (un consentement qui le tairait ne serait pas éclairé)"
+  },
+  "weCsWhoTitle": {
+    "fr": "Où elles vont",
+    "en": "Where they go",
+    "desc": "Titre de la section « destinataire et localisation »"
+  },
+  "weCsWho": {
+    "fr": "Sur nos serveurs, en Europe. Rangées sous ton passe anonyme, jamais sous ton nom ni ton numéro.",
+    "en": "To our servers, in Europe. Filed under your anonymous pass, never under your name or your number.",
+    "desc": "Destination des données — aucune promesse invérifiable de non-réidentification"
+  },
+  "weCsRightsTitle": {
+    "fr": "Tu gardes la main",
+    "en": "You stay in control",
+    "desc": "Titre de la section « droits »"
+  },
+  "weCsRights": {
+    "fr": "Tu peux retirer ton accord quand tu veux : les envois suivants s'arrêtent aussitôt. Tu peux aussi demander l'accès à tes données ou leur effacement.",
+    "en": "You can withdraw your agreement at any time: further sending stops immediately. You can also ask to access your data or have it erased.",
+    "desc": "Droit de retrait (art. 7-3), d'accès (art. 15) et d'effacement (art. 17)"
+  },
+  "weCsOptional": {
+    "fr": "C'est facultatif, et ça ne change rien au reste : ni ton déblocage, ni tes résultats, ni les tests du programme ne dépendent de cette réponse.",
+    "en": "This is optional and changes nothing else: neither your unlock, nor your results, nor the programme's tests depend on this answer.",
+    "desc": "Le caractère libre du consentement, dit là où la décision se prend"
+  },
+  "weCsAccept": {
+    "fr": "J'accepte l'envoi de mes réponses",
+    "en": "I agree to send my answers",
+    "desc": "Bouton d'octroi du consentement art. 9 — acte positif, jamais présélectionné"
+  },
+  "weCsDecline": {
+    "fr": "Non, garder mes réponses ici",
+    "en": "No, keep my answers here",
+    "desc": "Bouton de refus du consentement art. 9"
+  },
+  "weDxCardTitle": {
+    "fr": "Ton parcours",
+    "en": "Your history",
+    "desc": "Titre de la carte du bloc diagnostic dans le hub"
+  },
+  "weDxCardSubtitle": {
+    "fr": "Quelques questions, posées une seule fois · facultatif",
+    "en": "A few questions, asked only once · optional",
+    "desc": "Sous-titre de la carte du bloc diagnostic"
+  },
+  "weDxDeclinedTitle": {
+    "fr": "Rien ne partira",
+    "en": "Nothing will be sent",
+    "desc": "Titre du message affiché quand le consentement art. 9 est refusé"
+  },
+  "weDxDeclinedBody": {
+    "fr": "Ces questions ne servent qu'à nos travaux : sans ton accord, on ne te les pose pas. Tu peux revenir quand tu veux — ça ne change rien au reste du programme.",
+    "en": "These questions only serve our own research: without your agreement, we don't ask them. You can come back whenever you like — it changes nothing about the rest of the programme.",
+    "desc": "Explique pourquoi le bloc n'est pas proposé après un refus de consentement"
+  },
+  "weDxEyebrow": {
+    "fr": "Posé une seule fois",
+    "en": "Asked only once",
+    "desc": "Surtitre du bloc diagnostic — l'écriture est unique"
+  },
+  "weDxListTitle": {
+    "fr": "Ton parcours",
+    "en": "Your history",
+    "desc": "Titre court du bloc diagnostic (barre de titre, hauteur fixe)"
+  },
+  "weDxListQuestion": {
+    "fr": "As-tu reçu un diagnostic — ou penses-tu être concerné — pour l'un de ces troubles ?",
+    "en": "Have you been diagnosed — or do you think you may be affected — with any of these?",
+    "desc": "La question du bloc diagnostic, dans le CORPS de l'écran (trop longue pour la barre de titre, qui ellipse)"
+  },
+  "weDxListBody": {
+    "fr": "Ces réponses ne changent rien à tes résultats. Elles servent à construire nos outils : sans savoir qui est concerné, il est impossible de repérer les questions qui distinguent vraiment quelque chose.",
+    "en": "These answers change nothing about your results. They are used to build our tools: without knowing who is affected, it is impossible to spot which questions actually tell anything apart.",
+    "desc": "Cadrage du bloc diagnostic — dit que rien n'en dépend pour l'utilisateur"
+  },
+  "weDxListHint": {
+    "fr": "Coche tout ce qui s'applique.",
+    "en": "Tick everything that applies.",
+    "desc": "Consigne de sélection multiple"
+  },
+  "weDxAdhd": {
+    "fr": "TDAH",
+    "en": "ADHD",
+    "desc": "Trouble du bloc diagnostic"
+  },
+  "weDxAutism": {
+    "fr": "Autisme / TSA",
+    "en": "Autism / ASD",
+    "desc": "Trouble du bloc diagnostic"
+  },
+  "weDxDyslexia": {
+    "fr": "Dyslexie",
+    "en": "Dyslexia",
+    "desc": "Trouble du bloc diagnostic"
+  },
+  "weDxDyspraxia": {
+    "fr": "Dyspraxie",
+    "en": "Dyspraxia",
+    "desc": "Trouble du bloc diagnostic"
+  },
+  "weDxDyscalculia": {
+    "fr": "Dyscalculie",
+    "en": "Dyscalculia",
+    "desc": "Trouble du bloc diagnostic"
+  },
+  "weDxHpi": {
+    "fr": "Haut potentiel (HPI)",
+    "en": "Giftedness",
+    "desc": "Trouble du bloc diagnostic"
+  },
+  "weDxDepression": {
+    "fr": "Dépression",
+    "en": "Depression",
+    "desc": "Trouble du bloc diagnostic"
+  },
+  "weDxAnxiety": {
+    "fr": "Trouble anxieux",
+    "en": "Anxiety disorder",
+    "desc": "Trouble du bloc diagnostic"
+  },
+  "weDxBipolar": {
+    "fr": "Bipolarité",
+    "en": "Bipolar disorder",
+    "desc": "Trouble du bloc diagnostic"
+  },
+  "weDxOcd": {
+    "fr": "TOC",
+    "en": "OCD",
+    "desc": "Trouble du bloc diagnostic"
+  },
+  "weDxSleep": {
+    "fr": "Trouble du sommeil",
+    "en": "Sleep disorder",
+    "desc": "Trouble du bloc diagnostic"
+  },
+  "weDxBurnout": {
+    "fr": "Burn-out",
+    "en": "Burnout",
+    "desc": "Trouble du bloc diagnostic"
+  },
+  "weDxOther": {
+    "fr": "Un autre trouble",
+    "en": "Another condition",
+    "desc": "Case « autre » — SANS champ libre : un texte libre dans une charge utile art. 9 est un vecteur de ré-identification"
+  },
+  "weDxNone": {
+    "fr": "Aucun",
+    "en": "None",
+    "desc": "Case « aucun trouble » — le groupe témoin, exclusive des autres"
+  },
+  "weDxPreferNotToSay": {
+    "fr": "Je préfère ne pas répondre",
+    "en": "I'd rather not say",
+    "desc": "Case de refus — nécessité technique : sans elle, qui ne veut pas se déclarer coche « aucun » et pollue le groupe témoin"
+  },
+  "weDxDetailTitle": {
+    "fr": "Le détail",
+    "en": "Details",
+    "desc": "Titre court de l'écran de détail d'un trouble"
+  },
+  "weDxDetailProgress": {
+    "fr": "{current} sur {total}",
+    "en": "{current} of {total}",
+    "desc": "Progression dans les troubles à détailler",
+    "placeholders": {
+      "current": "int",
+      "total": "int"
+    }
+  },
+  "weDxSourceQuestion": {
+    "fr": "Qui l'a posé ?",
+    "en": "Who identified it?",
+    "desc": "Origine du diagnostic — sépare le critère dur de la simple croyance"
+  },
+  "weDxSourcePsychiatrist": {
+    "fr": "Psychiatre ou neuropsychologue",
+    "en": "A psychiatrist or neuropsychologist",
+    "desc": "Origine du diagnostic"
+  },
+  "weDxSourceGp": {
+    "fr": "Médecin généraliste",
+    "en": "A general practitioner",
+    "desc": "Origine du diagnostic"
+  },
+  "weDxSourcePsychologist": {
+    "fr": "Psychologue",
+    "en": "A psychologist",
+    "desc": "Origine du diagnostic"
+  },
+  "weDxSourceSelf": {
+    "fr": "Personne — je le pense, sans diagnostic",
+    "en": "Nobody — I think so, without a diagnosis",
+    "desc": "La TROISIÈME catégorie : une croyance, jamais mélangée aux diagnostics"
+  },
+  "weDxWhenQuestion": {
+    "fr": "C'était il y a combien de temps ?",
+    "en": "How long ago was that?",
+    "desc": "Ancienneté par tranches — jamais l'année exacte (quasi-identifiant, et aucune horloge locale n'est lue)"
+  },
+  "weDxWhenUnder1": {
+    "fr": "Moins d'un an",
+    "en": "Less than a year",
+    "desc": "Ancienneté du diagnostic"
+  },
+  "weDxWhen1to3": {
+    "fr": "Entre 1 et 3 ans",
+    "en": "Between 1 and 3 years",
+    "desc": "Ancienneté du diagnostic"
+  },
+  "weDxWhen3to10": {
+    "fr": "Entre 3 et 10 ans",
+    "en": "Between 3 and 10 years",
+    "desc": "Ancienneté du diagnostic"
+  },
+  "weDxWhenOver10": {
+    "fr": "Plus de 10 ans",
+    "en": "More than 10 years",
+    "desc": "Ancienneté du diagnostic"
+  },
+  "weDxWhenUnknown": {
+    "fr": "Je ne sais plus",
+    "en": "I can't remember",
+    "desc": "Ancienneté du diagnostic"
+  },
+  "weDxTreatmentQuestion": {
+    "fr": "Un traitement ou un suivi ?",
+    "en": "Any treatment or follow-up?",
+    "desc": "Prise en charge"
+  },
+  "weDxTreatmentYes": {
+    "fr": "Oui, en ce moment",
+    "en": "Yes, currently",
+    "desc": "Prise en charge"
+  },
+  "weDxTreatmentNo": {
+    "fr": "Non",
+    "en": "No",
+    "desc": "Prise en charge"
+  },
+  "weDxTreatmentPast": {
+    "fr": "Par le passé",
+    "en": "In the past",
+    "desc": "Prise en charge"
+  },
+  "weDxAssessmentQuestion": {
+    "fr": "Un bilan complet a-t-il été fait ?",
+    "en": "Was a full assessment carried out?",
+    "desc": "Profondeur de l'évaluation reçue"
+  },
+  "weDxAssessmentYes": {
+    "fr": "Oui",
+    "en": "Yes",
+    "desc": "Profondeur de l'évaluation reçue"
+  },
+  "weDxAssessmentNo": {
+    "fr": "Non",
+    "en": "No",
+    "desc": "Profondeur de l'évaluation reçue"
+  },
+  "weDxAssessmentUnknown": {
+    "fr": "Je ne sais pas",
+    "en": "I don't know",
+    "desc": "Profondeur de l'évaluation reçue"
+  },
+  "weDxDoneTitle": {
+    "fr": "C'est noté",
+    "en": "Noted",
+    "desc": "Titre de l'écran de fin du bloc"
+  },
+  "weDxDoneBody": {
+    "fr": "Merci. Cette question ne te sera plus posée — elle ne se pose qu'une fois. Elle ne change rien à tes résultats ni à ton déblocage.",
+    "en": "Thank you. You won't be asked this again — it is only asked once. It changes nothing about your results or your unlock.",
+    "desc": "Fin du bloc diagnostic"
+  },
+  "weDxAlreadyTitle": {
+    "fr": "Déjà répondu",
+    "en": "Already answered",
+    "desc": "Titre affiché si le bloc avait déjà été rempli"
+  },
+  "weDxAlreadyBody": {
+    "fr": "Tu as déjà rempli cette partie. Elle ne se pose qu'une fois, pour que ta réponse ne soit pas influencée par les tests des jours suivants.",
+    "en": "You have already filled this in. It is only asked once, so that your answer isn't influenced by the tests of the following days.",
+    "desc": "Explique l'écriture unique plutôt que de reposer la question"
+  },
+  "weDxFailedTitle": {
+    "fr": "Rien n'a pu être enregistré",
+    "en": "Nothing could be saved",
+    "desc": "Titre affiché quand l'écriture du bloc a échoué"
+  },
+  "weDxFailedBody": {
+    "fr": "Tes réponses n'ont pas été conservées, et rien n'a été envoyé. Tu peux réessayer depuis le programme — la question reste ouverte.",
+    "en": "Your answers were not kept, and nothing was sent. You can try again from the programme — the question is still open.",
+    "desc": "Échec d'écriture dit explicitement, jamais masqué par un remerciement"
+  },
+  "weDxQuitTitle": {
+    "fr": "Quitter maintenant ?",
+    "en": "Leave now?",
+    "desc": "Confirmation de sortie du bloc diagnostic"
+  },
+  "weDxQuitBody": {
+    "fr": "Ce que tu as coché ne sera pas conservé : ce bloc s'enregistre en une seule fois, à la fin. Tu pourras le reprendre depuis le programme.",
+    "en": "What you have ticked will not be kept: this block is saved in one go, at the end. You can start it again from the programme.",
+    "desc": "Dit la vérité du tout-ou-rien — contrairement au moteur de questionnaire, rien n'est persisté en route"
+  }
+}

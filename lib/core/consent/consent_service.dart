@@ -13,11 +13,17 @@
 //   - retrait          : withdraw() efface l'enregistrement
 //   - ré-information    : hasValidConsent() invalide une version périmée
 //
-// POURQUOI kConsentVersion N'A PAS BOUGÉ en ajoutant la finalité art. 9 :
-// incrémenter la version re-sollicite TOUS les utilisateurs, y compris pour
-// l'audio. Or aucun écran ne présente encore le texte de cette finalité — elle
-// vaut `false` partout et rien ne peut donc partir. Le texte, et avec lui
-// l'incrément de version, arrivent avec l'écran de recueil (LOT F).
+// DEUX TEXTES, DEUX VERSIONS. L'écran de recueil art. 9 existe désormais, et
+// il présente son PROPRE texte : sa version est donc suivie à part
+// (`kEventConsentVersion`, stampée dans `eventHealthDataVersion`), et non par
+// l'incrément de `kConsentVersion` qu'on avait d'abord envisagé. Deux raisons
+// l'ont emporté :
+//   · incrémenter la version partagée aurait re-sollicité TOUS les
+//     utilisateurs pour l'AUDIO, dont le texte n'a pas changé d'une virgule ;
+//   · une version unique laisse un piège silencieux. Accorder l'art. 9 sur un
+//     enregistrement audio plus ancien reconduisait sa version : le
+//     consentement se serait affiché « accordé » tout en étant jugé périmé à
+//     chaque envoi, et rien ne serait jamais parti — sans un mot.
 
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -66,9 +72,21 @@ class ConsentService {
   /// ne porte pas la finalité [kEventDataPurpose]. Tant que cette méthode
   /// répond `false`, les questionnaires restent jouables et le score
   /// s'affiche — mais rien ne part.
-  Future<bool> hasEventDataConsent() async {
+  Future<bool> hasEventDataConsent() async =>
+      await eventConsentVersion() != null;
+
+  /// La version du texte art. 9 réellement acceptée — ce qui voyage dans
+  /// l'en-tête `X-Consent-Version` de chaque envoi —, ou `null` s'il n'y a pas
+  /// de consentement exploitable.
+  ///
+  /// C'est bien la version DE CE TEXTE-LÀ qui part, pas celle du texte audio :
+  /// une preuve de consentement qui désigne le mauvais document ne prouve
+  /// rien.
+  Future<String?> eventConsentVersion() async {
     final record = await load();
-    return record != null && record.eventHealthData && record.isCurrentVersion;
+    return (record != null && record.isCurrentEventConsent)
+        ? record.eventHealthDataVersion
+        : null;
   }
 
   /// Enregistre un consentement granulaire et horodaté.
@@ -91,13 +109,18 @@ class ConsentService {
       commercialReuse: commercialReuse,
       parentalConsent: parentalConsent,
       eventHealthData: eventHealthData,
+      eventHealthDataVersion: eventHealthData ? kEventConsentVersion : null,
     );
     return _persist(record);
   }
 
   /// Accorde ou retire la SEULE finalité art. 9 de l'événement, sans toucher
   /// aux autres. Recueillie à part parce qu'elle arrive à un autre moment (le
-  /// gate de l'événement, LOT F) et porte sur d'autres données.
+  /// gate de l'événement) et porte sur d'autres données.
+  ///
+  /// L'octroi stampe [kEventConsentVersion] ; le retrait l'efface. Le
+  /// consentement audio, lui, garde sa propre version : elle n'a pas été
+  /// re-présentée, donc elle n'a pas à être rafraîchie.
   ///
   /// [sessionId] et [locale] ne servent qu'à créer l'enregistrement quand il
   /// n'en existe aucun (utilisateur qui n'a pas fait l'étape orale) ; ils sont
@@ -109,7 +132,7 @@ class ConsentService {
     DateTime? grantedAt,
   }) async {
     final existant = await load();
-    final record = existant?.copyWith(eventHealthData: granted) ??
+    final record = existant?.withEventHealthData(granted) ??
         ConsentRecord(
           sessionId: sessionId,
           version: kConsentVersion,
@@ -120,6 +143,7 @@ class ConsentService {
           recordingAndAnalysis: false,
           commercialReuse: false,
           eventHealthData: granted,
+          eventHealthDataVersion: granted ? kEventConsentVersion : null,
         );
     return _persist(record);
   }

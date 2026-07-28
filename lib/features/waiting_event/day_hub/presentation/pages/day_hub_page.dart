@@ -9,9 +9,13 @@ import '../../../../../core/widgets/kepler_scaffold.dart';
 import '../../../_shared/data/event_local_store.dart';
 import '../../../_shared/domain/models/day_status.dart';
 import '../../../_shared/domain/models/event_day.dart';
+import '../../../_shared/domain/services/event_consent.dart';
 import '../../../_shared/domain/services/event_schedule.dart';
 import '../../../_shared/domain/services/q_module_registry.dart';
 import '../../../_shared/presentation/questionnaire_runner_page.dart';
+import '../../../diagnostic_block/data/diagnostic_block_store.dart';
+import '../../../diagnostic_block/presentation/pages/diagnostic_block_page.dart';
+import '../../../diagnostic_block/presentation/pages/event_consent_page.dart';
 import '../../../reveals/data/self_estimate_store.dart';
 import '../../../reveals/domain/services/reveal_source.dart';
 import '../../../reveals/presentation/pages/reveal_page.dart';
@@ -33,6 +37,8 @@ class DayHubPage extends StatelessWidget {
     this.store,
     this.revealSource = const RevealSource(),
     this.selfEstimateStore = const SelfEstimateStore(),
+    this.diagnosticStore = const DiagnosticBlockStore(),
+    this.eventConsent = const AppEventConsent(),
   });
 
   /// 1..8 pendant l'attente, 9 une fois le déblocage acquis.
@@ -51,6 +57,13 @@ class DayHubPage extends StatelessWidget {
 
   /// L'auto-estimation du jour 1, gardée sur l'appareil.
   final SelfEstimateStore selfEstimateStore;
+
+  /// Le bloc diagnostic — posé une seule fois, à la fin du jour 1.
+  final DiagnosticBlockStore diagnosticStore;
+
+  /// Le consentement art. 9. Rien de ce que le bloc recueille n'existe sans
+  /// lui : c'est la seule porte, et elle est fermée par défaut.
+  final EventConsent eventConsent;
 
   @override
   Widget build(BuildContext context) {
@@ -77,8 +90,156 @@ class DayHubPage extends StatelessWidget {
               selfEstimateStore: selfEstimateStore,
             ),
             SizedBox(height: 12.h),
+            // Le bloc diagnostic se rattache au jour 1 — et il y reste, y
+            // compris quand ce jour est rattrapé plus tard. Il vit à côté de
+            // la carte du jour plutôt que dedans tant que le questionnaire du
+            // jour 1 n'est pas livré : le programme le veut à la FIN de cette
+            // journée, et une fin qui n'existe pas encore ne peut rien
+            // enchaîner.
+            if (jour.day == 1) ...[
+              _DiagnosticCard(
+                store: diagnosticStore,
+                consent: eventConsent,
+              ),
+            ],
           ],
         ],
+      ),
+    );
+  }
+}
+
+/// La carte du bloc diagnostic. Elle disparaît dès que la question est close —
+/// c'est la traduction à l'écran de « posé une seule fois, jamais reposé ».
+class _DiagnosticCard extends StatefulWidget {
+  const _DiagnosticCard({required this.store, required this.consent});
+
+  final DiagnosticBlockStore store;
+  final EventConsent consent;
+
+  @override
+  State<_DiagnosticCard> createState() => _DiagnosticCardState();
+}
+
+class _DiagnosticCardState extends State<_DiagnosticCard> {
+  /// `null` tant qu'on ne sait pas encore. On n'affiche RIEN dans cet
+  /// intervalle plutôt qu'un tourniquet : la lecture disque est immédiate, et
+  /// une carte qui apparaîtrait puis disparaîtrait serait pire que rien.
+  bool? _repondu;
+
+  /// Verrou de ré-entrance : l'enchaînement consentement → bloc est
+  /// asynchrone, et la carte reste tactile pendant ce temps. Sans lui, un
+  /// second appui empilerait un second écran de consentement.
+  bool _enCours = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _charger();
+  }
+
+  Future<void> _charger() async {
+    // Un incident de lecture vaut « pas encore répondu » : la carte s'affiche,
+    // et le verrou d'écriture du store rattrapera un éventuel doublon en
+    // refusant. L'inverse — masquer la carte au moindre incident — perdrait
+    // définitivement une déclaration que personne ne redemanderait.
+    final deja = await widget.store.isRecorded();
+    if (mounted) setState(() => _repondu = deja);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_repondu != false) return const SizedBox.shrink();
+    final l10n = context.l10n;
+    final colors = KeplerColors.of(context);
+    return Padding(
+      padding: EdgeInsets.only(bottom: 12.h),
+      child: KeplerCard(
+        onTap: _enCours ? null : _ouvrir,
+        child: Row(
+          children: [
+            Icon(Icons.fact_check_outlined, size: 20.sp, color: colors.primary),
+            SizedBox(width: 12.w),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(l10n.weDxCardTitle, style: AppText.of(context).h3()),
+                  SizedBox(height: 2.h),
+                  Text(
+                    l10n.weDxCardSubtitle,
+                    style: AppText.of(context)
+                        .bodySmall(color: colors.textSecondary),
+                  ),
+                ],
+              ),
+            ),
+            Icon(Icons.east, size: 18.sp, color: colors.primary),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// L'ordre est non négociable : le consentement art. 9 D'ABORD, les
+  /// questions de santé ensuite — jamais l'inverse, et jamais « on demandera
+  /// à l'envoi ». Recueillir des déclarations puis découvrir qu'on n'a pas le
+  /// droit de les envoyer laisserait sur l'appareil une donnée que personne
+  /// n'a autorisée et que rien n'exploitera.
+  ///
+  /// Ici le gate est DUR, alors qu'il est souple pour les questionnaires du
+  /// programme (jouables sans consentement, score affiché, rien d'envoyé) :
+  /// ce bloc n'affiche aucun résultat et ne calcule rien pour la personne. Le
+  /// faire remplir sans pouvoir l'exploiter, ce serait lui prendre deux écrans
+  /// de déclarations de santé pour rien.
+  Future<void> _ouvrir() async {
+    if (_enCours) return;
+    setState(() => _enCours = true);
+    try {
+      if (!await widget.consent.isGranted()) {
+        if (!mounted) return;
+        final accorde = await Navigator.of(context).push<bool>(
+          MaterialPageRoute<bool>(
+            builder: (_) => EventConsentPage(consent: widget.consent),
+          ),
+        );
+        if (!mounted) return;
+        // Refus, retour arrière, ou écriture en échec : dans les trois cas on
+        // n'a pas le droit d'aller plus loin.
+        if (accorde != true) return _direQueRienNePartira();
+      }
+
+      if (!mounted) return;
+      final close = await Navigator.of(context).push<bool>(
+        MaterialPageRoute<bool>(
+          builder: (_) => DiagnosticBlockPage(store: widget.store),
+        ),
+      );
+      if (!mounted) return;
+      // La carte ne disparaît que sur une question RÉELLEMENT close. Un
+      // abandon, ou une écriture en échec, la laisse en place.
+      if (close == true) setState(() => _repondu = true);
+    } finally {
+      if (mounted) setState(() => _enCours = false);
+    }
+  }
+
+  void _direQueRienNePartira() {
+    final l10n = context.l10n;
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (sheetContext) => Padding(
+        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 28.h),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(l10n.weDxDeclinedTitle, style: AppText.of(sheetContext).h2()),
+            SizedBox(height: 12.h),
+            Text(l10n.weDxDeclinedBody,
+                style: AppText.of(sheetContext).bodySmall()),
+          ],
+        ),
       ),
     );
   }

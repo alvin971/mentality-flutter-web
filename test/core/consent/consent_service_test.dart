@@ -116,21 +116,105 @@ void main() {
     await service.setEventHealthData(true);
     final record = await service.load();
 
-    // On simule le vieillissement du texte : la version stockée n'est plus la
-    // courante.
+    // On simule le vieillissement du TEXTE ART. 9 : la version stockée pour
+    // cette finalité-là n'est plus la courante.
     final perime = ConsentRecord.fromMap({
       ...record!.toMap(),
-      'version': 'version-perimee',
+      'event_health_data_version': 'version-perimee',
     });
 
     expect(perime.eventHealthData, isTrue);
-    expect(perime.isCurrentVersion, isFalse);
-    // hasEventDataConsent exige les DEUX : la finalité et une version à jour.
+    expect(perime.isCurrentEventConsent, isFalse);
+    // hasEventDataConsent exige les DEUX : la finalité et sa preuve de version.
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('gdpr_consent_record', _json(perime));
     expect(await service.hasEventDataConsent(), isFalse,
         reason: 'changer le texte re-sollicite : on ne parle plus de la même '
             'chose');
+    expect(await service.eventConsentVersion(), isNull);
+  });
+
+  test('un « oui » art. 9 SANS preuve de version ne vaut pas', () async {
+    // La forme qu'aurait un enregistrement trafiqué, ou écrit par une version
+    // du code où la preuve n'existait pas encore : le booléen dit oui, mais
+    // rien ne dit à QUOI.
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(
+      'gdpr_consent_record',
+      '{"session_id":"s1","version":"$kConsentVersion",'
+          '"granted_at":"2026-07-01T10:00:00.000Z","locale":"fr",'
+          '"recording_and_analysis":true,"commercial_reuse":false,'
+          '"event_health_data":true}',
+    );
+
+    expect(await service.hasEventDataConsent(), isFalse,
+        reason: 'sans savoir quel texte a été lu, il n\'y a pas de '
+            'consentement éclairé — donc pas de consentement');
+  });
+
+  group('les deux textes vieillissent séparément', () {
+    test('périmer le texte AUDIO ne périme pas l\'art. 9', () async {
+      await service.grant(
+        sessionId: 's1',
+        locale: 'fr',
+        recordingAndAnalysis: true,
+        commercialReuse: false,
+      );
+      await service.setEventHealthData(true);
+
+      final record = await service.load();
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(
+        'gdpr_consent_record',
+        _json(ConsentRecord.fromMap({
+          ...record!.toMap(),
+          'version': 'ancien-texte-audio',
+        })),
+      );
+
+      expect(await service.hasValidConsent(), isFalse,
+          reason: 'le texte audio a changé : il faut re-solliciter POUR LUI');
+      expect(await service.hasEventDataConsent(), isTrue,
+          reason: 'le texte art. 9, lui, n\'a pas bougé — le lier à la '
+              'version audio re-solliciterait tout le monde pour une phrase '
+              'ajoutée ailleurs');
+    });
+
+    test('accorder l\'art. 9 ne rafraîchit pas la version du texte audio',
+        () async {
+      // Un consentement audio recueilli sur un texte ANCIEN, comme il en
+      // existe sur les téléphones.
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(
+        'gdpr_consent_record',
+        '{"session_id":"s1","version":"ancien-texte-audio",'
+            '"granted_at":"2026-01-01T10:00:00.000Z","locale":"fr",'
+            '"recording_and_analysis":true,"commercial_reuse":false,'
+            '"event_health_data":false}',
+      );
+
+      await service.setEventHealthData(true);
+      final record = await service.load();
+
+      expect(record!.version, 'ancien-texte-audio',
+          reason: 'accepter le texte santé ne prouve rien sur le texte audio, '
+              'qui n\'a pas été re-présenté');
+      // Et pourtant l'art. 9 vaut : c'est tout l'intérêt de la séparation.
+      // Avec une version unique, ce cas donnait un consentement « accordé »
+      // que chaque envoi aurait jugé périmé — rien ne serait jamais parti.
+      expect(await service.hasEventDataConsent(), isTrue);
+      expect(await service.eventConsentVersion(), kEventConsentVersion);
+    });
+
+    test('le retrait efface la preuve, pas seulement le booléen', () async {
+      await service.setEventHealthData(true);
+      await service.setEventHealthData(false);
+
+      final record = await service.load();
+      expect(record!.eventHealthDataVersion, isNull,
+          reason: 'une preuve qui survit au retrait ferait re-valoir le '
+              'consentement au prochain octroi sans que le texte soit relu');
+    });
   });
 
   test('la finalité voyage jusqu\'au worker sous son nom exact', () {
