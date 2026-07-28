@@ -13,6 +13,8 @@
 import 'package:flutter/widgets.dart';
 
 import '../../../../core/l10n/l10n_ext.dart';
+import '../../delay_choice/data/delay_choice_record_store.dart';
+import '../../delay_choice/presentation/pages/delay_choice_game_page.dart';
 import '../../stroop/data/stroop_record_store.dart';
 import '../../stroop/presentation/pages/stroop_game_page.dart';
 import '../domain/models/event_day.dart';
@@ -57,10 +59,13 @@ abstract final class GameRegistry {
             hasPlayed: () async =>
                 (await const StroopRecordStore().read()).hasPlayed,
           ),
-        // Lots H2 à H5 — annoncés par le programme, pas encore écrits.
-        GameKind.delayChoice ||
-        GameKind.timeEstimation ||
-        GameKind.confidenceCalibration =>
-          null,
+        GameKind.delayChoice => EventGame(
+            title: (l10n) => l10n.weDcTitle,
+            open: (_) => const DelayChoiceGamePage(),
+            hasPlayed: () async =>
+                (await const DelayChoiceRecordStore().read()).hasPlayed,
+          ),
+        // Lots H3 à H5 — annoncés par le programme, pas encore écrits.
+        GameKind.timeEstimation || GameKind.confidenceCalibration => null,
       };
 }

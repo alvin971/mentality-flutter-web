@@ -3087,6 +3087,89 @@ class AppLocalizationsEn extends AppLocalizations {
   String get weRvSelfIncrease => 'Increase by one point';
 
   @override
+  String get weDcEyebrow => 'Game';
+
+  @override
+  String get weDcTitle => 'Now or later';
+
+  @override
+  String get weDcIntroTitle => 'Some money right now, or more of it later';
+
+  @override
+  String get weDcIntroBody =>
+      'You\'ll be offered the same kind of choice twenty times: a sum available right now, or a bigger sum after a wait. Just tap whichever one you\'d rather have.';
+
+  @override
+  String get weDcIntroImaginary =>
+      'These sums are imaginary. There is nothing to win, nothing to pay and nothing to receive: these are questions, not offers.';
+
+  @override
+  String get weDcIntroNoRightAnswer =>
+      'There is no right answer. Taking the money right away is neither better nor worse than waiting.';
+
+  @override
+  String get weDcStart => 'Start';
+
+  @override
+  String get weDcLater => 'Later';
+
+  @override
+  String get weDcProgressTag => 'Choice';
+
+  @override
+  String get weDcPrompt => 'Which would you rather have?';
+
+  @override
+  String get weDcImaginaryTag => 'Imaginary sums — there is nothing to win.';
+
+  @override
+  String get weDcResultTitle => 'Your patience';
+
+  @override
+  String weDcPatienceScore(int score) {
+    return '$score / 100';
+  }
+
+  @override
+  String get weDcResultCaption =>
+      'The higher the number, the more willing you are to wait. It isn\'t a grade: both ends of the scale are equally valid.';
+
+  @override
+  String weDcIndifference(String delayed, String immediate) {
+    return 'Waiting a month for $delayed amounts, for you, to getting $immediate right now.';
+  }
+
+  @override
+  String get weDcCurveTitle => 'What the wait was worth';
+
+  @override
+  String weDcPrevious(int score) {
+    return 'Last time: $score / 100';
+  }
+
+  @override
+  String get weDcNoBetterEnd =>
+      'This number doesn\'t say whether you played well. Preferring the money right away is a trade-off, not a mistake — and it shifts with the moment, the mood and each person\'s situation.';
+
+  @override
+  String get weDcNotClinical =>
+      'This is a game, not a clinical measure: no threshold, no ranking, nothing to conclude about you.';
+
+  @override
+  String get weDcIncoherentTitle =>
+      'Answers too scattered to draw anything from';
+
+  @override
+  String get weDcIncoherentBody =>
+      'Your answers pull in opposite directions from one delay to the next: the same sum ends up worth more further away than it is close by. Nothing was saved. Play again whenever you like.';
+
+  @override
+  String get weDcReplay => 'Play again';
+
+  @override
+  String get weDcDone => 'Done';
+
+  @override
   String get weCsEyebrow => 'Before going further';
 
   @override
@@ -6487,6 +6570,89 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get weRvSelfIncrease => 'Increase by one point';
+
+  @override
+  String get weDcEyebrow => 'Game';
+
+  @override
+  String get weDcTitle => 'Now or later';
+
+  @override
+  String get weDcIntroTitle => 'Some money right now, or more of it later';
+
+  @override
+  String get weDcIntroBody =>
+      'You\'ll be offered the same kind of choice twenty times: a sum available right now, or a bigger sum after a wait. Just tap whichever one you\'d rather have.';
+
+  @override
+  String get weDcIntroImaginary =>
+      'These sums are imaginary. There is nothing to win, nothing to pay and nothing to receive: these are questions, not offers.';
+
+  @override
+  String get weDcIntroNoRightAnswer =>
+      'There is no right answer. Taking the money straight away is neither better nor worse than waiting.';
+
+  @override
+  String get weDcStart => 'Start';
+
+  @override
+  String get weDcLater => 'Later';
+
+  @override
+  String get weDcProgressTag => 'Choice';
+
+  @override
+  String get weDcPrompt => 'Which would you rather have?';
+
+  @override
+  String get weDcImaginaryTag => 'Imaginary sums — there is nothing to win.';
+
+  @override
+  String get weDcResultTitle => 'Your patience';
+
+  @override
+  String weDcPatienceScore(int score) {
+    return '$score / 100';
+  }
+
+  @override
+  String get weDcResultCaption =>
+      'The higher the number, the more willing you are to wait. It isn\'t a mark: both ends of the scale are equally valid.';
+
+  @override
+  String weDcIndifference(String delayed, String immediate) {
+    return 'Waiting a month for $delayed amounts, for you, to getting $immediate straight away.';
+  }
+
+  @override
+  String get weDcCurveTitle => 'What the wait was worth';
+
+  @override
+  String weDcPrevious(int score) {
+    return 'Last time: $score / 100';
+  }
+
+  @override
+  String get weDcNoBetterEnd =>
+      'This number doesn\'t say whether you played well. Preferring the money straight away is a trade-off, not a mistake — and it shifts with the moment, the mood and each person\'s situation.';
+
+  @override
+  String get weDcNotClinical =>
+      'This is a game, not a clinical measure: no threshold, no ranking, nothing to conclude about you.';
+
+  @override
+  String get weDcIncoherentTitle =>
+      'Answers too scattered to draw anything from';
+
+  @override
+  String get weDcIncoherentBody =>
+      'Your answers pull in opposite directions from one delay to the next: the same sum ends up worth more further away than it is close by. Nothing was saved. Play again whenever you like.';
+
+  @override
+  String get weDcReplay => 'Play again';
+
+  @override
+  String get weDcDone => 'Done';
 
   @override
   String get weCsEyebrow => 'Before going further';

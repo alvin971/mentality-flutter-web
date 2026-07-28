@@ -1,0 +1,127 @@
+{
+  "weDcEyebrow": {
+    "fr": "Jeu",
+    "en": "Game",
+    "desc": "Surtitre des écrans du jeu de tolérance au délai"
+  },
+  "weDcTitle": {
+    "fr": "Maintenant ou plus tard",
+    "en": "Now or later",
+    "desc": "Nom du jeu de tolérance au délai tel qu'il est présenté (jamais « test d'impulsivité » : c'est un jeu, pas une mesure clinique, et l'impulsivité n'est pas nommée)"
+  },
+  "weDcIntroTitle": {
+    "fr": "Une somme tout de suite, ou une plus grosse plus tard",
+    "en": "Some money right now, or more of it later",
+    "desc": "Titre de l'écran d'introduction du jeu de délai — la consigne en une phrase"
+  },
+  "weDcIntroBody": {
+    "fr": "On va te proposer vingt fois le même genre de choix : une somme disponible tout de suite, ou une somme plus grande après un délai. Tu appuies simplement sur celle que tu préfères.",
+    "en": "You'll be offered the same kind of choice twenty times: a sum available right now, or a bigger sum after a wait. Just tap whichever one you'd rather have.",
+    "desc": "Explication de la consigne du jeu de délai"
+  },
+  "weDcIntroImaginary": {
+    "fr": "Ces sommes sont imaginaires. Il n'y a rien à gagner, rien à payer et rien à recevoir : ce sont des questions, pas des offres.",
+    "en": "These sums are imaginary. There is nothing to win, nothing to pay and nothing to receive: these are questions, not offers.",
+    "desc": "AVERTISSEMENT CENTRAL du jeu de délai — l'app vend un bilan par ailleurs, et un utilisateur qui croirait à un vrai paiement répondrait pour toucher l'argent au lieu de répondre selon sa préférence"
+  },
+  "weDcIntroNoRightAnswer": {
+    "fr": "Il n'y a pas de bonne réponse. Prendre l'argent tout de suite n'est ni mieux ni moins bien qu'attendre.",
+    "en": "There is no right answer. Taking the money right away is neither better nor worse than waiting.",
+    "desc": "Cadrage posé dès l'introduction : aucun bout de l'échelle n'est meilleur que l'autre"
+  },
+  "weDcStart": {
+    "fr": "Commencer",
+    "en": "Start",
+    "desc": "Bouton qui lance la partie du jeu de délai"
+  },
+  "weDcLater": {
+    "fr": "Plus tard",
+    "en": "Later",
+    "desc": "Bouton qui quitte le jeu de délai sans y jouer — le jeu est facultatif"
+  },
+  "weDcProgressTag": {
+    "fr": "Choix",
+    "en": "Choice",
+    "desc": "Étiquette de la barre de progression du jeu de délai"
+  },
+  "weDcPrompt": {
+    "fr": "Qu'est-ce que tu préfères ?",
+    "en": "Which would you rather have?",
+    "desc": "Question posée au-dessus des deux offres"
+  },
+  "weDcImaginaryTag": {
+    "fr": "Sommes imaginaires — rien n'est à gagner.",
+    "en": "Imaginary sums — there is nothing to win.",
+    "desc": "Rappel court affiché sur chacun des vingt écrans de choix, partout où de l'argent s'affiche"
+  },
+  "weDcResultTitle": {
+    "fr": "Ta patience",
+    "en": "Your patience",
+    "desc": "Titre de l'écran de résultat du jeu de délai"
+  },
+  "weDcPatienceScore": {
+    "fr": "{score} / 100",
+    "en": "{score} / 100",
+    "desc": "L'index de patience, entre 0 (rien ne vaut la peine d'attendre) et 100 (attendre ne coûte rien)",
+    "placeholders": {
+      "score": "int"
+    }
+  },
+  "weDcResultCaption": {
+    "fr": "Plus le chiffre est haut, plus tu acceptes d'attendre. Ce n'est pas une note : les deux bouts de l'échelle se valent.",
+    "en": "The higher the number, the more willing you are to wait. It isn't a grade: both ends of the scale are equally valid.",
+    "desc": "Explication de l'index de patience, avec le rappel qu'aucun bout n'est meilleur"
+  },
+  "weDcIndifference": {
+    "fr": "Attendre un mois pour {delayed} revient, pour toi, à recevoir {immediate} tout de suite.",
+    "en": "Waiting a month for {delayed} amounts, for you, to getting {immediate} right now.",
+    "desc": "La phrase concrète du résultat : le point d'indifférence à un mois, redit en langue humaine plutôt qu'en index",
+    "placeholders": {
+      "delayed": "String",
+      "immediate": "String"
+    }
+  },
+  "weDcCurveTitle": {
+    "fr": "Ce que valait l'attente",
+    "en": "What the wait was worth",
+    "desc": "Titre du tableau récapitulatif : pour chaque délai, le montant immédiat jugé équivalent"
+  },
+  "weDcPrevious": {
+    "fr": "La dernière fois : {score} / 100",
+    "en": "Last time: {score} / 100",
+    "desc": "Comparaison avec la partie précédente. JAMAIS un record ni un meilleur score — il n'y a pas de bonne réponse à ce jeu",
+    "placeholders": {
+      "score": "int"
+    }
+  },
+  "weDcNoBetterEnd": {
+    "fr": "Ce chiffre ne dit pas si tu as bien joué. Préférer l'argent tout de suite est un arbitrage, pas une erreur — et il change selon le moment, l'humeur et la situation de chacun.",
+    "en": "This number doesn't say whether you played well. Preferring the money right away is a trade-off, not a mistake — and it shifts with the moment, the mood and each person's situation.",
+    "desc": "Garde-fou de lecture du score — empêche de lire l'index comme une performance ou un trait de caractère"
+  },
+  "weDcNotClinical": {
+    "fr": "C'est un jeu, pas une mesure clinique : aucun seuil, aucun classement, rien à en conclure sur toi.",
+    "en": "This is a game, not a clinical measure: no threshold, no ranking, nothing to conclude about you.",
+    "desc": "Cadrage obligatoire des jeux — jamais présentés comme des mesures cliniques"
+  },
+  "weDcIncoherentTitle": {
+    "fr": "Des réponses trop dispersées pour en tirer quelque chose",
+    "en": "Answers too scattered to draw anything from",
+    "desc": "Titre affiché quand la courbe remonte franchement — signe de réponses posées au hasard"
+  },
+  "weDcIncoherentBody": {
+    "fr": "Tes réponses vont dans des sens opposés d'un délai à l'autre : une même somme y vaut plus loin qu'elle ne vaut proche. Rien n'a été enregistré. Rejoue quand tu veux.",
+    "en": "Your answers pull in opposite directions from one delay to the next: the same sum ends up worth more further away than it is close by. Nothing was saved. Play again whenever you like.",
+    "desc": "Corps du message affiché quand les réponses ne permettent aucune lecture cohérente"
+  },
+  "weDcReplay": {
+    "fr": "Rejouer",
+    "en": "Play again",
+    "desc": "Bouton qui relance une partie du jeu de délai depuis l'écran de résultat"
+  },
+  "weDcDone": {
+    "fr": "Terminer",
+    "en": "Done",
+    "desc": "Bouton qui referme le jeu de délai depuis l'écran de résultat"
+  }
+}

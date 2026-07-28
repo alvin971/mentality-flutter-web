@@ -3103,6 +3103,91 @@ class AppLocalizationsEs extends AppLocalizations {
   String get weRvSelfIncrease => 'Subir un punto';
 
   @override
+  String get weDcEyebrow => 'Juego';
+
+  @override
+  String get weDcTitle => 'Ahora o más tarde';
+
+  @override
+  String get weDcIntroTitle =>
+      'Una cantidad ahora mismo, o una mayor más tarde';
+
+  @override
+  String get weDcIntroBody =>
+      'Te vamos a proponer veinte veces el mismo tipo de elección: una cantidad disponible ahora mismo, o una cantidad mayor después de una espera. Solo tienes que tocar la que prefieras.';
+
+  @override
+  String get weDcIntroImaginary =>
+      'Estas cantidades son imaginarias. No hay nada que ganar, nada que pagar y nada que recibir: son preguntas, no ofertas.';
+
+  @override
+  String get weDcIntroNoRightAnswer =>
+      'No hay respuesta correcta. Coger el dinero ahora mismo no es ni mejor ni peor que esperar.';
+
+  @override
+  String get weDcStart => 'Empezar';
+
+  @override
+  String get weDcLater => 'Más tarde';
+
+  @override
+  String get weDcProgressTag => 'Elección';
+
+  @override
+  String get weDcPrompt => '¿Qué prefieres?';
+
+  @override
+  String get weDcImaginaryTag =>
+      'Cantidades imaginarias: no hay nada que ganar.';
+
+  @override
+  String get weDcResultTitle => 'Tu paciencia';
+
+  @override
+  String weDcPatienceScore(int score) {
+    return '$score / 100';
+  }
+
+  @override
+  String get weDcResultCaption =>
+      'Cuanto más alta es la cifra, más dispuesto estás a esperar. No es una nota: los dos extremos de la escala valen lo mismo.';
+
+  @override
+  String weDcIndifference(String delayed, String immediate) {
+    return 'Esperar un mes por $delayed equivale, para ti, a recibir $immediate ahora mismo.';
+  }
+
+  @override
+  String get weDcCurveTitle => 'Lo que valía la espera';
+
+  @override
+  String weDcPrevious(int score) {
+    return 'La última vez: $score / 100';
+  }
+
+  @override
+  String get weDcNoBetterEnd =>
+      'Esta cifra no dice si has jugado bien. Preferir el dinero ahora mismo es un equilibrio, no un error, y cambia según el momento, el ánimo y la situación de cada uno.';
+
+  @override
+  String get weDcNotClinical =>
+      'Es un juego, no una medida clínica: ningún umbral, ninguna clasificación, nada que concluir sobre ti.';
+
+  @override
+  String get weDcIncoherentTitle =>
+      'Respuestas demasiado dispersas para sacar algo en claro';
+
+  @override
+  String get weDcIncoherentBody =>
+      'Tus respuestas van en sentidos opuestos de un plazo a otro: una misma cantidad acaba valiendo más lejos que cerca. No se ha guardado nada. Vuelve a jugar cuando quieras.';
+
+  @override
+  String get weDcReplay => 'Volver a jugar';
+
+  @override
+  String get weDcDone => 'Terminar';
+
+  @override
   String get weCsEyebrow => 'Antes de continuar';
 
   @override

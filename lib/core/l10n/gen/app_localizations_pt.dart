@@ -3101,6 +3101,90 @@ class AppLocalizationsPt extends AppLocalizations {
   String get weRvSelfIncrease => 'Aumentar um ponto';
 
   @override
+  String get weDcEyebrow => 'Jogo';
+
+  @override
+  String get weDcTitle => 'Agora ou mais tarde';
+
+  @override
+  String get weDcIntroTitle =>
+      'Uma quantia já a seguir, ou uma maior mais tarde';
+
+  @override
+  String get weDcIntroBody =>
+      'Vamos propor-te vinte vezes o mesmo tipo de escolha: uma quantia disponível já a seguir, ou uma quantia maior depois de uma espera. Basta tocares naquela que preferires.';
+
+  @override
+  String get weDcIntroImaginary =>
+      'Estas quantias são imaginárias. Não há nada a ganhar, nada a pagar e nada a receber: são perguntas, não ofertas.';
+
+  @override
+  String get weDcIntroNoRightAnswer =>
+      'Não há resposta certa. Levar o dinheiro já a seguir não é nem melhor nem pior do que esperar.';
+
+  @override
+  String get weDcStart => 'Começar';
+
+  @override
+  String get weDcLater => 'Mais tarde';
+
+  @override
+  String get weDcProgressTag => 'Escolha';
+
+  @override
+  String get weDcPrompt => 'O que preferes?';
+
+  @override
+  String get weDcImaginaryTag => 'Quantias imaginárias — não há nada a ganhar.';
+
+  @override
+  String get weDcResultTitle => 'A tua paciência';
+
+  @override
+  String weDcPatienceScore(int score) {
+    return '$score / 100';
+  }
+
+  @override
+  String get weDcResultCaption =>
+      'Quanto mais alto for o número, mais aceitas esperar. Não é uma nota: os dois extremos da escala valem o mesmo.';
+
+  @override
+  String weDcIndifference(String delayed, String immediate) {
+    return 'Esperar um mês por $delayed equivale, para ti, a receber $immediate já a seguir.';
+  }
+
+  @override
+  String get weDcCurveTitle => 'O que valia a espera';
+
+  @override
+  String weDcPrevious(int score) {
+    return 'Da última vez: $score / 100';
+  }
+
+  @override
+  String get weDcNoBetterEnd =>
+      'Este número não diz se jogaste bem. Preferir o dinheiro já a seguir é um compromisso, não um erro — e muda consoante o momento, a disposição e a situação de cada um.';
+
+  @override
+  String get weDcNotClinical =>
+      'É um jogo, não uma medida clínica: nenhum limiar, nenhuma classificação, nada a concluir sobre ti.';
+
+  @override
+  String get weDcIncoherentTitle =>
+      'Respostas demasiado dispersas para daí tirar alguma coisa';
+
+  @override
+  String get weDcIncoherentBody =>
+      'As tuas respostas vão em sentidos opostos de um prazo para outro: a mesma quantia acaba por valer mais longe do que perto. Não foi guardado nada. Joga outra vez quando quiseres.';
+
+  @override
+  String get weDcReplay => 'Jogar outra vez';
+
+  @override
+  String get weDcDone => 'Terminar';
+
+  @override
   String get weCsEyebrow => 'Antes de continuar';
 
   @override

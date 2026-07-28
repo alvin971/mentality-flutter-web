@@ -23,6 +23,7 @@ import 'package:mentality/features/waiting_event/_shared/domain/models/event_day
 import 'package:mentality/features/waiting_event/_shared/domain/models/q_answer_set.dart';
 import 'package:mentality/features/waiting_event/_shared/presentation/game_registry.dart';
 import 'package:mentality/features/waiting_event/day_hub/presentation/pages/day_hub_page.dart';
+import 'package:mentality/features/waiting_event/delay_choice/presentation/pages/delay_choice_game_page.dart';
 import 'package:mentality/features/waiting_event/reveals/data/self_estimate_store.dart';
 import 'package:mentality/features/waiting_event/reveals/domain/services/reveal_source.dart';
 import 'package:mentality/features/waiting_event/reveals/presentation/pages/reveal_page.dart';
@@ -289,19 +290,19 @@ void main() {
     });
   });
 
-  testWidgets('le registre de production ne livre que le Stroop',
+  testWidgets('le registre de production livre le Stroop et le jeu de délai',
       (tester) async {
     expect(GameRegistry.forGame(GameKind.stroop), isNotNull);
+    expect(GameRegistry.forGame(GameKind.delayChoice), isNotNull);
     for (final kind in [
-      GameKind.delayChoice,
       GameKind.timeEstimation,
       GameKind.confidenceCalibration,
     ]) {
       expect(GameRegistry.forGame(kind), isNull,
-          reason: '$kind n\'est pas encore écrit — lots H2 à H5');
+          reason: '$kind n\'est pas encore écrit — lots H3 à H5');
     }
 
-    // Et il ouvre bien le vrai écran.
+    // Et il ouvre bien les vrais écrans.
     ecranTelephone(tester);
     await tester.pumpWidget(ScreenUtilInit(
       designSize: const Size(375, 812),
@@ -320,7 +321,27 @@ void main() {
       ),
     ));
     await tester.pumpAndSettle();
-
     expect(find.byType(StroopGamePage), findsOneWidget);
+
+    await tester.pumpWidget(ScreenUtilInit(
+      designSize: const Size(375, 812),
+      builder: (_, __) => MaterialApp(
+        // Une clé neuve : re-`pumpWidget` réutiliserait l'état du Stroop.
+        key: UniqueKey(),
+        locale: const Locale('fr'),
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Builder(
+          builder: GameRegistry.forGame(GameKind.delayChoice)!.open,
+        ),
+      ),
+    ));
+    await tester.pumpAndSettle();
+    expect(find.byType(DelayChoiceGamePage), findsOneWidget);
   });
 }

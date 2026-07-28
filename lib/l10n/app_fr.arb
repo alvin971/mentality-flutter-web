@@ -4161,6 +4161,116 @@
   "@weRvSelfIncrease": {
     "description": "Info-bulle du bouton qui augmente l'estimation d'un point"
   },
+  "weDcEyebrow": "Jeu",
+  "@weDcEyebrow": {
+    "description": "Surtitre des écrans du jeu de tolérance au délai"
+  },
+  "weDcTitle": "Maintenant ou plus tard",
+  "@weDcTitle": {
+    "description": "Nom du jeu de tolérance au délai tel qu'il est présenté (jamais « test d'impulsivité » : c'est un jeu, pas une mesure clinique, et l'impulsivité n'est pas nommée)"
+  },
+  "weDcIntroTitle": "Une somme tout de suite, ou une plus grosse plus tard",
+  "@weDcIntroTitle": {
+    "description": "Titre de l'écran d'introduction du jeu de délai — la consigne en une phrase"
+  },
+  "weDcIntroBody": "On va te proposer vingt fois le même genre de choix : une somme disponible tout de suite, ou une somme plus grande après un délai. Tu appuies simplement sur celle que tu préfères.",
+  "@weDcIntroBody": {
+    "description": "Explication de la consigne du jeu de délai"
+  },
+  "weDcIntroImaginary": "Ces sommes sont imaginaires. Il n'y a rien à gagner, rien à payer et rien à recevoir : ce sont des questions, pas des offres.",
+  "@weDcIntroImaginary": {
+    "description": "AVERTISSEMENT CENTRAL du jeu de délai — l'app vend un bilan par ailleurs, et un utilisateur qui croirait à un vrai paiement répondrait pour toucher l'argent au lieu de répondre selon sa préférence"
+  },
+  "weDcIntroNoRightAnswer": "Il n'y a pas de bonne réponse. Prendre l'argent tout de suite n'est ni mieux ni moins bien qu'attendre.",
+  "@weDcIntroNoRightAnswer": {
+    "description": "Cadrage posé dès l'introduction : aucun bout de l'échelle n'est meilleur que l'autre"
+  },
+  "weDcStart": "Commencer",
+  "@weDcStart": {
+    "description": "Bouton qui lance la partie du jeu de délai"
+  },
+  "weDcLater": "Plus tard",
+  "@weDcLater": {
+    "description": "Bouton qui quitte le jeu de délai sans y jouer — le jeu est facultatif"
+  },
+  "weDcProgressTag": "Choix",
+  "@weDcProgressTag": {
+    "description": "Étiquette de la barre de progression du jeu de délai"
+  },
+  "weDcPrompt": "Qu'est-ce que tu préfères ?",
+  "@weDcPrompt": {
+    "description": "Question posée au-dessus des deux offres"
+  },
+  "weDcImaginaryTag": "Sommes imaginaires — rien n'est à gagner.",
+  "@weDcImaginaryTag": {
+    "description": "Rappel court affiché sur chacun des vingt écrans de choix, partout où de l'argent s'affiche"
+  },
+  "weDcResultTitle": "Ta patience",
+  "@weDcResultTitle": {
+    "description": "Titre de l'écran de résultat du jeu de délai"
+  },
+  "weDcPatienceScore": "{score} / 100",
+  "@weDcPatienceScore": {
+    "description": "L'index de patience, entre 0 (rien ne vaut la peine d'attendre) et 100 (attendre ne coûte rien)",
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "weDcResultCaption": "Plus le chiffre est haut, plus tu acceptes d'attendre. Ce n'est pas une note : les deux bouts de l'échelle se valent.",
+  "@weDcResultCaption": {
+    "description": "Explication de l'index de patience, avec le rappel qu'aucun bout n'est meilleur"
+  },
+  "weDcIndifference": "Attendre un mois pour {delayed} revient, pour toi, à recevoir {immediate} tout de suite.",
+  "@weDcIndifference": {
+    "description": "La phrase concrète du résultat : le point d'indifférence à un mois, redit en langue humaine plutôt qu'en index",
+    "placeholders": {
+      "delayed": {
+        "type": "String"
+      },
+      "immediate": {
+        "type": "String"
+      }
+    }
+  },
+  "weDcCurveTitle": "Ce que valait l'attente",
+  "@weDcCurveTitle": {
+    "description": "Titre du tableau récapitulatif : pour chaque délai, le montant immédiat jugé équivalent"
+  },
+  "weDcPrevious": "La dernière fois : {score} / 100",
+  "@weDcPrevious": {
+    "description": "Comparaison avec la partie précédente. JAMAIS un record ni un meilleur score — il n'y a pas de bonne réponse à ce jeu",
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "weDcNoBetterEnd": "Ce chiffre ne dit pas si tu as bien joué. Préférer l'argent tout de suite est un arbitrage, pas une erreur — et il change selon le moment, l'humeur et la situation de chacun.",
+  "@weDcNoBetterEnd": {
+    "description": "Garde-fou de lecture du score — empêche de lire l'index comme une performance ou un trait de caractère"
+  },
+  "weDcNotClinical": "C'est un jeu, pas une mesure clinique : aucun seuil, aucun classement, rien à en conclure sur toi.",
+  "@weDcNotClinical": {
+    "description": "Cadrage obligatoire des jeux — jamais présentés comme des mesures cliniques"
+  },
+  "weDcIncoherentTitle": "Des réponses trop dispersées pour en tirer quelque chose",
+  "@weDcIncoherentTitle": {
+    "description": "Titre affiché quand la courbe remonte franchement — signe de réponses posées au hasard"
+  },
+  "weDcIncoherentBody": "Tes réponses vont dans des sens opposés d'un délai à l'autre : une même somme y vaut plus loin qu'elle ne vaut proche. Rien n'a été enregistré. Rejoue quand tu veux.",
+  "@weDcIncoherentBody": {
+    "description": "Corps du message affiché quand les réponses ne permettent aucune lecture cohérente"
+  },
+  "weDcReplay": "Rejouer",
+  "@weDcReplay": {
+    "description": "Bouton qui relance une partie du jeu de délai depuis l'écran de résultat"
+  },
+  "weDcDone": "Terminer",
+  "@weDcDone": {
+    "description": "Bouton qui referme le jeu de délai depuis l'écran de résultat"
+  },
   "weCsEyebrow": "Avant d'aller plus loin",
   "@weCsEyebrow": {
     "description": "Surtitre de l'écran de recueil du consentement art. 9"

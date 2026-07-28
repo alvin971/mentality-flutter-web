@@ -3096,6 +3096,90 @@ class AppLocalizationsFr extends AppLocalizations {
   String get weRvSelfIncrease => 'Augmenter d\'un point';
 
   @override
+  String get weDcEyebrow => 'Jeu';
+
+  @override
+  String get weDcTitle => 'Maintenant ou plus tard';
+
+  @override
+  String get weDcIntroTitle =>
+      'Une somme tout de suite, ou une plus grosse plus tard';
+
+  @override
+  String get weDcIntroBody =>
+      'On va te proposer vingt fois le même genre de choix : une somme disponible tout de suite, ou une somme plus grande après un délai. Tu appuies simplement sur celle que tu préfères.';
+
+  @override
+  String get weDcIntroImaginary =>
+      'Ces sommes sont imaginaires. Il n\'y a rien à gagner, rien à payer et rien à recevoir : ce sont des questions, pas des offres.';
+
+  @override
+  String get weDcIntroNoRightAnswer =>
+      'Il n\'y a pas de bonne réponse. Prendre l\'argent tout de suite n\'est ni mieux ni moins bien qu\'attendre.';
+
+  @override
+  String get weDcStart => 'Commencer';
+
+  @override
+  String get weDcLater => 'Plus tard';
+
+  @override
+  String get weDcProgressTag => 'Choix';
+
+  @override
+  String get weDcPrompt => 'Qu\'est-ce que tu préfères ?';
+
+  @override
+  String get weDcImaginaryTag => 'Sommes imaginaires — rien n\'est à gagner.';
+
+  @override
+  String get weDcResultTitle => 'Ta patience';
+
+  @override
+  String weDcPatienceScore(int score) {
+    return '$score / 100';
+  }
+
+  @override
+  String get weDcResultCaption =>
+      'Plus le chiffre est haut, plus tu acceptes d\'attendre. Ce n\'est pas une note : les deux bouts de l\'échelle se valent.';
+
+  @override
+  String weDcIndifference(String delayed, String immediate) {
+    return 'Attendre un mois pour $delayed revient, pour toi, à recevoir $immediate tout de suite.';
+  }
+
+  @override
+  String get weDcCurveTitle => 'Ce que valait l\'attente';
+
+  @override
+  String weDcPrevious(int score) {
+    return 'La dernière fois : $score / 100';
+  }
+
+  @override
+  String get weDcNoBetterEnd =>
+      'Ce chiffre ne dit pas si tu as bien joué. Préférer l\'argent tout de suite est un arbitrage, pas une erreur — et il change selon le moment, l\'humeur et la situation de chacun.';
+
+  @override
+  String get weDcNotClinical =>
+      'C\'est un jeu, pas une mesure clinique : aucun seuil, aucun classement, rien à en conclure sur toi.';
+
+  @override
+  String get weDcIncoherentTitle =>
+      'Des réponses trop dispersées pour en tirer quelque chose';
+
+  @override
+  String get weDcIncoherentBody =>
+      'Tes réponses vont dans des sens opposés d\'un délai à l\'autre : une même somme y vaut plus loin qu\'elle ne vaut proche. Rien n\'a été enregistré. Rejoue quand tu veux.';
+
+  @override
+  String get weDcReplay => 'Rejouer';
+
+  @override
+  String get weDcDone => 'Terminer';
+
+  @override
   String get weCsEyebrow => 'Avant d\'aller plus loin';
 
   @override

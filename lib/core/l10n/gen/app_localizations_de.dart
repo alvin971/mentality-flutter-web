@@ -3109,6 +3109,90 @@ class AppLocalizationsDe extends AppLocalizations {
   String get weRvSelfIncrease => 'Um einen Punkt erhöhen';
 
   @override
+  String get weDcEyebrow => 'Spiel';
+
+  @override
+  String get weDcTitle => 'Jetzt oder später';
+
+  @override
+  String get weDcIntroTitle => 'Ein Betrag sofort oder ein größerer später';
+
+  @override
+  String get weDcIntroBody =>
+      'Zwanzigmal bekommst du dieselbe Art von Wahl: ein Betrag, der sofort verfügbar ist, oder ein größerer Betrag nach einer Wartezeit. Tippe einfach den an, den du lieber hättest.';
+
+  @override
+  String get weDcIntroImaginary =>
+      'Diese Beträge sind erfunden. Es gibt nichts zu gewinnen, nichts zu zahlen und nichts zu bekommen: Das sind Fragen, keine Angebote.';
+
+  @override
+  String get weDcIntroNoRightAnswer =>
+      'Es gibt keine richtige Antwort. Das Geld sofort zu nehmen ist weder besser noch schlechter, als zu warten.';
+
+  @override
+  String get weDcStart => 'Beginnen';
+
+  @override
+  String get weDcLater => 'Später';
+
+  @override
+  String get weDcProgressTag => 'Wahl';
+
+  @override
+  String get weDcPrompt => 'Was hättest du lieber?';
+
+  @override
+  String get weDcImaginaryTag =>
+      'Erfundene Beträge — es gibt nichts zu gewinnen.';
+
+  @override
+  String get weDcResultTitle => 'Deine Geduld';
+
+  @override
+  String weDcPatienceScore(int score) {
+    return '$score / 100';
+  }
+
+  @override
+  String get weDcResultCaption =>
+      'Je höher die Zahl, desto eher bist du bereit zu warten. Das ist keine Note: Beide Enden der Skala sind gleich viel wert.';
+
+  @override
+  String weDcIndifference(String delayed, String immediate) {
+    return 'Einen Monat auf $delayed zu warten kommt für dich dem gleich, sofort $immediate zu bekommen.';
+  }
+
+  @override
+  String get weDcCurveTitle => 'Was das Warten wert war';
+
+  @override
+  String weDcPrevious(int score) {
+    return 'Beim letzten Mal: $score / 100';
+  }
+
+  @override
+  String get weDcNoBetterEnd =>
+      'Diese Zahl sagt nicht, ob du gut gespielt hast. Das Geld sofort zu bevorzugen ist eine Abwägung, kein Fehler — und sie verschiebt sich je nach Moment, Stimmung und Lebenslage.';
+
+  @override
+  String get weDcNotClinical =>
+      'Das ist ein Spiel, keine klinische Messung: kein Schwellenwert, keine Rangliste, nichts, was du daraus über dich schließen solltest.';
+
+  @override
+  String get weDcIncoherentTitle =>
+      'Zu verstreute Antworten, um etwas daraus zu lesen';
+
+  @override
+  String get weDcIncoherentBody =>
+      'Deine Antworten laufen von einer Wartezeit zur nächsten in entgegengesetzte Richtungen: Derselbe Betrag ist weiter entfernt am Ende mehr wert als nah. Es wurde nichts gespeichert. Spiel noch einmal, wann du magst.';
+
+  @override
+  String get weDcReplay => 'Noch einmal spielen';
+
+  @override
+  String get weDcDone => 'Fertig';
+
+  @override
   String get weCsEyebrow => 'Bevor es weitergeht';
 
   @override

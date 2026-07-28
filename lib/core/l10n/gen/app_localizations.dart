@@ -5445,6 +5445,144 @@ abstract class AppLocalizations {
   /// **'Augmenter d\'un point'**
   String get weRvSelfIncrease;
 
+  /// Surtitre des écrans du jeu de tolérance au délai
+  ///
+  /// In fr, this message translates to:
+  /// **'Jeu'**
+  String get weDcEyebrow;
+
+  /// Nom du jeu de tolérance au délai tel qu'il est présenté (jamais « test d'impulsivité » : c'est un jeu, pas une mesure clinique, et l'impulsivité n'est pas nommée)
+  ///
+  /// In fr, this message translates to:
+  /// **'Maintenant ou plus tard'**
+  String get weDcTitle;
+
+  /// Titre de l'écran d'introduction du jeu de délai — la consigne en une phrase
+  ///
+  /// In fr, this message translates to:
+  /// **'Une somme tout de suite, ou une plus grosse plus tard'**
+  String get weDcIntroTitle;
+
+  /// Explication de la consigne du jeu de délai
+  ///
+  /// In fr, this message translates to:
+  /// **'On va te proposer vingt fois le même genre de choix : une somme disponible tout de suite, ou une somme plus grande après un délai. Tu appuies simplement sur celle que tu préfères.'**
+  String get weDcIntroBody;
+
+  /// AVERTISSEMENT CENTRAL du jeu de délai — l'app vend un bilan par ailleurs, et un utilisateur qui croirait à un vrai paiement répondrait pour toucher l'argent au lieu de répondre selon sa préférence
+  ///
+  /// In fr, this message translates to:
+  /// **'Ces sommes sont imaginaires. Il n\'y a rien à gagner, rien à payer et rien à recevoir : ce sont des questions, pas des offres.'**
+  String get weDcIntroImaginary;
+
+  /// Cadrage posé dès l'introduction : aucun bout de l'échelle n'est meilleur que l'autre
+  ///
+  /// In fr, this message translates to:
+  /// **'Il n\'y a pas de bonne réponse. Prendre l\'argent tout de suite n\'est ni mieux ni moins bien qu\'attendre.'**
+  String get weDcIntroNoRightAnswer;
+
+  /// Bouton qui lance la partie du jeu de délai
+  ///
+  /// In fr, this message translates to:
+  /// **'Commencer'**
+  String get weDcStart;
+
+  /// Bouton qui quitte le jeu de délai sans y jouer — le jeu est facultatif
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus tard'**
+  String get weDcLater;
+
+  /// Étiquette de la barre de progression du jeu de délai
+  ///
+  /// In fr, this message translates to:
+  /// **'Choix'**
+  String get weDcProgressTag;
+
+  /// Question posée au-dessus des deux offres
+  ///
+  /// In fr, this message translates to:
+  /// **'Qu\'est-ce que tu préfères ?'**
+  String get weDcPrompt;
+
+  /// Rappel court affiché sur chacun des vingt écrans de choix, partout où de l'argent s'affiche
+  ///
+  /// In fr, this message translates to:
+  /// **'Sommes imaginaires — rien n\'est à gagner.'**
+  String get weDcImaginaryTag;
+
+  /// Titre de l'écran de résultat du jeu de délai
+  ///
+  /// In fr, this message translates to:
+  /// **'Ta patience'**
+  String get weDcResultTitle;
+
+  /// L'index de patience, entre 0 (rien ne vaut la peine d'attendre) et 100 (attendre ne coûte rien)
+  ///
+  /// In fr, this message translates to:
+  /// **'{score} / 100'**
+  String weDcPatienceScore(int score);
+
+  /// Explication de l'index de patience, avec le rappel qu'aucun bout n'est meilleur
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus le chiffre est haut, plus tu acceptes d\'attendre. Ce n\'est pas une note : les deux bouts de l\'échelle se valent.'**
+  String get weDcResultCaption;
+
+  /// La phrase concrète du résultat : le point d'indifférence à un mois, redit en langue humaine plutôt qu'en index
+  ///
+  /// In fr, this message translates to:
+  /// **'Attendre un mois pour {delayed} revient, pour toi, à recevoir {immediate} tout de suite.'**
+  String weDcIndifference(String delayed, String immediate);
+
+  /// Titre du tableau récapitulatif : pour chaque délai, le montant immédiat jugé équivalent
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce que valait l\'attente'**
+  String get weDcCurveTitle;
+
+  /// Comparaison avec la partie précédente. JAMAIS un record ni un meilleur score — il n'y a pas de bonne réponse à ce jeu
+  ///
+  /// In fr, this message translates to:
+  /// **'La dernière fois : {score} / 100'**
+  String weDcPrevious(int score);
+
+  /// Garde-fou de lecture du score — empêche de lire l'index comme une performance ou un trait de caractère
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce chiffre ne dit pas si tu as bien joué. Préférer l\'argent tout de suite est un arbitrage, pas une erreur — et il change selon le moment, l\'humeur et la situation de chacun.'**
+  String get weDcNoBetterEnd;
+
+  /// Cadrage obligatoire des jeux — jamais présentés comme des mesures cliniques
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est un jeu, pas une mesure clinique : aucun seuil, aucun classement, rien à en conclure sur toi.'**
+  String get weDcNotClinical;
+
+  /// Titre affiché quand la courbe remonte franchement — signe de réponses posées au hasard
+  ///
+  /// In fr, this message translates to:
+  /// **'Des réponses trop dispersées pour en tirer quelque chose'**
+  String get weDcIncoherentTitle;
+
+  /// Corps du message affiché quand les réponses ne permettent aucune lecture cohérente
+  ///
+  /// In fr, this message translates to:
+  /// **'Tes réponses vont dans des sens opposés d\'un délai à l\'autre : une même somme y vaut plus loin qu\'elle ne vaut proche. Rien n\'a été enregistré. Rejoue quand tu veux.'**
+  String get weDcIncoherentBody;
+
+  /// Bouton qui relance une partie du jeu de délai depuis l'écran de résultat
+  ///
+  /// In fr, this message translates to:
+  /// **'Rejouer'**
+  String get weDcReplay;
+
+  /// Bouton qui referme le jeu de délai depuis l'écran de résultat
+  ///
+  /// In fr, this message translates to:
+  /// **'Terminer'**
+  String get weDcDone;
+
   /// Surtitre de l'écran de recueil du consentement art. 9
   ///
   /// In fr, this message translates to:
