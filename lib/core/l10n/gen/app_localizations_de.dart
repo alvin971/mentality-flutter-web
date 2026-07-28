@@ -2979,4 +2979,132 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get weRunnerDoneCta => 'Zurück zum Programm';
+
+  @override
+  String get weRvEyebrow => 'Deine Enthüllung des Tages';
+
+  @override
+  String get weRvContinue => 'Weiter';
+
+  @override
+  String get weRvBackToHub => 'Zurück zum Programm';
+
+  @override
+  String get weRvScoreLabel => 'PUNKTWERT';
+
+  @override
+  String weRvCi(int low, int high) {
+    return '95-%-Konfidenzintervall · $low – $high';
+  }
+
+  @override
+  String get weRvCaveat =>
+      'Ein Index ist eine Messung mit ihrer Fehlermarge – kein Urteil. Dieselbe Testung noch einmal zu absolvieren würde nicht genau dieselbe Zahl ergeben.';
+
+  @override
+  String get weRvUnavailableTitle => 'Keine Testung zum Enthüllen';
+
+  @override
+  String get weRvUnavailableBody =>
+      'Auf diesem Gerät ist diesem Zugang keine abgeschlossene Testung zugeordnet. Nichts geht verloren: Die Enthüllung erscheint, sobald deine Ergebnisse hier wieder lesbar sind.';
+
+  @override
+  String get weRvMissingTitle => 'Dieser Index wurde nicht berechnet';
+
+  @override
+  String get weRvMissingBody =>
+      'Deine gespeicherte Testung enthält diesen Index nicht – ein Untertest fehlte. Die übrigen Enthüllungen bleiben verfügbar.';
+
+  @override
+  String get weRvVciBody =>
+      'Was du über Wörter und Ideen weißt und wie du sie verknüpfst: definieren, erklären, finden, was zwei Begriffe verbindet. Das ist der Teil des Profils, der sich über die Jahre am wenigsten verändert.';
+
+  @override
+  String get weRvVsiBody =>
+      'Wie du mit Formen und Raum umgehst: ein Muster nachbauen, sehen, wie Teile zusammenpassen, noch bevor du sie gelegt hast.';
+
+  @override
+  String get weRvFriBody =>
+      'Wie du eine Regel findest, die dir niemand gegeben hat – allein aus dem, was du beobachtest. Das ist das Denken, das nichts dem Gelernten verdankt.';
+
+  @override
+  String get weRvWmiBody =>
+      'Was du gleichzeitig im Kopf behalten UND bearbeiten kannst: eine Folge merken und dabei umsortieren. Das ist der Index, der am empfindlichsten auf Müdigkeit und Stress reagiert.';
+
+  @override
+  String get weRvPsiBody =>
+      'Wie schnell du eine einfache Information fehlerfrei verarbeitest. Das ist kein „schnelles Denken“: Es ist ein Durchsatz, und er wird mit Aufmerksamkeit bezahlt.';
+
+  @override
+  String get weRvStrengthsTitle => 'Deine Stärken und Aufmerksamkeitspunkte';
+
+  @override
+  String get weRvStrengthsIntro =>
+      'Heute werden die fünf Indizes miteinander verglichen. Eine Stärke ist kein absolutes Talent: Sie ist das, was dein eigenes durchschnittliches Niveau um mehr als 10 Punkte übertrifft.';
+
+  @override
+  String get weRvStrengthsNone =>
+      'Kein Index weicht um mehr als 10 Punkte von deinem durchschnittlichen Niveau ab: Dein Profil ist gleichmäßig – und das ist für sich genommen ein Ergebnis.';
+
+  @override
+  String get weRvFullIqLabel => 'Gesamt-IQ';
+
+  @override
+  String get weRvFullIqBody =>
+      'Der Gesamt-IQ fasst die fünf Indizes in einer einzigen Zahl zusammen. Wenn sie weit auseinanderliegen, verliert diese Zusammenfassung ihren Sinn: Dann beschreibt dich das Detail, nicht die Summe.';
+
+  @override
+  String get weRvEstimateTitle => 'DEINE SCHÄTZUNG GEGENÜBER DER MESSUNG';
+
+  @override
+  String weRvEstimateLine(int estimate, int measured) {
+    return 'Du hast dich auf $estimate geschätzt. Die Messung ergibt $measured.';
+  }
+
+  @override
+  String weRvEstimateOver(int points) {
+    return 'Das sind $points Punkte über der Messung.';
+  }
+
+  @override
+  String weRvEstimateUnder(int points) {
+    return 'Das sind $points Punkte unter der Messung.';
+  }
+
+  @override
+  String get weRvEstimateClose =>
+      'Weniger als 5 Punkte Unterschied: Deine Schätzung und die Messung sagen dasselbe.';
+
+  @override
+  String get weRvEstimateMissing =>
+      'Du hast keine Schätzung abgegeben – es gibt nichts zu vergleichen.';
+
+  @override
+  String get weRvSelfEyebrow => 'Vor jeder Enthüllung';
+
+  @override
+  String get weRvSelfTitle => 'Wie hoch schätzt du deinen IQ?';
+
+  @override
+  String get weRvSelfBody =>
+      'Eine einzige Frage, jetzt gestellt: Nach einer ersten Enthüllung wäre deine Antwort von der eben gelesenen Zahl beeinflusst. 100 ist der Durchschnitt. Deine Antwort bleibt auf deinem Telefon und kommt an Tag 8 zu dir zurück.';
+
+  @override
+  String get weRvSelfHint =>
+      'Schiebe den Regler oder tippe auf − und +, um zu wählen.';
+
+  @override
+  String get weRvSelfAverage => '100 ist der Durchschnitt.';
+
+  @override
+  String get weRvSelfConfirm => 'Meine Schätzung bestätigen';
+
+  @override
+  String get weRvSelfDecline => 'Ich möchte lieber nicht antworten';
+
+  @override
+  String get weRvSelfDecrease => 'Um einen Punkt verringern';
+
+  @override
+  String get weRvSelfIncrease => 'Um einen Punkt erhöhen';
 }

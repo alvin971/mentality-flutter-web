@@ -244,5 +244,194 @@
     "fr": "Revenir au programme",
     "en": "Back to the programme",
     "desc": "Bouton de sortie de l'écran de fin, vers le hub de l'événement"
+  },
+  "weRvEyebrow": {
+    "fr": "Ta révélation du jour",
+    "en": "Today's reveal",
+    "desc": "Surtitre de l'écran de révélation"
+  },
+  "weRvContinue": {
+    "fr": "Continuer",
+    "en": "Continue",
+    "desc": "Bouton de sortie d'une révélation quand une activité suit"
+  },
+  "weRvBackToHub": {
+    "fr": "Revenir au programme",
+    "en": "Back to the programme",
+    "desc": "Bouton de sortie d'une révélation quand rien ne suit"
+  },
+  "weRvScoreLabel": {
+    "fr": "SCORE",
+    "en": "SCORE",
+    "desc": "Étiquette mono au-dessus du nombre révélé"
+  },
+  "weRvCi": {
+    "fr": "Intervalle de confiance à 95 % · {low} – {high}",
+    "en": "95% confidence interval · {low} – {high}",
+    "desc": "Intervalle de confiance à 95 % du score révélé",
+    "placeholders": {
+      "low": "int",
+      "high": "int"
+    }
+  },
+  "weRvCaveat": {
+    "fr": "Un indice est une mesure, avec sa marge d'erreur — pas un verdict. Repasser le même bilan ne redonnerait pas exactement le même nombre.",
+    "en": "An index is a measurement, with its margin of error — not a verdict. Taking the same assessment again would not give exactly the same number.",
+    "desc": "Mise en garde présente sur TOUTES les révélations : un score est une mesure avec sa marge d'erreur"
+  },
+  "weRvUnavailableTitle": {
+    "fr": "Aucun bilan à révéler",
+    "en": "No assessment to reveal",
+    "desc": "Titre quand aucun bilan n'est rattaché au passe courant"
+  },
+  "weRvUnavailableBody": {
+    "fr": "Aucun bilan terminé n'est rattaché à ce passe sur cet appareil. Rien n'est perdu : la révélation s'affichera dès que tes résultats seront de nouveau lisibles ici.",
+    "en": "No completed assessment is attached to this pass on this device. Nothing is lost: the reveal will appear as soon as your results are readable here again.",
+    "desc": "Corps du message quand aucun bilan n'est rattaché au passe courant"
+  },
+  "weRvMissingTitle": {
+    "fr": "Cet indice n'a pas été calculé",
+    "en": "This index was not calculated",
+    "desc": "Titre quand l'indice du jour n'a pas été calculé (sous-test manquant)"
+  },
+  "weRvMissingBody": {
+    "fr": "Ton bilan enregistré ne contient pas cet indice — il y manquait un sous-test. Les autres révélations restent disponibles.",
+    "en": "Your saved assessment does not include this index — a subtest was missing. The other reveals remain available.",
+    "desc": "Corps du message quand l'indice du jour n'a pas été calculé"
+  },
+  "weRvVciBody": {
+    "fr": "Ce que tu sais des mots et des idées, et ta façon de les relier : définir, expliquer, retrouver ce qui rapproche deux notions. C'est la part du profil qui bouge le moins avec les années.",
+    "en": "What you know about words and ideas, and how you connect them: defining, explaining, finding what brings two notions together. It is the part of the profile that changes least over the years.",
+    "desc": "Explication de l'indice de compréhension verbale, jour 1"
+  },
+  "weRvVsiBody": {
+    "fr": "Ta façon de manipuler les formes et l'espace : reconstruire un motif, voir comment des pièces s'assemblent avant même de les avoir posées.",
+    "en": "How you handle shapes and space: rebuilding a pattern, seeing how pieces fit together before you have even laid them down.",
+    "desc": "Explication de l'indice visuo-spatial, jour 5"
+  },
+  "weRvFriBody": {
+    "fr": "Ta façon de trouver une règle que personne ne t'a donnée, à partir de ce que tu observes. C'est le raisonnement qui ne doit rien à ce que tu as appris.",
+    "en": "How you find a rule nobody gave you, from what you observe. It is the reasoning that owes nothing to what you were taught.",
+    "desc": "Explication de l'indice de raisonnement fluide, jour 4"
+  },
+  "weRvWmiBody": {
+    "fr": "Ce que tu peux garder en tête ET manipuler en même temps : retenir une suite tout en la réorganisant. C'est l'indice le plus sensible à la fatigue et au stress.",
+    "en": "What you can hold in mind AND handle at the same time: keeping a sequence while reordering it. It is the index most sensitive to tiredness and stress.",
+    "desc": "Explication de l'indice de mémoire de travail, jour 3"
+  },
+  "weRvPsiBody": {
+    "fr": "La vitesse à laquelle tu traites une information simple sans te tromper. Ce n'est pas « penser vite » : c'est un débit, et il se paie en attention.",
+    "en": "How fast you process simple information without making mistakes. It is not “thinking fast”: it is a throughput, and it is paid for in attention.",
+    "desc": "Explication de l'indice de vitesse de traitement, jour 2"
+  },
+  "weRvStrengthsTitle": {
+    "fr": "Tes forces et tes points de vigilance",
+    "en": "Your strengths and points of vigilance",
+    "desc": "Titre de la révélation du jour 6 (forces et faiblesses)"
+  },
+  "weRvStrengthsIntro": {
+    "fr": "Aujourd'hui, les cinq indices se comparent entre eux. Une force n'est pas un talent absolu : c'est ce qui dépasse ton propre niveau moyen de plus de 10 points.",
+    "en": "Today the five indices are compared with one another. A strength is not an absolute talent: it is what exceeds your own average level by more than 10 points.",
+    "desc": "Introduction de la révélation du jour 6 : une force est RELATIVE au niveau moyen de la personne"
+  },
+  "weRvStrengthsNone": {
+    "fr": "Aucun indice ne s'écarte de plus de 10 points de ton niveau moyen : ton profil est régulier, et c'est un résultat en soi.",
+    "en": "No index departs from your average level by more than 10 points: your profile is even, and that is a result in itself.",
+    "desc": "Message du jour 6 quand aucun indice ne se détache : un profil régulier est un résultat"
+  },
+  "weRvFullIqLabel": {
+    "fr": "QI global",
+    "en": "Full-scale IQ",
+    "desc": "Titre de la révélation du jour 8 (QI global)"
+  },
+  "weRvFullIqBody": {
+    "fr": "Le QI global résume les cinq indices en un seul nombre. Quand ils s'écartent beaucoup les uns des autres, ce résumé perd de son sens : c'est alors le détail qui te décrit, pas le total.",
+    "en": "The full-scale IQ sums up the five indices in a single number. When they differ widely from one another, that summary loses its meaning: it is then the detail that describes you, not the total.",
+    "desc": "Explication du QI global : un résumé qui perd son sens quand les indices s'écartent"
+  },
+  "weRvEstimateTitle": {
+    "fr": "TON ESTIMATION FACE À LA MESURE",
+    "en": "YOUR ESTIMATE VS THE MEASUREMENT",
+    "desc": "Étiquette mono du bloc qui confronte l'auto-estimation du jour 1 au QI mesuré"
+  },
+  "weRvEstimateLine": {
+    "fr": "Tu t'estimais à {estimate}. La mesure donne {measured}.",
+    "en": "You estimated {estimate}. The measurement gives {measured}.",
+    "desc": "Rappel de l'auto-estimation du jour 1 et du score mesuré",
+    "placeholders": {
+      "estimate": "int",
+      "measured": "int"
+    }
+  },
+  "weRvEstimateOver": {
+    "fr": "Soit {points} points au-dessus de la mesure.",
+    "en": "That is {points} points above the measurement.",
+    "desc": "Constat d'écart quand l'estimation dépasse la mesure — un écart, jamais un rang inventé",
+    "placeholders": {
+      "points": "int"
+    }
+  },
+  "weRvEstimateUnder": {
+    "fr": "Soit {points} points en dessous de la mesure.",
+    "en": "That is {points} points below the measurement.",
+    "desc": "Constat d'écart quand l'estimation est en dessous de la mesure",
+    "placeholders": {
+      "points": "int"
+    }
+  },
+  "weRvEstimateClose": {
+    "fr": "Moins de 5 points d'écart : ton estimation et la mesure disent la même chose.",
+    "en": "Less than 5 points apart: your estimate and the measurement say the same thing.",
+    "desc": "Constat quand l'estimation est à moins de 5 points de la mesure"
+  },
+  "weRvEstimateMissing": {
+    "fr": "Tu n'avais pas donné d'estimation — il n'y a rien à confronter.",
+    "en": "You did not give an estimate — there is nothing to compare.",
+    "desc": "Message du jour 8 quand aucune auto-estimation n'a été donnée au jour 1"
+  },
+  "weRvSelfEyebrow": {
+    "fr": "Avant toute révélation",
+    "en": "Before any reveal",
+    "desc": "Surtitre de l'auto-estimation du QI — elle passe AVANT toute révélation"
+  },
+  "weRvSelfTitle": {
+    "fr": "À combien estimes-tu ton QI ?",
+    "en": "What do you think your IQ is?",
+    "desc": "Question d'auto-estimation du QI, posée une seule fois au jour 1"
+  },
+  "weRvSelfBody": {
+    "fr": "Une seule question, posée maintenant : après une première révélation, ta réponse serait influencée par le chiffre que tu viens de lire. 100 est la moyenne. Ta réponse reste sur ton téléphone et te sera rendue au jour 8.",
+    "en": "A single question, asked now: after a first reveal, your answer would be influenced by the number you had just read. 100 is the average. Your answer stays on your phone and comes back to you on day 8.",
+    "desc": "Explication de l'auto-estimation : pourquoi maintenant, où va la réponse, quand elle revient"
+  },
+  "weRvSelfHint": {
+    "fr": "Fais glisser, ou touche − et +, pour choisir.",
+    "en": "Slide, or tap − and +, to choose.",
+    "desc": "Indication tant que l'estimation n'a pas été déplacée (le bouton reste inerte)"
+  },
+  "weRvSelfAverage": {
+    "fr": "100 est la moyenne.",
+    "en": "100 is the average.",
+    "desc": "Repère affiché sous l'échelle d'auto-estimation une fois qu'elle a été déplacée"
+  },
+  "weRvSelfConfirm": {
+    "fr": "Valider mon estimation",
+    "en": "Confirm my estimate",
+    "desc": "Bouton qui enregistre l'auto-estimation"
+  },
+  "weRvSelfDecline": {
+    "fr": "Je préfère ne pas répondre",
+    "en": "I'd rather not answer",
+    "desc": "Bouton qui clôt la question sans donner de nombre — sans lui, elle reviendrait sans fin"
+  },
+  "weRvSelfDecrease": {
+    "fr": "Diminuer d'un point",
+    "en": "Decrease by one point",
+    "desc": "Info-bulle du bouton qui diminue l'estimation d'un point"
+  },
+  "weRvSelfIncrease": {
+    "fr": "Augmenter d'un point",
+    "en": "Increase by one point",
+    "desc": "Info-bulle du bouton qui augmente l'estimation d'un point"
   }
 }

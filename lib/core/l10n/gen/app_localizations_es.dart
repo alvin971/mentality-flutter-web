@@ -2974,4 +2974,131 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get weRunnerDoneCta => 'Volver al programa';
+
+  @override
+  String get weRvEyebrow => 'Tu revelación del día';
+
+  @override
+  String get weRvContinue => 'Continuar';
+
+  @override
+  String get weRvBackToHub => 'Volver al programa';
+
+  @override
+  String get weRvScoreLabel => 'PUNTUACIÓN';
+
+  @override
+  String weRvCi(int low, int high) {
+    return 'Intervalo de confianza del 95 % · $low – $high';
+  }
+
+  @override
+  String get weRvCaveat =>
+      'Un índice es una medida, con su margen de error, no un veredicto. Repetir la misma evaluación no daría exactamente el mismo número.';
+
+  @override
+  String get weRvUnavailableTitle => 'No hay evaluación que revelar';
+
+  @override
+  String get weRvUnavailableBody =>
+      'No hay ninguna evaluación completada asociada a este pase en este dispositivo. No se pierde nada: la revelación aparecerá en cuanto tus resultados vuelvan a ser legibles aquí.';
+
+  @override
+  String get weRvMissingTitle => 'Este índice no se ha calculado';
+
+  @override
+  String get weRvMissingBody =>
+      'Tu evaluación guardada no incluye este índice: faltaba una subprueba. Las demás revelaciones siguen disponibles.';
+
+  @override
+  String get weRvVciBody =>
+      'Lo que sabes sobre las palabras y las ideas, y tu manera de relacionarlas: definir, explicar, encontrar lo que acerca dos nociones. Es la parte del perfil que menos cambia con los años.';
+
+  @override
+  String get weRvVsiBody =>
+      'Tu manera de manipular las formas y el espacio: reconstruir un motivo, ver cómo encajan las piezas incluso antes de colocarlas.';
+
+  @override
+  String get weRvFriBody =>
+      'Tu manera de encontrar una regla que nadie te ha dado, a partir de lo que observas. Es el razonamiento que no debe nada a lo aprendido.';
+
+  @override
+  String get weRvWmiBody =>
+      'Lo que puedes mantener en la cabeza Y manipular al mismo tiempo: retener una serie mientras la reorganizas. Es el índice más sensible al cansancio y al estrés.';
+
+  @override
+  String get weRvPsiBody =>
+      'La velocidad a la que procesas una información sencilla sin equivocarte. No es «pensar rápido»: es un caudal, y se paga en atención.';
+
+  @override
+  String get weRvStrengthsTitle => 'Tus fortalezas y tus puntos de vigilancia';
+
+  @override
+  String get weRvStrengthsIntro =>
+      'Hoy los cinco índices se comparan entre sí. Una fortaleza no es un talento absoluto: es lo que supera tu propio nivel medio en más de 10 puntos.';
+
+  @override
+  String get weRvStrengthsNone =>
+      'Ningún índice se aleja más de 10 puntos de tu nivel medio: tu perfil es regular, y eso ya es un resultado.';
+
+  @override
+  String get weRvFullIqLabel => 'CI global';
+
+  @override
+  String get weRvFullIqBody =>
+      'El CI global resume los cinco índices en un solo número. Cuando se separan mucho entre sí, ese resumen pierde sentido: entonces es el detalle lo que te describe, no el total.';
+
+  @override
+  String get weRvEstimateTitle => 'TU ESTIMACIÓN FRENTE A LA MEDIDA';
+
+  @override
+  String weRvEstimateLine(int estimate, int measured) {
+    return 'Te estimaste en $estimate. La medida da $measured.';
+  }
+
+  @override
+  String weRvEstimateOver(int points) {
+    return 'Es decir, $points puntos por encima de la medida.';
+  }
+
+  @override
+  String weRvEstimateUnder(int points) {
+    return 'Es decir, $points puntos por debajo de la medida.';
+  }
+
+  @override
+  String get weRvEstimateClose =>
+      'Menos de 5 puntos de diferencia: tu estimación y la medida dicen lo mismo.';
+
+  @override
+  String get weRvEstimateMissing =>
+      'No diste ninguna estimación: no hay nada que comparar.';
+
+  @override
+  String get weRvSelfEyebrow => 'Antes de cualquier revelación';
+
+  @override
+  String get weRvSelfTitle => '¿En cuánto estimas tu CI?';
+
+  @override
+  String get weRvSelfBody =>
+      'Una sola pregunta, hecha ahora: después de una primera revelación, tu respuesta estaría influida por la cifra que acabas de leer. 100 es la media. Tu respuesta se queda en tu teléfono y te será devuelta el día 8.';
+
+  @override
+  String get weRvSelfHint => 'Desliza, o toca − y +, para elegir.';
+
+  @override
+  String get weRvSelfAverage => '100 es la media.';
+
+  @override
+  String get weRvSelfConfirm => 'Confirmar mi estimación';
+
+  @override
+  String get weRvSelfDecline => 'Prefiero no responder';
+
+  @override
+  String get weRvSelfDecrease => 'Bajar un punto';
+
+  @override
+  String get weRvSelfIncrease => 'Subir un punto';
 }

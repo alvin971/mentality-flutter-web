@@ -97,13 +97,21 @@ void main() {
         reason: 'aucune action ne doit ouvrir un jour en avance');
   });
 
-  testWidgets('la journée du jour s\'ouvre sur une annonce honnête',
+  testWidgets('une journée sans révélation s\'ouvre sur une annonce honnête',
       (tester) async {
     _ecranTelephone(tester);
-    await tester.pumpWidget(_host(1));
+    // Le jour 7 est le SEUL sans révélation (jour vedette, sans concurrence) :
+    // c'est donc le seul dont l'ouverture mène directement à l'activité. Les
+    // autres passent d'abord par leur révélation — l'ordre du programme est
+    // vérifié dans day_hub_reveal_flow_test.dart.
+    await tester.pumpWidget(_host(7));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.text('J1'));
+    // Le hub défile : la septième carte est sous la ligne de flottaison, et
+    // un tap sans défilement préalable ne toucherait rien du tout.
+    await tester.ensureVisible(find.text('J7'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('J7'));
     await tester.pumpAndSettle();
 
     expect(find.text('En préparation'), findsOneWidget);

@@ -2958,6 +2958,133 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get weRunnerDoneCta => 'Back to the programme';
+
+  @override
+  String get weRvEyebrow => 'Today\'s reveal';
+
+  @override
+  String get weRvContinue => 'Continue';
+
+  @override
+  String get weRvBackToHub => 'Back to the programme';
+
+  @override
+  String get weRvScoreLabel => 'SCORE';
+
+  @override
+  String weRvCi(int low, int high) {
+    return '95% confidence interval · $low – $high';
+  }
+
+  @override
+  String get weRvCaveat =>
+      'An index is a measurement, with its margin of error — not a verdict. Taking the same assessment again would not give exactly the same number.';
+
+  @override
+  String get weRvUnavailableTitle => 'No assessment to reveal';
+
+  @override
+  String get weRvUnavailableBody =>
+      'No completed assessment is attached to this pass on this device. Nothing is lost: the reveal will appear as soon as your results are readable here again.';
+
+  @override
+  String get weRvMissingTitle => 'This index was not calculated';
+
+  @override
+  String get weRvMissingBody =>
+      'Your saved assessment does not include this index — a subtest was missing. The other reveals remain available.';
+
+  @override
+  String get weRvVciBody =>
+      'What you know about words and ideas, and how you connect them: defining, explaining, finding what brings two notions together. It is the part of the profile that changes least over the years.';
+
+  @override
+  String get weRvVsiBody =>
+      'How you handle shapes and space: rebuilding a pattern, seeing how pieces fit together before you have even laid them down.';
+
+  @override
+  String get weRvFriBody =>
+      'How you find a rule nobody gave you, from what you observe. It is the reasoning that owes nothing to what you were taught.';
+
+  @override
+  String get weRvWmiBody =>
+      'What you can hold in mind AND handle at the same time: keeping a sequence while reordering it. It is the index most sensitive to tiredness and stress.';
+
+  @override
+  String get weRvPsiBody =>
+      'How fast you process simple information without making mistakes. It is not “thinking fast”: it is a throughput, and it is paid for in attention.';
+
+  @override
+  String get weRvStrengthsTitle => 'Your strengths and points of vigilance';
+
+  @override
+  String get weRvStrengthsIntro =>
+      'Today the five indices are compared with one another. A strength is not an absolute talent: it is what exceeds your own average level by more than 10 points.';
+
+  @override
+  String get weRvStrengthsNone =>
+      'No index departs from your average level by more than 10 points: your profile is even, and that is a result in itself.';
+
+  @override
+  String get weRvFullIqLabel => 'Full-scale IQ';
+
+  @override
+  String get weRvFullIqBody =>
+      'The full-scale IQ sums up the five indices in a single number. When they differ widely from one another, that summary loses its meaning: it is then the detail that describes you, not the total.';
+
+  @override
+  String get weRvEstimateTitle => 'YOUR ESTIMATE VS THE MEASUREMENT';
+
+  @override
+  String weRvEstimateLine(int estimate, int measured) {
+    return 'You estimated $estimate. The measurement gives $measured.';
+  }
+
+  @override
+  String weRvEstimateOver(int points) {
+    return 'That is $points points above the measurement.';
+  }
+
+  @override
+  String weRvEstimateUnder(int points) {
+    return 'That is $points points below the measurement.';
+  }
+
+  @override
+  String get weRvEstimateClose =>
+      'Less than 5 points apart: your estimate and the measurement say the same thing.';
+
+  @override
+  String get weRvEstimateMissing =>
+      'You did not give an estimate — there is nothing to compare.';
+
+  @override
+  String get weRvSelfEyebrow => 'Before any reveal';
+
+  @override
+  String get weRvSelfTitle => 'What do you think your IQ is?';
+
+  @override
+  String get weRvSelfBody =>
+      'A single question, asked now: after a first reveal, your answer would be influenced by the number you had just read. 100 is the average. Your answer stays on your phone and comes back to you on day 8.';
+
+  @override
+  String get weRvSelfHint => 'Slide, or tap − and +, to choose.';
+
+  @override
+  String get weRvSelfAverage => '100 is the average.';
+
+  @override
+  String get weRvSelfConfirm => 'Confirm my estimate';
+
+  @override
+  String get weRvSelfDecline => 'I\'d rather not answer';
+
+  @override
+  String get weRvSelfDecrease => 'Decrease by one point';
+
+  @override
+  String get weRvSelfIncrease => 'Increase by one point';
 }
 
 /// The translations for English, as used in the United Kingdom (`en_GB`).
@@ -5915,4 +6042,131 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get weRunnerDoneCta => 'Back to the programme';
+
+  @override
+  String get weRvEyebrow => 'Today\'s reveal';
+
+  @override
+  String get weRvContinue => 'Continue';
+
+  @override
+  String get weRvBackToHub => 'Back to the programme';
+
+  @override
+  String get weRvScoreLabel => 'SCORE';
+
+  @override
+  String weRvCi(int low, int high) {
+    return '95% confidence interval · $low – $high';
+  }
+
+  @override
+  String get weRvCaveat =>
+      'An index is a measurement, with its margin of error — not a verdict. Sitting the same assessment again would not give exactly the same number.';
+
+  @override
+  String get weRvUnavailableTitle => 'No assessment to reveal';
+
+  @override
+  String get weRvUnavailableBody =>
+      'No completed assessment is attached to this pass on this device. Nothing is lost: the reveal will appear as soon as your results are readable here again.';
+
+  @override
+  String get weRvMissingTitle => 'This index was not calculated';
+
+  @override
+  String get weRvMissingBody =>
+      'Your saved assessment does not include this index — a subtest was missing. The other reveals remain available.';
+
+  @override
+  String get weRvVciBody =>
+      'What you know about words and ideas, and how you connect them: defining, explaining, finding what brings two notions together. It is the part of the profile that changes least over the years.';
+
+  @override
+  String get weRvVsiBody =>
+      'How you handle shapes and space: rebuilding a pattern, seeing how pieces fit together before you have even laid them down.';
+
+  @override
+  String get weRvFriBody =>
+      'How you find a rule nobody gave you, from what you observe. It is the reasoning that owes nothing to what you were taught.';
+
+  @override
+  String get weRvWmiBody =>
+      'What you can hold in mind AND handle at the same time: keeping a sequence while reordering it. It is the index most sensitive to tiredness and stress.';
+
+  @override
+  String get weRvPsiBody =>
+      'How fast you process simple information without making mistakes. It is not “thinking fast”: it is a throughput, and it is paid for in attention.';
+
+  @override
+  String get weRvStrengthsTitle => 'Your strengths and points of vigilance';
+
+  @override
+  String get weRvStrengthsIntro =>
+      'Today the five indices are compared with one another. A strength is not an absolute talent: it is what exceeds your own average level by more than 10 points.';
+
+  @override
+  String get weRvStrengthsNone =>
+      'No index departs from your average level by more than 10 points: your profile is even, and that is a result in itself.';
+
+  @override
+  String get weRvFullIqLabel => 'Full-scale IQ';
+
+  @override
+  String get weRvFullIqBody =>
+      'The full-scale IQ sums up the five indices in a single number. When they differ widely from one another, that summary loses its meaning: it is then the detail that describes you, not the total.';
+
+  @override
+  String get weRvEstimateTitle => 'YOUR ESTIMATE VS THE MEASUREMENT';
+
+  @override
+  String weRvEstimateLine(int estimate, int measured) {
+    return 'You estimated $estimate. The measurement gives $measured.';
+  }
+
+  @override
+  String weRvEstimateOver(int points) {
+    return 'That is $points points above the measurement.';
+  }
+
+  @override
+  String weRvEstimateUnder(int points) {
+    return 'That is $points points below the measurement.';
+  }
+
+  @override
+  String get weRvEstimateClose =>
+      'Less than 5 points apart: your estimate and the measurement say the same thing.';
+
+  @override
+  String get weRvEstimateMissing =>
+      'You did not give an estimate — there is nothing to compare.';
+
+  @override
+  String get weRvSelfEyebrow => 'Before any reveal';
+
+  @override
+  String get weRvSelfTitle => 'What do you think your IQ is?';
+
+  @override
+  String get weRvSelfBody =>
+      'A single question, asked now: after a first reveal, your answer would be influenced by the number you had just read. 100 is the average. Your answer stays on your phone and comes back to you on day 8.';
+
+  @override
+  String get weRvSelfHint => 'Slide, or tap − and +, to choose.';
+
+  @override
+  String get weRvSelfAverage => '100 is the average.';
+
+  @override
+  String get weRvSelfConfirm => 'Confirm my estimate';
+
+  @override
+  String get weRvSelfDecline => 'I\'d rather not answer';
+
+  @override
+  String get weRvSelfDecrease => 'Decrease by one point';
+
+  @override
+  String get weRvSelfIncrease => 'Increase by one point';
 }

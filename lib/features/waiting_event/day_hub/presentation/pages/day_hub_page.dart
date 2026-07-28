@@ -12,6 +12,10 @@ import '../../../_shared/domain/models/event_day.dart';
 import '../../../_shared/domain/services/event_schedule.dart';
 import '../../../_shared/domain/services/q_module_registry.dart';
 import '../../../_shared/presentation/questionnaire_runner_page.dart';
+import '../../../reveals/data/self_estimate_store.dart';
+import '../../../reveals/domain/services/reveal_source.dart';
+import '../../../reveals/presentation/pages/reveal_page.dart';
+import '../../../reveals/presentation/pages/self_estimate_page.dart';
 
 /// Hub de l'événement d'attente : le programme des 8 jours, et où l'on en est.
 ///
@@ -27,6 +31,8 @@ class DayHubPage extends StatelessWidget {
     required this.serverDayIndex,
     this.moduleForDay = QModuleRegistry.forDay,
     this.store,
+    this.revealSource = const RevealSource(),
+    this.selfEstimateStore = const SelfEstimateStore(),
   });
 
   /// 1..8 pendant l'attente, 9 une fois le déblocage acquis.
@@ -39,6 +45,12 @@ class DayHubPage extends StatelessWidget {
   /// Stockage des réponses. `null` = le stockage chiffré de l'app (le défaut
   /// n'est pas une constante : il ouvre une box Hive).
   final EventAnswerStore? store;
+
+  /// Le profil à révéler — l'historique local du passe courant.
+  final RevealSource revealSource;
+
+  /// L'auto-estimation du jour 1, gardée sur l'appareil.
+  final SelfEstimateStore selfEstimateStore;
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +73,8 @@ class DayHubPage extends StatelessWidget {
               ),
               moduleForDay: moduleForDay,
               store: store,
+              revealSource: revealSource,
+              selfEstimateStore: selfEstimateStore,
             ),
             SizedBox(height: 12.h),
           ],
@@ -78,12 +92,16 @@ class _DayCard extends StatelessWidget {
     required this.status,
     required this.moduleForDay,
     required this.store,
+    required this.revealSource,
+    required this.selfEstimateStore,
   });
 
   final EventDay day;
   final DayStatus status;
   final QModuleResolver moduleForDay;
   final EventAnswerStore? store;
+  final RevealSource revealSource;
+  final SelfEstimateStore selfEstimateStore;
 
   @override
   Widget build(BuildContext context) {
@@ -142,10 +160,81 @@ class _DayCard extends StatelessWidget {
         : carte;
   }
 
-  /// Ouvre la journée : son questionnaire s'il est livré, sinon l'annonce
+  /// Ouvre la journée dans l'ORDRE du programme (plan produit §3) :
+  ///
+  ///   1. l'auto-estimation du QI, tant qu'elle n'a pas été réglée — elle
+  ///      passe avant TOUTE révélation, sans quoi elle serait ancrée par le
+  ///      chiffre qu'on vient de montrer ;
+  ///   2. la révélation du jour, le cadeau qui ne demande rien ;
+  ///   3. l'activité : le questionnaire s'il est livré, sinon l'annonce
+  ///      honnête qu'il arrive.
+  ///
+  /// La garde de l'étape 1 porte sur « cette journée révèle-t-elle quelque
+  /// chose », PAS sur « sommes-nous au jour 1 ». La nuance est tout sauf
+  /// cosmétique : les journées passées sont rattrapables, donc rien ne
+  /// garantit que le jour 1 soit la première carte ouverte. Un utilisateur au
+  /// jour 3 qui rattrape d'abord le jour 2 y lirait sa vitesse de traitement,
+  /// et l'estimation demandée ensuite ne mesurerait plus une croyance mais un
+  /// calcul — silencieusement, puisque `record` est en écriture unique.
+  ///
+  /// Chaque étape ne cède la place à la suivante que si elle a été menée à son
+  /// terme (sortie par le bouton, pas par le retour système) : refermer une
+  /// révélation d'un geste de retour ramène au programme, ça n'enchaîne pas.
+  Future<void> _ouvrir(BuildContext context) async {
+    final reveal = day.reveal;
+
+    if (reveal != null) {
+      final deja = await selfEstimateStore.read();
+      if (!context.mounted) return;
+      if (!deja.isSettled) {
+        final reglee = await Navigator.of(context).push<bool>(
+          MaterialPageRoute<bool>(
+            builder: (_) => SelfEstimatePage(store: selfEstimateStore),
+          ),
+        );
+        // `false` = rien n'a pu être écrit : on n'enchaîne pas sur la
+        // révélation, sans quoi la question se reposerait APRÈS elle.
+        if (!context.mounted || reglee != true) return;
+      }
+    }
+
+    if (reveal != null) {
+      final profil = await revealSource.latest();
+      // L'estimation n'est relue que là où elle sert : la révélation finale.
+      final estimation = reveal == RevealKind.fullIq
+          ? await selfEstimateStore.read()
+          : SelfEstimate.absent;
+      if (!context.mounted) return;
+
+      final lue = await Navigator.of(context).push<bool>(
+        MaterialPageRoute<bool>(
+          builder: (revealContext) => RevealPage(
+            kind: reveal,
+            data: profil,
+            selfEstimate: estimation,
+            ctaLabel: _aUneActivite
+                ? revealContext.l10n.weRvContinue
+                : revealContext.l10n.weRvBackToHub,
+          ),
+        ),
+      );
+      if (!context.mounted || lue != true) return;
+      if (!_aUneActivite) return;
+    }
+
+    _ouvrirActivite(context);
+  }
+
+  /// Le jour 8 n'a rien à faire faire : sa « activité » est la carte de
+  /// partage, qui vit dans l'écran de déblocage. Enchaîner sur une annonce
+  /// « contenu à venir » juste après le QI global serait du bruit.
+  bool get _aUneActivite =>
+      day.activityKind != null && day.activityKind != DayActivityKind.share;
+
+  /// L'activité du jour : son questionnaire s'il est livré, sinon l'annonce
   /// honnête. Le contenu arrive module par module, et chaque journée s'active
   /// d'elle-même dès que le sien est enregistré.
-  void _ouvrir(BuildContext context) {
+  void _ouvrirActivite(BuildContext context) {
     final module = moduleForDay(day.day);
     if (module == null) return _annoncer(context);
 

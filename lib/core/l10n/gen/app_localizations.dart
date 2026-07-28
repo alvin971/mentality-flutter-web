@@ -5234,6 +5234,216 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Revenir au programme'**
   String get weRunnerDoneCta;
+
+  /// Surtitre de l'écran de révélation
+  ///
+  /// In fr, this message translates to:
+  /// **'Ta révélation du jour'**
+  String get weRvEyebrow;
+
+  /// Bouton de sortie d'une révélation quand une activité suit
+  ///
+  /// In fr, this message translates to:
+  /// **'Continuer'**
+  String get weRvContinue;
+
+  /// Bouton de sortie d'une révélation quand rien ne suit
+  ///
+  /// In fr, this message translates to:
+  /// **'Revenir au programme'**
+  String get weRvBackToHub;
+
+  /// Étiquette mono au-dessus du nombre révélé
+  ///
+  /// In fr, this message translates to:
+  /// **'SCORE'**
+  String get weRvScoreLabel;
+
+  /// Intervalle de confiance à 95 % du score révélé
+  ///
+  /// In fr, this message translates to:
+  /// **'Intervalle de confiance à 95 % · {low} – {high}'**
+  String weRvCi(int low, int high);
+
+  /// Mise en garde présente sur TOUTES les révélations : un score est une mesure avec sa marge d'erreur
+  ///
+  /// In fr, this message translates to:
+  /// **'Un indice est une mesure, avec sa marge d\'erreur — pas un verdict. Repasser le même bilan ne redonnerait pas exactement le même nombre.'**
+  String get weRvCaveat;
+
+  /// Titre quand aucun bilan n'est rattaché au passe courant
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun bilan à révéler'**
+  String get weRvUnavailableTitle;
+
+  /// Corps du message quand aucun bilan n'est rattaché au passe courant
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun bilan terminé n\'est rattaché à ce passe sur cet appareil. Rien n\'est perdu : la révélation s\'affichera dès que tes résultats seront de nouveau lisibles ici.'**
+  String get weRvUnavailableBody;
+
+  /// Titre quand l'indice du jour n'a pas été calculé (sous-test manquant)
+  ///
+  /// In fr, this message translates to:
+  /// **'Cet indice n\'a pas été calculé'**
+  String get weRvMissingTitle;
+
+  /// Corps du message quand l'indice du jour n'a pas été calculé
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton bilan enregistré ne contient pas cet indice — il y manquait un sous-test. Les autres révélations restent disponibles.'**
+  String get weRvMissingBody;
+
+  /// Explication de l'indice de compréhension verbale, jour 1
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce que tu sais des mots et des idées, et ta façon de les relier : définir, expliquer, retrouver ce qui rapproche deux notions. C\'est la part du profil qui bouge le moins avec les années.'**
+  String get weRvVciBody;
+
+  /// Explication de l'indice visuo-spatial, jour 5
+  ///
+  /// In fr, this message translates to:
+  /// **'Ta façon de manipuler les formes et l\'espace : reconstruire un motif, voir comment des pièces s\'assemblent avant même de les avoir posées.'**
+  String get weRvVsiBody;
+
+  /// Explication de l'indice de raisonnement fluide, jour 4
+  ///
+  /// In fr, this message translates to:
+  /// **'Ta façon de trouver une règle que personne ne t\'a donnée, à partir de ce que tu observes. C\'est le raisonnement qui ne doit rien à ce que tu as appris.'**
+  String get weRvFriBody;
+
+  /// Explication de l'indice de mémoire de travail, jour 3
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce que tu peux garder en tête ET manipuler en même temps : retenir une suite tout en la réorganisant. C\'est l\'indice le plus sensible à la fatigue et au stress.'**
+  String get weRvWmiBody;
+
+  /// Explication de l'indice de vitesse de traitement, jour 2
+  ///
+  /// In fr, this message translates to:
+  /// **'La vitesse à laquelle tu traites une information simple sans te tromper. Ce n\'est pas « penser vite » : c\'est un débit, et il se paie en attention.'**
+  String get weRvPsiBody;
+
+  /// Titre de la révélation du jour 6 (forces et faiblesses)
+  ///
+  /// In fr, this message translates to:
+  /// **'Tes forces et tes points de vigilance'**
+  String get weRvStrengthsTitle;
+
+  /// Introduction de la révélation du jour 6 : une force est RELATIVE au niveau moyen de la personne
+  ///
+  /// In fr, this message translates to:
+  /// **'Aujourd\'hui, les cinq indices se comparent entre eux. Une force n\'est pas un talent absolu : c\'est ce qui dépasse ton propre niveau moyen de plus de 10 points.'**
+  String get weRvStrengthsIntro;
+
+  /// Message du jour 6 quand aucun indice ne se détache : un profil régulier est un résultat
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun indice ne s\'écarte de plus de 10 points de ton niveau moyen : ton profil est régulier, et c\'est un résultat en soi.'**
+  String get weRvStrengthsNone;
+
+  /// Titre de la révélation du jour 8 (QI global)
+  ///
+  /// In fr, this message translates to:
+  /// **'QI global'**
+  String get weRvFullIqLabel;
+
+  /// Explication du QI global : un résumé qui perd son sens quand les indices s'écartent
+  ///
+  /// In fr, this message translates to:
+  /// **'Le QI global résume les cinq indices en un seul nombre. Quand ils s\'écartent beaucoup les uns des autres, ce résumé perd de son sens : c\'est alors le détail qui te décrit, pas le total.'**
+  String get weRvFullIqBody;
+
+  /// Étiquette mono du bloc qui confronte l'auto-estimation du jour 1 au QI mesuré
+  ///
+  /// In fr, this message translates to:
+  /// **'TON ESTIMATION FACE À LA MESURE'**
+  String get weRvEstimateTitle;
+
+  /// Rappel de l'auto-estimation du jour 1 et du score mesuré
+  ///
+  /// In fr, this message translates to:
+  /// **'Tu t\'estimais à {estimate}. La mesure donne {measured}.'**
+  String weRvEstimateLine(int estimate, int measured);
+
+  /// Constat d'écart quand l'estimation dépasse la mesure — un écart, jamais un rang inventé
+  ///
+  /// In fr, this message translates to:
+  /// **'Soit {points} points au-dessus de la mesure.'**
+  String weRvEstimateOver(int points);
+
+  /// Constat d'écart quand l'estimation est en dessous de la mesure
+  ///
+  /// In fr, this message translates to:
+  /// **'Soit {points} points en dessous de la mesure.'**
+  String weRvEstimateUnder(int points);
+
+  /// Constat quand l'estimation est à moins de 5 points de la mesure
+  ///
+  /// In fr, this message translates to:
+  /// **'Moins de 5 points d\'écart : ton estimation et la mesure disent la même chose.'**
+  String get weRvEstimateClose;
+
+  /// Message du jour 8 quand aucune auto-estimation n'a été donnée au jour 1
+  ///
+  /// In fr, this message translates to:
+  /// **'Tu n\'avais pas donné d\'estimation — il n\'y a rien à confronter.'**
+  String get weRvEstimateMissing;
+
+  /// Surtitre de l'auto-estimation du QI — elle passe AVANT toute révélation
+  ///
+  /// In fr, this message translates to:
+  /// **'Avant toute révélation'**
+  String get weRvSelfEyebrow;
+
+  /// Question d'auto-estimation du QI, posée une seule fois au jour 1
+  ///
+  /// In fr, this message translates to:
+  /// **'À combien estimes-tu ton QI ?'**
+  String get weRvSelfTitle;
+
+  /// Explication de l'auto-estimation : pourquoi maintenant, où va la réponse, quand elle revient
+  ///
+  /// In fr, this message translates to:
+  /// **'Une seule question, posée maintenant : après une première révélation, ta réponse serait influencée par le chiffre que tu viens de lire. 100 est la moyenne. Ta réponse reste sur ton téléphone et te sera rendue au jour 8.'**
+  String get weRvSelfBody;
+
+  /// Indication tant que l'estimation n'a pas été déplacée (le bouton reste inerte)
+  ///
+  /// In fr, this message translates to:
+  /// **'Fais glisser, ou touche − et +, pour choisir.'**
+  String get weRvSelfHint;
+
+  /// Repère affiché sous l'échelle d'auto-estimation une fois qu'elle a été déplacée
+  ///
+  /// In fr, this message translates to:
+  /// **'100 est la moyenne.'**
+  String get weRvSelfAverage;
+
+  /// Bouton qui enregistre l'auto-estimation
+  ///
+  /// In fr, this message translates to:
+  /// **'Valider mon estimation'**
+  String get weRvSelfConfirm;
+
+  /// Bouton qui clôt la question sans donner de nombre — sans lui, elle reviendrait sans fin
+  ///
+  /// In fr, this message translates to:
+  /// **'Je préfère ne pas répondre'**
+  String get weRvSelfDecline;
+
+  /// Info-bulle du bouton qui diminue l'estimation d'un point
+  ///
+  /// In fr, this message translates to:
+  /// **'Diminuer d\'un point'**
+  String get weRvSelfDecrease;
+
+  /// Info-bulle du bouton qui augmente l'estimation d'un point
+  ///
+  /// In fr, this message translates to:
+  /// **'Augmenter d\'un point'**
+  String get weRvSelfIncrease;
 }
 
 class _AppLocalizationsDelegate

@@ -3994,5 +3994,171 @@
   "weRunnerDoneCta": "Revenir au programme",
   "@weRunnerDoneCta": {
     "description": "Bouton de sortie de l'écran de fin, vers le hub de l'événement"
+  },
+  "weRvEyebrow": "Ta révélation du jour",
+  "@weRvEyebrow": {
+    "description": "Surtitre de l'écran de révélation"
+  },
+  "weRvContinue": "Continuer",
+  "@weRvContinue": {
+    "description": "Bouton de sortie d'une révélation quand une activité suit"
+  },
+  "weRvBackToHub": "Revenir au programme",
+  "@weRvBackToHub": {
+    "description": "Bouton de sortie d'une révélation quand rien ne suit"
+  },
+  "weRvScoreLabel": "SCORE",
+  "@weRvScoreLabel": {
+    "description": "Étiquette mono au-dessus du nombre révélé"
+  },
+  "weRvCi": "Intervalle de confiance à 95 % · {low} – {high}",
+  "@weRvCi": {
+    "description": "Intervalle de confiance à 95 % du score révélé",
+    "placeholders": {
+      "low": {
+        "type": "int"
+      },
+      "high": {
+        "type": "int"
+      }
+    }
+  },
+  "weRvCaveat": "Un indice est une mesure, avec sa marge d'erreur — pas un verdict. Repasser le même bilan ne redonnerait pas exactement le même nombre.",
+  "@weRvCaveat": {
+    "description": "Mise en garde présente sur TOUTES les révélations : un score est une mesure avec sa marge d'erreur"
+  },
+  "weRvUnavailableTitle": "Aucun bilan à révéler",
+  "@weRvUnavailableTitle": {
+    "description": "Titre quand aucun bilan n'est rattaché au passe courant"
+  },
+  "weRvUnavailableBody": "Aucun bilan terminé n'est rattaché à ce passe sur cet appareil. Rien n'est perdu : la révélation s'affichera dès que tes résultats seront de nouveau lisibles ici.",
+  "@weRvUnavailableBody": {
+    "description": "Corps du message quand aucun bilan n'est rattaché au passe courant"
+  },
+  "weRvMissingTitle": "Cet indice n'a pas été calculé",
+  "@weRvMissingTitle": {
+    "description": "Titre quand l'indice du jour n'a pas été calculé (sous-test manquant)"
+  },
+  "weRvMissingBody": "Ton bilan enregistré ne contient pas cet indice — il y manquait un sous-test. Les autres révélations restent disponibles.",
+  "@weRvMissingBody": {
+    "description": "Corps du message quand l'indice du jour n'a pas été calculé"
+  },
+  "weRvVciBody": "Ce que tu sais des mots et des idées, et ta façon de les relier : définir, expliquer, retrouver ce qui rapproche deux notions. C'est la part du profil qui bouge le moins avec les années.",
+  "@weRvVciBody": {
+    "description": "Explication de l'indice de compréhension verbale, jour 1"
+  },
+  "weRvVsiBody": "Ta façon de manipuler les formes et l'espace : reconstruire un motif, voir comment des pièces s'assemblent avant même de les avoir posées.",
+  "@weRvVsiBody": {
+    "description": "Explication de l'indice visuo-spatial, jour 5"
+  },
+  "weRvFriBody": "Ta façon de trouver une règle que personne ne t'a donnée, à partir de ce que tu observes. C'est le raisonnement qui ne doit rien à ce que tu as appris.",
+  "@weRvFriBody": {
+    "description": "Explication de l'indice de raisonnement fluide, jour 4"
+  },
+  "weRvWmiBody": "Ce que tu peux garder en tête ET manipuler en même temps : retenir une suite tout en la réorganisant. C'est l'indice le plus sensible à la fatigue et au stress.",
+  "@weRvWmiBody": {
+    "description": "Explication de l'indice de mémoire de travail, jour 3"
+  },
+  "weRvPsiBody": "La vitesse à laquelle tu traites une information simple sans te tromper. Ce n'est pas « penser vite » : c'est un débit, et il se paie en attention.",
+  "@weRvPsiBody": {
+    "description": "Explication de l'indice de vitesse de traitement, jour 2"
+  },
+  "weRvStrengthsTitle": "Tes forces et tes points de vigilance",
+  "@weRvStrengthsTitle": {
+    "description": "Titre de la révélation du jour 6 (forces et faiblesses)"
+  },
+  "weRvStrengthsIntro": "Aujourd'hui, les cinq indices se comparent entre eux. Une force n'est pas un talent absolu : c'est ce qui dépasse ton propre niveau moyen de plus de 10 points.",
+  "@weRvStrengthsIntro": {
+    "description": "Introduction de la révélation du jour 6 : une force est RELATIVE au niveau moyen de la personne"
+  },
+  "weRvStrengthsNone": "Aucun indice ne s'écarte de plus de 10 points de ton niveau moyen : ton profil est régulier, et c'est un résultat en soi.",
+  "@weRvStrengthsNone": {
+    "description": "Message du jour 6 quand aucun indice ne se détache : un profil régulier est un résultat"
+  },
+  "weRvFullIqLabel": "QI global",
+  "@weRvFullIqLabel": {
+    "description": "Titre de la révélation du jour 8 (QI global)"
+  },
+  "weRvFullIqBody": "Le QI global résume les cinq indices en un seul nombre. Quand ils s'écartent beaucoup les uns des autres, ce résumé perd de son sens : c'est alors le détail qui te décrit, pas le total.",
+  "@weRvFullIqBody": {
+    "description": "Explication du QI global : un résumé qui perd son sens quand les indices s'écartent"
+  },
+  "weRvEstimateTitle": "TON ESTIMATION FACE À LA MESURE",
+  "@weRvEstimateTitle": {
+    "description": "Étiquette mono du bloc qui confronte l'auto-estimation du jour 1 au QI mesuré"
+  },
+  "weRvEstimateLine": "Tu t'estimais à {estimate}. La mesure donne {measured}.",
+  "@weRvEstimateLine": {
+    "description": "Rappel de l'auto-estimation du jour 1 et du score mesuré",
+    "placeholders": {
+      "estimate": {
+        "type": "int"
+      },
+      "measured": {
+        "type": "int"
+      }
+    }
+  },
+  "weRvEstimateOver": "Soit {points} points au-dessus de la mesure.",
+  "@weRvEstimateOver": {
+    "description": "Constat d'écart quand l'estimation dépasse la mesure — un écart, jamais un rang inventé",
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "weRvEstimateUnder": "Soit {points} points en dessous de la mesure.",
+  "@weRvEstimateUnder": {
+    "description": "Constat d'écart quand l'estimation est en dessous de la mesure",
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "weRvEstimateClose": "Moins de 5 points d'écart : ton estimation et la mesure disent la même chose.",
+  "@weRvEstimateClose": {
+    "description": "Constat quand l'estimation est à moins de 5 points de la mesure"
+  },
+  "weRvEstimateMissing": "Tu n'avais pas donné d'estimation — il n'y a rien à confronter.",
+  "@weRvEstimateMissing": {
+    "description": "Message du jour 8 quand aucune auto-estimation n'a été donnée au jour 1"
+  },
+  "weRvSelfEyebrow": "Avant toute révélation",
+  "@weRvSelfEyebrow": {
+    "description": "Surtitre de l'auto-estimation du QI — elle passe AVANT toute révélation"
+  },
+  "weRvSelfTitle": "À combien estimes-tu ton QI ?",
+  "@weRvSelfTitle": {
+    "description": "Question d'auto-estimation du QI, posée une seule fois au jour 1"
+  },
+  "weRvSelfBody": "Une seule question, posée maintenant : après une première révélation, ta réponse serait influencée par le chiffre que tu viens de lire. 100 est la moyenne. Ta réponse reste sur ton téléphone et te sera rendue au jour 8.",
+  "@weRvSelfBody": {
+    "description": "Explication de l'auto-estimation : pourquoi maintenant, où va la réponse, quand elle revient"
+  },
+  "weRvSelfHint": "Fais glisser, ou touche − et +, pour choisir.",
+  "@weRvSelfHint": {
+    "description": "Indication tant que l'estimation n'a pas été déplacée (le bouton reste inerte)"
+  },
+  "weRvSelfAverage": "100 est la moyenne.",
+  "@weRvSelfAverage": {
+    "description": "Repère affiché sous l'échelle d'auto-estimation une fois qu'elle a été déplacée"
+  },
+  "weRvSelfConfirm": "Valider mon estimation",
+  "@weRvSelfConfirm": {
+    "description": "Bouton qui enregistre l'auto-estimation"
+  },
+  "weRvSelfDecline": "Je préfère ne pas répondre",
+  "@weRvSelfDecline": {
+    "description": "Bouton qui clôt la question sans donner de nombre — sans lui, elle reviendrait sans fin"
+  },
+  "weRvSelfDecrease": "Diminuer d'un point",
+  "@weRvSelfDecrease": {
+    "description": "Info-bulle du bouton qui diminue l'estimation d'un point"
+  },
+  "weRvSelfIncrease": "Augmenter d'un point",
+  "@weRvSelfIncrease": {
+    "description": "Info-bulle du bouton qui augmente l'estimation d'un point"
   }
 }
