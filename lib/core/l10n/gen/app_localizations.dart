@@ -6158,6 +6158,156 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Terminer'**
   String get weStroopDone;
+
+  /// Surtitre des écrans du jeu des durées
+  ///
+  /// In fr, this message translates to:
+  /// **'Jeu'**
+  String get weTeEyebrow;
+
+  /// Nom du jeu des durées tel qu'il est présenté (jamais « test de perception temporelle » : c'est un jeu, pas une mesure clinique)
+  ///
+  /// In fr, this message translates to:
+  /// **'Le plus long des deux'**
+  String get weTeTitle;
+
+  /// Titre de l'écran d'introduction du jeu des durées — la consigne en une phrase
+  ///
+  /// In fr, this message translates to:
+  /// **'Deux panneaux, l\'un après l\'autre'**
+  String get weTeIntroTitle;
+
+  /// Explication de la consigne du jeu des durées
+  ///
+  /// In fr, this message translates to:
+  /// **'Un panneau va s\'allumer, s\'éteindre, puis s\'allumer une seconde fois. Dis lequel des deux est resté allumé le plus longtemps. Les écarts se resserrent au fil de la partie.'**
+  String get weTeIntroBody;
+
+  /// Explique pourquoi le jeu compare deux durées brèves au lieu d'en faire estimer une longue — une durée comptable mesurerait la capacité à compter, pas la perception
+  ///
+  /// In fr, this message translates to:
+  /// **'Les durées sont de l\'ordre de la seconde : trop courtes pour être comptées. C\'est ta perception seule qui répond.'**
+  String get weTeIntroTooShortToCount;
+
+  /// Légende du panneau éteint montré dans l'introduction
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est ce panneau qui s\'allumera. Rien d\'autre ne bougera à l\'écran.'**
+  String get weTeIntroExample;
+
+  /// Bouton qui lance la partie du jeu des durées
+  ///
+  /// In fr, this message translates to:
+  /// **'Commencer'**
+  String get weTeStart;
+
+  /// Bouton qui quitte le jeu des durées sans y jouer — le jeu est facultatif
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus tard'**
+  String get weTeLater;
+
+  /// Étiquette de la barre de progression du jeu des durées
+  ///
+  /// In fr, this message translates to:
+  /// **'Essai'**
+  String get weTeProgressTag;
+
+  /// Texte affiché pendant la présentation des deux durées, avant la question
+  ///
+  /// In fr, this message translates to:
+  /// **'Regarde bien…'**
+  String get weTeWatch;
+
+  /// Question posée après la présentation des deux durées
+  ///
+  /// In fr, this message translates to:
+  /// **'Lequel est resté allumé le plus longtemps ?'**
+  String get weTePrompt;
+
+  /// Bouton de réponse : le premier panneau a duré plus longtemps
+  ///
+  /// In fr, this message translates to:
+  /// **'Le premier'**
+  String get weTeFirst;
+
+  /// Bouton de réponse : le second panneau a duré plus longtemps
+  ///
+  /// In fr, this message translates to:
+  /// **'Le second'**
+  String get weTeSecond;
+
+  /// Titre de l'écran de résultat du jeu des durées — le score est un SEUIL de discrimination
+  ///
+  /// In fr, this message translates to:
+  /// **'Ta finesse'**
+  String get weTeResultTitle;
+
+  /// Le seuil de discrimination : l'écart relatif le plus fin encore distingué
+  ///
+  /// In fr, this message translates to:
+  /// **'{percent} %'**
+  String weTeThreshold(int percent);
+
+  /// Explication du seuil affiché
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est l\'écart le plus fin que tu distingues encore entre deux durées. Plus le chiffre est petit, plus ta perception sépare finement deux instants proches.'**
+  String get weTeResultCaption;
+
+  /// Justesse de la partie, avec l'explication qu'elle est PILOTÉE par l'escalier et ne varie donc presque pas d'un joueur à l'autre
+  ///
+  /// In fr, this message translates to:
+  /// **'{percent} % de bonnes réponses — c\'est normal : le jeu resserre les écarts jusqu\'à te faire hésiter.'**
+  String weTeAccuracyNote(int percent);
+
+  /// Record local du jeu des durées — le seuil le plus PETIT obtenu
+  ///
+  /// In fr, this message translates to:
+  /// **'Ta meilleure finesse : {percent} %'**
+  String weTeBest(int percent);
+
+  /// Annonce d'un record battu au jeu des durées
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvelle meilleure finesse'**
+  String get weTeNewBest;
+
+  /// Garde-fou de lecture du score — empêche de le lire comme une vitesse (que la batterie mesure déjà par ailleurs)
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce chiffre n\'est pas ta vitesse : rien n\'a chronométré tes réponses, tu pouvais prendre tout ton temps pour décider.'**
+  String get weTeNotSpeed;
+
+  /// Cadrage obligatoire des jeux — jamais présentés comme des mesures cliniques
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est un jeu, pas une mesure clinique : aucun seuil, aucun classement, rien à en conclure sur toi.'**
+  String get weTeNotClinical;
+
+  /// Titre affiché quand la partie n'a pas assez d'inversions, ou quand le seuil reste au plafond
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas de quoi mesurer une finesse'**
+  String get weTeUnreliableTitle;
+
+  /// Corps du message affiché quand la partie ne permet aucun seuil fiable
+  ///
+  /// In fr, this message translates to:
+  /// **'La partie n\'a pas assez hésité pour qu\'un seuil veuille dire quelque chose. Ta meilleure finesse précédente reste intacte. Rejoue quand tu veux.'**
+  String get weTeUnreliableBody;
+
+  /// Bouton qui relance une partie du jeu des durées depuis l'écran de résultat
+  ///
+  /// In fr, this message translates to:
+  /// **'Rejouer'**
+  String get weTeReplay;
+
+  /// Bouton qui referme le jeu des durées depuis l'écran de résultat
+  ///
+  /// In fr, this message translates to:
+  /// **'Terminer'**
+  String get weTeDone;
 }
 
 class _AppLocalizationsDelegate

@@ -3486,6 +3486,94 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get weStroopDone => 'Done';
+
+  @override
+  String get weTeEyebrow => 'Game';
+
+  @override
+  String get weTeTitle => 'The longer of the two';
+
+  @override
+  String get weTeIntroTitle => 'Two panels, one after the other';
+
+  @override
+  String get weTeIntroBody =>
+      'A panel will light up, go dark, then light up a second time. Say which of the two stayed lit for longer. The gaps get tighter as the game goes on.';
+
+  @override
+  String get weTeIntroTooShortToCount =>
+      'The durations are around a second long: too short to count. Your perception alone does the answering.';
+
+  @override
+  String get weTeIntroExample =>
+      'This is the panel that will light up. Nothing else on screen will move.';
+
+  @override
+  String get weTeStart => 'Start';
+
+  @override
+  String get weTeLater => 'Later';
+
+  @override
+  String get weTeProgressTag => 'Trial';
+
+  @override
+  String get weTeWatch => 'Watch closely…';
+
+  @override
+  String get weTePrompt => 'Which one stayed lit for longer?';
+
+  @override
+  String get weTeFirst => 'The first one';
+
+  @override
+  String get weTeSecond => 'The second one';
+
+  @override
+  String get weTeResultTitle => 'Your resolution';
+
+  @override
+  String weTeThreshold(int percent) {
+    return '$percent%';
+  }
+
+  @override
+  String get weTeResultCaption =>
+      'That\'s the smallest gap you can still tell apart between two durations. The smaller the number, the more finely your perception separates two close moments.';
+
+  @override
+  String weTeAccuracyNote(int percent) {
+    return '$percent% correct — that\'s expected: the game tightens the gaps until you start hesitating.';
+  }
+
+  @override
+  String weTeBest(int percent) {
+    return 'Your best resolution: $percent%';
+  }
+
+  @override
+  String get weTeNewBest => 'New best resolution';
+
+  @override
+  String get weTeNotSpeed =>
+      'This number is not your speed: nothing timed your answers, you could take as long as you liked to decide.';
+
+  @override
+  String get weTeNotClinical =>
+      'This is a game, not a clinical measure: no threshold, no ranking, nothing to conclude about you.';
+
+  @override
+  String get weTeUnreliableTitle => 'Not enough to measure a resolution';
+
+  @override
+  String get weTeUnreliableBody =>
+      'The game never hesitated enough for a threshold to mean anything. Your previous best resolution is untouched. Play again whenever you like.';
+
+  @override
+  String get weTeReplay => 'Play again';
+
+  @override
+  String get weTeDone => 'Done';
 }
 
 /// The translations for English, as used in the United Kingdom (`en_GB`).
@@ -6971,4 +7059,92 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get weStroopDone => 'Done';
+
+  @override
+  String get weTeEyebrow => 'Game';
+
+  @override
+  String get weTeTitle => 'The longer of the two';
+
+  @override
+  String get weTeIntroTitle => 'Two panels, one after the other';
+
+  @override
+  String get weTeIntroBody =>
+      'A panel will light up, go dark, then light up a second time. Say which of the two stayed lit for longer. The gaps get tighter as the game goes on.';
+
+  @override
+  String get weTeIntroTooShortToCount =>
+      'The durations are around a second long: far too short to count. Your perception alone does the answering.';
+
+  @override
+  String get weTeIntroExample =>
+      'This is the panel that will light up. Nothing else on screen will move.';
+
+  @override
+  String get weTeStart => 'Start';
+
+  @override
+  String get weTeLater => 'Later';
+
+  @override
+  String get weTeProgressTag => 'Trial';
+
+  @override
+  String get weTeWatch => 'Watch closely…';
+
+  @override
+  String get weTePrompt => 'Which one stayed lit for longer?';
+
+  @override
+  String get weTeFirst => 'The first one';
+
+  @override
+  String get weTeSecond => 'The second one';
+
+  @override
+  String get weTeResultTitle => 'Your resolution';
+
+  @override
+  String weTeThreshold(int percent) {
+    return '$percent%';
+  }
+
+  @override
+  String get weTeResultCaption =>
+      'That\'s the smallest gap you can still tell apart between two durations. The smaller the number, the more finely your perception separates two close moments.';
+
+  @override
+  String weTeAccuracyNote(int percent) {
+    return '$percent% correct — that\'s expected: the game tightens the gaps until you start hesitating.';
+  }
+
+  @override
+  String weTeBest(int percent) {
+    return 'Your best resolution: $percent%';
+  }
+
+  @override
+  String get weTeNewBest => 'New best resolution';
+
+  @override
+  String get weTeNotSpeed =>
+      'This number is not your speed: nothing timed your answers, you could take as long as you liked to decide.';
+
+  @override
+  String get weTeNotClinical =>
+      'This is a game, not a clinical measure: no threshold, no ranking, nothing to conclude about you.';
+
+  @override
+  String get weTeUnreliableTitle => 'Not enough to measure a resolution';
+
+  @override
+  String get weTeUnreliableBody =>
+      'The game never hesitated enough for a threshold to mean anything. Your previous best resolution is untouched. Play again whenever you like.';
+
+  @override
+  String get weTeReplay => 'Play again';
+
+  @override
+  String get weTeDone => 'Done';
 }

@@ -3502,4 +3502,92 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get weStroopDone => 'Terminar';
+
+  @override
+  String get weTeEyebrow => 'Jogo';
+
+  @override
+  String get weTeTitle => 'O mais longo dos dois';
+
+  @override
+  String get weTeIntroTitle => 'Dois painéis, um depois do outro';
+
+  @override
+  String get weTeIntroBody =>
+      'Um painel vai acender, apagar-se e acender uma segunda vez. Diz qual dos dois ficou aceso mais tempo. As diferenças vão-se apertando ao longo do jogo.';
+
+  @override
+  String get weTeIntroTooShortToCount =>
+      'As durações são da ordem do segundo: demasiado curtas para serem contadas. Responde só a tua percepção.';
+
+  @override
+  String get weTeIntroExample =>
+      'É este o painel que vai acender. Mais nada se vai mexer no ecrã.';
+
+  @override
+  String get weTeStart => 'Começar';
+
+  @override
+  String get weTeLater => 'Mais tarde';
+
+  @override
+  String get weTeProgressTag => 'Tentativa';
+
+  @override
+  String get weTeWatch => 'Presta bem atenção…';
+
+  @override
+  String get weTePrompt => 'Qual ficou aceso mais tempo?';
+
+  @override
+  String get weTeFirst => 'O primeiro';
+
+  @override
+  String get weTeSecond => 'O segundo';
+
+  @override
+  String get weTeResultTitle => 'A tua finura';
+
+  @override
+  String weTeThreshold(int percent) {
+    return '$percent %';
+  }
+
+  @override
+  String get weTeResultCaption =>
+      'É a diferença mais pequena que ainda distingues entre duas durações. Quanto menor for o número, mais finamente a tua percepção separa dois instantes próximos.';
+
+  @override
+  String weTeAccuracyNote(int percent) {
+    return '$percent % de respostas certas — é normal: o jogo aperta as diferenças até te fazer hesitar.';
+  }
+
+  @override
+  String weTeBest(int percent) {
+    return 'A tua melhor finura: $percent %';
+  }
+
+  @override
+  String get weTeNewBest => 'Nova melhor finura';
+
+  @override
+  String get weTeNotSpeed =>
+      'Este número não é a tua velocidade: nada cronometrou as tuas respostas, podias demorar o tempo que quisesses a decidir.';
+
+  @override
+  String get weTeNotClinical =>
+      'É um jogo, não uma medida clínica: nenhum limiar, nenhuma classificação, nada a concluir sobre ti.';
+
+  @override
+  String get weTeUnreliableTitle => 'Não há com que medir uma finura';
+
+  @override
+  String get weTeUnreliableBody =>
+      'O jogo não hesitou o suficiente para que um limiar signifique algo. A tua melhor finura anterior fica intacta. Joga outra vez quando quiseres.';
+
+  @override
+  String get weTeReplay => 'Jogar outra vez';
+
+  @override
+  String get weTeDone => 'Terminar';
 }

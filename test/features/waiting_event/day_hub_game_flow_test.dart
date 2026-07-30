@@ -28,6 +28,7 @@ import 'package:mentality/features/waiting_event/reveals/data/self_estimate_stor
 import 'package:mentality/features/waiting_event/reveals/domain/services/reveal_source.dart';
 import 'package:mentality/features/waiting_event/reveals/presentation/pages/reveal_page.dart';
 import 'package:mentality/features/waiting_event/stroop/presentation/pages/stroop_game_page.dart';
+import 'package:mentality/features/waiting_event/time_estimation/presentation/pages/time_estimation_game_page.dart';
 import 'package:mentality/services/session_history_service.dart';
 
 class StoreMemoire implements EventAnswerStore {
@@ -290,17 +291,17 @@ void main() {
     });
   });
 
-  testWidgets('le registre de production livre le Stroop et le jeu de délai',
+  testWidgets('le registre de production livre les trois premiers jeux',
       (tester) async {
-    expect(GameRegistry.forGame(GameKind.stroop), isNotNull);
-    expect(GameRegistry.forGame(GameKind.delayChoice), isNotNull);
     for (final kind in [
+      GameKind.stroop,
+      GameKind.delayChoice,
       GameKind.timeEstimation,
-      GameKind.confidenceCalibration,
     ]) {
-      expect(GameRegistry.forGame(kind), isNull,
-          reason: '$kind n\'est pas encore écrit — lots H3 à H5');
+      expect(GameRegistry.forGame(kind), isNotNull, reason: '$kind');
     }
+    expect(GameRegistry.forGame(GameKind.confidenceCalibration), isNull,
+        reason: 'calibration de la confiance — lots H4 et H5');
 
     // Et il ouvre bien les vrais écrans.
     ecranTelephone(tester);
@@ -343,5 +344,25 @@ void main() {
     ));
     await tester.pumpAndSettle();
     expect(find.byType(DelayChoiceGamePage), findsOneWidget);
+
+    await tester.pumpWidget(ScreenUtilInit(
+      designSize: const Size(375, 812),
+      builder: (_, __) => MaterialApp(
+        key: UniqueKey(),
+        locale: const Locale('fr'),
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Builder(
+          builder: GameRegistry.forGame(GameKind.timeEstimation)!.open,
+        ),
+      ),
+    ));
+    await tester.pumpAndSettle();
+    expect(find.byType(TimeEstimationGamePage), findsOneWidget);
   });
 }

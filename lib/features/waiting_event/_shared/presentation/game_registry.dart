@@ -17,6 +17,8 @@ import '../../delay_choice/data/delay_choice_record_store.dart';
 import '../../delay_choice/presentation/pages/delay_choice_game_page.dart';
 import '../../stroop/data/stroop_record_store.dart';
 import '../../stroop/presentation/pages/stroop_game_page.dart';
+import '../../time_estimation/data/time_estimation_record_store.dart';
+import '../../time_estimation/presentation/pages/time_estimation_game_page.dart';
 import '../domain/models/event_day.dart';
 
 /// Un jeu livré, tel que le hub a besoin de le connaître.
@@ -65,7 +67,13 @@ abstract final class GameRegistry {
             hasPlayed: () async =>
                 (await const DelayChoiceRecordStore().read()).hasPlayed,
           ),
-        // Lots H3 à H5 — annoncés par le programme, pas encore écrits.
-        GameKind.timeEstimation || GameKind.confidenceCalibration => null,
+        GameKind.timeEstimation => EventGame(
+            title: (l10n) => l10n.weTeTitle,
+            open: (_) => const TimeEstimationGamePage(),
+            hasPlayed: () async =>
+                (await const TimeEstimationRecordStore().read()).hasPlayed,
+          ),
+        // Lots H4 et H5 — annoncés par le programme, pas encore écrits.
+        GameKind.confidenceCalibration => null,
       };
 }

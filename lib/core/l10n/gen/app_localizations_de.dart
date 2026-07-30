@@ -3511,4 +3511,92 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get weStroopDone => 'Fertig';
+
+  @override
+  String get weTeEyebrow => 'Spiel';
+
+  @override
+  String get weTeTitle => 'Das Längere von beiden';
+
+  @override
+  String get weTeIntroTitle => 'Zwei Felder, eines nach dem anderen';
+
+  @override
+  String get weTeIntroBody =>
+      'Ein Feld leuchtet auf, geht aus und leuchtet dann ein zweites Mal auf. Sage, welches der beiden länger geleuchtet hat. Die Unterschiede werden im Laufe des Spiels immer feiner.';
+
+  @override
+  String get weTeIntroTooShortToCount =>
+      'Die Dauern liegen im Bereich einer Sekunde: viel zu kurz, um sie zu zählen. Es antwortet allein deine Wahrnehmung.';
+
+  @override
+  String get weTeIntroExample =>
+      'Dieses Feld wird aufleuchten. Sonst bewegt sich nichts auf dem Bildschirm.';
+
+  @override
+  String get weTeStart => 'Beginnen';
+
+  @override
+  String get weTeLater => 'Später';
+
+  @override
+  String get weTeProgressTag => 'Versuch';
+
+  @override
+  String get weTeWatch => 'Schau genau hin …';
+
+  @override
+  String get weTePrompt => 'Welches hat länger geleuchtet?';
+
+  @override
+  String get weTeFirst => 'Das erste';
+
+  @override
+  String get weTeSecond => 'Das zweite';
+
+  @override
+  String get weTeResultTitle => 'Deine Feinheit';
+
+  @override
+  String weTeThreshold(int percent) {
+    return '$percent %';
+  }
+
+  @override
+  String get weTeResultCaption =>
+      'Das ist der kleinste Unterschied, den du zwischen zwei Dauern noch erkennst. Je kleiner die Zahl, desto feiner trennt deine Wahrnehmung zwei nahe Augenblicke.';
+
+  @override
+  String weTeAccuracyNote(int percent) {
+    return '$percent % richtig — das ist normal: Das Spiel verengt die Unterschiede, bis du ins Zögern kommst.';
+  }
+
+  @override
+  String weTeBest(int percent) {
+    return 'Deine feinste Unterscheidung: $percent %';
+  }
+
+  @override
+  String get weTeNewBest => 'Neue feinste Unterscheidung';
+
+  @override
+  String get weTeNotSpeed =>
+      'Diese Zahl ist nicht deine Geschwindigkeit: Nichts hat deine Antworten gemessen, du konntest dir so viel Zeit nehmen, wie du wolltest.';
+
+  @override
+  String get weTeNotClinical =>
+      'Das ist ein Spiel, keine klinische Messung: kein Schwellenwert, keine Rangliste, nichts, was du daraus über dich schließen solltest.';
+
+  @override
+  String get weTeUnreliableTitle => 'Zu wenig, um eine Feinheit zu messen';
+
+  @override
+  String get weTeUnreliableBody =>
+      'In dieser Runde gab es nicht genug Zögern, damit ein Wert etwas bedeuten würde. Deine bisher feinste Unterscheidung bleibt unberührt. Spiel noch einmal, wann du magst.';
+
+  @override
+  String get weTeReplay => 'Noch einmal spielen';
+
+  @override
+  String get weTeDone => 'Fertig';
 }

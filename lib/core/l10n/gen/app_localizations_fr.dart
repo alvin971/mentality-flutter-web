@@ -3498,4 +3498,92 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get weStroopDone => 'Terminer';
+
+  @override
+  String get weTeEyebrow => 'Jeu';
+
+  @override
+  String get weTeTitle => 'Le plus long des deux';
+
+  @override
+  String get weTeIntroTitle => 'Deux panneaux, l\'un après l\'autre';
+
+  @override
+  String get weTeIntroBody =>
+      'Un panneau va s\'allumer, s\'éteindre, puis s\'allumer une seconde fois. Dis lequel des deux est resté allumé le plus longtemps. Les écarts se resserrent au fil de la partie.';
+
+  @override
+  String get weTeIntroTooShortToCount =>
+      'Les durées sont de l\'ordre de la seconde : trop courtes pour être comptées. C\'est ta perception seule qui répond.';
+
+  @override
+  String get weTeIntroExample =>
+      'C\'est ce panneau qui s\'allumera. Rien d\'autre ne bougera à l\'écran.';
+
+  @override
+  String get weTeStart => 'Commencer';
+
+  @override
+  String get weTeLater => 'Plus tard';
+
+  @override
+  String get weTeProgressTag => 'Essai';
+
+  @override
+  String get weTeWatch => 'Regarde bien…';
+
+  @override
+  String get weTePrompt => 'Lequel est resté allumé le plus longtemps ?';
+
+  @override
+  String get weTeFirst => 'Le premier';
+
+  @override
+  String get weTeSecond => 'Le second';
+
+  @override
+  String get weTeResultTitle => 'Ta finesse';
+
+  @override
+  String weTeThreshold(int percent) {
+    return '$percent %';
+  }
+
+  @override
+  String get weTeResultCaption =>
+      'C\'est l\'écart le plus fin que tu distingues encore entre deux durées. Plus le chiffre est petit, plus ta perception sépare finement deux instants proches.';
+
+  @override
+  String weTeAccuracyNote(int percent) {
+    return '$percent % de bonnes réponses — c\'est normal : le jeu resserre les écarts jusqu\'à te faire hésiter.';
+  }
+
+  @override
+  String weTeBest(int percent) {
+    return 'Ta meilleure finesse : $percent %';
+  }
+
+  @override
+  String get weTeNewBest => 'Nouvelle meilleure finesse';
+
+  @override
+  String get weTeNotSpeed =>
+      'Ce chiffre n\'est pas ta vitesse : rien n\'a chronométré tes réponses, tu pouvais prendre tout ton temps pour décider.';
+
+  @override
+  String get weTeNotClinical =>
+      'C\'est un jeu, pas une mesure clinique : aucun seuil, aucun classement, rien à en conclure sur toi.';
+
+  @override
+  String get weTeUnreliableTitle => 'Pas de quoi mesurer une finesse';
+
+  @override
+  String get weTeUnreliableBody =>
+      'La partie n\'a pas assez hésité pour qu\'un seuil veuille dire quelque chose. Ta meilleure finesse précédente reste intacte. Rejoue quand tu veux.';
+
+  @override
+  String get weTeReplay => 'Rejouer';
+
+  @override
+  String get weTeDone => 'Terminer';
 }
