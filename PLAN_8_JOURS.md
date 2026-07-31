@@ -1,6 +1,31 @@
 # PLAN — Événement d'attente des 8 jours
 
-> **Statut :** plan de conception validé en discussion (2026-07-26). Rien d'implémenté.
+> ## ⏸️ MIS DE CÔTÉ POUR LE LANCEMENT — 2026-07-31
+>
+> **Décision produit : au lancement, l'utilisateur ne voit que le décompte.**
+> Un programme de huit journées à remplir est beaucoup à assumer pour un
+> début ; on fait d'abord patienter, on rallumera ensuite.
+>
+> **Rien n'est supprimé.** Le code, ses contenus et ses ~950 tests restent
+> dans la branche et continuent de tourner à chaque exécution de la suite.
+> L'événement est éteint par un interrupteur unique :
+> `lib/features/waiting_event/waiting_event_feature.dart`
+> (`kWaitingEventEnabled = false`).
+>
+> Il ferme la seule porte d'entrée — le bouton « Voir le programme du jour »
+> de la carte d'attente. Hub, révélations, questionnaires, bloc diagnostic et
+> jeux sont tous derrière elle et derrière elle seule ; une garde de test
+> (`waiting_event_feature_test.dart`) vérifie qu'aucune seconde porte n'est
+> percée et que rien ne peut entrer dans la file d'envoi.
+>
+> **Pour rallumer** : passer l'interrupteur à `true`, mettre à jour la garde
+> qui épingle sa valeur, et vérifier d'abord que `AppConstants.eventWorkerUrl`
+> n'est plus un gabarit et que `workers/event` est déployé.
+>
+> **Livré avant la mise de côté** : lots A, B, C, D, F, J, H1, H2, H3, E1.
+> **Non commencés** : E2, E3, E4, G, H4, H5, I.
+
+> **Statut du plan :** conception validée en discussion (2026-07-26).
 > **Prérequis techniques déjà livrés** : palier 3 = attente serveur 8 jours
 > (`UNLOCK_DELAY_MINUTES=11520`, ancre `stage3StartedAt`, décompte à ancrage
 > monotone, carte de partage J8) — commits `c1cc487`, `78b95ee`, `97bf113`.

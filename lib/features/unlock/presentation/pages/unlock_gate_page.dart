@@ -13,6 +13,7 @@ import '../../../../core/widgets/kepler_card.dart';
 import '../../../../core/widgets/kepler_scaffold.dart';
 import '../../../waiting_event/_shared/data/event_upload_service.dart';
 import '../../../waiting_event/day_hub/presentation/pages/day_hub_page.dart';
+import '../../../waiting_event/waiting_event_feature.dart';
 import '../../data/unlock_service.dart';
 
 /// Écran des paliers de déblocage du résultat, affiché à la FIN du test
@@ -424,11 +425,21 @@ class _UnlockGatePageState extends State<UnlockGatePage>
                 style: AppText.of(context)
                     .bodySmall(color: colors.textSecondary)),
           ],
-          // Le programme des 8 jours n'a de sens que si le serveur sait dire
-          // quel jour on est. Face à un worker antérieur au champ, `dayIndex`
-          // est nul et la carte reste exactement ce qu'elle était : pas de
-          // bouton qui mène nulle part. Rien ici n'avance le déblocage.
-          if (p.dayIndex != null) ...[
+          // LA PORTE UNIQUE de l'événement des 8 jours — hub, révélations,
+          // questionnaires, bloc diagnostic et jeux sont tous derrière ce
+          // bouton et derrière lui seul.
+          //
+          // Éteinte au lancement (`kWaitingEventEnabled`) : le programme est
+          // écrit et testé, mais un parcours de huit journées à remplir est
+          // beaucoup à assumer pour un début. L'utilisateur voit donc la carte
+          // d'attente telle qu'elle était — le décompte, et rien d'autre.
+          //
+          // La seconde condition reste utile pour le jour où l'on rallume : le
+          // programme n'a de sens que si le SERVEUR sait dire quel jour on est.
+          // Face à un worker antérieur au champ, `dayIndex` est nul et la carte
+          // n'affiche pas un bouton qui ne mènerait nulle part. Rien ici
+          // n'avance le déblocage, dans un cas comme dans l'autre.
+          if (kWaitingEventEnabled && p.dayIndex != null) ...[
             SizedBox(height: 16.h),
             KeplerButton(
               label: l10n.weGateCta,

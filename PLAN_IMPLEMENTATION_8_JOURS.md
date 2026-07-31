@@ -1,5 +1,20 @@
 # PLAN D'IMPLÉMENTATION — Événement d'attente des 8 jours
 
+> ## ⏸️ MIS DE CÔTÉ POUR LE LANCEMENT — 2026-07-31
+>
+> Voir l'en-tête de [PLAN_8_JOURS.md](PLAN_8_JOURS.md). L'événement est éteint
+> par `kWaitingEventEnabled = false` — rien n'est supprimé, tout reste testé.
+>
+> | Lot | État |
+> |---|---|
+> | A `dayIndex` serveur · B hub · C moteur · D révélations · F bloc diagnostic · J worker + rejeu | ✅ livrés |
+> | H1 Stroop · H2 délai · H3 durées | ✅ livrés |
+> | E1 IPIP-50 (+ champ de provenance) | ✅ livré — J1 complet |
+> | E2 GAD-7/PHQ-8 · E3 CBI · E4 RAADS/CAT-Q · G contributions · H4 confiance · H5 biais · I rapports | ⏸️ non commencés |
+>
+> Reprendre par le lot E2 le jour où l'on rallume. Les gardes de contenu du §3
+> sont déjà posées et balaient le seul module livré.
+
 > **Compagnon de [PLAN_8_JOURS.md](PLAN_8_JOURS.md)** (le QUOI). Ce document est
 > le COMMENT : arborescence, lots, critères d'acceptation, gardes automatiques.
 > **Branche : `claude/rgpd-data-traceability-5f5372`** (le même worktree).
