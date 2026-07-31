@@ -15,8 +15,7 @@ import '../../../_shared/domain/services/q_module_registry.dart';
 import '../../../_shared/presentation/game_registry.dart';
 import '../../../_shared/presentation/questionnaire_runner_page.dart';
 import '../../../diagnostic_block/data/diagnostic_block_store.dart';
-import '../../../diagnostic_block/presentation/pages/diagnostic_block_page.dart';
-import '../../../diagnostic_block/presentation/pages/event_consent_page.dart';
+import '../../../diagnostic_block/presentation/diagnostic_chain.dart';
 import '../../../reveals/data/self_estimate_store.dart';
 import '../../../reveals/domain/services/reveal_source.dart';
 import '../../../reveals/presentation/pages/reveal_page.dart';
@@ -95,6 +94,8 @@ class DayHubPage extends StatelessWidget {
               store: store,
               revealSource: revealSource,
               selfEstimateStore: selfEstimateStore,
+              diagnosticStore: diagnosticStore,
+              eventConsent: eventConsent,
             ),
             SizedBox(height: 12.h),
             // Le jeu a sa propre carte, sous celle de la journée : il est
@@ -104,18 +105,6 @@ class DayHubPage extends StatelessWidget {
                 statusOfDay(day: jour.day, serverDayIndex: serverDayIndex) !=
                     DayStatus.locked)
               _GameCard(game: gameFor(jour.game!)),
-            // Le bloc diagnostic se rattache au jour 1 — et il y reste, y
-            // compris quand ce jour est rattrapé plus tard. Il vit à côté de
-            // la carte du jour plutôt que dedans tant que le questionnaire du
-            // jour 1 n'est pas livré : le programme le veut à la FIN de cette
-            // journée, et une fin qui n'existe pas encore ne peut rien
-            // enchaîner.
-            if (jour.day == 1) ...[
-              _DiagnosticCard(
-                store: diagnosticStore,
-                consent: eventConsent,
-              ),
-            ],
           ],
         ],
       ),
@@ -123,144 +112,7 @@ class DayHubPage extends StatelessWidget {
   }
 }
 
-/// La carte du bloc diagnostic. Elle disparaît dès que la question est close —
-/// c'est la traduction à l'écran de « posé une seule fois, jamais reposé ».
-class _DiagnosticCard extends StatefulWidget {
-  const _DiagnosticCard({required this.store, required this.consent});
-
-  final DiagnosticBlockStore store;
-  final EventConsent consent;
-
-  @override
-  State<_DiagnosticCard> createState() => _DiagnosticCardState();
-}
-
-class _DiagnosticCardState extends State<_DiagnosticCard> {
-  /// `null` tant qu'on ne sait pas encore. On n'affiche RIEN dans cet
-  /// intervalle plutôt qu'un tourniquet : la lecture disque est immédiate, et
-  /// une carte qui apparaîtrait puis disparaîtrait serait pire que rien.
-  bool? _repondu;
-
-  /// Verrou de ré-entrance : l'enchaînement consentement → bloc est
-  /// asynchrone, et la carte reste tactile pendant ce temps. Sans lui, un
-  /// second appui empilerait un second écran de consentement.
-  bool _enCours = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _charger();
-  }
-
-  Future<void> _charger() async {
-    // Un incident de lecture vaut « pas encore répondu » : la carte s'affiche,
-    // et le verrou d'écriture du store rattrapera un éventuel doublon en
-    // refusant. L'inverse — masquer la carte au moindre incident — perdrait
-    // définitivement une déclaration que personne ne redemanderait.
-    final deja = await widget.store.isRecorded();
-    if (mounted) setState(() => _repondu = deja);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (_repondu != false) return const SizedBox.shrink();
-    final l10n = context.l10n;
-    final colors = KeplerColors.of(context);
-    return Padding(
-      padding: EdgeInsets.only(bottom: 12.h),
-      child: KeplerCard(
-        onTap: _enCours ? null : _ouvrir,
-        child: Row(
-          children: [
-            Icon(Icons.fact_check_outlined, size: 20.sp, color: colors.primary),
-            SizedBox(width: 12.w),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(l10n.weDxCardTitle, style: AppText.of(context).h3()),
-                  SizedBox(height: 2.h),
-                  Text(
-                    l10n.weDxCardSubtitle,
-                    style: AppText.of(context)
-                        .bodySmall(color: colors.textSecondary),
-                  ),
-                ],
-              ),
-            ),
-            Icon(Icons.east, size: 18.sp, color: colors.primary),
-          ],
-        ),
-      ),
-    );
-  }
-
-  /// L'ordre est non négociable : le consentement art. 9 D'ABORD, les
-  /// questions de santé ensuite — jamais l'inverse, et jamais « on demandera
-  /// à l'envoi ». Recueillir des déclarations puis découvrir qu'on n'a pas le
-  /// droit de les envoyer laisserait sur l'appareil une donnée que personne
-  /// n'a autorisée et que rien n'exploitera.
-  ///
-  /// Ici le gate est DUR, alors qu'il est souple pour les questionnaires du
-  /// programme (jouables sans consentement, score affiché, rien d'envoyé) :
-  /// ce bloc n'affiche aucun résultat et ne calcule rien pour la personne. Le
-  /// faire remplir sans pouvoir l'exploiter, ce serait lui prendre deux écrans
-  /// de déclarations de santé pour rien.
-  Future<void> _ouvrir() async {
-    if (_enCours) return;
-    setState(() => _enCours = true);
-    try {
-      if (!await widget.consent.isGranted()) {
-        if (!mounted) return;
-        final accorde = await Navigator.of(context).push<bool>(
-          MaterialPageRoute<bool>(
-            builder: (_) => EventConsentPage(consent: widget.consent),
-          ),
-        );
-        if (!mounted) return;
-        // Refus, retour arrière, ou écriture en échec : dans les trois cas on
-        // n'a pas le droit d'aller plus loin.
-        if (accorde != true) return _direQueRienNePartira();
-      }
-
-      if (!mounted) return;
-      final close = await Navigator.of(context).push<bool>(
-        MaterialPageRoute<bool>(
-          builder: (_) => DiagnosticBlockPage(store: widget.store),
-        ),
-      );
-      if (!mounted) return;
-      // La carte ne disparaît que sur une question RÉELLEMENT close. Un
-      // abandon, ou une écriture en échec, la laisse en place.
-      if (close == true) setState(() => _repondu = true);
-    } finally {
-      if (mounted) setState(() => _enCours = false);
-    }
-  }
-
-  void _direQueRienNePartira() {
-    final l10n = context.l10n;
-    showModalBottomSheet<void>(
-      context: context,
-      builder: (sheetContext) => Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 28.h),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(l10n.weDxDeclinedTitle, style: AppText.of(sheetContext).h2()),
-            SizedBox(height: 12.h),
-            Text(l10n.weDxDeclinedBody,
-                style: AppText.of(sheetContext).bodySmall()),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-/// La carte du jeu d'une journée. Rejouable, donc toujours là — contrairement
-/// à celle du bloc diagnostic, qui disparaît dès que la question est close.
+/// La carte du jeu d'une journée. Rejouable, donc toujours là.
 ///
 /// Rend un espace VIDE quand le jeu n'est pas encore livré : le programme
 /// l'annonce quand même dans le sous-titre de la journée (« Jeu : tolérance au
@@ -322,6 +174,8 @@ class _DayCard extends StatelessWidget {
     required this.store,
     required this.revealSource,
     required this.selfEstimateStore,
+    required this.diagnosticStore,
+    required this.eventConsent,
   });
 
   final EventDay day;
@@ -331,6 +185,8 @@ class _DayCard extends StatelessWidget {
   final EventAnswerStore? store;
   final RevealSource revealSource;
   final SelfEstimateStore selfEstimateStore;
+  final DiagnosticBlockStore diagnosticStore;
+  final EventConsent eventConsent;
 
   @override
   Widget build(BuildContext context) {
@@ -474,7 +330,14 @@ class _DayCard extends StatelessWidget {
     if (!context.mounted) return;
 
     if (!_aUneActivite) return;
-    _ouvrirActivite(context);
+    await _ouvrirActivite(context);
+    if (!context.mounted) return;
+
+    // ÉTAPE 5, jour 1 seulement : le bloc diagnostic, à la toute fin — après
+    // le questionnaire, jamais avant. Posé en début de journée il amorcerait
+    // les réponses ; posé plus tard dans le programme il serait contaminé par
+    // le dépistage autisme du jour 7.
+    await _chainerLeBlocDiagnostic(context);
   }
 
   /// Le jour 8 n'a rien à faire faire : sa « activité » est la carte de
@@ -486,11 +349,11 @@ class _DayCard extends StatelessWidget {
   /// L'activité du jour : son questionnaire s'il est livré, sinon l'annonce
   /// honnête. Le contenu arrive module par module, et chaque journée s'active
   /// d'elle-même dès que le sien est enregistré.
-  void _ouvrirActivite(BuildContext context) {
+  Future<void> _ouvrirActivite(BuildContext context) async {
     final module = moduleForDay(day.day);
     if (module == null) return _annoncer(context);
 
-    Navigator.of(context).push(
+    await Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (_) => QuestionnaireRunnerPage(
           module: module,
@@ -498,6 +361,43 @@ class _DayCard extends StatelessWidget {
           title: _titre(context.l10n),
         ),
       ),
+    );
+  }
+
+  /// Le bloc diagnostic, en sortie du questionnaire du jour 1.
+  ///
+  /// Deux conditions, et la seconde est celle qui compte :
+  ///
+  /// · le questionnaire du jour est TERMINÉ. Un abandon n'enchaîne rien — le
+  ///   programme veut ce bloc à la fin de la journée, et une journée
+  ///   interrompue n'a pas de fin. La condition se lit sur le DISQUE plutôt
+  ///   que sur un rappel de l'écran qu'on vient de fermer : rouvrir un module
+  ///   déjà complet ne re-notifie personne, et cette lecture-là marche dans
+  ///   les deux cas.
+  /// · le bloc n'a pas déjà été déclaré. C'est « posé une seule fois », lu au
+  ///   plus tard possible : le store a le dernier mot de toute façon (verrou
+  ///   d'écriture unique), mais autant ne pas ouvrir deux écrans pour se faire
+  ///   refuser au bout.
+  ///
+  /// Rien n'est perdu si l'enchaînement échoue en route (consentement refusé,
+  /// abandon, écriture en échec) : la question reste entière, et rouvrir la
+  /// journée 1 la reproposera. C'est la contrepartie du retrait de la carte
+  /// autonome — le chemin est unique, il doit rester REPASSABLE.
+  Future<void> _chainerLeBlocDiagnostic(BuildContext context) async {
+    if (day.day != DiagnosticBlockStore.day) return;
+
+    final module = moduleForDay(day.day);
+    if (module == null) return;
+    final reponses = await (store ?? EventLocalStore.instance).load(module.id);
+    if (reponses == null || reponses.isPartial) return;
+
+    if (await diagnosticStore.isRecorded()) return;
+    if (!context.mounted) return;
+
+    await openDiagnosticBlock(
+      context,
+      store: diagnosticStore,
+      consent: eventConsent,
     );
   }
 

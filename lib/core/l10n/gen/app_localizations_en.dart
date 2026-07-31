@@ -3218,12 +3218,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get weCsDecline => 'No, keep my answers here';
 
   @override
-  String get weDxCardTitle => 'Your history';
-
-  @override
-  String get weDxCardSubtitle => 'A few questions, asked only once · optional';
-
-  @override
   String get weDxDeclinedTitle => 'Nothing will be sent';
 
   @override
@@ -6789,12 +6783,6 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get weCsDecline => 'No, keep my answers here';
-
-  @override
-  String get weDxCardTitle => 'Your history';
-
-  @override
-  String get weDxCardSubtitle => 'A few questions, asked only once · optional';
 
   @override
   String get weDxDeclinedTitle => 'Nothing will be sent';

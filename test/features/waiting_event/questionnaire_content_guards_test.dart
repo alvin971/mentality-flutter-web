@@ -155,14 +155,100 @@ void main() {
     }
   });
 
-  test('aucun contenu livré n\'est encore enregistré — le hub annonce donc '
-      'ses journées sans les ouvrir', () {
-    // Ce test documente l\'état réel plutôt que de le supposer. Il tombera au
-    // premier module livré, ce qui est exactement le moment de le mettre à
-    // jour.
-    expect(modules, isEmpty);
-    for (var d = 1; d <= EventSchedule.totalDays; d++) {
-      expect(QModuleRegistry.forDay(d), isNull);
+  test('les journées livrées, et celles qui ne le sont pas encore', () {
+    // Ce test documente l'état réel plutôt que de le supposer : il tombe à
+    // chaque module livré, ce qui est exactement le moment de le relire.
+    expect(modules.map((m) => m.day).toList(), [1],
+        reason: 'LOT E1 — J1 (IPIP-50). Restent E2 (J3), E3 (J6), E4 (J7) et '
+            'G (J2, J4, J5).');
+    for (var d = 2; d <= EventSchedule.totalDays; d++) {
+      expect(QModuleRegistry.forDay(d), isNull,
+          reason: 'jour $d : contenu pas encore livré');
     }
+  });
+
+  // ─── Provenance : la seule incertitude qu'aucune autre garde ne voit ────────
+
+  test('tout bloc validé déclare d\'où vient son libellé', () {
+    // Les sept gardes ci-dessus vérifient la FORME du contenu — volume, ordre,
+    // six langues, échelle homogène. AUCUNE ne peut vérifier qu'un item est LE
+    // VRAI : un item d'instrument validé mal restitué ne plante rien, ne casse
+    // aucune de ces gardes, et fausse le barème en silence. Tout ce qu'un test
+    // peut faire, c'est exiger que l'incertitude soit DÉCLARÉE.
+    for (final m in modules) {
+      for (final bloc in m.instruments) {
+        if (bloc.origin == QItemOrigin.validated) {
+          expect(bloc.provenance, isNotNull,
+              reason: 'module ${m.id}, bloc ${bloc.id} : instrument publié '
+                  'sans déclaration de provenance');
+          expect(bloc.provenance!.reference, isNotEmpty,
+              reason: '${bloc.id} : une provenance sans référence primaire ne '
+                  'permet à personne d\'aller vérifier');
+        } else {
+          expect(bloc.provenance, isNull,
+              reason: 'module ${m.id}, bloc ${bloc.id} : nos questions sont à '
+                  'nous, il n\'y a pas de source dont s\'écarter');
+        }
+      }
+    }
+  });
+
+  test('un instrument restitué de mémoire dit CE QUI est tenu', () {
+    for (final bloc in QModuleRegistry.recalled) {
+      expect(bloc.provenance!.confidence, isNotNull,
+          reason: '${bloc.id} : « recalled » sans niveau confondrait un '
+              'instrument court à formulation figée avec un instrument dont '
+              'plusieurs versions circulent');
+      expect(bloc.provenance!.note.length, greaterThan(80),
+          reason: '${bloc.id} : la note est affichée telle quelle en page '
+              'Méthodologie — « de mémoire » n\'apprend rien à qui la lit');
+    }
+  });
+
+  test('LE REGISTRE DES INSTRUMENTS NON VÉRIFIÉS', () {
+    // ⚠️ Cette garde n'échoue PAS parce qu'un instrument est `recalled` — sinon
+    // plus rien ne passerait, et on l'aurait désactivée en une semaine. Elle
+    // échoue quand la LISTE change sans que personne ne l'ait décidé : un
+    // instrument qui bascule en `recalled` sans qu'on s'en aperçoive, ou un
+    // instrument confronté à sa source dont on aurait oublié de mettre à jour
+    // la page Méthodologie.
+    //
+    // Tenir la liste ici plutôt que dans un `print` est délibéré : un message
+    // sur la sortie standard d'une suite de 900 tests n'est lu par personne.
+    //
+    // Quand un instrument est enfin confronté à sa source primaire : passer sa
+    // provenance en `QProvenance.verified`, le retirer d'ici, et retirer sa
+    // ligne de la page Méthodologie (LOT I).
+    final registre = {
+      for (final bloc in QModuleRegistry.recalled)
+        bloc.id: bloc.provenance!.confidence!.name,
+    };
+
+    expect(registre, {
+      // Structure sûre (10 items par facteur, ordre entrelacé, sens de
+      // cotation) ; formulations parmi les plus reproduites de la
+      // psychométrie. Risque résiduel : une poignée d'items que l'IPIP-NEO-120
+      // et le mini-IPIP-20 formulent de façon voisine.
+      'ipip50': 'high',
+    },
+        reason: 'la liste des instruments non confrontés à leur source a '
+            'changé. Si c\'est voulu, mettre à jour ce test ET la page '
+            'Méthodologie ; sinon, c\'est la régression que cette garde '
+            'existe pour attraper.');
+  });
+
+  test('la page Méthodologie a de quoi être honnête', () {
+    // Le registre est exposé par le CODE, pas seulement par ce test : la page
+    // Méthodologie (LOT I) le lit pour afficher la liste. Une incertitude
+    // qu'on ne montre qu'aux développeurs n'est pas déclarée, elle est cachée.
+    for (final bloc in QModuleRegistry.recalled) {
+      expect(modules.expand((m) => m.instruments), contains(bloc),
+          reason: 'le registre doit refléter des blocs réellement livrés');
+    }
+    expect(
+      QModuleRegistry.recalled.map((b) => b.id).toSet().length,
+      QModuleRegistry.recalled.length,
+      reason: 'un bloc listé deux fois s\'afficherait deux fois',
+    );
   });
 }

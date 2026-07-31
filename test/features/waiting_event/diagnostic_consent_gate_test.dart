@@ -13,6 +13,13 @@
 // différence est assumée : le bloc diagnostic n'affiche aucun résultat et ne
 // calcule rien. Le faire remplir sans pouvoir l'exploiter, ce serait prendre
 // deux écrans de déclarations de santé pour rien.
+//
+// ⚠️ LE CHEMIN A CHANGÉ AU LOT E1. Le bloc n'a plus de carte à lui dans le
+// hub : le programme le veut à la FIN du jour 1, et cette fin existe depuis
+// que l'IPIP-50 est livré. On y arrive donc en sortant du questionnaire du
+// jour 1 — et par nulle part ailleurs. Le chemin étant unique, il doit rester
+// REPASSABLE : tout ce qui interrompt l'enchaînement (refus, abandon, panne
+// d'écriture) laisse la question entière, et rouvrir la journée la repropose.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -26,11 +33,15 @@ import 'package:mentality/features/waiting_event/_shared/data/event_upload_servi
 import 'package:mentality/features/waiting_event/_shared/domain/models/event_submission.dart';
 import 'package:mentality/features/waiting_event/_shared/domain/models/q_answer_set.dart';
 import 'package:mentality/features/waiting_event/_shared/domain/services/event_consent.dart';
+import 'package:mentality/features/waiting_event/_shared/domain/services/q_module_registry.dart';
+import 'package:mentality/features/waiting_event/_shared/domain/models/q_module.dart';
 import 'package:mentality/features/waiting_event/day_hub/presentation/pages/day_hub_page.dart';
 import 'package:mentality/features/waiting_event/diagnostic_block/data/diagnostic_block_store.dart';
 import 'package:mentality/features/waiting_event/diagnostic_block/domain/models/diagnostic_answers.dart';
 import 'package:mentality/features/waiting_event/diagnostic_block/presentation/pages/diagnostic_block_page.dart';
 import 'package:mentality/features/waiting_event/diagnostic_block/presentation/pages/event_consent_page.dart';
+import 'package:mentality/features/waiting_event/personality/domain/personality_module.dart';
+import 'package:mentality/features/waiting_event/_shared/presentation/questionnaire_runner_page.dart';
 import 'package:mentality/features/waiting_event/reveals/data/self_estimate_store.dart';
 import 'package:mentality/features/waiting_event/reveals/domain/services/reveal_source.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -90,6 +101,9 @@ Widget host({
   required DiagnosticBlockStore diagnostic,
   required EventConsent consent,
   required SelfEstimateStore estimation,
+  required EventAnswerStore reponses,
+  int serverDayIndex = 1,
+  QModuleResolver? moduleForDay,
   Locale locale = const Locale('fr'),
 }) =>
     ScreenUtilInit(
@@ -106,7 +120,11 @@ Widget host({
         ],
         supportedLocales: AppLocalizations.supportedLocales,
         home: DayHubPage(
-          serverDayIndex: 1,
+          serverDayIndex: serverDayIndex,
+          // Par défaut le registre RÉEL — c'est lui qui rattache l'IPIP-50 au
+          // jour 1, donc lui qui crée la sortie où le bloc s'enchaîne.
+          moduleForDay: moduleForDay ?? QModuleRegistry.forDay,
+          store: reponses,
           revealSource: RevealSource(load: () async => []),
           selfEstimateStore: estimation,
           diagnosticStore: diagnostic,
@@ -124,6 +142,30 @@ Future<void> toucher(WidgetTester tester, String texte) async {
   await tester.pumpAndSettle();
 }
 
+/// Le jour 1 déjà répondu, ses cinquante items marqués terminés.
+///
+/// Pré-remplir plutôt que taper cinquante fois n'est pas qu'une économie : le
+/// moteur rouvre alors le module sur son écran de FIN, ce qui est exactement
+/// l'état que le chaînage doit reconnaître — et c'est aussi le chemin qu'emprunte
+/// quelqu'un qui revient sur sa journée 1 après coup.
+QAnswerSet jourUnTermine() => QAnswerSet(
+      moduleId: personalityModule.id,
+      answers: {for (final item in personalityModule.items) item.id: 3},
+    ).markCompleted();
+
+/// LE chemin vers le bloc : la sortie du questionnaire du jour 1.
+///
+/// Trois écrans, dans l'ordre du programme — la révélation d'abord (le cadeau
+/// qui ne demande rien), puis le test, puis seulement le bloc.
+Future<void> ouvrirDepuisJ1(WidgetTester tester, AppLocalizations l10n) async {
+  await toucher(tester, l10n.weDay1Title);
+  expect(find.text(l10n.weRvContinue), findsOneWidget,
+      reason: 'la révélation passe avant le test');
+  await toucher(tester, l10n.weRvContinue);
+  expect(find.byType(QuestionnaireRunnerPage), findsOneWidget);
+  await toucher(tester, l10n.weRunnerDoneCta);
+}
+
 void main() {
   late StoreMemoire disque;
   late List<EventSubmission> envois;
@@ -139,10 +181,21 @@ void main() {
       submit: (s) async => envois.add(s),
     );
     estimation = SelfEstimateStore(StoreMemoire());
+    // Les deux étapes qui PRÉCÈDENT le bloc, déjà franchies : l'auto-estimation
+    // du QI (sinon elle s'intercale avant la révélation) et le questionnaire du
+    // jour 1. Ce qu'on teste ici commence APRÈS elles.
+    await estimation.record(100);
+    await disque.save(jourUnTermine());
+    // Un test qui touche `EventUploadService.instance` ouvrirait une box Hive
+    // qu'aucun test unitaire n'initialise. Le moteur de questionnaire y touche
+    // par défaut : on l'espionne pour tout le fichier.
+    EventUploadService.debugSetInstance(_ServiceEspion());
     // Les libellés de boutons sont TRADUITS : les charger, jamais les écrire
     // en dur.
     l10n = await AppLocalizations.delegate.load(const Locale('fr'));
   });
+
+  tearDown(() => EventUploadService.debugSetInstance(EventUploadService()));
 
   group('rien avant le consentement', () {
     testWidgets('la carte mène au recueil, PAS aux questions de santé',
@@ -150,10 +203,13 @@ void main() {
       ecranTelephone(tester);
       final consent = ConsentFaux();
       await tester.pumpWidget(host(
-          diagnostic: diagnostic, consent: consent, estimation: estimation));
+          diagnostic: diagnostic,
+          consent: consent,
+          estimation: estimation,
+          reponses: disque));
       await tester.pumpAndSettle();
 
-      await toucher(tester, l10n.weDxCardSubtitle);
+      await ouvrirDepuisJ1(tester, l10n);
 
       expect(find.byType(EventConsentPage), findsOneWidget);
       expect(find.byType(DiagnosticBlockPage), findsNothing,
@@ -165,39 +221,49 @@ void main() {
       ecranTelephone(tester);
       final consent = ConsentFaux();
       await tester.pumpWidget(host(
-          diagnostic: diagnostic, consent: consent, estimation: estimation));
+          diagnostic: diagnostic,
+          consent: consent,
+          estimation: estimation,
+          reponses: disque));
       await tester.pumpAndSettle();
 
-      await toucher(tester, l10n.weDxCardSubtitle);
+      await ouvrirDepuisJ1(tester, l10n);
       await tester.tap(find.text(l10n.weCsDecline));
       await tester.pumpAndSettle();
 
       expect(find.byType(DiagnosticBlockPage), findsNothing);
       expect(consent.accorde, isFalse);
-      expect(disque.data, isEmpty);
+      expect(disque.data, isNot(contains(DiagnosticAnswers.moduleId)));
       expect(envois, isEmpty);
       // Et on explique pourquoi le bloc ne s'ouvre pas, plutôt que de ne rien
       // faire du tout.
       expect(find.text(l10n.weDxDeclinedTitle), findsOneWidget);
     });
 
-    testWidgets('un refus laisse la carte en place — on peut revenir',
+    testWidgets('un refus laisse la question entière — on repasse par le J1',
         (tester) async {
       ecranTelephone(tester);
       await tester.pumpWidget(host(
           diagnostic: diagnostic,
           consent: ConsentFaux(),
-          estimation: estimation));
+          estimation: estimation,
+          reponses: disque));
       await tester.pumpAndSettle();
 
-      await toucher(tester, l10n.weDxCardSubtitle);
+      await ouvrirDepuisJ1(tester, l10n);
       await tester.tap(find.text(l10n.weCsDecline));
       await tester.pumpAndSettle();
       // On referme le message.
       await tester.tapAt(const Offset(200, 60));
       await tester.pumpAndSettle();
 
-      expect(find.text(l10n.weDxCardSubtitle), findsOneWidget);
+      // Le bloc n'a plus de carte à lui : la seule preuve qu'il reste
+      // atteignable est de refaire le chemin. C'est la contrepartie du chemin
+      // unique — s'il ne se repassait pas, un refus perdrait la question pour
+      // toujours.
+      await ouvrirDepuisJ1(tester, l10n);
+      expect(find.byType(EventConsentPage), findsOneWidget,
+          reason: 'refuser une fois ne doit pas fermer la porte');
     });
 
     testWidgets('un accord que le stockage refuse n\'ouvre PAS le bloc',
@@ -205,10 +271,13 @@ void main() {
       ecranTelephone(tester);
       final consent = ConsentFaux(ecritureOk: false);
       await tester.pumpWidget(host(
-          diagnostic: diagnostic, consent: consent, estimation: estimation));
+          diagnostic: diagnostic,
+          consent: consent,
+          estimation: estimation,
+          reponses: disque));
       await tester.pumpAndSettle();
 
-      await toucher(tester, l10n.weDxCardSubtitle);
+      await ouvrirDepuisJ1(tester, l10n);
       await tester.tap(find.text(l10n.weCsAccept));
       await tester.pumpAndSettle();
 
@@ -223,10 +292,13 @@ void main() {
       ecranTelephone(tester);
       final consent = ConsentFaux();
       await tester.pumpWidget(host(
-          diagnostic: diagnostic, consent: consent, estimation: estimation));
+          diagnostic: diagnostic,
+          consent: consent,
+          estimation: estimation,
+          reponses: disque));
       await tester.pumpAndSettle();
 
-      await toucher(tester, l10n.weDxCardSubtitle);
+      await ouvrirDepuisJ1(tester, l10n);
       await tester.tap(find.text(l10n.weCsAccept));
       await tester.pumpAndSettle();
 
@@ -239,10 +311,13 @@ void main() {
       ecranTelephone(tester);
       final consent = ConsentFaux(accorde: true);
       await tester.pumpWidget(host(
-          diagnostic: diagnostic, consent: consent, estimation: estimation));
+          diagnostic: diagnostic,
+          consent: consent,
+          estimation: estimation,
+          reponses: disque));
       await tester.pumpAndSettle();
 
-      await toucher(tester, l10n.weDxCardSubtitle);
+      await ouvrirDepuisJ1(tester, l10n);
 
       expect(find.byType(EventConsentPage), findsNothing);
       expect(find.byType(DiagnosticBlockPage), findsOneWidget);
@@ -255,9 +330,10 @@ void main() {
       await tester.pumpWidget(host(
           diagnostic: diagnostic,
           consent: ConsentFaux(accorde: true),
-          estimation: estimation));
+          estimation: estimation,
+          reponses: disque));
       await tester.pumpAndSettle();
-      await toucher(tester, l10n.weDxCardSubtitle);
+      await ouvrirDepuisJ1(tester, l10n);
     }
 
     testWidgets('« aucun » saute le détail et clôt la question',
@@ -306,7 +382,7 @@ void main() {
       });
     });
 
-    testWidgets('la carte disparaît une fois la question close',
+    testWidgets('une fois close, repasser par le J1 ne la repose pas',
         (tester) async {
       ecranTelephone(tester);
       await ouvrirLeBloc(tester);
@@ -315,9 +391,14 @@ void main() {
       await toucher(tester, l10n.weRunnerNext);
       await toucher(tester, l10n.weRunnerDoneCta);
 
-      expect(find.text(l10n.weDxCardSubtitle), findsNothing,
-          reason: 'posé une seule fois : la proposer encore serait la '
-              'promesse d\'une question qui sera refusée');
+      // Rejouer sa journée 1 est permis (rattrapage ouvert) ; reposer une
+      // déclaration de santé ne l'est pas. La seconde réponse arriverait de
+      // toute façon amorcée par tout ce qui s'est passé entre-temps.
+      await ouvrirDepuisJ1(tester, l10n);
+      expect(find.byType(EventConsentPage), findsNothing);
+      expect(find.byType(DiagnosticBlockPage), findsNothing);
+      expect(find.byType(DayHubPage), findsOneWidget,
+          reason: 'posé une seule fois : on retombe simplement sur le hub');
     });
 
     testWidgets('« aucun » et un trouble coché ne coexistent jamais',
@@ -358,10 +439,14 @@ void main() {
       await tester.tap(find.text(l10n.weRunnerQuitLeave));
       await tester.pumpAndSettle();
 
-      expect(disque.data, isEmpty);
+      expect(disque.data, isNot(contains(DiagnosticAnswers.moduleId)),
+          reason: 'tout-ou-rien : une déclaration à moitié remplie entrerait '
+              'dans le groupe critère sans qu\'on sache d\'où vient le '
+              'diagnostic');
       expect(envois, isEmpty);
-      expect(find.text(l10n.weDxCardSubtitle), findsOneWidget,
-          reason: 'la question reste entière, donc la carte reste');
+      await ouvrirDepuisJ1(tester, l10n);
+      expect(find.byType(DiagnosticBlockPage), findsOneWidget,
+          reason: 'la question reste entière, donc elle se repose');
     });
 
     testWidgets('un bloc déjà rempli n\'est plus proposé', (tester) async {
@@ -372,10 +457,147 @@ void main() {
       await tester.pumpWidget(host(
           diagnostic: diagnostic,
           consent: ConsentFaux(accorde: true),
-          estimation: estimation));
+          estimation: estimation,
+          reponses: disque));
       await tester.pumpAndSettle();
 
-      expect(find.text(l10n.weDxCardSubtitle), findsNothing);
+      await ouvrirDepuisJ1(tester, l10n);
+      expect(find.byType(DiagnosticBlockPage), findsNothing);
+      expect(envois, isEmpty, reason: 'rien n\'a été redéclaré');
+    });
+  });
+
+  // Le bloc n'a plus qu'un seul chemin ; ce groupe vérifie que c'est le BON,
+  // et qu'il ne s'ouvre pas ailleurs.
+  group('l\'enchaînement du jour 1', () {
+    testWidgets('le bloc n\'a plus de carte à lui dans le hub', (tester) async {
+      // La carte autonome était une nécessité tant que le jour 1 n'avait pas
+      // de fin. L'IPIP-50 lui en donne une : la laisser en plus ouvrirait un
+      // second chemin vers la même question, posée « une seule fois ».
+      ecranTelephone(tester);
+      await tester.pumpWidget(host(
+          diagnostic: diagnostic,
+          consent: ConsentFaux(accorde: true),
+          estimation: estimation,
+          reponses: disque));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(EventConsentPage), findsNothing);
+      expect(find.byType(DiagnosticBlockPage), findsNothing);
+      // Toutes les cartes du hub, dépliées : aucune ne mène au bloc.
+      for (final page in [EventConsentPage, DiagnosticBlockPage]) {
+        expect(find.byType(page, skipOffstage: false), findsNothing);
+      }
+    });
+
+    testWidgets('un questionnaire ABANDONNÉ n\'enchaîne rien', (tester) async {
+      // Le programme veut ce bloc à la fin de la journée. Une journée
+      // interrompue n'a pas de fin — et surtout, quelqu'un qui vient de fermer
+      // un questionnaire n'est pas quelqu'un à qui l'on enchaîne deux écrans
+      // de déclarations de santé.
+      await disque.save(QAnswerSet(
+        moduleId: personalityModule.id,
+        answers: {personalityModule.items.first.id: 3},
+      ));
+
+      ecranTelephone(tester);
+      await tester.pumpWidget(host(
+          diagnostic: diagnostic,
+          consent: ConsentFaux(accorde: true),
+          estimation: estimation,
+          reponses: disque));
+      await tester.pumpAndSettle();
+
+      await toucher(tester, l10n.weDay1Title);
+      await toucher(tester, l10n.weRvContinue);
+      // Le moteur rouvre sur la question 2 : on ressort sans finir.
+      await tester.tap(find.byIcon(Icons.arrow_back_ios_new));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(l10n.weRunnerQuitLeave));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(DiagnosticBlockPage), findsNothing);
+      expect(find.byType(EventConsentPage), findsNothing);
+      expect(find.byType(DayHubPage), findsOneWidget);
+    });
+
+    testWidgets('un questionnaire terminé un AUTRE jour n\'enchaîne rien',
+        (tester) async {
+      // Posé ailleurs qu'au jour 1, le bloc serait contaminé par les dépistages
+      // des journées suivantes — celui du jour 7 en particulier. La garde porte
+      // sur la JOURNÉE, pas sur « un questionnaire vient de se terminer » : on
+      // le prouve en rattachant un module au jour 3 et en le finissant.
+      final auJourTrois = QModule(
+        id: 'faux_jour_3',
+        day: 3,
+        kind: personalityModule.kind,
+        instruments: personalityModule.instruments,
+      );
+      await disque.save(QAnswerSet(
+        moduleId: auJourTrois.id,
+        answers: {for (final item in auJourTrois.items) item.id: 3},
+      ).markCompleted());
+
+      ecranTelephone(tester);
+      await tester.pumpWidget(host(
+          diagnostic: diagnostic,
+          consent: ConsentFaux(accorde: true),
+          estimation: estimation,
+          reponses: disque,
+          // L'événement est derrière nous : les huit journées sont rattrapables.
+          serverDayIndex: 9,
+          moduleForDay: (jour) => jour == 3 ? auJourTrois : null));
+      await tester.pumpAndSettle();
+
+      await toucher(tester, l10n.weDay3Title);
+      await toucher(tester, l10n.weRvContinue);
+      expect(find.byType(QuestionnaireRunnerPage), findsOneWidget);
+      await toucher(tester, l10n.weRunnerDoneCta);
+
+      expect(find.byType(EventConsentPage), findsNothing);
+      expect(find.byType(DiagnosticBlockPage), findsNothing,
+          reason: 'le bloc se rattache au jour 1 et à lui seul');
+    });
+
+    testWidgets('les cinquante questions, puis le bloc — le parcours réel',
+        (tester) async {
+      // Les autres tests pré-remplissent le module pour aller vite. Celui-ci
+      // paie le prix fort une fois : cinquante réponses données à la main, à
+      // travers le vrai moteur, jusqu'au bloc. C'est le seul qui prouve que
+      // l'enchaînement marche pour quelqu'un qui découvre sa journée 1.
+      final vierge = StoreMemoire();
+      ecranTelephone(tester);
+      await tester.pumpWidget(host(
+          diagnostic: diagnostic,
+          consent: ConsentFaux(accorde: true),
+          estimation: estimation,
+          reponses: vierge));
+      await tester.pumpAndSettle();
+
+      await toucher(tester, l10n.weDay1Title);
+      await toucher(tester, l10n.weRvContinue);
+      expect(find.byType(QuestionnaireRunnerPage), findsOneWidget);
+
+      for (var i = 0; i < personalityModule.questionCount; i++) {
+        // « Ni exact ni inexact » — la modalité centrale, présente à chaque
+        // écran quel que soit l'item.
+        await toucher(tester, 'Ni exact ni inexact');
+        await toucher(
+            tester,
+            i + 1 == personalityModule.questionCount
+                ? l10n.weRunnerFinish
+                : l10n.weRunnerNext);
+      }
+
+      expect(find.text(l10n.weRunnerDoneTitle), findsOneWidget,
+          reason: 'les cinquante items ont bien été parcourus');
+      expect(vierge.data[personalityModule.id]!.answeredCount, 50);
+      expect(vierge.data[personalityModule.id]!.isPartial, isFalse);
+
+      await toucher(tester, l10n.weRunnerDoneCta);
+      expect(find.byType(DiagnosticBlockPage), findsOneWidget,
+          reason: 'le bloc diagnostic vient à la FIN du jour 1, et il y vient '
+              'tout seul');
     });
   });
 
@@ -451,11 +673,12 @@ void main() {
           diagnostic: diagnostic,
           consent: ConsentFaux(),
           estimation: estimation,
+          reponses: disque,
           locale: locale,
         ));
         await tester.pumpAndSettle();
 
-        await toucher(tester, traduit.weDxCardSubtitle);
+        await ouvrirDepuisJ1(tester, traduit);
         expect(find.text(traduit.weCsAccept), findsOneWidget);
         expect(find.text(traduit.weCsDecline), findsOneWidget);
 

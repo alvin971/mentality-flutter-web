@@ -927,8 +927,6 @@
   "weCsOptional": "Es opcional y no cambia nada más: ni tu desbloqueo, ni tus resultados, ni las pruebas del programa dependen de esta respuesta.",
   "weCsAccept": "Acepto que se envíen mis respuestas",
   "weCsDecline": "No, guardar mis respuestas aquí",
-  "weDxCardTitle": "Tu historial",
-  "weDxCardSubtitle": "Unas preguntas, hechas una sola vez · opcional",
   "weDxDeclinedTitle": "No se enviará nada",
   "weDxDeclinedBody": "Estas preguntas solo sirven para nuestro trabajo: sin tu acuerdo, no te las hacemos. Puedes volver cuando quieras — no cambia nada del resto del programa.",
   "weDxEyebrow": "Se pregunta una sola vez",

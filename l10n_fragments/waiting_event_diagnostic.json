@@ -69,16 +69,6 @@
     "en": "No, keep my answers here",
     "desc": "Bouton de refus du consentement art. 9"
   },
-  "weDxCardTitle": {
-    "fr": "Ton parcours",
-    "en": "Your history",
-    "desc": "Titre de la carte du bloc diagnostic dans le hub"
-  },
-  "weDxCardSubtitle": {
-    "fr": "Quelques questions, posées une seule fois · facultatif",
-    "en": "A few questions, asked only once · optional",
-    "desc": "Sous-titre de la carte du bloc diagnostic"
-  },
   "weDxDeclinedTitle": {
     "fr": "Rien ne partira",
     "en": "Nothing will be sent",

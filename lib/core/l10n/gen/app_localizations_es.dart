@@ -3236,13 +3236,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get weCsDecline => 'No, guardar mis respuestas aquí';
 
   @override
-  String get weDxCardTitle => 'Tu historial';
-
-  @override
-  String get weDxCardSubtitle =>
-      'Unas preguntas, hechas una sola vez · opcional';
-
-  @override
   String get weDxDeclinedTitle => 'No se enviará nada';
 
   @override

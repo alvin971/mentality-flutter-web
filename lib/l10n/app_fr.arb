@@ -4327,14 +4327,6 @@
   "@weCsDecline": {
     "description": "Bouton de refus du consentement art. 9"
   },
-  "weDxCardTitle": "Ton parcours",
-  "@weDxCardTitle": {
-    "description": "Titre de la carte du bloc diagnostic dans le hub"
-  },
-  "weDxCardSubtitle": "Quelques questions, posées une seule fois · facultatif",
-  "@weDxCardSubtitle": {
-    "description": "Sous-titre de la carte du bloc diagnostic"
-  },
   "weDxDeclinedTitle": "Rien ne partira",
   "@weDxDeclinedTitle": {
     "description": "Titre du message affiché quand le consentement art. 9 est refusé"

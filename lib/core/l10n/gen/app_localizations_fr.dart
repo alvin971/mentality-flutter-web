@@ -3228,13 +3228,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get weCsDecline => 'Non, garder mes réponses ici';
 
   @override
-  String get weDxCardTitle => 'Ton parcours';
-
-  @override
-  String get weDxCardSubtitle =>
-      'Quelques questions, posées une seule fois · facultatif';
-
-  @override
   String get weDxDeclinedTitle => 'Rien ne partira';
 
   @override

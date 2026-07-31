@@ -927,8 +927,6 @@
   "weCsOptional": "This is optional and changes nothing else: neither your unlock, nor your results, nor the programme's tests depend on this answer.",
   "weCsAccept": "I agree to send my answers",
   "weCsDecline": "No, keep my answers here",
-  "weDxCardTitle": "Your history",
-  "weDxCardSubtitle": "A few questions, asked only once · optional",
   "weDxDeclinedTitle": "Nothing will be sent",
   "weDxDeclinedBody": "These questions only serve our own research: without your agreement, we don't ask them. You can come back whenever you like — it changes nothing about the rest of the programme.",
   "weDxEyebrow": "Asked only once",

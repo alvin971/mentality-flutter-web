@@ -9,6 +9,7 @@
 import 'package:equatable/equatable.dart';
 
 import 'q_item.dart';
+import 'q_provenance.dart';
 import 'q_scale.dart';
 import 'q_text.dart';
 
@@ -46,6 +47,7 @@ class QInstrument extends Equatable {
     required this.scale,
     required this.items,
     this.citation,
+    this.provenance,
     this.transition,
   });
 
@@ -65,6 +67,15 @@ class QInstrument extends Equatable {
   /// Affichée en page Méthodologie, jamais au milieu du flux.
   final String? citation;
 
+  /// D'où vient le libellé des items — recopié d'une source, ou restitué de
+  /// mémoire. `null` pour un bloc [QItemOrigin.candidate] : nos questions sont
+  /// à nous, il n'y a pas de source dont s'écarter.
+  ///
+  /// Obligatoire pour un bloc validé, et une garde de contenu le vérifie. Un
+  /// instrument publié dont on ne dit pas comment il est arrivé ici est
+  /// exactement ce qu'on ne saura plus juger dans six mois.
+  final QProvenance? provenance;
+
   /// Écran annonçant le changement d'échelle, quand ce bloc en ouvre une
   /// nouvelle.
   final QTransition? transition;
@@ -72,7 +83,11 @@ class QInstrument extends Equatable {
   /// True si ce bloc porte un score affichable à l'utilisateur.
   bool get isScored => origin == QItemOrigin.validated;
 
+  /// True si le libellé de ce bloc n'a PAS été confronté à sa source primaire.
+  /// Le registre en tient la liste, et la page Méthodologie l'affiche.
+  bool get isRecalled => provenance?.status == QSourceStatus.recalled;
+
   @override
   List<Object?> get props =>
-      [id, origin, scale, items, citation, transition];
+      [id, origin, scale, items, citation, provenance, transition];
 }

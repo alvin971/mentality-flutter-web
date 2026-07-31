@@ -5667,18 +5667,6 @@ abstract class AppLocalizations {
   /// **'Non, garder mes réponses ici'**
   String get weCsDecline;
 
-  /// Titre de la carte du bloc diagnostic dans le hub
-  ///
-  /// In fr, this message translates to:
-  /// **'Ton parcours'**
-  String get weDxCardTitle;
-
-  /// Sous-titre de la carte du bloc diagnostic
-  ///
-  /// In fr, this message translates to:
-  /// **'Quelques questions, posées une seule fois · facultatif'**
-  String get weDxCardSubtitle;
-
   /// Titre du message affiché quand le consentement art. 9 est refusé
   ///
   /// In fr, this message translates to:
