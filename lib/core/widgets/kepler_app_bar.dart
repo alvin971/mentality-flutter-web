@@ -73,7 +73,15 @@ class KeplerAppBar extends StatelessWidget implements PreferredSizeWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       if (eyebrow != null)
+                        // Une seule ligne, comme le titre juste en dessous :
+                        // la hauteur de l'AppBar est FIXE (72.h), et un
+                        // surtitre qui passe à la ligne la fait déborder. Le
+                        // cas arrive dans les langues les plus longues, pas en
+                        // français — d'où l'ellipse plutôt qu'un texte court
+                        // imposé aux traducteurs.
                         Text(eyebrow!.toUpperCase(),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                             style: AppText.of(context).monoLabel(
                                 color: KeplerColors.of(context).primary)),
                       if (title != null) ...[

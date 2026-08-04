@@ -15,6 +15,7 @@ import '../../domain/services/pdf_report_service.dart';
 import '../../../unlock/data/completion_reporter.dart';
 import '../../../unlock/data/unlock_service.dart';
 import '../../../unlock/presentation/pages/unlock_gate_page.dart';
+import '../../../share_score/presentation/pages/score_share_preview_page.dart';
 import '../../../../core/l10n/l10n_ext.dart';
 
 class CompleteTestResultsPage extends StatefulWidget {
@@ -35,7 +36,7 @@ class CompleteTestResultsPage extends StatefulWidget {
 class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
   late final IQScore? _iqScore;
 
-  /// Gate marketing : tant que les paliers (parrainage + Instagram) ne sont
+  /// Gate marketing : tant que les paliers (parrainage + attente) ne sont
   /// pas franchis côté serveur, la page affiche UnlockGatePage à la place du
   /// résultat. Le score reste calculé et sauvegardé en historique (inchangé).
   bool _unlocked = !UnlockService.instance.gateEnabled;
@@ -58,6 +59,22 @@ class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
     if (!locked && mounted) setState(() => _unlocked = true);
   }
 
+  /// Code d'invitation à imprimer sur la carte de partage. `null` tant qu'il
+  /// n'a pas été récupéré (worker injoignable, gate désactivé) — le bouton de
+  /// partage reste alors masqué : une carte sans code ne sert à rien.
+  String? _inviteCode;
+  String? _inviteLink;
+
+  Future<void> _loadInviteCode() async {
+    if (!UnlockService.instance.gateEnabled) return;
+    final p = await UnlockService.instance.getProgress();
+    if (p == null || p.referralCode.isEmpty || !mounted) return;
+    setState(() {
+      _inviteCode = p.referralCode;
+      _inviteLink = p.inviteLink;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -72,6 +89,7 @@ class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
     _saveToHistory();
     _retryPendingCompletion();
     _honorCachedUnlock();
+    _loadInviteCode();
   }
 
   /// Rejoue la déclaration de fin de test si le serveur ne l'a pas encore
@@ -160,7 +178,13 @@ class _CompleteTestResultsPageState extends State<CompleteTestResultsPage> {
             _NoScoreNotice(),
           ],
           SizedBox(height: 28.h),
-          _Actions(session: session, iq: _iqScore, ageInMonths: ageInMonths),
+          _Actions(
+            session: session,
+            iq: _iqScore,
+            ageInMonths: ageInMonths,
+            inviteCode: _inviteCode,
+            inviteLink: _inviteLink,
+          ),
           SizedBox(height: 24.h),
         ],
       ),
@@ -711,16 +735,50 @@ class _NoScoreNotice extends StatelessWidget {
 }
 
 class _Actions extends StatelessWidget {
-  const _Actions(
-      {required this.session, required this.iq, required this.ageInMonths});
+  const _Actions({
+    required this.session,
+    required this.iq,
+    required this.ageInMonths,
+    this.inviteCode,
+    this.inviteLink,
+  });
   final CompleteTestSession session;
   final IQScore? iq;
   final int? ageInMonths;
+  final String? inviteCode;
+  final String? inviteLink;
 
   @override
   Widget build(BuildContext context) {
+    final iqScore = iq;
+    final code = inviteCode;
+    final link = inviteLink;
+    // Le partage suppose un score ET un code d'invitation : sans l'un ou
+    // l'autre la carte n'aurait rien à montrer. La page entière n'est de toute
+    // façon atteignable qu'une fois les résultats débloqués.
+    final canShare = iqScore != null && code != null && link != null;
+
     return Column(
       children: [
+        if (canShare) ...[
+          KeplerButton(
+            label: context.l10n.ctShareScore,
+            icon: Icons.ios_share,
+            expand: true,
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => ScoreSharePreviewPage(
+                  iq: iqScore.fsiq,
+                  percentile: iqScore.percentiles['FSIQ'] ?? 50,
+                  classification: iqScore.classifications['FSIQ'] ?? '',
+                  inviteCode: code,
+                  inviteLink: link,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 12.h),
+        ],
         KeplerButton(
           label: context.l10n.ctExportPdf,
           icon: Icons.picture_as_pdf_outlined,

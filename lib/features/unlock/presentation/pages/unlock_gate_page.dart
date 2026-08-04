@@ -3,9 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-import '../../../../core/constants/app_constants.dart';
 import '../../../../core/l10n/l10n_ext.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_typography.dart';
@@ -13,6 +11,9 @@ import '../../../../core/theme/kepler_colors.dart';
 import '../../../../core/widgets/kepler_button.dart';
 import '../../../../core/widgets/kepler_card.dart';
 import '../../../../core/widgets/kepler_scaffold.dart';
+import '../../../waiting_event/_shared/data/event_upload_service.dart';
+import '../../../waiting_event/day_hub/presentation/pages/day_hub_page.dart';
+import '../../../waiting_event/waiting_event_feature.dart';
 import '../../data/completion_reporter.dart';
 import '../../data/unlock_service.dart';
 
@@ -23,26 +24,36 @@ import '../../data/unlock_service.dart';
 ///   1. Inviter 3 amis via le lien lié au token du parrain.
 ///   2. (révélé quand les 3 invitations sont parties) Attendre que les
 ///      filleuls TERMINENT leur test — statut par filleul + polling.
-///   3. Suivre le compte Instagram : pseudo + « vérification en cours »
-///      (le délai est appliqué côté serveur, autorité worker).
+///   3. Attendre le délai de publication — RIEN n'est demandé à l'utilisateur
+///      et rien n'est vérifié à son sujet ; le serveur seul décide de
+///      l'échéance (autorité worker).
 ///   4. Débloqué → [onUnlocked] est appelé (affiche le vrai résultat).
-/// Format de pseudo Instagram accepté par le serveur
-/// (miroir de `workers/referral/index.js` : `^[A-Za-z0-9._]{1,30}$`).
-final RegExp kInstagramHandleRe = RegExp(r'^[A-Za-z0-9._]{1,30}$');
 
-/// Extrait le pseudo d'une saisie libre : « @nom », une URL de profil collée
-/// ou des espaces parasites donnent tous « nom ».
+/// Granularité d'affichage du compte à rebours.
+enum CountdownUnit { zero, minutes, hours, days }
+
+/// Unité et valeur à afficher pour [remaining] : des JOURS au-delà de 48 h, des
+/// HEURES en dessous, des MINUTES sous une heure.
 ///
-/// Sans cette normalisation, coller son profil Instagram — le geste le plus
-/// naturel — était refusé par le serveur, et le refus était invisible.
-String normalizeInstagramHandle(String raw) {
-  var h = raw.trim();
-  h = h.replaceFirst(
-      RegExp(r'^(https?://)?(www\.)?instagram\.com/', caseSensitive: false), '');
-  h = h.split(RegExp(r'[/?#]')).first;
-  h = h.replaceFirst(RegExp(r'^@+'), '');
-  return h.trim();
+/// Arrondi AU SUPÉRIEUR partout : on n'annonce jamais moins de temps qu'il n'en
+/// reste. Les seuils portent sur les minutes DÉJÀ arrondies, ce qui interdit les
+/// affichages absurdes du type « encore 60 minutes ».
+({CountdownUnit unit, int value}) countdownParts(Duration remaining) {
+  final secs = remaining.inSeconds;
+  if (secs <= 0) return (unit: CountdownUnit.zero, value: 0);
+  final minutes = (secs / 60).ceil();
+  if (minutes > 2880) return (unit: CountdownUnit.days, value: (minutes / 1440).ceil());
+  if (minutes >= 60) return (unit: CountdownUnit.hours, value: (minutes / 60).ceil());
+  return (unit: CountdownUnit.minutes, value: minutes);
 }
+
+/// Bannière affichée quand le serveur tourne avec un délai d'affichage forcé.
+///
+/// VOLONTAIREMENT non traduite : ce n'est pas un message produit mais le signal
+/// d'un défaut de configuration, et il ne doit jamais pouvoir se fondre dans
+/// l'interface.
+String debugDelayBannerText(int delayMinutes) =>
+    'MODE TEST — délai réel : $delayMinutes min';
 
 class UnlockGatePage extends StatefulWidget {
   const UnlockGatePage({super.key, required this.onUnlocked});
@@ -54,30 +65,35 @@ class UnlockGatePage extends StatefulWidget {
   State<UnlockGatePage> createState() => _UnlockGatePageState();
 }
 
-class _UnlockGatePageState extends State<UnlockGatePage> {
+class _UnlockGatePageState extends State<UnlockGatePage>
+    with WidgetsBindingObserver {
   UnlockProgress? _progress;
   bool _loading = true;
   bool _error = false;
   bool _copied = false;
   Timer? _pollTimer;
-  final _instaController = TextEditingController();
-  bool _submittingInsta = false;
-
-  /// Message d'erreur sous le champ Instagram. Sans lui, un pseudo refusé par
-  /// le serveur (accents, tiret, URL collée) ou une coupure réseau rendaient le
-  /// bouton totalement inerte : dernier palier, aucune explication, impasse.
-  String? _instaError;
 
   /// Vrai quand le dernier rafraîchissement a échoué alors qu'un état était
   /// déjà affiché : les chiffres à l'écran sont périmés, il faut le dire.
   bool _refreshFailed = false;
 
+  /// Rythme d'AFFICHAGE du compte à rebours. Ne fait aucun appel réseau.
+  Timer? _tick;
+  Duration _remaining = Duration.zero;
+
+  /// Le compteur local est à zéro mais le serveur n'a pas encore confirmé le
+  /// stage 4. C'est le seul état où l'écran annonce la fin de l'attente sans
+  /// débloquer — et c'est exactement ce que voit quelqu'un qui a avancé
+  /// l'horloge de son téléphone : le serveur, lui, n'a pas bougé.
+  bool _awaitingServer = false;
+  int _confirmBackoffS = 5;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _load(init: true);
-    // Polling léger : les validations des filleuls et le délai Instagram
+    // Polling léger : les validations des filleuls et le délai d'attente
     // avancent côté serveur pendant que la page est ouverte.
     _pollTimer = Timer.periodic(
       const Duration(seconds: 30),
@@ -87,8 +103,9 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _pollTimer?.cancel();
-    _instaController.dispose();
+    _tick?.cancel();
     super.dispose();
   }
 
@@ -97,6 +114,21 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
 
   /// La fin de test n'est pas encore confirmée — on rejoue à chaque passage.
   bool _completionPending = false;
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Au retour au premier plan, le compteur monotone peut avoir pris du retard
+    // (processus suspendu) : on se recale sur le serveur avant de réafficher.
+    if (state != AppLifecycleState.resumed) return;
+    _load();
+    // Deuxième occasion de rejeu, après le démarrage de l'app (main.dart) : une
+    // app gardée en arrière-plan des jours durant ne redémarre jamais, et les
+    // réponses en attente n'auraient sinon aucune fenêtre pour partir. Non
+    // attendu — l'affichage ne dépend pas du réseau.
+    EventUploadService.instance.retryPending().catchError(
+          (_) => const <String, EventUploadOutcome>{},
+        );
+  }
 
   Future<void> _load({bool init = false}) async {
     // Rattrapage : une fin de test qui n'a pas abouti (réseau coupé, app
@@ -133,7 +165,57 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
       _error = false;
       _refreshFailed = false;
     });
+    _syncCountdown(p);
     if (p.unlocked) widget.onUnlocked();
+  }
+
+  /// Ré-ancre le compte à rebours sur la valeur que vient de donner le serveur.
+  void _syncCountdown(UnlockProgress p) {
+    _tick?.cancel();
+    if (!p.countdownApplicable) {
+      _awaitingServer = false;
+      return;
+    }
+    _remaining = p.remainingAt(UnlockService.instance.monotonicNow);
+    if (_remaining > Duration.zero) {
+      // Le serveur redonne du temps : on quitte l'état « attente de
+      // confirmation » et on repart de SA valeur, jamais de la nôtre.
+      _awaitingServer = false;
+      _confirmBackoffS = 5;
+      _tick = Timer.periodic(const Duration(seconds: 1), (_) => _onTick());
+    } else {
+      _enterAwaitingServer();
+    }
+  }
+
+  void _onTick() {
+    final p = _progress;
+    if (p == null) return;
+    final r = p.remainingAt(UnlockService.instance.monotonicNow);
+    if (r <= Duration.zero) {
+      _tick?.cancel();
+      _enterAwaitingServer();
+      return;
+    }
+    setState(() => _remaining = r);
+  }
+
+  /// Compteur local épuisé : on ne débloque RIEN, on redemande au serveur.
+  ///
+  /// [_awaitingServer] n'est levé que d'ici, et n'est baissé que par une
+  /// réponse serveur — stage 4 (déblocage) ou secondsRemaining positif
+  /// (le ticker repart de la valeur serveur). Le client n'a aucun chemin qui
+  /// débloque de lui-même.
+  void _enterAwaitingServer() {
+    setState(() {
+      _remaining = Duration.zero;
+      _awaitingServer = true;
+    });
+    _load();
+    _confirmBackoffS = (_confirmBackoffS * 2).clamp(5, 30);
+    Timer(Duration(seconds: _confirmBackoffS), () {
+      if (mounted && _awaitingServer) _load();
+    });
   }
 
   Future<void> _copyLink() async {
@@ -144,33 +226,6 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
     setState(() => _copied = true);
     Future.delayed(const Duration(seconds: 3), () {
       if (mounted) setState(() => _copied = false);
-    });
-  }
-
-  Future<void> _submitInstagram() async {
-    if (_submittingInsta) return;
-    final handle = normalizeInstagramHandle(_instaController.text);
-    // Pré-validation locale : un format refusé n'a pas à faire l'aller-retour
-    // réseau pour se solder par un bouton inerte.
-    if (!kInstagramHandleRe.hasMatch(handle)) {
-      setState(() => _instaError = context.l10n.ugInstaErrorFormat);
-      return;
-    }
-    setState(() {
-      _submittingInsta = true;
-      _instaError = null;
-    });
-    final p = await UnlockService.instance.submitInstagram(handle);
-    if (!mounted) return;
-    setState(() {
-      _submittingInsta = false;
-      if (p != null) {
-        _progress = p;
-        _instaError = null;
-      } else {
-        // Refus serveur ou réseau : toujours dire quelque chose.
-        _instaError = context.l10n.ugInstaErrorNetwork;
-      }
     });
   }
 
@@ -195,7 +250,7 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
   /// Avertissement sur la fin de test : refus définitif (session trop courte)
   /// ou confirmation encore en attente. Jamais silencieux — c'est ce silence
   /// qui faisait perdre des parrainages sans que personne ne le sache.
-  Widget _buildCompletionNotice(dynamic l10n) {
+  Widget _buildCompletionNotice(AppLocalizations l10n) {
     final refuse = _completionRejected;
     return KeplerCard(
       surface: true,
@@ -227,7 +282,7 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
     );
   }
 
-  Widget _buildError(dynamic l10n) {
+  Widget _buildError(AppLocalizations l10n) {
     return Column(
       children: [
         SizedBox(height: 40.h),
@@ -245,7 +300,7 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
     );
   }
 
-  Widget _buildSteps(dynamic l10n) {
+  Widget _buildSteps(AppLocalizations l10n) {
     final p = _progress!;
     // Palier 2 (attente) révélé dès qu'au moins un filleul a terminé mais que
     // le compte n'est pas atteint ; palier 3 seulement quand le parrainage est
@@ -256,6 +311,7 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        if (p.debugDelayOverride) _buildDebugDelayBanner(p),
         // La fin de test de CE passe n'a pas abouti : le dire ici, c'est le
         // seul écran que voit un filleul après sa passation. Sans ça, il
         // repartait convaincu d'avoir validé la mission de son parrain.
@@ -288,7 +344,7 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
         // créait une impasse (parrainage acquis + stage resté à 1 ⇒ AUCUNE carte
         // affichée, plus aucune action possible). Tant que ce n'est pas
         // débloqué, il y a toujours une action.
-        if (referralsDone && !p.unlocked) _buildInstagramStep(l10n, p),
+        if (referralsDone && !p.unlocked) _buildWaitStep(l10n, p),
         if (_refreshFailed) ...[
           SizedBox(height: 16.h),
           Row(
@@ -318,7 +374,7 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
   }
 
   /// Palier 1 — inviter 3 amis via le lien lié au token.
-  Widget _buildInviteStep(dynamic l10n, UnlockProgress p) {
+  Widget _buildInviteStep(AppLocalizations l10n, UnlockProgress p) {
     return KeplerCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -355,7 +411,7 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
   }
 
   /// Palier 2 — attendre que les filleuls terminent leur test.
-  Widget _buildWaitingStep(dynamic l10n, UnlockProgress p) {
+  Widget _buildWaitingStep(AppLocalizations l10n, UnlockProgress p) {
     return KeplerCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -395,73 +451,105 @@ class _UnlockGatePageState extends State<UnlockGatePage> {
     );
   }
 
-  /// Palier 3 — suivre le compte Instagram (déclaratif + délai serveur).
-  Widget _buildInstagramStep(dynamic l10n, UnlockProgress p) {
-    if (p.instagramSubmitted) {
-      return KeplerCard(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _stepHeader('3', l10n.ugStep3Title),
-            SizedBox(height: 10.h),
-            Row(
-              children: [
-                SizedBox(
-                  width: 16.sp,
-                  height: 16.sp,
-                  child: const CircularProgressIndicator(strokeWidth: 2),
-                ),
-                SizedBox(width: 10.w),
-                Expanded(
-                  child: Text(l10n.ugInstaPending,
-                      style: AppText.of(context).bodySmall()),
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
-    }
+  /// Palier 3 — le délai de publication court côté serveur.
+  ///
+  /// AUCUN indicateur d'activité ici : rien n'est en cours de traitement et
+  /// personne n'est vérifié. On attend une date, on le dit.
+  Widget _buildWaitStep(AppLocalizations l10n, UnlockProgress p) {
+    final colors = KeplerColors.of(context);
     return KeplerCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _stepHeader('3', l10n.ugStep3Title),
+          _stepHeader('3', l10n.ugWaitTitle),
           SizedBox(height: 10.h),
-          Text(l10n.ugStep3Body(AppConstants.instagramHandle),
+          Text(l10n.ugWaitBody(p.displayDelayDays),
               style: AppText.of(context).bodySmall()),
-          SizedBox(height: 14.h),
-          KeplerButton(
-            label: l10n.ugFollowButton(AppConstants.instagramHandle),
-            icon: Icons.open_in_new,
-            variant: KeplerButtonVariant.secondary,
-            expand: true,
-            onPressed: () => launchUrl(
-              Uri.parse(AppConstants.instagramUrl),
-              mode: LaunchMode.externalApplication,
+          if (p.countdownApplicable) ...[
+            SizedBox(height: 14.h),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(Icons.schedule_outlined, size: 18.sp, color: colors.primary),
+                SizedBox(width: 10.w),
+                Expanded(
+                  child: Text(
+                    _countdownLabel(l10n),
+                    style: AppText.of(context)
+                        .bodyStrong(color: colors.primary),
+                  ),
+                ),
+              ],
             ),
-          ),
-          SizedBox(height: 14.h),
-          TextField(
-            controller: _instaController,
-            autocorrect: false,
-            enableSuggestions: false,
-            onChanged: (_) {
-              if (_instaError != null) setState(() => _instaError = null);
-            },
-            onSubmitted: (_) => _submitInstagram(),
-            decoration: InputDecoration(
-              labelText: l10n.ugInstaFieldLabel,
-              prefixText: '@',
-              errorText: _instaError,
-              border: const OutlineInputBorder(),
+          ],
+          if (_awaitingServer) ...[
+            SizedBox(height: 8.h),
+            Text(l10n.ugWaitConfirming,
+                style: AppText.of(context)
+                    .bodySmall(color: colors.textSecondary)),
+          ],
+          // LA PORTE UNIQUE de l'événement des 8 jours — hub, révélations,
+          // questionnaires, bloc diagnostic et jeux sont tous derrière ce
+          // bouton et derrière lui seul.
+          //
+          // Éteinte au lancement (`kWaitingEventEnabled`) : le programme est
+          // écrit et testé, mais un parcours de huit journées à remplir est
+          // beaucoup à assumer pour un début. L'utilisateur voit donc la carte
+          // d'attente telle qu'elle était — le décompte, et rien d'autre.
+          //
+          // La seconde condition reste utile pour le jour où l'on rallume : le
+          // programme n'a de sens que si le SERVEUR sait dire quel jour on est.
+          // Face à un worker antérieur au champ, `dayIndex` est nul et la carte
+          // n'affiche pas un bouton qui ne mènerait nulle part. Rien ici
+          // n'avance le déblocage, dans un cas comme dans l'autre.
+          if (kWaitingEventEnabled && p.dayIndex != null) ...[
+            SizedBox(height: 16.h),
+            KeplerButton(
+              label: l10n.weGateCta,
+              icon: Icons.map_outlined,
+              expand: true,
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (_) => DayHubPage(serverDayIndex: p.dayIndex!),
+                ),
+              ),
             ),
-          ),
-          SizedBox(height: 12.h),
-          KeplerButton(
-            label: l10n.ugInstaSubmit,
-            expand: true,
-            onPressed: _submittingInsta ? null : _submitInstagram,
+          ],
+        ],
+      ),
+    );
+  }
+
+  String _countdownLabel(AppLocalizations l10n) {
+    final parts = countdownParts(_remaining);
+    return switch (parts.unit) {
+      CountdownUnit.days => l10n.ugWaitCountdownDays(parts.value),
+      CountdownUnit.hours => l10n.ugWaitCountdownHours(parts.value),
+      CountdownUnit.minutes => l10n.ugWaitCountdownMinutes(parts.value),
+      CountdownUnit.zero => l10n.ugWaitCountdownDone,
+    };
+  }
+
+  /// Bannière de recette. Affichée à TOUT stage, non traduite, non contournable :
+  /// tant que le worker tourne avec DEBUG_DISPLAY_DELAY_DAYS, le délai annoncé
+  /// est un mensonge et cela doit se voir.
+  Widget _buildDebugDelayBanner(UnlockProgress p) {
+    final colors = KeplerColors.of(context);
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+      margin: EdgeInsets.only(bottom: 12.h),
+      color: colors.warning.withValues(alpha: 0.15),
+      child: Row(
+        children: [
+          Icon(Icons.bug_report_outlined, size: 16.sp, color: colors.warning),
+          SizedBox(width: 8.w),
+          Expanded(
+            child: Text(
+              debugDelayBannerText(p.delayMinutes),
+              style: AppText.of(context).bodySmall(color: colors.warning),
+            ),
           ),
         ],
       ),

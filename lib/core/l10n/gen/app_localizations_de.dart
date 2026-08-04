@@ -544,16 +544,6 @@ class AppLocalizationsDe extends AppLocalizations {
   String get ctBackToHome => 'Zurück zur Startseite';
 
   @override
-  String get ctSubtestExitTitle => 'Untertest unterbrochen';
-
-  @override
-  String get ctSubtestExitBody =>
-      'Sie haben diesen Untertest verlassen, bevor er beendet war. Möchten Sie ihn fortsetzen oder die Bewertung beenden?';
-
-  @override
-  String get ctSubtestExitResume => 'Untertest fortsetzen';
-
-  @override
   String get ctPdfSubtitle => 'WAIS-IV-Bericht zur kognitiven Untersuchung';
 
   @override
@@ -1898,33 +1888,6 @@ class AppLocalizationsDe extends AppLocalizations {
       'Wählen Sie die 3 Teile, die die Figur ergeben (Drehungen erlaubt, Spiegelungen nicht).';
 
   @override
-  String get vpDemoEyebrow => 'DEMONSTRATION';
-
-  @override
-  String get vpDemoInstruction =>
-      'Übung ohne Zeitlimit: Wählen Sie die 3 Teile, die die Figur ergeben, und bestätigen Sie.';
-
-  @override
-  String get vpDemoStart => 'Test starten';
-
-  @override
-  String get vpDemoRetry => 'Erneut versuchen';
-
-  @override
-  String get vpRecorded => 'Antwort gespeichert';
-
-  @override
-  String get vpReadyTitle => 'Bereit?';
-
-  @override
-  String vpReadyBody(int count) {
-    return 'Das Training ist beendet. Der Test beginnt: $count Puzzles, jedes mit eigenem Zeitlimit. Die Zeit läuft, sobald Sie die Taste drücken.';
-  }
-
-  @override
-  String get vpReadyStart => 'Jetzt starten';
-
-  @override
   String vpSelectionSemantics(int filled, int total) {
     return 'Auswahl: $filled von $total Teilen';
   }
@@ -2469,6 +2432,255 @@ class AppLocalizationsDe extends AppLocalizations {
   String get psImgFusee => 'Rakete';
 
   @override
+  String get ctShareScore => 'Mein Ergebnis teilen';
+
+  @override
+  String get ctSubtestExitBody =>
+      'Sie haben diesen Untertest verlassen, bevor er beendet war. Möchten Sie ihn fortsetzen oder die Bewertung beenden?';
+
+  @override
+  String get ctSubtestExitResume => 'Untertest fortsetzen';
+
+  @override
+  String get ctSubtestExitTitle => 'Untertest unterbrochen';
+
+  @override
+  String get demoBadge => 'ÜBUNG';
+
+  @override
+  String get demoContinue => 'Weiter';
+
+  @override
+  String get demoNotice => 'Übung – dieser Versuch zählt nicht.';
+
+  @override
+  String get demoRetry => 'Erneut versuchen';
+
+  @override
+  String get demoStart => 'Test starten';
+
+  @override
+  String get demoTryAgain => 'Nicht ganz – versuchen Sie es erneut';
+
+  @override
+  String get demoWellDone => 'Richtig!';
+
+  @override
+  String get histLockedBody =>
+      'Dein Ergebnis ist gespeichert, bleibt aber unscharf, bis alle Missionen bestätigt sind.';
+
+  @override
+  String get histLockedBodyNoResult =>
+      'Deine Missionen und dein Einladungslink sind hier. Schließe deine Auswertung ab, um dein Ergebnis freizuschalten.';
+
+  @override
+  String get histLockedCta => 'Meine Missionen ansehen';
+
+  @override
+  String get histLockedTitle => 'Offene Missionen';
+
+  @override
+  String get inviteLandingBody =>
+      'Ein Freund lädt dich zum kostenlosen Mentality-IQ-Test ein. Wenn du deinen Test abschließt, erhältst du dein eigenes Ergebnis und hilfst deinem Freund, seines freizuschalten.';
+
+  @override
+  String get inviteLandingCta => 'Kostenlosen Test starten';
+
+  @override
+  String get inviteLandingTitle => 'Einladung';
+
+  @override
+  String get shareCancel => 'Abbrechen';
+
+  @override
+  String get shareCodeLabel => 'Einladungscode';
+
+  @override
+  String get shareConfirm => 'Dieses Bild teilen';
+
+  @override
+  String get shareError =>
+      'Das Bild konnte nicht erstellt werden. Bitte versuche es erneut.';
+
+  @override
+  String get shareEyebrow => 'Vorschau';
+
+  @override
+  String get shareIntro =>
+      'Das ist das Bild, das geteilt wird. Es wird nichts veröffentlicht, bevor du bestätigst.';
+
+  @override
+  String get shareLinkCopied =>
+      'Dein Link ist kopiert — füge ihn als Link-Sticker in deine Story ein';
+
+  @override
+  String sharePercentile(int rank) {
+    return 'Höher als $rank % der Teilnehmenden';
+  }
+
+  @override
+  String get shareScoreLabel => 'Gesamtergebnis';
+
+  @override
+  String get shareTitle => 'Mein Ergebnis teilen';
+
+  @override
+  String get ugCopied => 'Link kopiert!';
+
+  @override
+  String get ugCopyLink => 'Meinen Einladungslink kopieren';
+
+  @override
+  String get ugErrorBody =>
+      'Der Freischaltstatus konnte nicht geladen werden. Prüfe deine Verbindung und versuche es erneut.';
+
+  @override
+  String get ugEyebrow => 'Letzte Schritte';
+
+  @override
+  String get ugFreeNotice =>
+      'Der Test ist 100 % kostenlos. Um dein Ergebnis zu erhalten, fehlen noch einige einfache Schritte – sie werden automatisch bestätigt.';
+
+  @override
+  String ugFriendDone(int n) {
+    return 'Freund $n: Test abgeschlossen';
+  }
+
+  @override
+  String ugFriendPending(int n) {
+    return 'Freund $n: Test läuft';
+  }
+
+  @override
+  String ugInviteCounter(int joined, int required) {
+    return '$joined/$required Freunde haben ihren Test beendet';
+  }
+
+  @override
+  String get ugRefresh => 'Aktualisieren';
+
+  @override
+  String get ugRefreshFailed =>
+      'Aktualisierung fehlgeschlagen. Prüfe deine Verbindung — die angezeigten Zahlen stammen vom letzten erfolgreichen Abruf.';
+
+  @override
+  String get ugResultsHubNotice =>
+      'Alles findest du unter „Meine Ergebnisse“: deine Missionen, deinen Einladungslink und dein Ergebnis (unscharf, bis alle Missionen bestätigt sind). Du kannst diese Seite jederzeit verlassen und später zurückkommen.';
+
+  @override
+  String get ugRetry => 'Erneut versuchen';
+
+  @override
+  String get ugStep1Body =>
+      'Teile deinen persönlichen Link mit 3 Freunden. Dieser Schritt geht weiter, wenn sie ihren Test BEENDEN — nicht schon bei der Anmeldung. Erinnere sie ruhig daran.';
+
+  @override
+  String get ugStep1Title => 'Lade 3 Freunde ein';
+
+  @override
+  String get ugStep2Body =>
+      'Deine Freunde müssen nun ihren IQ-Test abschließen. Wir warten auf ihre Ergebnisse – erinnere sie ruhig daran!';
+
+  @override
+  String get ugStep2Title => 'Deine Freunde machen ihren Test';
+
+  @override
+  String get ugTitle => 'Dein Ergebnis ist bereit';
+
+  @override
+  String ugWaitBody(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other:
+          'Dein Ergebnis wird vorbereitet. Es wird in $days Tagen automatisch veröffentlicht – du musst nichts weiter tun.',
+      one:
+          'Dein Ergebnis wird vorbereitet. Es wird in $days Tag automatisch veröffentlicht – du musst nichts weiter tun.',
+      zero:
+          'Dein Ergebnis wird vorbereitet. Es wird automatisch veröffentlicht – du musst nichts weiter tun.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get ugWaitConfirming =>
+      'Dein Ergebnis wird freigeschaltet, sobald der Server bestätigt – diese Seite aktualisiert sich von selbst.';
+
+  @override
+  String ugWaitCountdownDays(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'Noch $days Tage',
+      one: 'Noch $days Tag',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get ugWaitCountdownDone => 'Die Wartezeit ist vorbei.';
+
+  @override
+  String ugWaitCountdownHours(int hours) {
+    String _temp0 = intl.Intl.pluralLogic(
+      hours,
+      locale: localeName,
+      other: 'Noch $hours Stunden',
+      one: 'Noch $hours Stunde',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String ugWaitCountdownMinutes(int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: 'Noch $minutes Minuten',
+      one: 'Noch $minutes Minute',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get ugWaitTitle => 'Deine Ergebnisse sind unterwegs';
+
+  @override
+  String get vpDemoEyebrow => 'DEMONSTRATION';
+
+  @override
+  String get vpDemoInstruction =>
+      'Übung ohne Zeitlimit: Wählen Sie die 3 Teile, die die Figur ergeben, und bestätigen Sie.';
+
+  @override
+  String get vpDemoRetry => 'Erneut versuchen';
+
+  @override
+  String get vpDemoStart => 'Test starten';
+
+  @override
+  String vpReadyBody(int count) {
+    return 'Das Training ist beendet. Der Test beginnt: $count Puzzles, jedes mit eigenem Zeitlimit. Die Zeit läuft, sobald Sie die Taste drücken.';
+  }
+
+  @override
+  String get vpReadyStart => 'Jetzt starten';
+
+  @override
+  String get vpReadyTitle => 'Bereit?';
+
+  @override
+  String get vpRecorded => 'Antwort gespeichert';
+
+  @override
+  String get completionPendingNotice =>
+      'Der Abschluss deines Tests wurde vom Server noch nicht bestätigt. Wir versuchen es weiter — bleib online und öffne die App bei Bedarf erneut.';
+
+  @override
+  String get completionRejectedNotice =>
+      'Dieser Durchgang konnte nicht bestätigt werden: Er war zu kurz. Er zählt nicht für die Empfehlungsmission.';
+
+  @override
   String get vocabTestName => 'Wortschatz';
 
   @override
@@ -2623,154 +2835,769 @@ class AppLocalizationsDe extends AppLocalizations {
   String get vocabTipContext => '• Erklären Sie die Bedeutung mit Kontext';
 
   @override
-  String get demoBadge => 'ÜBUNG';
+  String get weGateCta => 'Heutiges Programm ansehen';
 
   @override
-  String get demoNotice => 'Übung – dieser Versuch zählt nicht.';
+  String get weHubEyebrow => 'Während der Wartezeit';
 
   @override
-  String get demoStart => 'Test starten';
-
-  @override
-  String get demoRetry => 'Erneut versuchen';
-
-  @override
-  String get demoContinue => 'Weiter';
-
-  @override
-  String get demoWellDone => 'Richtig!';
-
-  @override
-  String get demoTryAgain => 'Nicht ganz – versuchen Sie es erneut';
-
-  @override
-  String get ugTitle => 'Dein Ergebnis ist bereit';
-
-  @override
-  String get ugEyebrow => 'Letzte Schritte';
-
-  @override
-  String get ugFreeNotice =>
-      'Der Test ist 100 % kostenlos. Um dein Ergebnis zu erhalten, fehlen noch einige einfache Schritte – sie werden automatisch bestätigt.';
-
-  @override
-  String get ugErrorBody =>
-      'Der Freischaltstatus konnte nicht geladen werden. Prüfe deine Verbindung und versuche es erneut.';
-
-  @override
-  String get ugRetry => 'Erneut versuchen';
-
-  @override
-  String get ugRefresh => 'Aktualisieren';
-
-  @override
-  String get ugStep1Title => 'Lade 3 Freunde ein';
-
-  @override
-  String get ugStep1Body =>
-      'Teile deinen persönlichen Link mit 3 Freunden. Dieser Schritt geht weiter, wenn sie ihren Test BEENDEN — nicht schon bei der Anmeldung. Erinnere sie ruhig daran.';
-
-  @override
-  String get ugCopyLink => 'Meinen Einladungslink kopieren';
-
-  @override
-  String get ugCopied => 'Link kopiert!';
-
-  @override
-  String ugInviteCounter(int joined, int required) {
-    return '$joined/$required Freunde haben ihren Test beendet';
+  String weHubTitle(int day) {
+    return 'Tag $day';
   }
 
   @override
-  String get ugStep2Title => 'Deine Freunde machen ihren Test';
+  String get weHubTitleDone => 'Programm abgeschlossen';
 
   @override
-  String get ugStep2Body =>
-      'Deine Freunde müssen nun ihren IQ-Test abschließen. Wir warten auf ihre Ergebnisse – erinnere sie ruhig daran!';
+  String get weHubIntro =>
+      'Jeden Tag wird ein Teil Ihrer Ergebnisse enthüllt, dazu eine optionale Aktivität. Nichts davon beschleunigt die Freischaltung: Nur die Zeit schaltet frei.';
 
   @override
-  String ugFriendDone(int n) {
-    return 'Freund $n: Test abgeschlossen';
+  String get weTodayTag => 'Heute';
+
+  @override
+  String get wePastTag => 'Nachholen';
+
+  @override
+  String weLockedTag(int day) {
+    return 'Öffnet an Tag $day';
   }
 
   @override
-  String ugFriendPending(int n) {
-    return 'Freund $n: Test läuft';
+  String get wePlaceholderTitle => 'In Vorbereitung';
+
+  @override
+  String get wePlaceholderBody =>
+      'Der Inhalt dieses Tages kommt mit einem der nächsten Updates.';
+
+  @override
+  String get weAnnouncedTag => 'Test des Tages — mit Ihrem Ergebnis';
+
+  @override
+  String get weContributionTag =>
+      'Beitrag — helfen Sie uns, unseren Test zu entwickeln';
+
+  @override
+  String get weShareTag => 'Letzte Belohnung';
+
+  @override
+  String get weDay1Title => 'Ihre Persönlichkeit';
+
+  @override
+  String get weDay2Title => 'Entwickeln Sie unseren Lesetest';
+
+  @override
+  String get weDay3Title => 'Ihr Gleichgewicht';
+
+  @override
+  String get weDay4Title => 'Entwickeln Sie unseren Aufmerksamkeitstest (1/2)';
+
+  @override
+  String get weDay5Title => 'Entwickeln Sie unseren Aufmerksamkeitstest (2/2)';
+
+  @override
+  String get weDay6Title => 'Ihre Energie';
+
+  @override
+  String get weDay7Title => 'Autismus-Profil';
+
+  @override
+  String get weDay8Title => 'Ihr Gesamt-IQ';
+
+  @override
+  String get weRevealVci => 'Ihr Sprachverständnis';
+
+  @override
+  String get weRevealPsi => 'Ihre Verarbeitungsgeschwindigkeit';
+
+  @override
+  String get weRevealWmi => 'Ihr Arbeitsgedächtnis';
+
+  @override
+  String get weRevealFri => 'Ihr logisches Denken';
+
+  @override
+  String get weRevealVsi => 'Ihr visuell-räumlicher Index';
+
+  @override
+  String get weRevealStrengths => 'Ihre Stärken und Schwächen';
+
+  @override
+  String get weRevealFullIq => 'Ihr Gesamt-IQ';
+
+  @override
+  String get weGameStroop => 'Spiel: Stroop';
+
+  @override
+  String get weGameDelayChoice => 'Spiel: Belohnungsaufschub';
+
+  @override
+  String get weGameTimeEstimation => 'Spiel: Zeitschätzung';
+
+  @override
+  String get weGameConfidence => 'Spiel: Kalibrierung des Selbstvertrauens';
+
+  @override
+  String get weRunnerNext => 'Weiter';
+
+  @override
+  String get weRunnerFinish => 'Abschließen';
+
+  @override
+  String get weRunnerBack => 'Zurück';
+
+  @override
+  String get weRunnerScoredLabel => 'Test des Tages';
+
+  @override
+  String get weRunnerContributionLabel => 'Beitrag';
+
+  @override
+  String get weRunnerResumed => 'Du machst dort weiter, wo du aufgehört hast.';
+
+  @override
+  String get weRunnerNoScoreNotice =>
+      'Diese Fragen berechnen keinen Wert für dich: Sie helfen, das Instrument für die Nächsten zu entwickeln.';
+
+  @override
+  String get weRunnerQuitTitle => 'Fragebogen verlassen?';
+
+  @override
+  String get weRunnerQuitBody =>
+      'Deine Antworten sind gespeichert. Du kannst bei der Frage weitermachen, bei der du aufhörst.';
+
+  @override
+  String get weRunnerQuitStay => 'Weitermachen';
+
+  @override
+  String get weRunnerQuitLeave => 'Verlassen';
+
+  @override
+  String get weRunnerTransitionCta => 'Weiter';
+
+  @override
+  String get weRunnerDoneTitle => 'Geschafft';
+
+  @override
+  String get weRunnerDoneBody => 'Danke — deine Antworten sind gespeichert.';
+
+  @override
+  String get weRunnerDoneContributionBody =>
+      'Danke — deine Antworten helfen, unseren Test zu entwickeln. Für dich wird kein Wert berechnet.';
+
+  @override
+  String get weRunnerDoneCta => 'Zurück zum Programm';
+
+  @override
+  String get weRvEyebrow => 'Deine Enthüllung des Tages';
+
+  @override
+  String get weRvContinue => 'Weiter';
+
+  @override
+  String get weRvBackToHub => 'Zurück zum Programm';
+
+  @override
+  String get weRvScoreLabel => 'PUNKTWERT';
+
+  @override
+  String weRvCi(int low, int high) {
+    return '95-%-Konfidenzintervall · $low – $high';
   }
 
   @override
-  String ugWaitingCounter(int done, int required) {
-    return '$done/$required Tests abgeschlossen';
+  String get weRvCaveat =>
+      'Ein Index ist eine Messung mit ihrer Fehlermarge – kein Urteil. Dieselbe Testung noch einmal zu absolvieren würde nicht genau dieselbe Zahl ergeben.';
+
+  @override
+  String get weRvUnavailableTitle => 'Keine Testung zum Enthüllen';
+
+  @override
+  String get weRvUnavailableBody =>
+      'Auf diesem Gerät ist diesem Zugang keine abgeschlossene Testung zugeordnet. Nichts geht verloren: Die Enthüllung erscheint, sobald deine Ergebnisse hier wieder lesbar sind.';
+
+  @override
+  String get weRvMissingTitle => 'Dieser Index wurde nicht berechnet';
+
+  @override
+  String get weRvMissingBody =>
+      'Deine gespeicherte Testung enthält diesen Index nicht – ein Untertest fehlte. Die übrigen Enthüllungen bleiben verfügbar.';
+
+  @override
+  String get weRvVciBody =>
+      'Was du über Wörter und Ideen weißt und wie du sie verknüpfst: definieren, erklären, finden, was zwei Begriffe verbindet. Das ist der Teil des Profils, der sich über die Jahre am wenigsten verändert.';
+
+  @override
+  String get weRvVsiBody =>
+      'Wie du mit Formen und Raum umgehst: ein Muster nachbauen, sehen, wie Teile zusammenpassen, noch bevor du sie gelegt hast.';
+
+  @override
+  String get weRvFriBody =>
+      'Wie du eine Regel findest, die dir niemand gegeben hat – allein aus dem, was du beobachtest. Das ist das Denken, das nichts dem Gelernten verdankt.';
+
+  @override
+  String get weRvWmiBody =>
+      'Was du gleichzeitig im Kopf behalten UND bearbeiten kannst: eine Folge merken und dabei umsortieren. Das ist der Index, der am empfindlichsten auf Müdigkeit und Stress reagiert.';
+
+  @override
+  String get weRvPsiBody =>
+      'Wie schnell du eine einfache Information fehlerfrei verarbeitest. Das ist kein „schnelles Denken“: Es ist ein Durchsatz, und er wird mit Aufmerksamkeit bezahlt.';
+
+  @override
+  String get weRvStrengthsTitle => 'Deine Stärken und Aufmerksamkeitspunkte';
+
+  @override
+  String get weRvStrengthsIntro =>
+      'Heute werden die fünf Indizes miteinander verglichen. Eine Stärke ist kein absolutes Talent: Sie ist das, was dein eigenes durchschnittliches Niveau um mehr als 10 Punkte übertrifft.';
+
+  @override
+  String get weRvStrengthsNone =>
+      'Kein Index weicht um mehr als 10 Punkte von deinem durchschnittlichen Niveau ab: Dein Profil ist gleichmäßig – und das ist für sich genommen ein Ergebnis.';
+
+  @override
+  String get weRvFullIqLabel => 'Gesamt-IQ';
+
+  @override
+  String get weRvFullIqBody =>
+      'Der Gesamt-IQ fasst die fünf Indizes in einer einzigen Zahl zusammen. Wenn sie weit auseinanderliegen, verliert diese Zusammenfassung ihren Sinn: Dann beschreibt dich das Detail, nicht die Summe.';
+
+  @override
+  String get weRvEstimateTitle => 'DEINE SCHÄTZUNG GEGENÜBER DER MESSUNG';
+
+  @override
+  String weRvEstimateLine(int estimate, int measured) {
+    return 'Du hast dich auf $estimate geschätzt. Die Messung ergibt $measured.';
   }
 
   @override
-  String get ugStep3Title => 'Letzter Schritt: Instagram';
-
-  @override
-  String ugStep3Body(String handle) {
-    return 'Folge unserem Konto @$handle und gib deinen Benutzernamen an. Wir prüfen dein Abo und dein Ergebnis wird freigeschaltet.';
+  String weRvEstimateOver(int points) {
+    return 'Das sind $points Punkte über der Messung.';
   }
 
   @override
-  String ugFollowButton(String handle) {
-    return '@$handle auf Instagram folgen';
+  String weRvEstimateUnder(int points) {
+    return 'Das sind $points Punkte unter der Messung.';
   }
 
   @override
-  String get ugInstaFieldLabel => 'Dein Instagram-Benutzername';
+  String get weRvEstimateClose =>
+      'Weniger als 5 Punkte Unterschied: Deine Schätzung und die Messung sagen dasselbe.';
 
   @override
-  String get ugInstaSubmit => 'Mein Abo bestätigen';
+  String get weRvEstimateMissing =>
+      'Du hast keine Schätzung abgegeben – es gibt nichts zu vergleichen.';
 
   @override
-  String get ugInstaPending =>
-      'Dein Abo wird überprüft … Dein Ergebnis wird in wenigen Stunden freigeschaltet. Du kannst diese Seite schließen und später zurückkommen.';
+  String get weRvSelfEyebrow => 'Vor jeder Enthüllung';
 
   @override
-  String get ugInstaErrorFormat =>
-      'Ungültiger Benutzername: nur Buchstaben, Zahlen, Punkt und Unterstrich — kein Link.';
+  String get weRvSelfTitle => 'Wie hoch schätzt du deinen IQ?';
 
   @override
-  String get ugInstaErrorNetwork =>
-      'Dein Benutzername konnte nicht gesendet werden. Prüfe deine Verbindung und versuche es erneut.';
+  String get weRvSelfBody =>
+      'Eine einzige Frage, jetzt gestellt: Nach einer ersten Enthüllung wäre deine Antwort von der eben gelesenen Zahl beeinflusst. 100 ist der Durchschnitt. Deine Antwort bleibt auf deinem Telefon und kommt an Tag 8 zu dir zurück.';
 
   @override
-  String get ugRefreshFailed =>
-      'Aktualisierung fehlgeschlagen. Prüfe deine Verbindung — die angezeigten Zahlen stammen vom letzten erfolgreichen Abruf.';
+  String get weRvSelfHint =>
+      'Schiebe den Regler oder tippe auf − und +, um zu wählen.';
 
   @override
-  String get ugResultsHubNotice =>
-      'Alles findest du unter „Meine Ergebnisse“: deine Missionen, deinen Einladungslink und dein Ergebnis (unscharf, bis alle Missionen bestätigt sind). Du kannst diese Seite jederzeit verlassen und später zurückkommen.';
+  String get weRvSelfAverage => '100 ist der Durchschnitt.';
 
   @override
-  String get histLockedTitle => 'Offene Missionen';
+  String get weRvSelfConfirm => 'Meine Schätzung bestätigen';
 
   @override
-  String get histLockedBody =>
-      'Dein Ergebnis ist gespeichert, bleibt aber unscharf, bis alle Missionen bestätigt sind.';
+  String get weRvSelfDecline => 'Ich möchte lieber nicht antworten';
 
   @override
-  String get histLockedBodyNoResult =>
-      'Deine Missionen und dein Einladungslink sind hier. Schließe deine Auswertung ab, um dein Ergebnis freizuschalten.';
+  String get weRvSelfDecrease => 'Um einen Punkt verringern';
 
   @override
-  String get histLockedCta => 'Meine Missionen ansehen';
+  String get weRvSelfIncrease => 'Um einen Punkt erhöhen';
 
   @override
-  String get inviteLandingTitle => 'Einladung';
+  String get weDcEyebrow => 'Spiel';
 
   @override
-  String get inviteLandingBody =>
-      'Ein Freund lädt dich zum kostenlosen Mentality-IQ-Test ein. Wenn du deinen Test abschließt, erhältst du dein eigenes Ergebnis und hilfst deinem Freund, seines freizuschalten.';
+  String get weDcTitle => 'Jetzt oder später';
 
   @override
-  String get inviteLandingCta => 'Kostenlosen Test starten';
+  String get weDcIntroTitle => 'Ein Betrag sofort oder ein größerer später';
 
   @override
-  String get completionPendingNotice =>
-      'Der Abschluss deines Tests wurde vom Server noch nicht bestätigt. Wir versuchen es weiter — bleib online und öffne die App bei Bedarf erneut.';
+  String get weDcIntroBody =>
+      'Zwanzigmal bekommst du dieselbe Art von Wahl: ein Betrag, der sofort verfügbar ist, oder ein größerer Betrag nach einer Wartezeit. Tippe einfach den an, den du lieber hättest.';
 
   @override
-  String get completionRejectedNotice =>
-      'Dieser Durchgang konnte nicht bestätigt werden: Er war zu kurz. Er zählt nicht für die Empfehlungsmission.';
+  String get weDcIntroImaginary =>
+      'Diese Beträge sind erfunden. Es gibt nichts zu gewinnen, nichts zu zahlen und nichts zu bekommen: Das sind Fragen, keine Angebote.';
+
+  @override
+  String get weDcIntroNoRightAnswer =>
+      'Es gibt keine richtige Antwort. Das Geld sofort zu nehmen ist weder besser noch schlechter, als zu warten.';
+
+  @override
+  String get weDcStart => 'Beginnen';
+
+  @override
+  String get weDcLater => 'Später';
+
+  @override
+  String get weDcProgressTag => 'Wahl';
+
+  @override
+  String get weDcPrompt => 'Was hättest du lieber?';
+
+  @override
+  String get weDcImaginaryTag =>
+      'Erfundene Beträge — es gibt nichts zu gewinnen.';
+
+  @override
+  String get weDcResultTitle => 'Deine Geduld';
+
+  @override
+  String weDcPatienceScore(int score) {
+    return '$score / 100';
+  }
+
+  @override
+  String get weDcResultCaption =>
+      'Je höher die Zahl, desto eher bist du bereit zu warten. Das ist keine Note: Beide Enden der Skala sind gleich viel wert.';
+
+  @override
+  String weDcIndifference(String delayed, String immediate) {
+    return 'Einen Monat auf $delayed zu warten kommt für dich dem gleich, sofort $immediate zu bekommen.';
+  }
+
+  @override
+  String get weDcCurveTitle => 'Was das Warten wert war';
+
+  @override
+  String weDcPrevious(int score) {
+    return 'Beim letzten Mal: $score / 100';
+  }
+
+  @override
+  String get weDcNoBetterEnd =>
+      'Diese Zahl sagt nicht, ob du gut gespielt hast. Das Geld sofort zu bevorzugen ist eine Abwägung, kein Fehler — und sie verschiebt sich je nach Moment, Stimmung und Lebenslage.';
+
+  @override
+  String get weDcNotClinical =>
+      'Das ist ein Spiel, keine klinische Messung: kein Schwellenwert, keine Rangliste, nichts, was du daraus über dich schließen solltest.';
+
+  @override
+  String get weDcIncoherentTitle =>
+      'Zu verstreute Antworten, um etwas daraus zu lesen';
+
+  @override
+  String get weDcIncoherentBody =>
+      'Deine Antworten laufen von einer Wartezeit zur nächsten in entgegengesetzte Richtungen: Derselbe Betrag ist weiter entfernt am Ende mehr wert als nah. Es wurde nichts gespeichert. Spiel noch einmal, wann du magst.';
+
+  @override
+  String get weDcReplay => 'Noch einmal spielen';
+
+  @override
+  String get weDcDone => 'Fertig';
+
+  @override
+  String get weCsEyebrow => 'Bevor es weitergeht';
+
+  @override
+  String get weCsTitle => 'Antworten senden?';
+
+  @override
+  String get weCsIntro =>
+      'Die folgenden Fragen betreffen deine psychische Gesundheit und deine neurologische Entwicklung. Das Gesetz schützt diese Antworten besonders: Sie dürfen dein Telefon nur verlassen, wenn du hier ausdrücklich zustimmst.';
+
+  @override
+  String get weCsWhatTitle => 'Was gesendet wird';
+
+  @override
+  String get weCsWhat =>
+      'Deine Antworten, genau so, wie du sie gegeben hast. Ohne deinen Namen, ohne deine Nummer, ohne genaues Datum und ohne Uhrzeit. Nie deine Punktwerte: Sie werden auf deinem Telefon berechnet und bleiben dort.';
+
+  @override
+  String get weCsPurposeTitle => 'Wofür sie dienen';
+
+  @override
+  String get weCsPurpose =>
+      'Um unsere eigenen Screening-Tests zu entwickeln und zu verbessern und um zu vergleichen, was Menschen angeben, mit dem, was die Testbatterie misst. Diese Werkzeuge gehören zu dem, was wir verkaufen — das gehört gesagt.';
+
+  @override
+  String get weCsWhoTitle => 'Wohin sie gehen';
+
+  @override
+  String get weCsWho =>
+      'Auf unsere Server in Europa. Abgelegt unter deinem anonymen Pass, nie unter deinem Namen oder deiner Nummer.';
+
+  @override
+  String get weCsRightsTitle => 'Du behältst die Kontrolle';
+
+  @override
+  String get weCsRights =>
+      'Du kannst deine Zustimmung jederzeit zurückziehen: Weitere Übertragungen hören sofort auf. Du kannst außerdem Auskunft über deine Daten oder deren Löschung verlangen.';
+
+  @override
+  String get weCsOptional =>
+      'Das ist freiwillig und ändert sonst nichts: Weder deine Freischaltung noch deine Ergebnisse noch die Tests des Programms hängen von dieser Antwort ab.';
+
+  @override
+  String get weCsAccept => 'Ich stimme dem Senden meiner Antworten zu';
+
+  @override
+  String get weCsDecline => 'Nein, Antworten hier behalten';
+
+  @override
+  String get weDxDeclinedTitle => 'Es wird nichts gesendet';
+
+  @override
+  String get weDxDeclinedBody =>
+      'Diese Fragen dienen ausschließlich unserer Arbeit: Ohne deine Zustimmung stellen wir sie nicht. Du kannst jederzeit zurückkommen — am Rest des Programms ändert das nichts.';
+
+  @override
+  String get weDxEyebrow => 'Nur einmal gefragt';
+
+  @override
+  String get weDxListTitle => 'Dein Werdegang';
+
+  @override
+  String get weDxListQuestion =>
+      'Hast du eine Diagnose erhalten — oder vermutest du, betroffen zu sein — für eine dieser Störungen?';
+
+  @override
+  String get weDxListBody =>
+      'Diese Antworten ändern nichts an deinen Ergebnissen. Sie dienen dem Aufbau unserer Werkzeuge: Ohne zu wissen, wer betroffen ist, lässt sich nicht erkennen, welche Fragen tatsächlich etwas unterscheiden.';
+
+  @override
+  String get weDxListHint => 'Kreuze alles an, was zutrifft.';
+
+  @override
+  String get weDxAdhd => 'ADHS';
+
+  @override
+  String get weDxAutism => 'Autismus / ASS';
+
+  @override
+  String get weDxDyslexia => 'Legasthenie';
+
+  @override
+  String get weDxDyspraxia => 'Dyspraxie';
+
+  @override
+  String get weDxDyscalculia => 'Dyskalkulie';
+
+  @override
+  String get weDxHpi => 'Hochbegabung';
+
+  @override
+  String get weDxDepression => 'Depression';
+
+  @override
+  String get weDxAnxiety => 'Angststörung';
+
+  @override
+  String get weDxBipolar => 'Bipolare Störung';
+
+  @override
+  String get weDxOcd => 'Zwangsstörung';
+
+  @override
+  String get weDxSleep => 'Schlafstörung';
+
+  @override
+  String get weDxBurnout => 'Burn-out';
+
+  @override
+  String get weDxOther => 'Eine andere Störung';
+
+  @override
+  String get weDxNone => 'Keine';
+
+  @override
+  String get weDxPreferNotToSay => 'Ich möchte nicht antworten';
+
+  @override
+  String get weDxDetailTitle => 'Genauer';
+
+  @override
+  String weDxDetailProgress(int current, int total) {
+    return '$current von $total';
+  }
+
+  @override
+  String get weDxSourceQuestion => 'Woher stammt die Diagnose?';
+
+  @override
+  String get weDxSourcePsychiatrist => 'Psychiatrie oder Neuropsychologie';
+
+  @override
+  String get weDxSourceGp => 'Hausarztpraxis';
+
+  @override
+  String get weDxSourcePsychologist => 'Psychologische Praxis';
+
+  @override
+  String get weDxSourceSelf => 'Von nirgendwo — ich vermute es, ohne Diagnose';
+
+  @override
+  String get weDxWhenQuestion => 'Wie lange ist das her?';
+
+  @override
+  String get weDxWhenUnder1 => 'Weniger als ein Jahr';
+
+  @override
+  String get weDxWhen1to3 => '1 bis 3 Jahre';
+
+  @override
+  String get weDxWhen3to10 => '3 bis 10 Jahre';
+
+  @override
+  String get weDxWhenOver10 => 'Mehr als 10 Jahre';
+
+  @override
+  String get weDxWhenUnknown => 'Weiß ich nicht mehr';
+
+  @override
+  String get weDxTreatmentQuestion => 'Behandlung oder Betreuung?';
+
+  @override
+  String get weDxTreatmentYes => 'Ja, aktuell';
+
+  @override
+  String get weDxTreatmentNo => 'Nein';
+
+  @override
+  String get weDxTreatmentPast => 'Früher';
+
+  @override
+  String get weDxAssessmentQuestion =>
+      'Wurde eine vollständige Abklärung gemacht?';
+
+  @override
+  String get weDxAssessmentYes => 'Ja';
+
+  @override
+  String get weDxAssessmentNo => 'Nein';
+
+  @override
+  String get weDxAssessmentUnknown => 'Weiß ich nicht';
+
+  @override
+  String get weDxDoneTitle => 'Notiert';
+
+  @override
+  String get weDxDoneBody =>
+      'Danke. Diese Frage wird dir nicht noch einmal gestellt — sie kommt nur einmal. An deinen Ergebnissen und deiner Freischaltung ändert sie nichts.';
+
+  @override
+  String get weDxAlreadyTitle => 'Schon beantwortet';
+
+  @override
+  String get weDxAlreadyBody =>
+      'Diesen Teil hast du bereits ausgefüllt. Er wird nur einmal gestellt, damit deine Antwort nicht von den Tests der folgenden Tage beeinflusst wird.';
+
+  @override
+  String get weDxFailedTitle => 'Nichts konnte gespeichert werden';
+
+  @override
+  String get weDxFailedBody =>
+      'Deine Antworten wurden nicht gespeichert, und es wurde nichts gesendet. Du kannst es vom Programm aus erneut versuchen — die Frage bleibt offen.';
+
+  @override
+  String get weDxQuitTitle => 'Jetzt verlassen?';
+
+  @override
+  String get weDxQuitBody =>
+      'Was du angekreuzt hast, wird nicht behalten: Dieser Teil wird am Ende in einem Zug gespeichert. Du kannst ihn vom Programm aus neu beginnen.';
+
+  @override
+  String get weGameCardSubtitle => 'Spiel des Tages · 2 Minuten · wiederholbar';
+
+  @override
+  String get weStroopEyebrow => 'Spiel';
+
+  @override
+  String get weStroopTitle => 'Farbenstreit';
+
+  @override
+  String get weStroopIntroTitle => 'Benenne die Farbe, nicht das Wort';
+
+  @override
+  String get weStroopIntroBody =>
+      'Ein Wort erscheint in einer bestimmten Farbe. Tippe auf die Farbe der TINTE, nicht auf das, was dasteht. Lesen läuft automatisch ab – genau das musst du beiseitelassen.';
+
+  @override
+  String get weStroopIntroPractice =>
+      'Wir beginnen mit drei Durchgängen, die nicht zählen – nur zum Warmwerden.';
+
+  @override
+  String get weStroopIntroExample =>
+      'Hier nennt das Wort eine Farbe und die Tinte eine andere: Es zählt die Tinte.';
+
+  @override
+  String get weStroopStart => 'Beginnen';
+
+  @override
+  String get weStroopLater => 'Später';
+
+  @override
+  String get weStroopPracticeTag => 'Übung';
+
+  @override
+  String get weStroopScoredTag => 'Zählt';
+
+  @override
+  String get weStroopPrompt => 'In welcher Farbe steht das?';
+
+  @override
+  String get weStroopBlockScoredTitle => 'Los geht\'s';
+
+  @override
+  String get weStroopBlockScoredBody =>
+      'Ab jetzt zählen die Durchgänge. Sei schnell, aber triff richtig: Ein Fehler bringt dir nichts.';
+
+  @override
+  String get weStroopBlockConflictTitle => 'Jetzt widersprechen dir die Wörter';
+
+  @override
+  String get weStroopBlockConflictBody =>
+      'Die Anweisung bleibt gleich: Es geht weiterhin um die Farbe der Tinte. Die Wörter sagen nur etwas anderes.';
+
+  @override
+  String get weStroopBlockCta => 'Weiter';
+
+  @override
+  String get weStroopResultTitle => 'Dein Abstand';
+
+  @override
+  String weStroopMilliseconds(int ms) {
+    return '$ms ms';
+  }
+
+  @override
+  String get weStroopResultCaption =>
+      'Das ist die zusätzliche Zeit, die du pro Durchgang gebraucht hast, wenn das Wort das Gegenteil der Tinte sagte.';
+
+  @override
+  String weStroopAccuracy(int correct, int total) {
+    return '$correct von $total richtig';
+  }
+
+  @override
+  String weStroopBest(int ms) {
+    return 'Dein bester Abstand: $ms ms';
+  }
+
+  @override
+  String get weStroopNewBest => 'Neuer bester Abstand';
+
+  @override
+  String get weStroopNotSpeed =>
+      'Diese Zahl ist nicht deine Geschwindigkeit. Sie ist der Unterschied zwischen zwei Serien: Wer insgesamt langsamer ist, kann durchaus einen kleineren Abstand haben.';
+
+  @override
+  String get weStroopNotClinical =>
+      'Das ist ein Spiel, keine klinische Messung: kein Schwellenwert, keine Rangliste, nichts, was du daraus über dich schließen solltest.';
+
+  @override
+  String get weStroopUnreliableTitle => 'Zu wenige Antworten, um zu zählen';
+
+  @override
+  String get weStroopUnreliableBody =>
+      'Es gibt nicht genug Antworten, die zugleich richtig und rechtzeitig waren, um einen ehrlichen Abstand zu berechnen. Dein bisher bester Abstand bleibt unberührt. Spiel noch einmal, wann du willst.';
+
+  @override
+  String get weStroopReplay => 'Noch einmal spielen';
+
+  @override
+  String get weStroopDone => 'Fertig';
+
+  @override
+  String get weTeEyebrow => 'Spiel';
+
+  @override
+  String get weTeTitle => 'Das Längere von beiden';
+
+  @override
+  String get weTeIntroTitle => 'Zwei Felder, eines nach dem anderen';
+
+  @override
+  String get weTeIntroBody =>
+      'Ein Feld leuchtet auf, geht aus und leuchtet dann ein zweites Mal auf. Sage, welches der beiden länger geleuchtet hat. Die Unterschiede werden im Laufe des Spiels immer feiner.';
+
+  @override
+  String get weTeIntroTooShortToCount =>
+      'Die Dauern liegen im Bereich einer Sekunde: viel zu kurz, um sie zu zählen. Es antwortet allein deine Wahrnehmung.';
+
+  @override
+  String get weTeIntroExample =>
+      'Dieses Feld wird aufleuchten. Sonst bewegt sich nichts auf dem Bildschirm.';
+
+  @override
+  String get weTeStart => 'Beginnen';
+
+  @override
+  String get weTeLater => 'Später';
+
+  @override
+  String get weTeProgressTag => 'Versuch';
+
+  @override
+  String get weTeWatch => 'Schau genau hin …';
+
+  @override
+  String get weTePrompt => 'Welches hat länger geleuchtet?';
+
+  @override
+  String get weTeFirst => 'Das erste';
+
+  @override
+  String get weTeSecond => 'Das zweite';
+
+  @override
+  String get weTeResultTitle => 'Deine Feinheit';
+
+  @override
+  String weTeThreshold(int percent) {
+    return '$percent %';
+  }
+
+  @override
+  String get weTeResultCaption =>
+      'Das ist der kleinste Unterschied, den du zwischen zwei Dauern noch erkennst. Je kleiner die Zahl, desto feiner trennt deine Wahrnehmung zwei nahe Augenblicke.';
+
+  @override
+  String weTeAccuracyNote(int percent) {
+    return '$percent % richtig — das ist normal: Das Spiel verengt die Unterschiede, bis du ins Zögern kommst.';
+  }
+
+  @override
+  String weTeBest(int percent) {
+    return 'Deine feinste Unterscheidung: $percent %';
+  }
+
+  @override
+  String get weTeNewBest => 'Neue feinste Unterscheidung';
+
+  @override
+  String get weTeNotSpeed =>
+      'Diese Zahl ist nicht deine Geschwindigkeit: Nichts hat deine Antworten gemessen, du konntest dir so viel Zeit nehmen, wie du wolltest.';
+
+  @override
+  String get weTeNotClinical =>
+      'Das ist ein Spiel, keine klinische Messung: kein Schwellenwert, keine Rangliste, nichts, was du daraus über dich schließen solltest.';
+
+  @override
+  String get weTeUnreliableTitle => 'Zu wenig, um eine Feinheit zu messen';
+
+  @override
+  String get weTeUnreliableBody =>
+      'In dieser Runde gab es nicht genug Zögern, damit ein Wert etwas bedeuten würde. Deine bisher feinste Unterscheidung bleibt unberührt. Spiel noch einmal, wann du magst.';
+
+  @override
+  String get weTeReplay => 'Noch einmal spielen';
+
+  @override
+  String get weTeDone => 'Fertig';
 }

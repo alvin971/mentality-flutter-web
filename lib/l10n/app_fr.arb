@@ -668,18 +668,6 @@
   "@ctBackToHome": {
     "description": "Bouton de retour à l'accueil depuis les résultats"
   },
-  "ctSubtestExitTitle": "Sous-test interrompu",
-  "@ctSubtestExitTitle": {
-    "description": "Titre du dialogue affiché quand l'utilisateur quitte un sous-test sans le terminer"
-  },
-  "ctSubtestExitBody": "Vous avez quitté ce sous-test avant de le terminer. Voulez-vous le reprendre ou arrêter l'évaluation ?",
-  "@ctSubtestExitBody": {
-    "description": "Corps du dialogue de sortie d'un sous-test"
-  },
-  "ctSubtestExitResume": "Reprendre le sous-test",
-  "@ctSubtestExitResume": {
-    "description": "Bouton pour reprendre le sous-test interrompu"
-  },
   "ctPdfSubtitle": "Rapport d'évaluation cognitive WAIS-IV",
   "@ctPdfSubtitle": {
     "description": "Sous-titre du rapport PDF (sous le titre de marque)"
@@ -2595,43 +2583,6 @@
   "@vpInstruction": {
     "description": "Puzzles visuels — consigne sous la figure cible"
   },
-  "vpDemoEyebrow": "DÉMONSTRATION",
-  "@vpDemoEyebrow": {
-    "description": "Puzzles visuels — eyebrow de la phase de démonstration non chronométrée"
-  },
-  "vpDemoInstruction": "Entraînement sans chrono : choisissez les 3 pièces qui forment la figure, puis validez.",
-  "@vpDemoInstruction": {
-    "description": "Puzzles visuels — consigne de l'item de démonstration"
-  },
-  "vpDemoStart": "Commencer le test",
-  "@vpDemoStart": {
-    "description": "Puzzles visuels — bouton après une démo réussie, lance les items chronométrés"
-  },
-  "vpDemoRetry": "Réessayer",
-  "@vpDemoRetry": {
-    "description": "Puzzles visuels — bouton après une démo ratée, réinitialise la démo"
-  },
-  "vpRecorded": "Réponse enregistrée",
-  "@vpRecorded": {
-    "description": "Puzzles visuels — libellé neutre du bouton après validation d'un item réel (aucun feedback correct/incorrect pendant le test, conforme au protocole)"
-  },
-  "vpReadyTitle": "Prêt ?",
-  "@vpReadyTitle": {
-    "description": "Puzzles visuels — titre de l'écran intermédiaire entre la démonstration et le premier item chronométré"
-  },
-  "vpReadyBody": "L'entraînement est terminé. Le test commence : {count} puzzles, chacun avec son propre chrono. Le temps démarre dès que vous appuyez sur le bouton.",
-  "@vpReadyBody": {
-    "description": "Puzzles visuels — texte de l'écran Prêt ; le chrono ne démarre qu'à l'appui sur le bouton",
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "vpReadyStart": "Lancer le test",
-  "@vpReadyStart": {
-    "description": "Puzzles visuels — bouton de l'écran Prêt qui démarre l'item 1 et son chrono"
-  },
   "vpSelectionSemantics": "Sélection : {filled} sur {total} pièces",
   "@vpSelectionSemantics": {
     "description": "Puzzles visuels — étiquette d'accessibilité de l'indicateur de sélection",
@@ -3427,6 +3378,192 @@
   "@psImgFusee": {
     "description": "Picture Span image name - rocket"
   },
+  "ctShareScore": "Partager mon score",
+  "ctSubtestExitBody": "Vous avez quitté ce sous-test avant de le terminer. Voulez-vous le reprendre ou arrêter l'évaluation ?",
+  "@ctSubtestExitBody": {
+    "description": "Corps du dialogue de sortie d'un sous-test"
+  },
+  "ctSubtestExitResume": "Reprendre le sous-test",
+  "@ctSubtestExitResume": {
+    "description": "Bouton pour reprendre le sous-test interrompu"
+  },
+  "ctSubtestExitTitle": "Sous-test interrompu",
+  "@ctSubtestExitTitle": {
+    "description": "Titre du dialogue affiché quand l'utilisateur quitte un sous-test sans le terminer"
+  },
+  "demoBadge": "ENTRAÎNEMENT",
+  "@demoBadge": {
+    "description": "Phase d'entraînement — libellé d'en-tête générique (partagé entre exercices)"
+  },
+  "demoContinue": "Continuer",
+  "@demoContinue": {
+    "description": "Phase d'entraînement — bouton neutre pour poursuivre (exercices sans bonne/mauvaise réponse automatique)"
+  },
+  "demoNotice": "Entraînement — cet essai ne compte pas.",
+  "@demoNotice": {
+    "description": "Phase d'entraînement — bandeau expliquant que l'essai n'est pas noté"
+  },
+  "demoRetry": "Réessayer",
+  "@demoRetry": {
+    "description": "Phase d'entraînement — bouton pour refaire l'essai"
+  },
+  "demoStart": "Commencer le test",
+  "@demoStart": {
+    "description": "Phase d'entraînement — bouton pour passer au test réel"
+  },
+  "demoTryAgain": "Pas tout à fait — réessayez",
+  "@demoTryAgain": {
+    "description": "Phase d'entraînement — retour après un essai incorrect"
+  },
+  "demoWellDone": "Bonne réponse !",
+  "@demoWellDone": {
+    "description": "Phase d'entraînement — retour positif après un essai correct"
+  },
+  "histLockedBody": "Ton résultat est enregistré, mais il reste flouté tant que toutes les missions ne sont pas validées.",
+  "histLockedBodyNoResult": "Tes missions et ton lien d'invitation sont ici. Termine ton évaluation pour débloquer ton résultat.",
+  "histLockedCta": "Voir mes missions",
+  "histLockedTitle": "Missions à valider",
+  "inviteLandingBody": "Un ami t'invite à passer le test de QI gratuit Mentality. En terminant ton test, tu obtiens ton propre résultat et tu aides ton ami à débloquer le sien.",
+  "inviteLandingCta": "Commencer le test gratuit",
+  "inviteLandingTitle": "Invitation",
+  "shareCancel": "Annuler",
+  "shareCodeLabel": "Code d'invitation",
+  "shareConfirm": "Partager cette image",
+  "shareError": "Impossible de préparer l'image. Réessaie.",
+  "shareEyebrow": "Aperçu",
+  "shareIntro": "Voici l'image qui sera partagée. Rien n'est publié tant que tu n'as pas confirmé.",
+  "shareLinkCopied": "Ton lien est copié — ajoute-le en sticker Lien sur ta story",
+  "sharePercentile": "Plus élevé que {rank} % des participants",
+  "@sharePercentile": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      }
+    }
+  },
+  "shareScoreLabel": "Score global",
+  "shareTitle": "Partager mon score",
+  "ugCopied": "Lien copié !",
+  "ugCopyLink": "Copier mon lien d'invitation",
+  "ugErrorBody": "Impossible de récupérer l'état de ton déblocage. Vérifie ta connexion puis réessaie.",
+  "ugEyebrow": "Dernières étapes",
+  "ugFreeNotice": "Le test est 100 % gratuit. Pour recevoir ton résultat, il te reste quelques étapes simples : elles se valident automatiquement.",
+  "ugFriendDone": "Ami {n} : test terminé",
+  "@ugFriendDone": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "ugFriendPending": "Ami {n} : test en cours",
+  "@ugFriendPending": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "ugInviteCounter": "{joined}/{required} amis ont terminé leur test",
+  "@ugInviteCounter": {
+    "placeholders": {
+      "joined": {
+        "type": "int"
+      },
+      "required": {
+        "type": "int"
+      }
+    }
+  },
+  "ugRefresh": "Actualiser",
+  "ugRefreshFailed": "Impossible d'actualiser. Vérifie ta connexion — les chiffres affichés datent de ta dernière connexion.",
+  "ugResultsHubNotice": "Tout se trouve dans « Mes résultats » : tes missions, ton lien d'invitation et ton résultat (flouté tant que toutes les missions ne sont pas validées). Tu peux quitter cette page et revenir quand tu veux.",
+  "ugRetry": "Réessayer",
+  "ugStep1Body": "Partage ton lien personnel avec 3 amis. Cette étape avance quand ils TERMINENT leur test — pas seulement quand ils s'inscrivent. Pense à les relancer.",
+  "ugStep1Title": "Invite 3 amis",
+  "ugStep2Body": "Tes amis doivent maintenant terminer leur test de QI. On attend leurs résultats — n'hésite pas à les relancer !",
+  "ugStep2Title": "Tes amis passent leur test",
+  "ugTitle": "Ton résultat est prêt",
+  "ugWaitBody": "{days, plural, =0{Ton résultat est en préparation. Il sera publié automatiquement — tu n'as plus rien à faire.} one{Ton résultat est en préparation. Il sera publié dans {days} jour, automatiquement — tu n'as plus rien à faire.} other{Ton résultat est en préparation. Il sera publié dans {days} jours, automatiquement — tu n'as plus rien à faire.}}",
+  "@ugWaitBody": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "ugWaitConfirming": "Ton résultat se débloque dès la confirmation du serveur — cet écran s'actualise tout seul.",
+  "ugWaitCountdownDays": "{days, plural, one{Encore {days} jour} other{Encore {days} jours}}",
+  "@ugWaitCountdownDays": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "ugWaitCountdownDone": "Le délai est écoulé.",
+  "ugWaitCountdownHours": "{hours, plural, one{Encore {hours} heure} other{Encore {hours} heures}}",
+  "@ugWaitCountdownHours": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "ugWaitCountdownMinutes": "{minutes, plural, one{Encore {minutes} minute} other{Encore {minutes} minutes}}",
+  "@ugWaitCountdownMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "ugWaitTitle": "Tes résultats arrivent",
+  "vpDemoEyebrow": "DÉMONSTRATION",
+  "@vpDemoEyebrow": {
+    "description": "Puzzles visuels — eyebrow de la phase de démonstration non chronométrée"
+  },
+  "vpDemoInstruction": "Entraînement sans chrono : choisissez les 3 pièces qui forment la figure, puis validez.",
+  "@vpDemoInstruction": {
+    "description": "Puzzles visuels — consigne de l'item de démonstration"
+  },
+  "vpDemoRetry": "Réessayer",
+  "@vpDemoRetry": {
+    "description": "Puzzles visuels — bouton après une démo ratée, réinitialise la démo"
+  },
+  "vpDemoStart": "Commencer le test",
+  "@vpDemoStart": {
+    "description": "Puzzles visuels — bouton après une démo réussie, lance les items chronométrés"
+  },
+  "vpReadyBody": "L'entraînement est terminé. Le test commence : {count} puzzles, chacun avec son propre chrono. Le temps démarre dès que vous appuyez sur le bouton.",
+  "@vpReadyBody": {
+    "description": "Puzzles visuels — texte de l'écran Prêt ; le chrono ne démarre qu'à l'appui sur le bouton",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "vpReadyStart": "Lancer le test",
+  "@vpReadyStart": {
+    "description": "Puzzles visuels — bouton de l'écran Prêt qui démarre l'item 1 et son chrono"
+  },
+  "vpReadyTitle": "Prêt ?",
+  "@vpReadyTitle": {
+    "description": "Puzzles visuels — titre de l'écran intermédiaire entre la démonstration et le premier item chronométré"
+  },
+  "vpRecorded": "Réponse enregistrée",
+  "@vpRecorded": {
+    "description": "Puzzles visuels — libellé neutre du bouton après validation d'un item réel (aucun feedback correct/incorrect pendant le test, conforme au protocole)"
+  },
+  "completionPendingNotice": "Fin de test pas encore confirmée par le serveur. Nous réessayons automatiquement — garde une connexion et rouvre l'app si besoin.",
+  "@completionPendingNotice": {
+    "description": "Avertissement affiché quand la déclaration de fin de test n'a pas abouti."
+  },
+  "completionRejectedNotice": "Cette passation n'a pas pu être validée : elle a été jugée trop courte. Elle ne compte pas pour la mission de parrainage.",
+  "@completionRejectedNotice": {
+    "description": "Avertissement affiché quand la déclaration de fin de test n'a pas abouti."
+  },
   "vocabTestName": "Vocabulaire",
   "@vocabTestName": {
     "description": "Vocabulaire — nom du test affiché dans le scaffold"
@@ -3664,121 +3801,999 @@
   "@vocabTipContext": {
     "description": "Vocabulaire — conseil 3 de l'encart"
   },
-  "demoBadge": "ENTRAÎNEMENT",
-  "@demoBadge": {
-    "description": "Phase d'entraînement — libellé d'en-tête générique (partagé entre exercices)"
+  "weGateCta": "Voir le programme du jour",
+  "@weGateCta": {
+    "description": "Bouton de la carte d'attente qui ouvre le hub de l'événement des 8 jours"
   },
-  "demoNotice": "Entraînement — cet essai ne compte pas.",
-  "@demoNotice": {
-    "description": "Phase d'entraînement — bandeau expliquant que l'essai n'est pas noté"
+  "weHubEyebrow": "Pendant l'attente",
+  "@weHubEyebrow": {
+    "description": "Surtitre du hub de l'événement"
   },
-  "demoStart": "Commencer le test",
-  "@demoStart": {
-    "description": "Phase d'entraînement — bouton pour passer au test réel"
-  },
-  "demoRetry": "Réessayer",
-  "@demoRetry": {
-    "description": "Phase d'entraînement — bouton pour refaire l'essai"
-  },
-  "demoContinue": "Continuer",
-  "@demoContinue": {
-    "description": "Phase d'entraînement — bouton neutre pour poursuivre (exercices sans bonne/mauvaise réponse automatique)"
-  },
-  "demoWellDone": "Bonne réponse !",
-  "@demoWellDone": {
-    "description": "Phase d'entraînement — retour positif après un essai correct"
-  },
-  "demoTryAgain": "Pas tout à fait — réessayez",
-  "@demoTryAgain": {
-    "description": "Phase d'entraînement — retour après un essai incorrect"
-  },
-  "ugTitle": "Ton résultat est prêt",
-  "ugEyebrow": "Dernières étapes",
-  "ugFreeNotice": "Le test est 100 % gratuit. Pour recevoir ton résultat, il te reste quelques étapes simples : elles se valident automatiquement.",
-  "ugErrorBody": "Impossible de récupérer l'état de ton déblocage. Vérifie ta connexion puis réessaie.",
-  "ugRetry": "Réessayer",
-  "ugRefresh": "Actualiser",
-  "ugStep1Title": "Invite 3 amis",
-  "ugStep1Body": "Partage ton lien personnel avec 3 amis. Cette étape avance quand ils TERMINENT leur test — pas seulement quand ils s'inscrivent. Pense à les relancer.",
-  "ugCopyLink": "Copier mon lien d'invitation",
-  "ugCopied": "Lien copié !",
-  "ugInviteCounter": "{joined}/{required} amis ont terminé leur test",
-  "@ugInviteCounter": {
+  "weHubTitle": "Jour {day}",
+  "@weHubTitle": {
+    "description": "Titre du hub : le jour courant, décidé par le serveur",
     "placeholders": {
-      "joined": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "weHubTitleDone": "Programme terminé",
+  "@weHubTitleDone": {
+    "description": "Titre du hub une fois les résultats débloqués"
+  },
+  "weHubIntro": "Chaque jour, une part de tes résultats se dévoile, avec une activité facultative. Rien ici n'accélère le déblocage : seul le temps débloque.",
+  "@weHubIntro": {
+    "description": "Introduction du hub — dit explicitement qu'aucune activité ne conditionne le déblocage"
+  },
+  "weTodayTag": "Aujourd'hui",
+  "@weTodayTag": {
+    "description": "Étiquette de la journée en cours"
+  },
+  "wePastTag": "À rattraper",
+  "@wePastTag": {
+    "description": "Étiquette d'une journée passée, qui reste accessible"
+  },
+  "weLockedTag": "S'ouvre au jour {day}",
+  "@weLockedTag": {
+    "description": "Étiquette d'une journée à venir",
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "wePlaceholderTitle": "En préparation",
+  "@wePlaceholderTitle": {
+    "description": "Titre affiché à l'ouverture d'une journée dont le contenu n'est pas encore disponible"
+  },
+  "wePlaceholderBody": "Le contenu de cette journée arrive dans une prochaine mise à jour.",
+  "@wePlaceholderBody": {
+    "description": "Corps du message d'une journée sans contenu disponible"
+  },
+  "weAnnouncedTag": "Test du jour — avec ton résultat",
+  "@weAnnouncedTag": {
+    "description": "Cadrage d'une journée dont le test affiche un score"
+  },
+  "weContributionTag": "Contribution — aide-nous à construire notre test",
+  "@weContributionTag": {
+    "description": "Cadrage d'une journée de questions candidates, sans score affiché"
+  },
+  "weShareTag": "Récompense finale",
+  "@weShareTag": {
+    "description": "Cadrage du dernier jour"
+  },
+  "weDay1Title": "Ta personnalité",
+  "@weDay1Title": {
+    "description": "Titre du jour 1"
+  },
+  "weDay2Title": "Construis notre test de lecture",
+  "@weDay2Title": {
+    "description": "Titre du jour 2"
+  },
+  "weDay3Title": "Ton équilibre",
+  "@weDay3Title": {
+    "description": "Titre du jour 3"
+  },
+  "weDay4Title": "Construis notre test d'attention (1/2)",
+  "@weDay4Title": {
+    "description": "Titre du jour 4"
+  },
+  "weDay5Title": "Construis notre test d'attention (2/2)",
+  "@weDay5Title": {
+    "description": "Titre du jour 5"
+  },
+  "weDay6Title": "Ton énergie",
+  "@weDay6Title": {
+    "description": "Titre du jour 6"
+  },
+  "weDay7Title": "Bilan autisme",
+  "@weDay7Title": {
+    "description": "Titre du jour 7"
+  },
+  "weDay8Title": "Ton QI global",
+  "@weDay8Title": {
+    "description": "Titre du jour 8"
+  },
+  "weRevealVci": "Ton indice verbal",
+  "@weRevealVci": {
+    "description": "Nom de la révélation du jour 1"
+  },
+  "weRevealPsi": "Ta vitesse de traitement",
+  "@weRevealPsi": {
+    "description": "Nom de la révélation du jour 2"
+  },
+  "weRevealWmi": "Ta mémoire de travail",
+  "@weRevealWmi": {
+    "description": "Nom de la révélation du jour 3"
+  },
+  "weRevealFri": "Ton raisonnement",
+  "@weRevealFri": {
+    "description": "Nom de la révélation du jour 4"
+  },
+  "weRevealVsi": "Ton indice spatial",
+  "@weRevealVsi": {
+    "description": "Nom de la révélation du jour 5"
+  },
+  "weRevealStrengths": "Tes forces et tes faiblesses",
+  "@weRevealStrengths": {
+    "description": "Nom de la révélation du jour 6"
+  },
+  "weRevealFullIq": "Ton QI global",
+  "@weRevealFullIq": {
+    "description": "Nom de la révélation du jour 8"
+  },
+  "weGameStroop": "Jeu : Stroop",
+  "@weGameStroop": {
+    "description": "Nom du jeu du jour 2"
+  },
+  "weGameDelayChoice": "Jeu : tolérance au délai",
+  "@weGameDelayChoice": {
+    "description": "Nom du jeu du jour 4"
+  },
+  "weGameTimeEstimation": "Jeu : estimation du temps",
+  "@weGameTimeEstimation": {
+    "description": "Nom du jeu du jour 5"
+  },
+  "weGameConfidence": "Jeu : calibration de la confiance",
+  "@weGameConfidence": {
+    "description": "Nom du jeu du jour 6"
+  },
+  "weRunnerNext": "Suivant",
+  "@weRunnerNext": {
+    "description": "Bouton d'avance du questionnaire — désactivé tant que la question n'a pas de réponse"
+  },
+  "weRunnerFinish": "Terminer",
+  "@weRunnerFinish": {
+    "description": "Bouton d'avance sur la dernière question du questionnaire"
+  },
+  "weRunnerBack": "Précédent",
+  "@weRunnerBack": {
+    "description": "Retour à la question précédente pour se corriger"
+  },
+  "weRunnerScoredLabel": "Test du jour",
+  "@weRunnerScoredLabel": {
+    "description": "Étiquette de la barre de progression pour un test dont le résultat sera affiché"
+  },
+  "weRunnerContributionLabel": "Contribution",
+  "@weRunnerContributionLabel": {
+    "description": "Étiquette de la barre de progression pour un questionnaire de contribution, sans score"
+  },
+  "weRunnerResumed": "Tu reprends là où tu t'étais arrêté.",
+  "@weRunnerResumed": {
+    "description": "Message affiché à la reprise d'un questionnaire commencé plus tôt"
+  },
+  "weRunnerNoScoreNotice": "Ces questions ne calculent aucun score pour toi : elles servent à construire l'outil pour les suivants.",
+  "@weRunnerNoScoreNotice": {
+    "description": "Cadrage honnête d'un bloc de questions candidates, affiché pendant la passation"
+  },
+  "weRunnerQuitTitle": "Quitter le questionnaire ?",
+  "@weRunnerQuitTitle": {
+    "description": "Titre de la confirmation de sortie en cours de questionnaire"
+  },
+  "weRunnerQuitBody": "Tes réponses sont enregistrées. Tu pourras reprendre à la question où tu t'arrêtes.",
+  "@weRunnerQuitBody": {
+    "description": "Corps de la confirmation de sortie — dit que rien n'est perdu"
+  },
+  "weRunnerQuitStay": "Continuer",
+  "@weRunnerQuitStay": {
+    "description": "Bouton qui referme la confirmation et reprend le questionnaire"
+  },
+  "weRunnerQuitLeave": "Quitter",
+  "@weRunnerQuitLeave": {
+    "description": "Bouton qui confirme la sortie du questionnaire"
+  },
+  "weRunnerTransitionCta": "Continuer",
+  "@weRunnerTransitionCta": {
+    "description": "Bouton de l'écran de transition annonçant un changement d'échelle de réponse"
+  },
+  "weRunnerDoneTitle": "C'est terminé",
+  "@weRunnerDoneTitle": {
+    "description": "Titre de l'écran de fin du questionnaire"
+  },
+  "weRunnerDoneBody": "Merci — tes réponses sont enregistrées.",
+  "@weRunnerDoneBody": {
+    "description": "Fin d'un questionnaire dont le résultat sera affiché"
+  },
+  "weRunnerDoneContributionBody": "Merci — tes réponses vont servir à construire notre test. Aucun score n'est calculé pour toi.",
+  "@weRunnerDoneContributionBody": {
+    "description": "Fin d'un questionnaire de contribution — rappelle qu'aucun score n'est promis"
+  },
+  "weRunnerDoneCta": "Revenir au programme",
+  "@weRunnerDoneCta": {
+    "description": "Bouton de sortie de l'écran de fin, vers le hub de l'événement"
+  },
+  "weRvEyebrow": "Ta révélation du jour",
+  "@weRvEyebrow": {
+    "description": "Surtitre de l'écran de révélation"
+  },
+  "weRvContinue": "Continuer",
+  "@weRvContinue": {
+    "description": "Bouton de sortie d'une révélation quand une activité suit"
+  },
+  "weRvBackToHub": "Revenir au programme",
+  "@weRvBackToHub": {
+    "description": "Bouton de sortie d'une révélation quand rien ne suit"
+  },
+  "weRvScoreLabel": "SCORE",
+  "@weRvScoreLabel": {
+    "description": "Étiquette mono au-dessus du nombre révélé"
+  },
+  "weRvCi": "Intervalle de confiance à 95 % · {low} – {high}",
+  "@weRvCi": {
+    "description": "Intervalle de confiance à 95 % du score révélé",
+    "placeholders": {
+      "low": {
         "type": "int"
       },
-      "required": {
+      "high": {
         "type": "int"
       }
     }
   },
-  "ugStep2Title": "Tes amis passent leur test",
-  "ugStep2Body": "Tes amis doivent maintenant terminer leur test de QI. On attend leurs résultats — n'hésite pas à les relancer !",
-  "ugFriendDone": "Ami {n} : test terminé",
-  "@ugFriendDone": {
-    "placeholders": {
-      "n": {
-        "type": "int"
-      }
-    }
+  "weRvCaveat": "Un indice est une mesure, avec sa marge d'erreur — pas un verdict. Repasser le même bilan ne redonnerait pas exactement le même nombre.",
+  "@weRvCaveat": {
+    "description": "Mise en garde présente sur TOUTES les révélations : un score est une mesure avec sa marge d'erreur"
   },
-  "ugFriendPending": "Ami {n} : test en cours",
-  "@ugFriendPending": {
-    "placeholders": {
-      "n": {
-        "type": "int"
-      }
-    }
+  "weRvUnavailableTitle": "Aucun bilan à révéler",
+  "@weRvUnavailableTitle": {
+    "description": "Titre quand aucun bilan n'est rattaché au passe courant"
   },
-  "ugWaitingCounter": "{done}/{required} tests terminés",
-  "@ugWaitingCounter": {
+  "weRvUnavailableBody": "Aucun bilan terminé n'est rattaché à ce passe sur cet appareil. Rien n'est perdu : la révélation s'affichera dès que tes résultats seront de nouveau lisibles ici.",
+  "@weRvUnavailableBody": {
+    "description": "Corps du message quand aucun bilan n'est rattaché au passe courant"
+  },
+  "weRvMissingTitle": "Cet indice n'a pas été calculé",
+  "@weRvMissingTitle": {
+    "description": "Titre quand l'indice du jour n'a pas été calculé (sous-test manquant)"
+  },
+  "weRvMissingBody": "Ton bilan enregistré ne contient pas cet indice — il y manquait un sous-test. Les autres révélations restent disponibles.",
+  "@weRvMissingBody": {
+    "description": "Corps du message quand l'indice du jour n'a pas été calculé"
+  },
+  "weRvVciBody": "Ce que tu sais des mots et des idées, et ta façon de les relier : définir, expliquer, retrouver ce qui rapproche deux notions. C'est la part du profil qui bouge le moins avec les années.",
+  "@weRvVciBody": {
+    "description": "Explication de l'indice de compréhension verbale, jour 1"
+  },
+  "weRvVsiBody": "Ta façon de manipuler les formes et l'espace : reconstruire un motif, voir comment des pièces s'assemblent avant même de les avoir posées.",
+  "@weRvVsiBody": {
+    "description": "Explication de l'indice visuo-spatial, jour 5"
+  },
+  "weRvFriBody": "Ta façon de trouver une règle que personne ne t'a donnée, à partir de ce que tu observes. C'est le raisonnement qui ne doit rien à ce que tu as appris.",
+  "@weRvFriBody": {
+    "description": "Explication de l'indice de raisonnement fluide, jour 4"
+  },
+  "weRvWmiBody": "Ce que tu peux garder en tête ET manipuler en même temps : retenir une suite tout en la réorganisant. C'est l'indice le plus sensible à la fatigue et au stress.",
+  "@weRvWmiBody": {
+    "description": "Explication de l'indice de mémoire de travail, jour 3"
+  },
+  "weRvPsiBody": "La vitesse à laquelle tu traites une information simple sans te tromper. Ce n'est pas « penser vite » : c'est un débit, et il se paie en attention.",
+  "@weRvPsiBody": {
+    "description": "Explication de l'indice de vitesse de traitement, jour 2"
+  },
+  "weRvStrengthsTitle": "Tes forces et tes points de vigilance",
+  "@weRvStrengthsTitle": {
+    "description": "Titre de la révélation du jour 6 (forces et faiblesses)"
+  },
+  "weRvStrengthsIntro": "Aujourd'hui, les cinq indices se comparent entre eux. Une force n'est pas un talent absolu : c'est ce qui dépasse ton propre niveau moyen de plus de 10 points.",
+  "@weRvStrengthsIntro": {
+    "description": "Introduction de la révélation du jour 6 : une force est RELATIVE au niveau moyen de la personne"
+  },
+  "weRvStrengthsNone": "Aucun indice ne s'écarte de plus de 10 points de ton niveau moyen : ton profil est régulier, et c'est un résultat en soi.",
+  "@weRvStrengthsNone": {
+    "description": "Message du jour 6 quand aucun indice ne se détache : un profil régulier est un résultat"
+  },
+  "weRvFullIqLabel": "QI global",
+  "@weRvFullIqLabel": {
+    "description": "Titre de la révélation du jour 8 (QI global)"
+  },
+  "weRvFullIqBody": "Le QI global résume les cinq indices en un seul nombre. Quand ils s'écartent beaucoup les uns des autres, ce résumé perd de son sens : c'est alors le détail qui te décrit, pas le total.",
+  "@weRvFullIqBody": {
+    "description": "Explication du QI global : un résumé qui perd son sens quand les indices s'écartent"
+  },
+  "weRvEstimateTitle": "TON ESTIMATION FACE À LA MESURE",
+  "@weRvEstimateTitle": {
+    "description": "Étiquette mono du bloc qui confronte l'auto-estimation du jour 1 au QI mesuré"
+  },
+  "weRvEstimateLine": "Tu t'estimais à {estimate}. La mesure donne {measured}.",
+  "@weRvEstimateLine": {
+    "description": "Rappel de l'auto-estimation du jour 1 et du score mesuré",
     "placeholders": {
-      "done": {
+      "estimate": {
         "type": "int"
       },
-      "required": {
+      "measured": {
         "type": "int"
       }
     }
   },
-  "ugStep3Title": "Dernière étape : Instagram",
-  "ugStep3Body": "Abonne-toi à notre compte @{handle} puis indique ton pseudo. On vérifie ton abonnement et ton résultat est débloqué.",
-  "@ugStep3Body": {
+  "weRvEstimateOver": "Soit {points} points au-dessus de la mesure.",
+  "@weRvEstimateOver": {
+    "description": "Constat d'écart quand l'estimation dépasse la mesure — un écart, jamais un rang inventé",
     "placeholders": {
-      "handle": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "weRvEstimateUnder": "Soit {points} points en dessous de la mesure.",
+  "@weRvEstimateUnder": {
+    "description": "Constat d'écart quand l'estimation est en dessous de la mesure",
+    "placeholders": {
+      "points": {
+        "type": "int"
+      }
+    }
+  },
+  "weRvEstimateClose": "Moins de 5 points d'écart : ton estimation et la mesure disent la même chose.",
+  "@weRvEstimateClose": {
+    "description": "Constat quand l'estimation est à moins de 5 points de la mesure"
+  },
+  "weRvEstimateMissing": "Tu n'avais pas donné d'estimation — il n'y a rien à confronter.",
+  "@weRvEstimateMissing": {
+    "description": "Message du jour 8 quand aucune auto-estimation n'a été donnée au jour 1"
+  },
+  "weRvSelfEyebrow": "Avant toute révélation",
+  "@weRvSelfEyebrow": {
+    "description": "Surtitre de l'auto-estimation du QI — elle passe AVANT toute révélation"
+  },
+  "weRvSelfTitle": "À combien estimes-tu ton QI ?",
+  "@weRvSelfTitle": {
+    "description": "Question d'auto-estimation du QI, posée une seule fois au jour 1"
+  },
+  "weRvSelfBody": "Une seule question, posée maintenant : après une première révélation, ta réponse serait influencée par le chiffre que tu viens de lire. 100 est la moyenne. Ta réponse reste sur ton téléphone et te sera rendue au jour 8.",
+  "@weRvSelfBody": {
+    "description": "Explication de l'auto-estimation : pourquoi maintenant, où va la réponse, quand elle revient"
+  },
+  "weRvSelfHint": "Fais glisser, ou touche − et +, pour choisir.",
+  "@weRvSelfHint": {
+    "description": "Indication tant que l'estimation n'a pas été déplacée (le bouton reste inerte)"
+  },
+  "weRvSelfAverage": "100 est la moyenne.",
+  "@weRvSelfAverage": {
+    "description": "Repère affiché sous l'échelle d'auto-estimation une fois qu'elle a été déplacée"
+  },
+  "weRvSelfConfirm": "Valider mon estimation",
+  "@weRvSelfConfirm": {
+    "description": "Bouton qui enregistre l'auto-estimation"
+  },
+  "weRvSelfDecline": "Je préfère ne pas répondre",
+  "@weRvSelfDecline": {
+    "description": "Bouton qui clôt la question sans donner de nombre — sans lui, elle reviendrait sans fin"
+  },
+  "weRvSelfDecrease": "Diminuer d'un point",
+  "@weRvSelfDecrease": {
+    "description": "Info-bulle du bouton qui diminue l'estimation d'un point"
+  },
+  "weRvSelfIncrease": "Augmenter d'un point",
+  "@weRvSelfIncrease": {
+    "description": "Info-bulle du bouton qui augmente l'estimation d'un point"
+  },
+  "weDcEyebrow": "Jeu",
+  "@weDcEyebrow": {
+    "description": "Surtitre des écrans du jeu de tolérance au délai"
+  },
+  "weDcTitle": "Maintenant ou plus tard",
+  "@weDcTitle": {
+    "description": "Nom du jeu de tolérance au délai tel qu'il est présenté (jamais « test d'impulsivité » : c'est un jeu, pas une mesure clinique, et l'impulsivité n'est pas nommée)"
+  },
+  "weDcIntroTitle": "Une somme tout de suite, ou une plus grosse plus tard",
+  "@weDcIntroTitle": {
+    "description": "Titre de l'écran d'introduction du jeu de délai — la consigne en une phrase"
+  },
+  "weDcIntroBody": "On va te proposer vingt fois le même genre de choix : une somme disponible tout de suite, ou une somme plus grande après un délai. Tu appuies simplement sur celle que tu préfères.",
+  "@weDcIntroBody": {
+    "description": "Explication de la consigne du jeu de délai"
+  },
+  "weDcIntroImaginary": "Ces sommes sont imaginaires. Il n'y a rien à gagner, rien à payer et rien à recevoir : ce sont des questions, pas des offres.",
+  "@weDcIntroImaginary": {
+    "description": "AVERTISSEMENT CENTRAL du jeu de délai — l'app vend un bilan par ailleurs, et un utilisateur qui croirait à un vrai paiement répondrait pour toucher l'argent au lieu de répondre selon sa préférence"
+  },
+  "weDcIntroNoRightAnswer": "Il n'y a pas de bonne réponse. Prendre l'argent tout de suite n'est ni mieux ni moins bien qu'attendre.",
+  "@weDcIntroNoRightAnswer": {
+    "description": "Cadrage posé dès l'introduction : aucun bout de l'échelle n'est meilleur que l'autre"
+  },
+  "weDcStart": "Commencer",
+  "@weDcStart": {
+    "description": "Bouton qui lance la partie du jeu de délai"
+  },
+  "weDcLater": "Plus tard",
+  "@weDcLater": {
+    "description": "Bouton qui quitte le jeu de délai sans y jouer — le jeu est facultatif"
+  },
+  "weDcProgressTag": "Choix",
+  "@weDcProgressTag": {
+    "description": "Étiquette de la barre de progression du jeu de délai"
+  },
+  "weDcPrompt": "Qu'est-ce que tu préfères ?",
+  "@weDcPrompt": {
+    "description": "Question posée au-dessus des deux offres"
+  },
+  "weDcImaginaryTag": "Sommes imaginaires — rien n'est à gagner.",
+  "@weDcImaginaryTag": {
+    "description": "Rappel court affiché sur chacun des vingt écrans de choix, partout où de l'argent s'affiche"
+  },
+  "weDcResultTitle": "Ta patience",
+  "@weDcResultTitle": {
+    "description": "Titre de l'écran de résultat du jeu de délai"
+  },
+  "weDcPatienceScore": "{score} / 100",
+  "@weDcPatienceScore": {
+    "description": "L'index de patience, entre 0 (rien ne vaut la peine d'attendre) et 100 (attendre ne coûte rien)",
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "weDcResultCaption": "Plus le chiffre est haut, plus tu acceptes d'attendre. Ce n'est pas une note : les deux bouts de l'échelle se valent.",
+  "@weDcResultCaption": {
+    "description": "Explication de l'index de patience, avec le rappel qu'aucun bout n'est meilleur"
+  },
+  "weDcIndifference": "Attendre un mois pour {delayed} revient, pour toi, à recevoir {immediate} tout de suite.",
+  "@weDcIndifference": {
+    "description": "La phrase concrète du résultat : le point d'indifférence à un mois, redit en langue humaine plutôt qu'en index",
+    "placeholders": {
+      "delayed": {
+        "type": "String"
+      },
+      "immediate": {
         "type": "String"
       }
     }
   },
-  "ugFollowButton": "Suivre @{handle} sur Instagram",
-  "@ugFollowButton": {
+  "weDcCurveTitle": "Ce que valait l'attente",
+  "@weDcCurveTitle": {
+    "description": "Titre du tableau récapitulatif : pour chaque délai, le montant immédiat jugé équivalent"
+  },
+  "weDcPrevious": "La dernière fois : {score} / 100",
+  "@weDcPrevious": {
+    "description": "Comparaison avec la partie précédente. JAMAIS un record ni un meilleur score — il n'y a pas de bonne réponse à ce jeu",
     "placeholders": {
-      "handle": {
-        "type": "String"
+      "score": {
+        "type": "int"
       }
     }
   },
-  "ugInstaFieldLabel": "Ton pseudo Instagram",
-  "ugInstaSubmit": "Valider mon abonnement",
-  "ugInstaPending": "Vérification de ton abonnement en cours… Ton résultat sera débloqué d'ici quelques heures. Tu peux fermer cette page et revenir plus tard.",
-  "ugInstaErrorFormat": "Pseudo invalide : lettres, chiffres, point et tiret bas uniquement — pas de lien.",
-  "ugInstaErrorNetwork": "Impossible d'envoyer ton pseudo. Vérifie ta connexion et réessaie.",
-  "ugRefreshFailed": "Impossible d'actualiser. Vérifie ta connexion — les chiffres affichés datent de ta dernière connexion.",
-  "ugResultsHubNotice": "Tout se trouve dans « Mes résultats » : tes missions, ton lien d'invitation et ton résultat (flouté tant que toutes les missions ne sont pas validées). Tu peux quitter cette page et revenir quand tu veux.",
-  "histLockedTitle": "Missions à valider",
-  "histLockedBody": "Ton résultat est enregistré, mais il reste flouté tant que toutes les missions ne sont pas validées.",
-  "histLockedBodyNoResult": "Tes missions et ton lien d'invitation sont ici. Termine ton évaluation pour débloquer ton résultat.",
-  "histLockedCta": "Voir mes missions",
-  "inviteLandingTitle": "Invitation",
-  "inviteLandingBody": "Un ami t'invite à passer le test de QI gratuit Mentality. En terminant ton test, tu obtiens ton propre résultat et tu aides ton ami à débloquer le sien.",
-  "inviteLandingCta": "Commencer le test gratuit",
-  "completionPendingNotice": "Fin de test pas encore confirmée par le serveur. Nous réessayons automatiquement — garde une connexion et rouvre l'app si besoin.",
-  "@completionPendingNotice": {
-    "description": "Avertissement affiché quand la déclaration de fin de test n'a pas abouti."
+  "weDcNoBetterEnd": "Ce chiffre ne dit pas si tu as bien joué. Préférer l'argent tout de suite est un arbitrage, pas une erreur — et il change selon le moment, l'humeur et la situation de chacun.",
+  "@weDcNoBetterEnd": {
+    "description": "Garde-fou de lecture du score — empêche de lire l'index comme une performance ou un trait de caractère"
   },
-  "completionRejectedNotice": "Cette passation n'a pas pu être validée : elle a été jugée trop courte. Elle ne compte pas pour la mission de parrainage.",
-  "@completionRejectedNotice": {
-    "description": "Avertissement affiché quand la déclaration de fin de test n'a pas abouti."
+  "weDcNotClinical": "C'est un jeu, pas une mesure clinique : aucun seuil, aucun classement, rien à en conclure sur toi.",
+  "@weDcNotClinical": {
+    "description": "Cadrage obligatoire des jeux — jamais présentés comme des mesures cliniques"
+  },
+  "weDcIncoherentTitle": "Des réponses trop dispersées pour en tirer quelque chose",
+  "@weDcIncoherentTitle": {
+    "description": "Titre affiché quand la courbe remonte franchement — signe de réponses posées au hasard"
+  },
+  "weDcIncoherentBody": "Tes réponses vont dans des sens opposés d'un délai à l'autre : une même somme y vaut plus loin qu'elle ne vaut proche. Rien n'a été enregistré. Rejoue quand tu veux.",
+  "@weDcIncoherentBody": {
+    "description": "Corps du message affiché quand les réponses ne permettent aucune lecture cohérente"
+  },
+  "weDcReplay": "Rejouer",
+  "@weDcReplay": {
+    "description": "Bouton qui relance une partie du jeu de délai depuis l'écran de résultat"
+  },
+  "weDcDone": "Terminer",
+  "@weDcDone": {
+    "description": "Bouton qui referme le jeu de délai depuis l'écran de résultat"
+  },
+  "weCsEyebrow": "Avant d'aller plus loin",
+  "@weCsEyebrow": {
+    "description": "Surtitre de l'écran de recueil du consentement art. 9"
+  },
+  "weCsTitle": "Envoyer tes réponses ?",
+  "@weCsTitle": {
+    "description": "Titre de l'écran de consentement art. 9"
+  },
+  "weCsIntro": "Les questions qui suivent portent sur ta santé mentale et ton neurodéveloppement. La loi protège ces réponses à part : elles ne peuvent quitter ton téléphone que si tu l'acceptes ici, explicitement.",
+  "@weCsIntro": {
+    "description": "Introduction du consentement art. 9 — dit pourquoi un accord distinct est requis"
+  },
+  "weCsWhatTitle": "Ce qui part",
+  "@weCsWhatTitle": {
+    "description": "Titre de la section « données transmises »"
+  },
+  "weCsWhat": "Tes réponses, telles que tu les as données. Sans ton nom, sans ton numéro, sans date ni heure précises. Jamais tes scores : ils sont calculés sur ton téléphone et y restent.",
+  "@weCsWhat": {
+    "description": "Ce qui est réellement transmis — miroir exact d'EventSubmission"
+  },
+  "weCsPurposeTitle": "À quoi elles servent",
+  "@weCsPurposeTitle": {
+    "description": "Titre de la section « finalité »"
+  },
+  "weCsPurpose": "À construire et améliorer nos propres tests de dépistage, et à comparer ce que les gens déclarent avec ce que la batterie mesure. Ces outils font partie de ce que nous vendons — le dire est la moindre des choses.",
+  "@weCsPurpose": {
+    "description": "Finalité art. 9, y compris son versant commercial (un consentement qui le tairait ne serait pas éclairé)"
+  },
+  "weCsWhoTitle": "Où elles vont",
+  "@weCsWhoTitle": {
+    "description": "Titre de la section « destinataire et localisation »"
+  },
+  "weCsWho": "Sur nos serveurs, en Europe. Rangées sous ton passe anonyme, jamais sous ton nom ni ton numéro.",
+  "@weCsWho": {
+    "description": "Destination des données — aucune promesse invérifiable de non-réidentification"
+  },
+  "weCsRightsTitle": "Tu gardes la main",
+  "@weCsRightsTitle": {
+    "description": "Titre de la section « droits »"
+  },
+  "weCsRights": "Tu peux retirer ton accord quand tu veux : les envois suivants s'arrêtent aussitôt. Tu peux aussi demander l'accès à tes données ou leur effacement.",
+  "@weCsRights": {
+    "description": "Droit de retrait (art. 7-3), d'accès (art. 15) et d'effacement (art. 17)"
+  },
+  "weCsOptional": "C'est facultatif, et ça ne change rien au reste : ni ton déblocage, ni tes résultats, ni les tests du programme ne dépendent de cette réponse.",
+  "@weCsOptional": {
+    "description": "Le caractère libre du consentement, dit là où la décision se prend"
+  },
+  "weCsAccept": "J'accepte l'envoi de mes réponses",
+  "@weCsAccept": {
+    "description": "Bouton d'octroi du consentement art. 9 — acte positif, jamais présélectionné"
+  },
+  "weCsDecline": "Non, garder mes réponses ici",
+  "@weCsDecline": {
+    "description": "Bouton de refus du consentement art. 9"
+  },
+  "weDxDeclinedTitle": "Rien ne partira",
+  "@weDxDeclinedTitle": {
+    "description": "Titre du message affiché quand le consentement art. 9 est refusé"
+  },
+  "weDxDeclinedBody": "Ces questions ne servent qu'à nos travaux : sans ton accord, on ne te les pose pas. Tu peux revenir quand tu veux — ça ne change rien au reste du programme.",
+  "@weDxDeclinedBody": {
+    "description": "Explique pourquoi le bloc n'est pas proposé après un refus de consentement"
+  },
+  "weDxEyebrow": "Posé une seule fois",
+  "@weDxEyebrow": {
+    "description": "Surtitre du bloc diagnostic — l'écriture est unique"
+  },
+  "weDxListTitle": "Ton parcours",
+  "@weDxListTitle": {
+    "description": "Titre court du bloc diagnostic (barre de titre, hauteur fixe)"
+  },
+  "weDxListQuestion": "As-tu reçu un diagnostic — ou penses-tu être concerné — pour l'un de ces troubles ?",
+  "@weDxListQuestion": {
+    "description": "La question du bloc diagnostic, dans le CORPS de l'écran (trop longue pour la barre de titre, qui ellipse)"
+  },
+  "weDxListBody": "Ces réponses ne changent rien à tes résultats. Elles servent à construire nos outils : sans savoir qui est concerné, il est impossible de repérer les questions qui distinguent vraiment quelque chose.",
+  "@weDxListBody": {
+    "description": "Cadrage du bloc diagnostic — dit que rien n'en dépend pour l'utilisateur"
+  },
+  "weDxListHint": "Coche tout ce qui s'applique.",
+  "@weDxListHint": {
+    "description": "Consigne de sélection multiple"
+  },
+  "weDxAdhd": "TDAH",
+  "@weDxAdhd": {
+    "description": "Trouble du bloc diagnostic"
+  },
+  "weDxAutism": "Autisme / TSA",
+  "@weDxAutism": {
+    "description": "Trouble du bloc diagnostic"
+  },
+  "weDxDyslexia": "Dyslexie",
+  "@weDxDyslexia": {
+    "description": "Trouble du bloc diagnostic"
+  },
+  "weDxDyspraxia": "Dyspraxie",
+  "@weDxDyspraxia": {
+    "description": "Trouble du bloc diagnostic"
+  },
+  "weDxDyscalculia": "Dyscalculie",
+  "@weDxDyscalculia": {
+    "description": "Trouble du bloc diagnostic"
+  },
+  "weDxHpi": "Haut potentiel (HPI)",
+  "@weDxHpi": {
+    "description": "Trouble du bloc diagnostic"
+  },
+  "weDxDepression": "Dépression",
+  "@weDxDepression": {
+    "description": "Trouble du bloc diagnostic"
+  },
+  "weDxAnxiety": "Trouble anxieux",
+  "@weDxAnxiety": {
+    "description": "Trouble du bloc diagnostic"
+  },
+  "weDxBipolar": "Bipolarité",
+  "@weDxBipolar": {
+    "description": "Trouble du bloc diagnostic"
+  },
+  "weDxOcd": "TOC",
+  "@weDxOcd": {
+    "description": "Trouble du bloc diagnostic"
+  },
+  "weDxSleep": "Trouble du sommeil",
+  "@weDxSleep": {
+    "description": "Trouble du bloc diagnostic"
+  },
+  "weDxBurnout": "Burn-out",
+  "@weDxBurnout": {
+    "description": "Trouble du bloc diagnostic"
+  },
+  "weDxOther": "Un autre trouble",
+  "@weDxOther": {
+    "description": "Case « autre » — SANS champ libre : un texte libre dans une charge utile art. 9 est un vecteur de ré-identification"
+  },
+  "weDxNone": "Aucun",
+  "@weDxNone": {
+    "description": "Case « aucun trouble » — le groupe témoin, exclusive des autres"
+  },
+  "weDxPreferNotToSay": "Je préfère ne pas répondre",
+  "@weDxPreferNotToSay": {
+    "description": "Case de refus — nécessité technique : sans elle, qui ne veut pas se déclarer coche « aucun » et pollue le groupe témoin"
+  },
+  "weDxDetailTitle": "Le détail",
+  "@weDxDetailTitle": {
+    "description": "Titre court de l'écran de détail d'un trouble"
+  },
+  "weDxDetailProgress": "{current} sur {total}",
+  "@weDxDetailProgress": {
+    "description": "Progression dans les troubles à détailler",
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "weDxSourceQuestion": "Qui l'a posé ?",
+  "@weDxSourceQuestion": {
+    "description": "Origine du diagnostic — sépare le critère dur de la simple croyance"
+  },
+  "weDxSourcePsychiatrist": "Psychiatre ou neuropsychologue",
+  "@weDxSourcePsychiatrist": {
+    "description": "Origine du diagnostic"
+  },
+  "weDxSourceGp": "Médecin généraliste",
+  "@weDxSourceGp": {
+    "description": "Origine du diagnostic"
+  },
+  "weDxSourcePsychologist": "Psychologue",
+  "@weDxSourcePsychologist": {
+    "description": "Origine du diagnostic"
+  },
+  "weDxSourceSelf": "Personne — je le pense, sans diagnostic",
+  "@weDxSourceSelf": {
+    "description": "La TROISIÈME catégorie : une croyance, jamais mélangée aux diagnostics"
+  },
+  "weDxWhenQuestion": "C'était il y a combien de temps ?",
+  "@weDxWhenQuestion": {
+    "description": "Ancienneté par tranches — jamais l'année exacte (quasi-identifiant, et aucune horloge locale n'est lue)"
+  },
+  "weDxWhenUnder1": "Moins d'un an",
+  "@weDxWhenUnder1": {
+    "description": "Ancienneté du diagnostic"
+  },
+  "weDxWhen1to3": "Entre 1 et 3 ans",
+  "@weDxWhen1to3": {
+    "description": "Ancienneté du diagnostic"
+  },
+  "weDxWhen3to10": "Entre 3 et 10 ans",
+  "@weDxWhen3to10": {
+    "description": "Ancienneté du diagnostic"
+  },
+  "weDxWhenOver10": "Plus de 10 ans",
+  "@weDxWhenOver10": {
+    "description": "Ancienneté du diagnostic"
+  },
+  "weDxWhenUnknown": "Je ne sais plus",
+  "@weDxWhenUnknown": {
+    "description": "Ancienneté du diagnostic"
+  },
+  "weDxTreatmentQuestion": "Un traitement ou un suivi ?",
+  "@weDxTreatmentQuestion": {
+    "description": "Prise en charge"
+  },
+  "weDxTreatmentYes": "Oui, en ce moment",
+  "@weDxTreatmentYes": {
+    "description": "Prise en charge"
+  },
+  "weDxTreatmentNo": "Non",
+  "@weDxTreatmentNo": {
+    "description": "Prise en charge"
+  },
+  "weDxTreatmentPast": "Par le passé",
+  "@weDxTreatmentPast": {
+    "description": "Prise en charge"
+  },
+  "weDxAssessmentQuestion": "Un bilan complet a-t-il été fait ?",
+  "@weDxAssessmentQuestion": {
+    "description": "Profondeur de l'évaluation reçue"
+  },
+  "weDxAssessmentYes": "Oui",
+  "@weDxAssessmentYes": {
+    "description": "Profondeur de l'évaluation reçue"
+  },
+  "weDxAssessmentNo": "Non",
+  "@weDxAssessmentNo": {
+    "description": "Profondeur de l'évaluation reçue"
+  },
+  "weDxAssessmentUnknown": "Je ne sais pas",
+  "@weDxAssessmentUnknown": {
+    "description": "Profondeur de l'évaluation reçue"
+  },
+  "weDxDoneTitle": "C'est noté",
+  "@weDxDoneTitle": {
+    "description": "Titre de l'écran de fin du bloc"
+  },
+  "weDxDoneBody": "Merci. Cette question ne te sera plus posée — elle ne se pose qu'une fois. Elle ne change rien à tes résultats ni à ton déblocage.",
+  "@weDxDoneBody": {
+    "description": "Fin du bloc diagnostic"
+  },
+  "weDxAlreadyTitle": "Déjà répondu",
+  "@weDxAlreadyTitle": {
+    "description": "Titre affiché si le bloc avait déjà été rempli"
+  },
+  "weDxAlreadyBody": "Tu as déjà rempli cette partie. Elle ne se pose qu'une fois, pour que ta réponse ne soit pas influencée par les tests des jours suivants.",
+  "@weDxAlreadyBody": {
+    "description": "Explique l'écriture unique plutôt que de reposer la question"
+  },
+  "weDxFailedTitle": "Rien n'a pu être enregistré",
+  "@weDxFailedTitle": {
+    "description": "Titre affiché quand l'écriture du bloc a échoué"
+  },
+  "weDxFailedBody": "Tes réponses n'ont pas été conservées, et rien n'a été envoyé. Tu peux réessayer depuis le programme — la question reste ouverte.",
+  "@weDxFailedBody": {
+    "description": "Échec d'écriture dit explicitement, jamais masqué par un remerciement"
+  },
+  "weDxQuitTitle": "Quitter maintenant ?",
+  "@weDxQuitTitle": {
+    "description": "Confirmation de sortie du bloc diagnostic"
+  },
+  "weDxQuitBody": "Ce que tu as coché ne sera pas conservé : ce bloc s'enregistre en une seule fois, à la fin. Tu pourras le reprendre depuis le programme.",
+  "@weDxQuitBody": {
+    "description": "Dit la vérité du tout-ou-rien — contrairement au moteur de questionnaire, rien n'est persisté en route"
+  },
+  "weGameCardSubtitle": "Jeu du jour · 2 minutes · rejouable",
+  "@weGameCardSubtitle": {
+    "description": "Sous-titre de la carte d'un jeu dans le hub de l'événement"
+  },
+  "weStroopEyebrow": "Jeu",
+  "@weStroopEyebrow": {
+    "description": "Surtitre des écrans du jeu Stroop"
+  },
+  "weStroopTitle": "Couleurs contrariées",
+  "@weStroopTitle": {
+    "description": "Nom du jeu Stroop tel qu'il est présenté (jamais « test de Stroop » : c'est un jeu, pas une mesure clinique)"
+  },
+  "weStroopIntroTitle": "Nomme la couleur, pas le mot",
+  "@weStroopIntroTitle": {
+    "description": "Titre de l'écran d'introduction du jeu Stroop — la consigne en une phrase"
+  },
+  "weStroopIntroBody": "Un mot va s'afficher dans une certaine couleur. Appuie sur la couleur de l'ENCRE, pas sur ce qui est écrit. Lire est automatique : c'est justement ce qu'il va falloir mettre de côté.",
+  "@weStroopIntroBody": {
+    "description": "Explication de la consigne du jeu Stroop"
+  },
+  "weStroopIntroPractice": "On commence par trois essais pour rien, le temps de prendre la main.",
+  "@weStroopIntroPractice": {
+    "description": "Annonce des essais d'entraînement non comptés"
+  },
+  "weStroopIntroExample": "Ici, le mot dit une couleur et l'encre en dit une autre : c'est l'encre qui compte.",
+  "@weStroopIntroExample": {
+    "description": "Légende de l'exemple de stimulus montré dans l'introduction"
+  },
+  "weStroopStart": "Commencer",
+  "@weStroopStart": {
+    "description": "Bouton qui lance la partie"
+  },
+  "weStroopLater": "Plus tard",
+  "@weStroopLater": {
+    "description": "Bouton qui quitte le jeu sans y jouer — le jeu est facultatif"
+  },
+  "weStroopPracticeTag": "Entraînement",
+  "@weStroopPracticeTag": {
+    "description": "Étiquette de progression pendant les essais non comptés"
+  },
+  "weStroopScoredTag": "Compté",
+  "@weStroopScoredTag": {
+    "description": "Étiquette de progression pendant les essais comptés"
+  },
+  "weStroopPrompt": "De quelle couleur est-ce écrit ?",
+  "@weStroopPrompt": {
+    "description": "Question rappelée au-dessus de chaque stimulus"
+  },
+  "weStroopBlockScoredTitle": "C'est parti",
+  "@weStroopBlockScoredTitle": {
+    "description": "Titre de l'écran annonçant la fin de l'entraînement"
+  },
+  "weStroopBlockScoredBody": "À partir de maintenant, les essais comptent. Va vite, mais vise juste : une erreur ne rapporte rien.",
+  "@weStroopBlockScoredBody": {
+    "description": "Corps de l'écran annonçant le premier bloc compté"
+  },
+  "weStroopBlockConflictTitle": "Maintenant, les mots te contredisent",
+  "@weStroopBlockConflictTitle": {
+    "description": "Titre de l'écran annonçant le bloc de conflit"
+  },
+  "weStroopBlockConflictBody": "La consigne ne change pas : c'est toujours la couleur de l'encre. Les mots vont simplement dire autre chose.",
+  "@weStroopBlockConflictBody": {
+    "description": "Corps de l'écran annonçant le bloc de conflit"
+  },
+  "weStroopBlockCta": "Continuer",
+  "@weStroopBlockCta": {
+    "description": "Bouton des écrans d'annonce de bloc"
+  },
+  "weStroopResultTitle": "Ton écart",
+  "@weStroopResultTitle": {
+    "description": "Titre de l'écran de résultat — le score est un ÉCART, jamais une vitesse"
+  },
+  "weStroopMilliseconds": "{ms} ms",
+  "@weStroopMilliseconds": {
+    "description": "Une durée en millisecondes — sert à afficher l'écart conflit/neutre",
+    "placeholders": {
+      "ms": {
+        "type": "int"
+      }
+    }
+  },
+  "weStroopResultCaption": "C'est le temps supplémentaire qu'il t'a fallu, à chaque essai, quand le mot disait le contraire de l'encre.",
+  "@weStroopResultCaption": {
+    "description": "Explication de ce que mesure l'écart affiché"
+  },
+  "weStroopAccuracy": "{correct} bonnes réponses sur {total}",
+  "@weStroopAccuracy": {
+    "description": "Justesse de la partie — rapportée à part, jamais fondue dans le temps",
+    "placeholders": {
+      "correct": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "weStroopBest": "Ton meilleur écart : {ms} ms",
+  "@weStroopBest": {
+    "description": "Record local du jeu — le plus PETIT écart obtenu",
+    "placeholders": {
+      "ms": {
+        "type": "int"
+      }
+    }
+  },
+  "weStroopNewBest": "Nouveau meilleur écart",
+  "@weStroopNewBest": {
+    "description": "Annonce d'un record battu"
+  },
+  "weStroopNotSpeed": "Ce chiffre n'est pas ta vitesse. C'est la différence entre deux séries : quelqu'un de globalement plus lent peut très bien avoir un écart plus petit.",
+  "@weStroopNotSpeed": {
+    "description": "Garde-fou de lecture du score — empêche de lire l'écart comme une vitesse (que la batterie mesure déjà)"
+  },
+  "weStroopNotClinical": "C'est un jeu, pas une mesure clinique : aucun seuil, aucun classement, rien à en conclure sur toi.",
+  "@weStroopNotClinical": {
+    "description": "Cadrage obligatoire des jeux — jamais présentés comme des mesures cliniques"
+  },
+  "weStroopUnreliableTitle": "Trop peu de réponses pour compter",
+  "@weStroopUnreliableTitle": {
+    "description": "Titre affiché quand la partie n'a pas assez d'essais valides pour un écart honnête"
+  },
+  "weStroopUnreliableBody": "Il n'y a pas assez de réponses justes et données dans les temps pour calculer un écart honnête. Ton meilleur écart précédent reste intact. Rejoue quand tu veux.",
+  "@weStroopUnreliableBody": {
+    "description": "Corps du message affiché quand la partie ne permet aucun écart fiable"
+  },
+  "weStroopReplay": "Rejouer",
+  "@weStroopReplay": {
+    "description": "Bouton qui relance une partie depuis l'écran de résultat"
+  },
+  "weStroopDone": "Terminer",
+  "@weStroopDone": {
+    "description": "Bouton qui referme le jeu depuis l'écran de résultat"
+  },
+  "weTeEyebrow": "Jeu",
+  "@weTeEyebrow": {
+    "description": "Surtitre des écrans du jeu des durées"
+  },
+  "weTeTitle": "Le plus long des deux",
+  "@weTeTitle": {
+    "description": "Nom du jeu des durées tel qu'il est présenté (jamais « test de perception temporelle » : c'est un jeu, pas une mesure clinique)"
+  },
+  "weTeIntroTitle": "Deux panneaux, l'un après l'autre",
+  "@weTeIntroTitle": {
+    "description": "Titre de l'écran d'introduction du jeu des durées — la consigne en une phrase"
+  },
+  "weTeIntroBody": "Un panneau va s'allumer, s'éteindre, puis s'allumer une seconde fois. Dis lequel des deux est resté allumé le plus longtemps. Les écarts se resserrent au fil de la partie.",
+  "@weTeIntroBody": {
+    "description": "Explication de la consigne du jeu des durées"
+  },
+  "weTeIntroTooShortToCount": "Les durées sont de l'ordre de la seconde : trop courtes pour être comptées. C'est ta perception seule qui répond.",
+  "@weTeIntroTooShortToCount": {
+    "description": "Explique pourquoi le jeu compare deux durées brèves au lieu d'en faire estimer une longue — une durée comptable mesurerait la capacité à compter, pas la perception"
+  },
+  "weTeIntroExample": "C'est ce panneau qui s'allumera. Rien d'autre ne bougera à l'écran.",
+  "@weTeIntroExample": {
+    "description": "Légende du panneau éteint montré dans l'introduction"
+  },
+  "weTeStart": "Commencer",
+  "@weTeStart": {
+    "description": "Bouton qui lance la partie du jeu des durées"
+  },
+  "weTeLater": "Plus tard",
+  "@weTeLater": {
+    "description": "Bouton qui quitte le jeu des durées sans y jouer — le jeu est facultatif"
+  },
+  "weTeProgressTag": "Essai",
+  "@weTeProgressTag": {
+    "description": "Étiquette de la barre de progression du jeu des durées"
+  },
+  "weTeWatch": "Regarde bien…",
+  "@weTeWatch": {
+    "description": "Texte affiché pendant la présentation des deux durées, avant la question"
+  },
+  "weTePrompt": "Lequel est resté allumé le plus longtemps ?",
+  "@weTePrompt": {
+    "description": "Question posée après la présentation des deux durées"
+  },
+  "weTeFirst": "Le premier",
+  "@weTeFirst": {
+    "description": "Bouton de réponse : le premier panneau a duré plus longtemps"
+  },
+  "weTeSecond": "Le second",
+  "@weTeSecond": {
+    "description": "Bouton de réponse : le second panneau a duré plus longtemps"
+  },
+  "weTeResultTitle": "Ta finesse",
+  "@weTeResultTitle": {
+    "description": "Titre de l'écran de résultat du jeu des durées — le score est un SEUIL de discrimination"
+  },
+  "weTeThreshold": "{percent} %",
+  "@weTeThreshold": {
+    "description": "Le seuil de discrimination : l'écart relatif le plus fin encore distingué",
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "weTeResultCaption": "C'est l'écart le plus fin que tu distingues encore entre deux durées. Plus le chiffre est petit, plus ta perception sépare finement deux instants proches.",
+  "@weTeResultCaption": {
+    "description": "Explication du seuil affiché"
+  },
+  "weTeAccuracyNote": "{percent} % de bonnes réponses — c'est normal : le jeu resserre les écarts jusqu'à te faire hésiter.",
+  "@weTeAccuracyNote": {
+    "description": "Justesse de la partie, avec l'explication qu'elle est PILOTÉE par l'escalier et ne varie donc presque pas d'un joueur à l'autre",
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "weTeBest": "Ta meilleure finesse : {percent} %",
+  "@weTeBest": {
+    "description": "Record local du jeu des durées — le seuil le plus PETIT obtenu",
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "weTeNewBest": "Nouvelle meilleure finesse",
+  "@weTeNewBest": {
+    "description": "Annonce d'un record battu au jeu des durées"
+  },
+  "weTeNotSpeed": "Ce chiffre n'est pas ta vitesse : rien n'a chronométré tes réponses, tu pouvais prendre tout ton temps pour décider.",
+  "@weTeNotSpeed": {
+    "description": "Garde-fou de lecture du score — empêche de le lire comme une vitesse (que la batterie mesure déjà par ailleurs)"
+  },
+  "weTeNotClinical": "C'est un jeu, pas une mesure clinique : aucun seuil, aucun classement, rien à en conclure sur toi.",
+  "@weTeNotClinical": {
+    "description": "Cadrage obligatoire des jeux — jamais présentés comme des mesures cliniques"
+  },
+  "weTeUnreliableTitle": "Pas de quoi mesurer une finesse",
+  "@weTeUnreliableTitle": {
+    "description": "Titre affiché quand la partie n'a pas assez d'inversions, ou quand le seuil reste au plafond"
+  },
+  "weTeUnreliableBody": "La partie n'a pas assez hésité pour qu'un seuil veuille dire quelque chose. Ta meilleure finesse précédente reste intacte. Rejoue quand tu veux.",
+  "@weTeUnreliableBody": {
+    "description": "Corps du message affiché quand la partie ne permet aucun seuil fiable"
+  },
+  "weTeReplay": "Rejouer",
+  "@weTeReplay": {
+    "description": "Bouton qui relance une partie du jeu des durées depuis l'écran de résultat"
+  },
+  "weTeDone": "Terminer",
+  "@weTeDone": {
+    "description": "Bouton qui referme le jeu des durées depuis l'écran de résultat"
   }
 }

@@ -1,0 +1,136 @@
+{
+  "weTeEyebrow": {
+    "fr": "Jeu",
+    "en": "Game",
+    "desc": "Surtitre des écrans du jeu des durées"
+  },
+  "weTeTitle": {
+    "fr": "Le plus long des deux",
+    "en": "The longer of the two",
+    "desc": "Nom du jeu des durées tel qu'il est présenté (jamais « test de perception temporelle » : c'est un jeu, pas une mesure clinique)"
+  },
+  "weTeIntroTitle": {
+    "fr": "Deux panneaux, l'un après l'autre",
+    "en": "Two panels, one after the other",
+    "desc": "Titre de l'écran d'introduction du jeu des durées — la consigne en une phrase"
+  },
+  "weTeIntroBody": {
+    "fr": "Un panneau va s'allumer, s'éteindre, puis s'allumer une seconde fois. Dis lequel des deux est resté allumé le plus longtemps. Les écarts se resserrent au fil de la partie.",
+    "en": "A panel will light up, go dark, then light up a second time. Say which of the two stayed lit for longer. The gaps get tighter as the game goes on.",
+    "desc": "Explication de la consigne du jeu des durées"
+  },
+  "weTeIntroTooShortToCount": {
+    "fr": "Les durées sont de l'ordre de la seconde : trop courtes pour être comptées. C'est ta perception seule qui répond.",
+    "en": "The durations are around a second long: too short to count. Your perception alone does the answering.",
+    "desc": "Explique pourquoi le jeu compare deux durées brèves au lieu d'en faire estimer une longue — une durée comptable mesurerait la capacité à compter, pas la perception"
+  },
+  "weTeIntroExample": {
+    "fr": "C'est ce panneau qui s'allumera. Rien d'autre ne bougera à l'écran.",
+    "en": "This is the panel that will light up. Nothing else on screen will move.",
+    "desc": "Légende du panneau éteint montré dans l'introduction"
+  },
+  "weTeStart": {
+    "fr": "Commencer",
+    "en": "Start",
+    "desc": "Bouton qui lance la partie du jeu des durées"
+  },
+  "weTeLater": {
+    "fr": "Plus tard",
+    "en": "Later",
+    "desc": "Bouton qui quitte le jeu des durées sans y jouer — le jeu est facultatif"
+  },
+  "weTeProgressTag": {
+    "fr": "Essai",
+    "en": "Trial",
+    "desc": "Étiquette de la barre de progression du jeu des durées"
+  },
+  "weTeWatch": {
+    "fr": "Regarde bien…",
+    "en": "Watch closely…",
+    "desc": "Texte affiché pendant la présentation des deux durées, avant la question"
+  },
+  "weTePrompt": {
+    "fr": "Lequel est resté allumé le plus longtemps ?",
+    "en": "Which one stayed lit for longer?",
+    "desc": "Question posée après la présentation des deux durées"
+  },
+  "weTeFirst": {
+    "fr": "Le premier",
+    "en": "The first one",
+    "desc": "Bouton de réponse : le premier panneau a duré plus longtemps"
+  },
+  "weTeSecond": {
+    "fr": "Le second",
+    "en": "The second one",
+    "desc": "Bouton de réponse : le second panneau a duré plus longtemps"
+  },
+  "weTeResultTitle": {
+    "fr": "Ta finesse",
+    "en": "Your resolution",
+    "desc": "Titre de l'écran de résultat du jeu des durées — le score est un SEUIL de discrimination"
+  },
+  "weTeThreshold": {
+    "fr": "{percent} %",
+    "en": "{percent}%",
+    "desc": "Le seuil de discrimination : l'écart relatif le plus fin encore distingué",
+    "placeholders": {
+      "percent": "int"
+    }
+  },
+  "weTeResultCaption": {
+    "fr": "C'est l'écart le plus fin que tu distingues encore entre deux durées. Plus le chiffre est petit, plus ta perception sépare finement deux instants proches.",
+    "en": "That's the smallest gap you can still tell apart between two durations. The smaller the number, the more finely your perception separates two close moments.",
+    "desc": "Explication du seuil affiché"
+  },
+  "weTeAccuracyNote": {
+    "fr": "{percent} % de bonnes réponses — c'est normal : le jeu resserre les écarts jusqu'à te faire hésiter.",
+    "en": "{percent}% correct — that's expected: the game tightens the gaps until you start hesitating.",
+    "desc": "Justesse de la partie, avec l'explication qu'elle est PILOTÉE par l'escalier et ne varie donc presque pas d'un joueur à l'autre",
+    "placeholders": {
+      "percent": "int"
+    }
+  },
+  "weTeBest": {
+    "fr": "Ta meilleure finesse : {percent} %",
+    "en": "Your best resolution: {percent}%",
+    "desc": "Record local du jeu des durées — le seuil le plus PETIT obtenu",
+    "placeholders": {
+      "percent": "int"
+    }
+  },
+  "weTeNewBest": {
+    "fr": "Nouvelle meilleure finesse",
+    "en": "New best resolution",
+    "desc": "Annonce d'un record battu au jeu des durées"
+  },
+  "weTeNotSpeed": {
+    "fr": "Ce chiffre n'est pas ta vitesse : rien n'a chronométré tes réponses, tu pouvais prendre tout ton temps pour décider.",
+    "en": "This number is not your speed: nothing timed your answers, you could take as long as you liked to decide.",
+    "desc": "Garde-fou de lecture du score — empêche de le lire comme une vitesse (que la batterie mesure déjà par ailleurs)"
+  },
+  "weTeNotClinical": {
+    "fr": "C'est un jeu, pas une mesure clinique : aucun seuil, aucun classement, rien à en conclure sur toi.",
+    "en": "This is a game, not a clinical measure: no threshold, no ranking, nothing to conclude about you.",
+    "desc": "Cadrage obligatoire des jeux — jamais présentés comme des mesures cliniques"
+  },
+  "weTeUnreliableTitle": {
+    "fr": "Pas de quoi mesurer une finesse",
+    "en": "Not enough to measure a resolution",
+    "desc": "Titre affiché quand la partie n'a pas assez d'inversions, ou quand le seuil reste au plafond"
+  },
+  "weTeUnreliableBody": {
+    "fr": "La partie n'a pas assez hésité pour qu'un seuil veuille dire quelque chose. Ta meilleure finesse précédente reste intacte. Rejoue quand tu veux.",
+    "en": "The game never hesitated enough for a threshold to mean anything. Your previous best resolution is untouched. Play again whenever you like.",
+    "desc": "Corps du message affiché quand la partie ne permet aucun seuil fiable"
+  },
+  "weTeReplay": {
+    "fr": "Rejouer",
+    "en": "Play again",
+    "desc": "Bouton qui relance une partie du jeu des durées depuis l'écran de résultat"
+  },
+  "weTeDone": {
+    "fr": "Terminer",
+    "en": "Done",
+    "desc": "Bouton qui referme le jeu des durées depuis l'écran de résultat"
+  }
+}

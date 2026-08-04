@@ -4,7 +4,7 @@
  * Le résultat du test complet est retenu derrière 3 paliers séquentiels :
  *   stage 1 : inviter des amis (lien /invite?ref=<code> lié au token)
  *   stage 2 : (affichage) attendre que les filleuls TERMINENT leur test
- *   stage 3 : suivre le compte Instagram (déclaratif + délai serveur)
+ *   stage 3 : délai d'attente serveur (UNLOCK_DELAY_MINUTES) avant publication
  *   stage 4 : résultat débloqué
  *
  * Endpoints (auth = header X-Mentality-Token, signature Ed25519 re-vérifiée
@@ -20,11 +20,11 @@
  *                           → crédite le parrain issu de /link. Idempotent.
  *   GET  /progress        → état courant + transitions de stage (autorité
  *                           serveur, jamais le client).
- *   POST /instagram       → enregistre le pseudo (palier parrainage requis).
+ *   POST /instagram       → PIERRE TOMBALE (cf. plus bas) : accepté, ignoré.
  *   GET  /resolve/<code>  → public : le code referral existe-t-il ? (landing)
  *
  * Stockage : Cloudflare KV (binding REFERRAL_KV) — aucun secret externe.
- * Var : INSTA_UNLOCK_DELAY_MINUTES (délai de « vérification » avant stage 4).
+ * Var : UNLOCK_DELAY_MINUTES (durée du palier 3, en minutes).
  *
  * Modèle de clés KV :
  *   progress:<account>        → JSON de l'état du parrain (voir emptyProgress)
@@ -36,7 +36,9 @@
  *   completed:<account>       → JSON de la preuve de complétion (1re fois gagne)
  *
  * ANONYMAT : seule la partition account = SHA256(nonce)[:32] est stockée —
- * aucune donnée personnelle hormis le pseudo Instagram fourni volontairement.
+ * plus AUCUNE donnée personnelle. Le pseudo Instagram, seule donnée nominative
+ * qu'ait connue ce worker, a été supprimé du code ET des lignes déjà en
+ * production (cf. scripts/purge-instagram.js).
  */
 
 import { verifyToken, TOKEN_SIGNING_PUBLIC_KEYS, sha256hex } from '../_shared/token_verify.js';
@@ -108,12 +110,17 @@ export default {
       if (request.method === 'GET' && path === '/progress') {
         return await handleProgress(env, origin, account);
       }
+      // ─── PIERRE TOMBALE — à supprimer après la release d'août 2026 ────────
+      // Les builds déjà installées (TestFlight) postent encore ce endpoint.
+      // Sans cette route elles recevraient un 404, que leur client traduit en
+      // « erreur réseau » PERMANENTE sur la dernière porte du parcours.
+      // On accepte donc la requête, on IGNORE le pseudo — rien n'est stocké,
+      // c'est tout l'objet de ce changement — et on renvoie l'état courant.
       if (request.method === 'POST' && path === '/instagram') {
-        let body;
-        try { body = await request.json(); } catch {
-          return json({ error: 'Corps JSON invalide' }, 400, origin);
-        }
-        return await handleInstagram(env, origin, account, body);
+        try { await request.json(); } catch { /* corps ignoré, quel qu'il soit */ }
+        const row = await getProgress(env, account);
+        if (!row) return json({ error: 'Aucun suivi — appeler /progress/init' }, 404, origin);
+        return await buildProgressResponse(env, origin, row);
       }
     } catch (e) {
       return json({ error: 'Erreur interne' }, 500, origin);
@@ -170,13 +177,14 @@ function emptyProgress(account, code, nowIso) {
     account,
     referralCode: code,
     stage: 1,
-    instagramHandle: null,
-    instagramSubmittedAt: null,
-    instagramVerified: null, // true/false = contrôle manuel admin
+    stage3StartedAt: null, // posé UNE SEULE FOIS au passage en stage 3
     unlockedAt: null,
     createdAt: nowIso,
   };
 }
+
+// Champs Instagram hérités. Conservés ici pour être SUPPRIMÉS à chaque écriture.
+const REMOVED_FIELDS = ['instagramHandle', 'instagramSubmittedAt', 'instagramVerified'];
 
 async function getProgress(env, account) {
   const raw = await env.REFERRAL_KV.get(`progress:${account}`);
@@ -184,7 +192,17 @@ async function getProgress(env, account) {
 }
 
 async function putProgress(env, row) {
+  // Filet RGPD : toute écriture purge les champs Instagram hérités, y compris
+  // sur une ligne relue telle quelle depuis KV. Aucun chemin de code oublié ne
+  // peut les faire survivre. La migration de stage3StartedAt lit
+  // instagramSubmittedAt AVANT cet appel (cf. buildProgressResponse).
+  for (const f of REMOVED_FIELDS) delete row[f];
   await env.REFERRAL_KV.put(`progress:${row.account}`, JSON.stringify(row));
+}
+
+/** Un horodatage ISO exploitable ? (miroir exact de scripts/purge-instagram.js) */
+function isValidIso(s) {
+  return typeof s === 'string' && Number.isFinite(Date.parse(s));
 }
 
 /** Nombre de filleuls ayant terminé leur test pour un code donné. */
@@ -322,68 +340,146 @@ async function handleProgress(env, origin, account) {
   return buildProgressResponse(env, origin, row);
 }
 
-/** POST /instagram — enregistre le pseudo, démarre le délai de vérification. */
-async function handleInstagram(env, origin, account, body) {
-  const handleRaw = typeof body.handle === 'string' ? body.handle.trim() : '';
-  const handle = handleRaw.replace(/^@/, '');
-  if (!/^[A-Za-z0-9._]{1,30}$/.test(handle)) {
-    return json({ error: 'Pseudo Instagram invalide' }, 400, origin);
-  }
-  const row = await getProgress(env, account);
-  if (!row) return json({ error: 'Aucun suivi — appeler /progress/init' }, 404, origin);
-
-  const completed = await countCompletedReferrals(env, row.referralCode);
-  if (completed < REQUIRED_REFERRALS) {
-    return json({ error: 'Palier parrainage non terminé' }, 403, origin);
-  }
-  if (!row.instagramSubmittedAt) {
-    row.instagramHandle = handle;
-    row.instagramSubmittedAt = isoNow();
-    row.stage = 3;
-    await putProgress(env, row);
-  }
-  return buildProgressResponse(env, origin, row);
-}
-
 /**
  * Calcule l'état renvoyé au client ET applique les transitions de stage :
- *   →3 : ≥REQUIRED filleuls ont terminé leur test
- *   3→4 : pseudo Insta soumis depuis plus de INSTA_UNLOCK_DELAY_MINUTES et
- *         non invalidé manuellement (instagramVerified !== false).
+ *   →3  : ≥REQUIRED filleuls ont terminé leur test
+ *   3→4 : le délai UNLOCK_DELAY_MINUTES s'est écoulé depuis stage3StartedAt.
+ *
+ * AUTORITÉ SERVEUR : ces transitions n'existent qu'ici. Le client ne débloque
+ * jamais de lui-même, quelle que soit l'heure de son téléphone.
  */
 async function buildProgressResponse(env, origin, row) {
   const completedCount = await countCompletedReferrals(env, row.referralCode);
-  let stage = row.stage;
+  const cfg = delayConfig(env);
+  const delayMin = cfg.minutes;
+  const now = Date.now();
   let dirty = false;
 
-  if (stage < 3 && completedCount >= REQUIRED_REFERRALS) {
-    stage = 3;
-    row.stage = 3;
-    dirty = true;
-  }
+  // (a) Le stage 4 est DÉFINITIF : ni relecture, ni recalcul, ni
+  //     re-verrouillage. Un déblocage acquis l'est pour de bon.
+  if (row.stage < 4) {
+    if (row.stage < 3 && completedCount >= REQUIRED_REFERRALS) {
+      row.stage = 3;
+      dirty = true;
+    }
 
-  if (stage === 3 && row.instagramSubmittedAt && row.instagramVerified !== false) {
-    const delayMin = parseInt(env.INSTA_UNLOCK_DELAY_MINUTES || '120', 10);
-    const elapsedMs = Date.now() - new Date(row.instagramSubmittedAt).getTime();
-    if (elapsedMs >= delayMin * 60000) {
-      stage = 4;
+    // POINT D'ANCRAGE UNIQUE du délai. Les trois situations y convergent, et le
+    // garde `!isValidIso` garantit qu'il n'est posé QU'UNE FOIS :
+    //   · promotion fraîche ci-dessus            → maintenant
+    //   · (b) ligne héritée avec instagramSubmittedAt → cette date, pour que
+    //         l'attente DÉJÀ ÉCOULÉE ne soit pas perdue (filet si la purge KV
+    //         n'a pas encore tourné — cf. scripts/purge-instagram.js)
+    //   · (c) ligne héritée sans rien            → maintenant
+    if (row.stage === 3 && !isValidIso(row.stage3StartedAt)) {
+      row.stage3StartedAt = isValidIso(row.instagramSubmittedAt)
+        ? row.instagramSubmittedAt
+        : isoNow();
+      dirty = true;
+    }
+
+    if (row.stage === 3 && now - Date.parse(row.stage3StartedAt) >= delayMin * 60000) {
       row.stage = 4;
       row.unlockedAt = isoNow();
       dirty = true;
     }
   }
 
+  // AUTORITÉ SERVEUR sur le temps : secondsRemaining est calculé ICI, sur
+  // l'horloge du worker. Le client ne le recalcule jamais depuis sa propre
+  // date — sinon avancer l'horloge du téléphone débloquerait le résultat.
+  let unlockAt = null;
+  let secondsRemaining = 0;
+  let dayIndex = null;
+  if (row.stage === 3) {
+    const startMs = Date.parse(row.stage3StartedAt);
+    const endMs = startMs + delayMin * 60000;
+    unlockAt = new Date(endMs).toISOString();
+    secondsRemaining = Math.max(0, Math.ceil((endMs - now) / 1000));
+    // Jour courant de l'événement d'attente, MÊME AUTORITÉ que
+    // secondsRemaining : dérivé de l'ancre sur l'horloge du worker.
+    //
+    // Un « jour » vaut 1/8 du délai réel : en production (11520 min) c'est
+    // exactement 24 h, et en recette (délai raccourci) les 8 jours restent
+    // traversables au lieu de rester figés au jour 1.
+    //
+    // Le clamp absorbe les deux bords : une ancre légèrement dans le futur
+    // (dérive d'horloge entre instances) comme un délai déjà dépassé alors
+    // que la promotion en stage 4 n'a pas encore été écrite.
+    const dayMs = Math.max(1, Math.round((delayMin * 60000) / 8));
+    dayIndex = Math.min(9, Math.max(1, Math.floor((now - startMs) / dayMs) + 1));
+  } else if (row.stage >= 4) {
+    unlockAt = row.unlockedAt || null;
+    // Débloqué : l'événement est derrière, tout est ouvert. INCONDITIONNEL —
+    // une ligne héritée en stage 4 n'a pas forcément d'ancre (le bloc
+    // d'ancrage est court-circuité par `row.stage < 4`), et Date.parse(null)
+    // vaudrait NaN, sérialisé silencieusement en null.
+    dayIndex = 9;
+  }
+
   if (dirty) await putProgress(env, row);
 
   return json({
-    stage,
+    stage: row.stage,
     referralCode: row.referralCode,
     // completedReferrals = filleuls ayant réellement terminé leur test.
     completedReferrals: completedCount,
     requiredReferrals: REQUIRED_REFERRALS,
-    instagramHandle: row.instagramHandle || null,
-    instagramSubmitted: !!row.instagramSubmittedAt,
+    // `null` tant que stage < 3 : c'est CE champ, et non secondsRemaining == 0
+    // (qui vaut aussi bien « pas commencé » que « terminé »), qui dit au client
+    // si un compte à rebours s'applique.
+    unlockAt,
+    secondsRemaining,
+    // Jour courant de l'événement des 8 jours : 1..8 pendant l'attente, 9 une
+    // fois débloqué, `null` tant qu'elle n'a pas commencé — même sémantique de
+    // discriminant qu'unlockAt. Le client ne le dérive JAMAIS de son horloge :
+    // c'est ici, et nulle part ailleurs, que le jour est décidé.
+    dayIndex,
+    displayDelayDays: cfg.displayDelayDays,
+    // Alimente la bannière « MODE TEST — délai réel : N min ». Constante de
+    // déploiement, identique pour tout le monde : rien de sensible.
+    delayMinutes: delayMin,
+    debugDelayOverride: cfg.debugDelayOverride,
+    // COMPAT — à retirer avec la pierre tombale /instagram : les builds déjà
+    // installées basculent ainsi sur leur carte « en cours », sémantiquement
+    // équivalente à la nouvelle attente, au lieu d'un formulaire mort.
+    instagramSubmitted: row.stage >= 3,
   }, 200, origin);
+}
+
+/** Délai par défaut si la variable est absente ou illisible : 8 jours. */
+const DEFAULT_UNLOCK_DELAY_MINUTES = 11520;
+
+/**
+ * Délai RÉEL (minutes) et délai AFFICHÉ (jours).
+ *
+ * Les deux ne peuvent diverger que par DEBUG_DISPLAY_DELAY_DAYS, qui sert à
+ * recetter le rendu « 8 jours » en attendant une minute. Dans ce cas le worker
+ * le SIGNALE (debugDelayOverride), et le client affiche une bannière
+ * incontournable : un délai de test ne doit jamais passer inaperçu en prod.
+ */
+function delayConfig(env) {
+  const parsed = parseInt(env.UNLOCK_DELAY_MINUTES ?? '', 10);
+  const minutes = Number.isFinite(parsed) && parsed >= 0
+    ? parsed
+    : DEFAULT_UNLOCK_DELAY_MINUTES;
+
+  const rawDbg = env.DEBUG_DISPLAY_DELAY_DAYS;
+  const dbg = (rawDbg === undefined || rawDbg === null || rawDbg === '')
+    ? NaN
+    : parseInt(rawDbg, 10);
+  if (Number.isFinite(dbg) && dbg >= 0) {
+    return { minutes, displayDelayDays: dbg, debugDelayOverride: true };
+  }
+
+  // ARRONDI AU SUPÉRIEUR, jamais au plus proche : le nombre de jours annoncé
+  // doit toujours être ≥ au délai réel. Au plus proche, un délai de 8 j 10 h
+  // annoncerait « 8 jours » alors que le compte à rebours tournerait encore le
+  // 8e jour — l'annonce contredirait le compteur affiché juste en dessous.
+  return {
+    minutes,
+    displayDelayDays: Math.max(0, Math.ceil(minutes / 1440)),
+    debugDelayOverride: false,
+  };
 }
 
 /** Code court a-z0-9 (8 chars, ~41 bits) unique en KV. */

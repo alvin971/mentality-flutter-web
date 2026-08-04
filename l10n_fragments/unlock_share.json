@@ -1,0 +1,546 @@
+{
+  "ctShareScore": {
+    "fr": "Partager mon score",
+    "en": "Share my score",
+    "es": "Compartir mi puntuación",
+    "pt": "Partilhar a minha pontuação",
+    "de": "Mein Ergebnis teilen",
+    "en_GB": "Share my score"
+  },
+  "ctSubtestExitBody": {
+    "fr": "Vous avez quitté ce sous-test avant de le terminer. Voulez-vous le reprendre ou arrêter l'évaluation ?",
+    "en": "You left this subtest before finishing it. Would you like to resume it or stop the assessment?",
+    "es": "Has salido de esta subprueba antes de terminarla. ¿Quieres reanudarla o detener la evaluación?",
+    "pt": "Saiu deste subteste antes de o terminar. Deseja retomá-lo ou parar a avaliação?",
+    "de": "Sie haben diesen Untertest verlassen, bevor er beendet war. Möchten Sie ihn fortsetzen oder die Bewertung beenden?",
+    "en_GB": "You left this subtest before finishing it. Would you like to resume it or stop the assessment?",
+    "desc": "Corps du dialogue de sortie d'un sous-test"
+  },
+  "ctSubtestExitResume": {
+    "fr": "Reprendre le sous-test",
+    "en": "Resume subtest",
+    "es": "Reanudar la subprueba",
+    "pt": "Retomar o subteste",
+    "de": "Untertest fortsetzen",
+    "en_GB": "Resume subtest",
+    "desc": "Bouton pour reprendre le sous-test interrompu"
+  },
+  "ctSubtestExitTitle": {
+    "fr": "Sous-test interrompu",
+    "en": "Subtest interrupted",
+    "es": "Subprueba interrumpida",
+    "pt": "Subteste interrompido",
+    "de": "Untertest unterbrochen",
+    "en_GB": "Subtest interrupted",
+    "desc": "Titre du dialogue affiché quand l'utilisateur quitte un sous-test sans le terminer"
+  },
+  "demoBadge": {
+    "fr": "ENTRAÎNEMENT",
+    "en": "PRACTICE",
+    "es": "PRÁCTICA",
+    "pt": "PRÁTICA",
+    "de": "ÜBUNG",
+    "en_GB": "PRACTICE",
+    "desc": "Phase d'entraînement — libellé d'en-tête générique (partagé entre exercices)"
+  },
+  "demoContinue": {
+    "fr": "Continuer",
+    "en": "Continue",
+    "es": "Continuar",
+    "pt": "Continuar",
+    "de": "Weiter",
+    "en_GB": "Continue",
+    "desc": "Phase d'entraînement — bouton neutre pour poursuivre (exercices sans bonne/mauvaise réponse automatique)"
+  },
+  "demoNotice": {
+    "fr": "Entraînement — cet essai ne compte pas.",
+    "en": "Practice — this attempt does not count.",
+    "es": "Práctica: este intento no cuenta.",
+    "pt": "Prática: esta tentativa não conta.",
+    "de": "Übung – dieser Versuch zählt nicht.",
+    "en_GB": "Practice — this attempt does not count.",
+    "desc": "Phase d'entraînement — bandeau expliquant que l'essai n'est pas noté"
+  },
+  "demoRetry": {
+    "fr": "Réessayer",
+    "en": "Try again",
+    "es": "Reintentar",
+    "pt": "Tentar de novo",
+    "de": "Erneut versuchen",
+    "en_GB": "Try again",
+    "desc": "Phase d'entraînement — bouton pour refaire l'essai"
+  },
+  "demoStart": {
+    "fr": "Commencer le test",
+    "en": "Start the test",
+    "es": "Comenzar la prueba",
+    "pt": "Começar o teste",
+    "de": "Test starten",
+    "en_GB": "Start the test",
+    "desc": "Phase d'entraînement — bouton pour passer au test réel"
+  },
+  "demoTryAgain": {
+    "fr": "Pas tout à fait — réessayez",
+    "en": "Not quite — try again",
+    "es": "Casi… inténtalo de nuevo",
+    "pt": "Quase… tente novamente",
+    "de": "Nicht ganz – versuchen Sie es erneut",
+    "en_GB": "Not quite — try again",
+    "desc": "Phase d'entraînement — retour après un essai incorrect"
+  },
+  "demoWellDone": {
+    "fr": "Bonne réponse !",
+    "en": "Correct!",
+    "es": "¡Correcto!",
+    "pt": "Correto!",
+    "de": "Richtig!",
+    "en_GB": "Correct!",
+    "desc": "Phase d'entraînement — retour positif après un essai correct"
+  },
+  "histLockedBody": {
+    "fr": "Ton résultat est enregistré, mais il reste flouté tant que toutes les missions ne sont pas validées.",
+    "en": "Your result is saved, but it stays blurred until every mission is validated.",
+    "es": "Tu resultado está guardado, pero permanecerá difuminado hasta que todas las misiones estén validadas.",
+    "pt": "O teu resultado está guardado, mas fica desfocado até todas as missões serem validadas.",
+    "de": "Dein Ergebnis ist gespeichert, bleibt aber unscharf, bis alle Missionen bestätigt sind.",
+    "en_GB": "Your result is saved, but it stays blurred until every mission is validated."
+  },
+  "histLockedBodyNoResult": {
+    "fr": "Tes missions et ton lien d'invitation sont ici. Termine ton évaluation pour débloquer ton résultat.",
+    "en": "Your missions and your invite link are here. Finish your assessment to unlock your result.",
+    "es": "Tus misiones y tu enlace de invitación están aquí. Termina tu evaluación para desbloquear tu resultado.",
+    "pt": "As tuas missões e o teu link de convite estão aqui. Termina a tua avaliação para desbloqueares o teu resultado.",
+    "de": "Deine Missionen und dein Einladungslink sind hier. Schließe deine Auswertung ab, um dein Ergebnis freizuschalten.",
+    "en_GB": "Your missions and your invite link are here. Finish your assessment to unlock your result."
+  },
+  "histLockedCta": {
+    "fr": "Voir mes missions",
+    "en": "See my missions",
+    "es": "Ver mis misiones",
+    "pt": "Ver as minhas missões",
+    "de": "Meine Missionen ansehen",
+    "en_GB": "See my missions"
+  },
+  "histLockedTitle": {
+    "fr": "Missions à valider",
+    "en": "Missions to complete",
+    "es": "Misiones por validar",
+    "pt": "Missões por validar",
+    "de": "Offene Missionen",
+    "en_GB": "Missions to complete"
+  },
+  "inviteLandingBody": {
+    "fr": "Un ami t'invite à passer le test de QI gratuit Mentality. En terminant ton test, tu obtiens ton propre résultat et tu aides ton ami à débloquer le sien.",
+    "en": "A friend invited you to take the free Mentality IQ test. By finishing your test, you get your own result and help your friend unlock theirs.",
+    "es": "Un amigo te invita a hacer el test de CI gratuito de Mentality. Al terminar tu test, obtienes tu propio resultado y ayudas a tu amigo a desbloquear el suyo.",
+    "pt": "Um amigo convidou-te para fazer o teste de QI gratuito da Mentality. Ao terminares o teu teste, obténs o teu resultado e ajudas o teu amigo a desbloquear o dele.",
+    "de": "Ein Freund lädt dich zum kostenlosen Mentality-IQ-Test ein. Wenn du deinen Test abschließt, erhältst du dein eigenes Ergebnis und hilfst deinem Freund, seines freizuschalten.",
+    "en_GB": "A friend invited you to take the free Mentality IQ test. By finishing your test, you get your own result and help your friend unlock theirs."
+  },
+  "inviteLandingCta": {
+    "fr": "Commencer le test gratuit",
+    "en": "Start the free test",
+    "es": "Empezar el test gratuito",
+    "pt": "Começar o teste gratuito",
+    "de": "Kostenlosen Test starten",
+    "en_GB": "Start the free test"
+  },
+  "inviteLandingTitle": {
+    "fr": "Invitation",
+    "en": "Invitation",
+    "es": "Invitación",
+    "pt": "Convite",
+    "de": "Einladung",
+    "en_GB": "Invitation"
+  },
+  "shareCancel": {
+    "fr": "Annuler",
+    "en": "Cancel",
+    "es": "Cancelar",
+    "pt": "Cancelar",
+    "de": "Abbrechen",
+    "en_GB": "Cancel"
+  },
+  "shareCodeLabel": {
+    "fr": "Code d'invitation",
+    "en": "Invite code",
+    "es": "Código de invitación",
+    "pt": "Código de convite",
+    "de": "Einladungscode",
+    "en_GB": "Invite code"
+  },
+  "shareConfirm": {
+    "fr": "Partager cette image",
+    "en": "Share this image",
+    "es": "Compartir esta imagen",
+    "pt": "Partilhar esta imagem",
+    "de": "Dieses Bild teilen",
+    "en_GB": "Share this image"
+  },
+  "shareError": {
+    "fr": "Impossible de préparer l'image. Réessaie.",
+    "en": "Could not prepare the image. Please try again.",
+    "es": "No se pudo preparar la imagen. Inténtalo de nuevo.",
+    "pt": "Não foi possível preparar a imagem. Tenta novamente.",
+    "de": "Das Bild konnte nicht erstellt werden. Bitte versuche es erneut.",
+    "en_GB": "Could not prepare the image. Please try again."
+  },
+  "shareEyebrow": {
+    "fr": "Aperçu",
+    "en": "Preview",
+    "es": "Vista previa",
+    "pt": "Pré-visualização",
+    "de": "Vorschau",
+    "en_GB": "Preview"
+  },
+  "shareIntro": {
+    "fr": "Voici l'image qui sera partagée. Rien n'est publié tant que tu n'as pas confirmé.",
+    "en": "This is the image that will be shared. Nothing is posted until you confirm.",
+    "es": "Esta es la imagen que se compartirá. No se publica nada hasta que confirmes.",
+    "pt": "Esta é a imagem que será partilhada. Nada é publicado até confirmares.",
+    "de": "Das ist das Bild, das geteilt wird. Es wird nichts veröffentlicht, bevor du bestätigst.",
+    "en_GB": "This is the image that will be shared. Nothing is posted until you confirm."
+  },
+  "shareLinkCopied": {
+    "fr": "Ton lien est copié — ajoute-le en sticker Lien sur ta story",
+    "en": "Your link is copied — add it as a Link sticker on your story",
+    "es": "Tu enlace está copiado: añádelo como sticker de Enlace en tu historia",
+    "pt": "O teu link está copiado — adiciona-o como sticker de Link na tua story",
+    "de": "Dein Link ist kopiert — füge ihn als Link-Sticker in deine Story ein",
+    "en_GB": "Your link is copied — add it as a Link sticker on your story"
+  },
+  "sharePercentile": {
+    "fr": "Plus élevé que {rank} % des participants",
+    "en": "Higher than {rank}% of participants",
+    "es": "Más alta que la del {rank} % de los participantes",
+    "pt": "Mais alta do que a de {rank} % dos participantes",
+    "de": "Höher als {rank} % der Teilnehmenden",
+    "en_GB": "Higher than {rank}% of participants",
+    "placeholders": {
+      "rank": "int"
+    }
+  },
+  "shareScoreLabel": {
+    "fr": "Score global",
+    "en": "Overall score",
+    "es": "Puntuación global",
+    "pt": "Pontuação global",
+    "de": "Gesamtergebnis",
+    "en_GB": "Overall score"
+  },
+  "shareTitle": {
+    "fr": "Partager mon score",
+    "en": "Share my score",
+    "es": "Compartir mi puntuación",
+    "pt": "Partilhar a minha pontuação",
+    "de": "Mein Ergebnis teilen",
+    "en_GB": "Share my score"
+  },
+  "ugCopied": {
+    "fr": "Lien copié !",
+    "en": "Link copied!",
+    "es": "¡Enlace copiado!",
+    "pt": "Link copiado!",
+    "de": "Link kopiert!",
+    "en_GB": "Link copied!"
+  },
+  "ugCopyLink": {
+    "fr": "Copier mon lien d'invitation",
+    "en": "Copy my invite link",
+    "es": "Copiar mi enlace de invitación",
+    "pt": "Copiar o meu link de convite",
+    "de": "Meinen Einladungslink kopieren",
+    "en_GB": "Copy my invite link"
+  },
+  "ugErrorBody": {
+    "fr": "Impossible de récupérer l'état de ton déblocage. Vérifie ta connexion puis réessaie.",
+    "en": "Could not fetch your unlock status. Check your connection and try again.",
+    "es": "No se pudo obtener el estado de tu desbloqueo. Comprueba tu conexión e inténtalo de nuevo.",
+    "pt": "Não foi possível obter o estado do teu desbloqueio. Verifica a tua ligação e tenta novamente.",
+    "de": "Der Freischaltstatus konnte nicht geladen werden. Prüfe deine Verbindung und versuche es erneut.",
+    "en_GB": "Could not fetch your unlock status. Check your connection and try again."
+  },
+  "ugEyebrow": {
+    "fr": "Dernières étapes",
+    "en": "Final steps",
+    "es": "Últimos pasos",
+    "pt": "Últimas etapas",
+    "de": "Letzte Schritte",
+    "en_GB": "Final steps"
+  },
+  "ugFreeNotice": {
+    "fr": "Le test est 100 % gratuit. Pour recevoir ton résultat, il te reste quelques étapes simples : elles se valident automatiquement.",
+    "en": "The test is 100% free. To receive your result, a few simple steps remain — they are validated automatically.",
+    "es": "El test es 100 % gratuito. Para recibir tu resultado quedan unos pasos sencillos: se validan automáticamente.",
+    "pt": "O teste é 100% gratuito. Para receberes o teu resultado faltam alguns passos simples: são validados automaticamente.",
+    "de": "Der Test ist 100 % kostenlos. Um dein Ergebnis zu erhalten, fehlen noch einige einfache Schritte – sie werden automatisch bestätigt.",
+    "en_GB": "The test is 100% free. To receive your result, a few simple steps remain — they are validated automatically."
+  },
+  "ugFriendDone": {
+    "fr": "Ami {n} : test terminé",
+    "en": "Friend {n}: test completed",
+    "es": "Amigo {n}: test terminado",
+    "pt": "Amigo {n}: teste terminado",
+    "de": "Freund {n}: Test abgeschlossen",
+    "en_GB": "Friend {n}: test completed",
+    "placeholders": {
+      "n": "int"
+    }
+  },
+  "ugFriendPending": {
+    "fr": "Ami {n} : test en cours",
+    "en": "Friend {n}: test in progress",
+    "es": "Amigo {n}: test en curso",
+    "pt": "Amigo {n}: teste em curso",
+    "de": "Freund {n}: Test läuft",
+    "en_GB": "Friend {n}: test in progress",
+    "placeholders": {
+      "n": "int"
+    }
+  },
+  "ugInviteCounter": {
+    "fr": "{joined}/{required} amis ont terminé leur test",
+    "en": "{joined}/{required} friends have finished their test",
+    "es": "{joined}/{required} amigos han terminado su test",
+    "pt": "{joined}/{required} amigos terminaram o seu teste",
+    "de": "{joined}/{required} Freunde haben ihren Test beendet",
+    "en_GB": "{joined}/{required} friends have finished their test",
+    "placeholders": {
+      "joined": "int",
+      "required": "int"
+    }
+  },
+  "ugRefresh": {
+    "fr": "Actualiser",
+    "en": "Refresh",
+    "es": "Actualizar",
+    "pt": "Atualizar",
+    "de": "Aktualisieren",
+    "en_GB": "Refresh"
+  },
+  "ugRefreshFailed": {
+    "fr": "Impossible d'actualiser. Vérifie ta connexion — les chiffres affichés datent de ta dernière connexion.",
+    "en": "Could not refresh. Check your connection — the numbers shown are from your last successful update.",
+    "es": "No se pudo actualizar. Comprueba tu conexión: las cifras mostradas son de la última actualización.",
+    "pt": "Não foi possível atualizar. Verifica a tua ligação — os números mostrados são da última atualização.",
+    "de": "Aktualisierung fehlgeschlagen. Prüfe deine Verbindung — die angezeigten Zahlen stammen vom letzten erfolgreichen Abruf.",
+    "en_GB": "Could not refresh. Check your connection — the numbers shown are from your last successful update."
+  },
+  "ugResultsHubNotice": {
+    "fr": "Tout se trouve dans « Mes résultats » : tes missions, ton lien d'invitation et ton résultat (flouté tant que toutes les missions ne sont pas validées). Tu peux quitter cette page et revenir quand tu veux.",
+    "en": "Everything lives in “My results”: your missions, your invite link and your result (blurred until every mission is validated). You can leave this page and come back anytime.",
+    "es": "Todo está en «Mis resultados»: tus misiones, tu enlace de invitación y tu resultado (difuminado hasta que valides todas las misiones). Puedes salir de esta página y volver cuando quieras.",
+    "pt": "Está tudo em «Os meus resultados»: as tuas missões, o teu link de convite e o teu resultado (desfocado até todas as missões serem validadas). Podes sair desta página e voltar quando quiseres.",
+    "de": "Alles findest du unter „Meine Ergebnisse“: deine Missionen, deinen Einladungslink und dein Ergebnis (unscharf, bis alle Missionen bestätigt sind). Du kannst diese Seite jederzeit verlassen und später zurückkommen.",
+    "en_GB": "Everything lives in “My results”: your missions, your invite link and your result (blurred until every mission is validated). You can leave this page and come back anytime."
+  },
+  "ugRetry": {
+    "fr": "Réessayer",
+    "en": "Retry",
+    "es": "Reintentar",
+    "pt": "Tentar novamente",
+    "de": "Erneut versuchen",
+    "en_GB": "Retry"
+  },
+  "ugStep1Body": {
+    "fr": "Partage ton lien personnel avec 3 amis. Cette étape avance quand ils TERMINENT leur test — pas seulement quand ils s'inscrivent. Pense à les relancer.",
+    "en": "Share your personal link with 3 friends. This step advances when they FINISH their test — not just when they sign up. Feel free to remind them.",
+    "es": "Comparte tu enlace personal con 3 amigos. Este paso avanza cuando TERMINAN su test, no solo cuando se registran. No dudes en recordárselo.",
+    "pt": "Partilha o teu link pessoal com 3 amigos. Este passo avança quando eles TERMINAM o teste — não apenas quando se inscrevem. Não hesites em lembrá-los.",
+    "de": "Teile deinen persönlichen Link mit 3 Freunden. Dieser Schritt geht weiter, wenn sie ihren Test BEENDEN — nicht schon bei der Anmeldung. Erinnere sie ruhig daran.",
+    "en_GB": "Share your personal link with 3 friends. This step advances when they FINISH their test — not just when they sign up. Feel free to remind them."
+  },
+  "ugStep1Title": {
+    "fr": "Invite 3 amis",
+    "en": "Invite 3 friends",
+    "es": "Invita a 3 amigos",
+    "pt": "Convida 3 amigos",
+    "de": "Lade 3 Freunde ein",
+    "en_GB": "Invite 3 friends"
+  },
+  "ugStep2Body": {
+    "fr": "Tes amis doivent maintenant terminer leur test de QI. On attend leurs résultats — n'hésite pas à les relancer !",
+    "en": "Your friends now need to finish their IQ test. We are waiting for their results — feel free to remind them!",
+    "es": "Tus amigos deben terminar ahora su test de CI. Esperamos sus resultados: ¡no dudes en recordárselo!",
+    "pt": "Os teus amigos precisam agora de terminar o teste de QI. Estamos à espera dos resultados — lembra-os!",
+    "de": "Deine Freunde müssen nun ihren IQ-Test abschließen. Wir warten auf ihre Ergebnisse – erinnere sie ruhig daran!",
+    "en_GB": "Your friends now need to finish their IQ test. We are waiting for their results — feel free to remind them!"
+  },
+  "ugStep2Title": {
+    "fr": "Tes amis passent leur test",
+    "en": "Your friends are taking their test",
+    "es": "Tus amigos están haciendo su test",
+    "pt": "Os teus amigos estão a fazer o teste",
+    "de": "Deine Freunde machen ihren Test",
+    "en_GB": "Your friends are taking their test"
+  },
+  "ugTitle": {
+    "fr": "Ton résultat est prêt",
+    "en": "Your result is ready",
+    "es": "Tu resultado está listo",
+    "pt": "O teu resultado está pronto",
+    "de": "Dein Ergebnis ist bereit",
+    "en_GB": "Your result is ready"
+  },
+  "ugWaitBody": {
+    "fr": "{days, plural, =0{Ton résultat est en préparation. Il sera publié automatiquement — tu n'as plus rien à faire.} one{Ton résultat est en préparation. Il sera publié dans {days} jour, automatiquement — tu n'as plus rien à faire.} other{Ton résultat est en préparation. Il sera publié dans {days} jours, automatiquement — tu n'as plus rien à faire.}}",
+    "en": "{days, plural, =0{Your result is being prepared. It will be published automatically — there is nothing left for you to do.} one{Your result is being prepared. It will be published in {days} day, automatically — there is nothing left for you to do.} other{Your result is being prepared. It will be published in {days} days, automatically — there is nothing left for you to do.}}",
+    "es": "{days, plural, =0{Tu resultado se está preparando. Se publicará automáticamente: no tienes que hacer nada más.} one{Tu resultado se está preparando. Se publicará dentro de {days} día, automáticamente: no tienes que hacer nada más.} other{Tu resultado se está preparando. Se publicará dentro de {days} días, automáticamente: no tienes que hacer nada más.}}",
+    "pt": "{days, plural, =0{O teu resultado está a ser preparado. Será publicado automaticamente — não tens de fazer mais nada.} one{O teu resultado está a ser preparado. Será publicado dentro de {days} dia, automaticamente — não tens de fazer mais nada.} other{O teu resultado está a ser preparado. Será publicado dentro de {days} dias, automaticamente — não tens de fazer mais nada.}}",
+    "de": "{days, plural, =0{Dein Ergebnis wird vorbereitet. Es wird automatisch veröffentlicht – du musst nichts weiter tun.} one{Dein Ergebnis wird vorbereitet. Es wird in {days} Tag automatisch veröffentlicht – du musst nichts weiter tun.} other{Dein Ergebnis wird vorbereitet. Es wird in {days} Tagen automatisch veröffentlicht – du musst nichts weiter tun.}}",
+    "en_GB": "{days, plural, =0{Your result is being prepared. It will be published automatically — there is nothing left for you to do.} one{Your result is being prepared. It will be published in {days} day, automatically — there is nothing left for you to do.} other{Your result is being prepared. It will be published in {days} days, automatically — there is nothing left for you to do.}}",
+    "placeholders": {
+      "days": "int"
+    }
+  },
+  "ugWaitConfirming": {
+    "fr": "Ton résultat se débloque dès la confirmation du serveur — cet écran s'actualise tout seul.",
+    "en": "Your result unlocks as soon as the server confirms — this screen refreshes on its own.",
+    "es": "Tu resultado se desbloquea en cuanto el servidor lo confirme: esta pantalla se actualiza sola.",
+    "pt": "O teu resultado é desbloqueado assim que o servidor confirmar — este ecrã atualiza-se sozinho.",
+    "de": "Dein Ergebnis wird freigeschaltet, sobald der Server bestätigt – diese Seite aktualisiert sich von selbst.",
+    "en_GB": "Your result unlocks as soon as the server confirms — this screen refreshes on its own."
+  },
+  "ugWaitCountdownDays": {
+    "fr": "{days, plural, one{Encore {days} jour} other{Encore {days} jours}}",
+    "en": "{days, plural, one{{days} day left} other{{days} days left}}",
+    "es": "{days, plural, one{Queda {days} día} other{Quedan {days} días}}",
+    "pt": "{days, plural, one{Falta {days} dia} other{Faltam {days} dias}}",
+    "de": "{days, plural, one{Noch {days} Tag} other{Noch {days} Tage}}",
+    "en_GB": "{days, plural, one{{days} day left} other{{days} days left}}",
+    "placeholders": {
+      "days": "int"
+    }
+  },
+  "ugWaitCountdownDone": {
+    "fr": "Le délai est écoulé.",
+    "en": "The wait is over.",
+    "es": "El plazo ha terminado.",
+    "pt": "O prazo terminou.",
+    "de": "Die Wartezeit ist vorbei.",
+    "en_GB": "The wait is over."
+  },
+  "ugWaitCountdownHours": {
+    "fr": "{hours, plural, one{Encore {hours} heure} other{Encore {hours} heures}}",
+    "en": "{hours, plural, one{{hours} hour left} other{{hours} hours left}}",
+    "es": "{hours, plural, one{Queda {hours} hora} other{Quedan {hours} horas}}",
+    "pt": "{hours, plural, one{Falta {hours} hora} other{Faltam {hours} horas}}",
+    "de": "{hours, plural, one{Noch {hours} Stunde} other{Noch {hours} Stunden}}",
+    "en_GB": "{hours, plural, one{{hours} hour left} other{{hours} hours left}}",
+    "placeholders": {
+      "hours": "int"
+    }
+  },
+  "ugWaitCountdownMinutes": {
+    "fr": "{minutes, plural, one{Encore {minutes} minute} other{Encore {minutes} minutes}}",
+    "en": "{minutes, plural, one{{minutes} minute left} other{{minutes} minutes left}}",
+    "es": "{minutes, plural, one{Queda {minutes} minuto} other{Quedan {minutes} minutos}}",
+    "pt": "{minutes, plural, one{Falta {minutes} minuto} other{Faltam {minutes} minutos}}",
+    "de": "{minutes, plural, one{Noch {minutes} Minute} other{Noch {minutes} Minuten}}",
+    "en_GB": "{minutes, plural, one{{minutes} minute left} other{{minutes} minutes left}}",
+    "placeholders": {
+      "minutes": "int"
+    }
+  },
+  "ugWaitTitle": {
+    "fr": "Tes résultats arrivent",
+    "en": "Your results are on the way",
+    "es": "Tus resultados están en camino",
+    "pt": "Os teus resultados estão a chegar",
+    "de": "Deine Ergebnisse sind unterwegs",
+    "en_GB": "Your results are on the way"
+  },
+  "vpDemoEyebrow": {
+    "fr": "DÉMONSTRATION",
+    "en": "DEMONSTRATION",
+    "es": "DEMOSTRACIÓN",
+    "pt": "DEMONSTRAÇÃO",
+    "de": "DEMONSTRATION",
+    "en_GB": "DEMONSTRATION",
+    "desc": "Puzzles visuels — eyebrow de la phase de démonstration non chronométrée"
+  },
+  "vpDemoInstruction": {
+    "fr": "Entraînement sans chrono : choisissez les 3 pièces qui forment la figure, puis validez.",
+    "en": "Untimed practice: choose the 3 pieces that form the figure, then confirm.",
+    "es": "Práctica sin tiempo: elige las 3 piezas que forman la figura y confirma.",
+    "pt": "Treino sem tempo: escolha as 3 peças que formam a figura e confirme.",
+    "de": "Übung ohne Zeitlimit: Wählen Sie die 3 Teile, die die Figur ergeben, und bestätigen Sie.",
+    "en_GB": "Untimed practice: choose the 3 pieces that form the figure, then confirm.",
+    "desc": "Puzzles visuels — consigne de l'item de démonstration"
+  },
+  "vpDemoRetry": {
+    "fr": "Réessayer",
+    "en": "Try again",
+    "es": "Reintentar",
+    "pt": "Tentar novamente",
+    "de": "Erneut versuchen",
+    "en_GB": "Try again",
+    "desc": "Puzzles visuels — bouton après une démo ratée, réinitialise la démo"
+  },
+  "vpDemoStart": {
+    "fr": "Commencer le test",
+    "en": "Start the test",
+    "es": "Comenzar la prueba",
+    "pt": "Começar o teste",
+    "de": "Test starten",
+    "en_GB": "Start the test",
+    "desc": "Puzzles visuels — bouton après une démo réussie, lance les items chronométrés"
+  },
+  "vpReadyBody": {
+    "fr": "L'entraînement est terminé. Le test commence : {count} puzzles, chacun avec son propre chrono. Le temps démarre dès que vous appuyez sur le bouton.",
+    "en": "Practice is over. The test begins: {count} puzzles, each with its own timer. The clock starts as soon as you press the button.",
+    "es": "La práctica ha terminado. Empieza la prueba: {count} puzles, cada uno con su propio cronómetro. El tiempo empieza en cuanto pulses el botón.",
+    "pt": "O treino terminou. O teste vai começar: {count} puzzles, cada um com o seu próprio cronómetro. O tempo começa assim que tocar no botão.",
+    "de": "Das Training ist beendet. Der Test beginnt: {count} Puzzles, jedes mit eigenem Zeitlimit. Die Zeit läuft, sobald Sie die Taste drücken.",
+    "en_GB": "Practice is over. The test begins: {count} puzzles, each with its own timer. The clock starts as soon as you press the button.",
+    "desc": "Puzzles visuels — texte de l'écran Prêt ; le chrono ne démarre qu'à l'appui sur le bouton",
+    "placeholders": {
+      "count": "int"
+    }
+  },
+  "vpReadyStart": {
+    "fr": "Lancer le test",
+    "en": "Start now",
+    "es": "Empezar ahora",
+    "pt": "Começar agora",
+    "de": "Jetzt starten",
+    "en_GB": "Start now",
+    "desc": "Puzzles visuels — bouton de l'écran Prêt qui démarre l'item 1 et son chrono"
+  },
+  "vpReadyTitle": {
+    "fr": "Prêt ?",
+    "en": "Ready?",
+    "es": "¿Preparado?",
+    "pt": "Pronto?",
+    "de": "Bereit?",
+    "en_GB": "Ready?",
+    "desc": "Puzzles visuels — titre de l'écran intermédiaire entre la démonstration et le premier item chronométré"
+  },
+  "vpRecorded": {
+    "fr": "Réponse enregistrée",
+    "en": "Answer recorded",
+    "es": "Respuesta registrada",
+    "pt": "Resposta registada",
+    "de": "Antwort gespeichert",
+    "en_GB": "Answer recorded",
+    "desc": "Puzzles visuels — libellé neutre du bouton après validation d'un item réel (aucun feedback correct/incorrect pendant le test, conforme au protocole)"
+  },
+  "completionPendingNotice": {
+    "fr": "Fin de test pas encore confirmée par le serveur. Nous réessayons automatiquement — garde une connexion et rouvre l'app si besoin.",
+    "en": "Your test completion hasn't been confirmed by the server yet. We keep retrying — stay connected and reopen the app if needed.",
+    "es": "El servidor aún no ha confirmado el final de tu prueba. Seguimos reintentando: mantén la conexión y vuelve a abrir la app si hace falta.",
+    "pt": "O servidor ainda não confirmou o fim do teu teste. Continuamos a tentar — mantém a ligação e reabre a app se necessário.",
+    "de": "Der Abschluss deines Tests wurde vom Server noch nicht bestätigt. Wir versuchen es weiter — bleib online und öffne die App bei Bedarf erneut.",
+    "en_GB": "Your test completion hasn't been confirmed by the server yet. We keep retrying — stay connected and reopen the app if needed.",
+    "desc": "Avertissement affiché quand la déclaration de fin de test n'a pas abouti."
+  },
+  "completionRejectedNotice": {
+    "fr": "Cette passation n'a pas pu être validée : elle a été jugée trop courte. Elle ne compte pas pour la mission de parrainage.",
+    "en": "This attempt could not be validated: it was too short. It does not count towards the referral mission.",
+    "es": "Este intento no se ha podido validar: ha sido demasiado corto. No cuenta para la misión de invitaciones.",
+    "pt": "Esta tentativa não pôde ser validada: foi demasiado curta. Não conta para a missão de convites.",
+    "de": "Dieser Durchgang konnte nicht bestätigt werden: Er war zu kurz. Er zählt nicht für die Empfehlungsmission.",
+    "en_GB": "This attempt could not be validated: it was too short. It does not count towards the referral mission.",
+    "desc": "Avertissement affiché quand la déclaration de fin de test n'a pas abouti."
+  }
+}

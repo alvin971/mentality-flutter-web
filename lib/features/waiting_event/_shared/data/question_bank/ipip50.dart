@@ -1,0 +1,595 @@
+// IPIP-50 — les 50 marqueurs du Big Five du International Personality Item
+// Pool. Domaine public, sans aucune obligation d'usage.
+//
+// ## Ce qui est un CONTRAT dans ce fichier
+//
+// · L'ORDRE. Les items sont dans leur ordre de publication, qui alterne les
+//   cinq facteurs (1 = extraversion, 2 = amabilité, 3 = conscience,
+//   4 = stabilité, 5 = ouverture, puis on recommence). Cet entrelacement n'est
+//   pas décoratif : regrouper les dix items d'un même trait produirait un
+//   effet de série (« j'ai déjà dit trois fois que je suis sociable ») que la
+//   calibration n'a jamais connu.
+// · LA COTATION INVERSE. Chaque trait a des items dans les deux sens. Le pôle
+//   retenu ici est TOUJOURS le pôle positif du facteur, y compris pour le
+//   quatrième : les marqueurs IPIP mesurent la STABILITÉ ÉMOTIONNELLE, pas le
+//   névrosisme. Afficher « névrosisme » à partir de ces items inverserait le
+//   sens du score sans qu'aucun test ne s'en aperçoive.
+// · LE LIBELLÉ ANGLAIS. Reproduit tel quel — sans le moderniser, sans en
+//   corriger la grammaire elliptique (« Am the life of the party », sans
+//   sujet : la consigne d'origine porte le sujet, pas l'item).
+//
+// ## Ce qui est une DÉCISION assumée
+//
+// · Les cinq autres langues sont NOS traductions, pas des versions publiées.
+//   Elles rétablissent le sujet, parce que la forme elliptique anglaise
+//   n'existe pas en français, en allemand, en espagnol ni en portugais.
+// · Elles évitent systématiquement les accords en genre (« Je stresse
+//   facilement » plutôt que « Je suis facilement stressé ») : l'app ne connaît
+//   pas le genre de qui répond, et une double forme « stressé(e) » à chaque
+//   item rendrait les cinquante écrans illisibles.
+// · Un seul item diffère entre `en` et `en_GB` : « centre » of attention.
+//
+// Provenance : voir [ipip50Provenance] — restitué de mémoire, pas confronté
+// à ipip.ori.org. La page Méthodologie le dit, et une garde de test tient le
+// registre.
+
+import '../../domain/models/q_instrument.dart';
+import '../../domain/models/q_item.dart';
+import '../../domain/models/q_provenance.dart';
+import '../../domain/models/q_scale.dart';
+import '../../domain/models/q_text.dart';
+
+/// Les cinq facteurs, nommés par leur PÔLE POSITIF — c'est le sens dans lequel
+/// les items sont cotés ici.
+abstract final class IpipTrait {
+  static const String extraversion = 'extraversion';
+  static const String agreeableness = 'agreeableness';
+  static const String conscientiousness = 'conscientiousness';
+
+  /// Stabilité émotionnelle. Le pôle OPPOSÉ au névrosisme : un score haut dit
+  /// « calme », pas « anxieux ».
+  static const String stability = 'stability';
+
+  /// Intellect / imagination — le nom que l'IPIP donne au cinquième facteur,
+  /// plus étroit que l'« ouverture à l'expérience » des modèles voisins.
+  static const String intellect = 'intellect';
+
+  static const List<String> all = [
+    extraversion,
+    agreeableness,
+    conscientiousness,
+    stability,
+    intellect,
+  ];
+}
+
+/// L'échelle d'exactitude en 5 points de l'IPIP, cotée 1 à 5.
+///
+/// Ce n'est PAS une échelle de fréquence : l'IPIP demande à quel point une
+/// description est exacte, jamais à quelle fréquence quelque chose arrive. La
+/// règle de rédaction « échelle de fréquence homogène, ancrage six mois » du
+/// plan d'implémentation vaut pour NOS questions candidates ; l'imposer ici
+/// reviendrait à reformuler un instrument validé.
+const QScale ipipAccuracyScale = QScale(
+  id: 'ipip_accuracy_5',
+  options: [
+    QScaleOption(
+      value: 1,
+      label: QText(
+        fr: 'Très inexact',
+        en: 'Very Inaccurate',
+        enGB: 'Very Inaccurate',
+        de: 'Sehr unzutreffend',
+        es: 'Muy inexacto',
+        pt: 'Muito inexato',
+      ),
+    ),
+    QScaleOption(
+      value: 2,
+      label: QText(
+        fr: 'Plutôt inexact',
+        en: 'Moderately Inaccurate',
+        enGB: 'Moderately Inaccurate',
+        de: 'Eher unzutreffend',
+        es: 'Bastante inexacto',
+        pt: 'Bastante inexato',
+      ),
+    ),
+    QScaleOption(
+      value: 3,
+      label: QText(
+        fr: 'Ni exact ni inexact',
+        en: 'Neither Accurate Nor Inaccurate',
+        enGB: 'Neither Accurate Nor Inaccurate',
+        de: 'Weder zutreffend noch unzutreffend',
+        es: 'Ni exacto ni inexacto',
+        pt: 'Nem exato nem inexato',
+      ),
+    ),
+    QScaleOption(
+      value: 4,
+      label: QText(
+        fr: 'Plutôt exact',
+        en: 'Moderately Accurate',
+        enGB: 'Moderately Accurate',
+        de: 'Eher zutreffend',
+        es: 'Bastante exacto',
+        pt: 'Bastante exato',
+      ),
+    ),
+    QScaleOption(
+      value: 5,
+      label: QText(
+        fr: 'Très exact',
+        en: 'Very Accurate',
+        enGB: 'Very Accurate',
+        de: 'Sehr zutreffend',
+        es: 'Muy exacto',
+        pt: 'Muito exato',
+      ),
+    ),
+  ],
+);
+
+/// Comment ces cinquante libellés sont arrivés ici.
+const QProvenance ipip50Provenance = QProvenance.recalled(
+  level: QSourceConfidence.high,
+  reference: 'International Personality Item Pool — 50-item Big-Five Factor '
+      'Markers (Goldberg, 1992), ipip.ori.org. Domaine public.',
+  note: 'Libellés anglais restitués de mémoire, sans confrontation à '
+      'ipip.ori.org. La structure est sûre — dix items par facteur, ordre '
+      'entrelacé, sens de cotation de chaque item — et les formulations sont '
+      'parmi les plus reproduites de la psychométrie. Le risque résiduel '
+      'porte sur une poignée d\'items dont la formulation se confond avec '
+      'celles de l\'IPIP-NEO-120 et du mini-IPIP-20, qui partagent des '
+      'tournures voisines. Les cinq autres langues sont nos traductions, non '
+      'des versions publiées : elles n\'ont pas de norme propre.',
+);
+
+/// Un item de l'IPIP, écrit une fois plutôt que cinquante.
+///
+/// [enGB] n'est renseigné que là où l'anglais britannique diffère réellement
+/// (un seul item sur cinquante) ; ailleurs il reprend [en] à l'identique,
+/// parce que la garde de parité exige les six langues et qu'un repli
+/// silencieux est précisément ce qu'elle existe pour empêcher.
+QItem _item(
+  int numero, {
+  required String trait,
+  required bool reversed,
+  required String en,
+  required String fr,
+  required String de,
+  required String es,
+  required String pt,
+  String? enGB,
+}) =>
+    QItem(
+      id: 'ipip50_q${numero.toString().padLeft(2, '0')}',
+      subscale: trait,
+      reverseScored: reversed,
+      text: QText(fr: fr, en: en, enGB: enGB ?? en, de: de, es: es, pt: pt),
+    );
+
+/// Les 50 items, dans l'ordre de passation publié.
+final List<QItem> ipip50Items = [
+  _item(1,
+      trait: IpipTrait.extraversion,
+      reversed: false,
+      en: 'Am the life of the party.',
+      fr: 'Je suis l\'âme de la fête.',
+      de: 'Ich bin die Seele der Party.',
+      es: 'Soy el alma de la fiesta.',
+      pt: 'Sou a alma da festa.'),
+  _item(2,
+      trait: IpipTrait.agreeableness,
+      reversed: true,
+      en: 'Feel little concern for others.',
+      fr: 'Je me soucie peu des autres.',
+      de: 'Ich mache mir wenig Gedanken um andere.',
+      es: 'Me preocupo poco por los demás.',
+      pt: 'Preocupo-me pouco com os outros.'),
+  _item(3,
+      trait: IpipTrait.conscientiousness,
+      reversed: false,
+      en: 'Am always prepared.',
+      fr: 'Je me prépare toujours.',
+      de: 'Ich bin immer vorbereitet.',
+      es: 'Siempre me preparo.',
+      pt: 'Preparo-me sempre.'),
+  _item(4,
+      trait: IpipTrait.stability,
+      reversed: true,
+      en: 'Get stressed out easily.',
+      fr: 'Je stresse facilement.',
+      de: 'Ich gerate leicht unter Stress.',
+      es: 'Me estreso con facilidad.',
+      pt: 'Fico em stress com facilidade.'),
+  _item(5,
+      trait: IpipTrait.intellect,
+      reversed: false,
+      en: 'Have a rich vocabulary.',
+      fr: 'J\'ai un vocabulaire riche.',
+      de: 'Ich habe einen großen Wortschatz.',
+      es: 'Tengo un vocabulario amplio.',
+      pt: 'Tenho um vocabulário rico.'),
+  _item(6,
+      trait: IpipTrait.extraversion,
+      reversed: true,
+      en: 'Don\'t talk a lot.',
+      fr: 'Je ne parle pas beaucoup.',
+      de: 'Ich rede nicht viel.',
+      es: 'No hablo mucho.',
+      pt: 'Não falo muito.'),
+  _item(7,
+      trait: IpipTrait.agreeableness,
+      reversed: false,
+      en: 'Am interested in people.',
+      fr: 'Les gens m\'intéressent.',
+      de: 'Ich interessiere mich für Menschen.',
+      es: 'Me intereso por la gente.',
+      pt: 'Interesso-me pelas pessoas.'),
+  _item(8,
+      trait: IpipTrait.conscientiousness,
+      reversed: true,
+      en: 'Leave my belongings around.',
+      fr: 'Je laisse traîner mes affaires.',
+      de: 'Ich lasse meine Sachen herumliegen.',
+      es: 'Dejo mis cosas por ahí.',
+      pt: 'Deixo as minhas coisas espalhadas.'),
+  _item(9,
+      trait: IpipTrait.stability,
+      reversed: false,
+      en: 'Am relaxed most of the time.',
+      fr: 'La plupart du temps, je suis calme.',
+      de: 'Meistens bin ich entspannt.',
+      es: 'La mayor parte del tiempo me siento en calma.',
+      pt: 'Na maior parte do tempo, mantenho a calma.'),
+  _item(10,
+      trait: IpipTrait.intellect,
+      reversed: true,
+      en: 'Have difficulty understanding abstract ideas.',
+      fr: 'J\'ai du mal à comprendre les idées abstraites.',
+      de: 'Es fällt mir schwer, abstrakte Ideen zu verstehen.',
+      es: 'Me cuesta entender las ideas abstractas.',
+      pt: 'Tenho dificuldade em compreender ideias abstratas.'),
+  _item(11,
+      trait: IpipTrait.extraversion,
+      reversed: false,
+      en: 'Feel comfortable around people.',
+      fr: 'Je me sens à l\'aise avec les gens.',
+      de: 'Ich fühle mich in Gesellschaft wohl.',
+      es: 'Me siento a gusto con la gente.',
+      pt: 'Sinto-me à vontade com as pessoas.'),
+  _item(12,
+      trait: IpipTrait.agreeableness,
+      reversed: true,
+      en: 'Insult people.',
+      fr: 'J\'insulte les gens.',
+      de: 'Ich beleidige andere.',
+      es: 'Insulto a la gente.',
+      pt: 'Insulto as pessoas.'),
+  _item(13,
+      trait: IpipTrait.conscientiousness,
+      reversed: false,
+      en: 'Pay attention to details.',
+      fr: 'Je fais attention aux détails.',
+      de: 'Ich achte auf Details.',
+      es: 'Presto atención a los detalles.',
+      pt: 'Presto atenção aos detalhes.'),
+  _item(14,
+      trait: IpipTrait.stability,
+      reversed: true,
+      en: 'Worry about things.',
+      fr: 'Je m\'inquiète pour les choses.',
+      de: 'Ich mache mir Sorgen um Dinge.',
+      es: 'Me preocupo por las cosas.',
+      pt: 'Preocupo-me com as coisas.'),
+  _item(15,
+      trait: IpipTrait.intellect,
+      reversed: false,
+      en: 'Have a vivid imagination.',
+      fr: 'J\'ai une imagination débordante.',
+      de: 'Ich habe eine lebhafte Fantasie.',
+      es: 'Tengo una imaginación viva.',
+      pt: 'Tenho uma imaginação viva.'),
+  _item(16,
+      trait: IpipTrait.extraversion,
+      reversed: true,
+      en: 'Keep in the background.',
+      fr: 'Je reste en retrait.',
+      de: 'Ich halte mich im Hintergrund.',
+      es: 'Me mantengo en un segundo plano.',
+      pt: 'Fico em segundo plano.'),
+  _item(17,
+      trait: IpipTrait.agreeableness,
+      reversed: false,
+      en: 'Sympathize with others\' feelings.',
+      fr: 'Je comprends ce que les autres ressentent.',
+      de: 'Ich fühle mit den Gefühlen anderer mit.',
+      es: 'Comprendo los sentimientos de los demás.',
+      pt: 'Compreendo os sentimentos dos outros.'),
+  _item(18,
+      trait: IpipTrait.conscientiousness,
+      reversed: true,
+      en: 'Make a mess of things.',
+      fr: 'Je fais les choses n\'importe comment.',
+      de: 'Ich bringe Dinge durcheinander.',
+      es: 'Hago las cosas de cualquier manera.',
+      pt: 'Faço as coisas de qualquer maneira.'),
+  _item(19,
+      trait: IpipTrait.stability,
+      reversed: false,
+      en: 'Seldom feel blue.',
+      fr: 'J\'ai rarement le cafard.',
+      de: 'Ich bin selten niedergeschlagen.',
+      es: 'Rara vez me siento con el ánimo bajo.',
+      pt: 'Raramente me sinto em baixo.'),
+  _item(20,
+      trait: IpipTrait.intellect,
+      reversed: true,
+      en: 'Am not interested in abstract ideas.',
+      fr: 'Les idées abstraites ne m\'intéressent pas.',
+      de: 'Abstrakte Ideen interessieren mich nicht.',
+      es: 'No me interesan las ideas abstractas.',
+      pt: 'Não me interessam as ideias abstratas.'),
+  _item(21,
+      trait: IpipTrait.extraversion,
+      reversed: false,
+      en: 'Start conversations.',
+      fr: 'J\'engage la conversation.',
+      de: 'Ich beginne Gespräche.',
+      es: 'Inicio conversaciones.',
+      pt: 'Inicio conversas.'),
+  _item(22,
+      trait: IpipTrait.agreeableness,
+      reversed: true,
+      en: 'Am not interested in other people\'s problems.',
+      fr: 'Les problèmes des autres ne m\'intéressent pas.',
+      de: 'Die Probleme anderer interessieren mich nicht.',
+      es: 'No me interesan los problemas de los demás.',
+      pt: 'Não me interessam os problemas dos outros.'),
+  _item(23,
+      trait: IpipTrait.conscientiousness,
+      reversed: false,
+      en: 'Get chores done right away.',
+      fr: 'Je fais mes tâches tout de suite.',
+      de: 'Ich erledige Aufgaben sofort.',
+      es: 'Hago las tareas de inmediato.',
+      pt: 'Trato das tarefas de imediato.'),
+  _item(24,
+      trait: IpipTrait.stability,
+      reversed: true,
+      en: 'Am easily disturbed.',
+      fr: 'Un rien me perturbe.',
+      de: 'Ich lasse mich leicht aus der Ruhe bringen.',
+      es: 'Me altero con facilidad.',
+      pt: 'Perturbo-me com facilidade.'),
+  _item(25,
+      trait: IpipTrait.intellect,
+      reversed: false,
+      en: 'Have excellent ideas.',
+      fr: 'J\'ai d\'excellentes idées.',
+      de: 'Ich habe ausgezeichnete Ideen.',
+      es: 'Tengo ideas excelentes.',
+      pt: 'Tenho ideias excelentes.'),
+  _item(26,
+      trait: IpipTrait.extraversion,
+      reversed: true,
+      en: 'Have little to say.',
+      fr: 'J\'ai peu de choses à dire.',
+      de: 'Ich habe wenig zu sagen.',
+      es: 'Tengo poco que decir.',
+      pt: 'Tenho pouco a dizer.'),
+  _item(27,
+      trait: IpipTrait.agreeableness,
+      reversed: false,
+      en: 'Have a soft heart.',
+      fr: 'J\'ai le cœur tendre.',
+      de: 'Ich habe ein weiches Herz.',
+      es: 'Tengo buen corazón.',
+      pt: 'Tenho um coração mole.'),
+  _item(28,
+      trait: IpipTrait.conscientiousness,
+      reversed: true,
+      en: 'Often forget to put things back in their proper place.',
+      fr: 'J\'oublie souvent de ranger les choses à leur place.',
+      de: 'Ich vergesse oft, Dinge an ihren Platz zurückzulegen.',
+      es: 'A menudo olvido devolver las cosas a su sitio.',
+      pt: 'Esqueço-me muitas vezes de voltar a pôr as coisas no lugar.'),
+  _item(29,
+      trait: IpipTrait.stability,
+      reversed: true,
+      en: 'Get upset easily.',
+      fr: 'Je me contrarie facilement.',
+      de: 'Ich rege mich leicht auf.',
+      es: 'Me disgusto con facilidad.',
+      pt: 'Aborreço-me com facilidade.'),
+  _item(30,
+      trait: IpipTrait.intellect,
+      reversed: true,
+      en: 'Do not have a good imagination.',
+      fr: 'Je n\'ai pas beaucoup d\'imagination.',
+      de: 'Ich habe keine gute Fantasie.',
+      es: 'No tengo buena imaginación.',
+      pt: 'Não tenho boa imaginação.'),
+  _item(31,
+      trait: IpipTrait.extraversion,
+      reversed: false,
+      en: 'Talk to a lot of different people at parties.',
+      fr: 'En soirée, je parle à beaucoup de gens différents.',
+      de: 'Auf Partys spreche ich mit vielen verschiedenen Leuten.',
+      es: 'En las fiestas hablo con mucha gente diferente.',
+      pt: 'Nas festas falo com muitas pessoas diferentes.'),
+  _item(32,
+      trait: IpipTrait.agreeableness,
+      reversed: true,
+      en: 'Am not really interested in others.',
+      fr: 'Les autres ne m\'intéressent pas vraiment.',
+      de: 'Andere interessieren mich nicht wirklich.',
+      es: 'Los demás no me interesan realmente.',
+      pt: 'Os outros não me interessam realmente.'),
+  _item(33,
+      trait: IpipTrait.conscientiousness,
+      reversed: false,
+      en: 'Like order.',
+      fr: 'J\'aime l\'ordre.',
+      de: 'Ich mag Ordnung.',
+      es: 'Me gusta el orden.',
+      pt: 'Gosto de ordem.'),
+  _item(34,
+      trait: IpipTrait.stability,
+      reversed: true,
+      en: 'Change my mood a lot.',
+      fr: 'Mon humeur change beaucoup.',
+      de: 'Meine Stimmung wechselt oft.',
+      es: 'Mi estado de ánimo cambia mucho.',
+      pt: 'O meu estado de espírito muda muito.'),
+  _item(35,
+      trait: IpipTrait.intellect,
+      reversed: false,
+      en: 'Am quick to understand things.',
+      fr: 'Je comprends vite.',
+      de: 'Ich begreife schnell.',
+      es: 'Entiendo las cosas rápido.',
+      pt: 'Compreendo as coisas depressa.'),
+  _item(36,
+      trait: IpipTrait.extraversion,
+      reversed: true,
+      en: 'Don\'t like to draw attention to myself.',
+      fr: 'Je n\'aime pas attirer l\'attention sur moi.',
+      de: 'Ich mag es nicht, Aufmerksamkeit auf mich zu ziehen.',
+      es: 'No me gusta llamar la atención.',
+      pt: 'Não gosto de chamar a atenção.'),
+  _item(37,
+      trait: IpipTrait.agreeableness,
+      reversed: false,
+      en: 'Take time out for others.',
+      fr: 'Je prends du temps pour les autres.',
+      de: 'Ich nehme mir Zeit für andere.',
+      es: 'Dedico tiempo a los demás.',
+      pt: 'Arranjo tempo para os outros.'),
+  _item(38,
+      trait: IpipTrait.conscientiousness,
+      reversed: true,
+      en: 'Shirk my duties.',
+      fr: 'Je me dérobe à mes obligations.',
+      de: 'Ich drücke mich vor meinen Pflichten.',
+      es: 'Eludo mis obligaciones.',
+      pt: 'Fujo às minhas obrigações.'),
+  _item(39,
+      trait: IpipTrait.stability,
+      reversed: true,
+      en: 'Have frequent mood swings.',
+      fr: 'J\'ai de fréquentes sautes d\'humeur.',
+      de: 'Ich habe häufige Stimmungsschwankungen.',
+      es: 'Tengo cambios de humor frecuentes.',
+      pt: 'Tenho mudanças de humor frequentes.'),
+  _item(40,
+      trait: IpipTrait.intellect,
+      reversed: false,
+      en: 'Use difficult words.',
+      fr: 'J\'emploie des mots compliqués.',
+      de: 'Ich benutze schwierige Wörter.',
+      es: 'Uso palabras difíciles.',
+      pt: 'Uso palavras difíceis.'),
+  // Le seul item où l'anglais britannique diffère réellement.
+  _item(41,
+      trait: IpipTrait.extraversion,
+      reversed: false,
+      en: 'Don\'t mind being the center of attention.',
+      enGB: 'Don\'t mind being the centre of attention.',
+      fr: 'Être au centre de l\'attention ne me dérange pas.',
+      de: 'Es macht mir nichts aus, im Mittelpunkt zu stehen.',
+      es: 'No me importa ser el centro de atención.',
+      pt: 'Não me importo de ser o centro das atenções.'),
+  _item(42,
+      trait: IpipTrait.agreeableness,
+      reversed: false,
+      en: 'Feel others\' emotions.',
+      fr: 'Je ressens les émotions des autres.',
+      de: 'Ich spüre die Gefühle anderer.',
+      es: 'Siento las emociones de los demás.',
+      pt: 'Sinto as emoções dos outros.'),
+  _item(43,
+      trait: IpipTrait.conscientiousness,
+      reversed: false,
+      en: 'Follow a schedule.',
+      fr: 'Je suis un planning.',
+      de: 'Ich halte mich an einen Zeitplan.',
+      es: 'Sigo un horario.',
+      pt: 'Sigo um horário.'),
+  _item(44,
+      trait: IpipTrait.stability,
+      reversed: true,
+      en: 'Get irritated easily.',
+      fr: 'Je m\'irrite facilement.',
+      de: 'Ich werde leicht gereizt.',
+      es: 'Me irrito con facilidad.',
+      pt: 'Irrito-me com facilidade.'),
+  _item(45,
+      trait: IpipTrait.intellect,
+      reversed: false,
+      en: 'Spend time reflecting on things.',
+      fr: 'Je passe du temps à réfléchir aux choses.',
+      de: 'Ich verbringe Zeit damit, über Dinge nachzudenken.',
+      es: 'Dedico tiempo a reflexionar sobre las cosas.',
+      pt: 'Passo tempo a refletir sobre as coisas.'),
+  _item(46,
+      trait: IpipTrait.extraversion,
+      reversed: true,
+      en: 'Am quiet around strangers.',
+      fr: 'Je parle peu avec les inconnus.',
+      de: 'Fremden gegenüber bin ich still.',
+      es: 'Hablo poco con desconocidos.',
+      pt: 'Falo pouco com desconhecidos.'),
+  _item(47,
+      trait: IpipTrait.agreeableness,
+      reversed: false,
+      en: 'Make people feel at ease.',
+      fr: 'Je mets les gens à l\'aise.',
+      de: 'Ich sorge dafür, dass andere sich wohlfühlen.',
+      es: 'Hago que la gente se sienta a gusto.',
+      pt: 'Faço com que as pessoas se sintam à vontade.'),
+  _item(48,
+      trait: IpipTrait.conscientiousness,
+      reversed: false,
+      en: 'Am exacting in my work.',
+      fr: 'J\'ai des exigences élevées dans mon travail.',
+      de: 'Ich bin in meiner Arbeit anspruchsvoll.',
+      es: 'Soy exigente en mi trabajo.',
+      pt: 'Sou exigente no meu trabalho.'),
+  _item(49,
+      trait: IpipTrait.stability,
+      reversed: true,
+      en: 'Often feel blue.',
+      fr: 'J\'ai souvent le cafard.',
+      de: 'Ich bin oft niedergeschlagen.',
+      es: 'A menudo me siento con el ánimo bajo.',
+      pt: 'Sinto-me muitas vezes em baixo.'),
+  _item(50,
+      trait: IpipTrait.intellect,
+      reversed: false,
+      en: 'Am full of ideas.',
+      fr: 'Je déborde d\'idées.',
+      de: 'Ich stecke voller Ideen.',
+      es: 'Tengo la cabeza llena de ideas.',
+      pt: 'Tenho a cabeça cheia de ideias.'),
+];
+
+/// Le bloc IPIP-50 — validé, intact, cinquante items en un seul tenant.
+///
+/// La citation est déclarée alors que l'IPIP n'en EXIGE aucune (domaine
+/// public, contrairement au RAADS-14 et au CAT-Q sous CC BY) : la page
+/// Méthodologie doit pouvoir dire d'où vient chaque bloc, et ne pas savoir
+/// distinguer « libre de citation » de « on a oublié de la mettre » serait le
+/// pire des deux mondes. `provenance` porte l'autre moitié de l'information :
+/// d'où vient le LIBELLÉ, et à quel point on en répond.
+final QInstrument ipip50 = QInstrument(
+  id: 'ipip50',
+  origin: QItemOrigin.validated,
+  scale: ipipAccuracyScale,
+  items: ipip50Items,
+  citation: 'International Personality Item Pool (ipip.ori.org) — '
+      '50-item Big-Five Factor Markers, Goldberg (1992). Domaine public.',
+  provenance: ipip50Provenance,
+);

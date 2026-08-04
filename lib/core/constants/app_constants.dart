@@ -76,6 +76,14 @@ class AppConstants {
   static const String tokeniserWorkerUrl =
       'https://mentality-tokeniser.devgreenpro.workers.dev';
 
+  /// URL du Cloudflare Worker qui reçoit les réponses de l'événement des
+  /// 8 jours (questionnaires, questions candidates, bloc diagnostic).
+  /// Déployer workers/event/ et remplacer cette valeur. Tant que l'URL reste
+  /// le placeholder, RIEN n'est envoyé : les questionnaires se passent, le
+  /// score s'affiche, et les réponses restent en local (chiffrées).
+  static const String eventWorkerUrl =
+      'https://mentality-event.YOUR_SUBDOMAIN.workers.dev';
+
   /// URL du Cloudflare Worker referral (déblocage des résultats par paliers).
   /// Déployer workers/referral/ et remplacer cette valeur. Tant que l'URL
   /// reste le placeholder, le gate est désactivé (résultats affichés
@@ -83,7 +91,7 @@ class AppConstants {
   static const String referralWorkerUrl =
       'https://mentality-referral.devgreenpro.workers.dev';
 
-  /// Active le déblocage des résultats par paliers (parrainage + Instagram).
+  /// Active le déblocage des résultats par paliers (parrainage + attente).
   /// Nécessite aussi une [referralWorkerUrl] réelle pour être effectif.
   static const bool unlockGateEnabled = true;
 
@@ -93,11 +101,6 @@ class AppConstants {
   /// (POST /link du worker referral) — aucun code à recopier. L'ancienne
   /// route /invite du site redirige elle aussi vers /inscription?ref=.
   static const String inviteBaseUrl = 'https://mental-et.com/inscription';
-
-  /// Compte Instagram à suivre pour le dernier palier de déblocage.
-  static const String instagramHandle = 'mental_e.t';
-  static const String instagramUrl =
-      'https://www.instagram.com/mental_e.t?igsh=b3hvM25zdHh2bm0y';
 
   /// Clés PUBLIQUES Ed25519 (32 octets, base64url) pour vérifier les tokens
   /// signés, indexées par `kid`. Ce n'est PAS un secret.

@@ -1089,24 +1089,6 @@ abstract class AppLocalizations {
   /// **'Retour à l\'accueil'**
   String get ctBackToHome;
 
-  /// Titre du dialogue affiché quand l'utilisateur quitte un sous-test sans le terminer
-  ///
-  /// In fr, this message translates to:
-  /// **'Sous-test interrompu'**
-  String get ctSubtestExitTitle;
-
-  /// Corps du dialogue de sortie d'un sous-test
-  ///
-  /// In fr, this message translates to:
-  /// **'Vous avez quitté ce sous-test avant de le terminer. Voulez-vous le reprendre ou arrêter l\'évaluation ?'**
-  String get ctSubtestExitBody;
-
-  /// Bouton pour reprendre le sous-test interrompu
-  ///
-  /// In fr, this message translates to:
-  /// **'Reprendre le sous-test'**
-  String get ctSubtestExitResume;
-
   /// Sous-titre du rapport PDF (sous le titre de marque)
   ///
   /// In fr, this message translates to:
@@ -3423,54 +3405,6 @@ abstract class AppLocalizations {
   /// **'Choisissez les 3 pièces qui forment la figure (rotations permises, retournements interdits).'**
   String get vpInstruction;
 
-  /// Puzzles visuels — eyebrow de la phase de démonstration non chronométrée
-  ///
-  /// In fr, this message translates to:
-  /// **'DÉMONSTRATION'**
-  String get vpDemoEyebrow;
-
-  /// Puzzles visuels — consigne de l'item de démonstration
-  ///
-  /// In fr, this message translates to:
-  /// **'Entraînement sans chrono : choisissez les 3 pièces qui forment la figure, puis validez.'**
-  String get vpDemoInstruction;
-
-  /// Puzzles visuels — bouton après une démo réussie, lance les items chronométrés
-  ///
-  /// In fr, this message translates to:
-  /// **'Commencer le test'**
-  String get vpDemoStart;
-
-  /// Puzzles visuels — bouton après une démo ratée, réinitialise la démo
-  ///
-  /// In fr, this message translates to:
-  /// **'Réessayer'**
-  String get vpDemoRetry;
-
-  /// Puzzles visuels — libellé neutre du bouton après validation d'un item réel (aucun feedback correct/incorrect pendant le test, conforme au protocole)
-  ///
-  /// In fr, this message translates to:
-  /// **'Réponse enregistrée'**
-  String get vpRecorded;
-
-  /// Puzzles visuels — titre de l'écran intermédiaire entre la démonstration et le premier item chronométré
-  ///
-  /// In fr, this message translates to:
-  /// **'Prêt ?'**
-  String get vpReadyTitle;
-
-  /// Puzzles visuels — texte de l'écran Prêt ; le chrono ne démarre qu'à l'appui sur le bouton
-  ///
-  /// In fr, this message translates to:
-  /// **'L\'entraînement est terminé. Le test commence : {count} puzzles, chacun avec son propre chrono. Le temps démarre dès que vous appuyez sur le bouton.'**
-  String vpReadyBody(int count);
-
-  /// Puzzles visuels — bouton de l'écran Prêt qui démarre l'item 1 et son chrono
-  ///
-  /// In fr, this message translates to:
-  /// **'Lancer le test'**
-  String get vpReadyStart;
-
   /// Puzzles visuels — étiquette d'accessibilité de l'indicateur de sélection
   ///
   /// In fr, this message translates to:
@@ -4395,6 +4329,378 @@ abstract class AppLocalizations {
   /// **'Fusée'**
   String get psImgFusee;
 
+  /// No description provided for @ctShareScore.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partager mon score'**
+  String get ctShareScore;
+
+  /// Corps du dialogue de sortie d'un sous-test
+  ///
+  /// In fr, this message translates to:
+  /// **'Vous avez quitté ce sous-test avant de le terminer. Voulez-vous le reprendre ou arrêter l\'évaluation ?'**
+  String get ctSubtestExitBody;
+
+  /// Bouton pour reprendre le sous-test interrompu
+  ///
+  /// In fr, this message translates to:
+  /// **'Reprendre le sous-test'**
+  String get ctSubtestExitResume;
+
+  /// Titre du dialogue affiché quand l'utilisateur quitte un sous-test sans le terminer
+  ///
+  /// In fr, this message translates to:
+  /// **'Sous-test interrompu'**
+  String get ctSubtestExitTitle;
+
+  /// Phase d'entraînement — libellé d'en-tête générique (partagé entre exercices)
+  ///
+  /// In fr, this message translates to:
+  /// **'ENTRAÎNEMENT'**
+  String get demoBadge;
+
+  /// Phase d'entraînement — bouton neutre pour poursuivre (exercices sans bonne/mauvaise réponse automatique)
+  ///
+  /// In fr, this message translates to:
+  /// **'Continuer'**
+  String get demoContinue;
+
+  /// Phase d'entraînement — bandeau expliquant que l'essai n'est pas noté
+  ///
+  /// In fr, this message translates to:
+  /// **'Entraînement — cet essai ne compte pas.'**
+  String get demoNotice;
+
+  /// Phase d'entraînement — bouton pour refaire l'essai
+  ///
+  /// In fr, this message translates to:
+  /// **'Réessayer'**
+  String get demoRetry;
+
+  /// Phase d'entraînement — bouton pour passer au test réel
+  ///
+  /// In fr, this message translates to:
+  /// **'Commencer le test'**
+  String get demoStart;
+
+  /// Phase d'entraînement — retour après un essai incorrect
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas tout à fait — réessayez'**
+  String get demoTryAgain;
+
+  /// Phase d'entraînement — retour positif après un essai correct
+  ///
+  /// In fr, this message translates to:
+  /// **'Bonne réponse !'**
+  String get demoWellDone;
+
+  /// No description provided for @histLockedBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton résultat est enregistré, mais il reste flouté tant que toutes les missions ne sont pas validées.'**
+  String get histLockedBody;
+
+  /// No description provided for @histLockedBodyNoResult.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tes missions et ton lien d\'invitation sont ici. Termine ton évaluation pour débloquer ton résultat.'**
+  String get histLockedBodyNoResult;
+
+  /// No description provided for @histLockedCta.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voir mes missions'**
+  String get histLockedCta;
+
+  /// No description provided for @histLockedTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Missions à valider'**
+  String get histLockedTitle;
+
+  /// No description provided for @inviteLandingBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Un ami t\'invite à passer le test de QI gratuit Mentality. En terminant ton test, tu obtiens ton propre résultat et tu aides ton ami à débloquer le sien.'**
+  String get inviteLandingBody;
+
+  /// No description provided for @inviteLandingCta.
+  ///
+  /// In fr, this message translates to:
+  /// **'Commencer le test gratuit'**
+  String get inviteLandingCta;
+
+  /// No description provided for @inviteLandingTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Invitation'**
+  String get inviteLandingTitle;
+
+  /// No description provided for @shareCancel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Annuler'**
+  String get shareCancel;
+
+  /// No description provided for @shareCodeLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Code d\'invitation'**
+  String get shareCodeLabel;
+
+  /// No description provided for @shareConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partager cette image'**
+  String get shareConfirm;
+
+  /// No description provided for @shareError.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible de préparer l\'image. Réessaie.'**
+  String get shareError;
+
+  /// No description provided for @shareEyebrow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aperçu'**
+  String get shareEyebrow;
+
+  /// No description provided for @shareIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'Voici l\'image qui sera partagée. Rien n\'est publié tant que tu n\'as pas confirmé.'**
+  String get shareIntro;
+
+  /// No description provided for @shareLinkCopied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton lien est copié — ajoute-le en sticker Lien sur ta story'**
+  String get shareLinkCopied;
+
+  /// No description provided for @sharePercentile.
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus élevé que {rank} % des participants'**
+  String sharePercentile(int rank);
+
+  /// No description provided for @shareScoreLabel.
+  ///
+  /// In fr, this message translates to:
+  /// **'Score global'**
+  String get shareScoreLabel;
+
+  /// No description provided for @shareTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partager mon score'**
+  String get shareTitle;
+
+  /// No description provided for @ugCopied.
+  ///
+  /// In fr, this message translates to:
+  /// **'Lien copié !'**
+  String get ugCopied;
+
+  /// No description provided for @ugCopyLink.
+  ///
+  /// In fr, this message translates to:
+  /// **'Copier mon lien d\'invitation'**
+  String get ugCopyLink;
+
+  /// No description provided for @ugErrorBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible de récupérer l\'état de ton déblocage. Vérifie ta connexion puis réessaie.'**
+  String get ugErrorBody;
+
+  /// No description provided for @ugEyebrow.
+  ///
+  /// In fr, this message translates to:
+  /// **'Dernières étapes'**
+  String get ugEyebrow;
+
+  /// No description provided for @ugFreeNotice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le test est 100 % gratuit. Pour recevoir ton résultat, il te reste quelques étapes simples : elles se valident automatiquement.'**
+  String get ugFreeNotice;
+
+  /// No description provided for @ugFriendDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ami {n} : test terminé'**
+  String ugFriendDone(int n);
+
+  /// No description provided for @ugFriendPending.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ami {n} : test en cours'**
+  String ugFriendPending(int n);
+
+  /// No description provided for @ugInviteCounter.
+  ///
+  /// In fr, this message translates to:
+  /// **'{joined}/{required} amis ont terminé leur test'**
+  String ugInviteCounter(int joined, int required);
+
+  /// No description provided for @ugRefresh.
+  ///
+  /// In fr, this message translates to:
+  /// **'Actualiser'**
+  String get ugRefresh;
+
+  /// No description provided for @ugRefreshFailed.
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible d\'actualiser. Vérifie ta connexion — les chiffres affichés datent de ta dernière connexion.'**
+  String get ugRefreshFailed;
+
+  /// No description provided for @ugResultsHubNotice.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tout se trouve dans « Mes résultats » : tes missions, ton lien d\'invitation et ton résultat (flouté tant que toutes les missions ne sont pas validées). Tu peux quitter cette page et revenir quand tu veux.'**
+  String get ugResultsHubNotice;
+
+  /// No description provided for @ugRetry.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réessayer'**
+  String get ugRetry;
+
+  /// No description provided for @ugStep1Body.
+  ///
+  /// In fr, this message translates to:
+  /// **'Partage ton lien personnel avec 3 amis. Cette étape avance quand ils TERMINENT leur test — pas seulement quand ils s\'inscrivent. Pense à les relancer.'**
+  String get ugStep1Body;
+
+  /// No description provided for @ugStep1Title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Invite 3 amis'**
+  String get ugStep1Title;
+
+  /// No description provided for @ugStep2Body.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tes amis doivent maintenant terminer leur test de QI. On attend leurs résultats — n\'hésite pas à les relancer !'**
+  String get ugStep2Body;
+
+  /// No description provided for @ugStep2Title.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tes amis passent leur test'**
+  String get ugStep2Title;
+
+  /// No description provided for @ugTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton résultat est prêt'**
+  String get ugTitle;
+
+  /// No description provided for @ugWaitBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'{days, plural, =0{Ton résultat est en préparation. Il sera publié automatiquement — tu n\'as plus rien à faire.} one{Ton résultat est en préparation. Il sera publié dans {days} jour, automatiquement — tu n\'as plus rien à faire.} other{Ton résultat est en préparation. Il sera publié dans {days} jours, automatiquement — tu n\'as plus rien à faire.}}'**
+  String ugWaitBody(int days);
+
+  /// No description provided for @ugWaitConfirming.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton résultat se débloque dès la confirmation du serveur — cet écran s\'actualise tout seul.'**
+  String get ugWaitConfirming;
+
+  /// No description provided for @ugWaitCountdownDays.
+  ///
+  /// In fr, this message translates to:
+  /// **'{days, plural, one{Encore {days} jour} other{Encore {days} jours}}'**
+  String ugWaitCountdownDays(int days);
+
+  /// No description provided for @ugWaitCountdownDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le délai est écoulé.'**
+  String get ugWaitCountdownDone;
+
+  /// No description provided for @ugWaitCountdownHours.
+  ///
+  /// In fr, this message translates to:
+  /// **'{hours, plural, one{Encore {hours} heure} other{Encore {hours} heures}}'**
+  String ugWaitCountdownHours(int hours);
+
+  /// No description provided for @ugWaitCountdownMinutes.
+  ///
+  /// In fr, this message translates to:
+  /// **'{minutes, plural, one{Encore {minutes} minute} other{Encore {minutes} minutes}}'**
+  String ugWaitCountdownMinutes(int minutes);
+
+  /// No description provided for @ugWaitTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Tes résultats arrivent'**
+  String get ugWaitTitle;
+
+  /// Puzzles visuels — eyebrow de la phase de démonstration non chronométrée
+  ///
+  /// In fr, this message translates to:
+  /// **'DÉMONSTRATION'**
+  String get vpDemoEyebrow;
+
+  /// Puzzles visuels — consigne de l'item de démonstration
+  ///
+  /// In fr, this message translates to:
+  /// **'Entraînement sans chrono : choisissez les 3 pièces qui forment la figure, puis validez.'**
+  String get vpDemoInstruction;
+
+  /// Puzzles visuels — bouton après une démo ratée, réinitialise la démo
+  ///
+  /// In fr, this message translates to:
+  /// **'Réessayer'**
+  String get vpDemoRetry;
+
+  /// Puzzles visuels — bouton après une démo réussie, lance les items chronométrés
+  ///
+  /// In fr, this message translates to:
+  /// **'Commencer le test'**
+  String get vpDemoStart;
+
+  /// Puzzles visuels — texte de l'écran Prêt ; le chrono ne démarre qu'à l'appui sur le bouton
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'entraînement est terminé. Le test commence : {count} puzzles, chacun avec son propre chrono. Le temps démarre dès que vous appuyez sur le bouton.'**
+  String vpReadyBody(int count);
+
+  /// Puzzles visuels — bouton de l'écran Prêt qui démarre l'item 1 et son chrono
+  ///
+  /// In fr, this message translates to:
+  /// **'Lancer le test'**
+  String get vpReadyStart;
+
+  /// Puzzles visuels — titre de l'écran intermédiaire entre la démonstration et le premier item chronométré
+  ///
+  /// In fr, this message translates to:
+  /// **'Prêt ?'**
+  String get vpReadyTitle;
+
+  /// Puzzles visuels — libellé neutre du bouton après validation d'un item réel (aucun feedback correct/incorrect pendant le test, conforme au protocole)
+  ///
+  /// In fr, this message translates to:
+  /// **'Réponse enregistrée'**
+  String get vpRecorded;
+
+  /// Avertissement affiché quand la déclaration de fin de test n'a pas abouti.
+  ///
+  /// In fr, this message translates to:
+  /// **'Fin de test pas encore confirmée par le serveur. Nous réessayons automatiquement — garde une connexion et rouvre l\'app si besoin.'**
+  String get completionPendingNotice;
+
+  /// Avertissement affiché quand la déclaration de fin de test n'a pas abouti.
+  ///
+  /// In fr, this message translates to:
+  /// **'Cette passation n\'a pas pu être validée : elle a été jugée trop courte. Elle ne compte pas pour la mission de parrainage.'**
+  String get completionRejectedNotice;
+
   /// Vocabulaire — nom du test affiché dans le scaffold
   ///
   /// In fr, this message translates to:
@@ -4653,257 +4959,1355 @@ abstract class AppLocalizations {
   /// **'• Expliquez le sens avec contexte'**
   String get vocabTipContext;
 
-  /// Phase d'entraînement — libellé d'en-tête générique (partagé entre exercices)
+  /// Bouton de la carte d'attente qui ouvre le hub de l'événement des 8 jours
   ///
   /// In fr, this message translates to:
-  /// **'ENTRAÎNEMENT'**
-  String get demoBadge;
+  /// **'Voir le programme du jour'**
+  String get weGateCta;
 
-  /// Phase d'entraînement — bandeau expliquant que l'essai n'est pas noté
+  /// Surtitre du hub de l'événement
   ///
   /// In fr, this message translates to:
-  /// **'Entraînement — cet essai ne compte pas.'**
-  String get demoNotice;
+  /// **'Pendant l\'attente'**
+  String get weHubEyebrow;
 
-  /// Phase d'entraînement — bouton pour passer au test réel
+  /// Titre du hub : le jour courant, décidé par le serveur
   ///
   /// In fr, this message translates to:
-  /// **'Commencer le test'**
-  String get demoStart;
+  /// **'Jour {day}'**
+  String weHubTitle(int day);
 
-  /// Phase d'entraînement — bouton pour refaire l'essai
+  /// Titre du hub une fois les résultats débloqués
   ///
   /// In fr, this message translates to:
-  /// **'Réessayer'**
-  String get demoRetry;
+  /// **'Programme terminé'**
+  String get weHubTitleDone;
 
-  /// Phase d'entraînement — bouton neutre pour poursuivre (exercices sans bonne/mauvaise réponse automatique)
+  /// Introduction du hub — dit explicitement qu'aucune activité ne conditionne le déblocage
+  ///
+  /// In fr, this message translates to:
+  /// **'Chaque jour, une part de tes résultats se dévoile, avec une activité facultative. Rien ici n\'accélère le déblocage : seul le temps débloque.'**
+  String get weHubIntro;
+
+  /// Étiquette de la journée en cours
+  ///
+  /// In fr, this message translates to:
+  /// **'Aujourd\'hui'**
+  String get weTodayTag;
+
+  /// Étiquette d'une journée passée, qui reste accessible
+  ///
+  /// In fr, this message translates to:
+  /// **'À rattraper'**
+  String get wePastTag;
+
+  /// Étiquette d'une journée à venir
+  ///
+  /// In fr, this message translates to:
+  /// **'S\'ouvre au jour {day}'**
+  String weLockedTag(int day);
+
+  /// Titre affiché à l'ouverture d'une journée dont le contenu n'est pas encore disponible
+  ///
+  /// In fr, this message translates to:
+  /// **'En préparation'**
+  String get wePlaceholderTitle;
+
+  /// Corps du message d'une journée sans contenu disponible
+  ///
+  /// In fr, this message translates to:
+  /// **'Le contenu de cette journée arrive dans une prochaine mise à jour.'**
+  String get wePlaceholderBody;
+
+  /// Cadrage d'une journée dont le test affiche un score
+  ///
+  /// In fr, this message translates to:
+  /// **'Test du jour — avec ton résultat'**
+  String get weAnnouncedTag;
+
+  /// Cadrage d'une journée de questions candidates, sans score affiché
+  ///
+  /// In fr, this message translates to:
+  /// **'Contribution — aide-nous à construire notre test'**
+  String get weContributionTag;
+
+  /// Cadrage du dernier jour
+  ///
+  /// In fr, this message translates to:
+  /// **'Récompense finale'**
+  String get weShareTag;
+
+  /// Titre du jour 1
+  ///
+  /// In fr, this message translates to:
+  /// **'Ta personnalité'**
+  String get weDay1Title;
+
+  /// Titre du jour 2
+  ///
+  /// In fr, this message translates to:
+  /// **'Construis notre test de lecture'**
+  String get weDay2Title;
+
+  /// Titre du jour 3
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton équilibre'**
+  String get weDay3Title;
+
+  /// Titre du jour 4
+  ///
+  /// In fr, this message translates to:
+  /// **'Construis notre test d\'attention (1/2)'**
+  String get weDay4Title;
+
+  /// Titre du jour 5
+  ///
+  /// In fr, this message translates to:
+  /// **'Construis notre test d\'attention (2/2)'**
+  String get weDay5Title;
+
+  /// Titre du jour 6
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton énergie'**
+  String get weDay6Title;
+
+  /// Titre du jour 7
+  ///
+  /// In fr, this message translates to:
+  /// **'Bilan autisme'**
+  String get weDay7Title;
+
+  /// Titre du jour 8
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton QI global'**
+  String get weDay8Title;
+
+  /// Nom de la révélation du jour 1
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton indice verbal'**
+  String get weRevealVci;
+
+  /// Nom de la révélation du jour 2
+  ///
+  /// In fr, this message translates to:
+  /// **'Ta vitesse de traitement'**
+  String get weRevealPsi;
+
+  /// Nom de la révélation du jour 3
+  ///
+  /// In fr, this message translates to:
+  /// **'Ta mémoire de travail'**
+  String get weRevealWmi;
+
+  /// Nom de la révélation du jour 4
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton raisonnement'**
+  String get weRevealFri;
+
+  /// Nom de la révélation du jour 5
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton indice spatial'**
+  String get weRevealVsi;
+
+  /// Nom de la révélation du jour 6
+  ///
+  /// In fr, this message translates to:
+  /// **'Tes forces et tes faiblesses'**
+  String get weRevealStrengths;
+
+  /// Nom de la révélation du jour 8
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton QI global'**
+  String get weRevealFullIq;
+
+  /// Nom du jeu du jour 2
+  ///
+  /// In fr, this message translates to:
+  /// **'Jeu : Stroop'**
+  String get weGameStroop;
+
+  /// Nom du jeu du jour 4
+  ///
+  /// In fr, this message translates to:
+  /// **'Jeu : tolérance au délai'**
+  String get weGameDelayChoice;
+
+  /// Nom du jeu du jour 5
+  ///
+  /// In fr, this message translates to:
+  /// **'Jeu : estimation du temps'**
+  String get weGameTimeEstimation;
+
+  /// Nom du jeu du jour 6
+  ///
+  /// In fr, this message translates to:
+  /// **'Jeu : calibration de la confiance'**
+  String get weGameConfidence;
+
+  /// Bouton d'avance du questionnaire — désactivé tant que la question n'a pas de réponse
+  ///
+  /// In fr, this message translates to:
+  /// **'Suivant'**
+  String get weRunnerNext;
+
+  /// Bouton d'avance sur la dernière question du questionnaire
+  ///
+  /// In fr, this message translates to:
+  /// **'Terminer'**
+  String get weRunnerFinish;
+
+  /// Retour à la question précédente pour se corriger
+  ///
+  /// In fr, this message translates to:
+  /// **'Précédent'**
+  String get weRunnerBack;
+
+  /// Étiquette de la barre de progression pour un test dont le résultat sera affiché
+  ///
+  /// In fr, this message translates to:
+  /// **'Test du jour'**
+  String get weRunnerScoredLabel;
+
+  /// Étiquette de la barre de progression pour un questionnaire de contribution, sans score
+  ///
+  /// In fr, this message translates to:
+  /// **'Contribution'**
+  String get weRunnerContributionLabel;
+
+  /// Message affiché à la reprise d'un questionnaire commencé plus tôt
+  ///
+  /// In fr, this message translates to:
+  /// **'Tu reprends là où tu t\'étais arrêté.'**
+  String get weRunnerResumed;
+
+  /// Cadrage honnête d'un bloc de questions candidates, affiché pendant la passation
+  ///
+  /// In fr, this message translates to:
+  /// **'Ces questions ne calculent aucun score pour toi : elles servent à construire l\'outil pour les suivants.'**
+  String get weRunnerNoScoreNotice;
+
+  /// Titre de la confirmation de sortie en cours de questionnaire
+  ///
+  /// In fr, this message translates to:
+  /// **'Quitter le questionnaire ?'**
+  String get weRunnerQuitTitle;
+
+  /// Corps de la confirmation de sortie — dit que rien n'est perdu
+  ///
+  /// In fr, this message translates to:
+  /// **'Tes réponses sont enregistrées. Tu pourras reprendre à la question où tu t\'arrêtes.'**
+  String get weRunnerQuitBody;
+
+  /// Bouton qui referme la confirmation et reprend le questionnaire
   ///
   /// In fr, this message translates to:
   /// **'Continuer'**
-  String get demoContinue;
+  String get weRunnerQuitStay;
 
-  /// Phase d'entraînement — retour positif après un essai correct
+  /// Bouton qui confirme la sortie du questionnaire
   ///
   /// In fr, this message translates to:
-  /// **'Bonne réponse !'**
-  String get demoWellDone;
+  /// **'Quitter'**
+  String get weRunnerQuitLeave;
 
-  /// Phase d'entraînement — retour après un essai incorrect
+  /// Bouton de l'écran de transition annonçant un changement d'échelle de réponse
   ///
   /// In fr, this message translates to:
-  /// **'Pas tout à fait — réessayez'**
-  String get demoTryAgain;
+  /// **'Continuer'**
+  String get weRunnerTransitionCta;
 
-  /// No description provided for @ugTitle.
+  /// Titre de l'écran de fin du questionnaire
   ///
   /// In fr, this message translates to:
-  /// **'Ton résultat est prêt'**
-  String get ugTitle;
+  /// **'C\'est terminé'**
+  String get weRunnerDoneTitle;
 
-  /// No description provided for @ugEyebrow.
+  /// Fin d'un questionnaire dont le résultat sera affiché
   ///
   /// In fr, this message translates to:
-  /// **'Dernières étapes'**
-  String get ugEyebrow;
+  /// **'Merci — tes réponses sont enregistrées.'**
+  String get weRunnerDoneBody;
 
-  /// No description provided for @ugFreeNotice.
+  /// Fin d'un questionnaire de contribution — rappelle qu'aucun score n'est promis
   ///
   /// In fr, this message translates to:
-  /// **'Le test est 100 % gratuit. Pour recevoir ton résultat, il te reste quelques étapes simples : elles se valident automatiquement.'**
-  String get ugFreeNotice;
+  /// **'Merci — tes réponses vont servir à construire notre test. Aucun score n\'est calculé pour toi.'**
+  String get weRunnerDoneContributionBody;
 
-  /// No description provided for @ugErrorBody.
+  /// Bouton de sortie de l'écran de fin, vers le hub de l'événement
   ///
   /// In fr, this message translates to:
-  /// **'Impossible de récupérer l\'état de ton déblocage. Vérifie ta connexion puis réessaie.'**
-  String get ugErrorBody;
+  /// **'Revenir au programme'**
+  String get weRunnerDoneCta;
 
-  /// No description provided for @ugRetry.
+  /// Surtitre de l'écran de révélation
   ///
   /// In fr, this message translates to:
-  /// **'Réessayer'**
-  String get ugRetry;
+  /// **'Ta révélation du jour'**
+  String get weRvEyebrow;
 
-  /// No description provided for @ugRefresh.
+  /// Bouton de sortie d'une révélation quand une activité suit
   ///
   /// In fr, this message translates to:
-  /// **'Actualiser'**
-  String get ugRefresh;
+  /// **'Continuer'**
+  String get weRvContinue;
 
-  /// No description provided for @ugStep1Title.
+  /// Bouton de sortie d'une révélation quand rien ne suit
   ///
   /// In fr, this message translates to:
-  /// **'Invite 3 amis'**
-  String get ugStep1Title;
+  /// **'Revenir au programme'**
+  String get weRvBackToHub;
 
-  /// No description provided for @ugStep1Body.
+  /// Étiquette mono au-dessus du nombre révélé
   ///
   /// In fr, this message translates to:
-  /// **'Partage ton lien personnel avec 3 amis. Cette étape avance quand ils TERMINENT leur test — pas seulement quand ils s\'inscrivent. Pense à les relancer.'**
-  String get ugStep1Body;
+  /// **'SCORE'**
+  String get weRvScoreLabel;
 
-  /// No description provided for @ugCopyLink.
+  /// Intervalle de confiance à 95 % du score révélé
   ///
   /// In fr, this message translates to:
-  /// **'Copier mon lien d\'invitation'**
-  String get ugCopyLink;
+  /// **'Intervalle de confiance à 95 % · {low} – {high}'**
+  String weRvCi(int low, int high);
 
-  /// No description provided for @ugCopied.
+  /// Mise en garde présente sur TOUTES les révélations : un score est une mesure avec sa marge d'erreur
   ///
   /// In fr, this message translates to:
-  /// **'Lien copié !'**
-  String get ugCopied;
+  /// **'Un indice est une mesure, avec sa marge d\'erreur — pas un verdict. Repasser le même bilan ne redonnerait pas exactement le même nombre.'**
+  String get weRvCaveat;
 
-  /// No description provided for @ugInviteCounter.
+  /// Titre quand aucun bilan n'est rattaché au passe courant
   ///
   /// In fr, this message translates to:
-  /// **'{joined}/{required} amis ont terminé leur test'**
-  String ugInviteCounter(int joined, int required);
+  /// **'Aucun bilan à révéler'**
+  String get weRvUnavailableTitle;
 
-  /// No description provided for @ugStep2Title.
+  /// Corps du message quand aucun bilan n'est rattaché au passe courant
   ///
   /// In fr, this message translates to:
-  /// **'Tes amis passent leur test'**
-  String get ugStep2Title;
+  /// **'Aucun bilan terminé n\'est rattaché à ce passe sur cet appareil. Rien n\'est perdu : la révélation s\'affichera dès que tes résultats seront de nouveau lisibles ici.'**
+  String get weRvUnavailableBody;
 
-  /// No description provided for @ugStep2Body.
+  /// Titre quand l'indice du jour n'a pas été calculé (sous-test manquant)
   ///
   /// In fr, this message translates to:
-  /// **'Tes amis doivent maintenant terminer leur test de QI. On attend leurs résultats — n\'hésite pas à les relancer !'**
-  String get ugStep2Body;
+  /// **'Cet indice n\'a pas été calculé'**
+  String get weRvMissingTitle;
 
-  /// No description provided for @ugFriendDone.
+  /// Corps du message quand l'indice du jour n'a pas été calculé
   ///
   /// In fr, this message translates to:
-  /// **'Ami {n} : test terminé'**
-  String ugFriendDone(int n);
+  /// **'Ton bilan enregistré ne contient pas cet indice — il y manquait un sous-test. Les autres révélations restent disponibles.'**
+  String get weRvMissingBody;
 
-  /// No description provided for @ugFriendPending.
+  /// Explication de l'indice de compréhension verbale, jour 1
   ///
   /// In fr, this message translates to:
-  /// **'Ami {n} : test en cours'**
-  String ugFriendPending(int n);
+  /// **'Ce que tu sais des mots et des idées, et ta façon de les relier : définir, expliquer, retrouver ce qui rapproche deux notions. C\'est la part du profil qui bouge le moins avec les années.'**
+  String get weRvVciBody;
 
-  /// No description provided for @ugWaitingCounter.
+  /// Explication de l'indice visuo-spatial, jour 5
   ///
   /// In fr, this message translates to:
-  /// **'{done}/{required} tests terminés'**
-  String ugWaitingCounter(int done, int required);
+  /// **'Ta façon de manipuler les formes et l\'espace : reconstruire un motif, voir comment des pièces s\'assemblent avant même de les avoir posées.'**
+  String get weRvVsiBody;
 
-  /// No description provided for @ugStep3Title.
+  /// Explication de l'indice de raisonnement fluide, jour 4
   ///
   /// In fr, this message translates to:
-  /// **'Dernière étape : Instagram'**
-  String get ugStep3Title;
+  /// **'Ta façon de trouver une règle que personne ne t\'a donnée, à partir de ce que tu observes. C\'est le raisonnement qui ne doit rien à ce que tu as appris.'**
+  String get weRvFriBody;
 
-  /// No description provided for @ugStep3Body.
+  /// Explication de l'indice de mémoire de travail, jour 3
   ///
   /// In fr, this message translates to:
-  /// **'Abonne-toi à notre compte @{handle} puis indique ton pseudo. On vérifie ton abonnement et ton résultat est débloqué.'**
-  String ugStep3Body(String handle);
+  /// **'Ce que tu peux garder en tête ET manipuler en même temps : retenir une suite tout en la réorganisant. C\'est l\'indice le plus sensible à la fatigue et au stress.'**
+  String get weRvWmiBody;
 
-  /// No description provided for @ugFollowButton.
+  /// Explication de l'indice de vitesse de traitement, jour 2
   ///
   /// In fr, this message translates to:
-  /// **'Suivre @{handle} sur Instagram'**
-  String ugFollowButton(String handle);
+  /// **'La vitesse à laquelle tu traites une information simple sans te tromper. Ce n\'est pas « penser vite » : c\'est un débit, et il se paie en attention.'**
+  String get weRvPsiBody;
 
-  /// No description provided for @ugInstaFieldLabel.
+  /// Titre de la révélation du jour 6 (forces et faiblesses)
   ///
   /// In fr, this message translates to:
-  /// **'Ton pseudo Instagram'**
-  String get ugInstaFieldLabel;
+  /// **'Tes forces et tes points de vigilance'**
+  String get weRvStrengthsTitle;
 
-  /// No description provided for @ugInstaSubmit.
+  /// Introduction de la révélation du jour 6 : une force est RELATIVE au niveau moyen de la personne
   ///
   /// In fr, this message translates to:
-  /// **'Valider mon abonnement'**
-  String get ugInstaSubmit;
+  /// **'Aujourd\'hui, les cinq indices se comparent entre eux. Une force n\'est pas un talent absolu : c\'est ce qui dépasse ton propre niveau moyen de plus de 10 points.'**
+  String get weRvStrengthsIntro;
 
-  /// No description provided for @ugInstaPending.
+  /// Message du jour 6 quand aucun indice ne se détache : un profil régulier est un résultat
   ///
   /// In fr, this message translates to:
-  /// **'Vérification de ton abonnement en cours… Ton résultat sera débloqué d\'ici quelques heures. Tu peux fermer cette page et revenir plus tard.'**
-  String get ugInstaPending;
+  /// **'Aucun indice ne s\'écarte de plus de 10 points de ton niveau moyen : ton profil est régulier, et c\'est un résultat en soi.'**
+  String get weRvStrengthsNone;
 
-  /// No description provided for @ugInstaErrorFormat.
+  /// Titre de la révélation du jour 8 (QI global)
   ///
   /// In fr, this message translates to:
-  /// **'Pseudo invalide : lettres, chiffres, point et tiret bas uniquement — pas de lien.'**
-  String get ugInstaErrorFormat;
+  /// **'QI global'**
+  String get weRvFullIqLabel;
 
-  /// No description provided for @ugInstaErrorNetwork.
+  /// Explication du QI global : un résumé qui perd son sens quand les indices s'écartent
   ///
   /// In fr, this message translates to:
-  /// **'Impossible d\'envoyer ton pseudo. Vérifie ta connexion et réessaie.'**
-  String get ugInstaErrorNetwork;
+  /// **'Le QI global résume les cinq indices en un seul nombre. Quand ils s\'écartent beaucoup les uns des autres, ce résumé perd de son sens : c\'est alors le détail qui te décrit, pas le total.'**
+  String get weRvFullIqBody;
 
-  /// No description provided for @ugRefreshFailed.
+  /// Étiquette mono du bloc qui confronte l'auto-estimation du jour 1 au QI mesuré
   ///
   /// In fr, this message translates to:
-  /// **'Impossible d\'actualiser. Vérifie ta connexion — les chiffres affichés datent de ta dernière connexion.'**
-  String get ugRefreshFailed;
+  /// **'TON ESTIMATION FACE À LA MESURE'**
+  String get weRvEstimateTitle;
 
-  /// No description provided for @ugResultsHubNotice.
+  /// Rappel de l'auto-estimation du jour 1 et du score mesuré
   ///
   /// In fr, this message translates to:
-  /// **'Tout se trouve dans « Mes résultats » : tes missions, ton lien d\'invitation et ton résultat (flouté tant que toutes les missions ne sont pas validées). Tu peux quitter cette page et revenir quand tu veux.'**
-  String get ugResultsHubNotice;
+  /// **'Tu t\'estimais à {estimate}. La mesure donne {measured}.'**
+  String weRvEstimateLine(int estimate, int measured);
 
-  /// No description provided for @histLockedTitle.
+  /// Constat d'écart quand l'estimation dépasse la mesure — un écart, jamais un rang inventé
   ///
   /// In fr, this message translates to:
-  /// **'Missions à valider'**
-  String get histLockedTitle;
+  /// **'Soit {points} points au-dessus de la mesure.'**
+  String weRvEstimateOver(int points);
 
-  /// No description provided for @histLockedBody.
+  /// Constat d'écart quand l'estimation est en dessous de la mesure
   ///
   /// In fr, this message translates to:
-  /// **'Ton résultat est enregistré, mais il reste flouté tant que toutes les missions ne sont pas validées.'**
-  String get histLockedBody;
+  /// **'Soit {points} points en dessous de la mesure.'**
+  String weRvEstimateUnder(int points);
 
-  /// No description provided for @histLockedBodyNoResult.
+  /// Constat quand l'estimation est à moins de 5 points de la mesure
   ///
   /// In fr, this message translates to:
-  /// **'Tes missions et ton lien d\'invitation sont ici. Termine ton évaluation pour débloquer ton résultat.'**
-  String get histLockedBodyNoResult;
+  /// **'Moins de 5 points d\'écart : ton estimation et la mesure disent la même chose.'**
+  String get weRvEstimateClose;
 
-  /// No description provided for @histLockedCta.
+  /// Message du jour 8 quand aucune auto-estimation n'a été donnée au jour 1
   ///
   /// In fr, this message translates to:
-  /// **'Voir mes missions'**
-  String get histLockedCta;
+  /// **'Tu n\'avais pas donné d\'estimation — il n\'y a rien à confronter.'**
+  String get weRvEstimateMissing;
 
-  /// No description provided for @inviteLandingTitle.
+  /// Surtitre de l'auto-estimation du QI — elle passe AVANT toute révélation
   ///
   /// In fr, this message translates to:
-  /// **'Invitation'**
-  String get inviteLandingTitle;
+  /// **'Avant toute révélation'**
+  String get weRvSelfEyebrow;
 
-  /// No description provided for @inviteLandingBody.
+  /// Question d'auto-estimation du QI, posée une seule fois au jour 1
   ///
   /// In fr, this message translates to:
-  /// **'Un ami t\'invite à passer le test de QI gratuit Mentality. En terminant ton test, tu obtiens ton propre résultat et tu aides ton ami à débloquer le sien.'**
-  String get inviteLandingBody;
+  /// **'À combien estimes-tu ton QI ?'**
+  String get weRvSelfTitle;
 
-  /// No description provided for @inviteLandingCta.
+  /// Explication de l'auto-estimation : pourquoi maintenant, où va la réponse, quand elle revient
   ///
   /// In fr, this message translates to:
-  /// **'Commencer le test gratuit'**
-  String get inviteLandingCta;
+  /// **'Une seule question, posée maintenant : après une première révélation, ta réponse serait influencée par le chiffre que tu viens de lire. 100 est la moyenne. Ta réponse reste sur ton téléphone et te sera rendue au jour 8.'**
+  String get weRvSelfBody;
 
-  /// Avertissement affiché quand la déclaration de fin de test n'a pas abouti.
+  /// Indication tant que l'estimation n'a pas été déplacée (le bouton reste inerte)
   ///
   /// In fr, this message translates to:
-  /// **'Fin de test pas encore confirmée par le serveur. Nous réessayons automatiquement — garde une connexion et rouvre l\'app si besoin.'**
-  String get completionPendingNotice;
+  /// **'Fais glisser, ou touche − et +, pour choisir.'**
+  String get weRvSelfHint;
 
-  /// Avertissement affiché quand la déclaration de fin de test n'a pas abouti.
+  /// Repère affiché sous l'échelle d'auto-estimation une fois qu'elle a été déplacée
   ///
   /// In fr, this message translates to:
-  /// **'Cette passation n\'a pas pu être validée : elle a été jugée trop courte. Elle ne compte pas pour la mission de parrainage.'**
-  String get completionRejectedNotice;
+  /// **'100 est la moyenne.'**
+  String get weRvSelfAverage;
+
+  /// Bouton qui enregistre l'auto-estimation
+  ///
+  /// In fr, this message translates to:
+  /// **'Valider mon estimation'**
+  String get weRvSelfConfirm;
+
+  /// Bouton qui clôt la question sans donner de nombre — sans lui, elle reviendrait sans fin
+  ///
+  /// In fr, this message translates to:
+  /// **'Je préfère ne pas répondre'**
+  String get weRvSelfDecline;
+
+  /// Info-bulle du bouton qui diminue l'estimation d'un point
+  ///
+  /// In fr, this message translates to:
+  /// **'Diminuer d\'un point'**
+  String get weRvSelfDecrease;
+
+  /// Info-bulle du bouton qui augmente l'estimation d'un point
+  ///
+  /// In fr, this message translates to:
+  /// **'Augmenter d\'un point'**
+  String get weRvSelfIncrease;
+
+  /// Surtitre des écrans du jeu de tolérance au délai
+  ///
+  /// In fr, this message translates to:
+  /// **'Jeu'**
+  String get weDcEyebrow;
+
+  /// Nom du jeu de tolérance au délai tel qu'il est présenté (jamais « test d'impulsivité » : c'est un jeu, pas une mesure clinique, et l'impulsivité n'est pas nommée)
+  ///
+  /// In fr, this message translates to:
+  /// **'Maintenant ou plus tard'**
+  String get weDcTitle;
+
+  /// Titre de l'écran d'introduction du jeu de délai — la consigne en une phrase
+  ///
+  /// In fr, this message translates to:
+  /// **'Une somme tout de suite, ou une plus grosse plus tard'**
+  String get weDcIntroTitle;
+
+  /// Explication de la consigne du jeu de délai
+  ///
+  /// In fr, this message translates to:
+  /// **'On va te proposer vingt fois le même genre de choix : une somme disponible tout de suite, ou une somme plus grande après un délai. Tu appuies simplement sur celle que tu préfères.'**
+  String get weDcIntroBody;
+
+  /// AVERTISSEMENT CENTRAL du jeu de délai — l'app vend un bilan par ailleurs, et un utilisateur qui croirait à un vrai paiement répondrait pour toucher l'argent au lieu de répondre selon sa préférence
+  ///
+  /// In fr, this message translates to:
+  /// **'Ces sommes sont imaginaires. Il n\'y a rien à gagner, rien à payer et rien à recevoir : ce sont des questions, pas des offres.'**
+  String get weDcIntroImaginary;
+
+  /// Cadrage posé dès l'introduction : aucun bout de l'échelle n'est meilleur que l'autre
+  ///
+  /// In fr, this message translates to:
+  /// **'Il n\'y a pas de bonne réponse. Prendre l\'argent tout de suite n\'est ni mieux ni moins bien qu\'attendre.'**
+  String get weDcIntroNoRightAnswer;
+
+  /// Bouton qui lance la partie du jeu de délai
+  ///
+  /// In fr, this message translates to:
+  /// **'Commencer'**
+  String get weDcStart;
+
+  /// Bouton qui quitte le jeu de délai sans y jouer — le jeu est facultatif
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus tard'**
+  String get weDcLater;
+
+  /// Étiquette de la barre de progression du jeu de délai
+  ///
+  /// In fr, this message translates to:
+  /// **'Choix'**
+  String get weDcProgressTag;
+
+  /// Question posée au-dessus des deux offres
+  ///
+  /// In fr, this message translates to:
+  /// **'Qu\'est-ce que tu préfères ?'**
+  String get weDcPrompt;
+
+  /// Rappel court affiché sur chacun des vingt écrans de choix, partout où de l'argent s'affiche
+  ///
+  /// In fr, this message translates to:
+  /// **'Sommes imaginaires — rien n\'est à gagner.'**
+  String get weDcImaginaryTag;
+
+  /// Titre de l'écran de résultat du jeu de délai
+  ///
+  /// In fr, this message translates to:
+  /// **'Ta patience'**
+  String get weDcResultTitle;
+
+  /// L'index de patience, entre 0 (rien ne vaut la peine d'attendre) et 100 (attendre ne coûte rien)
+  ///
+  /// In fr, this message translates to:
+  /// **'{score} / 100'**
+  String weDcPatienceScore(int score);
+
+  /// Explication de l'index de patience, avec le rappel qu'aucun bout n'est meilleur
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus le chiffre est haut, plus tu acceptes d\'attendre. Ce n\'est pas une note : les deux bouts de l\'échelle se valent.'**
+  String get weDcResultCaption;
+
+  /// La phrase concrète du résultat : le point d'indifférence à un mois, redit en langue humaine plutôt qu'en index
+  ///
+  /// In fr, this message translates to:
+  /// **'Attendre un mois pour {delayed} revient, pour toi, à recevoir {immediate} tout de suite.'**
+  String weDcIndifference(String delayed, String immediate);
+
+  /// Titre du tableau récapitulatif : pour chaque délai, le montant immédiat jugé équivalent
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce que valait l\'attente'**
+  String get weDcCurveTitle;
+
+  /// Comparaison avec la partie précédente. JAMAIS un record ni un meilleur score — il n'y a pas de bonne réponse à ce jeu
+  ///
+  /// In fr, this message translates to:
+  /// **'La dernière fois : {score} / 100'**
+  String weDcPrevious(int score);
+
+  /// Garde-fou de lecture du score — empêche de lire l'index comme une performance ou un trait de caractère
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce chiffre ne dit pas si tu as bien joué. Préférer l\'argent tout de suite est un arbitrage, pas une erreur — et il change selon le moment, l\'humeur et la situation de chacun.'**
+  String get weDcNoBetterEnd;
+
+  /// Cadrage obligatoire des jeux — jamais présentés comme des mesures cliniques
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est un jeu, pas une mesure clinique : aucun seuil, aucun classement, rien à en conclure sur toi.'**
+  String get weDcNotClinical;
+
+  /// Titre affiché quand la courbe remonte franchement — signe de réponses posées au hasard
+  ///
+  /// In fr, this message translates to:
+  /// **'Des réponses trop dispersées pour en tirer quelque chose'**
+  String get weDcIncoherentTitle;
+
+  /// Corps du message affiché quand les réponses ne permettent aucune lecture cohérente
+  ///
+  /// In fr, this message translates to:
+  /// **'Tes réponses vont dans des sens opposés d\'un délai à l\'autre : une même somme y vaut plus loin qu\'elle ne vaut proche. Rien n\'a été enregistré. Rejoue quand tu veux.'**
+  String get weDcIncoherentBody;
+
+  /// Bouton qui relance une partie du jeu de délai depuis l'écran de résultat
+  ///
+  /// In fr, this message translates to:
+  /// **'Rejouer'**
+  String get weDcReplay;
+
+  /// Bouton qui referme le jeu de délai depuis l'écran de résultat
+  ///
+  /// In fr, this message translates to:
+  /// **'Terminer'**
+  String get weDcDone;
+
+  /// Surtitre de l'écran de recueil du consentement art. 9
+  ///
+  /// In fr, this message translates to:
+  /// **'Avant d\'aller plus loin'**
+  String get weCsEyebrow;
+
+  /// Titre de l'écran de consentement art. 9
+  ///
+  /// In fr, this message translates to:
+  /// **'Envoyer tes réponses ?'**
+  String get weCsTitle;
+
+  /// Introduction du consentement art. 9 — dit pourquoi un accord distinct est requis
+  ///
+  /// In fr, this message translates to:
+  /// **'Les questions qui suivent portent sur ta santé mentale et ton neurodéveloppement. La loi protège ces réponses à part : elles ne peuvent quitter ton téléphone que si tu l\'acceptes ici, explicitement.'**
+  String get weCsIntro;
+
+  /// Titre de la section « données transmises »
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce qui part'**
+  String get weCsWhatTitle;
+
+  /// Ce qui est réellement transmis — miroir exact d'EventSubmission
+  ///
+  /// In fr, this message translates to:
+  /// **'Tes réponses, telles que tu les as données. Sans ton nom, sans ton numéro, sans date ni heure précises. Jamais tes scores : ils sont calculés sur ton téléphone et y restent.'**
+  String get weCsWhat;
+
+  /// Titre de la section « finalité »
+  ///
+  /// In fr, this message translates to:
+  /// **'À quoi elles servent'**
+  String get weCsPurposeTitle;
+
+  /// Finalité art. 9, y compris son versant commercial (un consentement qui le tairait ne serait pas éclairé)
+  ///
+  /// In fr, this message translates to:
+  /// **'À construire et améliorer nos propres tests de dépistage, et à comparer ce que les gens déclarent avec ce que la batterie mesure. Ces outils font partie de ce que nous vendons — le dire est la moindre des choses.'**
+  String get weCsPurpose;
+
+  /// Titre de la section « destinataire et localisation »
+  ///
+  /// In fr, this message translates to:
+  /// **'Où elles vont'**
+  String get weCsWhoTitle;
+
+  /// Destination des données — aucune promesse invérifiable de non-réidentification
+  ///
+  /// In fr, this message translates to:
+  /// **'Sur nos serveurs, en Europe. Rangées sous ton passe anonyme, jamais sous ton nom ni ton numéro.'**
+  String get weCsWho;
+
+  /// Titre de la section « droits »
+  ///
+  /// In fr, this message translates to:
+  /// **'Tu gardes la main'**
+  String get weCsRightsTitle;
+
+  /// Droit de retrait (art. 7-3), d'accès (art. 15) et d'effacement (art. 17)
+  ///
+  /// In fr, this message translates to:
+  /// **'Tu peux retirer ton accord quand tu veux : les envois suivants s\'arrêtent aussitôt. Tu peux aussi demander l\'accès à tes données ou leur effacement.'**
+  String get weCsRights;
+
+  /// Le caractère libre du consentement, dit là où la décision se prend
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est facultatif, et ça ne change rien au reste : ni ton déblocage, ni tes résultats, ni les tests du programme ne dépendent de cette réponse.'**
+  String get weCsOptional;
+
+  /// Bouton d'octroi du consentement art. 9 — acte positif, jamais présélectionné
+  ///
+  /// In fr, this message translates to:
+  /// **'J\'accepte l\'envoi de mes réponses'**
+  String get weCsAccept;
+
+  /// Bouton de refus du consentement art. 9
+  ///
+  /// In fr, this message translates to:
+  /// **'Non, garder mes réponses ici'**
+  String get weCsDecline;
+
+  /// Titre du message affiché quand le consentement art. 9 est refusé
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien ne partira'**
+  String get weDxDeclinedTitle;
+
+  /// Explique pourquoi le bloc n'est pas proposé après un refus de consentement
+  ///
+  /// In fr, this message translates to:
+  /// **'Ces questions ne servent qu\'à nos travaux : sans ton accord, on ne te les pose pas. Tu peux revenir quand tu veux — ça ne change rien au reste du programme.'**
+  String get weDxDeclinedBody;
+
+  /// Surtitre du bloc diagnostic — l'écriture est unique
+  ///
+  /// In fr, this message translates to:
+  /// **'Posé une seule fois'**
+  String get weDxEyebrow;
+
+  /// Titre court du bloc diagnostic (barre de titre, hauteur fixe)
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton parcours'**
+  String get weDxListTitle;
+
+  /// La question du bloc diagnostic, dans le CORPS de l'écran (trop longue pour la barre de titre, qui ellipse)
+  ///
+  /// In fr, this message translates to:
+  /// **'As-tu reçu un diagnostic — ou penses-tu être concerné — pour l\'un de ces troubles ?'**
+  String get weDxListQuestion;
+
+  /// Cadrage du bloc diagnostic — dit que rien n'en dépend pour l'utilisateur
+  ///
+  /// In fr, this message translates to:
+  /// **'Ces réponses ne changent rien à tes résultats. Elles servent à construire nos outils : sans savoir qui est concerné, il est impossible de repérer les questions qui distinguent vraiment quelque chose.'**
+  String get weDxListBody;
+
+  /// Consigne de sélection multiple
+  ///
+  /// In fr, this message translates to:
+  /// **'Coche tout ce qui s\'applique.'**
+  String get weDxListHint;
+
+  /// Trouble du bloc diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'TDAH'**
+  String get weDxAdhd;
+
+  /// Trouble du bloc diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Autisme / TSA'**
+  String get weDxAutism;
+
+  /// Trouble du bloc diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Dyslexie'**
+  String get weDxDyslexia;
+
+  /// Trouble du bloc diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Dyspraxie'**
+  String get weDxDyspraxia;
+
+  /// Trouble du bloc diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Dyscalculie'**
+  String get weDxDyscalculia;
+
+  /// Trouble du bloc diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Haut potentiel (HPI)'**
+  String get weDxHpi;
+
+  /// Trouble du bloc diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Dépression'**
+  String get weDxDepression;
+
+  /// Trouble du bloc diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Trouble anxieux'**
+  String get weDxAnxiety;
+
+  /// Trouble du bloc diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Bipolarité'**
+  String get weDxBipolar;
+
+  /// Trouble du bloc diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'TOC'**
+  String get weDxOcd;
+
+  /// Trouble du bloc diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Trouble du sommeil'**
+  String get weDxSleep;
+
+  /// Trouble du bloc diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Burn-out'**
+  String get weDxBurnout;
+
+  /// Case « autre » — SANS champ libre : un texte libre dans une charge utile art. 9 est un vecteur de ré-identification
+  ///
+  /// In fr, this message translates to:
+  /// **'Un autre trouble'**
+  String get weDxOther;
+
+  /// Case « aucun trouble » — le groupe témoin, exclusive des autres
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun'**
+  String get weDxNone;
+
+  /// Case de refus — nécessité technique : sans elle, qui ne veut pas se déclarer coche « aucun » et pollue le groupe témoin
+  ///
+  /// In fr, this message translates to:
+  /// **'Je préfère ne pas répondre'**
+  String get weDxPreferNotToSay;
+
+  /// Titre court de l'écran de détail d'un trouble
+  ///
+  /// In fr, this message translates to:
+  /// **'Le détail'**
+  String get weDxDetailTitle;
+
+  /// Progression dans les troubles à détailler
+  ///
+  /// In fr, this message translates to:
+  /// **'{current} sur {total}'**
+  String weDxDetailProgress(int current, int total);
+
+  /// Origine du diagnostic — sépare le critère dur de la simple croyance
+  ///
+  /// In fr, this message translates to:
+  /// **'Qui l\'a posé ?'**
+  String get weDxSourceQuestion;
+
+  /// Origine du diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Psychiatre ou neuropsychologue'**
+  String get weDxSourcePsychiatrist;
+
+  /// Origine du diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Médecin généraliste'**
+  String get weDxSourceGp;
+
+  /// Origine du diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Psychologue'**
+  String get weDxSourcePsychologist;
+
+  /// La TROISIÈME catégorie : une croyance, jamais mélangée aux diagnostics
+  ///
+  /// In fr, this message translates to:
+  /// **'Personne — je le pense, sans diagnostic'**
+  String get weDxSourceSelf;
+
+  /// Ancienneté par tranches — jamais l'année exacte (quasi-identifiant, et aucune horloge locale n'est lue)
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'était il y a combien de temps ?'**
+  String get weDxWhenQuestion;
+
+  /// Ancienneté du diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Moins d\'un an'**
+  String get weDxWhenUnder1;
+
+  /// Ancienneté du diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Entre 1 et 3 ans'**
+  String get weDxWhen1to3;
+
+  /// Ancienneté du diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Entre 3 et 10 ans'**
+  String get weDxWhen3to10;
+
+  /// Ancienneté du diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus de 10 ans'**
+  String get weDxWhenOver10;
+
+  /// Ancienneté du diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Je ne sais plus'**
+  String get weDxWhenUnknown;
+
+  /// Prise en charge
+  ///
+  /// In fr, this message translates to:
+  /// **'Un traitement ou un suivi ?'**
+  String get weDxTreatmentQuestion;
+
+  /// Prise en charge
+  ///
+  /// In fr, this message translates to:
+  /// **'Oui, en ce moment'**
+  String get weDxTreatmentYes;
+
+  /// Prise en charge
+  ///
+  /// In fr, this message translates to:
+  /// **'Non'**
+  String get weDxTreatmentNo;
+
+  /// Prise en charge
+  ///
+  /// In fr, this message translates to:
+  /// **'Par le passé'**
+  String get weDxTreatmentPast;
+
+  /// Profondeur de l'évaluation reçue
+  ///
+  /// In fr, this message translates to:
+  /// **'Un bilan complet a-t-il été fait ?'**
+  String get weDxAssessmentQuestion;
+
+  /// Profondeur de l'évaluation reçue
+  ///
+  /// In fr, this message translates to:
+  /// **'Oui'**
+  String get weDxAssessmentYes;
+
+  /// Profondeur de l'évaluation reçue
+  ///
+  /// In fr, this message translates to:
+  /// **'Non'**
+  String get weDxAssessmentNo;
+
+  /// Profondeur de l'évaluation reçue
+  ///
+  /// In fr, this message translates to:
+  /// **'Je ne sais pas'**
+  String get weDxAssessmentUnknown;
+
+  /// Titre de l'écran de fin du bloc
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est noté'**
+  String get weDxDoneTitle;
+
+  /// Fin du bloc diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Merci. Cette question ne te sera plus posée — elle ne se pose qu\'une fois. Elle ne change rien à tes résultats ni à ton déblocage.'**
+  String get weDxDoneBody;
+
+  /// Titre affiché si le bloc avait déjà été rempli
+  ///
+  /// In fr, this message translates to:
+  /// **'Déjà répondu'**
+  String get weDxAlreadyTitle;
+
+  /// Explique l'écriture unique plutôt que de reposer la question
+  ///
+  /// In fr, this message translates to:
+  /// **'Tu as déjà rempli cette partie. Elle ne se pose qu\'une fois, pour que ta réponse ne soit pas influencée par les tests des jours suivants.'**
+  String get weDxAlreadyBody;
+
+  /// Titre affiché quand l'écriture du bloc a échoué
+  ///
+  /// In fr, this message translates to:
+  /// **'Rien n\'a pu être enregistré'**
+  String get weDxFailedTitle;
+
+  /// Échec d'écriture dit explicitement, jamais masqué par un remerciement
+  ///
+  /// In fr, this message translates to:
+  /// **'Tes réponses n\'ont pas été conservées, et rien n\'a été envoyé. Tu peux réessayer depuis le programme — la question reste ouverte.'**
+  String get weDxFailedBody;
+
+  /// Confirmation de sortie du bloc diagnostic
+  ///
+  /// In fr, this message translates to:
+  /// **'Quitter maintenant ?'**
+  String get weDxQuitTitle;
+
+  /// Dit la vérité du tout-ou-rien — contrairement au moteur de questionnaire, rien n'est persisté en route
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce que tu as coché ne sera pas conservé : ce bloc s\'enregistre en une seule fois, à la fin. Tu pourras le reprendre depuis le programme.'**
+  String get weDxQuitBody;
+
+  /// Sous-titre de la carte d'un jeu dans le hub de l'événement
+  ///
+  /// In fr, this message translates to:
+  /// **'Jeu du jour · 2 minutes · rejouable'**
+  String get weGameCardSubtitle;
+
+  /// Surtitre des écrans du jeu Stroop
+  ///
+  /// In fr, this message translates to:
+  /// **'Jeu'**
+  String get weStroopEyebrow;
+
+  /// Nom du jeu Stroop tel qu'il est présenté (jamais « test de Stroop » : c'est un jeu, pas une mesure clinique)
+  ///
+  /// In fr, this message translates to:
+  /// **'Couleurs contrariées'**
+  String get weStroopTitle;
+
+  /// Titre de l'écran d'introduction du jeu Stroop — la consigne en une phrase
+  ///
+  /// In fr, this message translates to:
+  /// **'Nomme la couleur, pas le mot'**
+  String get weStroopIntroTitle;
+
+  /// Explication de la consigne du jeu Stroop
+  ///
+  /// In fr, this message translates to:
+  /// **'Un mot va s\'afficher dans une certaine couleur. Appuie sur la couleur de l\'ENCRE, pas sur ce qui est écrit. Lire est automatique : c\'est justement ce qu\'il va falloir mettre de côté.'**
+  String get weStroopIntroBody;
+
+  /// Annonce des essais d'entraînement non comptés
+  ///
+  /// In fr, this message translates to:
+  /// **'On commence par trois essais pour rien, le temps de prendre la main.'**
+  String get weStroopIntroPractice;
+
+  /// Légende de l'exemple de stimulus montré dans l'introduction
+  ///
+  /// In fr, this message translates to:
+  /// **'Ici, le mot dit une couleur et l\'encre en dit une autre : c\'est l\'encre qui compte.'**
+  String get weStroopIntroExample;
+
+  /// Bouton qui lance la partie
+  ///
+  /// In fr, this message translates to:
+  /// **'Commencer'**
+  String get weStroopStart;
+
+  /// Bouton qui quitte le jeu sans y jouer — le jeu est facultatif
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus tard'**
+  String get weStroopLater;
+
+  /// Étiquette de progression pendant les essais non comptés
+  ///
+  /// In fr, this message translates to:
+  /// **'Entraînement'**
+  String get weStroopPracticeTag;
+
+  /// Étiquette de progression pendant les essais comptés
+  ///
+  /// In fr, this message translates to:
+  /// **'Compté'**
+  String get weStroopScoredTag;
+
+  /// Question rappelée au-dessus de chaque stimulus
+  ///
+  /// In fr, this message translates to:
+  /// **'De quelle couleur est-ce écrit ?'**
+  String get weStroopPrompt;
+
+  /// Titre de l'écran annonçant la fin de l'entraînement
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est parti'**
+  String get weStroopBlockScoredTitle;
+
+  /// Corps de l'écran annonçant le premier bloc compté
+  ///
+  /// In fr, this message translates to:
+  /// **'À partir de maintenant, les essais comptent. Va vite, mais vise juste : une erreur ne rapporte rien.'**
+  String get weStroopBlockScoredBody;
+
+  /// Titre de l'écran annonçant le bloc de conflit
+  ///
+  /// In fr, this message translates to:
+  /// **'Maintenant, les mots te contredisent'**
+  String get weStroopBlockConflictTitle;
+
+  /// Corps de l'écran annonçant le bloc de conflit
+  ///
+  /// In fr, this message translates to:
+  /// **'La consigne ne change pas : c\'est toujours la couleur de l\'encre. Les mots vont simplement dire autre chose.'**
+  String get weStroopBlockConflictBody;
+
+  /// Bouton des écrans d'annonce de bloc
+  ///
+  /// In fr, this message translates to:
+  /// **'Continuer'**
+  String get weStroopBlockCta;
+
+  /// Titre de l'écran de résultat — le score est un ÉCART, jamais une vitesse
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton écart'**
+  String get weStroopResultTitle;
+
+  /// Une durée en millisecondes — sert à afficher l'écart conflit/neutre
+  ///
+  /// In fr, this message translates to:
+  /// **'{ms} ms'**
+  String weStroopMilliseconds(int ms);
+
+  /// Explication de ce que mesure l'écart affiché
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est le temps supplémentaire qu\'il t\'a fallu, à chaque essai, quand le mot disait le contraire de l\'encre.'**
+  String get weStroopResultCaption;
+
+  /// Justesse de la partie — rapportée à part, jamais fondue dans le temps
+  ///
+  /// In fr, this message translates to:
+  /// **'{correct} bonnes réponses sur {total}'**
+  String weStroopAccuracy(int correct, int total);
+
+  /// Record local du jeu — le plus PETIT écart obtenu
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton meilleur écart : {ms} ms'**
+  String weStroopBest(int ms);
+
+  /// Annonce d'un record battu
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouveau meilleur écart'**
+  String get weStroopNewBest;
+
+  /// Garde-fou de lecture du score — empêche de lire l'écart comme une vitesse (que la batterie mesure déjà)
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce chiffre n\'est pas ta vitesse. C\'est la différence entre deux séries : quelqu\'un de globalement plus lent peut très bien avoir un écart plus petit.'**
+  String get weStroopNotSpeed;
+
+  /// Cadrage obligatoire des jeux — jamais présentés comme des mesures cliniques
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est un jeu, pas une mesure clinique : aucun seuil, aucun classement, rien à en conclure sur toi.'**
+  String get weStroopNotClinical;
+
+  /// Titre affiché quand la partie n'a pas assez d'essais valides pour un écart honnête
+  ///
+  /// In fr, this message translates to:
+  /// **'Trop peu de réponses pour compter'**
+  String get weStroopUnreliableTitle;
+
+  /// Corps du message affiché quand la partie ne permet aucun écart fiable
+  ///
+  /// In fr, this message translates to:
+  /// **'Il n\'y a pas assez de réponses justes et données dans les temps pour calculer un écart honnête. Ton meilleur écart précédent reste intact. Rejoue quand tu veux.'**
+  String get weStroopUnreliableBody;
+
+  /// Bouton qui relance une partie depuis l'écran de résultat
+  ///
+  /// In fr, this message translates to:
+  /// **'Rejouer'**
+  String get weStroopReplay;
+
+  /// Bouton qui referme le jeu depuis l'écran de résultat
+  ///
+  /// In fr, this message translates to:
+  /// **'Terminer'**
+  String get weStroopDone;
+
+  /// Surtitre des écrans du jeu des durées
+  ///
+  /// In fr, this message translates to:
+  /// **'Jeu'**
+  String get weTeEyebrow;
+
+  /// Nom du jeu des durées tel qu'il est présenté (jamais « test de perception temporelle » : c'est un jeu, pas une mesure clinique)
+  ///
+  /// In fr, this message translates to:
+  /// **'Le plus long des deux'**
+  String get weTeTitle;
+
+  /// Titre de l'écran d'introduction du jeu des durées — la consigne en une phrase
+  ///
+  /// In fr, this message translates to:
+  /// **'Deux panneaux, l\'un après l\'autre'**
+  String get weTeIntroTitle;
+
+  /// Explication de la consigne du jeu des durées
+  ///
+  /// In fr, this message translates to:
+  /// **'Un panneau va s\'allumer, s\'éteindre, puis s\'allumer une seconde fois. Dis lequel des deux est resté allumé le plus longtemps. Les écarts se resserrent au fil de la partie.'**
+  String get weTeIntroBody;
+
+  /// Explique pourquoi le jeu compare deux durées brèves au lieu d'en faire estimer une longue — une durée comptable mesurerait la capacité à compter, pas la perception
+  ///
+  /// In fr, this message translates to:
+  /// **'Les durées sont de l\'ordre de la seconde : trop courtes pour être comptées. C\'est ta perception seule qui répond.'**
+  String get weTeIntroTooShortToCount;
+
+  /// Légende du panneau éteint montré dans l'introduction
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est ce panneau qui s\'allumera. Rien d\'autre ne bougera à l\'écran.'**
+  String get weTeIntroExample;
+
+  /// Bouton qui lance la partie du jeu des durées
+  ///
+  /// In fr, this message translates to:
+  /// **'Commencer'**
+  String get weTeStart;
+
+  /// Bouton qui quitte le jeu des durées sans y jouer — le jeu est facultatif
+  ///
+  /// In fr, this message translates to:
+  /// **'Plus tard'**
+  String get weTeLater;
+
+  /// Étiquette de la barre de progression du jeu des durées
+  ///
+  /// In fr, this message translates to:
+  /// **'Essai'**
+  String get weTeProgressTag;
+
+  /// Texte affiché pendant la présentation des deux durées, avant la question
+  ///
+  /// In fr, this message translates to:
+  /// **'Regarde bien…'**
+  String get weTeWatch;
+
+  /// Question posée après la présentation des deux durées
+  ///
+  /// In fr, this message translates to:
+  /// **'Lequel est resté allumé le plus longtemps ?'**
+  String get weTePrompt;
+
+  /// Bouton de réponse : le premier panneau a duré plus longtemps
+  ///
+  /// In fr, this message translates to:
+  /// **'Le premier'**
+  String get weTeFirst;
+
+  /// Bouton de réponse : le second panneau a duré plus longtemps
+  ///
+  /// In fr, this message translates to:
+  /// **'Le second'**
+  String get weTeSecond;
+
+  /// Titre de l'écran de résultat du jeu des durées — le score est un SEUIL de discrimination
+  ///
+  /// In fr, this message translates to:
+  /// **'Ta finesse'**
+  String get weTeResultTitle;
+
+  /// Le seuil de discrimination : l'écart relatif le plus fin encore distingué
+  ///
+  /// In fr, this message translates to:
+  /// **'{percent} %'**
+  String weTeThreshold(int percent);
+
+  /// Explication du seuil affiché
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est l\'écart le plus fin que tu distingues encore entre deux durées. Plus le chiffre est petit, plus ta perception sépare finement deux instants proches.'**
+  String get weTeResultCaption;
+
+  /// Justesse de la partie, avec l'explication qu'elle est PILOTÉE par l'escalier et ne varie donc presque pas d'un joueur à l'autre
+  ///
+  /// In fr, this message translates to:
+  /// **'{percent} % de bonnes réponses — c\'est normal : le jeu resserre les écarts jusqu\'à te faire hésiter.'**
+  String weTeAccuracyNote(int percent);
+
+  /// Record local du jeu des durées — le seuil le plus PETIT obtenu
+  ///
+  /// In fr, this message translates to:
+  /// **'Ta meilleure finesse : {percent} %'**
+  String weTeBest(int percent);
+
+  /// Annonce d'un record battu au jeu des durées
+  ///
+  /// In fr, this message translates to:
+  /// **'Nouvelle meilleure finesse'**
+  String get weTeNewBest;
+
+  /// Garde-fou de lecture du score — empêche de le lire comme une vitesse (que la batterie mesure déjà par ailleurs)
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce chiffre n\'est pas ta vitesse : rien n\'a chronométré tes réponses, tu pouvais prendre tout ton temps pour décider.'**
+  String get weTeNotSpeed;
+
+  /// Cadrage obligatoire des jeux — jamais présentés comme des mesures cliniques
+  ///
+  /// In fr, this message translates to:
+  /// **'C\'est un jeu, pas une mesure clinique : aucun seuil, aucun classement, rien à en conclure sur toi.'**
+  String get weTeNotClinical;
+
+  /// Titre affiché quand la partie n'a pas assez d'inversions, ou quand le seuil reste au plafond
+  ///
+  /// In fr, this message translates to:
+  /// **'Pas de quoi mesurer une finesse'**
+  String get weTeUnreliableTitle;
+
+  /// Corps du message affiché quand la partie ne permet aucun seuil fiable
+  ///
+  /// In fr, this message translates to:
+  /// **'La partie n\'a pas assez hésité pour qu\'un seuil veuille dire quelque chose. Ta meilleure finesse précédente reste intacte. Rejoue quand tu veux.'**
+  String get weTeUnreliableBody;
+
+  /// Bouton qui relance une partie du jeu des durées depuis l'écran de résultat
+  ///
+  /// In fr, this message translates to:
+  /// **'Rejouer'**
+  String get weTeReplay;
+
+  /// Bouton qui referme le jeu des durées depuis l'écran de résultat
+  ///
+  /// In fr, this message translates to:
+  /// **'Terminer'**
+  String get weTeDone;
 }
 
 class _AppLocalizationsDelegate
