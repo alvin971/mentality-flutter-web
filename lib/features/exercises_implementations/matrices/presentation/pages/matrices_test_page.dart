@@ -27,10 +27,25 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
 
   late List<MatrixItem> _generatedItems;
 
-  /// Phase de DÉMONSTRATION : un item d'exemple fixe, sans chrono ni score,
-  /// rejouable jusqu'à réussite — comme la démonstration du protocole réel.
+  /// Phase de DÉMONSTRATION : TROIS items d'exemple fixes, sans chrono ni
+  /// score, chacun rejouable jusqu'à réussite — comme la démonstration du
+  /// protocole réel. Une matrice ne se comprend pas sur un seul exemple : la
+  /// règle change d'un item à l'autre (progression, alternance, rotation), et
+  /// c'est cette variété que l'entraînement doit montrer.
   bool _demoPhase = true;
-  late final MatrixItem _demoItem;
+  late final List<MatrixItem> _demoItems;
+
+  /// Item d'entraînement courant.
+  int _demoIndex = 0;
+
+  /// Seed FIXE des items d'entraînement : tout le monde s'entraîne sur les
+  /// mêmes matrices, quelle que soit la passation qui suit.
+  static const int _demoSeed = 42;
+
+  /// Nombre d'items d'entraînement.
+  static const int _demoCount = 3;
+
+  bool get _isLastDemo => _demoIndex >= _demoItems.length - 1;
 
   /// Vrai une fois la réponse de démo soumise (affiche le feedback et bascule
   /// le bouton bas sur « Commencer »/« Réessayer »). Sans effet hors démo :
@@ -41,10 +56,15 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
   void initState() {
     super.initState();
     _generateItems();
-    // L'item de démonstration est le premier item (slot le plus facile) du
-    // tirage de cette passation : sa difficulté est fixe même si son contenu
-    // change d'une session à l'autre.
-    _demoItem = _generatedItems.first;
+    // Les items d'entraînement viennent d'un tirage SÉPARÉ et graine fixe :
+    // les 3 slots les plus faciles d'une banque qui n'est pas celle de la
+    // passation. L'entraînement empruntait jusqu'ici le premier item du test,
+    // que le sujet retrouvait ensuite à l'identique — première réponse
+    // connue d'avance, et un item coté de moins en pratique.
+    _demoItems = MatrixGenerator(seed: _demoSeed)
+        .generateComplete26Items()
+        .take(_demoCount)
+        .toList();
     // La démonstration n'est pas chronométrée : le chrono d'item ne démarre
     // qu'au passage au premier item réel (_startRealTest).
   }
@@ -63,7 +83,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
   }
 
   MatrixItem get _currentItem =>
-      _demoPhase ? _demoItem : _generatedItems[currentLevel];
+      _demoPhase ? _demoItems[_demoIndex] : _generatedItems[currentLevel];
 
   void _startRealTest() {
     setState(() {
@@ -71,6 +91,16 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
       _demoSubmitted = false;
       _selectedAnswer = null;
       _itemStartTime = DateTime.now();
+    });
+  }
+
+  /// Item d'entraînement suivant : même remise à zéro qu'un réessai, sur
+  /// l'item d'après.
+  void _nextDemo() {
+    setState(() {
+      _demoIndex++;
+      _selectedAnswer = null;
+      _demoSubmitted = false;
     });
   }
 
@@ -158,9 +188,10 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
       testName: context.l10n.matTestName,
       eyebrow: _demoPhase ? context.l10n.demoBadge : context.l10n.matEyebrow,
       accentColor: AppColors.indexFSIQ,
-      // Pas de barre de progression pendant la démo (hors des 26 items).
-      currentItem: _demoPhase ? null : currentLevel + 1,
-      totalItems: _demoPhase ? null : _generatedItems.length,
+      // Pendant l'entraînement, la barre compte les 3 items d'exemple et non
+      // les 26 items cotés — l'eyebrow « ENTRAÎNEMENT » lui sert de libellé.
+      currentItem: _demoPhase ? _demoIndex + 1 : currentLevel + 1,
+      totalItems: _demoPhase ? _demoItems.length : _generatedItems.length,
       // Tout tient à l'écran : matrice redimensionnée à la hauteur disponible,
       // bouton Valider sticky en bas (jamais besoin de scroller).
       scrollable: false,
@@ -207,15 +238,17 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
   String _bottomBarLabel(BuildContext context, MatrixItem item) {
     if (_demoPhase && _demoSubmitted) {
       final ok = _selectedAnswer == item.correctAnswer;
-      return ok ? context.l10n.demoStart : context.l10n.demoRetry;
+      if (!ok) return context.l10n.demoRetry;
+      return _isLastDemo ? context.l10n.demoStart : context.l10n.demoContinue;
     }
     return context.l10n.matValidateAnswer;
   }
 
   VoidCallback? _bottomBarAction() {
     if (_demoPhase && _demoSubmitted) {
-      final ok = _selectedAnswer == _demoItem.correctAnswer;
-      return ok ? _startRealTest : _retryDemo;
+      final ok = _selectedAnswer == _demoItems[_demoIndex].correctAnswer;
+      if (!ok) return _retryDemo;
+      return _isLastDemo ? _startRealTest : _nextDemo;
     }
     return _selectedAnswer == null ? null : _handleSubmit;
   }

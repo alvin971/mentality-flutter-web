@@ -55,8 +55,11 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
   /// Début de l'item courant, pour le temps de réponse journalisé.
   DateTime _itemStartedAt = DateTime.now();
 
-  /// Phase de DÉMONSTRATION : un item d'exemple fixe, sans chrono ni score,
-  /// rejouable jusqu'à réussite — comme la démonstration du protocole réel.
+  /// Phase de DÉMONSTRATION : TROIS items d'exemple fixes, sans chrono ni
+  /// score, chacun rejouable jusqu'à réussite — comme la démonstration du
+  /// protocole réel. Trois et non un : choisir 3 pièces parmi 6 demande
+  /// d'écarter des pièges (échelle, couleurs, symétrie) que le premier item
+  /// ne peut pas tous porter à lui seul.
   bool _demoPhase = true;
 
   /// Écran « Prêt ? » entre la démo réussie et l'item 1 : le chrono du
@@ -64,19 +67,33 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
   /// surprise (les 20 s de l'item 1 sont des données comme les autres).
   bool _readyPhase = false;
 
-  late final PuzzleItem _demoItem;
+  late final List<PuzzleItem> _demoItems;
 
-  /// Seed fixe de l'item de démonstration (contrôlé visuellement : pièges
+  /// Item d'entraînement courant.
+  int _demoIndex = 0;
+
+  /// Seed fixe des items de démonstration (contrôlé visuellement : pièges
   /// évidents, motif bicolore lisible). Ne pas changer sans re-vérifier.
   static const int _demoSeed = 7;
+
+  /// Nombre d'items d'entraînement.
+  static const int _demoCount = 3;
+
+  bool get _isLastDemo => _demoIndex >= _demoItems.length - 1;
 
   static const String _labels = '123456';
 
   @override
   void initState() {
     super.initState();
-    _demoItem = PuzzleGenerator(seed: _demoSeed)
-        .generateItem(1, DifficultyLevel.veryEasy);
+    // Les rangs 1 à 3 de l'échelle : les trois recettes les plus faciles,
+    // tirées d'un générateur à graine fixe — donc les mêmes pour tout le
+    // monde, et indépendants des 26 items de la passation.
+    final demoGen = PuzzleGenerator(seed: _demoSeed);
+    _demoItems = List.generate(
+      _demoCount,
+      (i) => demoGen.generateItem(i + 1, DifficultyLevel.veryEasy),
+    );
     _generateItems();
     // La démonstration n'est pas chronométrée : le timer ne démarre qu'au
     // passage au premier item réel (_startRealTest).
@@ -100,7 +117,7 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
   }
 
   PuzzleItem get _currentItem =>
-      _demoPhase ? _demoItem : _items[_currentItemIndex];
+      _demoPhase ? _demoItems[_demoIndex] : _items[_currentItemIndex];
 
   void _goToReady() {
     setState(() {
@@ -114,6 +131,16 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
   void _startRealTest() {
     setState(() => _readyPhase = false);
     _startItem();
+  }
+
+  /// Item d'entraînement suivant : même remise à zéro qu'un réessai, sur
+  /// l'item d'après. Aucun chrono — il ne démarre qu'après l'écran « Prêt ? ».
+  void _nextDemo() {
+    setState(() {
+      _demoIndex++;
+      _selectedIds.clear();
+      _submitted = false;
+    });
   }
 
   void _retryDemo() {
@@ -301,10 +328,19 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
       eyebrow:
           _demoPhase ? context.l10n.vpDemoEyebrow : context.l10n.vpEyebrow,
       accentColor: accent,
-      // Pas de barre de progression pendant la démo ni l'écran Prêt (hors
-      // des 26 items) : l'eyebrow s'affiche alors seul dans l'AppBar.
-      currentItem: _isPlaying ? _currentItemIndex + 1 : null,
-      totalItems: _isPlaying ? _items.length : null,
+      // Pendant l'entraînement, la barre compte les 3 items d'exemple et non
+      // les 26 items cotés — l'eyebrow « ENTRAÎNEMENT » lui sert de libellé.
+      // Rien sur l'écran « Prêt ? », qui n'est pas un item.
+      currentItem: _isPlaying
+          ? _currentItemIndex + 1
+          : _demoPhase
+              ? _demoIndex + 1
+              : null,
+      totalItems: _isPlaying
+          ? _items.length
+          : _demoPhase
+              ? _demoItems.length
+              : null,
       // Aucun défilement : cible et pièces se redimensionnent pour tenir
       // dans la hauteur de n'importe quel écran (test chronométré).
       scrollable: false,
@@ -329,7 +365,10 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
     if (_submitted) {
       if (_demoPhase) {
         final ok = setEquals(_selectedIds, item.correctIds);
-        return ok ? context.l10n.vpDemoStart : context.l10n.vpDemoRetry;
+        if (!ok) return context.l10n.vpDemoRetry;
+        return _isLastDemo
+            ? context.l10n.vpDemoStart
+            : context.l10n.demoContinue;
       }
       // Test réel : libellé NEUTRE — aucun retour correct/incorrect au
       // sujet, conformément au protocole (la démo, elle, garde son
@@ -345,9 +384,8 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
     if (_readyPhase) return _startRealTest;
     if (_submitted) {
       if (!_demoPhase) return null;
-      return setEquals(_selectedIds, item.correctIds)
-          ? _goToReady
-          : _retryDemo;
+      if (!setEquals(_selectedIds, item.correctIds)) return _retryDemo;
+      return _isLastDemo ? _goToReady : _nextDemo;
     }
     return _selectedIds.length == 3 ? () => _submit() : null;
   }

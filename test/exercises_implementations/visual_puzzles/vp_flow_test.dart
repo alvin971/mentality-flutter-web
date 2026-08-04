@@ -75,17 +75,30 @@ void main() {
     await tester.pumpWidget(_wrap(const VisualPuzzlesTestPage()));
     await tester.pump(const Duration(milliseconds: 100));
 
-    // --- Démo : pas de chrono, feedback pédagogique complet.
+    // --- Démo : TROIS items, pas de chrono, feedback pédagogique complet.
+    // Les deux premiers enchaînent sur « Continuer » ; seul le troisième
+    // ouvre le test. Une démo d'un seul item ne montrait qu'un piège sur les
+    // trois familles (échelle, couleurs, symétrie).
     expect(find.text('DÉMONSTRATION'), findsOneWidget);
-    await _solveCurrentItem(tester);
-    // Les 3 bonnes pièces sont révélées (bordures vertes) EN DÉMO SEULEMENT.
-    final demoRevealed = tester
-        .widgetList<PuzzlePieceWidget>(find.byType(PuzzlePieceWidget))
-        .where((w) => w.showCorrect)
-        .length;
-    expect(demoRevealed, 3, reason: 'la démo doit garder son feedback');
-    // La démo n'écrit RIEN dans le journal.
-    expect(svc.cognitiveRecordCount, baseline);
+    for (var i = 1; i <= 3; i++) {
+      await _solveCurrentItem(tester);
+      // Les 3 bonnes pièces sont révélées (bordures vertes) EN DÉMO SEULEMENT.
+      final demoRevealed = tester
+          .widgetList<PuzzlePieceWidget>(find.byType(PuzzlePieceWidget))
+          .where((w) => w.showCorrect)
+          .length;
+      expect(demoRevealed, 3,
+          reason: 'la démo doit garder son feedback (item $i)');
+      // La démo n'écrit RIEN dans le journal, quel que soit le nombre d'items.
+      expect(svc.cognitiveRecordCount, baseline);
+
+      if (i < 3) {
+        expect(find.text('Commencer le test'), findsNothing,
+            reason: 'le test ne s\'ouvre pas avant le 3e item d\'entraînement');
+        await tester.tap(find.text('Continuer'));
+        await tester.pump();
+      }
+    }
 
     // --- Écran « Prêt ? » : l'item 1 n'est pas affiché, pas de chrono.
     await tester.tap(find.text('Commencer le test'));

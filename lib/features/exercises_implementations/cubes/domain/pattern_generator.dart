@@ -35,6 +35,63 @@ class CubePatternGenerator {
     DifficultyLevel.veryHard,
   ];
 
+  /// Les trois items d'ENTRAÎNEMENT, écrits à la main et identiques pour tout
+  /// le monde. Ils ne mesurent rien : ils apprennent l'interface, et l'ordre
+  /// est ce qui compte.
+  ///
+  /// 1. **Deux couleurs pleines.** Un appui suffit : on découvre qu'une case
+  ///    se change en la touchant.
+  /// 2. **Des diagonales.** Aucune ne s'obtient en un appui — il faut toucher
+  ///    la MÊME case plusieurs fois pour parcourir le cycle
+  ///    blanc → rouge → 4 diagonales. C'est le seul item qui l'enseigne, et
+  ///    c'est sa raison d'être : sans lui, les faces diagonales se découvrent
+  ///    à l'item 6 coté, chrono lancé.
+  /// 3. **Une 3×3 mêlant les deux**, au format des items cotés.
+  ///
+  /// Écrits en dur plutôt que tirés d'une seed : un tirage « très facile »
+  /// 2×2 ne contient JAMAIS de diagonale (cf. [_generate2x2Simple]), donc
+  /// aucune seed ne peut produire l'item 2.
+  static List<CubePattern> demoPatterns() => <CubePattern>[
+        // 1 — pleines seulement : 1 appui (rouge), 0 appui (blanc).
+        _demo(2, const [
+          [CubeFace.redSolid, CubeFace.whiteSolid],
+          [CubeFace.whiteSolid, CubeFace.redSolid],
+        ]),
+        // 2 — deux diagonales : 2 appuis pour ↘, 4 pour ↖.
+        _demo(2, const [
+          [CubeFace.redSolid, CubeFace.diagonalRedWhite_0],
+          [CubeFace.diagonalRedWhite_180, CubeFace.whiteSolid],
+        ]),
+        // 3 — croix rouge et quatre coins diagonaux pointant vers l'extérieur.
+        _demo(3, const [
+          [
+            CubeFace.diagonalRedWhite_0,
+            CubeFace.redSolid,
+            CubeFace.diagonalRedWhite_90
+          ],
+          [CubeFace.redSolid, CubeFace.redSolid, CubeFace.redSolid],
+          [
+            CubeFace.diagonalRedWhite_270,
+            CubeFace.redSolid,
+            CubeFace.diagonalRedWhite_180
+          ],
+        ]),
+      ];
+
+  /// Fabrique d'item d'entraînement : hors barème, hors chrono.
+  ///
+  /// `timeLimit` n'est jamais lu — la page passe `timeLimitSeconds: null`
+  /// pendant l'entraînement — mais le champ est requis par [CubePattern].
+  static CubePattern _demo(int gridSize, List<List<CubeFace>> pattern) =>
+      CubePattern(
+        gridSize: gridSize,
+        pattern: pattern.map(List<CubeFace>.from).toList(),
+        cohesionScore: 0,
+        timeLimit: 999,
+        description: 'Item d\'entraînement — ne compte pas',
+        difficulty: DifficultyLevel.example,
+      );
+
   final Random _random;
 
   /// [seed] optionnel : tirage reproductible (tests, item de démonstration).

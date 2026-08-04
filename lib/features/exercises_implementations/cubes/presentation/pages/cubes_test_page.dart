@@ -35,10 +35,18 @@ class _CubesTestPageState extends State<CubesTestPage> {
 
   int _consecutiveFailures = 0;
 
-  /// Phase de DÉMONSTRATION : un item d'exemple fixe, sans chrono ni score,
-  /// rejouable jusqu'à réussite — comme la démonstration du protocole réel.
+  /// Phase de DÉMONSTRATION : TROIS items d'exemple fixes, sans chrono ni
+  /// score, chacun rejouable jusqu'à réussite — comme la démonstration du
+  /// protocole réel.
+  ///
+  /// Trois et non un : le deuxième item est le seul endroit où le sujet peut
+  /// découvrir que les faces DIAGONALES existent et s'atteignent en appuyant
+  /// plusieurs fois sur la même case. Un entraînement 2×2 en aplats seuls
+  /// laissait croire qu'un appui = une case terminée, et la découverte se
+  /// faisait à l'item 6, chronométré et coté.
   bool _demoPhase = true;
-  late final CubePattern _demoPattern;
+  final List<CubePattern> _demoPatterns = CubePatternGenerator.demoPatterns();
+  int _demoIndex = 0;
   bool? _demoLastCorrect;
 
   /// Clé du widget d'exercice pendant la démo : on l'incrémente à chaque
@@ -48,9 +56,9 @@ class _CubesTestPageState extends State<CubesTestPage> {
   /// neuf plutôt que d'exposer une méthode de reset publique).
   int _demoAttempt = 0;
 
-  /// Seed fixe de l'item de démonstration (2×2 simple, très facile,
-  /// solvable en quelques secondes). Ne pas changer sans re-vérifier.
-  static const int _demoSeed = 42;
+  /// Vrai sur le dernier item d'entraînement : le bouton propose alors de
+  /// commencer le test, et non de passer à l'entraînement suivant.
+  bool get _isLastDemo => _demoIndex >= _demoPatterns.length - 1;
 
   @override
   void initState() {
@@ -58,8 +66,6 @@ class _CubesTestPageState extends State<CubesTestPage> {
     // Sans seed → tirage aléatoire par passation : les motifs changent à
     // chaque session, seule la progression de difficulté est fixe.
     _patternGenerator = CubePatternGenerator();
-    _demoPattern = CubePatternGenerator(seed: _demoSeed)
-        .generatePattern(DifficultyLevel.veryEasy);
     _generateLevels();
     // La démonstration n'est pas chronométrée : le chrono (interne au
     // widget d'exercice) ne démarre qu'au passage au premier item réel
@@ -80,10 +86,20 @@ class _CubesTestPageState extends State<CubesTestPage> {
   /// Pattern courant : item de démonstration fixe pendant la phase
   /// d'entraînement, sinon l'item réel généré pour le niveau courant.
   CubePattern get _currentPattern =>
-      _demoPhase ? _demoPattern : _generatedPatterns[currentLevel];
+      _demoPhase ? _demoPatterns[_demoIndex] : _generatedPatterns[currentLevel];
 
   void _startRealTest() {
     setState(() => _demoPhase = false);
+  }
+
+  /// Item d'entraînement suivant. Comme [_retryDemo], on incrémente
+  /// [_demoAttempt] : la clé du widget change, donc la grille repart vide.
+  void _nextDemo() {
+    setState(() {
+      _demoIndex++;
+      _demoLastCorrect = null;
+      _demoAttempt++;
+    });
   }
 
   void _retryDemo() {
@@ -174,10 +190,11 @@ class _CubesTestPageState extends State<CubesTestPage> {
       testName: context.l10n.cubesTestName,
       eyebrow: _demoPhase ? context.l10n.demoBadge : context.l10n.fwEyebrow,
       accentColor: AppColors.indexFRI,
-      // Pas de barre de progression pendant la démo (hors des 14 items) :
-      // l'eyebrow « ENTRAÎNEMENT » s'affiche alors dans l'AppBar.
-      currentItem: _demoPhase ? null : currentLevel + 1,
-      totalItems: _demoPhase ? null : _generatedPatterns.length,
+      // Pendant l'entraînement, la barre compte les 3 items d'exemple et non
+      // les 14 items cotés — l'eyebrow « ENTRAÎNEMENT » lui sert de libellé,
+      // donc « 2/3 » ne peut pas se lire comme une progression dans le test.
+      currentItem: _demoPhase ? _demoIndex + 1 : currentLevel + 1,
+      totalItems: _demoPhase ? _demoPatterns.length : _generatedPatterns.length,
       // Tout tient à l'écran : les deux grilles se redimensionnent à la
       // hauteur disponible, les boutons restent toujours visibles.
       scrollable: false,
@@ -185,11 +202,17 @@ class _CubesTestPageState extends State<CubesTestPage> {
       // la progression d'items est affichée, jamais les points obtenus.
       bottomBar: _demoPhase && _demoLastCorrect != null
           ? KeplerTestButton.primary(
-              label: _demoLastCorrect!
-                  ? context.l10n.demoStart
-                  : context.l10n.demoRetry,
+              label: !_demoLastCorrect!
+                  ? context.l10n.demoRetry
+                  : _isLastDemo
+                      ? context.l10n.demoStart
+                      : context.l10n.demoContinue,
               accentColor: AppColors.indexFRI,
-              onPressed: _demoLastCorrect! ? _startRealTest : _retryDemo,
+              onPressed: !_demoLastCorrect!
+                  ? _retryDemo
+                  : _isLastDemo
+                      ? _startRealTest
+                      : _nextDemo,
             )
           : null,
       child: Column(
@@ -207,7 +230,7 @@ class _CubesTestPageState extends State<CubesTestPage> {
               // Pendant la démo, on incrémente la clé à chaque réessai pour
               // forcer un widget neuf (état d'assemblage interne réinitialisé).
               key: _demoPhase
-                  ? ValueKey('demo-$_demoAttempt')
+                  ? ValueKey('demo-$_demoIndex-$_demoAttempt')
                   : ValueKey(currentLevel),
               gridSize: pattern.gridSize,
               targetPattern: pattern.pattern,

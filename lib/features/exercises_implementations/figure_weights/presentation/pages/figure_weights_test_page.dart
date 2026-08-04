@@ -35,56 +35,155 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
 
   late List<BalanceItem> _generatedItems;
 
-  /// Phase de DÉMONSTRATION : un item d'exemple fixe, sans chrono ni score,
-  /// rejouable jusqu'à réussite — comme la démonstration du protocole réel.
+  /// Phase de DÉMONSTRATION : TROIS items d'exemple fixes, sans chrono ni
+  /// score, chacun rejouable jusqu'à réussite — comme la démonstration du
+  /// protocole réel.
   bool _demoPhase = true;
-  late final BalanceItem _demoItem;
+  late final List<BalanceItem> _demoItems;
+
+  /// Item d'entraînement courant.
+  int _demoIndex = 0;
+
+  bool get _isLastDemo => _demoIndex >= _demoItems.length - 1;
 
   @override
   void initState() {
     super.initState();
-    _demoItem = _buildDemoItem();
+    _demoItems = _buildDemoItems();
     _generateItems();
     // La démonstration n'est pas chronométrée : le compte à rebours ne
     // démarre qu'au passage au premier item réel (_startRealTest).
   }
 
-  /// Item de démonstration FIXE et déterministe (aucun aléatoire) : une
-  /// balance triviale « 2 cercles = 2 cercles », question « 2 cercles = ? »,
-  /// 4 options A-D dont une seule correcte (2 cercles). Volontairement très
-  /// facile pour illustrer le principe de l'exercice sans le noter.
-  BalanceItem _buildDemoItem() {
+  /// Les TROIS items d'entraînement, FIXES et déterministes (aucun aléatoire).
+  ///
+  /// Un seul exemple ne montrait que la lecture d'une balance ; il ne montrait
+  /// pas ce que l'exercice demande réellement, qui est de CONVERTIR une forme
+  /// en une autre. La progression est donc :
+  ///
+  /// 1. **Une seule forme.** « 2 cercles = 2 cercles » : on apprend à lire la
+  ///    balance et à choisir parmi 4 options.
+  /// 2. **Deux formes, une conversion.** « 1 carré = 2 cercles », donc
+  ///    2 carrés valent 4 cercles — le premier item où il faut convertir.
+  /// 3. **Deux balances enchaînées.** « 1 triangle = 2 carrés » et
+  ///    « 1 carré = 2 cercles », donc 1 triangle vaut 4 cercles : c'est la
+  ///    forme des items cotés, où la réponse passe par une forme
+  ///    intermédiaire.
+  List<BalanceItem> _buildDemoItems() => [
+        _demoOneShape(),
+        _demoConversion(),
+        _demoChained(),
+      ];
+
+  /// 1 — « 2 cercles = 2 cercles », question « 2 cercles = ? ».
+  BalanceItem _demoOneShape() {
     const shape = TokenShape.circle;
-    final balance = Balance(
-      leftSide: [Token(shape: shape, count: 2)],
-      rightSide: [Token(shape: shape, count: 2)],
-    );
     final correctAnswer = [Token(shape: shape, count: 2)];
-    final options = <List<Token>>[
-      [Token(shape: shape, count: 1)],
-      [Token(shape: shape, count: 3)],
-      correctAnswer,
-      [Token(shape: shape, count: 4)],
-    ];
     return BalanceItem(
-      balances: [balance],
+      balances: [
+        Balance(
+          leftSide: [Token(shape: shape, count: 2)],
+          rightSide: [Token(shape: shape, count: 2)],
+        ),
+      ],
       question: BalanceQuestion(
         type: QuestionType.findEquivalent,
         targetSide: [Token(shape: shape, count: 2)],
       ),
       correctAnswer: correctAnswer,
-      options: options,
+      options: <List<Token>>[
+        [Token(shape: shape, count: 1)],
+        [Token(shape: shape, count: 3)],
+        correctAnswer,
+        [Token(shape: shape, count: 4)],
+      ],
       timeLimitSeconds: 20,
       thetaValue: -1.8,
     );
   }
 
+  /// 2 — « 1 carré = 2 cercles », question « 2 carrés = ? » → 4 cercles.
+  ///
+  /// Les distracteurs sont les erreurs qu'on fait vraiment : oublier de
+  /// doubler (2), ne convertir qu'un seul carré (3), doubler deux fois (8).
+  BalanceItem _demoConversion() {
+    const a = TokenShape.square;
+    const b = TokenShape.circle;
+    final correctAnswer = [Token(shape: b, count: 4)];
+    return BalanceItem(
+      balances: [
+        Balance(
+          leftSide: [Token(shape: a, count: 1)],
+          rightSide: [Token(shape: b, count: 2)],
+        ),
+      ],
+      question: BalanceQuestion(
+        type: QuestionType.findEquivalent,
+        targetSide: [Token(shape: a, count: 2)],
+      ),
+      correctAnswer: correctAnswer,
+      options: <List<Token>>[
+        [Token(shape: b, count: 2)],
+        correctAnswer,
+        [Token(shape: b, count: 3)],
+        [Token(shape: b, count: 8)],
+      ],
+      timeLimitSeconds: 25,
+      thetaValue: -1.5,
+    );
+  }
+
+  /// 3 — « 1 triangle = 2 carrés » et « 1 carré = 2 cercles »,
+  /// question « 1 triangle = ? » → 4 cercles.
+  BalanceItem _demoChained() {
+    const a = TokenShape.triangle;
+    const b = TokenShape.square;
+    const c = TokenShape.circle;
+    final correctAnswer = [Token(shape: c, count: 4)];
+    return BalanceItem(
+      balances: [
+        Balance(
+          leftSide: [Token(shape: a, count: 1)],
+          rightSide: [Token(shape: b, count: 2)],
+        ),
+        Balance(
+          leftSide: [Token(shape: b, count: 1)],
+          rightSide: [Token(shape: c, count: 2)],
+        ),
+      ],
+      question: BalanceQuestion(
+        type: QuestionType.findEquivalent,
+        targetSide: [Token(shape: a, count: 1)],
+      ),
+      correctAnswer: correctAnswer,
+      options: <List<Token>>[
+        [Token(shape: c, count: 2)],
+        [Token(shape: c, count: 3)],
+        correctAnswer,
+        [Token(shape: c, count: 6)],
+      ],
+      timeLimitSeconds: 30,
+      thetaValue: -1.2,
+    );
+  }
+
   BalanceItem get _currentItem =>
-      _demoPhase ? _demoItem : _generatedItems[currentLevel];
+      _demoPhase ? _demoItems[_demoIndex] : _generatedItems[currentLevel];
 
   void _startRealTest() {
     setState(() => _demoPhase = false);
     _startItem();
+  }
+
+  /// Item d'entraînement suivant : même remise à zéro qu'un réessai, sur
+  /// l'item d'après. Toujours pas de chrono — [_startItem] n'est appelé qu'au
+  /// passage au test réel.
+  void _nextDemo() {
+    setState(() {
+      _demoIndex++;
+      _selectedAnswer = null;
+      _submitted = false;
+    });
   }
 
   void _retryDemo() {
@@ -213,10 +312,10 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
       testName: context.l10n.fwTestName,
       eyebrow: _demoPhase ? context.l10n.demoBadge : context.l10n.fwEyebrow,
       accentColor: AppColors.indexFRI,
-      // Pas de barre de progression pendant la démo (hors des items notés) :
-      // l'eyebrow « PRACTICE » s'affiche alors dans l'AppBar.
-      currentItem: _demoPhase ? null : currentLevel + 1,
-      totalItems: _demoPhase ? null : _generatedItems.length,
+      // Pendant l'entraînement, la barre compte les 3 items d'exemple et non
+      // les items cotés — l'eyebrow « ENTRAÎNEMENT » lui sert de libellé.
+      currentItem: _demoPhase ? _demoIndex + 1 : currentLevel + 1,
+      totalItems: _demoPhase ? _demoItems.length : _generatedItems.length,
       // Chrono seul dans l'AppBar (gain de hauteur) et bouton Valider sticky
       // en bas : plus jamais besoin de scroller pour valider. Aucun score
       // visible pendant la passation (protocole WAIS-IV), et pas de chrono
@@ -407,7 +506,8 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
     if (_demoPhase && _submitted) {
       final isCorrect = _selectedAnswer != null &&
           _listsEqual(_selectedAnswer!, item.correctAnswer);
-      return isCorrect ? context.l10n.demoStart : context.l10n.demoRetry;
+      if (!isCorrect) return context.l10n.demoRetry;
+      return _isLastDemo ? context.l10n.demoStart : context.l10n.demoContinue;
     }
     return context.l10n.commonValidate;
   }
@@ -416,7 +516,8 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
     if (_demoPhase && _submitted) {
       final isCorrect = _selectedAnswer != null &&
           _listsEqual(_selectedAnswer!, item.correctAnswer);
-      return isCorrect ? _startRealTest : _retryDemo;
+      if (!isCorrect) return _retryDemo;
+      return _isLastDemo ? _startRealTest : _nextDemo;
     }
     return _selectedAnswer != null ? _submitAnswer : null;
   }
