@@ -27,6 +27,8 @@ import '../../../exercises_implementations/figure_weights/presentation/pages/fig
 import '../../../data_collection/oral_test_flow.dart';
 import '../../../unlock/data/completion_reporter.dart';
 import '../../../../core/services/token_claims_reader.dart';
+import '../../data/pretest_store.dart';
+import '../pretest_chain.dart';
 import 'complete_test_results_page.dart';
 import '../../../../core/l10n/l10n_ext.dart';
 
@@ -65,19 +67,25 @@ String _localizedTestName(BuildContext context, String key) {
 }
 
 class CompleteTestOrchestratorPage extends StatelessWidget {
-  const CompleteTestOrchestratorPage({super.key});
+  const CompleteTestOrchestratorPage({super.key, this.pretestStore});
+
+  /// Injectable pour les tests uniquement : en production, le stockage réel
+  /// (box Hive chiffrée) est celui par défaut.
+  final PretestStore? pretestStore;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => CompleteTestBloc(),
-      child: const _OrchestratorView(),
+      child: _OrchestratorView(pretestStore: pretestStore),
     );
   }
 }
 
 class _OrchestratorView extends StatefulWidget {
-  const _OrchestratorView();
+  const _OrchestratorView({this.pretestStore});
+
+  final PretestStore? pretestStore;
 
   @override
   State<_OrchestratorView> createState() => _OrchestratorViewState();
@@ -99,6 +107,12 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
   /// Garde anti-double-lancement de l'étape orale finale (le listener BLoC
   /// peut se déclencher plusieurs fois pour un même état).
   bool _postBatteryStarted = false;
+
+  /// Verrou du lancement. Entre l'appui sur « Lancer » et le `StartTestEvent`
+  /// il y a désormais un `await` (lecture du stockage, puis éventuellement le
+  /// questionnaire préalable) : sans ce verrou, un second appui pendant cette
+  /// fenêtre empilerait un deuxième questionnaire par-dessus le premier.
+  bool _launching = false;
 
   @override
   void initState() {
@@ -130,6 +144,31 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
   void dispose() {
     _ageController.dispose();
     super.dispose();
+  }
+
+  /// Le seul chemin vers la batterie. Le questionnaire préalable s'intercale
+  /// ici, et pas dans les écrans appelants : ce bouton est le goulot par lequel
+  /// passent aussi bien une première passation que la reprise d'un test
+  /// interrompu depuis l'accueil.
+  ///
+  /// Ressortir du questionnaire sans répondre NE lance PAS le test : la
+  /// question est obligatoire, on revient à cet écran.
+  Future<void> _startBattery(BuildContext context, int ageInMonths) async {
+    if (_launching) return;
+    setState(() => _launching = true);
+    // Capturé AVANT l'await : après, `context.read` traverserait un arbre qui
+    // a pu changer pendant l'affichage du questionnaire.
+    final bloc = context.read<CompleteTestBloc>();
+    try {
+      final ok = await ensurePretest(
+        context,
+        store: widget.pretestStore ?? const PretestStore(),
+      );
+      if (!mounted || !ok) return;
+      bloc.add(StartTestEvent(ageInMonths));
+    } finally {
+      if (mounted) setState(() => _launching = false);
+    }
   }
 
   void _launchTest(BuildContext context, String testName) {
@@ -415,10 +454,8 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
             label: context.l10n.ctLaunchFullTest,
             icon: Icons.east,
             expand: true,
-            onPressed: _ageInMonths != null
-                ? () => context.read<CompleteTestBloc>().add(
-                      StartTestEvent(_ageInMonths!),
-                    )
+            onPressed: (_ageInMonths != null && !_launching)
+                ? () => _startBattery(context, _ageInMonths!)
                 : null,
           ),
           SizedBox(height: 12.h),

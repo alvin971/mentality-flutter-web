@@ -1570,6 +1570,98 @@
   "@oralQuit": {
     "description": "Bouton pour quitter le test (dialogue de sortie)"
   },
+  "preEyebrow": "Avant de commencer",
+  "@preEyebrow": {
+    "description": "Surtitre de l'unique question obligatoire du questionnaire préalable"
+  },
+  "preQ1Title": "As-tu déjà passé un test de QI ?",
+  "@preQ1Title": {
+    "description": "La question obligatoire posée avant le premier sous-test"
+  },
+  "preQ1Body": "Une question, pour situer ce que tu t'apprêtes à mesurer. Ta réponse ne change ni le test ni ton score.",
+  "@preQ1Body": {
+    "description": "Cadrage sous la question obligatoire : elle n'influence pas le test"
+  },
+  "preQ1Professional": "Oui, avec un psychiatre ou un psychologue",
+  "@preQ1Professional": {
+    "description": "Première modalité : test passé chez un professionnel — seule branche où un score rapporté est une mesure"
+  },
+  "preQ1Online": "Oui, un test en ligne peu fiable",
+  "@preQ1Online": {
+    "description": "Deuxième modalité : test en ligne, fiabilité non établie"
+  },
+  "preQ1Never": "Non, jamais — mais j'ai toujours voulu en faire un",
+  "@preQ1Never": {
+    "description": "Troisième modalité : jamais passé de test de QI"
+  },
+  "preLocalNotice": "Tes réponses restent sur ton téléphone, chiffrées. Rien n'est envoyé.",
+  "@preLocalNotice": {
+    "description": "Mention affichée sur chaque écran du questionnaire préalable — vérifiée par une garde de test : rien n'entre dans la file d'envoi"
+  },
+  "prePastEyebrow": "Ce test passé",
+  "@prePastEyebrow": {
+    "description": "Surtitre de l'écran âge + score, réservé à la branche « chez un professionnel »"
+  },
+  "prePastTitle": "Deux questions facultatives",
+  "@prePastTitle": {
+    "description": "Titre de l'écran âge + score du test passé chez un professionnel"
+  },
+  "prePastBody": "Tu peux continuer sans y répondre. Rien ici n'entre dans le calcul de ton score.",
+  "@prePastBody": {
+    "description": "Rappel du caractère facultatif des deux champs, et du fait qu'ils n'influencent pas le score"
+  },
+  "prePastAgeLabel": "À quel âge l'avais-tu passé ?",
+  "@prePastAgeLabel": {
+    "description": "Libellé du champ facultatif d'âge de passation du test antérieur"
+  },
+  "prePastAgeError": "Un âge entre 5 et 90 ans.",
+  "@prePastAgeError": {
+    "description": "Erreur affichée sous le champ d'âge quand la valeur saisie est hors bornes"
+  },
+  "prePastScoreLabel": "Quel score avais-tu obtenu ?",
+  "@prePastScoreLabel": {
+    "description": "Libellé du champ facultatif de score du test antérieur"
+  },
+  "prePastScoreError": "Un score entre 40 et 200.",
+  "@prePastScoreError": {
+    "description": "Erreur affichée sous le champ de score quand la valeur saisie est hors bornes"
+  },
+  "preEstimateEyebrow": "Avant le premier exercice",
+  "@preEstimateEyebrow": {
+    "description": "Surtitre de l'auto-estimation — elle passe AVANT tout résultat"
+  },
+  "preEstimateTitle": "À combien estimes-tu ton QI ?",
+  "@preEstimateTitle": {
+    "description": "Question d'auto-estimation, posée aux branches « test en ligne » et « jamais »"
+  },
+  "preEstimateBody": "Posée maintenant, avant le premier exercice : une fois un résultat sous les yeux, ta réponse ne serait plus une croyance. 100 est la moyenne.",
+  "@preEstimateBody": {
+    "description": "Explication de l'auto-estimation : pourquoi maintenant plutôt qu'après"
+  },
+  "preEstimateHint": "Fais glisser, ou touche − et +, pour choisir.",
+  "@preEstimateHint": {
+    "description": "Indication tant que l'estimation n'a pas été déplacée (le bouton reste inerte)"
+  },
+  "preEstimateAverage": "100 est la moyenne.",
+  "@preEstimateAverage": {
+    "description": "Repère affiché sous l'échelle une fois qu'elle a été déplacée"
+  },
+  "preEstimateConfirm": "Valider mon estimation",
+  "@preEstimateConfirm": {
+    "description": "Bouton qui enregistre l'auto-estimation et lance la batterie"
+  },
+  "preEstimateDecline": "Je préfère ne pas répondre",
+  "@preEstimateDecline": {
+    "description": "Bouton qui clôt l'auto-estimation sans donner de nombre — sans lui, la question reviendrait sans fin"
+  },
+  "preEstimateDecrease": "Diminuer d'un point",
+  "@preEstimateDecrease": {
+    "description": "Info-bulle du bouton qui diminue l'estimation d'un point"
+  },
+  "preEstimateIncrease": "Augmenter d'un point",
+  "@preEstimateIncrease": {
+    "description": "Info-bulle du bouton qui augmente l'estimation d'un point"
+  },
   "regStepEyebrow": "ÉTAPE {step} / 4",
   "@regStepEyebrow": {
     "description": "Eyebrow label showing the current registration step out of 4",

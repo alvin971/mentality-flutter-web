@@ -1191,6 +1191,80 @@ class AppLocalizationsDe extends AppLocalizations {
   String get oralQuit => 'Verlassen';
 
   @override
+  String get preEyebrow => 'Bevor es losgeht';
+
+  @override
+  String get preQ1Title => 'Hast du schon einmal einen IQ-Test gemacht?';
+
+  @override
+  String get preQ1Body =>
+      'Eine Frage, um einzuordnen, was du gleich misst. Deine Antwort ändert weder den Test noch dein Ergebnis.';
+
+  @override
+  String get preQ1Professional =>
+      'Ja, in einer psychiatrischen oder psychologischen Praxis';
+
+  @override
+  String get preQ1Online => 'Ja, einen wenig verlässlichen Online-Test';
+
+  @override
+  String get preQ1Never => 'Nein, nie — aber ich wollte immer schon';
+
+  @override
+  String get preLocalNotice =>
+      'Deine Antworten bleiben verschlüsselt auf deinem Gerät. Es wird nichts gesendet.';
+
+  @override
+  String get prePastEyebrow => 'Dieser frühere Test';
+
+  @override
+  String get prePastTitle => 'Zwei freiwillige Fragen';
+
+  @override
+  String get prePastBody =>
+      'Du kannst auch ohne Antwort fortfahren. Nichts davon fließt in dein Ergebnis ein.';
+
+  @override
+  String get prePastAgeLabel => 'Wie alt warst du damals?';
+
+  @override
+  String get prePastAgeError => 'Ein Alter zwischen 5 und 90 Jahren.';
+
+  @override
+  String get prePastScoreLabel => 'Welches Ergebnis hattest du?';
+
+  @override
+  String get prePastScoreError => 'Ein Ergebnis zwischen 40 und 200.';
+
+  @override
+  String get preEstimateEyebrow => 'Vor der ersten Aufgabe';
+
+  @override
+  String get preEstimateTitle => 'Wie hoch schätzt du deinen IQ?';
+
+  @override
+  String get preEstimateBody =>
+      'Jetzt gefragt, vor der ersten Aufgabe: mit einem Ergebnis vor Augen wäre deine Antwort keine Überzeugung mehr. 100 ist der Durchschnitt.';
+
+  @override
+  String get preEstimateHint => 'Schieben oder auf − und + tippen.';
+
+  @override
+  String get preEstimateAverage => '100 ist der Durchschnitt.';
+
+  @override
+  String get preEstimateConfirm => 'Schätzung bestätigen';
+
+  @override
+  String get preEstimateDecline => 'Ich möchte nicht antworten';
+
+  @override
+  String get preEstimateDecrease => 'Um einen Punkt verringern';
+
+  @override
+  String get preEstimateIncrease => 'Um einen Punkt erhöhen';
+
+  @override
   String regStepEyebrow(int step) {
     return 'SCHRITT $step / 4';
   }

@@ -2205,6 +2205,144 @@ abstract class AppLocalizations {
   /// **'Quitter'**
   String get oralQuit;
 
+  /// Surtitre de l'unique question obligatoire du questionnaire préalable
+  ///
+  /// In fr, this message translates to:
+  /// **'Avant de commencer'**
+  String get preEyebrow;
+
+  /// La question obligatoire posée avant le premier sous-test
+  ///
+  /// In fr, this message translates to:
+  /// **'As-tu déjà passé un test de QI ?'**
+  String get preQ1Title;
+
+  /// Cadrage sous la question obligatoire : elle n'influence pas le test
+  ///
+  /// In fr, this message translates to:
+  /// **'Une question, pour situer ce que tu t\'apprêtes à mesurer. Ta réponse ne change ni le test ni ton score.'**
+  String get preQ1Body;
+
+  /// Première modalité : test passé chez un professionnel — seule branche où un score rapporté est une mesure
+  ///
+  /// In fr, this message translates to:
+  /// **'Oui, avec un psychiatre ou un psychologue'**
+  String get preQ1Professional;
+
+  /// Deuxième modalité : test en ligne, fiabilité non établie
+  ///
+  /// In fr, this message translates to:
+  /// **'Oui, un test en ligne peu fiable'**
+  String get preQ1Online;
+
+  /// Troisième modalité : jamais passé de test de QI
+  ///
+  /// In fr, this message translates to:
+  /// **'Non, jamais — mais j\'ai toujours voulu en faire un'**
+  String get preQ1Never;
+
+  /// Mention affichée sur chaque écran du questionnaire préalable — vérifiée par une garde de test : rien n'entre dans la file d'envoi
+  ///
+  /// In fr, this message translates to:
+  /// **'Tes réponses restent sur ton téléphone, chiffrées. Rien n\'est envoyé.'**
+  String get preLocalNotice;
+
+  /// Surtitre de l'écran âge + score, réservé à la branche « chez un professionnel »
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce test passé'**
+  String get prePastEyebrow;
+
+  /// Titre de l'écran âge + score du test passé chez un professionnel
+  ///
+  /// In fr, this message translates to:
+  /// **'Deux questions facultatives'**
+  String get prePastTitle;
+
+  /// Rappel du caractère facultatif des deux champs, et du fait qu'ils n'influencent pas le score
+  ///
+  /// In fr, this message translates to:
+  /// **'Tu peux continuer sans y répondre. Rien ici n\'entre dans le calcul de ton score.'**
+  String get prePastBody;
+
+  /// Libellé du champ facultatif d'âge de passation du test antérieur
+  ///
+  /// In fr, this message translates to:
+  /// **'À quel âge l\'avais-tu passé ?'**
+  String get prePastAgeLabel;
+
+  /// Erreur affichée sous le champ d'âge quand la valeur saisie est hors bornes
+  ///
+  /// In fr, this message translates to:
+  /// **'Un âge entre 5 et 90 ans.'**
+  String get prePastAgeError;
+
+  /// Libellé du champ facultatif de score du test antérieur
+  ///
+  /// In fr, this message translates to:
+  /// **'Quel score avais-tu obtenu ?'**
+  String get prePastScoreLabel;
+
+  /// Erreur affichée sous le champ de score quand la valeur saisie est hors bornes
+  ///
+  /// In fr, this message translates to:
+  /// **'Un score entre 40 et 200.'**
+  String get prePastScoreError;
+
+  /// Surtitre de l'auto-estimation — elle passe AVANT tout résultat
+  ///
+  /// In fr, this message translates to:
+  /// **'Avant le premier exercice'**
+  String get preEstimateEyebrow;
+
+  /// Question d'auto-estimation, posée aux branches « test en ligne » et « jamais »
+  ///
+  /// In fr, this message translates to:
+  /// **'À combien estimes-tu ton QI ?'**
+  String get preEstimateTitle;
+
+  /// Explication de l'auto-estimation : pourquoi maintenant plutôt qu'après
+  ///
+  /// In fr, this message translates to:
+  /// **'Posée maintenant, avant le premier exercice : une fois un résultat sous les yeux, ta réponse ne serait plus une croyance. 100 est la moyenne.'**
+  String get preEstimateBody;
+
+  /// Indication tant que l'estimation n'a pas été déplacée (le bouton reste inerte)
+  ///
+  /// In fr, this message translates to:
+  /// **'Fais glisser, ou touche − et +, pour choisir.'**
+  String get preEstimateHint;
+
+  /// Repère affiché sous l'échelle une fois qu'elle a été déplacée
+  ///
+  /// In fr, this message translates to:
+  /// **'100 est la moyenne.'**
+  String get preEstimateAverage;
+
+  /// Bouton qui enregistre l'auto-estimation et lance la batterie
+  ///
+  /// In fr, this message translates to:
+  /// **'Valider mon estimation'**
+  String get preEstimateConfirm;
+
+  /// Bouton qui clôt l'auto-estimation sans donner de nombre — sans lui, la question reviendrait sans fin
+  ///
+  /// In fr, this message translates to:
+  /// **'Je préfère ne pas répondre'**
+  String get preEstimateDecline;
+
+  /// Info-bulle du bouton qui diminue l'estimation d'un point
+  ///
+  /// In fr, this message translates to:
+  /// **'Diminuer d\'un point'**
+  String get preEstimateDecrease;
+
+  /// Info-bulle du bouton qui augmente l'estimation d'un point
+  ///
+  /// In fr, this message translates to:
+  /// **'Augmenter d\'un point'**
+  String get preEstimateIncrease;
+
   /// Eyebrow label showing the current registration step out of 4
   ///
   /// In fr, this message translates to:

@@ -1182,6 +1182,79 @@ class AppLocalizationsEn extends AppLocalizations {
   String get oralQuit => 'Leave';
 
   @override
+  String get preEyebrow => 'Before you start';
+
+  @override
+  String get preQ1Title => 'Have you ever taken an IQ test?';
+
+  @override
+  String get preQ1Body =>
+      'One question, to place what you are about to measure. Your answer changes neither the test nor your score.';
+
+  @override
+  String get preQ1Professional => 'Yes, with a psychiatrist or a psychologist';
+
+  @override
+  String get preQ1Online => 'Yes, an unreliable test online';
+
+  @override
+  String get preQ1Never => 'No, never — but I have always wanted to';
+
+  @override
+  String get preLocalNotice =>
+      'Your answers stay on your phone, encrypted. Nothing is sent.';
+
+  @override
+  String get prePastEyebrow => 'That earlier test';
+
+  @override
+  String get prePastTitle => 'Two optional questions';
+
+  @override
+  String get prePastBody =>
+      'You can continue without answering them. Nothing here goes into your score.';
+
+  @override
+  String get prePastAgeLabel => 'How old were you when you took it?';
+
+  @override
+  String get prePastAgeError => 'An age between 5 and 90.';
+
+  @override
+  String get prePastScoreLabel => 'What score did you get?';
+
+  @override
+  String get prePastScoreError => 'A score between 40 and 200.';
+
+  @override
+  String get preEstimateEyebrow => 'Before the first exercise';
+
+  @override
+  String get preEstimateTitle => 'What do you think your IQ is?';
+
+  @override
+  String get preEstimateBody =>
+      'Asked now, before the first exercise: once a result is in front of you, your answer would no longer be a belief. 100 is the average.';
+
+  @override
+  String get preEstimateHint => 'Slide, or tap − and +, to choose.';
+
+  @override
+  String get preEstimateAverage => '100 is the average.';
+
+  @override
+  String get preEstimateConfirm => 'Confirm my estimate';
+
+  @override
+  String get preEstimateDecline => 'I would rather not answer';
+
+  @override
+  String get preEstimateDecrease => 'Decrease by one point';
+
+  @override
+  String get preEstimateIncrease => 'Increase by one point';
+
+  @override
   String regStepEyebrow(int step) {
     return 'STEP $step / 4';
   }
@@ -4755,6 +4828,79 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get oralQuit => 'Leave';
+
+  @override
+  String get preEyebrow => 'Before you start';
+
+  @override
+  String get preQ1Title => 'Have you ever taken an IQ test?';
+
+  @override
+  String get preQ1Body =>
+      'One question, to place what you are about to measure. Your answer changes neither the test nor your score.';
+
+  @override
+  String get preQ1Professional => 'Yes, with a psychiatrist or a psychologist';
+
+  @override
+  String get preQ1Online => 'Yes, an unreliable test online';
+
+  @override
+  String get preQ1Never => 'No, never — but I have always wanted to';
+
+  @override
+  String get preLocalNotice =>
+      'Your answers stay on your phone, encrypted. Nothing is sent.';
+
+  @override
+  String get prePastEyebrow => 'That earlier test';
+
+  @override
+  String get prePastTitle => 'Two optional questions';
+
+  @override
+  String get prePastBody =>
+      'You can continue without answering them. Nothing here goes into your score.';
+
+  @override
+  String get prePastAgeLabel => 'How old were you when you took it?';
+
+  @override
+  String get prePastAgeError => 'An age between 5 and 90.';
+
+  @override
+  String get prePastScoreLabel => 'What score did you get?';
+
+  @override
+  String get prePastScoreError => 'A score between 40 and 200.';
+
+  @override
+  String get preEstimateEyebrow => 'Before the first exercise';
+
+  @override
+  String get preEstimateTitle => 'What do you think your IQ is?';
+
+  @override
+  String get preEstimateBody =>
+      'Asked now, before the first exercise: once a result is in front of you, your answer would no longer be a belief. 100 is the average.';
+
+  @override
+  String get preEstimateHint => 'Slide, or tap − and +, to choose.';
+
+  @override
+  String get preEstimateAverage => '100 is the average.';
+
+  @override
+  String get preEstimateConfirm => 'Confirm my estimate';
+
+  @override
+  String get preEstimateDecline => 'I would rather not answer';
+
+  @override
+  String get preEstimateDecrease => 'Decrease by one point';
+
+  @override
+  String get preEstimateIncrease => 'Increase by one point';
 
   @override
   String regStepEyebrow(int step) {

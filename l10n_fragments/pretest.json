@@ -1,0 +1,209 @@
+{
+  "preEyebrow": {
+    "fr": "Avant de commencer",
+    "en": "Before you start",
+    "es": "Antes de empezar",
+    "pt": "Antes de começar",
+    "de": "Bevor es losgeht",
+    "en_GB": "Before you start",
+    "desc": "Surtitre de l'unique question obligatoire du questionnaire préalable"
+  },
+  "preQ1Title": {
+    "fr": "As-tu déjà passé un test de QI ?",
+    "en": "Have you ever taken an IQ test?",
+    "es": "¿Has hecho alguna vez un test de CI?",
+    "pt": "Já fizeste alguma vez um teste de QI?",
+    "de": "Hast du schon einmal einen IQ-Test gemacht?",
+    "en_GB": "Have you ever taken an IQ test?",
+    "desc": "La question obligatoire posée avant le premier sous-test"
+  },
+  "preQ1Body": {
+    "fr": "Une question, pour situer ce que tu t'apprêtes à mesurer. Ta réponse ne change ni le test ni ton score.",
+    "en": "One question, to place what you are about to measure. Your answer changes neither the test nor your score.",
+    "es": "Una pregunta, para situar lo que vas a medir. Tu respuesta no cambia ni el test ni tu puntuación.",
+    "pt": "Uma pergunta, para situar o que vais medir. A tua resposta não altera o teste nem a tua pontuação.",
+    "de": "Eine Frage, um einzuordnen, was du gleich misst. Deine Antwort ändert weder den Test noch dein Ergebnis.",
+    "en_GB": "One question, to place what you are about to measure. Your answer changes neither the test nor your score.",
+    "desc": "Cadrage sous la question obligatoire : elle n'influence pas le test"
+  },
+  "preQ1Professional": {
+    "fr": "Oui, avec un psychiatre ou un psychologue",
+    "en": "Yes, with a psychiatrist or a psychologist",
+    "es": "Sí, con un psiquiatra o un psicólogo",
+    "pt": "Sim, com um psiquiatra ou um psicólogo",
+    "de": "Ja, in einer psychiatrischen oder psychologischen Praxis",
+    "en_GB": "Yes, with a psychiatrist or a psychologist",
+    "desc": "Première modalité : test passé chez un professionnel — seule branche où un score rapporté est une mesure"
+  },
+  "preQ1Online": {
+    "fr": "Oui, un test en ligne peu fiable",
+    "en": "Yes, an unreliable test online",
+    "es": "Sí, un test en línea poco fiable",
+    "pt": "Sim, um teste online pouco fiável",
+    "de": "Ja, einen wenig verlässlichen Online-Test",
+    "en_GB": "Yes, an unreliable test online",
+    "desc": "Deuxième modalité : test en ligne, fiabilité non établie"
+  },
+  "preQ1Never": {
+    "fr": "Non, jamais — mais j'ai toujours voulu en faire un",
+    "en": "No, never — but I have always wanted to",
+    "es": "No, nunca — pero siempre he querido hacerlo",
+    "pt": "Não, nunca — mas sempre quis fazer um",
+    "de": "Nein, nie — aber ich wollte immer schon",
+    "en_GB": "No, never — but I have always wanted to",
+    "desc": "Troisième modalité : jamais passé de test de QI"
+  },
+  "preLocalNotice": {
+    "fr": "Tes réponses restent sur ton téléphone, chiffrées. Rien n'est envoyé.",
+    "en": "Your answers stay on your phone, encrypted. Nothing is sent.",
+    "es": "Tus respuestas se quedan en tu teléfono, cifradas. No se envía nada.",
+    "pt": "As tuas respostas ficam no teu telemóvel, cifradas. Nada é enviado.",
+    "de": "Deine Antworten bleiben verschlüsselt auf deinem Gerät. Es wird nichts gesendet.",
+    "en_GB": "Your answers stay on your phone, encrypted. Nothing is sent.",
+    "desc": "Mention affichée sur chaque écran du questionnaire préalable — vérifiée par une garde de test : rien n'entre dans la file d'envoi"
+  },
+  "prePastEyebrow": {
+    "fr": "Ce test passé",
+    "en": "That earlier test",
+    "es": "Aquel test",
+    "pt": "Esse teste",
+    "de": "Dieser frühere Test",
+    "en_GB": "That earlier test",
+    "desc": "Surtitre de l'écran âge + score, réservé à la branche « chez un professionnel »"
+  },
+  "prePastTitle": {
+    "fr": "Deux questions facultatives",
+    "en": "Two optional questions",
+    "es": "Dos preguntas opcionales",
+    "pt": "Duas perguntas opcionais",
+    "de": "Zwei freiwillige Fragen",
+    "en_GB": "Two optional questions",
+    "desc": "Titre de l'écran âge + score du test passé chez un professionnel"
+  },
+  "prePastBody": {
+    "fr": "Tu peux continuer sans y répondre. Rien ici n'entre dans le calcul de ton score.",
+    "en": "You can continue without answering them. Nothing here goes into your score.",
+    "es": "Puedes continuar sin responderlas. Nada de esto entra en el cálculo de tu puntuación.",
+    "pt": "Podes continuar sem responder. Nada disto entra no cálculo da tua pontuação.",
+    "de": "Du kannst auch ohne Antwort fortfahren. Nichts davon fließt in dein Ergebnis ein.",
+    "en_GB": "You can continue without answering them. Nothing here goes into your score.",
+    "desc": "Rappel du caractère facultatif des deux champs, et du fait qu'ils n'influencent pas le score"
+  },
+  "prePastAgeLabel": {
+    "fr": "À quel âge l'avais-tu passé ?",
+    "en": "How old were you when you took it?",
+    "es": "¿Qué edad tenías cuando lo hiciste?",
+    "pt": "Que idade tinhas quando o fizeste?",
+    "de": "Wie alt warst du damals?",
+    "en_GB": "How old were you when you took it?",
+    "desc": "Libellé du champ facultatif d'âge de passation du test antérieur"
+  },
+  "prePastAgeError": {
+    "fr": "Un âge entre 5 et 90 ans.",
+    "en": "An age between 5 and 90.",
+    "es": "Una edad entre 5 y 90 años.",
+    "pt": "Uma idade entre 5 e 90 anos.",
+    "de": "Ein Alter zwischen 5 und 90 Jahren.",
+    "en_GB": "An age between 5 and 90.",
+    "desc": "Erreur affichée sous le champ d'âge quand la valeur saisie est hors bornes"
+  },
+  "prePastScoreLabel": {
+    "fr": "Quel score avais-tu obtenu ?",
+    "en": "What score did you get?",
+    "es": "¿Qué puntuación obtuviste?",
+    "pt": "Que pontuação obtiveste?",
+    "de": "Welches Ergebnis hattest du?",
+    "en_GB": "What score did you get?",
+    "desc": "Libellé du champ facultatif de score du test antérieur"
+  },
+  "prePastScoreError": {
+    "fr": "Un score entre 40 et 200.",
+    "en": "A score between 40 and 200.",
+    "es": "Una puntuación entre 40 y 200.",
+    "pt": "Uma pontuação entre 40 e 200.",
+    "de": "Ein Ergebnis zwischen 40 und 200.",
+    "en_GB": "A score between 40 and 200.",
+    "desc": "Erreur affichée sous le champ de score quand la valeur saisie est hors bornes"
+  },
+  "preEstimateEyebrow": {
+    "fr": "Avant le premier exercice",
+    "en": "Before the first exercise",
+    "es": "Antes del primer ejercicio",
+    "pt": "Antes do primeiro exercício",
+    "de": "Vor der ersten Aufgabe",
+    "en_GB": "Before the first exercise",
+    "desc": "Surtitre de l'auto-estimation — elle passe AVANT tout résultat"
+  },
+  "preEstimateTitle": {
+    "fr": "À combien estimes-tu ton QI ?",
+    "en": "What do you think your IQ is?",
+    "es": "¿Cuánto crees que es tu CI?",
+    "pt": "Quanto achas que é o teu QI?",
+    "de": "Wie hoch schätzt du deinen IQ?",
+    "en_GB": "What do you think your IQ is?",
+    "desc": "Question d'auto-estimation, posée aux branches « test en ligne » et « jamais »"
+  },
+  "preEstimateBody": {
+    "fr": "Posée maintenant, avant le premier exercice : une fois un résultat sous les yeux, ta réponse ne serait plus une croyance. 100 est la moyenne.",
+    "en": "Asked now, before the first exercise: once a result is in front of you, your answer would no longer be a belief. 100 is the average.",
+    "es": "Te la hacemos ahora, antes del primer ejercicio: con un resultado delante, tu respuesta ya no sería una creencia. 100 es la media.",
+    "pt": "Perguntada agora, antes do primeiro exercício: com um resultado à frente, a tua resposta já não seria uma crença. 100 é a média.",
+    "de": "Jetzt gefragt, vor der ersten Aufgabe: mit einem Ergebnis vor Augen wäre deine Antwort keine Überzeugung mehr. 100 ist der Durchschnitt.",
+    "en_GB": "Asked now, before the first exercise: once a result is in front of you, your answer would no longer be a belief. 100 is the average.",
+    "desc": "Explication de l'auto-estimation : pourquoi maintenant plutôt qu'après"
+  },
+  "preEstimateHint": {
+    "fr": "Fais glisser, ou touche − et +, pour choisir.",
+    "en": "Slide, or tap − and +, to choose.",
+    "es": "Desliza, o toca − y +, para elegir.",
+    "pt": "Desliza, ou toca em − e +, para escolher.",
+    "de": "Schieben oder auf − und + tippen.",
+    "en_GB": "Slide, or tap − and +, to choose.",
+    "desc": "Indication tant que l'estimation n'a pas été déplacée (le bouton reste inerte)"
+  },
+  "preEstimateAverage": {
+    "fr": "100 est la moyenne.",
+    "en": "100 is the average.",
+    "es": "100 es la media.",
+    "pt": "100 é a média.",
+    "de": "100 ist der Durchschnitt.",
+    "en_GB": "100 is the average.",
+    "desc": "Repère affiché sous l'échelle une fois qu'elle a été déplacée"
+  },
+  "preEstimateConfirm": {
+    "fr": "Valider mon estimation",
+    "en": "Confirm my estimate",
+    "es": "Confirmar mi estimación",
+    "pt": "Confirmar a minha estimativa",
+    "de": "Schätzung bestätigen",
+    "en_GB": "Confirm my estimate",
+    "desc": "Bouton qui enregistre l'auto-estimation et lance la batterie"
+  },
+  "preEstimateDecline": {
+    "fr": "Je préfère ne pas répondre",
+    "en": "I would rather not answer",
+    "es": "Prefiero no responder",
+    "pt": "Prefiro não responder",
+    "de": "Ich möchte nicht antworten",
+    "en_GB": "I would rather not answer",
+    "desc": "Bouton qui clôt l'auto-estimation sans donner de nombre — sans lui, la question reviendrait sans fin"
+  },
+  "preEstimateDecrease": {
+    "fr": "Diminuer d'un point",
+    "en": "Decrease by one point",
+    "es": "Disminuir un punto",
+    "pt": "Diminuir um ponto",
+    "de": "Um einen Punkt verringern",
+    "en_GB": "Decrease by one point",
+    "desc": "Info-bulle du bouton qui diminue l'estimation d'un point"
+  },
+  "preEstimateIncrease": {
+    "fr": "Augmenter d'un point",
+    "en": "Increase by one point",
+    "es": "Aumentar un punto",
+    "pt": "Aumentar um ponto",
+    "de": "Um einen Punkt erhöhen",
+    "en_GB": "Increase by one point",
+    "desc": "Info-bulle du bouton qui augmente l'estimation d'un point"
+  }
+}

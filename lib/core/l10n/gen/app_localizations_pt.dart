@@ -1189,6 +1189,79 @@ class AppLocalizationsPt extends AppLocalizations {
   String get oralQuit => 'Sair';
 
   @override
+  String get preEyebrow => 'Antes de começar';
+
+  @override
+  String get preQ1Title => 'Já fizeste alguma vez um teste de QI?';
+
+  @override
+  String get preQ1Body =>
+      'Uma pergunta, para situar o que vais medir. A tua resposta não altera o teste nem a tua pontuação.';
+
+  @override
+  String get preQ1Professional => 'Sim, com um psiquiatra ou um psicólogo';
+
+  @override
+  String get preQ1Online => 'Sim, um teste online pouco fiável';
+
+  @override
+  String get preQ1Never => 'Não, nunca — mas sempre quis fazer um';
+
+  @override
+  String get preLocalNotice =>
+      'As tuas respostas ficam no teu telemóvel, cifradas. Nada é enviado.';
+
+  @override
+  String get prePastEyebrow => 'Esse teste';
+
+  @override
+  String get prePastTitle => 'Duas perguntas opcionais';
+
+  @override
+  String get prePastBody =>
+      'Podes continuar sem responder. Nada disto entra no cálculo da tua pontuação.';
+
+  @override
+  String get prePastAgeLabel => 'Que idade tinhas quando o fizeste?';
+
+  @override
+  String get prePastAgeError => 'Uma idade entre 5 e 90 anos.';
+
+  @override
+  String get prePastScoreLabel => 'Que pontuação obtiveste?';
+
+  @override
+  String get prePastScoreError => 'Uma pontuação entre 40 e 200.';
+
+  @override
+  String get preEstimateEyebrow => 'Antes do primeiro exercício';
+
+  @override
+  String get preEstimateTitle => 'Quanto achas que é o teu QI?';
+
+  @override
+  String get preEstimateBody =>
+      'Perguntada agora, antes do primeiro exercício: com um resultado à frente, a tua resposta já não seria uma crença. 100 é a média.';
+
+  @override
+  String get preEstimateHint => 'Desliza, ou toca em − e +, para escolher.';
+
+  @override
+  String get preEstimateAverage => '100 é a média.';
+
+  @override
+  String get preEstimateConfirm => 'Confirmar a minha estimativa';
+
+  @override
+  String get preEstimateDecline => 'Prefiro não responder';
+
+  @override
+  String get preEstimateDecrease => 'Diminuir um ponto';
+
+  @override
+  String get preEstimateIncrease => 'Aumentar um ponto';
+
+  @override
   String regStepEyebrow(int step) {
     return 'PASSO $step / 4';
   }
