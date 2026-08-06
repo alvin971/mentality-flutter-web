@@ -245,6 +245,40 @@ void main() {
       expect(ecrit()[PretestAnswers.itemPriorScore], 128);
     });
 
+    testWidgets('restent validables clavier ouvert', (tester) async {
+      // LE BUG DU 2026-08-05. Flutter ne remonte PAS `bottomNavigationBar`
+      // au-dessus du clavier : la barre restait à 748–800 pendant qu'un pavé
+      // numérique en couvrait tout à partir de 476. Aucun bouton de
+      // validation n'était atteignable — et le pavé numérique iOS n'a pas de
+      // touche « OK » pour refermer le clavier. Écran sans issue.
+      // Corrigé dans `KeplerScaffold`, vérifié ici où le bug se voyait.
+      final hote = await ouvrir(tester);
+      await tester.tap(find.text(kPro));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(kContinuer));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(TextField).at(1));
+      // Le clavier iOS : ~336 pt, mesuré en pixels physiques (×3).
+      tester.view.viewInsets = const FakeViewPadding(bottom: 336 * 3);
+      addTearDown(tester.view.reset);
+      await tester.pumpAndSettle();
+
+      const hautDuClavier = 812.0 - 336.0;
+      final bouton = tester.getRect(find.widgetWithText(KeplerButton, kContinuer));
+      expect(bouton.bottom, lessThanOrEqualTo(hautDuClavier),
+          reason: 'le bouton doit rester au-dessus du clavier : sans lui, '
+              'l\'écran n\'a plus aucune sortie');
+
+      // Et il fonctionne encore là où il est.
+      await tester.enterText(find.byType(TextField).at(1), '128');
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(kContinuer));
+      await tester.pumpAndSettle();
+      expect(ecrit()[PretestAnswers.itemPriorScore], 128);
+      expect(hote.resultat, isTrue);
+    });
+
     testWidgets('hors bornes, affichent une erreur et ne sont pas écrits',
         (tester) async {
       await ouvrir(tester);
