@@ -6,9 +6,12 @@
 -- KV évite toute dépendance et tout secret externe.
 --
 -- Modèle de clés KV (voir index.js) :
---   progress:<account>        état des paliers du parrain (JSON)
+--   progress:<account>        état des paliers du parrain (JSON ; champ
+--                             firstSeenVia depuis le LOT 0 anti-faux-test)
 --   code:<referralCode>       compte propriétaire du code (unicité + resolve)
---   referee:<account>         referrerCode validé (écrit une fois : 1 filleul = 1 parrain)
+--   referee:<account>         lien filleul→parrain, écrit une fois (1 filleul =
+--                             1 parrain). Neuf : JSON {code, at} ; legacy :
+--                             referrerCode brut (cf. parseRefereeLink)
 --   ref:<referrerCode>:<acct> filleul ayant terminé son test (comptage)
 --   completed:<account>       preuve de complétion du test (première fois gagne)
 --

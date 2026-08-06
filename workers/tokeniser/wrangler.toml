@@ -29,7 +29,25 @@ compatibility_date = "2025-01-01"
 # bucket_name = "mentality-audio"
 # jurisdiction = "eu"
 
+# Plafond d'émission de tokens (LOT 0 anti-faux-test) : compteur AGRÉGÉ par
+# tranche de temps dans KV — clé issue:<n°>, un entier, TTL court. Ni IP, ni
+# claims, ni token : rien de rattachable à quiconque (cf. README, « Garanties
+# & limites »). Sans ce binding, le code est FAIL-OPEN (plafond inactif) : un
+# frein anti-abus ne doit jamais murer l'inscription.
+#
+# → ACTIVER en 2 étapes avant `wrangler deploy` :
+#   1. npx wrangler kv namespace create RATE_KV
+#   2. décommenter ces 3 lignes et coller l'id rendu par la commande.
+# [[kv_namespaces]]
+# binding = "RATE_KV"
+# id = "<id rendu par `npx wrangler kv namespace create RATE_KV`>"
+
+[vars]
 # Nombre minimal d'enregistrements exigé sous le compte pour valider le token
 # (proxy de « test complété » ; best-effort uploads → garder bas, ajustable).
-[vars]
 MIN_RECORDINGS = "1"
+# Plafond d'émission : fenêtre (minutes) et maximum d'émissions par fenêtre.
+# Valeurs de départ actées avec le fondateur (2026-08-06) : 300/heure —
+# prudent-large, à affiner après observation du compteur en KV.
+ISSUE_WINDOW_MINUTES = "60"
+ISSUE_MAX_PER_WINDOW = "300"

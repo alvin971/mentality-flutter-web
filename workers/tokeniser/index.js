@@ -26,10 +26,14 @@
  *
  * Déploiement : voir README.md. Secret : wrangler secret put ED25519_PRIVATE_KEY_B64.
  *
- * ANONYMAT : stateless, AUCUN log (IP/timestamp/claims/token), aucun stockage.
+ * ANONYMAT : aucun log par requête (IP/timestamp/claims/token), aucun stockage
+ * PAR UTILISATEUR. Seul état serveur (LOT 0 anti-faux-test) : un compteur
+ * AGRÉGÉ d'émissions par tranche de temps (clé issue:<n°>, un entier, TTL
+ * court) — ni IP, ni claims, ni token, rien de rattachable à quiconque.
  */
 
 import { verifyToken, TOKEN_SIGNING_PUBLIC_KEYS, sha256hex } from '../_shared/token_verify.js';
+import { checkOrigin } from '../_shared/origin_policy.js';
 
 const KID = 'k1';
 const SCHEMA_VERSION = 2;
@@ -51,9 +55,12 @@ export default {
   async fetch(request, env) {
     if (request.method === 'OPTIONS') return handleOptions(request);
 
-    const origin = request.headers.get('Origin') || '';
-    // Égalité STRICTE (pas startsWith). CORS ≠ contrôle d'accès (cf. README).
-    if (!ALLOWED_ORIGINS.includes(origin) && origin !== '') {
+    // Politique d'Origin explicite (workers/_shared/origin_policy.js) : égalité
+    // stricte, absent = app native (compensation : plafond d'émission agrégé).
+    // CORS ≠ contrôle d'accès (cf. README).
+    const o = checkOrigin(request, ALLOWED_ORIGINS);
+    const origin = o.origin;
+    if (!o.allowed) {
       return json({ error: 'Origin non autorisée' }, 403, origin);
     }
     const path = new URL(request.url).pathname;
@@ -135,10 +142,52 @@ function regionFromCf(cf) {
   return byName || 'OTHER';
 }
 
+/**
+ * Plafond d'émission — LOT 0 anti-faux-test.
+ *
+ * Compteur AGRÉGÉ par tranche de temps : une clé `issue:<n°>`, une valeur
+ * entière, un TTL court. Ni IP, ni claims, ni token, ni horodatage individuel
+ * — rien de rattachable à quiconque (engagement d'anonymat en tête de fichier).
+ *
+ * FAIL-OPEN si RATE_KV n'est pas lié : le plafond est un frein anti-abus, pas
+ * un invariant de sécurité — un binding manquant ne doit pas murer l'inscription.
+ *
+ * APPROXIMATIF et assumé : KV n'a pas d'incrément atomique (courses d'écriture
+ * concurrentes, propagation inter-colo ~60 s → sous-comptage léger possible).
+ * Suffisant comme frein grossier ; l'exactitude demanderait un Durable Object.
+ */
+async function checkIssueCap(env) {
+  if (!env.RATE_KV) return true;
+  const winMin = parsePositiveInt(env.ISSUE_WINDOW_MINUTES, 60);
+  const max = parsePositiveInt(env.ISSUE_MAX_PER_WINDOW, 300);
+  const bucket = Math.floor(Date.now() / (winMin * 60000));
+  const key = `issue:${bucket}`;
+  const cur = parseInt(await env.RATE_KV.get(key), 10) || 0;
+  if (cur >= max) return false;
+  await env.RATE_KV.put(key, String(cur + 1), {
+    // ≥ 2 fenêtres pour couvrir la tranche courante entière (minimum KV : 60 s).
+    expirationTtl: Math.max(2 * winMin * 60, 120),
+  });
+  return true;
+}
+
+function parsePositiveInt(raw, fallback) {
+  const n = parseInt(raw ?? '', 10);
+  return Number.isFinite(n) && n > 0 ? n : fallback;
+}
+
 /** POST / — émet le token (immuable) depuis des claims démographiques larges. */
 async function handleIssue(body, env, origin) {
   const v = validateClaims(body);
   if (v.error) return json({ error: v.error }, 400, origin);
+
+  // Plafond d'émission, APRÈS la validation des claims (un corps grossièrement
+  // invalide ne consomme pas le budget) et AVANT toute signature. Le 429 est
+  // géré explicitement par le client (tokeniser_service.dart) : contexte
+  // interactif d'inscription, l'utilisateur réessaie.
+  if (!(await checkIssueCap(env))) {
+    return json({ error: 'Trop de requêtes — réessaie dans un instant' }, 429, origin);
+  }
 
   const nonceBytes = new Uint8Array(16); // 128 bits — identifiant de partition, pas un secret
   crypto.getRandomValues(nonceBytes);

@@ -1,6 +1,9 @@
 #!/usr/bin/env node
 /**
- * Auto-test de la machine à états du worker referral.
+ * Auto-test du worker referral : machine à états des paliers, et depuis le
+ * LOT 0 anti-faux-test : plausibilité de /complete à chaque appel, cohérence
+ * temporelle, crédit-jonction (maybeCredit), gate propriétaire (faille 11),
+ * politique d'Origin.
  *
  *   node workers/referral/scripts/selftest.mjs
  *
@@ -30,13 +33,8 @@ const account = (await sha256hex('selftest')).slice(0, 32);
 const iso = (ms) => new Date(ms).toISOString();
 const maintenant = Date.now();
 
-/** KV en mémoire, même contrat que le binding Cloudflare. */
-function kv(rowFields, filleuls = 3) {
-  const m = new Map();
-  m.set(`progress:${account}`, JSON.stringify({
-    account, referralCode: 'testcode', ...rowFields,
-  }));
-  for (let i = 0; i < filleuls; i++) m.set(`ref:testcode:filleul${i}`, iso(maintenant));
+/** Store KV en mémoire, même contrat que le binding Cloudflare. */
+function storeDepuis(m) {
   return {
     _m: m,
     get: async (k) => (m.has(k) ? m.get(k) : null),
@@ -47,14 +45,43 @@ function kv(rowFields, filleuls = 3) {
   };
 }
 
-const requete = (path, method, body) => new Request(`https://selftest${path}`, {
-  method,
-  headers: { 'X-Mentality-Token': TOKEN, 'Content-Type': 'application/json' },
-  body: body === undefined ? undefined : JSON.stringify(body),
-});
+/**
+ * Store de la machine à états : une ligne de suivi + N filleuls crédités,
+ * ET une preuve de complétion PLAUSIBLE du propriétaire — sans elle, le gate
+ * propriétaire (faille 11) gèlerait comptage et transitions dans tous les
+ * scénarios historiques de ce fichier.
+ */
+function kv(rowFields, filleuls = 3) {
+  const m = new Map();
+  m.set(`progress:${account}`, JSON.stringify({
+    account, referralCode: 'testcode', ...rowFields,
+  }));
+  m.set(`completed:${account}`, JSON.stringify({
+    at: iso(maintenant - 86400000), subtests: 12, durationS: 4500,
+  }));
+  for (let i = 0; i < filleuls; i++) m.set(`ref:testcode:filleul${i}`, iso(maintenant));
+  return storeDepuis(m);
+}
 
-async function appel(store, env, path = '/progress', method = 'GET', body) {
-  const resp = await worker.fetch(requete(path, method, body),
+/** Store VIERGE (compte jamais vu du serveur), seedable clé par clé. */
+function kvNu(seed = {}) {
+  return storeDepuis(new Map(Object.entries(seed)));
+}
+
+const requete = (path, method, body, opts = {}) => {
+  const headers = { 'Content-Type': 'application/json' };
+  const token = 'token' in opts ? opts.token : TOKEN;
+  if (token) headers['X-Mentality-Token'] = token;
+  if (opts.origin) headers['Origin'] = opts.origin;
+  return new Request(`https://selftest${path}`, {
+    method,
+    headers,
+    body: body === undefined ? undefined : JSON.stringify(body),
+  });
+};
+
+async function appel(store, env, path = '/progress', method = 'GET', body, opts) {
+  const resp = await worker.fetch(requete(path, method, body, opts),
     { REFERRAL_KV: store, ...env });
   return { statut: resp.status, corps: await resp.json() };
 }
@@ -252,6 +279,281 @@ console.log('\nPierre tombale POST /instagram');
     `HTTP ${statut}`);
   verifie("le pseudo n'est PAS stocké", !('instagramHandle' in ligne(s)));
   verifie('compat instagramSubmitted vrai au stage 3', corps.instagramSubmitted === true);
+}
+
+// ═══ LOT 0 anti-faux-test ════════════════════════════════════════════════════
+
+console.log('\n/complete — plausibilité et écritures (première déclaration)');
+{
+  const s = kvNu();
+  const { statut, corps } = await appel(s, PROD, '/complete', 'POST',
+    { subtestsCompleted: 12, durationSeconds: 4500 });
+  const row = ligne(s);
+  const preuve = JSON.parse(s._m.get(`completed:${account}`) ?? 'null');
+  verifie('déclaration plausible → 200, preuve stockée', statut === 200 &&
+    preuve && preuve.subtests === 12 && preuve.durationS === 4500, `HTTP ${statut}`);
+  verifie("ligne créée à la volée, marquée firstSeenVia 'complete'",
+    row && row.firstSeenVia === 'complete', JSON.stringify(row));
+  verifie("le code d'invitation existe (clé code:)", [...s._m.keys()].some((k) => k.startsWith('code:')));
+  const champs = ['stage', 'referralCode', 'completedReferrals', 'requiredReferrals',
+    'unlockAt', 'secondsRemaining', 'dayIndex', 'displayDelayDays', 'delayMinutes',
+    'debugDelayOverride', 'instagramSubmitted'];
+  verifie('les 11 champs du contrat client sont tous émis',
+    champs.every((c) => c in corps), champs.filter((c) => !(c in corps)).join(','));
+}
+{
+  const s = kvNu();
+  const { statut } = await appel(s, PROD, '/complete', 'POST',
+    { subtestsCompleted: 1, durationSeconds: 10 });
+  verifie('déclaration grossière → 400 et RIEN d\'écrit (ni ligne, ni code, ni preuve)',
+    statut === 400 && s._m.size === 0, `HTTP ${statut}, ${s._m.size} clés`);
+}
+{
+  const s = kvNu();
+  const { statut } = await appel(s, PROD, '/complete', 'POST',
+    { subtestsCompleted: 9, durationSeconds: 4500 });
+  verifie('9 sous-tests < plancher → 400', statut === 400, `HTTP ${statut}`);
+}
+{
+  const s = kvNu();
+  const { statut } = await appel(s, PROD, '/complete', 'POST',
+    { subtestsCompleted: 12, durationSeconds: 299 });
+  verifie('299 s < plancher → 400', statut === 400, `HTTP ${statut}`);
+}
+{
+  const s = kvNu();
+  const { statut } = await appel(s, PROD, '/complete', 'POST',
+    { subtestsCompleted: 'abc', durationSeconds: 4500 });
+  verifie('subtests non numérique → 400', statut === 400, `HTTP ${statut}`);
+}
+
+console.log('\n/complete — cohérence temporelle (base sûre : le lien posé par le SITE)');
+{
+  // ATTAQUE n°2 (link puis complete immédiat) via le VRAI endpoint /link :
+  // un lien via:'link' est posé à la CRÉATION du passe, donc AVANT tout test —
+  // déclarer ensuite 4500 s de test en quelques secondes est impossible.
+  const s = kvNu({ 'code:testcode': 'autreproprio' });
+  const lien = await appel(s, PROD, '/link', 'POST', { referrerCode: 'testcode' });
+  const refereeBrut = s._m.get(`referee:${account}`);
+  const referee = JSON.parse(refereeBrut ?? 'null');
+  verifie("/link pose un lien JSON HORODATÉ {code, at, via:'link'}",
+    lien.corps.linked === true && referee && referee.code === 'testcode' &&
+    referee.via === 'link' && Number.isFinite(Date.parse(referee.at)), String(refereeBrut));
+  const { statut } = await appel(s, PROD, '/complete', 'POST',
+    { subtestsCompleted: 12, durationSeconds: 4500 });
+  verifie('link (site) → complete immédiat : durée > âge du passe → 400, preuve NON écrite',
+    statut === 400 && !s._m.has(`completed:${account}`), `HTTP ${statut}`);
+}
+{
+  // Lien via:'link' ANCIEN : la durée déclarée tient dans l'âge du passe → 200.
+  const s = kvNu({
+    [`referee:${account}`]: JSON.stringify({ code: 'testcode', at: iso(maintenant - 5000000), via: 'link' }),
+    'code:testcode': 'autreproprio',
+  });
+  const { statut } = await appel(s, PROD, '/complete', 'POST',
+    { subtestsCompleted: 12, durationSeconds: 4500 });
+  verifie('lien site ancien : durée ≤ âge du passe → 200', statut === 200, `HTTP ${statut}`);
+}
+{
+  // GARDE ANTI-FAUX-POSITIF — LA course réelle de l'app : si le /complete
+  // initial a échoué (réseau), complete_test_results_page relance retryPending,
+  // isLocked et getProgress EN CONCURRENCE (initState sans await). Un init peut
+  // donc créer ligne + lien via:'init' quelques secondes AVANT le /complete
+  // rejoué. RIEN de ce que l'app pose n'est une base de rejet : un 400 serait
+  // un refus DÉFINITIF pour un utilisateur honnête.
+  const s = kvNu({ 'code:testcode': 'autreproprio' });
+  await appel(s, PROD, '/progress/init', 'POST', { referrerCode: 'testcode' });
+  const referee = JSON.parse(s._m.get(`referee:${account}`) ?? 'null');
+  verifie("init pose un lien via:'init' (jamais une base de rejet)",
+    referee && referee.via === 'init', JSON.stringify(referee));
+  const { statut } = await appel(s, PROD, '/complete', 'POST',
+    { subtestsCompleted: 12, durationSeconds: 4500 });
+  verifie('course init/retry : ligne + lien app récents → 200 (retry honnête sûr) et crédit posé',
+    statut === 200 && s._m.has(`ref:testcode:${account}`), `HTTP ${statut}`);
+}
+{
+  // Ligne LEGACY sans marqueur, récente : origine inconnue → jamais de rejet.
+  const s = kvNu({ [`progress:${account}`]: JSON.stringify({
+    account, referralCode: 'testcode', stage: 1,
+    createdAt: iso(maintenant - 60000),
+  }) });
+  const { statut } = await appel(s, PROD, '/complete', 'POST',
+    { subtestsCompleted: 12, durationSeconds: 4500 });
+  verifie('ligne legacy récente sans marqueur → 200 (jamais une base de rejet)',
+    statut === 200, `HTTP ${statut}`);
+}
+{
+  // Lien LEGACY (string sans date) : pas de base temporelle → pas de contrôle,
+  // et le crédit fonctionne quand même (rétrocompat).
+  const s = kvNu({
+    [`referee:${account}`]: 'testcode',
+    'code:testcode': 'autreproprio',
+  });
+  const { statut } = await appel(s, PROD, '/complete', 'POST',
+    { subtestsCompleted: 12, durationSeconds: 4500 });
+  verifie('lien legacy sans date → 200 et crédit posé (rétrocompat)',
+    statut === 200 && s._m.has(`ref:testcode:${account}`), `HTTP ${statut}`);
+}
+
+console.log('\nCrédit-jonction — (lien ∧ complétion plausible), quel que soit l\'ordre');
+{
+  // Ordre SITE : lien posé à la création du passe (ancien), test passé ensuite.
+  const s = kvNu({
+    [`referee:${account}`]: JSON.stringify({ code: 'testcode', at: iso(maintenant - 5000000) }),
+    'code:testcode': 'autreproprio',
+  });
+  const { statut } = await appel(s, PROD, '/complete', 'POST',
+    { subtestsCompleted: 12, durationSeconds: 4500 });
+  verifie('link (ancien) → complete : crédit posé par /complete',
+    statut === 200 && s._m.has(`ref:testcode:${account}`), `HTTP ${statut}`);
+}
+{
+  // Ordre APP NOMINAL : /complete au dernier sous-test, PUIS l'écran des
+  // missions envoie /progress/init {referrerCode}. C'était LE flux cassé :
+  // le lien arrivait trop tard et le crédit n'était jamais posé.
+  const s = kvNu({ 'code:testcode': 'autreproprio' });
+  await appel(s, PROD, '/complete', 'POST', { subtestsCompleted: 12, durationSeconds: 4500 });
+  verifie('complete seul : pas encore de crédit (aucun lien)',
+    !s._m.has(`ref:testcode:${account}`));
+  const { statut } = await appel(s, PROD, '/progress/init', 'POST', { referrerCode: 'testcode' });
+  verifie('… puis init {referrerCode} : crédit posé À L\'INIT (flux nominal réparé)',
+    statut === 200 && s._m.has(`ref:testcode:${account}`), `HTTP ${statut}`);
+}
+{
+  // Ordre complete → /link (rattrapage par le site).
+  const s = kvNu({ 'code:testcode': 'autreproprio' });
+  await appel(s, PROD, '/complete', 'POST', { subtestsCompleted: 12, durationSeconds: 4500 });
+  const { statut, corps } = await appel(s, PROD, '/link', 'POST', { referrerCode: 'testcode' });
+  verifie('complete → link : crédit posé AU LINK',
+    statut === 200 && corps.linked === true && s._m.has(`ref:testcode:${account}`),
+    `HTTP ${statut}`);
+}
+{
+  // Rejeu au corps VIDE après complétion légitime : plus aucun seuil sauté,
+  // et le crédit déjà posé n'est JAMAIS réécrit (write-once).
+  const s = kvNu({
+    [`referee:${account}`]: JSON.stringify({ code: 'testcode', at: iso(maintenant - 5000000) }),
+    'code:testcode': 'autreproprio',
+    [`completed:${account}`]: JSON.stringify({ at: iso(maintenant - 3600000), subtests: 12, durationS: 4500 }),
+    [`ref:testcode:${account}`]: 'SENTINELLE',
+  });
+  const { statut } = await appel(s, PROD, '/complete', 'POST', {});
+  verifie('rejeu corps vide → 200 (jamais 400 en rejeu), crédit INCHANGÉ',
+    statut === 200 && s._m.get(`ref:testcode:${account}`) === 'SENTINELLE', `HTTP ${statut}`);
+}
+{
+  // Ouvrir l'écran des missions sans avoir terminé de test ne crédite rien.
+  const s = kvNu({ 'code:testcode': 'autreproprio' });
+  const { statut } = await appel(s, PROD, '/progress/init', 'POST', { referrerCode: 'testcode' });
+  verifie('init seul (aucune complétion) → lien posé mais AUCUN crédit',
+    statut === 200 && s._m.has(`referee:${account}`) && !s._m.has(`ref:testcode:${account}`),
+    `HTTP ${statut}`);
+}
+{
+  // Auto-parrainage injecté : jamais de crédit.
+  const s = kvNu({
+    [`referee:${account}`]: JSON.stringify({ code: 'testcode', at: iso(maintenant - 5000000) }),
+    'code:testcode': account, // le compte possède son propre code
+    [`completed:${account}`]: JSON.stringify({ at: iso(maintenant), subtests: 12, durationS: 4500 }),
+  });
+  await appel(s, PROD, '/complete', 'POST', {});
+  verifie('auto-parrainage → jamais de crédit', !s._m.has(`ref:testcode:${account}`));
+}
+{
+  // Preuve stockée IMPLAUSIBLE (héritage/injection) : la jonction revalide et
+  // refuse de créditer — sans jamais renvoyer 400 en rejeu.
+  const s = kvNu({
+    [`referee:${account}`]: JSON.stringify({ code: 'testcode', at: iso(maintenant - 5000000) }),
+    'code:testcode': 'autreproprio',
+    [`completed:${account}`]: JSON.stringify({ at: iso(maintenant), subtests: 1, durationS: 10 }),
+  });
+  const { statut } = await appel(s, PROD, '/complete', 'POST', {});
+  verifie('preuve stockée implausible → 200 mais AUCUN crédit',
+    statut === 200 && !s._m.has(`ref:testcode:${account}`), `HTTP ${statut}`);
+}
+{
+  // Second /link avec un autre code : first-write-wins, lien intact.
+  const s = kvNu({ 'code:testcode': 'autreproprio', 'code:autrecode': 'troisieme' });
+  await appel(s, PROD, '/link', 'POST', { referrerCode: 'testcode' });
+  const avant = s._m.get(`referee:${account}`);
+  const { corps } = await appel(s, PROD, '/link', 'POST', { referrerCode: 'autrecode' });
+  verifie('second /link autre code → linked:false, lien INCHANGÉ',
+    corps.linked === false && s._m.get(`referee:${account}`) === avant);
+}
+
+console.log('\nGate propriétaire — faille 11 (compte-mule)');
+{
+  const s = kv({ stage: 1 });
+  s._m.delete(`completed:${account}`);
+  const { corps } = await appel(s, PROD);
+  verifie('propriétaire sans complétion : 3 filleuls affichés 0, stage gelé à 1',
+    corps.completedReferrals === 0 && corps.stage === 1, JSON.stringify(corps));
+}
+{
+  const s = kv({ stage: 1 });
+  const { corps } = await appel(s, PROD);
+  verifie('propriétaire avec complétion : 3 filleuls comptés, stage 3',
+    corps.completedReferrals === 3 && corps.stage === 3, JSON.stringify(corps));
+}
+{
+  // RÉVERSIBILITÉ : les ref: accumulés pendant le gel ne sont jamais perdus.
+  const s = kv({ stage: 1 });
+  s._m.delete(`completed:${account}`);
+  await appel(s, PROD);
+  await appel(s, PROD, '/complete', 'POST', { subtestsCompleted: 12, durationSeconds: 4500 });
+  const { corps } = await appel(s, PROD);
+  verifie('le propriétaire termine son test → comptage et transitions reprennent (3, stage 3)',
+    corps.completedReferrals === 3 && corps.stage === 3, JSON.stringify(corps));
+}
+{
+  // Un déblocage acquis reste acquis, gate ou pas.
+  const s = kv({ stage: 4, unlockedAt: iso(maintenant - 1000) }, 0);
+  s._m.delete(`completed:${account}`);
+  const { corps } = await appel(s, PROD);
+  verifie('stage 4 acquis sans complétion propriétaire → reste 4 (jamais rétrogradé)',
+    corps.stage === 4 && corps.dayIndex === 9, JSON.stringify(corps));
+}
+{
+  // Ligne stage 3 GELÉE sans ancre : répond comme « attente pas commencée »,
+  // sans crash (toISOString sur NaN) et SANS poser d'ancre pendant le gel.
+  const s = kv({ stage: 3 });
+  s._m.delete(`completed:${account}`);
+  const { statut, corps } = await appel(s, PROD);
+  verifie('stage 3 gelé sans ancre → 200, pas d\'ancre posée, compte à rebours neutre',
+    statut === 200 && corps.unlockAt === null && corps.dayIndex === null &&
+    !ligne(s).stage3StartedAt, `HTTP ${statut} ${JSON.stringify(corps)}`);
+}
+
+console.log("\nPolitique d'Origin");
+{
+  const s = kv({ stage: 1 });
+  const { statut } = await appel(s, PROD, '/progress', 'GET', undefined,
+    { origin: 'https://evil.example' });
+  verifie('Origin non listée → 403', statut === 403, `HTTP ${statut}`);
+}
+{
+  const s = kv({ stage: 1 });
+  const { statut } = await appel(s, PROD, '/progress', 'GET', undefined,
+    { origin: 'https://mental-et.com' });
+  verifie('Origin listée → 200', statut === 200, `HTTP ${statut}`);
+}
+{
+  const s = kv({ stage: 1 });
+  const sansOrigin = await appel(s, PROD);
+  const sansToken = await appel(s, PROD, '/progress', 'GET', undefined, { token: null });
+  verifie('Origin absente : accepté AVEC token (app native), 401 SANS token',
+    sansOrigin.statut === 200 && sansToken.statut === 401,
+    `avec ${sansOrigin.statut}, sans ${sansToken.statut}`);
+}
+
+console.log('\n/resolve — contrat de la page invite');
+{
+  const s = kvNu({ 'code:testcode': 'autreproprio' });
+  const connu = await appel(s, PROD, '/resolve/testcode', 'GET', undefined, { token: null });
+  const inconnu = await appel(s, PROD, '/resolve/zzzzzzzz', 'GET', undefined, { token: null });
+  verifie('code connu → {valid:true}, inconnu → {valid:false}, sans auth',
+    connu.corps.valid === true && inconnu.corps.valid === false,
+    JSON.stringify([connu.corps, inconnu.corps]));
 }
 
 console.log(`\n${ok} vérifications OK, ${echecs.length} en échec`);

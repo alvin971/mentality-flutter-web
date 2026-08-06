@@ -126,7 +126,14 @@ trousseau client. La seule réponse réelle à une fuite = retirer `k1` du trous
 - **Bearer token** : qui le détient y accède. Pas de révocation sans état serveur.
   Perte = définitive, vol = accès. Défense : entropie 128 bits (toujours
   cryptographiquement massive comme identifiant, pas un secret) + Hive AES-256 + HTTPS.
-- **Anonymat / no-log** : Worker stateless, aucun log d'IP/timestamp/claims/token,
-  aucun `iat` précis (le jour d'inscription, claim `d`, suffit).
-- **CORS ≠ contrôle d'accès** : limiter le volume d'émission via le rate-limiting
-  edge de Cloudflare (distinct du no-log applicatif).
+- **Anonymat / no-log** : aucun log par requête (IP/timestamp/claims/token),
+  aucun stockage **par utilisateur**, aucun `iat` précis (le jour d'inscription,
+  claim `d`, suffit). Seul état serveur depuis le LOT 0 anti-faux-test : un
+  **compteur agrégé** d'émissions par tranche de temps (clé KV `issue:<n°>`, un
+  entier, TTL court) — ni IP, ni claims, ni token, rien de rattachable à
+  quiconque.
+- **CORS ≠ contrôle d'accès** : le volume d'émission est plafonné par le
+  compteur agrégé ci-dessus (429 au-delà de `ISSUE_MAX_PER_WINDOW` par fenêtre
+  de `ISSUE_WINDOW_MINUTES` ; approximatif — KV sans incrément atomique). Le
+  rate-limiting edge de Cloudflare reste une option complémentaire (distincte
+  du no-log applicatif).
