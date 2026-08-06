@@ -129,6 +129,25 @@ console.log("\nPlafond d'émission (compteur agrégé)");
     statut === 200, `HTTP ${statut}`);
 }
 {
+  // FAIL-OPEN aussi quand KV JETTE : panne, ou limite Cloudflare « 1 écriture
+  // par seconde et par clé » dépassée en rafale (toutes les émissions d'une
+  // fenêtre écrivent la MÊME clé). Le worker n'a pas de try/catch global :
+  // sans le filet de checkIssueCap, un pic d'inscriptions deviendrait un 500.
+  const casseGet = {
+    get: async () => { throw new Error('KV get down'); },
+    put: async () => {},
+  };
+  const cassePut = {
+    get: async () => null,
+    put: async () => { throw new Error('KV put rate-limited'); },
+  };
+  const surGet = await appel(env(casseGet));
+  const surPut = await appel(env(cassePut));
+  verifie('KV en panne (get ou put qui jette) → FAIL-OPEN (200), jamais 500',
+    surGet.statut === 200 && surPut.statut === 200,
+    `get=${surGet.statut}, put=${surPut.statut}`);
+}
+{
   const b = Math.floor(Date.now() / (FENETRE_MIN * 60000));
   const s = kv({ [`issue:${b - 1}`]: String(MAX_FENETRE) }); // tranche PASSÉE pleine
   const { statut } = await appel(env(s));

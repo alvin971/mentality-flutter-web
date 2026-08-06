@@ -21,10 +21,29 @@
  */
 
 import worker from '../index.js';
-import { sha256hex } from '../../_shared/token_verify.js';
+import { sha256hex, TOKEN_SIGNING_PUBLIC_KEYS } from '../../_shared/token_verify.js';
 
 const TOKEN = 'M2.' + Buffer.from(JSON.stringify({ n: 'selftest', sv: 2 }))
   .toString('base64url');
+
+// ─── Token SIGNÉ Ed25519 — le chemin NOMINAL de production (tokens émis par
+//     le tokeniser). Sans lui, seul le repli `M2.` serait exercé : une casse
+//     de la branche signée de resolveNonce (→ 401 = 4xx définitif côté client
+//     déployé) laisserait tout ce fichier vert. Kid dédié pour ne pas toucher
+//     aux clés réelles (propriétés mutables, même procédé que le selftest du
+//     tokeniser). ──────────────────────────────────────────────────────────
+const kpSelftest = await crypto.subtle.generateKey({ name: 'Ed25519' }, true, ['sign', 'verify']);
+TOKEN_SIGNING_PUBLIC_KEYS.selftest = Buffer
+  .from(new Uint8Array(await crypto.subtle.exportKey('raw', kpSelftest.publicKey)))
+  .toString('base64url');
+const segment = (o) => Buffer.from(JSON.stringify(o)).toString('base64url');
+const signingInput =
+  `${segment({ alg: 'EdDSA', kid: 'selftest' })}.${segment({ n: 'selftest-signe', sv: 2 })}`;
+const TOKEN_SIGNE = `${signingInput}.` + Buffer
+  .from(new Uint8Array(await crypto.subtle.sign(
+    { name: 'Ed25519' }, kpSelftest.privateKey, new TextEncoder().encode(signingInput))))
+  .toString('base64url');
+const accountSigne = (await sha256hex('selftest-signe')).slice(0, 32);
 
 const HUIT_JOURS_MIN = 11520;
 const PROD = { UNLOCK_DELAY_MINUTES: String(HUIT_JOURS_MIN) };
@@ -47,9 +66,10 @@ function storeDepuis(m) {
 
 /**
  * Store de la machine à états : une ligne de suivi + N filleuls crédités,
- * ET une preuve de complétion PLAUSIBLE du propriétaire — sans elle, le gate
- * propriétaire (faille 11) gèlerait comptage et transitions dans tous les
- * scénarios historiques de ce fichier.
+ * ET une preuve de complétion PLAUSIBLE du propriétaire. Les lignes de kv()
+ * sont LEGACY (sans firstSeenVia) donc exemptées du gate propriétaire ; les
+ * scénarios du gate passent explicitement `firstSeenVia` pour être gatés, et
+ * la preuve seedée garde les scénarios historiques sur le chemin nominal.
  */
 function kv(rowFields, filleuls = 3) {
   const m = new Map();
@@ -300,6 +320,99 @@ console.log('\n/complete — plausibilité et écritures (première déclaration
     'debugDelayOverride', 'instagramSubmitted'];
   verifie('les 11 champs du contrat client sont tous émis',
     champs.every((c) => c in corps), champs.filter((c) => !(c in corps)).join(','));
+  // Présence ≠ contrat : l'app déployée LIT ces valeurs. `referralCode: null`
+  // ou `requiredReferrals: "3"` passeraient un simple `in`.
+  verifie('… et VALEURS conformes à ce que le client lit (pas seulement présents)',
+    corps.stage === 1 && /^[a-z0-9]{8}$/.test(corps.referralCode) &&
+    corps.completedReferrals === 0 && corps.requiredReferrals === 3 &&
+    corps.unlockAt === null && corps.secondsRemaining === 0 &&
+    corps.dayIndex === null && corps.displayDelayDays === 8 &&
+    corps.delayMinutes === HUIT_JOURS_MIN && corps.debugDelayOverride === false &&
+    corps.instagramSubmitted === false,
+    JSON.stringify(corps));
+}
+{
+  // Frontière EXACTE des planchers : un off-by-one (`>=` → `>`) enverrait un
+  // 400 DÉFINITIF à une déclaration légitime pile au seuil.
+  const s = kvNu();
+  const { statut } = await appel(s, PROD, '/complete', 'POST',
+    { subtestsCompleted: 10, durationSeconds: 300 });
+  verifie('frontière exacte 10 sous-tests / 300 s → 200 (plancher inclusif)',
+    statut === 200, `HTTP ${statut}`);
+}
+
+console.log('\nToken SIGNÉ Ed25519 — chemin nominal de production');
+{
+  const s = kvNu();
+  const { statut } = await appel(s, PROD, '/complete', 'POST',
+    { subtestsCompleted: 12, durationSeconds: 4500 }, { token: TOKEN_SIGNE });
+  const rowSigne = JSON.parse(s._m.get(`progress:${accountSigne}`) ?? 'null');
+  verifie('token signé accepté : 200, ligne sous le compte dérivé du nonce SIGNÉ',
+    statut === 200 && rowSigne !== null && rowSigne.firstSeenVia === 'complete',
+    `HTTP ${statut}`);
+}
+{
+  // Signature invalide sans repli M2 possible : 401, rien d'écrit.
+  const [enTete, charge] = TOKEN_SIGNE.split('.');
+  const forge = `${enTete}.${charge}.${'A'.repeat(86)}`;
+  const s = kvNu();
+  const { statut } = await appel(s, PROD, '/progress', 'GET', undefined, { token: forge });
+  verifie('signature cassée (hors format M2) → 401, aucune écriture',
+    statut === 401 && s._m.size === 0, `HTTP ${statut}`);
+}
+
+console.log('\nCode referral DÉTERMINISTE — la course de création converge');
+{
+  // L'app déployée lance /complete (rejoué) et /progress/init (2-3×) EN
+  // CONCURRENCE dans l'initState de la page de résultats. Un code tiré au
+  // hasard par créateur scindait le compte en deux codes : la ligne n'en
+  // gardait qu'un, l'autre restait résolvable/liable mais invisible au
+  // comptage — filleuls perdus À VIE (referee: est write-once). Le code
+  // étant dérivé du compte, tous les créateurs convergent.
+  const a = kvNu();
+  const b = kvNu();
+  await appel(a, PROD, '/complete', 'POST', { subtestsCompleted: 12, durationSeconds: 4500 });
+  await appel(b, PROD, '/progress/init', 'POST', {});
+  verifie('création par /complete et par /init → MÊME code (dérivé du compte)',
+    /^[a-z0-9]{8}$/.test(ligne(a).referralCode) &&
+    ligne(a).referralCode === ligne(b).referralCode,
+    `${ligne(a).referralCode} vs ${ligne(b).referralCode}`);
+}
+{
+  // La course réelle : trois requêtes concurrentes sur le MÊME store vierge.
+  const s = kvNu();
+  await Promise.all([
+    appel(s, PROD, '/complete', 'POST', { subtestsCompleted: 12, durationSeconds: 4500 }),
+    appel(s, PROD, '/progress/init', 'POST', {}),
+    appel(s, PROD, '/progress/init', 'POST', {}),
+  ]);
+  const codes = [...s._m.keys()].filter((k) => k.startsWith('code:'));
+  verifie('course complete × init ×2 → UN SEUL code:, aligné sur la ligne stockée',
+    codes.length === 1 && codes[0] === `code:${ligne(s).referralCode}`,
+    codes.join(','));
+}
+{
+  // Collision : le code dérivé appartient déjà à un AUTRE compte → repli
+  // aléatoire, et le mapping du tiers n'est JAMAIS écrasé.
+  const hex = await sha256hex(`refcode-v1:${account}`);
+  const derive = BigInt('0x' + hex.slice(0, 12)).toString(36).padStart(8, '0').slice(-8);
+  const s = kvNu({ [`code:${derive}`]: 'untierscompte' });
+  await appel(s, PROD, '/progress/init', 'POST', {});
+  verifie('code dérivé déjà pris par un tiers → repli aléatoire, mapping du tiers intact',
+    ligne(s).referralCode !== derive && s._m.get(`code:${derive}`) === 'untierscompte',
+    `ligne=${ligne(s).referralCode}, dérivé=${derive}`);
+}
+{
+  // AUTO-RÉPARATION : une création passée a échoué à mi-chemin (ligne écrite,
+  // mapping code: jamais posé) → le code affiché ne résolvait plus, aucun
+  // filleul ne pouvait se lier. Le passage suivant répare.
+  const s = kvNu();
+  await appel(s, PROD, '/progress/init', 'POST', {});
+  const code = ligne(s).referralCode;
+  s._m.delete(`code:${code}`);
+  await appel(s, PROD, '/complete', 'POST', { subtestsCompleted: 12, durationSeconds: 4500 });
+  verifie('mapping code: perdu → reposé au passage suivant (parrainage réparé)',
+    s._m.get(`code:${code}`) === account, String(s._m.get(`code:${code}`)));
 }
 {
   const s = kvNu();
@@ -353,6 +466,38 @@ console.log('\n/complete — cohérence temporelle (base sûre : le lien posé p
   const { statut } = await appel(s, PROD, '/complete', 'POST',
     { subtestsCompleted: 12, durationSeconds: 4500 });
   verifie('lien site ancien : durée ≤ âge du passe → 200', statut === 200, `HTTP ${statut}`);
+}
+{
+  // IMMUNITÉ AUX SAUTS D'HORLOGE CLIENT : durationS vient de l'horloge MURALE
+  // du téléphone (un recalage NTP/manuel pendant le test le gonfle d'autant).
+  // Un lien plus vieux que MIN_TEST_DURATION_S n'est JAMAIS une base de 400,
+  // même si la durée déclarée dépasse son âge : une passation honnête occupe
+  // au moins ce temps RÉEL après la pose du lien, l'exemption est prouvable.
+  const s = kvNu({
+    [`referee:${account}`]: JSON.stringify(
+      { code: 'testcode', at: iso(Date.now() - 400000), via: 'link' }),
+    'code:testcode': 'autreproprio',
+  });
+  const { statut } = await appel(s, PROD, '/complete', 'POST',
+    { subtestsCompleted: 12, durationSeconds: 4500 });
+  verifie('lien site de 400 s + durée 4500 s (horloge cliente sautée) → 200, jamais 400',
+    statut === 200, `HTTP ${statut}`);
+}
+{
+  // Bornes de la fenêtre éclair, à durée déclarée MINIMALE plausible (300 s) :
+  // la marge de 120 s doit être RÉELLE des deux côtés.
+  const cas = async (ageS) => {
+    const s = kvNu({
+      [`referee:${account}`]: JSON.stringify(
+        { code: 'testcode', at: iso(Date.now() - ageS * 1000), via: 'link' }),
+      'code:testcode': 'autreproprio',
+    });
+    return (await appel(s, PROD, '/complete', 'POST',
+      { subtestsCompleted: 12, durationSeconds: 300 })).statut;
+  };
+  verifie('durée 300 s : lien de 175 s → 400 (éclair), lien de 185 s → 200 (dans la marge)',
+    (await cas(175)) === 400 && (await cas(185)) === 200,
+    `175s=${await cas(175)}, 185s=${await cas(185)}`);
 }
 {
   // GARDE ANTI-FAUX-POSITIF — LA course réelle de l'app : si le /complete
@@ -429,6 +574,24 @@ console.log('\nCrédit-jonction — (lien ∧ complétion plausible), quel que s
     `HTTP ${statut}`);
 }
 {
+  // 4e point de matérialisation : /link RÉPÉTÉ alors que le lien existe déjà
+  // et que la complétion est arrivée entre-temps (branche « lien existant »
+  // de handleLink — rattrapage sans nouvelle écriture du lien).
+  const s = kvNu({
+    [`referee:${account}`]: JSON.stringify(
+      { code: 'testcode', at: iso(maintenant - 5000000), via: 'link' }),
+    'code:testcode': 'autreproprio',
+    [`completed:${account}`]: JSON.stringify(
+      { at: iso(maintenant - 3600000), subtests: 12, durationS: 4500 }),
+  });
+  const avant = s._m.get(`referee:${account}`);
+  const { statut, corps } = await appel(s, PROD, '/link', 'POST', { referrerCode: 'testcode' });
+  verifie('/link répété (lien existant + complétion présente) → crédit matérialisé, lien INTACT',
+    statut === 200 && corps.linked === true &&
+    s._m.has(`ref:testcode:${account}`) && s._m.get(`referee:${account}`) === avant,
+    `HTTP ${statut}`);
+}
+{
   // Rejeu au corps VIDE après complétion légitime : plus aucun seuil sauté,
   // et le crédit déjà posé n'est JAMAIS réécrit (write-once).
   const s = kvNu({
@@ -481,13 +644,26 @@ console.log('\nCrédit-jonction — (lien ∧ complétion plausible), quel que s
     corps.linked === false && s._m.get(`referee:${account}`) === avant);
 }
 
-console.log('\nGate propriétaire — faille 11 (compte-mule)');
+console.log('\nGate propriétaire — faille 11 (compte-mule, lignes LOT 0 seulement)');
 {
+  const s = kv({ stage: 1, firstSeenVia: 'init' });
+  s._m.delete(`completed:${account}`);
+  const { corps } = await appel(s, PROD);
+  verifie('ligne LOT 0 sans complétion : 3 filleuls affichés 0, stage gelé à 1',
+    corps.completedReferrals === 0 && corps.stage === 1, JSON.stringify(corps));
+}
+{
+  // EXEMPTION LEGACY : une ligne née AVANT le LOT 0 (sans firstSeenVia) peut
+  // ne plus JAMAIS pouvoir produire completed: — builds pré-bba99db
+  // (2026-07-19) qui n'appellent pas /complete du tout, honnêtes rejetés 400
+  // sous le plancher 600 s (refus mémorisé définitif par le client). La gater
+  // serait un gel À VIE de parrains honnêtes : le gate ne s'applique qu'aux
+  // lignes marquées LOT 0.
   const s = kv({ stage: 1 });
   s._m.delete(`completed:${account}`);
   const { corps } = await appel(s, PROD);
-  verifie('propriétaire sans complétion : 3 filleuls affichés 0, stage gelé à 1',
-    corps.completedReferrals === 0 && corps.stage === 1, JSON.stringify(corps));
+  verifie('ligne LEGACY sans complétion : filleuls COMPTÉS, transitions ACTIVES (exemption)',
+    corps.completedReferrals === 3 && corps.stage === 3, JSON.stringify(corps));
 }
 {
   const s = kv({ stage: 1 });
@@ -497,17 +673,18 @@ console.log('\nGate propriétaire — faille 11 (compte-mule)');
 }
 {
   // RÉVERSIBILITÉ : les ref: accumulés pendant le gel ne sont jamais perdus.
-  const s = kv({ stage: 1 });
+  const s = kv({ stage: 1, firstSeenVia: 'init' });
   s._m.delete(`completed:${account}`);
-  await appel(s, PROD);
+  const gele = (await appel(s, PROD)).corps;
   await appel(s, PROD, '/complete', 'POST', { subtestsCompleted: 12, durationSeconds: 4500 });
   const { corps } = await appel(s, PROD);
   verifie('le propriétaire termine son test → comptage et transitions reprennent (3, stage 3)',
-    corps.completedReferrals === 3 && corps.stage === 3, JSON.stringify(corps));
+    gele.stage === 1 && corps.completedReferrals === 3 && corps.stage === 3,
+    JSON.stringify(corps));
 }
 {
   // Un déblocage acquis reste acquis, gate ou pas.
-  const s = kv({ stage: 4, unlockedAt: iso(maintenant - 1000) }, 0);
+  const s = kv({ stage: 4, unlockedAt: iso(maintenant - 1000), firstSeenVia: 'init' }, 0);
   s._m.delete(`completed:${account}`);
   const { corps } = await appel(s, PROD);
   verifie('stage 4 acquis sans complétion propriétaire → reste 4 (jamais rétrogradé)',
@@ -516,7 +693,7 @@ console.log('\nGate propriétaire — faille 11 (compte-mule)');
 {
   // Ligne stage 3 GELÉE sans ancre : répond comme « attente pas commencée »,
   // sans crash (toISOString sur NaN) et SANS poser d'ancre pendant le gel.
-  const s = kv({ stage: 3 });
+  const s = kv({ stage: 3, firstSeenVia: 'init' });
   s._m.delete(`completed:${account}`);
   const { statut, corps } = await appel(s, PROD);
   verifie('stage 3 gelé sans ancre → 200, pas d\'ancre posée, compte à rebours neutre',

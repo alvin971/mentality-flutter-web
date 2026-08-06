@@ -270,13 +270,7 @@ async function handleLink(env, origin, account, body) {
  */
 async function handleInit(env, origin, account, body) {
   const nowIso = isoNow();
-  let row = await getProgress(env, account);
-  if (!row) {
-    const code = await generateUniqueCode(env);
-    row = emptyProgress(account, code, nowIso, 'init');
-    await putProgress(env, row);
-    await env.REFERRAL_KV.put(`code:${code}`, account);
-  }
+  const row = await ensureRow(env, account, await getProgress(env, account), 'init');
 
   // Lien (build sans /link) : on LIE, avec horodatage. First-write-wins.
   const existing = await env.REFERRAL_KV.get(`referee:${account}`);
@@ -440,7 +434,22 @@ async function handleComplete(env, origin, account, body) {
     const link = parseRefereeLink(await env.REFERRAL_KV.get(`referee:${account}`));
     if (link && link.at && link.via === 'link') {
       const linkAgeS = (Date.now() - Date.parse(link.at)) / 1000;
-      if (durationS > linkAgeS + TEMPORAL_MARGIN_S) {
+      // DEUX conditions, et la seconde est le filet anti-faux-positif :
+      // le 400 exige un lien plus jeune que MIN_TEST_DURATION_S. C'est la
+      // signature de l'attaque éclair, et c'est ce qui rend le faux positif
+      // impossible : durationS est mesuré à l'horloge MURALE du téléphone
+      // (un recalage NTP/manuel pendant le test le gonfle d'autant), donc sur
+      // la seule condition « durée > âge + marge », un honnête au lien ancien
+      // mais à l'horloge sautée prendrait un 400 définitif. Or une passation
+      // honnête (≥ MIN_SUBTESTS_COMPLETED sous-tests) occupe au moins
+      // MIN_TEST_DURATION_S de temps RÉEL après la pose du lien (le passe
+      // précède le test) : son lien a toujours PLUS de MIN_TEST_DURATION_S —
+      // l'exemption est prouvable, quelle que soit l'horloge du client.
+      // Coût attaquant inchangé : le minimum plausible (300 s) exigeait déjà
+      // d'attendre ~300 s après /link ; seul l'intérêt d'attendre pour
+      // déclarer une GRANDE durée disparaît — durée qui n'apporte rien de
+      // plus aujourd'hui (le seuil de plausibilité est scalaire).
+      if (linkAgeS < MIN_TEST_DURATION_S && durationS > linkAgeS + TEMPORAL_MARGIN_S) {
         return json(
           { error: 'Durée déclarée incompatible avec la date de création du passe', credited: false },
           400, origin,
@@ -452,24 +461,17 @@ async function handleComplete(env, origin, account, body) {
     // Le suivi est créé à la volée si besoin : l'app déclare la fin de test
     // dès le dernier sous-test, AVANT tout écran de missions — renvoyer 404
     // ici perdrait le parrainage d'un tout premier test.
-    if (!row) {
-      const code = await generateUniqueCode(env);
-      row = emptyProgress(account, code, isoNow(), 'complete');
-      await putProgress(env, row);
-      await env.REFERRAL_KV.put(`code:${code}`, account);
-    }
+    row = await ensureRow(env, account, row, 'complete');
     await env.REFERRAL_KV.put(`completed:${account}`, JSON.stringify({
       at: isoNow(),
       subtests,
       durationS,
     }));
-  } else if (!row) {
-    // Rejeu d'un compte complété dont la ligne a disparu (théorique) : la
-    // preuve stockée fait foi, on recrée le suivi sans re-contrôler le corps.
-    const code = await generateUniqueCode(env);
-    row = emptyProgress(account, code, isoNow(), 'complete');
-    await putProgress(env, row);
-    await env.REFERRAL_KV.put(`code:${code}`, account);
+  } else {
+    // Rejeu : la preuve stockée fait foi, on ne re-contrôle pas le corps.
+    // ensureRow recrée la ligne si elle a disparu (théorique) et répare le
+    // mapping code: si une création passée a échoué à mi-chemin.
+    row = await ensureRow(env, account, row, 'complete');
   }
   // En rejeu (`already`), le corps est IGNORÉ : la revalidation « à chaque
   // appel » porte sur la preuve STOCKÉE, dans maybeCredit. Jamais de 400 ici.
@@ -500,10 +502,21 @@ async function buildProgressResponse(env, origin, row) {
   // PROPRIÉTAIRE a lui-même une preuve de complétion. Les `ref:` s'accumulent
   // quand même (rien n'est perdu) ; comptage et transitions reprennent dès que
   // `completed:<owner>` existe. Un stage 4 acquis n'est JAMAIS rétrogradé.
+  //
+  // EXEMPTION LEGACY : le gate ne s'applique qu'aux lignes NÉES avec le LOT 0
+  // (`firstSeenVia` présent). Deux populations réelles ne peuvent plus JAMAIS
+  // produire `completed:` — les builds antérieures à bba99db (2026-07-19),
+  // qui n'appellent pas /complete du tout, et les honnêtes rejetés 400 sous
+  // le plancher 600 s (refus mémorisé comme définitif par le client). Les
+  // gater serait un gel À VIE de parrains honnêtes, sans recours. Même
+  // doctrine que le contrôle temporel de /complete : un signal legacy/app
+  // ambigu n'est jamais une base punitive. Les comptes-mules créés depuis le
+  // LOT 0 portent tous `firstSeenVia` et restent gatés.
   const ownerCompleted =
     (await env.REFERRAL_KV.get(`completed:${row.account}`)) !== null;
+  const ownerOk = ownerCompleted || row.firstSeenVia === undefined;
   const rawCount = await countCompletedReferrals(env, row.referralCode);
-  const completedCount = ownerCompleted ? rawCount : 0;
+  const completedCount = ownerOk ? rawCount : 0;
   const cfg = delayConfig(env);
   const delayMin = cfg.minutes;
   const now = Date.now();
@@ -512,8 +525,9 @@ async function buildProgressResponse(env, origin, row) {
   // (a) Le stage 4 est DÉFINITIF : ni relecture, ni recalcul, ni
   //     re-verrouillage. Un déblocage acquis l'est pour de bon.
   // (b) Aucune transition tant que le propriétaire n'a pas terminé son propre
-  //     test (gate faille 11 ci-dessus) — gèle <3→3 ET 3→4.
-  if (row.stage < 4 && ownerCompleted) {
+  //     test (gate faille 11 ci-dessus, lignes LOT 0 seulement) — gèle
+  //     <3→3 ET 3→4.
+  if (row.stage < 4 && ownerOk) {
     if (row.stage < 3 && completedCount >= REQUIRED_REFERRALS) {
       row.stage = 3;
       dirty = true;
@@ -643,7 +657,56 @@ function delayConfig(env) {
   };
 }
 
-/** Code court a-z0-9 (8 chars, ~41 bits) unique en KV. */
+/**
+ * Obtient (ou crée) la ligne de suivi — point UNIQUE de création, IDEMPOTENT.
+ *
+ * Le code referral est DÉRIVÉ DU COMPTE (déterministe) : l'app déployée lance
+ * /complete (rejoué) et /progress/init (2 à 3 fois) EN CONCURRENCE dans
+ * l'initState de la page de résultats, sans await, et un rejeu peut atterrir
+ * sur une colo qui n'a pas encore vu la première écriture (KV est
+ * éventuellement cohérent). Avec un code tiré au hasard, chaque créateur
+ * concurrent fabriquait le SIEN : la ligne stockée n'en gardait qu'un, l'autre
+ * restait résolvable et liable (`code:` posé) mais invisible au comptage —
+ * et comme `referee:` est write-once, tout filleul lié au code orphelin était
+ * perdu À VIE pour le parrain. Ici, tous les créateurs calculent le MÊME
+ * code : les écritures convergent, la course et le rejeu sont inoffensifs.
+ *
+ * Auto-réparation : si la ligne existe mais que `code:<code>` manque (échec
+ * KV à mi-création dans le passé — le code affiché ne résolvait plus, aucun
+ * filleul ne pouvait se lier), le mapping est reposé.
+ */
+async function ensureRow(env, account, row, firstSeenVia) {
+  if (!row) {
+    const code = await deriveReferralCode(env, account);
+    row = emptyProgress(account, code, isoNow(), firstSeenVia);
+    await putProgress(env, row);
+    await env.REFERRAL_KV.put(`code:${code}`, account);
+    return row;
+  }
+  if ((await env.REFERRAL_KV.get(`code:${row.referralCode}`)) === null) {
+    await env.REFERRAL_KV.put(`code:${row.referralCode}`, account);
+  }
+  return row;
+}
+
+/**
+ * Code referral DÉTERMINISTE : 8 chars a-z0-9 dérivés du compte par sha256.
+ * Même compte → même code, quel que soit le créateur (cf. ensureRow). Dérivé
+ * à sens unique : le code, public, ne révèle rien du compte. Repli aléatoire
+ * si le code dérivé appartient déjà à un AUTRE compte (collision entre
+ * comptes ~2⁻⁴¹ par paire — jamais provoquée par la course elle-même, qui
+ * produit le même code pour le même compte).
+ */
+async function deriveReferralCode(env, account) {
+  const hex = await sha256hex(`refcode-v1:${account}`);
+  const code = BigInt('0x' + hex.slice(0, 12)).toString(36).padStart(8, '0').slice(-8);
+  const owner = await env.REFERRAL_KV.get(`code:${code}`);
+  if (owner === null || owner === account) return code;
+  return generateUniqueCode(env);
+}
+
+/** Code court a-z0-9 (8 chars, ~41 bits) unique en KV — REPLI de collision
+ *  de deriveReferralCode uniquement (les lignes legacy en sont issues). */
 async function generateUniqueCode(env) {
   const alphabet = 'abcdefghijklmnopqrstuvwxyz0123456789';
   for (let attempt = 0; attempt < 6; attempt++) {

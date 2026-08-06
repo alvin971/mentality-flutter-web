@@ -162,12 +162,22 @@ async function checkIssueCap(env) {
   const max = parsePositiveInt(env.ISSUE_MAX_PER_WINDOW, 300);
   const bucket = Math.floor(Date.now() / (winMin * 60000));
   const key = `issue:${bucket}`;
-  const cur = parseInt(await env.RATE_KV.get(key), 10) || 0;
-  if (cur >= max) return false;
-  await env.RATE_KV.put(key, String(cur + 1), {
-    // ≥ 2 fenêtres pour couvrir la tranche courante entière (minimum KV : 60 s).
-    expirationTtl: Math.max(2 * winMin * 60, 120),
-  });
+  try {
+    const cur = parseInt(await env.RATE_KV.get(key), 10) || 0;
+    if (cur >= max) return false;
+    await env.RATE_KV.put(key, String(cur + 1), {
+      // ≥ 2 fenêtres pour couvrir la tranche courante entière (minimum KV : 60 s).
+      expirationTtl: Math.max(2 * winMin * 60, 120),
+    });
+  } catch {
+    // FAIL-OPEN aussi quand KV JETTE — panne, ou limite Cloudflare
+    // « 1 écriture/seconde par clé » dépassée en rafale (toutes les émissions
+    // d'une fenêtre écrivent la MÊME clé). Sans ce filet, le worker n'ayant
+    // aucun try/catch global, un pic d'inscriptions ou un incident KV
+    // transformerait le frein en 500 sur l'émission — l'inverse exact de la
+    // politique « un frein anti-abus ne mure jamais l'inscription ».
+    // L'émission ratée du compteur = sous-comptage léger, déjà assumé.
+  }
   return true;
 }
 
