@@ -38,10 +38,27 @@ import { checkOrigin } from '../_shared/origin_policy.js';
 const KID = 'k1';
 const SCHEMA_VERSION = 2;
 
+// ⚠️ RÉCONCILIATION AVEC LA PRODUCTION (2026-08-07) — cette liste était EN
+// RETARD sur le worker déployé, qui accepte déjà les 4 origines ajoutées
+// ci-dessous (vérifié origine par origine : GET /geo avec en-tête Origin →
+// 200 pour chacune, 403 pour une origine tierce). La dérive vient de ce que
+// les workers se déploient À LA MAIN, sans CI : le jour où le site
+// mental-et.com a été mis en ligne, l'allow-list a été élargie côté
+// Cloudflare sans que le dépôt suive.
+//
+// NE PAS RETIRER `mental-et.com` : la page d'inscription EN PRODUCTION
+// (site Astro, /inscription) POSTe sur ce worker depuis ce domaine. Déployer
+// une liste sans elle éteindrait l'inscription — 403 sur toutes les créations
+// de passe. Un selftest épingle désormais cette origine (scripts/selftest.mjs).
 const ALLOWED_ORIGINS = [
+  'https://mental-et.com',
+  'https://www.mental-et.com',
+  'https://mental-et.pages.dev',
+  // Historique (app web retirée, liens déjà partagés) :
   'https://mentality-flutter-web.pages.dev',
   'http://localhost:7357',
   'http://localhost:8080',
+  'http://localhost:4321',
 ];
 
 // Allow-lists FERMÉES (anti-injection de quasi-identifiants / canal caché).

@@ -197,6 +197,18 @@ console.log("\nPolitique d'Origin");
   verifie('Origin listée → 200 ; Origin absente (app native) → 200',
     avec.statut === 200 && sans.statut === 200, `${avec.statut} / ${sans.statut}`);
 }
+{
+  // PARITÉ AVEC LA PRODUCTION — le dépôt a déjà été en retard sur le worker
+  // déployé une fois (cf. commentaire d'ALLOWED_ORIGINS) : retirer l'une de
+  // ces origines éteindrait l'inscription en production au prochain deploy.
+  const domaines = ['https://mental-et.com', 'https://www.mental-et.com'];
+  const statuts = [];
+  for (const d of domaines) {
+    statuts.push((await appel(env(kv()), '/', 'POST', CLAIMS, { origin: d })).statut);
+  }
+  verifie("les domaines de la page d'inscription en PRODUCTION émettent (200)",
+    statuts.every((s) => s === 200), `${domaines.join(', ')} → ${statuts.join(', ')}`);
+}
 
 console.log(`\n${ok} vérifications OK, ${echecs.length} en échec`);
 if (echecs.length) { console.error('Échecs : ' + echecs.join(' | ')); process.exit(1); }
