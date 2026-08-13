@@ -7,16 +7,43 @@
 
 ---
 
-## État
+## État au 2026-08-14
 
 | Étape | Familles | Volume | État |
 |---|---|---|---|
 | Cycle 1 — rédaction française | `fam_00001` → `fam_01000` | 1 000 textes | ✅ terminé, commit `4da031c` |
-| Cycle 1 — réécritures natives | mêmes familles × 5 langues | 5 000 textes | ⏳ en cours (`wf_05fd3cc4-82e`) |
-| **Cycle 2 — rédaction française** | `fam_01001` → `fam_03500` | **2 500 textes** | ⬜ à lancer dès la fin du cycle 1 |
+| Cycle 1 — réécritures natives | mêmes familles × 5 langues | 3 481 / 5 000 | 🟠 **coupé par le quota hebdomadaire** — commit `f8a6e0b` |
+| Cycle 1 — **rattrapage** | 310 familles × 5 langues | ~1 519 textes | ⬜ **à faire en premier** dès la remise à zéro |
+| **Cycle 2 — rédaction française** | `fam_01001` → `fam_03500` | **2 500 textes** | ⬜ ensuite |
 | **Cycle 2 — réécritures natives** | mêmes familles × 5 langues | **12 500 textes** | ⬜ enchaîner derrière |
 
+**690 familles sont COMPLÈTES dans les six langues** — le corpus est utilisable en l'état.
+Détail : fr 1000 · en 705 · en_GB 700 · pt 696 · es 690 · de 690.
+
 Total visé : **3 500 familles**, soit **21 000 textes** sur six langues.
+
+### ⚠️ Le quota est le facteur limitant, pas la technique
+
+Le cycle 1 (6 000 textes) a consommé **37 millions de tokens de sous-agents** et épuisé la
+limite hebdomadaire à 70 % des réécritures. Le cycle 2 pèse **2,5 fois plus**. Il faudra
+donc **plusieurs fenêtres hebdomadaires** : découper en runs qui tiennent dans une fenêtre,
+committer après chacun, reprendre à la suivante. Ne pas relancer un gros run juste après une
+coupure : les agents échouent en masse sans rien produire.
+
+### Reprise du rattrapage
+
+Les lots manquants par langue sont dans `tools/corpus_gen/out/lots_manquants.json`
+(≈30 lots par langue, familles `fam_00691` à `fam_01000`). Deux voies :
+
+```bash
+# voie 1 — reprise du run interrompu : les 346 agents réussis reviennent du cache,
+# seuls les 154 refusés sont rejoués
+Workflow({scriptPath: '<session>/workflows/scripts/corpus-traductions-natives-wf_05fd3cc4-82e.js',
+          resumeFromRunId: 'wf_05fd3cc4-82e'})
+```
+
+Voie 2 — nouveau workflow ciblant uniquement les lots de `lots_manquants.json`
+(plus économe : ~155 agents au lieu de 500 même en cache).
 
 ---
 
