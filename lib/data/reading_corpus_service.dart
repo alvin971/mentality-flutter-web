@@ -18,6 +18,7 @@ class ReadingCorpusService {
   static final ReadingCorpusService instance = ReadingCorpusService._();
 
   static const Map<String, String> _assetByTag = {
+    'fr': 'fr',
     'en': 'en',
     'en-GB': 'en_GB',
     'es': 'es',

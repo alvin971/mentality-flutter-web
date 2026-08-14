@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:ui';
 
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mentality/core/l10n/locale_notifier.dart';
@@ -30,8 +32,8 @@ void main() {
     test('ne répète pas de texte tant que le corpus n\'est pas épuisé',
         () async {
       final seen = <String>{};
-      // Le corpus FR contient 503 textes ; sur 10 sessions de 5 textes
-      // (50 textes), aucune répétition ne doit survenir.
+      // Sur 10 sessions de 5 textes, aucune répétition ne doit survenir : le
+      // corpus français est très au-dessus de ces 50 textes.
       for (var i = 0; i < 10; i++) {
         final texts =
             await ReadingCorpusService.instance.pickSessionTexts(count: 5);
@@ -44,27 +46,56 @@ void main() {
       expect(seen.length, 50);
     });
 
-    test('réinitialise l\'historique une fois le corpus épuisé (langue à 50 textes)',
-        () async {
-      localeNotifier.value = const Locale('de');
-      final seenPerRound = <Set<String>>[];
+    test('les six langues couvrent exactement les mêmes familles', () async {
+      // C'est la raison d'être du corpus : un enregistrement allemand et un
+      // enregistrement espagnol doivent porter le MÊME contenu pour être
+      // comparables. Si une langue dérive, l'alignement est perdu.
+      Set<String> familles(String raw) => raw
+          .split('\n')
+          .where((l) => l.trim().isNotEmpty)
+          .map((l) => (jsonDecode(l) as Map<String, dynamic>)['family'] as String)
+          .toSet();
 
-      // Le corpus DE contient 50 textes : 10 sessions de 5 l'épuisent
-      // exactement. La 11e doit puiser dans un historique remis à zéro
-      // plutôt que planter ou renvoyer moins de 5 textes.
-      for (var i = 0; i < 11; i++) {
+      final fr = familles(
+          await rootBundle.loadString('assets/reading_corpus/fr.jsonl'));
+      expect(fr, isNotEmpty);
+
+      for (final asset in ['en', 'en_GB', 'es', 'pt', 'de']) {
+        final autre = familles(
+            await rootBundle.loadString('assets/reading_corpus/$asset.jsonl'));
+        expect(autre, fr,
+            reason: '$asset ne couvre pas les mêmes familles que le français');
+      }
+    });
+
+    test('réinitialise l\'historique une fois le corpus épuisé', () async {
+      localeNotifier.value = const Locale('de');
+
+      // La taille du corpus est DÉRIVÉE de l'asset, jamais codée en dur : elle
+      // grandit à chaque cycle de production, et un nombre écrit en dur ferait
+      // retomber ce test à la prochaine vague.
+      final raw = await rootBundle.loadString('assets/reading_corpus/de.jsonl');
+      final total =
+          raw.split('\n').where((l) => l.trim().isNotEmpty).length;
+      final sessionsPourEpuiser = total ~/ 5;
+      expect(sessionsPourEpuiser, greaterThan(1));
+
+      final vus = <String>{};
+      for (var i = 0; i < sessionsPourEpuiser; i++) {
         final texts =
             await ReadingCorpusService.instance.pickSessionTexts(count: 5);
-        expect(texts.length, 5);
-        seenPerRound.add(texts.map((t) => t.id).toSet());
+        expect(texts.length, 5, reason: 'session $i tronquée');
+        vus.addAll(texts.map((t) => t.id));
       }
+      expect(vus.length, sessionsPourEpuiser * 5,
+          reason: 'aucune répétition avant épuisement du corpus');
 
-      final last = seenPerRound.last;
-      final priorRounds = seenPerRound.sublist(0, 10).expand((s) => s).toSet();
-      expect(priorRounds.length, 50,
-          reason: 'les 10 premières sessions doivent couvrir tout le corpus');
-      // Après reset, les textes piochés viennent forcément du corpus déjà vu.
-      expect(last.every(priorRounds.contains), isTrue);
+      // La session suivante doit puiser dans un historique remis à zéro,
+      // plutôt que planter ou renvoyer moins de cinq textes.
+      final apresReset =
+          await ReadingCorpusService.instance.pickSessionTexts(count: 5);
+      expect(apresReset.length, 5);
+      expect(apresReset.every((t) => vus.contains(t.id)), isTrue);
     });
   });
 }
