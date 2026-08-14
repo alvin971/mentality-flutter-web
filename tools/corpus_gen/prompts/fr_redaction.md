@@ -117,13 +117,22 @@ possible de mots différents du français.
   spécial, intéressant, plusieurs choses.
 - **Liste `{bannis}`** — ces mots sont déjà sur-utilisés ailleurs dans le corpus. Évite-les
   soigneusement, y compris leurs formes fléchies.
-- **Liste `{cible_lexicale}`** — emploie ces mots **naturellement**, répartis entre tes dix
-  textes, jamais plaqués. Si un mot ne s'insère pas sans forcer, laisse-le : un mot plaqué est
-  pire qu'un mot absent.
+- **Liste `{cible_lexicale}`** — vingt mots. **Emploie-en au moins dix**, répartis entre tes dix
+  textes. Ce n'est pas une suggestion : c'est ce qui fait progresser la couverture lexicale du
+  corpus, et la version souple du cycle précédent n'a rendu que treize pour mille de vocabulaire
+  supplémentaire. En revanche, un mot ne se plaque jamais : choisis les dix qui s'insèrent
+  vraiment, et construis au besoin la situation qui les appelle. Un mot forcé dans une phrase qui
+  ne le demandait pas est plus coûteux qu'un mot absent.
 - **Varie les ouvertures.** Aucun de tes dix textes ne commence par la même construction. Sont
   interdites les ouvertures formulaires du type « Les X jouent un rôle essentiel », « Depuis
   toujours », « Il existe », « On sait que ». Alterne : une action en cours, une observation
   concrète, une question, une situation, un contraste, une voix rapportée en prose.
+- **Genre « lettre ou message » : la formule d'envoi est interdite en ouverture.** Pas de
+  « Je t'écris depuis… », « Je t'écris de… », « Chère amie, je… », ni aucune variante annonçant
+  l'acte d'écrire. Entre directement dans le contenu — une observation, une nouvelle, une
+  question posée au destinataire — et laisse la situation épistolaire se deviner. *(Au cycle
+  précédent, « je t'écris depuis… » ouvrait neuf textes et « je t'écris de… » sept autres :
+  c'est exactement le tic à éliminer.)*
 - **Varie la syntaxe d'un texte à l'autre** : longueur des phrases, place des subordonnées,
   rythme. Deux textes du lot ne doivent pas se ressembler de loin.
 
