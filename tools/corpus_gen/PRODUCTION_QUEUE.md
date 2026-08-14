@@ -7,18 +7,38 @@
 
 ---
 
-## État au 2026-08-14
+## État au 2026-08-14 — **7 100 textes produits**
 
 | Étape | Familles | Volume | État |
 |---|---|---|---|
-| Cycle 1 — rédaction française | `fam_00001` → `fam_01000` | 1 000 textes | ✅ terminé, commit `4da031c` |
-| Cycle 1 — réécritures natives | mêmes familles × 5 langues | 3 481 / 5 000 | 🟠 **coupé par le quota hebdomadaire** — commit `f8a6e0b` |
-| Cycle 1 — **rattrapage** | 310 familles × 5 langues | ~1 519 textes | ⬜ **à faire en premier** dès la remise à zéro |
-| **Cycle 2 — rédaction française** | `fam_01001` → `fam_03500` | **2 500 textes** | ⬜ ensuite |
-| **Cycle 2 — réécritures natives** | mêmes familles × 5 langues | **12 500 textes** | ⬜ enchaîner derrière |
+| Cycle 1 — rédaction française | `fam_00001` → `fam_01000` | 1 000 | ✅ commit `4da031c` |
+| Cycle 1 — réécritures natives | × 5 langues | 5 000 | ✅ commit `32aae0a` |
+| Cycle 2A — rédaction française | `fam_01001` → `fam_02250` | 1 100 / 1 250 | 🟠 **110 lots sur 125**, commit `0af069d` |
+| Cycle 2A — **15 lots restants** | familles de `fam_02101` à `fam_02250` | 150 | ⬜ **reprendre ici** |
+| Cycle 2B — rédaction française | `fam_02251` → `fam_03500` | 1 250 | ⬜ ensuite |
+| Cycle 2 — réécritures natives | 2 500 familles × 5 langues | 12 500 | ⬜ en dernier, par vagues |
 
-**690 familles sont COMPLÈTES dans les six langues** — le corpus est utilisable en l'état.
-Détail : fr 1000 · en 705 · en_GB 700 · pt 696 · es 690 · de 690.
+**Le cycle 1 est intégralement livré** : 1 000 familles complètes dans les six langues,
+assemblées dans `assets/reading_corpus/v2/{fr,en,en_GB,es,pt,de}.jsonl`, 0 rejet,
+0 divergence d'unités, temps de lecture homogène (médianes 797–822 caractères).
+**Le corpus est utilisable en production tel quel.**
+
+Le français du cycle 2 vit dans `tools/corpus_gen/out/fr/batch_c2_*.jsonl` et n'est
+**volontairement pas** assemblé dans `v2/fr.jsonl` : ce fichier reste le corpus aligné.
+Il n'accueillera les nouvelles familles que lorsque leurs cinq réécritures existeront.
+
+### Reprise immédiate — les 15 lots du cycle 2A
+
+Coupure à la **limite de session** (remise à zéro 5 h 50 Europe/Berlin), pas la limite
+hebdomadaire. Lots manquants : `batch_c2_110` à `batch_c2_124`.
+
+```
+Workflow({scriptPath: '<session>/workflows/scripts/corpus-fr-cycle2-a-wf_b03de711-0ce.js',
+          resumeFromRunId: 'wf_b03de711-0ce'})
+```
+Les 130 agents réussis reviennent du cache, seuls les 15 refusés sont rejoués.
+Vérifier d'abord `ls tools/corpus_gen/out/fr/batch_c2_*.jsonl | wc -l` — si le compte
+est à 125, il n'y a rien à reprendre.
 
 Total visé : **3 500 familles**, soit **21 000 textes** sur six langues.
 
