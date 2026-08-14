@@ -7,7 +7,24 @@
 
 ---
 
-## État au 2026-08-14 — **7 100 textes produits**
+## ✅ LIVRÉ EN PRODUCTION — build TestFlight `31782370719` (2026-08-14, succès en 7 min 41)
+
+Branche `claude/french-texts-notes-6cb067`, poussée sur `origin`, **non fusionnée dans `main`**.
+Commits : `4da031c` (FR) → `32aae0a` (six langues) → `0af069d` (cycle 2A) → `14ff08b` (câblage app).
+
+L'app sert le corpus v2 : `assets/reading_corpus/{fr,en,en_GB,es,pt,de}.jsonl`, 1000 textes
+par langue. Publié par `publish.py`, qui **refuse de publier une langue désalignée**.
+989 tests verts.
+
+**Reprise du câblage** : rien à faire, c'est en place. Pour republier après un nouveau cycle :
+```bash
+python3 tools/corpus_gen/publish.py     # v2/ → assets/, estampille les identifiants
+flutter test test/data/reading_corpus_service_test.dart
+```
+
+---
+
+## État de la production au 2026-08-14 — **7 100 textes produits**
 
 | Étape | Familles | Volume | État |
 |---|---|---|---|
@@ -94,15 +111,27 @@ Voie 2 — nouveau workflow ciblant uniquement les lots de `lots_manquants.json`
 
 ---
 
-## Défauts connus du cycle 1, à corriger au cycle 2
+## Ce que les deux cycles ont appris
 
-1. **Ouvertures répétées du genre « lettre »** — « je t'écris depuis… » ×9,
-   « je t'écris de… » ×7, « chère amie je… » ×5. Ajouter au prompt de rédaction
-   l'interdiction explicite d'ouvrir une lettre par une formule d'envoi.
-2. **Densité lexicale inchangée** — à taille égale, +1,3 % de formes uniques seulement
-   par rapport au corpus v1. La liste-cible des lexicographes n'a pas suffi. Piste :
-   élargir la liste-cible à 20 mots par lot et exiger qu'au moins la moitié soit
-   employée, plutôt que « ceux qui s'insèrent naturellement ».
+1. **Les tics d'ouverture se corrigent, mais ils reviennent ailleurs.** Le cycle 1 avait
+   « je t'écris depuis… » (×9) ; l'interdiction explicite dans le prompt l'a **éliminé à
+   100 %** au cycle 2 (92 lettres, aucune formule d'envoi). Mais un nouveau tic est apparu :
+   « Pendant des générations, » ouvre 18 textes du cycle 2. → **À chaque vague, relever les
+   ouvertures répétées avec `gates.py` et les bannir explicitement dans le prompt.** C'est un
+   jeu de taupes permanent, pas un défaut qu'on corrige une fois.
+
+2. **La densité lexicale par texte est un PLAFOND DU MODÈLE, pas un défaut de prompt.**
+   Deux tentatives, deux échecs : liste-cible souple de 12 mots → +1,3 % ; liste durcie de
+   20 mots dont 10 obligatoires → **+0,4 %**, donc pire. Insister davantage produirait des
+   mots plaqués et abîmerait les textes. **Ne pas retenter cette voie.**
+   En revanche la couverture CUMULÉE marche très bien : chaque millier de textes apporte
+   ~5 300 formes absentes du précédent (14 789 → 20 084 formes en passant de 1 000 à 2 000
+   textes). **La couverture lexicale s'achète par le volume, pas par la densité** — ce qui
+   justifie précisément les 2 500 familles demandées.
+
+3. **Le quota est le seul facteur limitant.** Trois coupures en deux jours (hebdomadaire une
+   fois, session deux fois). Le dispositif y résiste sans perte parce que chaque agent écrit
+   son lot sur le disque avant de rendre son bilan.
 
 ---
 
