@@ -13,6 +13,8 @@ import '../../domain/puzzle_generator.dart';
 import '../widgets/puzzle_piece_widget.dart';
 import '../widgets/puzzle_slot_indicator.dart';
 import '../widgets/puzzle_target_widget.dart';
+import '../../../../../core/services/results_sync.dart';
+import '../../../../../core/services/subtest_instrumentation.dart';
 
 /// Page du test "Puzzles Visuels" (inspiré du subtest VP, indice VSI).
 ///
@@ -43,6 +45,11 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
   int _consecutiveFailures = 0;
 
   final Set<String> _selectedIds = {};
+
+  /// Mesure item par item (latence, hésitation, reprises).
+  /// Aucune frappe individuelle n'est captée — cf. SubtestInstrumentation.
+  final SubtestInstrumentation _instr =
+      SubtestInstrumentation('visual_puzzles');
   int _remainingSeconds = 0;
   Timer? _timer;
   Timer? _advanceTimer;
@@ -155,6 +162,9 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
     _submitted = false;
     _remainingSeconds = _currentItem.timeLimitSeconds;
     _itemStartedAt = DateTime.now();
+    if (!_demoPhase) {
+      _instr.startItem(index: _currentItemIndex);
+    }
     _startTimer();
   }
 
@@ -183,6 +193,14 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
 
   void _togglePiece(String pieceId) {
     if (_submitted) return;
+    // Sélectionner puis désélectionner une pièce est une reprise :
+    // on la compte comme telle (signal d'hésitation).
+    _instr.onInput(
+      previous: _selectedIds.join(','),
+      current: _selectedIds.contains(pieceId)
+          ? (_selectedIds.length - 1).toString()
+          : '${_selectedIds.join(',')},\$pieceId',
+    );
     if (!_selectedIds.contains(pieceId) && _selectedIds.length >= 3) {
       // Déjà 3 pièces : on N'ajoute PAS (remplacer silencieusement la plus
       // ancienne sélection déroutait). Le sujet doit désélectionner d'abord.
@@ -215,6 +233,13 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
         setEquals(_selectedIds, _currentItem.correctIds);
     _logItemResult(isCorrect: isCorrect, autoSubmit: autoSubmit);
 
+    _instr.endItem(
+      response: _selectedIds.join(','),
+      isCorrect: isCorrect,
+      score: isCorrect ? 1 : 0,
+      timedOut: autoSubmit,
+    );
+
     setState(() {
       _submitted = true;
       if (isCorrect) {
@@ -246,6 +271,12 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
 
   void _finish() {
     _logSummary();
+
+    // Les mesures partent MAINTENANT, sous-test par sous-test : une app fermée
+    // plus loin dans la batterie ne doit pas emporter ce qui a déjà été mesuré.
+    unawaited(ResultsSync.instance.flushSubtest(
+      _instr.toPayload(rawScore: _score, maxScore: _items.length),
+    ));
     Navigator.of(context).pop(_score);
   }
 

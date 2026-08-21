@@ -36,3 +36,14 @@ id = "6c70f3aab78c4aeb92d1255f62edbafd"
 # (passage en stage 3) et la publication du résultat (stage 4).
 # 11520 min = 8 jours. Rien n'est vérifié pendant ce délai — on attend, c'est tout.
 UNLOCK_DELAY_MINUTES = "11520"
+
+# ── Secrets requis par POST /results (migration Supabase 011) ────────────────
+# Le worker écrit les passations dans Supabase. Sans ces deux secrets, /results
+# répond 200 {stored:false, reason:'not_configured'} — fail-soft, le parcours
+# de test n'est jamais bloqué.
+#
+#   npx wrangler secret put SUPABASE_URL          # https://<ref>.supabase.co
+#   npx wrangler secret put SUPABASE_SERVICE_KEY  # secret key (sb_secret_… ou service_role)
+#
+# ⚠️ La service key contourne le RLS : elle ne doit exister QUE comme secret de
+# worker, jamais dans le dépôt ni dans l'app.

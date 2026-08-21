@@ -23,6 +23,13 @@ class AuthLocalStore {
   Future<void> saveToken(String token) async {
     final box = await _openBox();
     await box.put(_tokenKey, token);
+    // Un changement de token change d'IDENTITÉ : la passation en cours
+    // appartenait au token précédent. Sans cet effacement, le prochain envoi
+    // réutiliserait le même client_session_id sous un compte différent, et le
+    // serveur RÉATTRIBUERAIT la session — les mesures partielles de l'ancien
+    // compte deviendraient celles du nouveau. C'est le goulot par lequel passe
+    // tout changement de token : la garantie est ici, pas chez les appelants.
+    await box.delete(_testSessionKey);
   }
 
   /// Retourne le token persisté ou `null` si aucun.
@@ -39,6 +46,29 @@ class AuthLocalStore {
 
   /// True si un token est présent localement.
   Future<bool> hasToken() async => (await getToken()) != null;
+
+  // ───── Identité de la passation en cours ─────
+  //
+  // UUID généré au premier sous-test et conservé jusqu'à la fin du test. C'est
+  // la clé d'idempotence des envois incrémentaux : l'app peut fermer, planter ou
+  // perdre le réseau, elle reprendra la MÊME session côté serveur au lieu d'en
+  // ouvrir une seconde. C'est aussi ce qui rendra la pause/reprise possible.
+  static const _testSessionKey = 'test_session_id_v1';
+
+  Future<void> saveTestSessionId(String id) async {
+    final box = await _openBox();
+    await box.put(_testSessionKey, id);
+  }
+
+  Future<String?> getTestSessionId() async {
+    final box = await _openBox();
+    return box.get(_testSessionKey) as String?;
+  }
+
+  Future<void> clearTestSessionId() async {
+    final box = await _openBox();
+    await box.delete(_testSessionKey);
+  }
 
   static const _referrerKey = 'pending_referrer_code';
 

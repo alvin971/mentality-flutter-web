@@ -26,6 +26,7 @@ import '../../../exercises_implementations/picture_span/presentation/pages/pictu
 import '../../../exercises_implementations/figure_weights/presentation/pages/figure_weights_test_page.dart';
 import '../../../data_collection/oral_test_flow.dart';
 import '../../../unlock/data/completion_reporter.dart';
+import '../../../../core/services/results_sync.dart';
 import '../../../../core/services/token_claims_reader.dart';
 import '../../data/pretest_store.dart';
 import '../pretest_chain.dart';
@@ -248,6 +249,20 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
     unawaited(CompletionReporter.instance.declare(
       subtestsCompleted: session.completedTestsCount,
       durationSeconds: duree.inSeconds,
+    ));
+
+    // Les résultats partent séparément, et VOLONTAIREMENT hors du gate de
+    // déblocage : `declare()` sort tôt quand le gate est éteint, alors que les
+    // scores doivent être conservés dans tous les cas — ils sont ce qui rend la
+    // passation portable d'un appareil à l'autre (/login-token retrouve le même
+    // `account`) et ce qui alimentera la calibration.
+    //
+    // Rattachés au token, donc à personne. Tir-et-oublie : un échec de
+    // téléversement ne doit jamais retarder l'écran de résultats, les scores
+    // restant de toute façon en local.
+    unawaited(ResultsSync.instance.complete(
+      durationSeconds: duree.inSeconds,
+      subtests: session.toResultsPayload(),
     ));
 
     await Navigator.push(

@@ -9,6 +9,8 @@ import '../../domain/balance_generator.dart';
 import '../widgets/balance_widget.dart';
 import '../widgets/token_widget.dart';
 import '../../../../../core/theme/kepler_colors.dart';
+import '../../../../../core/services/results_sync.dart';
+import '../../../../../core/services/subtest_instrumentation.dart';
 
 /// Page du test des Balances Quantitatives (Figure Weights)
 /// WAIS-IV : 27 items, g-loading = 0.78
@@ -28,6 +30,11 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
   int totalTime = 0;
   int _consecutiveFailures = 0;
   List<Token>? _selectedAnswer;
+
+  /// Mesure item par item (latence, hésitation, reprises).
+  /// Aucune frappe individuelle n'est captée — cf. SubtestInstrumentation.
+  final SubtestInstrumentation _instr =
+      SubtestInstrumentation('figure_weights');
   DateTime? _itemStartTime;
   Timer? _countdownTimer;
   int _remainingSeconds = 0;
@@ -210,6 +217,9 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
     _selectedAnswer = null;
     _submitted = false;
     _remainingSeconds = _currentItem.timeLimitSeconds;
+    if (!_demoPhase && currentLevel < _generatedItems.length) {
+      _instr.startItem(index: currentLevel);
+    }
 
     _startCountdown();
   }
@@ -254,6 +264,13 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
     final isCorrect = _selectedAnswer != null &&
         _listsEqual(_selectedAnswer!, _generatedItems[currentLevel].correctAnswer);
 
+    _instr.endItem(
+      response: _selectedAnswer?.map((t) => t.toString()).join(','),
+      isCorrect: isCorrect,
+      score: isCorrect ? 1 : 0,
+      timedOut: _selectedAnswer == null,
+    );
+
     if (isCorrect) {
       score++;
       _consecutiveFailures = 0;
@@ -283,6 +300,13 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
   }
 
   void _showFinalResults() {
+    // Les mesures partent MAINTENANT, sous-test par sous-test : une app
+    // fermée plus loin dans la batterie ne doit pas emporter ce qui a déjà
+    // été mesuré. Tir-et-oublie, fail-soft.
+    unawaited(ResultsSync.instance.flushSubtest(
+      _instr.toPayload(rawScore: score, maxScore: _generatedItems.length),
+    ));
+
     // Test non noté à l'écran : aucun récapitulatif de points/temps/réussite,
     // simple confirmation de fin — le score repart vers l'appelant, sans être montré.
     showDialog(

@@ -9,6 +9,8 @@ import '../../../../../core/theme/kepler_colors.dart';
 import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/vocabulary_generator.dart';
+import '../../../../../core/services/results_sync.dart';
+import '../../../../../core/services/subtest_instrumentation.dart';
 
 /// Page du test de Vocabulaire (Vocabulary)
 /// WAIS-IV : 30 mots
@@ -29,6 +31,11 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
   int totalTime = 0;
   int _consecutiveZeros = 0;
   final TextEditingController _answerController = TextEditingController();
+
+  /// Mesure item par item (latence, hésitation, reprises) — cf.
+  /// SubtestInstrumentation. Aucune frappe individuelle n'est captée.
+  final SubtestInstrumentation _instr = SubtestInstrumentation('vocabulary');
+  String _prevAnswer = '';
   DateTime? _itemStartTime;
   Timer? _timer;
   int _elapsedSeconds = 0;
@@ -106,6 +113,13 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
     _itemStartTime = DateTime.now();
     _elapsedSeconds = 0;
     _answerController.clear();
+    _prevAnswer = '';
+    if (currentLevel < _generatedItems.length) {
+      _instr.startItem(
+        index: currentLevel,
+        itemId: _generatedItems[currentLevel].word,
+      );
+    }
 
     _startTimer();
   }
@@ -156,6 +170,12 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
       timeSeconds: timeSeconds,
     ));
 
+    _instr.endItem(
+      response: userAnswer,
+      isCorrect: itemScore > 0,
+      score: itemScore,
+    );
+
     // Test non noté à l'écran : on enchaîne sans retour de score.
     // Discontinuation WAIS-IV : 3 scores de 0 consécutifs.
     if (_consecutiveZeros >= 3 ||
@@ -170,6 +190,13 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
   }
 
   void _showFinalResults() {
+    // Les mesures partent MAINTENANT, sous-test par sous-test, plutôt qu'en un
+    // seul envoi à la fin des 12 : une app fermée plus loin dans la batterie ne
+    // doit pas emporter ce qui a déjà été mesuré. Tir-et-oublie, fail-soft.
+    unawaited(ResultsSync.instance.flushSubtest(
+      _instr.toPayload(rawScore: score, maxScore: _generatedItems.length * 2),
+    ));
+
     // Test non noté à l'écran : aucun récapitulatif de points/temps/réussite,
     // simple confirmation de fin — le score repart vers l'appelant, sans être montré.
     showDialog(
@@ -371,7 +398,11 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
             controller: _answerController,
             maxLines: 3,
             // Met à jour l'état du bouton Valider à chaque frappe.
-            onChanged: (_) => setState(() {}),
+            onChanged: (v) {
+              _instr.onInput(previous: _prevAnswer, current: v);
+              _prevAnswer = v;
+              setState(() {});
+            },
             // Mobile : la touche Entrée du clavier devient « OK » (au lieu
             // d'un retour à la ligne) et valide la réponse ; taper hors du
             // champ referme le clavier — sinon il masque le bouton Valider.

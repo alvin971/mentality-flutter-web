@@ -67,6 +67,61 @@ class CompleteTestSession {
     'Balances',
   ];
 
+  /// Codes stables des sous-tests, pour la base et l'analyse.
+  ///
+  /// [testSequence] contient des LIBELLÉS D'AFFICHAGE français : ils changent
+  /// avec la langue et ne peuvent pas servir de clé. Cette table fige les noms
+  /// WAIS-IV standards, qui eux ne bougeront pas.
+  static const Map<String, String> subtestCodes = {
+    'Cubes': 'block_design',
+    'Similitudes': 'similarities',
+    'Mémoire des Chiffres': 'digit_span',
+    'Matrices': 'matrix_reasoning',
+    'Vocabulaire': 'vocabulary',
+    'Arithmétique': 'arithmetic',
+    'Recherche de Symboles': 'symbol_search',
+    'Puzzles Visuels': 'visual_puzzles',
+    'Information': 'information',
+    'Code': 'coding',
+    'Mémoire des Images': 'picture_span',
+    'Balances': 'figure_weights',
+  };
+
+  /// Score brut par code stable, les sous-tests non passés étant absents.
+  Map<String, int> get scoresByCode {
+    final m = <String, int?>{
+      'block_design': cubesScore,
+      'similarities': similaritiesScore,
+      'digit_span': digitSpanScore,
+      'matrix_reasoning': matricesScore,
+      'vocabulary': vocabularyScore,
+      'arithmetic': arithmeticScore,
+      'symbol_search': symbolSearchScore,
+      'visual_puzzles': visualPuzzlesScore,
+      'information': informationScore,
+      'coding': codingScore,
+      'picture_span': pictureSpanScore,
+      'figure_weights': figureWeightsScore,
+    };
+    return {
+      for (final e in m.entries)
+        if (e.value != null) e.key: e.value!,
+    };
+  }
+
+  /// Charge utile pour `UnlockService.uploadTestResults`.
+  ///
+  /// Un élément par sous-test effectivement noté. On n'envoie AUCUNE donnée
+  /// nominative : uniquement un code de sous-test et un score brut, rattachés
+  /// côté serveur au token — donc à personne.
+  List<Map<String, dynamic>> toResultsPayload() => [
+        for (final e in scoresByCode.entries)
+          <String, dynamic>{
+            'subtest': e.key,
+            'rawScore': e.value,
+          },
+      ];
+
   /// Retourne le nom du test en cours
   String get currentTestName =>
       currentTestIndex < testSequence.length

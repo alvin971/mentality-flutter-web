@@ -43,13 +43,14 @@ class AppConstants {
   // SUPABASE (admin backend)
   // ========================================
 
-  /// URL du projet Supabase admin (visible dans Supabase Dashboard → Settings → API)
+  /// URL du projet Supabase admin (Dashboard → Data API → Project URL).
   /// Laisser vide pour désactiver la configuration distante.
-  static const String supabaseUrl = 'https://supabase.0for0.com';
+  static const String supabaseUrl = 'https://ktrnievuknfhwffbxaog.supabase.co';
 
-  /// Clé anon publique Supabase (safe à inclure côté client — RLS contrôle l'accès)
+  /// Publishable key Supabase (Dashboard → API Keys). Publique par design :
+  /// elle part dans le binaire, c'est le RLS qui contrôle l'accès.
   static const String supabaseAnonKey =
-      'eyJhbGciOiAiSFMyNTYiLCAidHlwIjogIkpXVCJ9.eyJyb2xlIjogImFub24iLCAiaXNzIjogInN1cGFiYXNlIiwgImlhdCI6IDE3NzM5NjE0NTIsICJleHAiOiAyMDg5MzIxNDUyfQ.zU4lqg55i1aUG-SEIz_SeVCdMI5twUyqK4W1eyVMXYo';
+      'sb_publishable_-cnHCFJuR4uvb7k3CMvVRQ_GkWglFGi';
 
   // ========================================
   // API ENDPOINTS

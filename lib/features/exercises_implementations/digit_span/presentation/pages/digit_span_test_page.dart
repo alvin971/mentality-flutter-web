@@ -8,6 +8,8 @@ import '../../../../../core/theme/kepler_colors.dart';
 import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/digit_span_generator.dart';
+import '../../../../../core/services/results_sync.dart';
+import '../../../../../core/services/subtest_instrumentation.dart';
 
 /// Page du test Mémoire des Chiffres (Digit Span)
 /// 3 parties : Forward, Backward, Sequencing
@@ -34,6 +36,11 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
 
   // Progression
   int _currentItemIndex = 0;
+
+  /// Mesure item par item (latence, hésitation, reprises).
+  /// Aucune frappe individuelle n'est captée — cf. SubtestInstrumentation.
+  final SubtestInstrumentation _instr =
+      SubtestInstrumentation('digit_span');
   final List<int> _userAnswer = [];
 
   // Scoring par partie
@@ -163,7 +170,18 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
   void _submitAnswer() {
     final isCorrect = _currentItem.isCorrect(_userAnswer);
 
+    // Empan : l'item s'ouvre à la présentation de la séquence, mais seule
+    // la saisie est mesurable. On ouvre et ferme au même endroit — la
+    // latence porte donc le temps de RESTITUTION, pas d'écoute.
+    _instr.startItem(index: _currentItemIndex);
+
     int pointsEarned = 0;
+
+    _instr.endItem(
+      response: _userAnswer.join(''),
+      isCorrect: isCorrect,
+      score: isCorrect ? 1 : 0,
+    );
 
     if (isCorrect) {
       // Barème harmonisé : 1 point par essai réussi (max 46), pas de 2/1.
@@ -245,6 +263,13 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
       Navigator.pop(dialogContext);
       if (mounted) Navigator.pop(context, totalScore);
     }
+
+    // Les mesures partent MAINTENANT, sous-test par sous-test : une app
+    // fermée plus loin dans la batterie ne doit pas emporter ce qui a déjà
+    // été mesuré. Tir-et-oublie, fail-soft.
+    unawaited(ResultsSync.instance.flushSubtest(
+      _instr.toPayload(),
+    ));
 
     // Test non noté à l'écran : aucun récapitulatif de points/temps/réussite,
     // simple confirmation de fin — le score repart vers l'appelant, sans être montré.

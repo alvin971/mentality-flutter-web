@@ -8,6 +8,8 @@ import '../../../../../core/theme/kepler_colors.dart';
 import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/coding_generator.dart';
+import '../../../../../core/services/results_sync.dart';
+import '../../../../../core/services/subtest_instrumentation.dart';
 
 /// Page du test Code (Coding / Digit Symbol)
 /// 135 cases à compléter en 120 secondes avec palette de symboles
@@ -31,6 +33,11 @@ class _CodingTestPageState extends State<CodingTestPage> {
   // Phase du test
   TestPhase _currentPhase = TestPhase.intro;
   bool _isTraining = false;
+
+  /// Mesure item par item (latence, hésitation, reprises).
+  /// Aucune frappe individuelle n'est captée — cf. SubtestInstrumentation.
+  final SubtestInstrumentation _instr =
+      SubtestInstrumentation('coding');
 
   // Timer
   Timer? _countdownTimer;
@@ -92,6 +99,7 @@ class _CodingTestPageState extends State<CodingTestPage> {
 
   void _selectSymbol(String symbol) {
     if (_isTraining) {
+
       // Mode entraînement : seulement les 7 premières cases
       if (_selectedCellIndex < 7) {
         setState(() {
@@ -105,6 +113,15 @@ class _CodingTestPageState extends State<CodingTestPage> {
     } else {
       // Mode test : toutes les 135 cases
       if (_selectedCellIndex < 135) {
+        // Test de vitesse : chaque case remplie est un item, ouvert et fermé
+        // dans le même geste. C'est la CADENCE qui est évaluée ici, donc la
+        // latence par case est la mesure utile.
+        _instr
+          ..startItem(index: _selectedCellIndex)
+          ..endItem(
+            response: symbol,
+            isCorrect: _referenceKey[_digitSequence[_selectedCellIndex]] == symbol,
+          );
         setState(() {
           _userAnswers[_selectedCellIndex] = symbol;
           if (_selectedCellIndex < 134) {
@@ -166,6 +183,14 @@ class _CodingTestPageState extends State<CodingTestPage> {
 
   void _finishTest() {
     _countdownTimer?.cancel();
+
+    // Les mesures partent MAINTENANT, sous-test par sous-test : une app
+    // fermée plus loin dans la batterie ne doit pas emporter ce qui a déjà
+    // été mesuré. Tir-et-oublie, fail-soft.
+    unawaited(ResultsSync.instance.flushSubtest(
+      _instr.toPayload(),
+    ));
+
 
     // Test non noté à l'écran : aucun récapitulatif de points/temps/réussite,
     // simple confirmation de fin — le score repart vers l'appelant, sans être montré.

@@ -8,6 +8,8 @@ import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/arithmetic_generator.dart';
 import '../../../../../core/theme/kepler_colors.dart';
+import '../../../../../core/services/results_sync.dart';
+import '../../../../../core/services/subtest_instrumentation.dart';
 
 /// Page du test Arithmétique (Arithmetic)
 /// Résolution mentale de 22 problèmes sous contrainte de temps
@@ -27,6 +29,11 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
 
   int _currentItemIndex = 0;
   int _score = 0;
+
+  /// Mesure item par item (latence, hésitation, reprises).
+  /// Aucune frappe individuelle n'est captée — cf. SubtestInstrumentation.
+  final SubtestInstrumentation _instr =
+      SubtestInstrumentation('arithmetic');
   int _consecutiveFailures = 0;
 
   // Timer
@@ -69,6 +76,12 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
       _hasRepeated = false;
       _answerController.clear();
     });
+    if (_currentItemIndex < _generatedItems.length) {
+      _instr.startItem(
+        index: _currentItemIndex,
+        itemId: _currentItem.problem,
+      );
+    }
 
     _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
@@ -160,6 +173,13 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
   void _processAnswer(int? userAnswer) {
     final itemScore = _currentItem.calculateScore(userAnswer, _elapsedSeconds);
 
+    _instr.endItem(
+      response: userAnswer?.toString(),
+      isCorrect: itemScore > 0,
+      score: itemScore,
+      timedOut: userAnswer == null,
+    );
+
     setState(() {
       if (itemScore == 0) {
         _consecutiveFailures++;
@@ -192,6 +212,13 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
 
   void _showFinalResults() {
     _countdownTimer?.cancel();
+
+    // Les mesures partent MAINTENANT, sous-test par sous-test : une app
+    // fermée plus loin dans la batterie ne doit pas emporter ce qui a déjà
+    // été mesuré. Tir-et-oublie, fail-soft.
+    unawaited(ResultsSync.instance.flushSubtest(
+      _instr.toPayload(rawScore: _score, maxScore: _generatedItems.length),
+    ));
 
     // Test non noté à l'écran : aucun récapitulatif de points/temps/réussite,
     // simple confirmation de fin — le score repart vers l'appelant, sans être montré.
