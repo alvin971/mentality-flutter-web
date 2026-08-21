@@ -7,6 +7,8 @@ import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/picture_span_generator.dart';
 import '../../../../../core/theme/kepler_colors.dart';
+import '../../../../../core/services/results_sync.dart';
+import '../../../../../core/services/subtest_instrumentation.dart';
 
 /// Page du test Mémoire des Images (Picture Span)
 /// Présentation séquentielle puis rappel ordonné sur grille
@@ -24,6 +26,11 @@ class _PictureSpanTestPageState extends State<PictureSpanTestPage> {
 
   int _currentItemIndex = 0;
   int _score = 0;
+
+  /// Mesure item par item (latence, hésitation, reprises).
+  /// Aucune frappe individuelle n'est captée — cf. SubtestInstrumentation.
+  final SubtestInstrumentation _instr =
+      SubtestInstrumentation('picture_span');
   int _consecutiveFailuresAtLevel = 0;
   int _currentLevel = 1;
 
@@ -66,6 +73,7 @@ class _PictureSpanTestPageState extends State<PictureSpanTestPage> {
       _userSelectedImageIds.clear();
       _currentPhase = TestPhase.presentation;
     });
+    _instr.startItem(index: _currentItemIndex);
 
     _showNextImage();
   }
@@ -117,6 +125,12 @@ class _PictureSpanTestPageState extends State<PictureSpanTestPage> {
   void _validateAnswer() {
     final isCorrect = _currentItem.isCorrect(_userSelectedImageIds);
 
+    _instr.endItem(
+      response: _userSelectedImageIds.join(','),
+      isCorrect: isCorrect,
+      score: isCorrect ? 1 : 0,
+    );
+
     setState(() {
       if (isCorrect) {
         _score++;
@@ -154,6 +168,13 @@ class _PictureSpanTestPageState extends State<PictureSpanTestPage> {
 
   void _showFinalResults() {
     _presentationTimer?.cancel();
+
+    // Les mesures partent MAINTENANT, sous-test par sous-test : une app
+    // fermée plus loin dans la batterie ne doit pas emporter ce qui a déjà
+    // été mesuré. Tir-et-oublie, fail-soft.
+    unawaited(ResultsSync.instance.flushSubtest(
+      _instr.toPayload(rawScore: _score),
+    ));
 
     // Test non noté à l'écran : aucun récapitulatif de points/temps/réussite,
     // simple confirmation de fin — le score repart vers l'appelant, sans être montré.

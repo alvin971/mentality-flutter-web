@@ -14,6 +14,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../core/consent/consent_service.dart';
+import '../../core/services/results_sync.dart';
 import '../../core/l10n/l10n_ext.dart';
 import '../../core/l10n/locale_notifier.dart';
 import '../../core/services/auth_local_store.dart';
@@ -110,6 +111,7 @@ class _OralTestFlowState extends State<OralTestFlow> {
 
   void _onReadingCompleted(String textId, String sessionId) {
     _pauseTimer?.cancel();
+    _consigneOral(kind: 'reading', textId: textId, r2SessionId: sessionId);
     setState(() {
       _step = _FlowStep.pause;
       _pauseCountdown = 5;
@@ -133,6 +135,7 @@ class _OralTestFlowState extends State<OralTestFlow> {
 
   void _onSummaryCompleted(String textId, String sessionId) {
     _pauseTimer?.cancel();
+    _consigneOral(kind: 'summary', textId: textId, r2SessionId: sessionId);
     if (_currentCycle < 4) {
       setState(() {
         _currentCycle++;
@@ -145,6 +148,34 @@ class _OralTestFlowState extends State<OralTestFlow> {
       widget.onAllCompleted?.call();
       _validateTokenAfterTest();
     }
+  }
+
+  /// Consigne en base ce qui a été lu, et sous quelle couche R2.
+  ///
+  /// Rien de sonore ne part ici : l'audio suit son propre chemin vers R2. On
+  /// n'enregistre que de quoi retrouver et interpréter l'enregistrement — quel
+  /// texte du corpus, quel cycle, quel consentement. Cette information
+  /// n'existait nulle part jusqu'ici : on avait des fichiers audio sans savoir
+  /// ce qu'ils contenaient.
+  ///
+  /// `layer` reprend la règle du worker r2-upload : `reusable/` quand la
+  /// personne a consenti à la cession commerciale, `internal/` sinon.
+  ///
+  /// Tir-et-oublie : un échec ne doit jamais interrompre l'épreuve.
+  void _consigneOral({
+    required String kind,
+    required String textId,
+    required String r2SessionId,
+  }) {
+    unawaited(ResultsSync.instance.flushOral(<String, dynamic>{
+      'cycle': _currentCycle,
+      'kind': kind,
+      'textId': textId,
+      'r2SessionId': r2SessionId,
+      'layer': _consentCommercial ? 'reusable' : 'internal',
+      'commercialReuse': _consentCommercial,
+      'uploadOk': true,
+    }));
   }
 
   /// À la soumission du test, enregistre côté serveur que le token a

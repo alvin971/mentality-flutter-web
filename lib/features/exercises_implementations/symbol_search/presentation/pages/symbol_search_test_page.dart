@@ -8,6 +8,8 @@ import '../../../../../core/theme/kepler_colors.dart';
 import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/symbol_search_generator.dart';
+import '../../../../../core/services/results_sync.dart';
+import '../../../../../core/services/subtest_instrumentation.dart';
 
 /// Page du test Recherche de Symboles (Symbol Search)
 /// 60 items en 120 secondes avec réponse OUI/NON
@@ -30,6 +32,11 @@ class _SymbolSearchTestPageState extends State<SymbolSearchTestPage> {
   // Phase du test
   TestPhase _currentPhase = TestPhase.intro;
   bool _isTraining = false;
+
+  /// Mesure item par item (latence, hésitation, reprises).
+  /// Aucune frappe individuelle n'est captée — cf. SubtestInstrumentation.
+  final SubtestInstrumentation _instr =
+      SubtestInstrumentation('symbol_search');
 
   // Timer
   Timer? _countdownTimer;
@@ -99,6 +106,7 @@ class _SymbolSearchTestPageState extends State<SymbolSearchTestPage> {
 
   void _submitAnswer(bool answer) {
     if (_isTraining) {
+
       // Mode entraînement
       if (_currentItemIndex < _trainingItems.length) {
         if (_currentItemIndex < _trainingItems.length - 1) {
@@ -114,6 +122,13 @@ class _SymbolSearchTestPageState extends State<SymbolSearchTestPage> {
       setState(() {
         _userAnswers[_currentItemIndex] = answer;
       });
+
+      // Test de vitesse : chaque réponse est un item, ouvert et fermé dans le
+      // même geste. La latence mesure la cadence — qui EST le construit
+      // évalué par ce sous-test.
+      _instr
+        ..startItem(index: _currentItemIndex)
+        ..endItem(response: answer.toString());
 
       if (_currentItemIndex < _testItems.length - 1) {
         setState(() {
@@ -147,6 +162,14 @@ class _SymbolSearchTestPageState extends State<SymbolSearchTestPage> {
 
   void _finishTest() {
     _countdownTimer?.cancel();
+
+    // Les mesures partent MAINTENANT, sous-test par sous-test : une app
+    // fermée plus loin dans la batterie ne doit pas emporter ce qui a déjà
+    // été mesuré. Tir-et-oublie, fail-soft.
+    unawaited(ResultsSync.instance.flushSubtest(
+      _instr.toPayload(),
+    ));
+
 
     final score = _generator.calculateScore(_userAnswers);
 

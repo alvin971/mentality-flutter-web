@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/l10n/l10n_ext.dart';
@@ -7,6 +8,8 @@ import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/matrix_generator.dart';
 import '../widgets/matrix_cell_widget.dart';
 import '../../../../../core/theme/kepler_colors.dart';
+import '../../../../../core/services/results_sync.dart';
+import '../../../../../core/services/subtest_instrumentation.dart';
 
 /// Page de test des Matrices Progressives (WAIS-IV: 26 items, WISC-V: 32 items)
 class MatricesTestPage extends StatefulWidget {
@@ -23,6 +26,9 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
   int totalTime = 0;
   int _consecutiveFailures = 0;
   MatrixCell? _selectedAnswer;
+
+  /// Mesure item par item (latence, hésitation, changements d'avis).
+  final SubtestInstrumentation _instr = SubtestInstrumentation('matrix_reasoning');
   DateTime? _itemStartTime;
 
   late List<MatrixItem> _generatedItems;
@@ -91,6 +97,9 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
       _demoSubmitted = false;
       _selectedAnswer = null;
       _itemStartTime = DateTime.now();
+      if (!_demoPhase && currentLevel < _generatedItems.length) {
+        _instr.startItem(index: currentLevel);
+      }
     });
   }
 
@@ -113,6 +122,11 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
 
   void _handleAnswerSelected(MatrixCell answer) {
     if (_demoPhase && _demoSubmitted) return;
+    // Changer d'avis compte comme une reprise — signal d'incertitude.
+    _instr.onInput(
+      previous: _selectedAnswer?.toString() ?? '',
+      current: answer.toString(),
+    );
     setState(() {
       _selectedAnswer = answer;
     });
@@ -130,6 +144,12 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
 
     final isCorrect = _selectedAnswer == _generatedItems[currentLevel].correctAnswer;
     final timeSeconds = DateTime.now().difference(_itemStartTime!).inSeconds;
+
+    _instr.endItem(
+      response: _selectedAnswer?.toString(),
+      isCorrect: isCorrect,
+      score: isCorrect ? 1 : 0,
+    );
 
     setState(() {
       totalTime += timeSeconds;
@@ -152,11 +172,19 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
         currentLevel++;
         _selectedAnswer = null;
         _itemStartTime = DateTime.now();
+      if (!_demoPhase && currentLevel < _generatedItems.length) {
+        _instr.startItem(index: currentLevel);
+      }
       });
     }
   }
 
   void _showFinalResults() {
+    // Les mesures partent MAINTENANT, sous-test par sous-test.
+    unawaited(ResultsSync.instance.flushSubtest(
+      _instr.toPayload(rawScore: score, maxScore: _generatedItems.length),
+    ));
+
     // Test non noté à l'écran : aucun récapitulatif de points/temps/réussite,
     // simple confirmation de fin — le score repart vers l'appelant, sans être montré.
     // Aucune option « Recommencer » : un sous-test WAIS-IV ne se repasse pas

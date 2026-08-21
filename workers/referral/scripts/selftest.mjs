@@ -733,5 +733,247 @@ console.log('\n/resolve — contrat de la page invite');
     JSON.stringify([connu.corps, inconnu.corps]));
 }
 
+console.log('\n/results — passations rattachées au token, écrites au fil de l\'eau');
+{
+  const vraiFetch = globalThis.fetch;
+  const capte = [];
+  const SB = { SUPABASE_URL: 'https://sb.test', SUPABASE_SERVICE_KEY: 'sb_secret_faux' };
+  const brancher = (impl) => { globalThis.fetch = impl; };
+  const debrancher = () => { globalThis.fetch = vraiFetch; };
+  const CSID = '3f2504e0-4f89-11d3-9a0c-0305e82c3301';
+
+  const supabaseOk = async (url, init) => {
+    capte.push({ url: String(url), body: JSON.parse(init.body) });
+    if (String(url).includes('test_sessions')) {
+      return new Response(JSON.stringify([{ id: 'sess-1' }]), { status: 201 });
+    }
+    return new Response('[]', { status: 201 });
+  };
+
+  const charge = {
+    clientSessionId: CSID,
+    startedAt: '2026-08-21T13:00:00.000Z',
+    completedAt: '2026-08-21T14:03:27.512Z',
+    status: 'completed',
+    durationS: 4500,
+    subtests: [
+      { subtest: 'block_design', rawScore: 42 },
+      { subtest: 'digit_span', rawScore: 18 },
+    ],
+  };
+  const sessionDe = () => capte.find((c) => c.url.includes('test_sessions'));
+
+  {
+    const { statut, corps } = await appel(kvNu(), PROD, '/results', 'POST', charge);
+    verifie('sans secrets Supabase → 200 stored:false not_configured',
+      statut === 200 && corps.stored === false && corps.reason === 'not_configured',
+      JSON.stringify(corps));
+  }
+
+  {
+    capte.length = 0; brancher(supabaseOk);
+    const { statut, corps } = await appel(kvNu(), { ...PROD, ...SB }, '/results', 'POST', charge);
+    debrancher();
+    verifie('chemin nominal → 200 stored:true, 2 sous-tests',
+      statut === 200 && corps.stored === true && corps.subtests === 2, JSON.stringify(corps));
+
+    const se = sessionDe();
+    verifie("l'horodatage est réduit à la JOURNÉE (anti-corrélation)",
+      se && se.body.completed_on === '2026-08-21' && se.body.started_on === '2026-08-21',
+      JSON.stringify(se && se.body));
+    verifie('aucune heure fine ne fuit vers la base',
+      se && !JSON.stringify(se.body).includes('14:03'), JSON.stringify(se && se.body));
+    verifie("la clé écrite est l'account dérivé, jamais le token",
+      se && /^[0-9a-f]{32}$/.test(se.body.account) && !JSON.stringify(se.body).includes(TOKEN),
+      JSON.stringify(se && se.body));
+    verifie('la durée fine est CONSERVÉE (contrôle de plausibilité)',
+      se && se.body.duration_s === 4500);
+    // La cible du conflit doit être le COUPLE : sur `client_session_id` seul, un
+    // envoi sous un autre compte réattribuerait la passation existante au lieu
+    // d'en ouvrir une nouvelle (défaut trouvé en revue, migration 015).
+    verifie("l'upsert cible le COUPLE (client_session_id, account), pas l'id seul",
+      se && se.url.includes('on_conflict=client_session_id,account')
+      && se.body.client_session_id === CSID, se && se.url);
+
+    const results = capte.find((c) => c.url.includes('test_results'));
+    verifie('les sous-tests sont rattachés à la session créée',
+      results && results.body.length === 2 && results.body.every((r) => r.session_id === 'sess-1'),
+      JSON.stringify(results && results.body));
+  }
+
+  console.log('\n/results — écriture incrémentale (pause et reprise)');
+  {
+    capte.length = 0; brancher(supabaseOk);
+    // 1er flush : le test commence, rien n'est terminé.
+    const f1 = await appel(kvNu(), { ...PROD, ...SB }, '/results', 'POST', {
+      clientSessionId: CSID, startedAt: '2026-08-21T13:00:00.000Z',
+      subtests: [{ subtest: 'block_design', rawScore: 42, items: [{ index: 0, response: 'a' }] }],
+    });
+    const s1 = sessionDe();
+    verifie('flush intermédiaire → status in_progress, aucune date de fin',
+      f1.corps.status === 'in_progress' && s1 && s1.body.status === 'in_progress'
+      && s1.body.completed_on === undefined, JSON.stringify(s1 && s1.body));
+
+    capte.length = 0;
+    const f2 = await appel(kvNu(), { ...PROD, ...SB }, '/results', 'POST',
+      { ...charge, subtests: [] });
+    debrancher();
+    const s2 = sessionDe();
+    verifie('flush final sans sous-test → session close en completed',
+      f2.statut === 200 && s2 && s2.body.status === 'completed'
+      && s2.body.completed_on === '2026-08-21', JSON.stringify(s2 && s2.body));
+    verifie('le même clientSessionId est réutilisé → une seule passation',
+      s1 && s2 && s1.body.client_session_id === s2.body.client_session_id);
+  }
+
+  {
+    // Régression : un envoi SANS completedAt ni status laissait `day` à null,
+    // et ce null partait dans accounts.last_seen, qui est NOT NULL. Le registre
+    // échouait, la session tombait sur sa clé étrangère, et l'échec était muet.
+    // C'est exactement la requête que produit un premier flush réel.
+    capte.length = 0; brancher(supabaseOk);
+    const { corps } = await appel(kvNu(), { ...PROD, ...SB }, '/results', 'POST', {
+      clientSessionId: CSID,
+      subtests: [{ subtest: 'block_design', rawScore: 1 }],
+    });
+    debrancher();
+    const compte = capte.find((c) => c.url.includes('/accounts'));
+    verifie('flush sans completedAt → last_seen JAMAIS null (NOT NULL en base)',
+      compte && compte.body.last_seen != null
+      && /^\d{4}-\d{2}-\d{2}$/.test(compte.body.last_seen),
+      JSON.stringify(compte && compte.body));
+    verifie('… et la session est bien écrite malgré tout',
+      corps.stored === true && corps.status === 'in_progress', JSON.stringify(corps));
+  }
+
+  {
+    // Le registre en échec doit être REMONTÉ, pas avalé.
+    brancher(async (url) => String(url).includes('/accounts')
+      ? new Response('{"message":"null value in column last_seen"}', { status: 400 })
+      : new Response(JSON.stringify([{ id: 'sess-1' }]), { status: 201 }));
+    const { corps } = await appel(kvNu(), { ...PROD, ...SB }, '/results', 'POST', charge);
+    debrancher();
+    verifie('registre en échec → account_failed remonté, session non tentée',
+      corps.stored === false && corps.reason === 'account_failed', JSON.stringify(corps));
+  }
+
+  console.log('\n/results — épreuve orale');
+  {
+    capte.length = 0; brancher(supabaseOk);
+    const { corps } = await appel(kvNu(), { ...PROD, ...SB }, '/results', 'POST', {
+      clientSessionId: CSID,
+      oral: [
+        { cycle: 0, kind: 'reading', textId: 'fr_0042', r2SessionId: 'sess-r2-1',
+          layer: 'reusable', durationMs: 61000, latencyMs: 2300, uploadOk: true,
+          commercialReuse: true },
+        { cycle: 0, kind: 'summary', textId: 'fr_0042', layer: 'internal',
+          durationMs: 45000, uploadOk: false, commercialReuse: false },
+        { kind: 'reading' },   // sans cycle → rejeté
+      ],
+    });
+    debrancher();
+    const o = capte.find((c) => c.url.includes('oral_recordings'));
+    verifie('les enregistrements oraux sont écrits, sans cycle ils sont rejetés',
+      corps.oral === 2 && o && o.body.length === 2, JSON.stringify(corps));
+    verifie('le texte lu, la couche R2 et le consentement sont conservés',
+      o && o.body[0].text_id === 'fr_0042' && o.body[0].layer === 'reusable'
+      && o.body[0].commercial_reuse === true && o.body[1].layer === 'internal',
+      JSON.stringify(o && o.body[0]));
+    verifie('aucune donnée sonore ne transite par la base',
+      o && !JSON.stringify(o.body).match(/audio|webm|base64|blob/i));
+  }
+
+  console.log('\n/results — entrées invalides et robustesse');
+  {
+    brancher(supabaseOk);
+    const sansId = await appel(kvNu(), { ...PROD, ...SB }, '/results', 'POST',
+      { ...charge, clientSessionId: undefined });
+    const idKo = await appel(kvNu(), { ...PROD, ...SB }, '/results', 'POST',
+      { ...charge, clientSessionId: 'pas-un-uuid' });
+    const vide = await appel(kvNu(), { ...PROD, ...SB }, '/results', 'POST',
+      { clientSessionId: CSID });
+    const trop = await appel(kvNu(), { ...PROD, ...SB }, '/results', 'POST',
+      { ...charge, subtests: Array.from({ length: 33 }, () => ({ subtest: 'x', rawScore: 1 })) });
+    const dateKo = await appel(kvNu(), { ...PROD, ...SB }, '/results', 'POST',
+      { ...charge, completedAt: 'pas-une-date' });
+    debrancher();
+    verifie('clientSessionId absent → 400', sansId.statut === 400);
+    verifie('clientSessionId non UUID → 400', idKo.statut === 400);
+    verifie('flush vide et non terminal → 400', vide.statut === 400);
+    verifie('plus de 32 sous-tests → 400', trop.statut === 400);
+    verifie('completedAt invalide → 400', dateKo.statut === 400);
+  }
+
+  {
+    brancher(async () => { throw new Error('réseau coupé'); });
+    const { statut, corps } = await appel(kvNu(), { ...PROD, ...SB }, '/results', 'POST', charge);
+    debrancher();
+    verifie('Supabase injoignable → 200 stored:false, jamais 5xx',
+      statut === 200 && corps.stored === false && corps.reason === 'unreachable',
+      JSON.stringify(corps));
+  }
+
+  console.log('\n/results — grain item et registre des comptes');
+  {
+    capte.length = 0; brancher(supabaseOk);
+    const avecItems = {
+      ...charge,
+      subtests: [{
+        subtest: 'vocabulary', rawScore: 30,
+        items: [
+          { index: 0, itemId: 'voc_01', response: 'chaise', isCorrect: true, score: 2,
+            latencyMs: 4300, firstInputMs: 900, editsCount: 2, backspacesCount: 1 },
+          { index: 1, itemId: 'voc_02', response: '', skipped: true },
+        ],
+      }],
+    };
+    const { corps } = await appel(kvNu(), { ...PROD, ...SB }, '/results', 'POST', avecItems);
+    debrancher();
+    const it = capte.find((c) => c.url.includes('test_items'));
+    verifie('les items sont enregistrés et rattachés à la session',
+      corps.items === 2 && it && it.body.length === 2
+      && it.body.every((r) => r.session_id === 'sess-1'), JSON.stringify(corps));
+    verifie("les métriques d'hésitation et de correction sont transmises",
+      it && it.body[0].first_input_ms === 900 && it.body[0].backspaces_count === 1,
+      JSON.stringify(it && it.body[0]));
+    verifie('un item sauté est marqué comme tel',
+      it && it.body[1].skipped === true && it.body[1].is_correct === null);
+    verifie("l'upsert des items cible (session, sous-test, rang)",
+      it && it.url.includes('on_conflict=session_id,subtest,item_index'), it && it.url);
+
+    const iComptes = capte.findIndex((c) => c.url.includes('/accounts'));
+    const iSession = capte.findIndex((c) => c.url.includes('test_sessions'));
+    verifie('le compte est enregistré AVANT la passation (contrainte FK)',
+      iComptes >= 0 && iSession >= 0 && iComptes < iSession, `${iComptes} < ${iSession}`);
+    const compte = capte[iComptes] && capte[iComptes].body;
+    verifie("le registre est clé par l'account, jamais par le token",
+      compte && /^[0-9a-f]{32}$/.test(compte.account)
+      && !JSON.stringify(compte).includes(TOKEN), JSON.stringify(compte));
+    verifie('TOKEN de test non signé → AUCUNE démographie enregistrée',
+      compte && compte.sex === undefined && compte.region === undefined,
+      JSON.stringify(compte));
+  }
+
+  {
+    capte.length = 0; brancher(supabaseOk);
+    const enorme = {
+      ...charge,
+      subtests: [{ subtest: 'flood', rawScore: 0,
+        items: Array.from({ length: 900 }, (_, i) => ({ index: i, response: 'x' })) }],
+    };
+    const { corps } = await appel(kvNu(), { ...PROD, ...SB }, '/results', 'POST', enorme);
+    debrancher();
+    verifie("flot d'items plafonné à 600", corps.items === 600, JSON.stringify(corps));
+  }
+
+  {
+    brancher(supabaseOk);
+    const { statut } = await appel(kvNu(), { ...PROD, ...SB }, '/results', 'POST', charge,
+      { token: 'bidon' });
+    debrancher();
+    verifie('token invalide → 401 avant toute écriture', statut === 401);
+  }
+}
+
 console.log(`\n${ok} vérifications OK, ${echecs.length} en échec`);
 if (echecs.length) { console.error('Échecs : ' + echecs.join(' | ')); process.exit(1); }

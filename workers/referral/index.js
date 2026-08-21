@@ -92,9 +92,9 @@ export default {
 
     // ─── Tout le reste exige un token exploitable ───────────────────────────
     const token = request.headers.get('X-Mentality-Token');
-    const nonce = await resolveNonce(token);
-    if (!nonce) return json({ error: 'token invalide' }, 401, origin);
-    const account = (await sha256hex(nonce)).slice(0, 32);
+    const identite = await resolveIdentity(token);
+    if (!identite) return json({ error: 'token invalide' }, 401, origin);
+    const account = (await sha256hex(identite.nonce)).slice(0, 32);
 
     try {
       if (request.method === 'POST' && path === '/link') {
@@ -119,6 +119,13 @@ export default {
       if (request.method === 'GET' && path === '/progress') {
         return await handleProgress(env, origin, account);
       }
+      if (request.method === 'POST' && path === '/results') {
+        let body;
+        try { body = await request.json(); } catch {
+          return json({ error: 'Corps JSON invalide' }, 400, origin);
+        }
+        return await handleResults(env, origin, account, body, identite);
+      }
       // ─── PIERRE TOMBALE — à supprimer après la release d'août 2026 ────────
       // Les builds déjà installées (TestFlight) postent encore ce endpoint.
       // Sans cette route elles recevraient un 404, que leur client traduit en
@@ -140,6 +147,7 @@ export default {
 
 // Versions de schéma de claims supportées (miroir de kTokenSchemaVersion).
 const SUPPORTED_SV = new Set([2]);
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const B64URL = /^[A-Za-z0-9\-_]+$/;
 
 /**
@@ -151,6 +159,32 @@ const B64URL = /^[A-Za-z0-9\-_]+$/;
  * — ce gate marketing (données non sensibles) applique le même modèle de
  * confiance pour ne bloquer aucun utilisateur réel. Renvoie null si inexploitable.
  */
+/**
+ * Comme resolveNonce, mais rend aussi les claims démographiques et DIT si la
+ * signature a été vérifiée.
+ *
+ * `verified` est décisif : le repli `M2.` ci-dessous accepte un token NON SIGNÉ
+ * (tokens de fumée du selftest, builds anciennes). Ses claims sont donc
+ * déclaratives — n'importe qui peut forger `{r:'IDF'}`. On ne les enregistre
+ * jamais dans public.accounts : une statistique de région alimentée par des
+ * claims non signées ne vaudrait rien.
+ */
+async function resolveIdentity(token) {
+  if (typeof token !== 'string' || token.length === 0) return null;
+  const v = await verifyToken(token, TOKEN_SIGNING_PUBLIC_KEYS);
+  if (v.valid) return { nonce: v.nonce, claims: v.claims || null, verified: true };
+  if (token.startsWith('M2.')) {
+    const claims = decodeB64urlJson(token.slice(3));
+    if (claims &&
+        typeof claims.n === 'string' &&
+        B64URL.test(claims.n) &&
+        SUPPORTED_SV.has(claims.sv)) {
+      return { nonce: claims.n, claims: null, verified: false };
+    }
+  }
+  return null;
+}
+
 async function resolveNonce(token) {
   if (typeof token !== 'string' || token.length === 0) return null;
   const v = await verifyToken(token, TOKEN_SIGNING_PUBLIC_KEYS);
@@ -746,4 +780,215 @@ function json(obj, status, origin) {
     status,
     headers: { ...corsHeaders(origin), 'Content-Type': 'application/json' },
   });
+}
+
+/**
+ * POST /results — enregistre une passation et ses sous-tests dans Supabase.
+ *
+ * Rattaché à `account` = SHA256(nonce)[:32], jamais à une identité. Le token a
+ * déjà été vérifié en amont : atteindre cette fonction prouve la possession d'un
+ * token signé par nous.
+ *
+ * L'horodatage est VOLONTAIREMENT réduit à la journée avant écriture : le risque
+ * résiduel du modèle est la corrélation temporelle entre l'émission d'un token et
+ * l'apparition d'un résultat. La durée fine, elle, est conservée — elle sert au
+ * contrôle de plausibilité.
+ *
+ * FAIL-SOFT : une panne Supabase ne doit jamais bloquer la fin d'un test. On
+ * répond 200 avec `{stored:false}` plutôt que de faire échouer le parcours.
+ */
+async function handleResults(env, origin, account, body, identite) {
+  if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_KEY) {
+    return json({ stored: false, reason: 'not_configured' }, 200, origin);
+  }
+
+  // Identité de la session, générée par l'app et stable d'un envoi à l'autre.
+  // C'est elle qui rend les envois idempotents et la reprise après pause possible.
+  const csid = typeof body.clientSessionId === 'string' ? body.clientSessionId : null;
+  if (!csid || !UUID_RE.test(csid)) {
+    return json({ error: 'clientSessionId requis (UUID)' }, 400, origin);
+  }
+
+  const statut = body.status === 'completed' ? 'completed' : 'in_progress';
+
+  const subtests = Array.isArray(body?.subtests) ? body.subtests : [];
+  const oral = Array.isArray(body?.oral) ? body.oral : [];
+  if (subtests.length === 0 && oral.length === 0 && statut !== 'completed') {
+    return json({ error: 'rien à enregistrer' }, 400, origin);
+  }
+  if (subtests.length > 32) {
+    return json({ error: 'trop de sous-tests' }, 400, origin);
+  }
+
+
+  // Journée seulement — cf. commentaire ci-dessus et migration 011.
+  const jour = (v) => {
+    const d = typeof v === 'string' ? v.slice(0, 10) : null;
+    return d && /^\d{4}-\d{2}-\d{2}$/.test(d) ? d : null;
+  };
+  const debut = jour(body.startedAt) || new Date().toISOString().slice(0, 10);
+  const day = jour(body.completedAt) || (statut === 'completed' ? debut : null);
+  if (body.completedAt !== undefined && body.completedAt !== null && !jour(body.completedAt)) {
+    return json({ error: 'completedAt invalide' }, 400, origin);
+  }
+
+  const durationS = Number.isInteger(body.durationS) ? body.durationS : null;
+
+  const headers = {
+    apikey: env.SUPABASE_SERVICE_KEY,
+    Authorization: `Bearer ${env.SUPABASE_SERVICE_KEY}`,
+    'Content-Type': 'application/json',
+  };
+
+  try {
+    // Le registre d'abord : la FK test_sessions.account l'exige, et c'est ce qui
+    // rend visible un utilisateur même s'il ne termine jamais de test.
+    // Démographie enregistrée UNIQUEMENT si la signature a été vérifiée.
+    const c = identite && identite.verified ? identite.claims : null;
+    // `day` est null tant que la session n'est pas terminée ; `debut` ne l'est
+    // jamais. accounts.last_seen étant NOT NULL, écrire `day` tel quel faisait
+    // échouer l'insertion — et, par ricochet, la session sur sa clé étrangère.
+    const compte = { account, last_seen: day || debut };
+    if (c) {
+      if (c.s) compte.sex = c.s;
+      if (Number.isInteger(c.y)) compte.birth_year = c.y;
+      if (Number.isInteger(c.m)) compte.birth_month = c.m;
+      if (c.r) compte.region = c.r;
+      if (Number.isInteger(c.d)) {
+        compte.issued_on = new Date(c.d * 86400000).toISOString().slice(0, 10);
+      }
+    }
+    const aRes = await fetch(`${env.SUPABASE_URL}/rest/v1/accounts`, {
+      method: 'POST',
+      headers: { ...headers, Prefer: 'resolution=merge-duplicates' },
+      body: JSON.stringify(compte),
+    });
+    if (!aRes.ok) {
+      // Inutile de tenter la session : sa clé étrangère la refusera. On REMONTE
+      // la cause plutôt que de la taire — c'est ce silence qui avait masqué
+      // l'écriture d'un last_seen null.
+      return json({ stored: false, reason: 'account_failed', status: aRes.status },
+        200, origin);
+    }
+
+    // UPSERT sur client_session_id : le premier flush crée la session, les
+    // suivants l'enrichissent. Un rejeu réseau écrit deux fois la même chose,
+    // sans jamais créer de seconde passation.
+    const session = {
+      client_session_id: csid,
+      account,
+      started_on: debut,
+      status: statut,
+      source: 'app',
+    };
+    if (day) session.completed_on = day;
+    if (durationS !== null) session.duration_s = durationS;
+    if (subtests.length > 0) session.subtests_count = subtests.length;
+
+    const sRes = await fetch(
+      `${env.SUPABASE_URL}/rest/v1/test_sessions?on_conflict=client_session_id,account`, {
+        method: 'POST',
+        headers: { ...headers, Prefer: 'return=representation,resolution=merge-duplicates' },
+        body: JSON.stringify(session),
+      });
+    if (!sRes.ok) return json({ stored: false, reason: 'session_failed' }, 200, origin);
+
+    const rows = await sRes.json();
+    if (!Array.isArray(rows) || rows.length === 0) {
+      return json({ stored: false, reason: 'session_missing' }, 200, origin);
+    }
+    const sessionId = rows[0].id;
+
+    const payload = subtests.map((t) => ({
+      session_id: sessionId,
+      subtest: String(t?.subtest ?? '').slice(0, 64),
+      raw_score: Number.isInteger(t?.rawScore) ? t.rawScore : null,
+      max_score: Number.isInteger(t?.maxScore) ? t.maxScore : null,
+      answers: t?.answers ?? null,
+      duration_s: Number.isInteger(t?.durationS) ? t.durationS : null,
+    })).filter((t) => t.subtest.length > 0);
+
+    let rRes = { ok: true };
+    if (payload.length > 0) {
+      rRes = await fetch(
+        `${env.SUPABASE_URL}/rest/v1/test_results?on_conflict=session_id,subtest`, {
+          method: 'POST',
+          headers: { ...headers, Prefer: 'resolution=merge-duplicates' },
+          body: JSON.stringify(payload),
+        });
+    }
+
+    // Grain item : la matrice item × réponse dont la calibration a besoin.
+    // Facultatif — une app non encore instrumentée n'envoie rien et tout marche.
+    const items = [];
+    for (const t of subtests) {
+      const st = String(t?.subtest ?? '').slice(0, 64);
+      if (!st || !Array.isArray(t?.items)) continue;
+      for (const [i, it] of t.items.entries()) {
+        if (items.length >= 600) break;   // garde-fou de volume
+        items.push({
+          session_id: sessionId,
+          subtest: st,
+          item_index: Number.isInteger(it?.index) ? it.index : i,
+          item_id: it?.itemId != null ? String(it.itemId).slice(0, 64) : null,
+          response: it?.response != null ? String(it.response).slice(0, 2000) : null,
+          is_correct: typeof it?.isCorrect === 'boolean' ? it.isCorrect : null,
+          score: Number.isInteger(it?.score) ? it.score : null,
+          latency_ms: Number.isInteger(it?.latencyMs) ? it.latencyMs : null,
+          first_input_ms: Number.isInteger(it?.firstInputMs) ? it.firstInputMs : null,
+          edits_count: Number.isInteger(it?.editsCount) ? it.editsCount : null,
+          backspaces_count: Number.isInteger(it?.backspacesCount) ? it.backspacesCount : null,
+          focus_lost_count: Number.isInteger(it?.focusLostCount) ? it.focusLostCount : null,
+          timed_out: it?.timedOut === true,
+          skipped: it?.skipped === true,
+        });
+      }
+    }
+
+    let itemsOk = true;
+    if (items.length > 0) {
+      const iRes = await fetch(
+        `${env.SUPABASE_URL}/rest/v1/test_items?on_conflict=session_id,subtest,item_index`, {
+          method: 'POST',
+          headers: { ...headers, Prefer: 'resolution=merge-duplicates' },
+          body: JSON.stringify(items),
+        });
+      itemsOk = iRes.ok;
+    }
+
+    // Épreuve orale : quel texte, quel cycle, quelle couche R2, quel consentement.
+    // L'audio reste dans R2 ; rien de sonore ne transite ici.
+    let oralOk = true;
+    const oralRows = oral.slice(0, 40).map((o) => ({
+      session_id: sessionId,
+      cycle: Number.isInteger(o?.cycle) ? o.cycle : null,
+      kind: o?.kind === 'summary' ? 'summary' : 'reading',
+      text_id: o?.textId != null ? String(o.textId).slice(0, 128) : null,
+      r2_session_id: o?.r2SessionId != null ? String(o.r2SessionId).slice(0, 128) : null,
+      layer: o?.layer === 'internal' ? 'internal' : (o?.layer === 'reusable' ? 'reusable' : null),
+      duration_ms: Number.isInteger(o?.durationMs) ? o.durationMs : null,
+      latency_ms: Number.isInteger(o?.latencyMs) ? o.latencyMs : null,
+      upload_ok: typeof o?.uploadOk === 'boolean' ? o.uploadOk : null,
+      commercial_reuse: typeof o?.commercialReuse === 'boolean' ? o.commercialReuse : null,
+    })).filter((o) => o.cycle !== null);
+
+    if (oralRows.length > 0) {
+      const oRes = await fetch(
+        `${env.SUPABASE_URL}/rest/v1/oral_recordings?on_conflict=session_id,cycle,kind`, {
+          method: 'POST',
+          headers: { ...headers, Prefer: 'resolution=merge-duplicates' },
+          body: JSON.stringify(oralRows),
+        });
+      oralOk = oRes.ok;
+    }
+
+    return json({
+      stored: rRes.ok, status: statut, sessionId,
+      subtests: payload.length, items: items.length, itemsOk,
+      oral: oralRows.length, oralOk,
+    }, 200, origin);
+  } catch {
+    // Réseau, timeout, Supabase indisponible — le parcours continue.
+    return json({ stored: false, reason: 'unreachable' }, 200, origin);
+  }
 }

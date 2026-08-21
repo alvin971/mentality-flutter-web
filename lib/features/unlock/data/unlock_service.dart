@@ -279,6 +279,61 @@ class UnlockService {
     }
   }
 
+  /// Téléverse les mesures vers `POST /results`, au fil de l'eau.
+  ///
+  /// Rattachées au token — donc à `account = SHA256(nonce)`, jamais à une
+  /// identité. C'est ce qui rend une passation portable d'un appareil à l'autre :
+  /// `/login-token` recalcule le même `account` et la retrouve.
+  ///
+  /// [clientSessionId] est l'UUID généré par l'app et conservé pendant toute la
+  /// passation. Le serveur fait un upsert dessus : rejouer un envoi n'écrit
+  /// jamais de doublon, et une app fermée en cours de test reprend la MÊME
+  /// session au lieu d'en ouvrir une seconde.
+  ///
+  /// [status] vaut `in_progress` pendant le test et `completed` au dernier envoi.
+  /// [oral] porte les métadonnées de l'épreuve orale — jamais d'audio, qui suit
+  /// son propre chemin vers R2.
+  ///
+  /// Les horodatages sont réduits à la JOURNÉE côté serveur (migration 011) :
+  /// la précision fine ne sert qu'à la durée, jamais à situer la passation.
+  ///
+  /// FAIL-SOFT ASSUMÉ : renvoie `false` sans jamais lever. Un échec d'envoi ne
+  /// doit ni bloquer l'utilisateur ni lui faire perdre ses résultats, qui
+  /// restent de toute façon en local (Hive).
+  Future<bool> uploadTestResults({
+    required String clientSessionId,
+    List<Map<String, dynamic>> subtests = const [],
+    List<Map<String, dynamic>> oral = const [],
+    String status = 'in_progress',
+    DateTime? startedAt,
+    int? durationSeconds,
+  }) async {
+    final headers = await _authHeaders();
+    if (!isConfigured || headers == null) return false;
+    if (subtests.isEmpty && oral.isEmpty && status != 'completed') return false;
+    try {
+      final now = DateTime.now().toUtc();
+      final resp = await http.post(
+        Uri.parse('${AppConstants.referralWorkerUrl}/results'),
+        headers: headers,
+        body: jsonEncode({
+          'clientSessionId': clientSessionId,
+          'status': status,
+          'startedAt': (startedAt?.toUtc() ?? now).toIso8601String(),
+          if (status == 'completed') 'completedAt': now.toIso8601String(),
+          if (durationSeconds != null) 'durationS': durationSeconds,
+          if (subtests.isNotEmpty) 'subtests': subtests,
+          if (oral.isNotEmpty) 'oral': oral,
+        }),
+      );
+      if (resp.statusCode != 200) return false;
+      final body = jsonDecode(resp.body) as Map<String, dynamic>;
+      return body['stored'] == true;
+    } catch (_) {
+      return false;
+    }
+  }
+
   /// État courant (les transitions de palier sont calculées côté serveur).
   Future<UnlockProgress?> getProgress() async {
     final headers = await _authHeaders();

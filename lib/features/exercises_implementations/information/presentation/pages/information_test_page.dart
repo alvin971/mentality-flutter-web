@@ -9,6 +9,8 @@ import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/information_generator.dart';
 import '../../../../../core/theme/kepler_colors.dart';
+import '../../../../../core/services/results_sync.dart';
+import '../../../../../core/services/subtest_instrumentation.dart';
 
 /// Page du test d'Information (Connaissances générales)
 /// WAIS-IV : 28 questions
@@ -29,6 +31,11 @@ class _InformationTestPageState extends State<InformationTestPage> {
   int totalTime = 0;
   int _consecutiveFailures = 0;
   int? _selectedAnswer;
+
+  /// Mesure item par item (latence, hésitation, reprises).
+  /// Aucune frappe individuelle n'est captée — cf. SubtestInstrumentation.
+  final SubtestInstrumentation _instr =
+      SubtestInstrumentation('information');
   DateTime? _itemStartTime;
   Timer? _timer;
   int _elapsedSeconds = 0;
@@ -108,6 +115,12 @@ class _InformationTestPageState extends State<InformationTestPage> {
     _elapsedSeconds = 0;
     _selectedAnswer = null;
     _submitted = false;
+    if (currentLevel < _generatedItems.length) {
+      _instr.startItem(
+        index: currentLevel,
+        itemId: _generatedItems[currentLevel].question,
+      );
+    }
 
     _startTimer();
   }
@@ -128,6 +141,11 @@ class _InformationTestPageState extends State<InformationTestPage> {
 
   void _selectAnswer(int index) {
     if (_demoPhase && _submitted) return;
+    // Chaque changement de choix compte comme une reprise.
+    _instr.onInput(
+      previous: _selectedAnswer?.toString() ?? '',
+      current: index.toString(),
+    );
     setState(() {
       _selectedAnswer = index;
     });
@@ -153,6 +171,12 @@ class _InformationTestPageState extends State<InformationTestPage> {
 
     final currentItem = _generatedItems[currentLevel];
     final isCorrect = currentItem.isCorrect(_selectedAnswer!);
+
+    _instr.endItem(
+      response: _selectedAnswer!.toString(),
+      isCorrect: isCorrect,
+      score: isCorrect ? 1 : 0,
+    );
 
     if (isCorrect) {
       score++;
@@ -184,6 +208,13 @@ class _InformationTestPageState extends State<InformationTestPage> {
   }
 
   void _showFinalResults() {
+    // Les mesures partent MAINTENANT, sous-test par sous-test : une app
+    // fermée plus loin dans la batterie ne doit pas emporter ce qui a déjà
+    // été mesuré. Tir-et-oublie, fail-soft.
+    unawaited(ResultsSync.instance.flushSubtest(
+      _instr.toPayload(rawScore: score, maxScore: _generatedItems.length),
+    ));
+
     // Test non noté à l'écran : aucun récapitulatif de points/temps/réussite,
     // simple confirmation de fin — le score repart vers l'appelant, sans être montré.
     showDialog(

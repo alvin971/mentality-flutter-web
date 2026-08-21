@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/l10n/l10n_ext.dart';
@@ -7,6 +8,8 @@ import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../widgets/cubes_exercise_widget.dart';
 import '../../domain/pattern_generator.dart';
 import '../../../../../core/theme/kepler_colors.dart';
+import '../../../../../core/services/results_sync.dart';
+import '../../../../../core/services/subtest_instrumentation.dart';
 
 /// Page de test des Cubes avec progression par niveaux
 class CubesTestPage extends StatefulWidget {
@@ -20,6 +23,11 @@ class CubesTestPage extends StatefulWidget {
 class _CubesTestPageState extends State<CubesTestPage> {
   int currentLevel = 0;
   int score = 0;
+
+  /// Mesure item par item (latence, hésitation, reprises).
+  /// Aucune frappe individuelle n'est captée — cf. SubtestInstrumentation.
+  final SubtestInstrumentation _instr =
+      SubtestInstrumentation('block_design');
   int totalTime = 0;
   bool showResult = false;
   bool? lastAnswerCorrect;
@@ -110,6 +118,9 @@ class _CubesTestPageState extends State<CubesTestPage> {
   }
 
   void _handleComplete(bool isCorrect, int timeSeconds) {
+    // Cubes n'a pas d'ouverture d'item explicite : on ouvre et on ferme
+    // au même endroit, la durée réelle venant du widget de construction.
+    if (!_demoPhase) _instr.startItem(index: currentLevel);
     if (_demoPhase) {
       // Démo : feedback visuel seulement — ni score, ni règle d'arrêt, ni
       // avance automatique (le bouton bas devient « Commencer » / « Réessayer »).
@@ -121,6 +132,8 @@ class _CubesTestPageState extends State<CubesTestPage> {
       showResult = true;
       lastAnswerCorrect = isCorrect;
       totalTime += timeSeconds;
+
+    _instr.endItem(isCorrect: isCorrect, score: isCorrect ? 1 : 0);
 
       // Gestion des échecs consécutifs
       if (isCorrect) {
@@ -159,6 +172,13 @@ class _CubesTestPageState extends State<CubesTestPage> {
   }
 
   void _showFinalResults() {
+    // Les mesures partent MAINTENANT, sous-test par sous-test : une app
+    // fermée plus loin dans la batterie ne doit pas emporter ce qui a déjà
+    // été mesuré. Tir-et-oublie, fail-soft.
+    unawaited(ResultsSync.instance.flushSubtest(
+      _instr.toPayload(rawScore: score, maxScore: _generatedPatterns.length),
+    ));
+
     // Test non noté à l'écran : aucun récapitulatif de points/temps/réussite,
     // simple confirmation de fin — le score repart vers l'appelant, sans être montré.
     // Aucune option « Recommencer » : un sous-test WAIS-IV ne se repasse pas
