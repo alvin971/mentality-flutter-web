@@ -618,6 +618,9 @@ class AppLocalizationsDe extends AppLocalizations {
       'HINWEIS: Dieser Bericht wird von einer Anwendung zur Unterstützung der Untersuchung erstellt und stellt keine offizielle klinische Diagnose dar. Er muss von einer qualifizierten medizinischen Fachperson interpretiert werden. Nicht ohne ergänzende fachliche Begutachtung für medizinische oder rechtliche Zwecke verwenden.';
 
   @override
+  String get ctResumeFullTest => 'Bewertung fortsetzen';
+
+  @override
   String get chatEyebrow => 'KI-ASSISTENT';
 
   @override
@@ -773,6 +776,30 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get homeLogoutConfirm => 'Abmelden';
+
+  @override
+  String homeResumeProgress(int done, int total) {
+    return '$done von $total Übungen';
+  }
+
+  @override
+  String homeResumeNext(String name) {
+    return 'Als Nächstes: $name';
+  }
+
+  @override
+  String get homeResumeFinish =>
+      'Alle Übungen sind erledigt — es fehlt nur der Abschluss.';
+
+  @override
+  String get homeResumeRestart => 'Neu beginnen';
+
+  @override
+  String get homeResumeRestartTitle => 'Von vorne beginnen?';
+
+  @override
+  String get homeResumeRestartBody =>
+      'Bereits absolvierte Übungen werden verworfen und können nicht fortgesetzt werden. Dies lässt sich nicht rückgängig machen.';
 
   @override
   String get infoTestName => 'Allgemeinwissen';
@@ -2510,10 +2537,10 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get ctSubtestExitBody =>
-      'Sie haben diesen Untertest verlassen, bevor er beendet war. Möchten Sie ihn fortsetzen oder die Bewertung beenden?';
+      'Sie haben diese Übung verlassen, bevor sie beendet war. Bereits abgeschlossene Übungen sind gespeichert: Sie können die Bewertung genau hier, bei dieser Übung, fortsetzen.';
 
   @override
-  String get ctSubtestExitResume => 'Untertest fortsetzen';
+  String get ctSubtestExitResume => 'Übung fortsetzen';
 
   @override
   String get ctSubtestExitTitle => 'Untertest unterbrochen';
@@ -2753,6 +2780,9 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get completionRejectedNotice =>
       'Dieser Durchgang konnte nicht bestätigt werden: Er war zu kurz. Er zählt nicht für die Empfehlungsmission.';
+
+  @override
+  String get ctSubtestExitPause => 'Pausieren';
 
   @override
   String get vocabTestName => 'Wortschatz';

@@ -996,5 +996,198 @@ console.log('\n/results — passations rattachées au token, écrites au fil de 
   }
 }
 
+console.log('\n/results/session — reprise : lire où en est la passation');
+{
+  const vraiFetch = globalThis.fetch;
+  const SB = { SUPABASE_URL: 'https://sb.test', SUPABASE_SERVICE_KEY: 'sb_secret_faux' };
+  const CSID = '6c0ac833-fb7f-4450-9e52-6721cdd6a498';
+  const jour = (delta) =>
+    new Date(Date.now() + delta * 86400000).toISOString().slice(0, 10);
+
+  /**
+   * Supabase simulé : `sessions` est la réponse de test_sessions, `results`
+   * celle de test_results. Toutes les requêtes sont capturées — c'est ce qui
+   * permet de vérifier ce qui est DEMANDÉ, pas seulement ce qui est rendu.
+   */
+  const brancher = ({ sessions = [], results = [], ko = null }) => {
+    const capte = [];
+    globalThis.fetch = async (url, init = {}) => {
+      const u = String(url);
+      capte.push({ url: u, method: init.method || 'GET', body: init.body ? JSON.parse(init.body) : null });
+      if (ko === 'session' && u.includes('test_sessions') && (init.method || 'GET') === 'GET') {
+        return new Response('{}', { status: 500 });
+      }
+      if (ko === 'results' && u.includes('test_results')) return new Response('{}', { status: 500 });
+      if (u.includes('test_sessions') && (init.method || 'GET') === 'GET') {
+        return new Response(JSON.stringify(sessions), { status: 200 });
+      }
+      if (u.includes('test_results')) return new Response(JSON.stringify(results), { status: 200 });
+      return new Response('[]', { status: 200 });
+    };
+    return capte;
+  };
+  const debrancher = () => { globalThis.fetch = vraiFetch; };
+  const lire = () => appel(kvNu(), { ...PROD, ...SB }, '/results/session', 'GET');
+
+  {
+    const { statut, corps } = await appel(kvNu(), PROD, '/results/session', 'GET');
+    verifie('sans secrets Supabase → 200 session:null not_configured',
+      statut === 200 && corps.session === null && corps.reason === 'not_configured',
+      JSON.stringify(corps));
+  }
+
+  {
+    const capte = brancher({ sessions: [] });
+    const { statut, corps } = await lire();
+    debrancher();
+    verifie('aucune passation ouverte → session:null',
+      statut === 200 && corps.session === null && corps.reason === undefined,
+      JSON.stringify(corps));
+    const req = capte[0] && capte[0].url;
+    verifie("la requête est bornée à l'account dérivé, et au seul in_progress",
+      req && req.includes(`account=eq.${account}`) && req.includes('status=eq.in_progress'),
+      req);
+    verifie('le token ne fuit jamais vers la base',
+      req && !req.includes(TOKEN), req);
+  }
+
+  {
+    brancher({
+      sessions: [{ id: 'sess-1', client_session_id: CSID, started_on: jour(0), duration_s: null }],
+      results: [
+        { subtest: 'block_design', raw_score: 34 },
+        { subtest: 'similarities', raw_score: 21 },
+      ],
+    });
+    const { statut, corps } = await lire();
+    debrancher();
+    const se = corps.session;
+    verifie('passation ouverte → identifiant et sous-tests déjà notés',
+      statut === 200 && se && se.clientSessionId === CSID && se.subtests.length === 2,
+      JSON.stringify(corps));
+    verifie('les scores bruts sont rendus par CODE stable, pas par libellé',
+      se && se.subtests[0].subtest === 'block_design' && se.subtests[0].rawScore === 34,
+      JSON.stringify(se && se.subtests));
+    verifie("aucune donnée nominative ne sort de cette route",
+      se && Object.keys(se).join(',') === 'clientSessionId,startedOn,durationS,subtests',
+      Object.keys(se || {}).join(','));
+  }
+
+  {
+    brancher({
+      sessions: [{ id: 'sess-1', client_session_id: CSID, started_on: jour(-7), duration_s: null }],
+      results: [{ subtest: 'block_design', raw_score: 34 }],
+    });
+    const { corps } = await lire();
+    debrancher();
+    verifie('exactement 7 jours → encore reprenable (borne incluse)',
+      corps.session !== null, JSON.stringify(corps));
+  }
+
+  {
+    const capte = brancher({
+      sessions: [{ id: 'sess-vieille', client_session_id: CSID, started_on: jour(-8), duration_s: null }],
+    });
+    const { corps } = await lire();
+    debrancher();
+    verifie('8 jours → périmée, plus proposée',
+      corps.session === null && corps.reason === 'expired', JSON.stringify(corps));
+    const patch = capte.find((c) => c.method === 'PATCH');
+    verifie('une passation périmée est CLOSE, pas laissée in_progress à vie',
+      patch && patch.body.status === 'abandoned' && patch.url.includes('sess-vieille'),
+      JSON.stringify(patch));
+  }
+
+  {
+    const capte = brancher({
+      sessions: [{ id: 'sess-orpheline', client_session_id: null, started_on: jour(0) }],
+    });
+    const { corps } = await lire();
+    debrancher();
+    verifie('sans client_session_id → inutilisable, jamais proposée',
+      corps.session === null && corps.reason === 'unusable', JSON.stringify(corps));
+    verifie('une passation inutilisable est close elle aussi',
+      capte.some((c) => c.method === 'PATCH' && c.url.includes('sess-orpheline')));
+  }
+
+  {
+    const capte = brancher({
+      sessions: [
+        { id: 'sess-recente', client_session_id: CSID, started_on: jour(0) },
+        { id: 'sess-ancienne', client_session_id: '3f2504e0-4f89-11d3-9a0c-0305e82c3301', started_on: jour(-2) },
+      ],
+      results: [{ subtest: 'block_design', raw_score: 34 }],
+    });
+    const { corps } = await lire();
+    debrancher();
+    verifie('plusieurs passations ouvertes → la plus récente fait foi',
+      corps.session && corps.session.clientSessionId === CSID, JSON.stringify(corps));
+    verifie('un compte converge vers UNE seule passation ouverte',
+      capte.some((c) => c.method === 'PATCH' && c.url.includes('sess-ancienne')
+        && c.body.status === 'abandoned'));
+  }
+
+  {
+    brancher({ ko: 'session' });
+    const a = await lire();
+    debrancher();
+    brancher({
+      sessions: [{ id: 'sess-1', client_session_id: CSID, started_on: jour(0) }],
+      ko: 'results',
+    });
+    const b = await lire();
+    debrancher();
+    verifie('Supabase injoignable → 200 session:null, jamais 5xx',
+      a.statut === 200 && a.corps.reason === 'unreachable'
+      && b.statut === 200 && b.corps.reason === 'unreachable',
+      JSON.stringify([a.corps, b.corps]));
+  }
+
+  {
+    const { statut } = await appel(kvNu(), { ...PROD, ...SB }, '/results/session', 'GET',
+      undefined, { token: 'bidon' });
+    verifie('token invalide → 401 avant toute lecture', statut === 401);
+  }
+}
+
+console.log("\n/results — abandon explicite d'une passation");
+{
+  const vraiFetch = globalThis.fetch;
+  const SB = { SUPABASE_URL: 'https://sb.test', SUPABASE_SERVICE_KEY: 'sb_secret_faux' };
+  const CSID = '6c0ac833-fb7f-4450-9e52-6721cdd6a498';
+  const capte = [];
+  globalThis.fetch = async (url, init) => {
+    capte.push({ url: String(url), body: JSON.parse(init.body) });
+    if (String(url).includes('test_sessions')) {
+      return new Response(JSON.stringify([{ id: 'sess-1' }]), { status: 201 });
+    }
+    return new Response('[]', { status: 201 });
+  };
+
+  const envoi = (status) => appel(kvNu(), { ...PROD, ...SB }, '/results', 'POST',
+    { clientSessionId: CSID, startedAt: '2026-08-23T10:00:00.000Z', status });
+
+  {
+    capte.length = 0;
+    const { statut, corps } = await envoi('abandoned');
+    const se = capte.find((c) => c.url.includes('test_sessions'));
+    verifie("abandon accepté SANS charge : changer le statut est tout son objet",
+      statut === 200 && corps.status === 'abandoned', JSON.stringify(corps));
+    verifie("l'abandon est écrit tel quel, jamais rétrogradé en in_progress",
+      se && se.body.status === 'abandoned', JSON.stringify(se && se.body));
+    verifie("une passation abandonnée n'a pas de date de fin",
+      se && se.body.completed_on === undefined, JSON.stringify(se && se.body));
+  }
+
+  {
+    capte.length = 0;
+    const { statut, corps } = await envoi('n_importe_quoi');
+    verifie('statut inconnu et charge vide → 400, comme avant',
+      statut === 400 && corps.error === 'rien à enregistrer', JSON.stringify(corps));
+  }
+
+  globalThis.fetch = vraiFetch;
+}
+
 console.log(`\n${ok} vérifications OK, ${echecs.length} en échec`);
 if (echecs.length) { console.error('Échecs : ' + echecs.join(' | ')); process.exit(1); }

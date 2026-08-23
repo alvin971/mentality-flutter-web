@@ -1227,6 +1227,12 @@ abstract class AppLocalizations {
   /// **'AVERTISSEMENT : Ce rapport est généré par une application d\'aide à l\'évaluation et ne constitue pas un diagnostic clinique officiel. Il doit être interprété par un professionnel de santé qualifié. Ne pas utiliser à des fins médicales ou légales sans évaluation professionnelle complémentaire.'**
   String get ctPdfDisclaimer;
 
+  /// Bouton de lancement quand un bilan interrompu est repris
+  ///
+  /// In fr, this message translates to:
+  /// **'Reprendre le bilan'**
+  String get ctResumeFullTest;
+
   /// App bar eyebrow on chat screen
   ///
   /// In fr, this message translates to:
@@ -1502,6 +1508,42 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Se déconnecter'**
   String get homeLogoutConfirm;
+
+  /// Progression réelle affichée dans la bannière de reprise
+  ///
+  /// In fr, this message translates to:
+  /// **'{done} exercices sur {total}'**
+  String homeResumeProgress(int done, int total);
+
+  /// Prochain exercice annoncé dans la bannière de reprise
+  ///
+  /// In fr, this message translates to:
+  /// **'Prochain : {name}'**
+  String homeResumeNext(String name);
+
+  /// Bannière de reprise quand les 12 sous-tests sont faits mais la clôture n'a pas abouti
+  ///
+  /// In fr, this message translates to:
+  /// **'Tous les exercices sont faits — il ne reste que la clôture.'**
+  String get homeResumeFinish;
+
+  /// Bouton abandonnant le bilan en cours pour repartir de zéro
+  ///
+  /// In fr, this message translates to:
+  /// **'Recommencer'**
+  String get homeResumeRestart;
+
+  /// Titre de la confirmation avant abandon du bilan en cours
+  ///
+  /// In fr, this message translates to:
+  /// **'Recommencer depuis le début ?'**
+  String get homeResumeRestartTitle;
+
+  /// Corps de la confirmation avant abandon du bilan en cours
+  ///
+  /// In fr, this message translates to:
+  /// **'Les exercices déjà passés seront abandonnés et ne pourront plus être repris. Vous ne pourrez pas revenir en arrière.'**
+  String get homeResumeRestartBody;
 
   /// Information — nom du test affiché dans le scaffold
   ///
@@ -4473,16 +4515,16 @@ abstract class AppLocalizations {
   /// **'Partager mon score'**
   String get ctShareScore;
 
-  /// Corps du dialogue de sortie d'un sous-test
+  /// Corps du dialogue de sortie d'un exercice — la pause est un choix légitime, pas un incident
   ///
   /// In fr, this message translates to:
-  /// **'Vous avez quitté ce sous-test avant de le terminer. Voulez-vous le reprendre ou arrêter l\'évaluation ?'**
+  /// **'Vous avez quitté cet exercice avant de le terminer. Les exercices déjà terminés sont enregistrés : vous pourrez reprendre le bilan ici même, à cet exercice.'**
   String get ctSubtestExitBody;
 
-  /// Bouton pour reprendre le sous-test interrompu
+  /// Bouton pour reprendre l'exercice interrompu
   ///
   /// In fr, this message translates to:
-  /// **'Reprendre le sous-test'**
+  /// **'Reprendre l\'exercice'**
   String get ctSubtestExitResume;
 
   /// Titre du dialogue affiché quand l'utilisateur quitte un sous-test sans le terminer
@@ -4838,6 +4880,12 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Cette passation n\'a pas pu être validée : elle a été jugée trop courte. Elle ne compte pas pour la mission de parrainage.'**
   String get completionRejectedNotice;
+
+  /// Bouton qui met le bilan en pause et revient à l'écran précédent
+  ///
+  /// In fr, this message translates to:
+  /// **'Mettre en pause'**
+  String get ctSubtestExitPause;
 
   /// Vocabulaire — nom du test affiché dans le scaffold
   ///

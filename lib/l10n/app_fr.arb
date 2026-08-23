@@ -773,6 +773,10 @@
   "@ctPdfDisclaimer": {
     "description": "Avertissement en bas du rapport PDF"
   },
+  "ctResumeFullTest": "Reprendre le bilan",
+  "@ctResumeFullTest": {
+    "description": "Bouton de lancement quand un bilan interrompu est repris"
+  },
   "chatEyebrow": "ASSISTANT IA",
   "@chatEyebrow": {
     "description": "App bar eyebrow on chat screen"
@@ -969,6 +973,43 @@
   "homeLogoutConfirm": "Se déconnecter",
   "@homeLogoutConfirm": {
     "description": "Logout confirm/tooltip label"
+  },
+  "homeResumeProgress": "{done} exercices sur {total}",
+  "@homeResumeProgress": {
+    "description": "Progression réelle affichée dans la bannière de reprise",
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "homeResumeNext": "Prochain : {name}",
+  "@homeResumeNext": {
+    "description": "Prochain exercice annoncé dans la bannière de reprise",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "homeResumeFinish": "Tous les exercices sont faits — il ne reste que la clôture.",
+  "@homeResumeFinish": {
+    "description": "Bannière de reprise quand les 12 sous-tests sont faits mais la clôture n'a pas abouti"
+  },
+  "homeResumeRestart": "Recommencer",
+  "@homeResumeRestart": {
+    "description": "Bouton abandonnant le bilan en cours pour repartir de zéro"
+  },
+  "homeResumeRestartTitle": "Recommencer depuis le début ?",
+  "@homeResumeRestartTitle": {
+    "description": "Titre de la confirmation avant abandon du bilan en cours"
+  },
+  "homeResumeRestartBody": "Les exercices déjà passés seront abandonnés et ne pourront plus être repris. Vous ne pourrez pas revenir en arrière.",
+  "@homeResumeRestartBody": {
+    "description": "Corps de la confirmation avant abandon du bilan en cours"
   },
   "infoTestName": "Information",
   "@infoTestName": {
@@ -3471,13 +3512,13 @@
     "description": "Picture Span image name - rocket"
   },
   "ctShareScore": "Partager mon score",
-  "ctSubtestExitBody": "Vous avez quitté ce sous-test avant de le terminer. Voulez-vous le reprendre ou arrêter l'évaluation ?",
+  "ctSubtestExitBody": "Vous avez quitté cet exercice avant de le terminer. Les exercices déjà terminés sont enregistrés : vous pourrez reprendre le bilan ici même, à cet exercice.",
   "@ctSubtestExitBody": {
-    "description": "Corps du dialogue de sortie d'un sous-test"
+    "description": "Corps du dialogue de sortie d'un exercice — la pause est un choix légitime, pas un incident"
   },
-  "ctSubtestExitResume": "Reprendre le sous-test",
+  "ctSubtestExitResume": "Reprendre l'exercice",
   "@ctSubtestExitResume": {
-    "description": "Bouton pour reprendre le sous-test interrompu"
+    "description": "Bouton pour reprendre l'exercice interrompu"
   },
   "ctSubtestExitTitle": "Sous-test interrompu",
   "@ctSubtestExitTitle": {
@@ -3655,6 +3696,10 @@
   "completionRejectedNotice": "Cette passation n'a pas pu être validée : elle a été jugée trop courte. Elle ne compte pas pour la mission de parrainage.",
   "@completionRejectedNotice": {
     "description": "Avertissement affiché quand la déclaration de fin de test n'a pas abouti."
+  },
+  "ctSubtestExitPause": "Mettre en pause",
+  "@ctSubtestExitPause": {
+    "description": "Bouton qui met le bilan en pause et revient à l'écran précédent"
   },
   "vocabTestName": "Vocabulaire",
   "@vocabTestName": {

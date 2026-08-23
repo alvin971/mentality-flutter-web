@@ -24,6 +24,9 @@
  *   endpoint ne crédite sans cette double preuve.
  *   GET  /progress        → état courant + transitions de stage (autorité
  *                           serveur, jamais le client).
+ *   GET  /results/session → la passation EN COURS de ce token, s'il y en a une :
+ *                           de quoi reprendre le bilan à l'exercice suivant au
+ *                           lieu de tout recommencer. Lecture seule.
  *   POST /instagram       → PIERRE TOMBALE (cf. plus bas) : accepté, ignoré.
  *   GET  /resolve/<code>  → public : le code referral existe-t-il ? (landing)
  *
@@ -118,6 +121,12 @@ export default {
       }
       if (request.method === 'GET' && path === '/progress') {
         return await handleProgress(env, origin, account);
+      }
+      // La reprise a besoin de LIRE l'état de la passation, pas seulement de
+      // l'écrire. Sans cette route, l'app ne pouvait que proposer de tout
+      // recommencer alors que le serveur savait exactement où on s'était arrêté.
+      if (request.method === 'GET' && path === '/results/session') {
+        return await handleResumableSession(env, origin, account);
       }
       if (request.method === 'POST' && path === '/results') {
         let body;
@@ -797,6 +806,18 @@ function json(obj, status, origin) {
  * FAIL-SOFT : une panne Supabase ne doit jamais bloquer la fin d'un test. On
  * répond 200 avec `{stored:false}` plutôt que de faire échouer le parcours.
  */
+const STATUTS_SESSION = new Set(['in_progress', 'completed', 'abandoned']);
+
+/**
+ * Fenêtre de reprise, en jours. Au-delà, une passation restée `in_progress`
+ * n'est plus proposée : deux moitiés de bilan séparées par plus d'une semaine ne
+ * se comparent pas honnêtement. La même constante existe côté app
+ * (`ResumeService.fenetreJours`) pour que le repli hors ligne applique la
+ * MÊME règle que le serveur — sinon l'app proposerait une reprise que le
+ * serveur vient de refuser.
+ */
+const FENETRE_REPRISE_JOURS = 7;
+
 async function handleResults(env, origin, account, body, identite) {
   if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_KEY) {
     return json({ stored: false, reason: 'not_configured' }, 200, origin);
@@ -809,11 +830,18 @@ async function handleResults(env, origin, account, body, identite) {
     return json({ error: 'clientSessionId requis (UUID)' }, 400, origin);
   }
 
-  const statut = body.status === 'completed' ? 'completed' : 'in_progress';
+  // 'abandoned' est le statut d'une passation que l'utilisateur a explicitement
+  // renoncé à reprendre. L'ancien ternaire rétrogradait TOUTE valeur inconnue en
+  // 'in_progress' : un refus de reprise serait donc revenu se proposer au
+  // démarrage suivant, indéfiniment. Le CHECK de la migration 014 accepte déjà
+  // les trois valeurs — c'est ici que le worker s'aligne dessus.
+  const statut = STATUTS_SESSION.has(body.status) ? body.status : 'in_progress';
 
   const subtests = Array.isArray(body?.subtests) ? body.subtests : [];
   const oral = Array.isArray(body?.oral) ? body.oral : [];
-  if (subtests.length === 0 && oral.length === 0 && statut !== 'completed') {
+  // Une clôture et un abandon n'ont rien à porter : changer le statut EST leur
+  // objet. Seul un envoi 'in_progress' vide n'a aucun sens.
+  if (subtests.length === 0 && oral.length === 0 && statut === 'in_progress') {
     return json({ error: 'rien à enregistrer' }, 400, origin);
   }
   if (subtests.length > 32) {
@@ -1000,4 +1028,116 @@ async function handleResults(env, origin, account, body, identite) {
     // Réseau, timeout, Supabase indisponible — le parcours continue.
     return json({ stored: false, reason: 'unreachable' }, 200, origin);
   }
+}
+
+/**
+ * GET /results/session — la passation EN COURS de ce token, s'il y en a une.
+ *
+ * POURQUOI CETTE ROUTE EXISTE
+ * Les mesures partaient déjà au fil de l'eau, mais rien ne permettait de les
+ * RELIRE : l'app ne pouvait proposer que « lancer un bilan complet », c'est-à-dire
+ * tout recommencer, alors que la base savait exactement quels exercices étaient
+ * faits. Cette route est la moitié manquante de la pause/reprise.
+ *
+ * Elle ne rend QUE ce qu'il faut pour reprendre : l'identifiant de passation (à
+ * réadopter pour que les envois suivants tombent sur la MÊME ligne, y compris
+ * depuis un autre appareil) et la liste des sous-tests déjà notés. Aucune donnée
+ * nominative ne peut en sortir : la requête est bornée à l'`account` dérivé du
+ * token porté par l'appelant.
+ *
+ * FAIL-SOFT : toute anomalie rend `{session: null}` avec un motif. Ne pas savoir
+ * s'il y a une reprise ne doit jamais empêcher de lancer un bilan.
+ */
+async function handleResumableSession(env, origin, account) {
+  if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_KEY) {
+    return json({ session: null, reason: 'not_configured' }, 200, origin);
+  }
+
+  const headers = {
+    apikey: env.SUPABASE_SERVICE_KEY,
+    Authorization: `Bearer ${env.SUPABASE_SERVICE_KEY}`,
+    'Content-Type': 'application/json',
+  };
+  const abandonner = (id) => fetch(
+    `${env.SUPABASE_URL}/rest/v1/test_sessions?id=eq.${encodeURIComponent(id)}`, {
+      method: 'PATCH',
+      headers,
+      body: JSON.stringify({ status: 'abandoned' }),
+    }).catch(() => null);
+
+  try {
+    const sRes = await fetch(
+      `${env.SUPABASE_URL}/rest/v1/test_sessions`
+      + `?account=eq.${encodeURIComponent(account)}&status=eq.in_progress`
+      + '&select=id,client_session_id,started_on,duration_s'
+      + '&order=created_at.desc', { headers });
+    if (!sRes.ok) return json({ session: null, reason: 'unreachable' }, 200, origin);
+
+    const lignes = await sRes.json();
+    if (!Array.isArray(lignes) || lignes.length === 0) {
+      return json({ session: null }, 200, origin);
+    }
+
+    // Un compte = une personne = UNE passation ouverte. S'il en traîne
+    // plusieurs (build ancienne, token restauré avant le correctif 015), la plus
+    // récente fait foi et les autres sont closes : sans ça, la reprise serait
+    // ambiguë et les anciennes resteraient `in_progress` à vie.
+    const courante = lignes[0];
+    for (const vieille of lignes.slice(1)) await abandonner(vieille.id);
+
+    // Sans client_session_id, l'app ne peut RIEN réadopter : ses envois
+    // ouvriraient une seconde passation au lieu d'enrichir celle-ci.
+    if (!courante.client_session_id) {
+      await abandonner(courante.id);
+      return json({ session: null, reason: 'unusable' }, 200, origin);
+    }
+
+    // Fenêtre de reprise. On clôt au passage plutôt que de laisser une session
+    // périmée revenir se proposer à chaque démarrage.
+    if (joursDepuis(courante.started_on) > FENETRE_REPRISE_JOURS) {
+      await abandonner(courante.id);
+      return json({ session: null, reason: 'expired' }, 200, origin);
+    }
+
+    const rRes = await fetch(
+      `${env.SUPABASE_URL}/rest/v1/test_results`
+      + `?session_id=eq.${encodeURIComponent(courante.id)}`
+      + '&select=subtest,raw_score', { headers });
+    if (!rRes.ok) return json({ session: null, reason: 'unreachable' }, 200, origin);
+
+    const brut = await rRes.json();
+    const subtests = (Array.isArray(brut) ? brut : [])
+      .filter((r) => typeof r.subtest === 'string' && r.subtest.length > 0)
+      .map((r) => ({
+        subtest: r.subtest,
+        rawScore: Number.isInteger(r.raw_score) ? r.raw_score : null,
+      }));
+
+    return json({
+      session: {
+        clientSessionId: courante.client_session_id,
+        startedOn: courante.started_on,
+        durationS: Number.isInteger(courante.duration_s) ? courante.duration_s : null,
+        subtests,
+      },
+    }, 200, origin);
+  } catch {
+    return json({ session: null, reason: 'unreachable' }, 200, origin);
+  }
+}
+
+/**
+ * Nombre de jours entre une date `YYYY-MM-DD` et aujourd'hui (UTC).
+ * Une date absente ou illisible rend `Infinity` : à défaut de savoir quand la
+ * passation a commencé, on ne la propose pas — l'inverse ferait reprendre un
+ * bilan d'âge inconnu.
+ */
+function joursDepuis(dateISO) {
+  if (typeof dateISO !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(dateISO)) {
+    return Infinity;
+  }
+  const alors = Date.parse(`${dateISO}T00:00:00Z`);
+  if (Number.isNaN(alors)) return Infinity;
+  const aujourdhui = Date.parse(`${new Date().toISOString().slice(0, 10)}T00:00:00Z`);
+  return Math.round((aujourdhui - alors) / 86400000);
 }

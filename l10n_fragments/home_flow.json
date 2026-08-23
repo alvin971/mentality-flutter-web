@@ -121,5 +121,66 @@
     "de": "Abmelden",
     "en_GB": "Sign out",
     "desc": "Logout confirm/tooltip label"
+  },
+  "homeResumeProgress": {
+    "fr": "{done} exercices sur {total}",
+    "en": "{done} of {total} exercises",
+    "es": "{done} de {total} ejercicios",
+    "pt": "{done} de {total} exercícios",
+    "de": "{done} von {total} Übungen",
+    "en_GB": "{done} of {total} exercises",
+    "desc": "Progression réelle affichée dans la bannière de reprise",
+    "placeholders": {
+      "done": "int",
+      "total": "int"
+    }
+  },
+  "homeResumeNext": {
+    "fr": "Prochain : {name}",
+    "en": "Next: {name}",
+    "es": "Siguiente: {name}",
+    "pt": "Próximo: {name}",
+    "de": "Als Nächstes: {name}",
+    "en_GB": "Next: {name}",
+    "desc": "Prochain exercice annoncé dans la bannière de reprise",
+    "placeholders": {
+      "name": "String"
+    }
+  },
+  "homeResumeFinish": {
+    "fr": "Tous les exercices sont faits — il ne reste que la clôture.",
+    "en": "All exercises are done — only the wrap-up remains.",
+    "es": "Todos los ejercicios están hechos: solo falta el cierre.",
+    "pt": "Todos os exercícios estão feitos — falta apenas o encerramento.",
+    "de": "Alle Übungen sind erledigt — es fehlt nur der Abschluss.",
+    "en_GB": "All exercises are done — only the wrap-up remains.",
+    "desc": "Bannière de reprise quand les 12 sous-tests sont faits mais la clôture n'a pas abouti"
+  },
+  "homeResumeRestart": {
+    "fr": "Recommencer",
+    "en": "Start over",
+    "es": "Empezar de nuevo",
+    "pt": "Recomeçar",
+    "de": "Neu beginnen",
+    "en_GB": "Start over",
+    "desc": "Bouton abandonnant le bilan en cours pour repartir de zéro"
+  },
+  "homeResumeRestartTitle": {
+    "fr": "Recommencer depuis le début ?",
+    "en": "Start over from the beginning?",
+    "es": "¿Empezar de nuevo desde el principio?",
+    "pt": "Recomeçar do início?",
+    "de": "Von vorne beginnen?",
+    "en_GB": "Start over from the beginning?",
+    "desc": "Titre de la confirmation avant abandon du bilan en cours"
+  },
+  "homeResumeRestartBody": {
+    "fr": "Les exercices déjà passés seront abandonnés et ne pourront plus être repris. Vous ne pourrez pas revenir en arrière.",
+    "en": "The exercises you have already taken will be discarded and cannot be resumed. This cannot be undone.",
+    "es": "Los ejercicios ya realizados se descartarán y no podrán reanudarse. No podrás deshacerlo.",
+    "pt": "Os exercícios já realizados serão descartados e não poderão ser retomados. Não será possível voltar atrás.",
+    "de": "Bereits absolvierte Übungen werden verworfen und können nicht fortgesetzt werden. Dies lässt sich nicht rückgängig machen.",
+    "en_GB": "The exercises you have already taken will be discarded and cannot be resumed. This cannot be undone.",
+    "desc": "Corps de la confirmation avant abandon du bilan en cours"
   }
 }

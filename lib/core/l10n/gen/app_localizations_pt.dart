@@ -616,6 +616,9 @@ class AppLocalizationsPt extends AppLocalizations {
       'AVISO: Este relatório é gerado por uma aplicação de apoio à avaliação e não constitui um diagnóstico clínico oficial. Deve ser interpretado por um profissional de saúde qualificado. Não utilizar para fins médicos ou legais sem avaliação profissional complementar.';
 
   @override
+  String get ctResumeFullTest => 'Retomar a avaliação';
+
+  @override
   String get chatEyebrow => 'ASSISTENTE IA';
 
   @override
@@ -772,6 +775,30 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get homeLogoutConfirm => 'Terminar sessão';
+
+  @override
+  String homeResumeProgress(int done, int total) {
+    return '$done de $total exercícios';
+  }
+
+  @override
+  String homeResumeNext(String name) {
+    return 'Próximo: $name';
+  }
+
+  @override
+  String get homeResumeFinish =>
+      'Todos os exercícios estão feitos — falta apenas o encerramento.';
+
+  @override
+  String get homeResumeRestart => 'Recomeçar';
+
+  @override
+  String get homeResumeRestartTitle => 'Recomeçar do início?';
+
+  @override
+  String get homeResumeRestartBody =>
+      'Os exercícios já realizados serão descartados e não poderão ser retomados. Não será possível voltar atrás.';
 
   @override
   String get infoTestName => 'Informação';
@@ -2501,10 +2528,10 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get ctSubtestExitBody =>
-      'Saiu deste subteste antes de o terminar. Deseja retomá-lo ou parar a avaliação?';
+      'Saiu deste exercício antes de o terminar. Os exercícios já concluídos estão guardados: poderá retomar a avaliação aqui mesmo, neste exercício.';
 
   @override
-  String get ctSubtestExitResume => 'Retomar o subteste';
+  String get ctSubtestExitResume => 'Retomar o exercício';
 
   @override
   String get ctSubtestExitTitle => 'Subteste interrompido';
@@ -2744,6 +2771,9 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get completionRejectedNotice =>
       'Esta tentativa não pôde ser validada: foi demasiado curta. Não conta para a missão de convites.';
+
+  @override
+  String get ctSubtestExitPause => 'Pausar';
 
   @override
   String get vocabTestName => 'Vocabulário';

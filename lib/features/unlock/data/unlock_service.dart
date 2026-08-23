@@ -334,6 +334,54 @@ class UnlockService {
     }
   }
 
+  /// Passation EN COURS rattachée à ce token, s'il y en a une.
+  ///
+  /// C'est la moitié LECTURE de l'écriture au fil de l'eau : sans elle, l'app ne
+  /// savait pas ce que le serveur savait déjà et ne pouvait proposer que de tout
+  /// recommencer. Rend `null` si rien n'est reprenable, si le worker n'est pas
+  /// configuré, ou en cas d'erreur — l'appelant se replie alors sur le local.
+  Future<RemoteResumableSession?> fetchResumableSession() async {
+    final headers = await _authHeaders();
+    if (!isConfigured || headers == null) return null;
+    try {
+      final resp = await http.get(
+        Uri.parse('${AppConstants.referralWorkerUrl}/results/session'),
+        headers: headers,
+      );
+      if (resp.statusCode != 200) return null;
+      final body = jsonDecode(resp.body) as Map<String, dynamic>;
+      final s = body['session'];
+      if (s is! Map<String, dynamic>) return null;
+      return RemoteResumableSession.fromJson(s);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Clôt une passation que l'utilisateur a renoncé à reprendre.
+  ///
+  /// Sans cet appel, choisir « recommencer » laisserait l'ancienne session
+  /// `in_progress` côté serveur : elle reviendrait se proposer au démarrage
+  /// suivant, et le compte finirait avec deux passations ouvertes.
+  Future<bool> abandonSession(String clientSessionId) async {
+    final headers = await _authHeaders();
+    if (!isConfigured || headers == null) return false;
+    try {
+      final resp = await http.post(
+        Uri.parse('${AppConstants.referralWorkerUrl}/results'),
+        headers: headers,
+        body: jsonEncode({
+          'clientSessionId': clientSessionId,
+          'status': 'abandoned',
+          'startedAt': DateTime.now().toUtc().toIso8601String(),
+        }),
+      );
+      return resp.statusCode == 200;
+    } catch (_) {
+      return false;
+    }
+  }
+
   /// État courant (les transitions de palier sont calculées côté serveur).
   Future<UnlockProgress?> getProgress() async {
     final headers = await _authHeaders();
@@ -366,5 +414,53 @@ class UnlockService {
     } catch (_) {
       return false;
     }
+  }
+}
+
+/// Ce que le serveur sait d'une passation en cours : de quoi la reprendre.
+///
+/// Volontairement pauvre — un identifiant et des scores bruts par CODE stable.
+/// La route `/results/session` ne peut rien rendre d'autre, et l'app n'a besoin
+/// de rien d'autre pour repartir à l'exercice suivant.
+class RemoteResumableSession {
+  const RemoteResumableSession({
+    required this.clientSessionId,
+    required this.scoresByCode,
+    this.startedOn,
+    this.durationS,
+  });
+
+  final String clientSessionId;
+
+  /// Code WAIS-IV stable → score brut. Un sous-test terminé sans score
+  /// exploitable est absent : on ne le proposera pas à la reprise, mais on ne
+  /// prétendra pas non plus connaître son score.
+  final Map<String, int> scoresByCode;
+
+  /// Jour de début tel que le serveur le connaît. La granularité est la JOURNÉE
+  /// par conception (anti-corrélation avec l'émission du token) : l'heure fine
+  /// n'existe nulle part côté serveur.
+  final DateTime? startedOn;
+
+  /// Durée déjà mesurée sur cette passation, en secondes. Sur un appareil neuf
+  /// c'est la SEULE source : le stockage local y est vide.
+  final int? durationS;
+
+  static RemoteResumableSession? fromJson(Map<String, dynamic> j) {
+    final id = j['clientSessionId'];
+    if (id is! String || id.isEmpty) return null;
+    final scores = <String, int>{};
+    for (final e in (j['subtests'] as List? ?? const [])) {
+      if (e is! Map) continue;
+      final code = e['subtest'];
+      final score = e['rawScore'];
+      if (code is String && code.isNotEmpty && score is int) scores[code] = score;
+    }
+    return RemoteResumableSession(
+      clientSessionId: id,
+      scoresByCode: scores,
+      startedOn: DateTime.tryParse('${j['startedOn']}'),
+      durationS: j['durationS'] is int ? j['durationS'] as int : null,
+    );
   }
 }

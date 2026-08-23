@@ -27,6 +27,7 @@ import '../../../exercises_implementations/figure_weights/presentation/pages/fig
 import '../../../data_collection/oral_test_flow.dart';
 import '../../../unlock/data/completion_reporter.dart';
 import '../../../../core/services/results_sync.dart';
+import '../../../../core/services/resume_service.dart';
 import '../../../../core/services/token_claims_reader.dart';
 import '../../data/pretest_store.dart';
 import '../pretest_chain.dart';
@@ -68,25 +69,34 @@ String _localizedTestName(BuildContext context, String key) {
 }
 
 class CompleteTestOrchestratorPage extends StatelessWidget {
-  const CompleteTestOrchestratorPage({super.key, this.pretestStore});
+  const CompleteTestOrchestratorPage({
+    super.key,
+    this.pretestStore,
+    this.reprise,
+  });
 
   /// Injectable pour les tests uniquement : en production, le stockage réel
   /// (box Hive chiffrée) est celui par défaut.
   final PretestStore? pretestStore;
 
+  /// Bilan interrompu à poursuivre. `null` = première passation, on part de
+  /// l'écran d'introduction comme avant.
+  final ResumableSession? reprise;
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => CompleteTestBloc(),
-      child: _OrchestratorView(pretestStore: pretestStore),
+      child: _OrchestratorView(pretestStore: pretestStore, reprise: reprise),
     );
   }
 }
 
 class _OrchestratorView extends StatefulWidget {
-  const _OrchestratorView({this.pretestStore});
+  const _OrchestratorView({this.pretestStore, this.reprise});
 
   final PretestStore? pretestStore;
+  final ResumableSession? reprise;
 
   @override
   State<_OrchestratorView> createState() => _OrchestratorViewState();
@@ -121,6 +131,9 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
     _loadAgeFromToken();
   }
 
+  /// Vrai quand cet écran poursuit un bilan interrompu.
+  bool get _estReprise => widget.reprise != null;
+
   /// Dérive l'âge (en mois) depuis l'année/mois de naissance du token.
   /// Plage acceptée identique à l'ancienne saisie (16–90 ans) pour rester
   /// cohérent avec les tables normatives.
@@ -139,6 +152,16 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
       }
       _ageLoading = false;
     });
+
+    // Une reprise a déjà été confirmée par l'utilisateur sur l'accueil : lui
+    // réafficher l'écran d'introduction (« Lancer le test complet ») serait au
+    // mieux redondant, au pire trompeur — c'est le bouton qui repart de zéro.
+    // On enchaîne donc directement, dès que l'âge est connu.
+    if (_estReprise && _ageInMonths != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _startBattery(context, _ageInMonths!);
+      });
+    }
   }
 
   @override
@@ -161,12 +184,25 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
     // a pu changer pendant l'affichage du questionnaire.
     final bloc = context.read<CompleteTestBloc>();
     try {
+      // RÉADOPTION AVANT TOUTE MESURE. La passation reprise a déjà un
+      // identifiant côté serveur ; sans l'adopter ici, le premier exercice
+      // terminé ouvrirait une SECONDE passation et la première resterait
+      // ouverte à jamais. C'est le seul endroit où la batterie démarre, donc
+      // le seul où cette garantie tient.
+      final reprise = widget.reprise;
+      if (reprise != null) await ResumeService.instance.adopt(reprise);
+      // `context.mounted` et non `mounted` : c'est le contexte PASSÉ EN
+      // PARAMÈTRE qui traverse l'await, pas celui de l'État.
+      if (!context.mounted) return;
+
       final ok = await ensurePretest(
         context,
         store: widget.pretestStore ?? const PretestStore(),
       );
       if (!mounted || !ok) return;
-      bloc.add(StartTestEvent(ageInMonths));
+      bloc.add(reprise != null
+          ? ResumeTestEvent(ageInMonths: ageInMonths, reprise: reprise)
+          : StartTestEvent(ageInMonths));
     } finally {
       if (mounted) setState(() => _launching = false);
     }
@@ -204,7 +240,7 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(false),
-            child: Text(dialogContext.l10n.ctBackToHome),
+            child: Text(dialogContext.l10n.ctSubtestExitPause),
           ),
           FilledButton(
             onPressed: () => Navigator.of(dialogContext).pop(true),
@@ -217,7 +253,10 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
     if (resume == true) {
       _launchTest(context, testName); // relance le même sous-test
     } else {
-      Navigator.of(context).maybePop(); // quitte la batterie vers l'écran précédent
+      // PAUSE. Rien à sauvegarder ici : tout exercice terminé est déjà écrit,
+      // en local à chaque score et côté serveur au fil de l'eau. Quitter est
+      // donc sans perte, et l'accueil proposera de reprendre à cet exercice.
+      Navigator.of(context).maybePop();
     }
   }
 
@@ -331,7 +370,14 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
         }
       },
       builder: (context, state) {
-        if (state is CompleteTestIntroState) return _buildIntroScreen(context);
+        if (state is CompleteTestIntroState) {
+          // En reprise avec un âge lisible dans le token, l'intro n'est qu'un
+          // clignotement avant le lancement automatique : on montre directement
+          // l'écran d'attente, qui porte la vraie progression.
+          return (_estReprise && (_ageLoading || _ageFromToken))
+              ? _buildProgressScreen(context, state)
+              : _buildIntroScreen(context);
+        }
         if (state is CompleteTestDoneState) {
           return KeplerScaffold(
             title: context.l10n.ctComputingResultsTitle,
@@ -466,7 +512,9 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
           ],
           SizedBox(height: 24.h),
           KeplerButton(
-            label: context.l10n.ctLaunchFullTest,
+            label: _estReprise
+                ? context.l10n.ctResumeFullTest
+                : context.l10n.ctLaunchFullTest,
             icon: Icons.east,
             expand: true,
             onPressed: (_ageInMonths != null && !_launching)
@@ -493,9 +541,13 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
             ? state.session
             : null;
 
-    final progress = session != null ? session.progressPercentage / 100 : 0.0;
-    final completed = session?.completedTestsCount ?? 0;
-    final total = session?.totalTests ?? 12;
+    // Pendant la reprise, la session du BLoC n'existe pas encore (l'âge se lit
+    // d'abord depuis le token). Afficher 0/12 à ce moment-là ferait croire à un
+    // redémarrage : on montre la progression réelle, connue avant même le BLoC.
+    final reprise = widget.reprise;
+    final total = session?.totalTests ?? reprise?.totalTests ?? 12;
+    final completed = session?.completedTestsCount ?? reprise?.completedCount ?? 0;
+    final progress = total == 0 ? 0.0 : completed / total;
     final next = state is CompleteTestRunningState ? state.nextTestName : null;
 
     return KeplerScaffold(

@@ -8,22 +8,22 @@
     "en_GB": "Share my score"
   },
   "ctSubtestExitBody": {
-    "fr": "Vous avez quitté ce sous-test avant de le terminer. Voulez-vous le reprendre ou arrêter l'évaluation ?",
-    "en": "You left this subtest before finishing it. Would you like to resume it or stop the assessment?",
-    "es": "Has salido de esta subprueba antes de terminarla. ¿Quieres reanudarla o detener la evaluación?",
-    "pt": "Saiu deste subteste antes de o terminar. Deseja retomá-lo ou parar a avaliação?",
-    "de": "Sie haben diesen Untertest verlassen, bevor er beendet war. Möchten Sie ihn fortsetzen oder die Bewertung beenden?",
-    "en_GB": "You left this subtest before finishing it. Would you like to resume it or stop the assessment?",
-    "desc": "Corps du dialogue de sortie d'un sous-test"
+    "fr": "Vous avez quitté cet exercice avant de le terminer. Les exercices déjà terminés sont enregistrés : vous pourrez reprendre le bilan ici même, à cet exercice.",
+    "en": "You left this exercise before finishing it. The exercises you have already completed are saved: you can resume the assessment right here, at this exercise.",
+    "es": "Has salido de este ejercicio antes de terminarlo. Los ejercicios ya completados están guardados: podrás reanudar la evaluación aquí mismo, en este ejercicio.",
+    "pt": "Saiu deste exercício antes de o terminar. Os exercícios já concluídos estão guardados: poderá retomar a avaliação aqui mesmo, neste exercício.",
+    "de": "Sie haben diese Übung verlassen, bevor sie beendet war. Bereits abgeschlossene Übungen sind gespeichert: Sie können die Bewertung genau hier, bei dieser Übung, fortsetzen.",
+    "en_GB": "You left this exercise before finishing it. The exercises you have already completed are saved: you can resume the assessment right here, at this exercise.",
+    "desc": "Corps du dialogue de sortie d'un exercice — la pause est un choix légitime, pas un incident"
   },
   "ctSubtestExitResume": {
-    "fr": "Reprendre le sous-test",
-    "en": "Resume subtest",
-    "es": "Reanudar la subprueba",
-    "pt": "Retomar o subteste",
-    "de": "Untertest fortsetzen",
-    "en_GB": "Resume subtest",
-    "desc": "Bouton pour reprendre le sous-test interrompu"
+    "fr": "Reprendre l'exercice",
+    "en": "Resume exercise",
+    "es": "Reanudar el ejercicio",
+    "pt": "Retomar o exercício",
+    "de": "Übung fortsetzen",
+    "en_GB": "Resume exercise",
+    "desc": "Bouton pour reprendre l'exercice interrompu"
   },
   "ctSubtestExitTitle": {
     "fr": "Sous-test interrompu",
@@ -542,5 +542,14 @@
     "de": "Dieser Durchgang konnte nicht bestätigt werden: Er war zu kurz. Er zählt nicht für die Empfehlungsmission.",
     "en_GB": "This attempt could not be validated: it was too short. It does not count towards the referral mission.",
     "desc": "Avertissement affiché quand la déclaration de fin de test n'a pas abouti."
+  },
+  "ctSubtestExitPause": {
+    "fr": "Mettre en pause",
+    "en": "Pause",
+    "es": "Pausar",
+    "pt": "Pausar",
+    "de": "Pausieren",
+    "en_GB": "Pause",
+    "desc": "Bouton qui met le bilan en pause et revient à l'écran précédent"
   }
 }

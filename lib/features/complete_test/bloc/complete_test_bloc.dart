@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/models/complete_test_session.dart';
+import '../../../core/services/results_sync.dart';
 import '../../../services/session_persistence_service.dart';
 import 'complete_test_event.dart';
 import 'complete_test_state.dart';
@@ -14,6 +15,7 @@ import 'complete_test_state.dart';
 class CompleteTestBloc extends Bloc<CompleteTestEvent, CompleteTestState> {
   CompleteTestBloc() : super(const CompleteTestIntroState()) {
     on<StartTestEvent>(_onStart);
+    on<ResumeTestEvent>(_onResume);
     on<SubmitSubtestScoreEvent>(_onSubmitScore);
     on<FinalizeTestEvent>(_onFinalize);
   }
@@ -23,12 +25,50 @@ class CompleteTestBloc extends Bloc<CompleteTestEvent, CompleteTestState> {
   Future<void> _onStart(
       StartTestEvent event, Emitter<CompleteTestState> emit) async {
     _ageInMonths = event.ageInMonths;
+
+    // Un DÉPART est un départ : on libère l'identifiant de la passation
+    // précédente. Sans ça, l'app rouvrait la passation encore en cours — son
+    // identifiant est persisté dans le coffre — et les sous-tests du nouveau
+    // bilan venaient écraser ceux de l'ancien, un par un, dans la MÊME ligne
+    // serveur. Deux passations mélangées, et rien pour les distinguer après
+    // coup. L'ancienne reste `in_progress` jusqu'à ce que /results/session la
+    // close (une seule passation ouverte par compte).
+    await ResultsSync.instance.reset();
+
     final session = CompleteTestSession(startTime: DateTime.now());
 
     // Sauvegarder immédiatement la session de départ
     await SessionPersistenceService.instance
         .saveSession(session, _ageInMonths);
 
+    emit(CompleteTestRunningState(
+      session: session,
+      nextTestName: session.currentTestName,
+    ));
+  }
+
+  /// Reprise d'un bilan interrompu.
+  ///
+  /// La session est reconstruite avec les scores déjà connus et l'index posé sur
+  /// le premier exercice ABSENT — pas sur un compteur : la séquence peut avoir
+  /// des trous, et un compteur en sauterait un silencieusement.
+  Future<void> _onResume(
+      ResumeTestEvent event, Emitter<CompleteTestState> emit) async {
+    _ageInMonths = event.ageInMonths;
+    final session = event.reprise.toSession();
+
+    if (session.isComplete) {
+      // Les 12 sous-tests sont faits, mais la clôture n'a jamais abouti (réseau
+      // coupé au dernier envoi, app tuée entre la batterie et l'épreuve orale).
+      // Sans cette branche, la reprise n'aurait aucun exercice à lancer et
+      // resterait bloquée sur « Lancement… ». On enchaîne sur la clôture.
+      await SessionPersistenceService.instance.clearSession();
+      emit(CompleteTestAwaitingNextState(session));
+      add(const FinalizeTestEvent());
+      return;
+    }
+
+    await SessionPersistenceService.instance.saveSession(session, _ageInMonths);
     emit(CompleteTestRunningState(
       session: session,
       nextTestName: session.currentTestName,
@@ -51,6 +91,12 @@ class CompleteTestBloc extends Bloc<CompleteTestEvent, CompleteTestState> {
       currentTestIndex: nextIndex,
       completedTests: newCompleted,
     );
+
+    // La durée part avec CHAQUE sous-test, pas seulement à la clôture : c'est
+    // la seule trace qu'un autre appareil pourra lire pour reprendre sans
+    // sous-déclarer le temps déjà passé.
+    ResultsSync.instance
+        .majDuree(DateTime.now().difference(updated.startTime).inSeconds);
 
     if (updated.isComplete) {
       // Supprimer la session sauvegardée car le test est terminé

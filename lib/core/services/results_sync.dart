@@ -41,6 +41,23 @@ class ResultsSync {
   bool _envoiEnCours = false;
   bool _charge = false;
 
+  /// Durée écoulée depuis le début de la passation, telle que le BLoC la
+  /// connaît. Envoyée à CHAQUE sous-test, et pas seulement à la clôture.
+  ///
+  /// C'est ce qui rend la reprise possible depuis un autre appareil sans mentir
+  /// sur la durée : le stockage local y est vide, seul le serveur peut dire
+  /// depuis combien de temps la passation dure. Sans cette mise à jour continue,
+  /// `duration_s` restait nul jusqu'à la fin, une reprise ne mesurait que sa
+  /// propre portion, et la déclaration de fin tombait sous le plancher de
+  /// plausibilité du worker (300 s) — 400 définitif, parrainage perdu, et un
+  /// message d'échec affiché à quelqu'un qui a réellement tout passé.
+  int _dureeAcquise = 0;
+
+  /// Met à jour la durée courante. Appelée par le BLoC à chaque sous-test.
+  void majDuree(int secondes) {
+    if (secondes > _dureeAcquise) _dureeAcquise = secondes;
+  }
+
   /// UUID de la passation, créé au premier appel et conservé jusqu'à `complete`.
   Future<String> sessionId() async {
     if (_sessionId != null) return _sessionId!;
@@ -60,6 +77,32 @@ class ResultsSync {
       await AuthLocalStore.instance.saveTestSessionId(neuf);
     } catch (_) {/* l'envoi reste possible sans persistance */}
     return neuf;
+  }
+
+  /// Reprend une passation DÉJÀ OUVERTE au lieu d'en créer une nouvelle.
+  ///
+  /// Appelé par `ResumeService.adopt` quand l'utilisateur choisit de continuer
+  /// un bilan interrompu. Sans ça, une reprise sur un autre appareil — ou après
+  /// un effacement local — repartirait avec un identifiant neuf : le serveur
+  /// ouvrirait une SECONDE passation et la première resterait `in_progress`
+  /// pour toujours, ses mesures orphelines.
+  ///
+  /// [debut] est le jour d'ouverture connu du serveur. On le réinjecte pour que
+  /// l'upsert ne réécrive pas `started_on` à la date du jour : sinon reprendre
+  /// tous les six jours prolongerait indéfiniment la fenêtre de reprise, et la
+  /// date de début finirait par désigner la dernière reprise plutôt que le
+  /// début réel.
+  ///
+  /// La file en attente est CONSERVÉE : ce qu'elle contient appartient au même
+  /// bilan, et l'upsert serveur sur (session, sous-test) rend le rattachement
+  /// inoffensif.
+  Future<void> adopterSession(String id, {DateTime? debut}) async {
+    if (id.isEmpty) return;
+    _sessionId = id;
+    if (debut != null) _startedAt = debut;
+    try {
+      await AuthLocalStore.instance.saveTestSessionId(id);
+    } catch (_) {/* l'envoi reste possible sans persistance */}
   }
 
   /// Envoie un sous-test terminé. À appeler dès la dernière réponse validée.
@@ -105,6 +148,7 @@ class ResultsSync {
 
     _sessionId = null;
     _startedAt = null;
+    _dureeAcquise = 0;
     try {
       await AuthLocalStore.instance.clearTestSessionId();
     } catch (_) {/* sans conséquence : un nouvel UUID sera généré */}
@@ -115,6 +159,7 @@ class ResultsSync {
   Future<void> reset() async {
     _sessionId = null;
     _startedAt = null;
+    _dureeAcquise = 0;
     _enAttente.clear();
     _oralEnAttente.clear();
     try {
@@ -201,7 +246,8 @@ class ResultsSync {
         subtests: sousTests,
         oral: oral,
         status: status,
-        durationSeconds: durationSeconds,
+        durationSeconds:
+            durationSeconds ?? (_dureeAcquise > 0 ? _dureeAcquise : null),
       );
       if (ok) {
         _enAttente.removeRange(0, sousTests.length);

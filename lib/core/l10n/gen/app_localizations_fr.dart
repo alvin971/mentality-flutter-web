@@ -615,6 +615,9 @@ class AppLocalizationsFr extends AppLocalizations {
       'AVERTISSEMENT : Ce rapport est généré par une application d\'aide à l\'évaluation et ne constitue pas un diagnostic clinique officiel. Il doit être interprété par un professionnel de santé qualifié. Ne pas utiliser à des fins médicales ou légales sans évaluation professionnelle complémentaire.';
 
   @override
+  String get ctResumeFullTest => 'Reprendre le bilan';
+
+  @override
   String get chatEyebrow => 'ASSISTANT IA';
 
   @override
@@ -770,6 +773,30 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get homeLogoutConfirm => 'Se déconnecter';
+
+  @override
+  String homeResumeProgress(int done, int total) {
+    return '$done exercices sur $total';
+  }
+
+  @override
+  String homeResumeNext(String name) {
+    return 'Prochain : $name';
+  }
+
+  @override
+  String get homeResumeFinish =>
+      'Tous les exercices sont faits — il ne reste que la clôture.';
+
+  @override
+  String get homeResumeRestart => 'Recommencer';
+
+  @override
+  String get homeResumeRestartTitle => 'Recommencer depuis le début ?';
+
+  @override
+  String get homeResumeRestartBody =>
+      'Les exercices déjà passés seront abandonnés et ne pourront plus être repris. Vous ne pourrez pas revenir en arrière.';
 
   @override
   String get infoTestName => 'Information';
@@ -2499,10 +2526,10 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get ctSubtestExitBody =>
-      'Vous avez quitté ce sous-test avant de le terminer. Voulez-vous le reprendre ou arrêter l\'évaluation ?';
+      'Vous avez quitté cet exercice avant de le terminer. Les exercices déjà terminés sont enregistrés : vous pourrez reprendre le bilan ici même, à cet exercice.';
 
   @override
-  String get ctSubtestExitResume => 'Reprendre le sous-test';
+  String get ctSubtestExitResume => 'Reprendre l\'exercice';
 
   @override
   String get ctSubtestExitTitle => 'Sous-test interrompu';
@@ -2741,6 +2768,9 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get completionRejectedNotice =>
       'Cette passation n\'a pas pu être validée : elle a été jugée trop courte. Elle ne compte pas pour la mission de parrainage.';
+
+  @override
+  String get ctSubtestExitPause => 'Mettre en pause';
 
   @override
   String get vocabTestName => 'Vocabulaire';

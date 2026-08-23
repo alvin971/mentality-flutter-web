@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../core/services/resume_service.dart';
+
 abstract class CompleteTestEvent extends Equatable {
   const CompleteTestEvent();
   @override
@@ -12,6 +14,21 @@ class StartTestEvent extends CompleteTestEvent {
   const StartTestEvent(this.ageInMonths);
   @override
   List<Object?> get props => [ageInMonths];
+}
+
+/// L'utilisateur reprend un bilan interrompu : on repart à l'exercice suivant.
+///
+/// Distinct de [StartTestEvent] à dessein. Le démarrage crée une session vierge ;
+/// la reprise en RECONSTRUIT une à partir de ce que le serveur et le stockage
+/// local savent déjà. Confondre les deux, c'est ce que faisait l'app : la
+/// bannière « Reprendre » de l'accueil menait au seul chemin existant, celui
+/// qui repart de zéro.
+class ResumeTestEvent extends CompleteTestEvent {
+  final int ageInMonths;
+  final ResumableSession reprise;
+  const ResumeTestEvent({required this.ageInMonths, required this.reprise});
+  @override
+  List<Object?> get props => [ageInMonths, reprise];
 }
 
 /// Un sous-test s'est terminé avec un score donné.
