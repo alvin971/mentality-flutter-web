@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'core/l10n/gen/app_localizations.dart';
 import 'core/l10n/locale_notifier.dart';
 import 'core/theme/app_colors.dart';
@@ -75,15 +74,11 @@ Future<void> _configureApp() async {
   // Volontairement NON attendu : le démarrage ne dépend pas du réseau.
   unawaited(CompletionReporter.instance.retryPending());
 
-  // Initialiser Supabase (auth OTP email + phone)
-  try {
-    await Supabase.initialize(
-      url: AppConstants.supabaseUrl,
-      anonKey: AppConstants.supabaseAnonKey,
-    );
-  } catch (_) {
-    // Ne pas bloquer le démarrage si l'init Supabase échoue
-  }
+  // Pas d'initialisation Supabase : l'app n'utilise plus le client.
+  // L'inscription se fait UNIQUEMENT sur mental-et.com/inscription, via le
+  // worker Cloudflare `tokeniser` — l'app se contente de recevoir un token.
+  // La seule lecture Supabase restante est `remote_config`, faite en HTTP brut
+  // par RemoteConfigService, sans SDK.
 
   // Charger le thème et la langue sauvegardés
   await themeNotifier.load();
