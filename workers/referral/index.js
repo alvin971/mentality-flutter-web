@@ -906,6 +906,15 @@ async function handleResults(env, origin, account, body, identite) {
       max_score: Number.isInteger(t?.maxScore) ? t.maxScore : null,
       answers: t?.answers ?? null,
       duration_s: Number.isInteger(t?.durationS) ? t.durationS : null,
+      // Ces trois-là étaient ENVOYÉS par l'app et jetés ici : les colonnes de la
+      // migration 013 restaient vides sur toutes les passations. Trouvé au
+      // premier test réel — aucune assertion ne comparait ce que l'app émet à
+      // ce que le worker recopie.
+      items_administered:
+        Number.isInteger(t?.itemsAdministered) ? t.itemsAdministered : null,
+      items_correct: Number.isInteger(t?.itemsCorrect) ? t.itemsCorrect : null,
+      median_latency_ms:
+        Number.isInteger(t?.medianLatencyMs) ? t.medianLatencyMs : null,
     })).filter((t) => t.subtest.length > 0);
 
     let rRes = { ok: true };

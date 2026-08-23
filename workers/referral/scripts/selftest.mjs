@@ -796,9 +796,30 @@ console.log('\n/results — passations rattachées au token, écrites au fil de 
       && se.body.client_session_id === CSID, se && se.url);
 
     const results = capte.find((c) => c.url.includes('test_results'));
+    // Le défaut trouvé au premier test réel : l'app envoyait
+    // itemsAdministered / itemsCorrect / medianLatencyMs, le worker les jetait,
+    // et les colonnes de la 013 restaient vides. On compare désormais ce qui
+    // ENTRE à ce qui SORT, au lieu de vérifier seulement que quelque chose sort.
+
     verifie('les sous-tests sont rattachés à la session créée',
       results && results.body.length === 2 && results.body.every((r) => r.session_id === 'sess-1'),
       JSON.stringify(results && results.body));
+  }
+
+  {
+    capte.length = 0; brancher(supabaseOk);
+    await appel(kvNu(), { ...PROD, ...SB }, '/results', 'POST', {
+      ...charge,
+      subtests: [{
+        subtest: 'vocabulary', rawScore: 30, maxScore: 60,
+        itemsAdministered: 21, itemsCorrect: 17, medianLatencyMs: 4300,
+      }],
+    });
+    debrancher();
+    const w = capte.find((c) => c.url.includes('test_results'));
+    verifie('les métriques agrégées ne sont PAS jetées en route',
+      w && w.body[0].items_administered === 21 && w.body[0].items_correct === 17
+      && w.body[0].median_latency_ms === 4300, JSON.stringify(w && w.body[0]));
   }
 
   console.log('\n/results — écriture incrémentale (pause et reprise)');

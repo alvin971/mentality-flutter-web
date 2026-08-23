@@ -65,10 +65,18 @@ class SubtestInstrumentation {
   void onFocusLost() => _focusLost++;
 
   /// Clôt l'item courant. Sans [startItem] préalable, ne fait rien.
+  ///
+  /// [latencyMs] permet d'imposer la durée quand l'exercice la mesure lui-même.
+  /// C'est le cas des épreuves de construction (Cubes) : l'item s'ouvre dans un
+  /// widget enfant et ne revient à la page qu'une fois terminé, si bien que le
+  /// chronomètre local mesurerait zéro. Sans cette porte, la latence de ces
+  /// exercices serait fausse — et une latence fausse est pire qu'absente,
+  /// puisqu'elle entrerait telle quelle dans la calibration.
   void endItem({
     String? response,
     bool? isCorrect,
     int? score,
+    int? latencyMs,
     bool timedOut = false,
     bool skipped = false,
   }) {
@@ -81,7 +89,7 @@ class SubtestInstrumentation {
       if (response != null) 'response': response,
       if (isCorrect != null) 'isCorrect': isCorrect,
       if (score != null) 'score': score,
-      'latencyMs': c.elapsedMilliseconds,
+      'latencyMs': latencyMs ?? c.elapsedMilliseconds,
       if (_firstInputMs != null) 'firstInputMs': _firstInputMs,
       'editsCount': _edits,
       'backspacesCount': _backspaces,

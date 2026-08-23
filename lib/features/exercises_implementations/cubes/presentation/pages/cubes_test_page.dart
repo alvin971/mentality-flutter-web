@@ -118,8 +118,10 @@ class _CubesTestPageState extends State<CubesTestPage> {
   }
 
   void _handleComplete(bool isCorrect, int timeSeconds) {
-    // Cubes n'a pas d'ouverture d'item explicite : on ouvre et on ferme
-    // au même endroit, la durée réelle venant du widget de construction.
+    // Cubes n'a pas d'ouverture d'item explicite : la construction se déroule
+    // dans un widget enfant qui ne rend la main qu'une fois terminée. On ouvre
+    // et on ferme donc au même endroit, en IMPOSANT la durée que ce widget a
+    // mesurée — sinon le chronomètre local relèverait zéro.
     if (!_demoPhase) _instr.startItem(index: currentLevel);
     if (_demoPhase) {
       // Démo : feedback visuel seulement — ni score, ni règle d'arrêt, ni
@@ -133,7 +135,13 @@ class _CubesTestPageState extends State<CubesTestPage> {
       lastAnswerCorrect = isCorrect;
       totalTime += timeSeconds;
 
-    _instr.endItem(isCorrect: isCorrect, score: isCorrect ? 1 : 0);
+    _instr.endItem(
+      isCorrect: isCorrect,
+      // Le barème Cubes est en POINTS (bonus de rapidité au-delà du niveau 2),
+      // pas en 0/1 : score += _calculatePoints(timeSeconds).
+      score: isCorrect && currentLevel >= 2 ? _calculatePoints(timeSeconds) : (isCorrect ? 1 : 0),
+      latencyMs: timeSeconds * 1000,
+    );
 
       // Gestion des échecs consécutifs
       if (isCorrect) {
@@ -176,7 +184,7 @@ class _CubesTestPageState extends State<CubesTestPage> {
     // fermée plus loin dans la batterie ne doit pas emporter ce qui a déjà
     // été mesuré. Tir-et-oublie, fail-soft.
     unawaited(ResultsSync.instance.flushSubtest(
-      _instr.toPayload(rawScore: score, maxScore: _generatedPatterns.length),
+      _instr.toPayload(rawScore: score),
     ));
 
     // Test non noté à l'écran : aucun récapitulatif de points/temps/réussite,
