@@ -1,3 +1,4 @@
+import 'dart:async';
 // lib/features/data_collection/token_issuance_step.dart
 //
 // Dernière étape du flow oral : formulaire démographique LARGE (sexe,
@@ -19,6 +20,7 @@ import '../../core/services/auth_local_store.dart';
 import '../../core/services/token_issuer.dart';
 import '../../core/theme/app_colors.dart';
 import '../../services/tokeniser_service.dart';
+import '../../core/services/results_sync.dart';
 import '../../core/theme/kepler_colors.dart';
 import '../registration/domain/entities/registration_form.dart' show Sex, SexX;
 
@@ -110,6 +112,10 @@ class _TokenIssuanceStepState extends State<TokenIssuanceStep> {
       // on ne persiste qu'un token confirmé.
       final token = await TokenIssuer.issue(demo);
       await AuthLocalStore.instance.saveToken(token);
+      // Le token n'existe qu'ICI, à la fin du parcours, alors que les mesures
+      // sont parties PENDANT — sans token elles ont toutes échoué en silence.
+      // On rejoue la file maintenant qu'un en-tête d'authentification existe.
+      unawaited(ResultsSync.instance.retryPending());
       if (!mounted) return;
       setState(() => _issuedToken = token);
     } catch (e) {

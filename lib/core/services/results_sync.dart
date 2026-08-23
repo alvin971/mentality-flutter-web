@@ -117,6 +117,19 @@ class ResultsSync {
     } catch (_) {/* rien à faire */}
   }
 
+  /// Rejoue ce qui attend, après qu'un token soit devenu disponible.
+  ///
+  /// Nécessaire parce que `TokenIssuanceStep` émet le token à la FIN du
+  /// parcours, alors que les mesures partent PENDANT. Sans token,
+  /// `UnlockService._authHeaders()` renvoie null et chaque envoi échoue en
+  /// silence — la file survit (correctif de la revue), mais plus rien ne la
+  /// relançait : les mesures d'un parcours entier se perdaient à la fermeture
+  /// de l'app. Ce point d'entrée referme ce trou.
+  Future<void> retryPending() async {
+    if (_enAttente.isEmpty && _oralEnAttente.isEmpty) return;
+    await _envoie(status: 'in_progress');
+  }
+
   /// Rend `true` si l'envoi a réellement abouti — c'est ce verdict qui autorise
   /// [complete] à libérer la session.
   Future<bool> _envoie({
