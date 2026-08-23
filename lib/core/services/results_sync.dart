@@ -16,6 +16,8 @@
 // une file en mémoire et retenté au prochain, puis à la clôture : perdre du
 // réseau au milieu du test ne doit ni bloquer l'utilisateur, ni lui faire
 // perdre ses mesures.
+import 'dart:convert';
+
 import 'package:uuid/uuid.dart';
 
 import '../../features/unlock/data/unlock_service.dart';
@@ -37,6 +39,7 @@ class ResultsSync {
   final List<Map<String, dynamic>> _oralEnAttente = [];
 
   bool _envoiEnCours = false;
+  bool _charge = false;
 
   /// UUID de la passation, créé au premier appel et conservé jusqu'à `complete`.
   Future<String> sessionId() async {
@@ -64,6 +67,7 @@ class ResultsSync {
   /// [payload] vient de `SubtestInstrumentation.toPayload()`.
   Future<void> flushSubtest(Map<String, dynamic> payload) async {
     _enAttente.add(payload);
+    await _persiste();          // AVANT l'envoi : si l'app meurt ici, rien n'est perdu
     await _envoie(status: 'in_progress');
   }
 
@@ -73,6 +77,7 @@ class ResultsSync {
   /// le retrouver et l'interpréter — texte lu, cycle, couche, consentement.
   Future<void> flushOral(Map<String, dynamic> enregistrement) async {
     _oralEnAttente.add(enregistrement);
+    await _persiste();
     await _envoie(status: 'in_progress');
   }
 
@@ -113,8 +118,50 @@ class ResultsSync {
     _enAttente.clear();
     _oralEnAttente.clear();
     try {
+      await AuthLocalStore.instance.clearPendingResults();
       await AuthLocalStore.instance.clearTestSessionId();
     } catch (_) {/* rien à faire */}
+  }
+
+  /// Relit la file laissée par une exécution précédente et tente de l'envoyer.
+  ///
+  /// À appeler au DÉMARRAGE de l'app. Sans ça, un exercice terminé juste avant
+  /// que le système ne tue l'app en arrière-plan ne repartirait jamais : la file
+  /// est persistée, mais rien ne la relirait.
+  Future<void> restaureEtRejoue() async {
+    if (_charge) return;
+    _charge = true;
+    try {
+      final brut = await AuthLocalStore.instance.getPendingResults();
+      if (brut == null || brut.isEmpty) return;
+      final d = jsonDecode(brut) as Map<String, dynamic>;
+      _enAttente.addAll((d['subtests'] as List? ?? const [])
+          .map((e) => Map<String, dynamic>.from(e as Map)));
+      _oralEnAttente.addAll((d['oral'] as List? ?? const [])
+          .map((e) => Map<String, dynamic>.from(e as Map)));
+    } catch (_) {
+      // File illisible (format changé, coffre corrompu) : on repart propre
+      // plutôt que de bloquer le démarrage.
+      try {
+        await AuthLocalStore.instance.clearPendingResults();
+      } catch (_) {/* rien à faire */}
+      return;
+    }
+    await _envoie(status: 'in_progress');
+  }
+
+  /// Écrit la file dans le coffre chiffré. Silencieux en cas d'échec : perdre la
+  /// persistance ne doit pas empêcher l'envoi immédiat de fonctionner.
+  Future<void> _persiste() async {
+    try {
+      if (_enAttente.isEmpty && _oralEnAttente.isEmpty) {
+        await AuthLocalStore.instance.clearPendingResults();
+        return;
+      }
+      await AuthLocalStore.instance.savePendingResults(
+        jsonEncode({'subtests': _enAttente, 'oral': _oralEnAttente}),
+      );
+    } catch (_) {/* la file reste au moins en mémoire */}
   }
 
   /// Rejoue ce qui attend, après qu'un token soit devenu disponible.
@@ -159,6 +206,7 @@ class ResultsSync {
       if (ok) {
         _enAttente.removeRange(0, sousTests.length);
         _oralEnAttente.removeRange(0, oral.length);
+        await _persiste();
       }
       return ok;
     } catch (_) {

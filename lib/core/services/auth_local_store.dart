@@ -47,6 +47,30 @@ class AuthLocalStore {
   /// True si un token est présent localement.
   Future<bool> hasToken() async => (await getToken()) != null;
 
+  // ───── File des mesures en attente d'envoi ─────
+  //
+  // Persistée, et pas seulement gardée en mémoire : entre deux exercices, iOS
+  // et Android tuent régulièrement une app passée en arrière-plan. Une file
+  // volatile perdrait alors tout ce qui n'était pas encore parti, sans trace ni
+  // rejeu possible — et c'est précisément la situation d'une mise en pause au
+  // milieu du test.
+  static const _pendingResultsKey = 'pending_results_v1';
+
+  Future<void> savePendingResults(String json) async {
+    final box = await _openBox();
+    await box.put(_pendingResultsKey, json);
+  }
+
+  Future<String?> getPendingResults() async {
+    final box = await _openBox();
+    return box.get(_pendingResultsKey) as String?;
+  }
+
+  Future<void> clearPendingResults() async {
+    final box = await _openBox();
+    await box.delete(_pendingResultsKey);
+  }
+
   // ───── Identité de la passation en cours ─────
   //
   // UUID généré au premier sous-test et conservé jusqu'à la fin du test. C'est

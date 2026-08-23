@@ -14,6 +14,7 @@ import 'core/theme/theme_notifier.dart';
 import 'core/router/app_router.dart';
 import 'core/constants/app_constants.dart';
 import 'core/services/remote_config_service.dart';
+import 'core/services/results_sync.dart';
 import 'features/waiting_event/_shared/data/event_upload_service.dart';
 import 'services/data_collection_service.dart';
 import 'features/unlock/data/completion_reporter.dart';
@@ -73,6 +74,12 @@ Future<void> _configureApp() async {
   // parrainage du filleul était perdu définitivement et sans aucun message.
   // Volontairement NON attendu : le démarrage ne dépend pas du réseau.
   unawaited(CompletionReporter.instance.retryPending());
+
+  // Rejoue les mesures qu'une exécution précédente n'avait pas pu envoyer —
+  // typiquement un exercice terminé juste avant que le système ne tue l'app en
+  // arrière-plan. La file est persistée dans le coffre chiffré ; sans cette
+  // relecture, elle y dormirait indéfiniment.
+  unawaited(ResultsSync.instance.restaureEtRejoue());
 
   // Pas d'initialisation Supabase : l'app n'utilise plus le client.
   // L'inscription se fait UNIQUEMENT sur mental-et.com/inscription, via le
