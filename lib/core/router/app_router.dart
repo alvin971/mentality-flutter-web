@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../../features/registration/presentation/pages/token_login_page.dart';
 import '../../features/registration/presentation/pages/token_restore_page.dart';
 import '../../features/home/presentation/pages/home_page.dart';
 import '../../features/assessment/presentation/pages/assessment_intro_page.dart';
@@ -9,7 +8,6 @@ import '../../features/chat/presentation/pages/mentality_chat_page.dart';
 import '../../features/results_history/presentation/pages/results_history_page.dart';
 import '../../features/onboarding/presentation/pages/onboarding_page.dart';
 import '../../features/data_collection/oral_test_flow.dart';
-import '../../features/data_collection/token_issuance_step.dart';
 import '../../features/exercises_implementations/cubes/presentation/pages/cubes_test_page.dart';
 import '../../features/exercises_implementations/matrices/presentation/pages/matrices_test_page.dart';
 import '../../features/exercises_implementations/figure_weights/presentation/pages/figure_weights_test_page.dart';
@@ -81,12 +79,14 @@ final GoRouter appRouter = GoRouter(
       builder: (_, __) => const OnboardingPage(),
     ),
 
-    // Connexion par token anonyme : petit formulaire démographique au début →
-    // token PROVISOIRE → accès à l'app. Remplace l'ancien flux téléphone/OTP.
+    // Entrée de l'app : CONNEXION UNIQUEMENT. L'app ne crée jamais de token —
+    // l'inscription se fait exclusivement sur mental-et.com/inscription, d'où
+    // l'utilisateur repart avec un token qu'il colle ici. L'écran renvoie vers
+    // le site pour qui n'en a pas encore.
     GoRoute(
       path: AppConstants.routeRegister,
       name: 'register',
-      builder: (_, __) => const TokenLoginPage(),
+      builder: (_, __) => const TokenRestorePage(),
     ),
 
     // Reconnexion : coller un token déjà sauvegardé pour restaurer l'accès.
@@ -184,13 +184,6 @@ final GoRouter appRouter = GoRouter(
       builder: (_, __) => const OralTestFlow(),
     ),
 
-    // DEV : écran isolé démographiques + émission du token, pour tester la
-    // fonction sans refaire tout le test. Voir PLAN_TOKEN_FIN_DE_TEST.md.
-    GoRoute(
-      path: '/test/token',
-      name: 'test-token',
-      builder: (_, __) => const TokenIssuanceStep(standalone: true),
-    ),
 
     // Lien d'invitation (parrainage) : /invite?ref=<code>. Mémorise le code
     // du parrain puis envoie le filleul vers le parcours normal.

@@ -5,12 +5,16 @@
 //
 // TODO(i18n) : libellés en dur (FR), à migrer vers l'ARB.
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/services/auth_local_store.dart';
+import '../../../../core/services/results_sync.dart';
 import '../../../../core/services/token_access.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/kepler_colors.dart';
@@ -50,6 +54,9 @@ class _TokenRestorePageState extends State<TokenRestorePage> {
       return;
     }
     await AuthLocalStore.instance.saveToken(token);
+    // Un en-tête d'authentification existe enfin : on rejoue ce qui aurait pu
+    // s'accumuler sans token (voir ResultsSync.retryPending).
+    unawaited(ResultsSync.instance.retryPending());
     if (!mounted) return;
     context.go(AppConstants.routeHome);
   }
@@ -102,6 +109,47 @@ class _TokenRestorePageState extends State<TokenRestorePage> {
                       borderRadius: BorderRadius.circular(10.r)),
                 ),
                 style: TextStyle(fontSize: 12.sp, fontFamily: 'monospace'),
+              ),
+              SizedBox(height: 20.h),
+              // L'inscription n'existe QUE sur le site : l'app ne crée jamais de
+              // token, elle en reçoit un. Sans ce renvoi, un nouvel arrivant se
+              // retrouverait devant un champ qu'il ne peut pas remplir.
+              Container(
+                padding: EdgeInsets.all(14.w),
+                decoration: BoxDecoration(
+                  color:
+                      KeplerColors.of(context).primary.withValues(alpha: 0.06),
+                  borderRadius: BorderRadius.circular(10.r),
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      'Pas encore de token ?',
+                      style: TextStyle(
+                          fontSize: 14.sp, fontWeight: FontWeight.w600),
+                    ),
+                    SizedBox(height: 6.h),
+                    Text(
+                      'Il se crée en une minute sur le site, sans compte ni '
+                      'email. Pense à le sauvegarder : il est ta seule clé.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        height: 1.5,
+                      ),
+                    ),
+                    SizedBox(height: 10.h),
+                    OutlinedButton.icon(
+                      onPressed: () => launchUrl(
+                        Uri.parse(AppConstants.inviteBaseUrl),
+                        mode: LaunchMode.externalApplication,
+                      ),
+                      icon: const Icon(Icons.open_in_new, size: 18),
+                      label: const Text('Créer mon token sur le site'),
+                    ),
+                  ],
+                ),
               ),
               if (_error != null) ...[
                 SizedBox(height: 12.h),

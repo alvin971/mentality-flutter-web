@@ -119,12 +119,14 @@ class ResultsSync {
 
   /// Rejoue ce qui attend, après qu'un token soit devenu disponible.
   ///
-  /// Nécessaire parce que `TokenIssuanceStep` émet le token à la FIN du
-  /// parcours, alors que les mesures partent PENDANT. Sans token,
-  /// `UnlockService._authHeaders()` renvoie null et chaque envoi échoue en
-  /// silence — la file survit (correctif de la revue), mais plus rien ne la
-  /// relançait : les mesures d'un parcours entier se perdaient à la fermeture
-  /// de l'app. Ce point d'entrée referme ce trou.
+  /// Sans token, `UnlockService._authHeaders()` renvoie null et chaque envoi
+  /// échoue en silence. La file survit (correctif de la revue), mais plus rien
+  /// ne la relançait : les mesures d'un parcours entier se perdaient à la
+  /// fermeture de l'app.
+  ///
+  /// Appelé à la connexion (`TokenRestorePage`), seul endroit où un token entre
+  /// désormais dans l'app — elle n'en crée plus aucun, l'inscription se faisant
+  /// exclusivement sur mental-et.com/inscription.
   Future<void> retryPending() async {
     if (_enAttente.isEmpty && _oralEnAttente.isEmpty) return;
     await _envoie(status: 'in_progress');
