@@ -1150,6 +1150,54 @@ console.log('\n/results/session — reprise : lire où en est la passation');
   }
 }
 
+console.log('\n/results — sous-tests notés par une IA en aval');
+{
+  const vraiFetch = globalThis.fetch;
+  const SB = { SUPABASE_URL: 'https://sb.test', SUPABASE_SERVICE_KEY: 'sb_secret_faux' };
+  const capte = [];
+  globalThis.fetch = async (url, init) => {
+    capte.push({ url: String(url), body: JSON.parse(init.body) });
+    if (String(url).includes('test_sessions')) {
+      return new Response(JSON.stringify([{ id: 'sess-1' }]), { status: 201 });
+    }
+    return new Response('[]', { status: 201 });
+  };
+
+  await appel(kvNu(), { ...PROD, ...SB }, '/results', 'POST', {
+    clientSessionId: '6c0ac833-fb7f-4450-9e52-6721cdd6a498',
+    startedAt: '2026-08-24T10:00:00.000Z',
+    status: 'in_progress',
+    subtests: [
+      { subtest: 'block_design', rawScore: 42 },
+      { subtest: 'similarities', scoring: 'ai_pending',
+        items: [{ index: 0, response: 'Fruit' }] },
+    ],
+  });
+  globalThis.fetch = vraiFetch;
+
+  const r = capte.find((c) => c.url.includes('test_results'));
+  const bd = r && r.body.find((x) => x.subtest === 'block_design');
+  const si = r && r.body.find((x) => x.subtest === 'similarities');
+
+  verifie('un sous-test à réponse libre est écrit SANS score, mais marqué',
+    si && si.raw_score === null && si.scoring_status === 'ai_pending',
+    JSON.stringify(si));
+  verifie("un sous-test noté par l'app n'est jamais marqué en attente",
+    bd && bd.raw_score === 42 && bd.scoring_status === null, JSON.stringify(bd));
+
+  const it = capte.find((c) => c.url.includes('test_items'));
+  verifie('la RÉPONSE est conservée telle quelle — matière de la notation IA',
+    it && it.body[0].response === 'Fruit' && it.body[0].score === null
+    && it.body[0].is_correct === null, JSON.stringify(it && it.body[0]));
+
+  verifie('une valeur de marqueur inconnue est ignorée, jamais recopiée',
+    (() => {
+      const faux = { subtest: 'x', scoring: '"; drop table --' };
+      const m = faux.scoring === 'ai_pending' ? 'ai_pending' : null;
+      return m === null;
+    })());
+}
+
 console.log("\n/results — abandon explicite d'une passation");
 {
   const vraiFetch = globalThis.fetch;

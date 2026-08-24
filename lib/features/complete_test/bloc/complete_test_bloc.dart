@@ -133,6 +133,10 @@ class CompleteTestBloc extends Bloc<CompleteTestEvent, CompleteTestState> {
     String testName,
     int score,
   ) {
+    // Sous-test administré mais non noté : le champ reste NUL. Il compte
+    // néanmoins comme terminé — c'est `completedTests` qui porte la
+    // progression, pas la présence d'un score.
+    if (score == CompleteTestSession.awaitingAiScore) return session;
     switch (testName) {
       case 'Cubes':
         return session.copyWith(cubesScore: score);

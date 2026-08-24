@@ -25,6 +25,7 @@ const _age = 28 * 12;
 ResumableSession reprise(Map<String, int> scores) => ResumeService.fusionne(
       distant: RemoteResumableSession(
         clientSessionId: '6c0ac833-fb7f-4450-9e52-6721cdd6a498',
+        completedCodes: scores.keys.toSet(),
         scoresByCode: scores,
       ),
     )!;

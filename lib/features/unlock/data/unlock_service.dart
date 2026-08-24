@@ -425,6 +425,7 @@ class UnlockService {
 class RemoteResumableSession {
   const RemoteResumableSession({
     required this.clientSessionId,
+    required this.completedCodes,
     required this.scoresByCode,
     this.startedOn,
     this.durationS,
@@ -432,9 +433,12 @@ class RemoteResumableSession {
 
   final String clientSessionId;
 
-  /// Code WAIS-IV stable → score brut. Un sous-test terminé sans score
-  /// exploitable est absent : on ne le proposera pas à la reprise, mais on ne
-  /// prétendra pas non plus connaître son score.
+  /// Codes des sous-tests ADMINISTRÉS, avec ou sans score. Similitudes et
+  /// Vocabulaire sont notés par une IA en aval : ils sont passés, leur
+  /// `raw_score` est nul, et ils ne doivent surtout pas être refaits.
+  final Set<String> completedCodes;
+
+  /// Code WAIS-IV stable → score brut, pour les seuls sous-tests qui en ont un.
   final Map<String, int> scoresByCode;
 
   /// Jour de début tel que le serveur le connaît. La granularité est la JOURNÉE
@@ -449,15 +453,19 @@ class RemoteResumableSession {
   static RemoteResumableSession? fromJson(Map<String, dynamic> j) {
     final id = j['clientSessionId'];
     if (id is! String || id.isEmpty) return null;
+    final faits = <String>{};
     final scores = <String, int>{};
     for (final e in (j['subtests'] as List? ?? const [])) {
       if (e is! Map) continue;
       final code = e['subtest'];
+      if (code is! String || code.isEmpty) continue;
+      faits.add(code);
       final score = e['rawScore'];
-      if (code is String && code.isNotEmpty && score is int) scores[code] = score;
+      if (score is int) scores[code] = score;
     }
     return RemoteResumableSession(
       clientSessionId: id,
+      completedCodes: faits,
       scoresByCode: scores,
       startedOn: DateTime.tryParse('${j['startedOn']}'),
       durationS: j['durationS'] is int ? j['durationS'] as int : null,

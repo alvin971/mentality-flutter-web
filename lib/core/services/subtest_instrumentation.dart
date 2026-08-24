@@ -117,14 +117,28 @@ class SubtestInstrumentation {
   }
 
   /// Bloc `subtests[]` attendu par `UnlockService.uploadTestResults`.
-  Map<String, dynamic> toPayload({int? rawScore, int? maxScore}) =>
-      <String, dynamic>{
-        'subtest': subtest,
-        if (rawScore != null) 'rawScore': rawScore,
-        if (maxScore != null) 'maxScore': maxScore,
-        'itemsAdministered': _items.length,
-        'itemsCorrect': _items.where((e) => e['isCorrect'] == true).length,
-        if (medianLatencyMs != null) 'medianLatencyMs': medianLatencyMs,
-        'items': List<Map<String, dynamic>>.unmodifiable(_items),
-      };
+  /// [scoring] marque un sous-test dont la correction est confiée à une IA en
+  /// aval ('ai_pending'). Sans lui, un `raw_score` nul serait indiscernable
+  /// d'un calcul qui a échoué.
+  Map<String, dynamic> toPayload({
+    int? rawScore,
+    int? maxScore,
+    String? scoring,
+  }) {
+    // Un sous-test non noté n'a AUCUN item jugé correct — mais annoncer
+    // « 0 correct » serait un jugement, pas une absence de jugement. On omet
+    // donc le compte quand rien n'a été jugé.
+    final juges = _items.where((e) => e.containsKey('isCorrect'));
+    return <String, dynamic>{
+      'subtest': subtest,
+      if (rawScore != null) 'rawScore': rawScore,
+      if (maxScore != null) 'maxScore': maxScore,
+      if (scoring != null) 'scoring': scoring,
+      'itemsAdministered': _items.length,
+      if (juges.isNotEmpty)
+        'itemsCorrect': juges.where((e) => e['isCorrect'] == true).length,
+      if (medianLatencyMs != null) 'medianLatencyMs': medianLatencyMs,
+      'items': List<Map<String, dynamic>>.unmodifiable(_items),
+    };
+  }
 }

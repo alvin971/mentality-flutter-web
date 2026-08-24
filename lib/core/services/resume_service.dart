@@ -35,29 +35,25 @@ import 'results_sync.dart';
 /// Une passation interrompue, prête à repartir.
 class ResumableSession {
   const ResumableSession({
+    required this.completedCodes,
     required this.scoresByCode,
-    required this.completedTests,
-    required this.nextIndex,
     required this.startTime,
     required this.serverStartedOn,
     required this.clientSessionId,
     required this.knownToServer,
   });
 
-  /// Code WAIS-IV stable → score brut, union du local et du serveur.
-  final Map<String, int> scoresByCode;
-
-  /// Libellés de [CompleteTestSession.testSequence] déjà terminés, DANS l'ordre
-  /// de la séquence — c'est ce que le modèle de session attend.
-  final List<String> completedTests;
-
-  /// Rang, dans la séquence, du premier sous-test qui reste à passer.
+  /// Codes WAIS-IV stables des sous-tests ADMINISTRÉS — indépendamment du fait
+  /// qu'ils portent un score.
   ///
-  /// Calculé comme le premier ABSENT, pas comme un compteur : la séquence peut
-  /// avoir des trous (un sous-test dont l'envoi a échoué et dont le score local
-  /// a été perdu) et un simple `completedTests.length` sauterait alors un
-  /// exercice sans que rien ne le signale.
-  final int nextIndex;
+  /// C'est la distinction qui compte depuis que Similitudes et Vocabulaire sont
+  /// notés par une IA en aval : leur `raw_score` est nul alors qu'ils sont bel
+  /// et bien passés. Se fier aux scores pour savoir ce qui est fait ferait
+  /// REPASSER ces deux exercices à chaque reprise.
+  final Set<String> completedCodes;
+
+  /// Code stable → score brut, pour les seuls sous-tests qui en ont un.
+  final Map<String, int> scoresByCode;
 
   /// Début de la passation. Vaut l'instant de la reprise quand seul le serveur
   /// connaît cette passation : il n'en garde que la JOURNÉE (granularité voulue,
@@ -78,6 +74,27 @@ class ResumableSession {
   /// Vrai si le serveur connaît cette passation. Faux = reprise purement locale
   /// (hors ligne, ou envois jamais partis).
   final bool knownToServer;
+
+  /// Libellés de [CompleteTestSession.testSequence] déjà terminés, dans l'ordre
+  /// de la séquence — c'est ce que le modèle de session attend.
+  List<String> get completedTests => [
+        for (final l in CompleteTestSession.testSequence)
+          if (completedCodes.contains(CompleteTestSession.subtestCodes[l])) l,
+      ];
+
+  /// Rang du premier sous-test qui reste à passer.
+  ///
+  /// Le premier ABSENT, jamais un compteur : la séquence peut avoir des trous
+  /// (un envoi perdu, un score jamais transmis) et `completedTests.length`
+  /// sauterait alors un exercice sans que rien ne le signale.
+  int get nextIndex {
+    for (var i = 0; i < CompleteTestSession.testSequence.length; i++) {
+      final code =
+          CompleteTestSession.subtestCodes[CompleteTestSession.testSequence[i]];
+      if (code == null || !completedCodes.contains(code)) return i;
+    }
+    return CompleteTestSession.testSequence.length;
+  }
 
   int get completedCount => completedTests.length;
   int get totalTests => CompleteTestSession.testSequence.length;
@@ -181,31 +198,28 @@ class ResumeService {
   }) {
     if (local == null && distant == null) return null;
 
-    // Le serveur fait autorité sur les scores qu'il connaît : le local peut
+    // ADMINISTRÉS : union de ce que chaque côté a vu passer. Un sous-test noté
+    // par IA n'a pas de score et compte quand même — sans quoi la reprise le
+    // referait passer.
+    final faits = <String>{
+      ...?local?.completedTests
+          .map((l) => CompleteTestSession.subtestCodes[l])
+          .whereType<String>(),
+      ...?distant?.completedCodes,
+    };
+    if (faits.isEmpty) return null;
+
+    // SCORES : le serveur fait autorité sur ceux qu'il connaît. Le local peut
     // porter un score qu'un envoi n'a jamais réussi à transmettre, mais jamais
     // une valeur PLUS À JOUR pour un sous-test que le serveur a déjà.
     final scores = <String, int>{
       ...?local?.scoresByCode,
       ...?distant?.scoresByCode,
     };
-    if (scores.isEmpty) return null;
-
-    final faits = <String>[];
-    var suivant = CompleteTestSession.testSequence.length;
-    for (var i = 0; i < CompleteTestSession.testSequence.length; i++) {
-      final libelle = CompleteTestSession.testSequence[i];
-      final code = CompleteTestSession.subtestCodes[libelle];
-      if (code != null && scores.containsKey(code)) {
-        faits.add(libelle);
-      } else if (suivant == CompleteTestSession.testSequence.length) {
-        suivant = i; // premier ABSENT, trous compris
-      }
-    }
 
     return ResumableSession(
+      completedCodes: faits,
       scoresByCode: scores,
-      completedTests: faits,
-      nextIndex: suivant,
       // Reculer le départ de la durée déjà acquise, plutôt que de repartir de
       // maintenant : la sémantique de `totalDuration` (fin − début) reste celle
       // d'aujourd'hui, et une reprise sur appareil neuf ne sous-déclare plus le
@@ -225,7 +239,9 @@ class ResumeService {
     final charge = SessionPersistenceService.instance.loadSession();
     if (charge == null) return null;
     if (_joursPleins(charge.session.startTime) > fenetreJours) return null;
-    if (charge.session.scoresByCode.isEmpty) return null;
+    // Sur `completedTests` et non sur les scores : un sous-test noté par IA est
+    // terminé sans porter de score.
+    if (charge.session.completedTests.isEmpty) return null;
     return charge.session;
   }
 

@@ -943,6 +943,10 @@ async function handleResults(env, origin, account, body, identite) {
       items_correct: Number.isInteger(t?.itemsCorrect) ? t.itemsCorrect : null,
       median_latency_ms:
         Number.isInteger(t?.medianLatencyMs) ? t.medianLatencyMs : null,
+      // Sous-test à réponse libre, dont la notation est confiée à une IA en
+      // aval (migration 017). Sans ce marqueur, son `raw_score` nul serait
+      // indiscernable d'un calcul qui a échoué.
+      scoring_status: t?.scoring === 'ai_pending' ? 'ai_pending' : null,
     })).filter((t) => t.subtest.length > 0);
 
     let rRes = { ok: true };

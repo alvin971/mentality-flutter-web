@@ -10,6 +10,7 @@ import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/similarities_generator.dart';
 import '../../../../../core/services/results_sync.dart';
+import '../../../../../core/models/complete_test_session.dart';
 import '../../../../../core/services/subtest_instrumentation.dart';
 
 /// Page du test des Similitudes (Similarities)
@@ -27,9 +28,13 @@ class SimilaritiesTestPage extends StatefulWidget {
 
 class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
   int currentLevel = 0;
-  int score = 0;
+
   int totalTime = 0;
-  int _consecutiveZeros = 0;
+  /// NON-RÉPONSES consécutives. Ce n'est plus le score qui arrête ce sous-test.
+  /// La notation algorithmique s'est révélée fausse sur des réponses justes
+  /// (« Fruit » refusé parce que la table dit « Des fruits ») et disqualifiait
+  /// des gens qui avaient bien répondu. Seul un renoncement explicite arrête.
+  int _consecutiveSkips = 0;
   final TextEditingController _answerController = TextEditingController();
 
   /// Mesure item par item (latence, hésitation, reprises).
@@ -154,7 +159,11 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
     if (currentLevel < _generatedItems.length) {
       _instr.startItem(
         index: currentLevel,
-        itemId: _generatedItems[currentLevel].toString(),
+        // `toString()` sur une classe sans surcharge écrivait
+        // « Instance of 'SimilarityItem' » : l'IA qui note en aval n'aurait
+        // jamais su QUELLE paire de mots a été présentée.
+        itemId: '${_generatedItems[currentLevel].word1}/'
+            '${_generatedItems[currentLevel].word2}',
       );
     }
 
@@ -187,22 +196,18 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
     final currentItem = _generatedItems[currentLevel];
     final userAnswer = _answerController.text.trim();
 
-    // Scoring automatique basé sur les réponses pré-définies
-    final itemScore = currentItem.scoreAnswer(userAnswer);
+    final renonce = userAnswer.isEmpty;
 
-    score += itemScore;
+    // AUCUN jugement ici. On enregistre la réponse telle qu'elle a été écrite ;
+    // ni `score` ni `isCorrect` ne partent, une IA les établira en aval à partir
+    // de l'item et de la réponse. Poser un « 0 » algorithmique serait un
+    // jugement faux, pas une absence de jugement.
+    _instr.endItem(response: userAnswer, skipped: renonce);
 
-    _instr.endItem(
-      response: userAnswer,
-      isCorrect: itemScore > 0,
-      score: itemScore,
-    );
-
-    // Gestion des échecs consécutifs
-    if (itemScore == 0) {
-      _consecutiveZeros++;
+    if (renonce) {
+      _consecutiveSkips++;
     } else {
-      _consecutiveZeros = 0;
+      _consecutiveSkips = 0;
     }
 
     // Enregistrer le résultat
@@ -210,13 +215,12 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
       word1: currentItem.word1,
       word2: currentItem.word2,
       userAnswer: userAnswer,
-      score: itemScore,
+      score: 0,
       timeSeconds: timeSeconds,
     ));
 
-    // Test non noté à l'écran : on enchaîne sans retour de score.
-    // Discontinuation WAIS-IV : 3 scores de 0 consécutifs.
-    if (_consecutiveZeros >= 3 ||
+    // Arrêt sur RENONCEMENT — 3 items passés d'affilée —, jamais sur un score.
+    if (_consecutiveSkips >= 3 ||
         currentLevel >= _generatedItems.length - 1) {
       _showFinalResults();
     } else {
@@ -232,7 +236,9 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
     // fermée plus loin dans la batterie ne doit pas emporter ce qui a déjà
     // été mesuré. Tir-et-oublie, fail-soft.
     unawaited(ResultsSync.instance.flushSubtest(
-      _instr.toPayload(rawScore: score, maxScore: _generatedItems.length * 2),
+      // Ni `rawScore` ni `maxScore` : le score n'existe pas encore. Le marqueur
+      // distingue « en attente de notation » d'un calcul qui aurait échoué.
+      _instr.toPayload(scoring: 'ai_pending'),
     ));
 
     // Test non noté à l'écran : aucun récapitulatif de points/temps/réussite,
@@ -246,7 +252,9 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
-              Navigator.of(context).pop(score);
+              // Terminé, mais délibérément NON NOTÉ (≠ null, qui veut dire
+              // « quitté sans finir » et rouvrirait le dialogue de reprise).
+              Navigator.of(context).pop(CompleteTestSession.awaitingAiScore);
             },
             child: Text(context.l10n.simBack),
           ),
@@ -301,12 +309,30 @@ class _SimilaritiesTestPageState extends State<SimilaritiesTestPage> {
               // pas requise pour continuer.
               onPressed: _startRealTest,
             )
-          : KeplerTestButton.primary(
-              label: context.l10n.commonValidate,
-              accentColor: AppColors.indexVCI,
-              onPressed: _answerController.text.trim().isNotEmpty
-                  ? _submitAnswer
-                  : null,
+          : Row(
+              children: [
+                // Sans « Passer », l'arrêt sur non-réponse serait INATTEIGNABLE :
+                // « Valider » est désactivé tant que le champ est vide, donc il
+                // était impossible de ne pas répondre.
+                Expanded(
+                  child: KeplerTestButton.outlined(
+                    label: context.l10n.commonSkip,
+                    accentColor: AppColors.indexVCI,
+                    onPressed: _submitAnswer,
+                  ),
+                ),
+                SizedBox(width: 12.w),
+                Expanded(
+                  flex: 2,
+                  child: KeplerTestButton.primary(
+                    label: context.l10n.commonValidate,
+                    accentColor: AppColors.indexVCI,
+                    onPressed: _answerController.text.trim().isNotEmpty
+                        ? _submitAnswer
+                        : null,
+                  ),
+                ),
+              ],
             ),
       child: Column(
 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -450,7 +476,13 @@ crossAxisAlignment: CrossAxisAlignment.stretch,
                 // bouton Valider.
                 textInputAction: TextInputAction.done,
                 onSubmitted: (_) {
-                  if (_answerController.text.trim().isNotEmpty) {
+                  // PENDANT LA DÉMO, « Terminé » doit faire ce que fait le
+                  // bouton du bas : démarrer le test. Sans cette garde, la
+                  // touche validait un item RÉEL jamais affiché — réponse
+                  // perdue, item sauté, zéro injecté dans le compteur d'arrêt.
+                  if (_demoPhase) {
+                    _startRealTest();
+                  } else if (_answerController.text.trim().isNotEmpty) {
                     _submitAnswer();
                   }
                 },

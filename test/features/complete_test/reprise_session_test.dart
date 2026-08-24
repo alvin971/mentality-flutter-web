@@ -16,14 +16,9 @@ import 'package:mentality/features/unlock/data/unlock_service.dart';
 
 /// Session locale portant les scores donnés, dans l'ordre de la séquence.
 CompleteTestSession locale(Map<String, int> scoresParCode, {DateTime? debut}) {
-  final faits = [
-    for (final l in CompleteTestSession.testSequence)
-      if (scoresParCode.containsKey(CompleteTestSession.subtestCodes[l])) l,
-  ];
   return ResumableSession(
+    completedCodes: scoresParCode.keys.toSet(),
     scoresByCode: scoresParCode,
-    completedTests: faits,
-    nextIndex: faits.length,
     startTime: debut ?? DateTime.now(),
     serverStartedOn: null,
     clientSessionId: null,
@@ -39,6 +34,7 @@ RemoteResumableSession distante(
 }) =>
     RemoteResumableSession(
       clientSessionId: id,
+      completedCodes: scores.keys.toSet(),
       scoresByCode: scores,
       durationS: durationS,
       startedOn: startedOn,
@@ -50,7 +46,7 @@ void main() {
       expect(ResumeService.fusionne(), isNull);
     });
 
-    test('une session vide de tout score ne se reprend pas', () {
+    test("une session dont aucun exercice n'est fait ne se reprend pas", () {
       expect(ResumeService.fusionne(local: locale({})), isNull);
     });
 
@@ -143,6 +139,54 @@ void main() {
       expect(r.completedCount, 1);
       expect(r.nextTestName, 'Similitudes');
       expect(() => r.toSession(), returnsNormally);
+    });
+  });
+
+  group('sous-tests notés par une IA (sans score)', () {
+    test(
+        'un exercice ADMINISTRÉ sans score compte comme fait — sinon la reprise '
+        'le referait passer', () {
+      // Similitudes et Vocabulaire n'envoient plus de `rawScore` : une IA les
+      // note en aval. Se fier aux scores pour savoir ce qui est fait les
+      // remettrait au programme à chaque reprise, indéfiniment.
+      final r = ResumeService.fusionne(
+        distant: RemoteResumableSession(
+          clientSessionId: '6c0ac833-fb7f-4450-9e52-6721cdd6a498',
+          completedCodes: {'block_design', 'similarities'},
+          scoresByCode: {'block_design': 42}, // similarities : aucun score
+        ),
+      )!;
+      expect(r.completedCount, 2);
+      expect(r.nextTestName, 'Mémoire des Chiffres');
+      expect(r.scoresByCode.containsKey('similarities'), isFalse);
+    });
+
+    test('la session reconstruite laisse le champ de score à null', () {
+      final r = ResumeService.fusionne(
+        distant: RemoteResumableSession(
+          clientSessionId: '6c0ac833-fb7f-4450-9e52-6721cdd6a498',
+          completedCodes: {'block_design', 'similarities'},
+          scoresByCode: {'block_design': 42},
+        ),
+      )!;
+      final s = r.toSession();
+      expect(s.cubesScore, 42);
+      expect(s.similaritiesScore, isNull);
+      expect(s.completedTests, ['Cubes', 'Similitudes']);
+      expect(s.currentTestIndex, 2);
+    });
+
+    test('une passation faite ENTIÈREMENT de sous-tests non notés se reprend',
+        () {
+      final r = ResumeService.fusionne(
+        distant: RemoteResumableSession(
+          clientSessionId: '6c0ac833-fb7f-4450-9e52-6721cdd6a498',
+          completedCodes: {'similarities'},
+          scoresByCode: const {},
+        ),
+      );
+      expect(r, isNotNull);
+      expect(r!.completedCount, 1);
     });
   });
 

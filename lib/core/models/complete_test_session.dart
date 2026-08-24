@@ -67,6 +67,23 @@ class CompleteTestSession {
     'Balances',
   ];
 
+  /// Rendu par un sous-test administré mais VOLONTAIREMENT non noté : sa
+  /// correction est confiée à une IA en aval.
+  ///
+  /// À ne pas confondre avec `null`, qui veut dire « quitté sans terminer » et
+  /// déclenche le dialogue de reprise. Il fallait une troisième valeur : le
+  /// sous-test est bien fini, il n'a simplement pas de score à ce stade.
+  static const int awaitingAiScore = -1;
+
+  /// Sous-tests à RÉPONSE LIBRE, dont la notation algorithmique a été retirée.
+  ///
+  /// Un comparateur de chaînes ne peut pas juger « en quoi une orange et une
+  /// banane se ressemblent-elles ». Le premier test réel l'a montré : « Fruit »
+  /// a été compté zéro parce que la table dit « Des fruits », et trois zéros de
+  /// ce genre arrêtaient le sous-test d'une personne qui avait bien répondu.
+  /// On enregistre donc les réponses telles quelles et une IA note ensuite.
+  static const Set<String> aiScoredSubtests = {'similarities', 'vocabulary'};
+
   /// Codes stables des sous-tests, pour la base et l'analyse.
   ///
   /// [testSequence] contient des LIBELLÉS D'AFFICHAGE français : ils changent

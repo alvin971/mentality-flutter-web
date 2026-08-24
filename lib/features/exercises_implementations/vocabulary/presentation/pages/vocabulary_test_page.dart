@@ -10,6 +10,7 @@ import '../../../../../core/widgets/test/kepler_test_button.dart';
 import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/vocabulary_generator.dart';
 import '../../../../../core/services/results_sync.dart';
+import '../../../../../core/models/complete_test_session.dart';
 import '../../../../../core/services/subtest_instrumentation.dart';
 
 /// Page du test de Vocabulaire (Vocabulary)
@@ -27,9 +28,13 @@ class VocabularyTestPage extends StatefulWidget {
 
 class _VocabularyTestPageState extends State<VocabularyTestPage> {
   int currentLevel = 0;
-  int score = 0;
+
   int totalTime = 0;
-  int _consecutiveZeros = 0;
+  /// NON-RÉPONSES consécutives. Ce n'est plus le score qui arrête ce sous-test.
+  /// La notation algorithmique s'est révélée fausse sur des réponses justes
+  /// (« Fruit » refusé parce que la table dit « Des fruits ») et disqualifiait
+  /// des gens qui avaient bien répondu. Seul un renoncement explicite arrête.
+  int _consecutiveSkips = 0;
   final TextEditingController _answerController = TextEditingController();
 
   /// Mesure item par item (latence, hésitation, reprises) — cf.
@@ -150,35 +155,27 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
     final currentItem = _generatedItems[currentLevel];
     final userAnswer = _answerController.text.trim();
 
-    // Scoring automatique basé sur les réponses pré-définies
-    final itemScore = currentItem.scoreAnswer(userAnswer);
+    final renonce = userAnswer.isEmpty;
 
-    score += itemScore;
-
-    // Gestion des échecs consécutifs
-    if (itemScore == 0) {
-      _consecutiveZeros++;
-    } else {
-      _consecutiveZeros = 0;
-    }
-
-    // Enregistrer le résultat
+    // AUCUN jugement ici — cf. Similitudes. La définition d'un mot ne se juge
+    // pas par comparaison de chaînes ; une IA notera en aval.
     _results.add(ItemResult(
       word: currentItem.word,
       userAnswer: userAnswer,
-      score: itemScore,
+      score: 0,
       timeSeconds: timeSeconds,
     ));
 
-    _instr.endItem(
-      response: userAnswer,
-      isCorrect: itemScore > 0,
-      score: itemScore,
-    );
+    _instr.endItem(response: userAnswer, skipped: renonce);
 
-    // Test non noté à l'écran : on enchaîne sans retour de score.
-    // Discontinuation WAIS-IV : 3 scores de 0 consécutifs.
-    if (_consecutiveZeros >= 3 ||
+    if (renonce) {
+      _consecutiveSkips++;
+    } else {
+      _consecutiveSkips = 0;
+    }
+
+    // Arrêt sur RENONCEMENT — 3 items passés d'affilée —, jamais sur un score.
+    if (_consecutiveSkips >= 3 ||
         currentLevel >= _generatedItems.length - 1) {
       _showFinalResults();
     } else {
@@ -194,7 +191,8 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
     // seul envoi à la fin des 12 : une app fermée plus loin dans la batterie ne
     // doit pas emporter ce qui a déjà été mesuré. Tir-et-oublie, fail-soft.
     unawaited(ResultsSync.instance.flushSubtest(
-      _instr.toPayload(rawScore: score, maxScore: _generatedItems.length * 2),
+      // Ni `rawScore` ni `maxScore` : le score n'existe pas encore.
+      _instr.toPayload(scoring: 'ai_pending'),
     ));
 
     // Test non noté à l'écran : aucun récapitulatif de points/temps/réussite,
@@ -208,7 +206,9 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
-              Navigator.of(context).pop(score);
+              // Terminé, mais délibérément NON NOTÉ (≠ null, qui veut dire
+              // « quitté sans finir »).
+              Navigator.of(context).pop(CompleteTestSession.awaitingAiScore);
             },
             child: Text(context.l10n.commonBack),
           ),
@@ -265,12 +265,28 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
               accentColor: AppColors.indexVCI,
               onPressed: _startRealTest,
             )
-          : KeplerTestButton.primary(
-              label: l10n.commonValidate,
-              accentColor: AppColors.indexVCI,
-              onPressed: _answerController.text.trim().isNotEmpty
-                  ? _submitAnswer
-                  : null,
+          : Row(
+              children: [
+                // Sans « Passer », l'arrêt sur non-réponse serait inatteignable.
+                Expanded(
+                  child: KeplerTestButton.outlined(
+                    label: l10n.commonSkip,
+                    accentColor: AppColors.indexVCI,
+                    onPressed: _submitAnswer,
+                  ),
+                ),
+                SizedBox(width: 12.w),
+                Expanded(
+                  flex: 2,
+                  child: KeplerTestButton.primary(
+                    label: l10n.commonValidate,
+                    accentColor: AppColors.indexVCI,
+                    onPressed: _answerController.text.trim().isNotEmpty
+                        ? _submitAnswer
+                        : null,
+                  ),
+                ),
+              ],
             ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -408,7 +424,13 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
             // champ referme le clavier — sinon il masque le bouton Valider.
             textInputAction: TextInputAction.done,
             onSubmitted: (_) {
-              if (_answerController.text.trim().isNotEmpty) _submitAnswer();
+              // Pendant la démo, « Terminé » démarre le test au lieu de valider
+              // un item réel jamais affiché (cf. Similitudes).
+              if (_demoPhase) {
+                _startRealTest();
+              } else if (_answerController.text.trim().isNotEmpty) {
+                _submitAnswer();
+              }
             },
             onTapOutside: (_) =>
                 FocusManager.instance.primaryFocus?.unfocus(),
