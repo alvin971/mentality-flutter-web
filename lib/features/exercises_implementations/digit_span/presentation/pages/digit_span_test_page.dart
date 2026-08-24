@@ -10,6 +10,7 @@ import '../../../../../core/widgets/test/kepler_test_scaffold.dart';
 import '../../domain/digit_span_generator.dart';
 import '../../../../../core/services/results_sync.dart';
 import '../../../../../core/services/subtest_instrumentation.dart';
+import '../../../../../core/services/subtest_progress_store.dart';
 
 /// Page du test Mémoire des Chiffres (Digit Span)
 /// 3 parties : Forward, Backward, Sequencing
@@ -63,6 +64,35 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
     _forwardItems = _generator.getForwardItems();
     _backwardItems = _generator.getBackwardItems();
     _sequencingItems = _generator.getSequencingItems();
+    _reprendreSiInterrompu();
+  }
+
+  /// Reprend l'exercice là où une pause l'a laissé.
+  ///
+  /// Lecture SYNCHRONE — on est dans `initState`, on ne peut pas attendre, et
+  /// le premier écran doit déjà refléter le bon endroit. Sans reprise, tout
+  /// l'exercice repartait de son premier item : trois parties à refaire pour
+  /// une pause prise à la dernière.
+  void _reprendreSiInterrompu() {
+    final p = SubtestProgressStore.instance.pour('digit_span');
+    if (p == null) return;
+    final e = p.etat;
+    _currentSpanType = SpanType.values.firstWhere(
+      (v) => v.name == e['spanType'],
+      orElse: () => SpanType.forward,
+    );
+    _currentItemIndex = e['itemIndex'] is int ? e['itemIndex'] as int : 0;
+    _forwardScore = e['forward'] is int ? e['forward'] as int : 0;
+    _backwardScore = e['backward'] is int ? e['backward'] as int : 0;
+    _sequencingScore = e['sequencing'] is int ? e['sequencing'] as int : 0;
+    // Le compteur d'échecs repart à zéro : il porte sur une longueur de
+    // séquence en cours, notion qui ne survit pas à une interruption. Au pire
+    // l'exercice dure un essai de plus — jamais un de moins.
+    _failuresAtCurrentLength = 0;
+    _instr.rehydrate(p.items);
+    // On rentre par l'introduction de partie : reprendre en plein milieu d'une
+    // présentation auditive n'aurait aucun sens, la séquence a été entendue.
+    _currentPhase = TestPhase.partIntro;
   }
 
   @override
@@ -206,6 +236,20 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
         break;
     }
 
+    unawaited(SubtestProgressStore.instance.jalon(
+      subtest: 'digit_span',
+      prochainItem: _currentItemIndex + 1,
+      score: _forwardScore + _backwardScore + _sequencingScore,
+      instr: _instr,
+      etat: {
+        'spanType': _currentSpanType.name,
+        'itemIndex': _currentItemIndex + 1,
+        'forward': _forwardScore,
+        'backward': _backwardScore,
+        'sequencing': _sequencingScore,
+      },
+    ));
+
     _nextItem();
   }
 
@@ -267,6 +311,10 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
     // Les mesures partent MAINTENANT, sous-test par sous-test : une app
     // fermée plus loin dans la batterie ne doit pas emporter ce qui a déjà
     // été mesuré. Tir-et-oublie, fail-soft.
+    // L'exercice est fini : il n'y a plus rien à reprendre. Laisser le point
+    // de reprise en place le ferait redémarrer au milieu la fois suivante.
+    unawaited(SubtestProgressStore.instance.clear());
+
     unawaited(ResultsSync.instance.flushSubtest(
       _instr.toPayload(),
     ));

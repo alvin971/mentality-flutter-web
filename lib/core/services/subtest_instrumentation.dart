@@ -103,6 +103,21 @@ class SubtestInstrumentation {
 
   int get itemCount => _items.length;
 
+  /// Les mesures brutes, pour les confier au point de reprise.
+  List<Map<String, dynamic>> get itemsBruts =>
+      List<Map<String, dynamic>>.unmodifiable(_items);
+
+  /// Réinstalle des mesures collectées avant une pause.
+  ///
+  /// Sans elle, reprendre un exercice au milieu repartirait avec une
+  /// instrumentation vide : les items déjà passés disparaîtraient des données,
+  /// et `itemsAdministered` mentirait sur ce qui a réellement été présenté.
+  void rehydrate(List<Map<String, dynamic>> items) {
+    _items
+      ..clear()
+      ..addAll(items.map(Map<String, dynamic>.from));
+  }
+
   /// Latence médiane, pour `test_results.median_latency_ms`.
   int? get medianLatencyMs {
     final l = _items
@@ -120,10 +135,14 @@ class SubtestInstrumentation {
   /// [scoring] marque un sous-test dont la correction est confiée à une IA en
   /// aval ('ai_pending'). Sans lui, un `raw_score` nul serait indiscernable
   /// d'un calcul qui a échoué.
+  /// [partial] marque un exercice INTERROMPU : ses réponses sont conservées,
+  /// mais il reste à finir. [resumeItemIndex] dit à quel rang le reprendre.
   Map<String, dynamic> toPayload({
     int? rawScore,
     int? maxScore,
     String? scoring,
+    bool partial = false,
+    int? resumeItemIndex,
   }) {
     // Un sous-test non noté n'a AUCUN item jugé correct — mais annoncer
     // « 0 correct » serait un jugement, pas une absence de jugement. On omet
@@ -134,6 +153,8 @@ class SubtestInstrumentation {
       if (rawScore != null) 'rawScore': rawScore,
       if (maxScore != null) 'maxScore': maxScore,
       if (scoring != null) 'scoring': scoring,
+      if (partial) 'partial': true,
+      if (partial && resumeItemIndex != null) 'resumeItemIndex': resumeItemIndex,
       'itemsAdministered': _items.length,
       if (juges.isNotEmpty)
         'itemsCorrect': juges.where((e) => e['isCorrect'] == true).length,

@@ -157,6 +157,16 @@ class ResultsSync {
   ///
   /// [payload] vient de `SubtestInstrumentation.toPayload()`.
   Future<void> flushSubtest(Map<String, dynamic> payload) async {
+    // Un sous-test ne peut figurer QU'UNE FOIS dans la file. Depuis que les
+    // exercices s'envoient aussi en cours de route, un envoi partiel non parti
+    // pouvait être rejoint par l'envoi final du même exercice : les deux lignes
+    // partaient dans la MÊME requête, et Postgres refuse un upsert qui touche
+    // deux fois la même ligne de conflit. Le dernier état gagne, ce qui est
+    // exactement la sémantique voulue.
+    final code = payload['subtest'];
+    if (code is String && code.isNotEmpty) {
+      _enAttente.removeWhere((e) => e['subtest'] == code);
+    }
     _enAttente.add(payload);
     await _persiste();          // AVANT l'envoi : si l'app meurt ici, rien n'est perdu
     await _envoie(status: 'in_progress');

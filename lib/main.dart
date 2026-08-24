@@ -15,6 +15,7 @@ import 'core/router/app_router.dart';
 import 'core/constants/app_constants.dart';
 import 'core/services/remote_config_service.dart';
 import 'core/services/results_sync.dart';
+import 'core/services/subtest_progress_store.dart';
 import 'features/waiting_event/_shared/data/event_upload_service.dart';
 import 'services/data_collection_service.dart';
 import 'features/unlock/data/completion_reporter.dart';
@@ -64,6 +65,8 @@ Future<void> _configureApp() async {
     // Les autres boxes partagent la même clé AES générée par DataCollectionService
     final cipher = await DataCollectionService.buildSharedCipher();
     await SessionPersistenceService.instance.initialize(encryptionCipher: cipher);
+    // L'exercice en cours, pour qu'une pause puisse tomber en plein exercice.
+    await SubtestProgressStore.instance.initialize(encryptionCipher: cipher);
     await SessionHistoryService.instance.initialize(encryptionCipher: cipher);
   } catch (_) {
     // Ne pas bloquer le démarrage si Hive échoue

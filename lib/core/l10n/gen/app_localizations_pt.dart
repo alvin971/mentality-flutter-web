@@ -2524,6 +2524,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get psImgFusee => 'Foguetão';
 
   @override
+  String get speedNoPauseTitle => '2 minutos sem interrupção';
+
+  @override
+  String get speedNoPauseBody =>
+      'Este exercício mede a sua velocidade num período contínuo. Não pode ser pausado: se sair, terá de o repetir desde o início. Instale-se antes de começar.';
+
+  @override
+  String get speedNoPauseConfirm => 'Estou pronto';
+
+  @override
   String get ctShareScore => 'Partilhar a minha pontuação';
 
   @override

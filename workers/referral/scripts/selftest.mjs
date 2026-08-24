@@ -1068,8 +1068,11 @@ console.log('\n/results/session — reprise : lire où en est la passation');
     verifie('les scores bruts sont rendus par CODE stable, pas par libellé',
       se && se.subtests[0].subtest === 'block_design' && se.subtests[0].rawScore === 34,
       JSON.stringify(se && se.subtests));
+    // Liste BLANCHE, et non une égalité de chaîne : ce qui compte est
+    // qu'aucune clé INATTENDUE n'apparaisse, pas l'ordre ni le nombre.
+    const permises = ['clientSessionId', 'startedOn', 'durationS', 'subtests', 'inProgress'];
     verifie("aucune donnée nominative ne sort de cette route",
-      se && Object.keys(se).join(',') === 'clientSessionId,startedOn,durationS,subtests',
+      se && Object.keys(se).every((k) => permises.includes(k)),
       Object.keys(se || {}).join(','));
   }
 
@@ -1147,6 +1150,92 @@ console.log('\n/results/session — reprise : lire où en est la passation');
     const { statut } = await appel(kvNu(), { ...PROD, ...SB }, '/results/session', 'GET',
       undefined, { token: 'bidon' });
     verifie('token invalide → 401 avant toute lecture', statut === 401);
+  }
+}
+
+console.log('\n/results/session — exercice INTERROMPU : reprendre, pas sauter');
+{
+  const vraiFetch = globalThis.fetch;
+  const SB = { SUPABASE_URL: 'https://sb.test', SUPABASE_SERVICE_KEY: 'sb_secret_faux' };
+  const CSID = '6c0ac833-fb7f-4450-9e52-6721cdd6a498';
+  const jour = () => new Date().toISOString().slice(0, 10);
+
+  const brancher = (results) => {
+    const capte = [];
+    globalThis.fetch = async (url, init = {}) => {
+      const u = String(url);
+      capte.push({ url: u, method: init.method || 'GET',
+        body: init.body ? JSON.parse(init.body) : null });
+      if (u.includes('test_sessions') && (init.method || 'GET') === 'GET') {
+        return new Response(JSON.stringify(
+          [{ id: 's1', client_session_id: CSID, started_on: jour(), duration_s: 600 }]),
+          { status: 200 });
+      }
+      if (u.includes('test_results')) return new Response(JSON.stringify(results), { status: 200 });
+      return new Response('[]', { status: 200 });
+    };
+    return capte;
+  };
+  const debrancher = () => { globalThis.fetch = vraiFetch; };
+
+  {
+    brancher([
+      { subtest: 'block_design', raw_score: 42, is_complete: true, resume_item_index: null },
+      { subtest: 'digit_span', raw_score: null, is_complete: false, resume_item_index: 4 },
+    ]);
+    const { corps } = await appel(kvNu(), { ...PROD, ...SB }, '/results/session', 'GET');
+    debrancher();
+    const se = corps.session;
+    verifie("un exercice interrompu n'est PAS compté comme fait",
+      se && se.subtests.length === 1 && se.subtests[0].subtest === 'block_design',
+      JSON.stringify(se && se.subtests));
+    verifie("il est rendu à part, avec le rang où reprendre",
+      se && se.inProgress && se.inProgress.subtest === 'digit_span'
+      && se.inProgress.resumeItemIndex === 4, JSON.stringify(se && se.inProgress));
+  }
+
+  {
+    brancher([{ subtest: 'block_design', raw_score: 42, is_complete: true }]);
+    const { corps } = await appel(kvNu(), { ...PROD, ...SB }, '/results/session', 'GET');
+    debrancher();
+    verifie('sans exercice interrompu, inProgress est null',
+      corps.session && corps.session.inProgress === null, JSON.stringify(corps.session));
+  }
+
+  {
+    brancher([{ subtest: 'coding', raw_score: null, is_complete: false }]);
+    const { corps } = await appel(kvNu(), { ...PROD, ...SB }, '/results/session', 'GET');
+    debrancher();
+    verifie('un rang de reprise absent retombe sur 0, jamais sur null',
+      corps.session.inProgress.resumeItemIndex === 0,
+      JSON.stringify(corps.session.inProgress));
+  }
+
+  {
+    const capte = [];
+    globalThis.fetch = async (url, init) => {
+      capte.push({ url: String(url), body: JSON.parse(init.body) });
+      if (String(url).includes('test_sessions')) {
+        return new Response(JSON.stringify([{ id: 'sess-1' }]), { status: 201 });
+      }
+      return new Response('[]', { status: 201 });
+    };
+    await appel(kvNu(), { ...PROD, ...SB }, '/results', 'POST', {
+      clientSessionId: CSID, startedAt: '2026-08-24T10:00:00.000Z', status: 'in_progress',
+      subtests: [
+        { subtest: 'digit_span', partial: true, resumeItemIndex: 4,
+          items: [{ index: 0, response: '5-8-2' }] },
+        { subtest: 'block_design', rawScore: 42 },
+      ],
+    });
+    debrancher();
+    const r = capte.find((c) => c.url.includes('test_results'));
+    const ds = r && r.body.find((x) => x.subtest === 'digit_span');
+    const bd = r && r.body.find((x) => x.subtest === 'block_design');
+    verifie("un envoi partiel est marqué inachevé et porte son rang de reprise",
+      ds && ds.is_complete === false && ds.resume_item_index === 4, JSON.stringify(ds));
+    verifie('un envoi normal reste achevé, sans rang de reprise',
+      bd && bd.is_complete === true && bd.resume_item_index === null, JSON.stringify(bd));
   }
 }
 

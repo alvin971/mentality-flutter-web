@@ -193,6 +193,34 @@ class _SymbolSearchTestPageState extends State<SymbolSearchTestPage> {
     );
   }
 
+  /// Cet exercice ne peut pas être mis en pause.
+  ///
+  /// C'est le SEUL endroit de l'app où la pause est refusée, et ce n'est pas
+  /// un oubli : le score est « combien d'items en 120 secondes ». Autoriser une
+  /// interruption laisserait souffler entre deux moitiés, et le résultat ne
+  /// serait plus comparable à celui de quelqu'un qui a tenu la plage d'affilée.
+  /// On le dit AVANT, plutôt que de le découvrir en perdant son travail.
+  Future<void> _confirmerDemarrageChronometre() async {
+    final pret = await showDialog<bool>(
+      context: context,
+      builder: (d) => AlertDialog(
+        title: Text(d.l10n.speedNoPauseTitle),
+        content: Text(d.l10n.speedNoPauseBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(d, false),
+            child: Text(d.l10n.commonCancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(d, true),
+            child: Text(d.l10n.speedNoPauseConfirm),
+          ),
+        ],
+      ),
+    );
+    if (pret == true && mounted) _startTraining();
+  }
+
   @override
   Widget build(BuildContext context) {
     switch (_currentPhase) {
@@ -212,7 +240,7 @@ class _SymbolSearchTestPageState extends State<SymbolSearchTestPage> {
       bottomBar: KeplerTestButton.primary(
         label: context.l10n.codingStartTraining,
         accentColor: AppColors.indexPSI,
-        onPressed: _startTraining,
+        onPressed: _confirmerDemarrageChronometre,
       ),
       child: Column(
 crossAxisAlignment: CrossAxisAlignment.start,

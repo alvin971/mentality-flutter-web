@@ -4509,6 +4509,24 @@ abstract class AppLocalizations {
   /// **'Fusée'**
   String get psImgFusee;
 
+  /// Titre de la confirmation avant un exercice chronométré
+  ///
+  /// In fr, this message translates to:
+  /// **'2 minutes sans interruption'**
+  String get speedNoPauseTitle;
+
+  /// Corps de la confirmation avant un exercice chronométré
+  ///
+  /// In fr, this message translates to:
+  /// **'Cet exercice mesure votre vitesse sur une plage continue. Il ne peut pas être mis en pause : si vous le quittez, il devra être repassé depuis le début. Installez-vous avant de commencer.'**
+  String get speedNoPauseBody;
+
+  /// Bouton confirmant le démarrage d'un exercice chronométré
+  ///
+  /// In fr, this message translates to:
+  /// **'Je suis prêt'**
+  String get speedNoPauseConfirm;
+
   /// No description provided for @ctShareScore.
   ///
   /// In fr, this message translates to:

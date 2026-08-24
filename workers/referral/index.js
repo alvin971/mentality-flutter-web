@@ -947,6 +947,12 @@ async function handleResults(env, origin, account, body, identite) {
       // aval (migration 017). Sans ce marqueur, son `raw_score` nul serait
       // indiscernable d'un calcul qui a échoué.
       scoring_status: t?.scoring === 'ai_pending' ? 'ai_pending' : null,
+      // Exercice INTERROMPU (migration 018). Sans cette distinction, la reprise
+      // verrait la ligne, croirait l'exercice fait, et le sauterait.
+      is_complete: t?.partial !== true,
+      resume_item_index:
+        t?.partial === true && Number.isInteger(t?.resumeItemIndex)
+          ? t.resumeItemIndex : null,
     })).filter((t) => t.subtest.length > 0);
 
     let rRes = { ok: true };
@@ -1106,16 +1112,25 @@ async function handleResumableSession(env, origin, account) {
     const rRes = await fetch(
       `${env.SUPABASE_URL}/rest/v1/test_results`
       + `?session_id=eq.${encodeURIComponent(courante.id)}`
-      + '&select=subtest,raw_score', { headers });
+      + '&select=subtest,raw_score,is_complete,resume_item_index', { headers });
     if (!rRes.ok) return json({ session: null, reason: 'unreachable' }, 200, origin);
 
-    const brut = await rRes.json();
-    const subtests = (Array.isArray(brut) ? brut : [])
-      .filter((r) => typeof r.subtest === 'string' && r.subtest.length > 0)
+    const brut = (await rRes.json());
+    const lignesR = (Array.isArray(brut) ? brut : [])
+      .filter((r) => typeof r.subtest === 'string' && r.subtest.length > 0);
+
+    // TERMINÉS seulement : un exercice interrompu ne compte pas comme fait,
+    // sinon la reprise le sauterait au lieu de le reprendre.
+    const subtests = lignesR
+      .filter((r) => r.is_complete !== false)
       .map((r) => ({
         subtest: r.subtest,
         rawScore: Number.isInteger(r.raw_score) ? r.raw_score : null,
       }));
+
+    // L'exercice INTERROMPU, s'il y en a un — il n'y en a jamais plus d'un,
+    // la batterie n'en présente qu'un à la fois.
+    const partiel = lignesR.find((r) => r.is_complete === false);
 
     return json({
       session: {
@@ -1123,6 +1138,11 @@ async function handleResumableSession(env, origin, account) {
         startedOn: courante.started_on,
         durationS: Number.isInteger(courante.duration_s) ? courante.duration_s : null,
         subtests,
+        inProgress: partiel ? {
+          subtest: partiel.subtest,
+          resumeItemIndex: Number.isInteger(partiel.resume_item_index)
+            ? partiel.resume_item_index : 0,
+        } : null,
       },
     }, 200, origin);
   } catch {

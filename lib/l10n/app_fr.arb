@@ -3511,6 +3511,18 @@
   "@psImgFusee": {
     "description": "Picture Span image name - rocket"
   },
+  "speedNoPauseTitle": "2 minutes sans interruption",
+  "@speedNoPauseTitle": {
+    "description": "Titre de la confirmation avant un exercice chronométré"
+  },
+  "speedNoPauseBody": "Cet exercice mesure votre vitesse sur une plage continue. Il ne peut pas être mis en pause : si vous le quittez, il devra être repassé depuis le début. Installez-vous avant de commencer.",
+  "@speedNoPauseBody": {
+    "description": "Corps de la confirmation avant un exercice chronométré"
+  },
+  "speedNoPauseConfirm": "Je suis prêt",
+  "@speedNoPauseConfirm": {
+    "description": "Bouton confirmant le démarrage d'un exercice chronométré"
+  },
   "ctShareScore": "Partager mon score",
   "ctSubtestExitBody": "Vous avez quitté cet exercice avant de le terminer. Les exercices déjà terminés sont enregistrés : vous pourrez reprendre le bilan ici même, à cet exercice.",
   "@ctSubtestExitBody": {

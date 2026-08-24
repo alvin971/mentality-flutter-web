@@ -2513,6 +2513,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get psImgFusee => 'Rocket';
 
   @override
+  String get speedNoPauseTitle => '2 uninterrupted minutes';
+
+  @override
+  String get speedNoPauseBody =>
+      'This exercise measures your speed over a continuous stretch. It cannot be paused: if you leave it, it will have to be retaken from the start. Get settled before you begin.';
+
+  @override
+  String get speedNoPauseConfirm => 'I am ready';
+
+  @override
   String get ctShareScore => 'Share my score';
 
   @override
@@ -6189,6 +6199,16 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get psImgFusee => 'Rocket';
+
+  @override
+  String get speedNoPauseTitle => '2 uninterrupted minutes';
+
+  @override
+  String get speedNoPauseBody =>
+      'This exercise measures your speed over a continuous stretch. It cannot be paused: if you leave it, it will have to be retaken from the start. Get settled before you begin.';
+
+  @override
+  String get speedNoPauseConfirm => 'I am ready';
 
   @override
   String get ctShareScore => 'Share my score';

@@ -2533,6 +2533,16 @@ class AppLocalizationsDe extends AppLocalizations {
   String get psImgFusee => 'Rakete';
 
   @override
+  String get speedNoPauseTitle => '2 Minuten ohne Unterbrechung';
+
+  @override
+  String get speedNoPauseBody =>
+      'Diese Übung misst Ihre Geschwindigkeit über einen zusammenhängenden Zeitraum. Sie kann nicht pausiert werden: Wenn Sie sie verlassen, müssen Sie sie von vorne wiederholen. Richten Sie sich ein, bevor Sie beginnen.';
+
+  @override
+  String get speedNoPauseConfirm => 'Ich bin bereit';
+
+  @override
   String get ctShareScore => 'Mein Ergebnis teilen';
 
   @override
