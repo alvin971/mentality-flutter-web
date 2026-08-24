@@ -67,7 +67,15 @@ void main() {
     final bloc = CompleteTestBloc();
     bloc.add(const StartTestEvent(_age));
     await bloc.stream.firstWhere((e) => e is CompleteTestRunningState);
-    expect(await AuthLocalStore.instance.getTestSessionId(), isNull);
+
+    final neuf = await AuthLocalStore.instance.getTestSessionId();
+    expect(neuf, isNotNull);
+    expect(neuf, isNot('ancienne-passation'));
+    // Et l'horloge démarre AVEC la batterie : sinon le premier envoi, émis à la
+    // fin du premier exercice, porterait une durée nulle.
+    final dates = await AuthLocalStore.instance.getTestSessionDates();
+    expect(dates.ouverture, isNotNull);
+    expect(dates.mesureDepuis, isNotNull);
     await bloc.close();
   });
 

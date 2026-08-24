@@ -30,6 +30,8 @@ class AuthLocalStore {
     // compte deviendraient celles du nouveau. C'est le goulot par lequel passe
     // tout changement de token : la garantie est ici, pas chez les appelants.
     await box.delete(_testSessionKey);
+    await box.delete(_testSessionOpenedKey);
+    await box.delete(_testSessionMeasureKey);
   }
 
   /// Retourne le token persisté ou `null` si aucun.
@@ -79,9 +81,55 @@ class AuthLocalStore {
   // ouvrir une seconde. C'est aussi ce qui rendra la pause/reprise possible.
   static const _testSessionKey = 'test_session_id_v1';
 
+  /// Jour d'ouverture de la passation, et origine de la mesure de durée.
+  ///
+  /// Persistés parce que l'identifiant seul ne suffit pas : sans eux, l'app
+  /// redémarrée en cours de bilan renvoyait `startedAt = maintenant`, l'upsert
+  /// déplaçait `started_on` à la date du jour — et la fenêtre de reprise de
+  /// 7 jours repartait de zéro en silence. Deux dates et non une : le jour
+  /// d'ouverture doit rester CELUI DU DÉBUT (il fixe la péremption), alors que
+  /// l'origine de mesure recule d'autant que la durée déjà acquise lors d'une
+  /// reprise sur un autre appareil.
+  static const _testSessionOpenedKey = 'test_session_opened_at_v1';
+  static const _testSessionMeasureKey = 'test_session_measure_from_v1';
+
   Future<void> saveTestSessionId(String id) async {
     final box = await _openBox();
     await box.put(_testSessionKey, id);
+  }
+
+  /// Enregistre les deux dates. Une valeur nulle EFFACE la clé plutôt que
+  /// d'écrire un marqueur illisible.
+  Future<void> saveTestSessionDates({
+    DateTime? ouverture,
+    DateTime? mesureDepuis,
+  }) async {
+    final box = await _openBox();
+    for (final e in {
+      _testSessionOpenedKey: ouverture,
+      _testSessionMeasureKey: mesureDepuis,
+    }.entries) {
+      if (e.value == null) {
+        await box.delete(e.key);
+      } else {
+        await box.put(e.key, e.value!.toIso8601String());
+      }
+    }
+  }
+
+  /// Les deux dates, ou `null` chacune si absente ou illisible.
+  Future<({DateTime? ouverture, DateTime? mesureDepuis})>
+      getTestSessionDates() async {
+    final box = await _openBox();
+    DateTime? lis(String k) {
+      final v = box.get(k);
+      return v is String ? DateTime.tryParse(v) : null;
+    }
+
+    return (
+      ouverture: lis(_testSessionOpenedKey),
+      mesureDepuis: lis(_testSessionMeasureKey),
+    );
   }
 
   Future<String?> getTestSessionId() async {
@@ -92,6 +140,8 @@ class AuthLocalStore {
   Future<void> clearTestSessionId() async {
     final box = await _openBox();
     await box.delete(_testSessionKey);
+    await box.delete(_testSessionOpenedKey);
+    await box.delete(_testSessionMeasureKey);
   }
 
   static const _referrerKey = 'pending_referrer_code';

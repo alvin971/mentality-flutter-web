@@ -254,8 +254,13 @@ class ResumeService {
   Future<void> adopt(ResumableSession reprise) async {
     final id = reprise.clientSessionId;
     if (id == null || id.isEmpty) return;
-    await ResultsSync.instance
-        .adopterSession(id, debut: reprise.serverStartedOn);
+    await ResultsSync.instance.adopterSession(
+      id,
+      // Le jour d'ouverture ne bouge pas : il date la péremption.
+      jourOuverture: reprise.serverStartedOn,
+      // L'origine de mesure, elle, a déjà reculé de la durée acquise.
+      mesureDepuis: reprise.startTime,
+    );
   }
 
   /// L'utilisateur renonce à reprendre et repart de zéro.

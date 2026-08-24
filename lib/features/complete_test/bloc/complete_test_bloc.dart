@@ -34,6 +34,9 @@ class CompleteTestBloc extends Bloc<CompleteTestEvent, CompleteTestState> {
     // coup. L'ancienne reste `in_progress` jusqu'à ce que /results/session la
     // close (une seule passation ouverte par compte).
     await ResultsSync.instance.reset();
+    // L'horloge de la passation démarre ICI, avec la batterie — pas au premier
+    // envoi, qui n'a lieu qu'à la FIN du premier exercice.
+    await ResultsSync.instance.demarrer();
 
     final session = CompleteTestSession(startTime: DateTime.now());
 
@@ -55,6 +58,10 @@ class CompleteTestBloc extends Bloc<CompleteTestEvent, CompleteTestState> {
   Future<void> _onResume(
       ResumeTestEvent event, Emitter<CompleteTestState> emit) async {
     _ageInMonths = event.ageInMonths;
+    // Sans identifiant à réadopter (reprise purement locale), la passation
+    // s'ouvre ici. Sinon `ResumeService.adopt` l'a déjà fait et ceci ne fait
+    // rien.
+    await ResultsSync.instance.demarrer();
     final session = event.reprise.toSession();
 
     if (session.isComplete) {
@@ -91,12 +98,6 @@ class CompleteTestBloc extends Bloc<CompleteTestEvent, CompleteTestState> {
       currentTestIndex: nextIndex,
       completedTests: newCompleted,
     );
-
-    // La durée part avec CHAQUE sous-test, pas seulement à la clôture : c'est
-    // la seule trace qu'un autre appareil pourra lire pour reprendre sans
-    // sous-déclarer le temps déjà passé.
-    ResultsSync.instance
-        .majDuree(DateTime.now().difference(updated.startTime).inSeconds);
 
     if (updated.isComplete) {
       // Supprimer la session sauvegardée car le test est terminé

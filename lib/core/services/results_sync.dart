@@ -30,7 +30,16 @@ class ResultsSync {
   static const _uuid = Uuid();
 
   String? _sessionId;
+
+  /// Jour d'ouverture de la passation — ce que le serveur écrit dans
+  /// `started_on`, et donc ce qui date la péremption de la reprise.
   DateTime? _startedAt;
+
+  /// Origine de la mesure de durée. Distincte de [_startedAt] : lors d'une
+  /// reprise sur un appareil neuf, elle recule de la durée déjà acquise pour que
+  /// `duration_s` reste continu, alors que le jour d'ouverture, lui, ne bouge
+  /// jamais.
+  DateTime? _debutMesure;
 
   /// Sous-tests dont l'envoi a échoué, à rejouer au prochain flush.
   final List<Map<String, dynamic>> _enAttente = [];
@@ -41,21 +50,27 @@ class ResultsSync {
   bool _envoiEnCours = false;
   bool _charge = false;
 
-  /// Durée écoulée depuis le début de la passation, telle que le BLoC la
-  /// connaît. Envoyée à CHAQUE sous-test, et pas seulement à la clôture.
+  /// Durée courante de la passation, envoyée à CHAQUE sous-test et plus
+  /// seulement à la clôture.
   ///
   /// C'est ce qui rend la reprise possible depuis un autre appareil sans mentir
   /// sur la durée : le stockage local y est vide, seul le serveur peut dire
-  /// depuis combien de temps la passation dure. Sans cette mise à jour continue,
-  /// `duration_s` restait nul jusqu'à la fin, une reprise ne mesurait que sa
-  /// propre portion, et la déclaration de fin tombait sous le plancher de
-  /// plausibilité du worker (300 s) — 400 définitif, parrainage perdu, et un
-  /// message d'échec affiché à quelqu'un qui a réellement tout passé.
-  int _dureeAcquise = 0;
-
-  /// Met à jour la durée courante. Appelée par le BLoC à chaque sous-test.
-  void majDuree(int secondes) {
-    if (secondes > _dureeAcquise) _dureeAcquise = secondes;
+  /// depuis combien de temps la passation dure. Sans elle, `duration_s` restait
+  /// nul jusqu'à la fin, une reprise ne mesurait que sa propre portion, et la
+  /// déclaration de fin pouvait tomber sous le plancher de plausibilité du
+  /// worker (300 s) — 400 définitif, parrainage perdu, et un message d'échec
+  /// affiché à quelqu'un qui a réellement tout passé.
+  ///
+  /// L'horloge est ICI et non dans le BLoC : la première version la recevait du
+  /// BLoC, qui n'apprend la fin d'un sous-test qu'après le `pop` de sa page —
+  /// donc APRÈS que la page ait déjà appelé `flushSubtest`. La durée arrivait
+  /// systématiquement un sous-test trop tard, et restait nulle sur le premier
+  /// envoi. Vérifié sur la première passation réelle : `duration_s` à `null`
+  /// après Cubes.
+  int? _dureeCourante() {
+    if (_debutMesure == null) return null;
+    final s = DateTime.now().difference(_debutMesure!).inSeconds;
+    return s > 0 ? s : null;
   }
 
   /// UUID de la passation, créé au premier appel et conservé jusqu'à `complete`.
@@ -65,6 +80,12 @@ class ResultsSync {
       final existant = await AuthLocalStore.instance.getTestSessionId();
       if (existant != null && existant.isNotEmpty) {
         _sessionId = existant;
+        // Les dates aussi : sans elles, une app redémarrée en cours de bilan
+        // renvoie `startedAt = maintenant`, l'upsert déplace `started_on` à
+        // aujourd'hui, et la fenêtre de reprise repart de zéro en silence.
+        final d = await AuthLocalStore.instance.getTestSessionDates();
+        _startedAt ??= d.ouverture;
+        _debutMesure ??= d.mesureDepuis;
         return existant;
       }
     } catch (_) {
@@ -72,12 +93,30 @@ class ResultsSync {
     }
     final neuf = _uuid.v4();
     _sessionId = neuf;
-    _startedAt ??= DateTime.now();
+    final maintenant = DateTime.now();
+    _startedAt ??= maintenant;
+    _debutMesure ??= maintenant;
     try {
       await AuthLocalStore.instance.saveTestSessionId(neuf);
+      await AuthLocalStore.instance.saveTestSessionDates(
+        ouverture: _startedAt,
+        mesureDepuis: _debutMesure,
+      );
     } catch (_) {/* l'envoi reste possible sans persistance */}
     return neuf;
   }
+
+  /// Ouvre la passation MAINTENANT, au lancement de la batterie.
+  ///
+  /// Sans cet appel, l'horloge ne démarrait qu'à la PREMIÈRE invocation de
+  /// [sessionId], c'est-à-dire au premier envoi — donc à la FIN du premier
+  /// exercice. La durée de ce premier envoi valait alors zéro, et le serveur
+  /// recevait `duration_s` nul. Observé tel quel sur la première passation
+  /// réelle : Cubes terminé, `duration_s` à `null` en base.
+  ///
+  /// Idempotent : une passation déjà ouverte (ou adoptée à la reprise) n'est
+  /// pas réinitialisée.
+  Future<void> demarrer() => sessionId();
 
   /// Reprend une passation DÉJÀ OUVERTE au lieu d'en créer une nouvelle.
   ///
@@ -96,12 +135,21 @@ class ResultsSync {
   /// La file en attente est CONSERVÉE : ce qu'elle contient appartient au même
   /// bilan, et l'upsert serveur sur (session, sous-test) rend le rattachement
   /// inoffensif.
-  Future<void> adopterSession(String id, {DateTime? debut}) async {
+  Future<void> adopterSession(
+    String id, {
+    DateTime? jourOuverture,
+    DateTime? mesureDepuis,
+  }) async {
     if (id.isEmpty) return;
     _sessionId = id;
-    if (debut != null) _startedAt = debut;
+    _startedAt = jourOuverture ?? _startedAt;
+    _debutMesure = mesureDepuis ?? _debutMesure ?? DateTime.now();
     try {
       await AuthLocalStore.instance.saveTestSessionId(id);
+      await AuthLocalStore.instance.saveTestSessionDates(
+        ouverture: _startedAt,
+        mesureDepuis: _debutMesure,
+      );
     } catch (_) {/* l'envoi reste possible sans persistance */}
   }
 
@@ -148,7 +196,7 @@ class ResultsSync {
 
     _sessionId = null;
     _startedAt = null;
-    _dureeAcquise = 0;
+    _debutMesure = null;
     try {
       await AuthLocalStore.instance.clearTestSessionId();
     } catch (_) {/* sans conséquence : un nouvel UUID sera généré */}
@@ -159,7 +207,7 @@ class ResultsSync {
   Future<void> reset() async {
     _sessionId = null;
     _startedAt = null;
-    _dureeAcquise = 0;
+    _debutMesure = null;
     _enAttente.clear();
     _oralEnAttente.clear();
     try {
@@ -240,14 +288,18 @@ class ResultsSync {
     final sousTests = List<Map<String, dynamic>>.from(_enAttente);
     final oral = List<Map<String, dynamic>>.from(_oralEnAttente);
     try {
+      // Résolu AVANT de composer l'appel : c'est `sessionId()` qui relit les
+      // dates persistées, et les deux arguments suivants en dépendent. Les
+      // laisser en ligne ferait reposer la justesse sur l'ordre d'évaluation
+      // des arguments nommés.
+      final id = await sessionId();
       final ok = await UnlockService.instance.uploadTestResults(
-        clientSessionId: await sessionId(),
+        clientSessionId: id,
         startedAt: _startedAt,
         subtests: sousTests,
         oral: oral,
         status: status,
-        durationSeconds:
-            durationSeconds ?? (_dureeAcquise > 0 ? _dureeAcquise : null),
+        durationSeconds: durationSeconds ?? _dureeCourante(),
       );
       if (ok) {
         _enAttente.removeRange(0, sousTests.length);
