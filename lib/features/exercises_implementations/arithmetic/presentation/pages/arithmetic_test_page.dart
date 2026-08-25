@@ -10,6 +10,7 @@ import '../../domain/arithmetic_generator.dart';
 import '../../../../../core/theme/kepler_colors.dart';
 import '../../../../../core/services/results_sync.dart';
 import '../../../../../core/services/subtest_instrumentation.dart';
+import '../../../../../core/services/subtest_progress_store.dart';
 
 /// Page du test Arithmétique (Arithmetic)
 /// Résolution mentale de 22 problèmes sous contrainte de temps
@@ -57,6 +58,7 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
     } else {
       _generatedItems = all;
     }
+      _reprendreSiInterrompu();
   }
 
   @override
@@ -180,6 +182,13 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
       timedOut: userAnswer == null,
     );
 
+    unawaited(SubtestProgressStore.instance.jalon(
+      subtest: 'arithmetic',
+      prochainItem: _currentItemIndex + 1,
+      score: _score,
+      instr: _instr,
+    ));
+
     setState(() {
       if (itemScore == 0) {
         _consecutiveFailures++;
@@ -210,7 +219,27 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
     }
   }
 
+  /// Reprend l'exercice au STADE où une pause l'a laissé.
+  ///
+  /// Aucun démarrage n'est déclenché ici : cet exercice attend que
+  /// l'utilisateur lance lui-même, et `_startItem()` lira alors le rang
+  /// restauré. On restitue le stade, jamais l'énoncé — les items sont
+  /// regénérés au hasard, et c'est voulu.
+  void _reprendreSiInterrompu() {
+    final p = SubtestProgressStore.instance.pour('arithmetic');
+    if (p == null) return;
+    _currentItemIndex = p.itemIndex;
+    _score = p.score;
+    // Repart à zéro : il porte sur une série en cours, qui ne survit pas à une
+    // interruption. Au pire un item de plus, jamais un de moins.
+    _consecutiveFailures = 0;
+    _instr.rehydrate(p.items);
+  }
+
   void _showFinalResults() {
+    // Terminé : plus rien à reprendre.
+    unawaited(SubtestProgressStore.instance.clear());
+
     _countdownTimer?.cancel();
 
     // Les mesures partent MAINTENANT, sous-test par sous-test : une app

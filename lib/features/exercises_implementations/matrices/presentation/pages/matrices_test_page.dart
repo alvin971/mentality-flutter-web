@@ -10,6 +10,7 @@ import '../widgets/matrix_cell_widget.dart';
 import '../../../../../core/theme/kepler_colors.dart';
 import '../../../../../core/services/results_sync.dart';
 import '../../../../../core/services/subtest_instrumentation.dart';
+import '../../../../../core/services/subtest_progress_store.dart';
 
 /// Page de test des Matrices Progressives (WAIS-IV: 26 items, WISC-V: 32 items)
 class MatricesTestPage extends StatefulWidget {
@@ -73,6 +74,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
         .toList();
     // La démonstration n'est pas chronométrée : le chrono d'item ne démarre
     // qu'au passage au premier item réel (_startRealTest).
+      _reprendreSiInterrompu();
   }
 
   void _generateItems() {
@@ -151,6 +153,13 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
       score: isCorrect ? 1 : 0,
     );
 
+    unawaited(SubtestProgressStore.instance.jalon(
+      subtest: 'matrix_reasoning',
+      prochainItem: currentLevel + 1,
+      score: score,
+      instr: _instr,
+    ));
+
     setState(() {
       totalTime += timeSeconds;
 
@@ -179,7 +188,31 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
     }
   }
 
+  /// Reprend l'exercice au STADE où une pause l'a laissé.
+  ///
+  /// On restitue le stade — rang, score, progression — jamais l'énoncé : les
+  /// items sont regénérés au hasard à chaque lancement, et c'est voulu. Le
+  /// compteur d'échecs consécutifs repart à zéro : il porte sur une série en
+  /// cours, notion qui ne survit pas à une interruption. Au pire l'exercice
+  /// dure un item de plus, jamais un de moins.
+  ///
+  /// La démonstration est sautée : elle a déjà été vue avant la pause, et la
+  /// reposer à chaque reprise en ferait un péage.
+  void _reprendreSiInterrompu() {
+    final p = SubtestProgressStore.instance.pour('matrix_reasoning');
+    if (p == null) return;
+    currentLevel = p.itemIndex;
+    score = p.score;
+    _consecutiveFailures = 0;
+    _instr.rehydrate(p.items);
+    _startRealTest();
+  }
+
   void _showFinalResults() {
+    // L'exercice est terminé : plus rien à reprendre. Laisser le point de
+    // reprise en place le ferait redémarrer au milieu la fois suivante.
+    unawaited(SubtestProgressStore.instance.clear());
+
     // Les mesures partent MAINTENANT, sous-test par sous-test.
     unawaited(ResultsSync.instance.flushSubtest(
       _instr.toPayload(rawScore: score, maxScore: _generatedItems.length),

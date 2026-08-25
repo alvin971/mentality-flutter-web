@@ -15,6 +15,7 @@ import '../widgets/puzzle_slot_indicator.dart';
 import '../widgets/puzzle_target_widget.dart';
 import '../../../../../core/services/results_sync.dart';
 import '../../../../../core/services/subtest_instrumentation.dart';
+import '../../../../../core/services/subtest_progress_store.dart';
 
 /// Page du test "Puzzles Visuels" (inspiré du subtest VP, indice VSI).
 ///
@@ -104,6 +105,7 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
     _generateItems();
     // La démonstration n'est pas chronométrée : le timer ne démarre qu'au
     // passage au premier item réel (_startRealTest).
+      _reprendreSiInterrompu();
   }
 
   void _generateItems() {
@@ -240,6 +242,13 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
       timedOut: autoSubmit,
     );
 
+    unawaited(SubtestProgressStore.instance.jalon(
+      subtest: 'visual_puzzles',
+      prochainItem: _currentItemIndex + 1,
+      score: _score,
+      instr: _instr,
+    ));
+
     setState(() {
       _submitted = true;
       if (isCorrect) {
@@ -269,7 +278,26 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
     _startItem();
   }
 
+  /// Reprend l'exercice au STADE où une pause l'a laissé.
+  ///
+  /// Deux verrous à lever, pas un : `_demoPhase` puis `_readyPhase`. Ne lever
+  /// que le second laisserait la démonstration à l'écran alors qu'elle a déjà
+  /// été vue avant la pause.
+  void _reprendreSiInterrompu() {
+    final p = SubtestProgressStore.instance.pour('visual_puzzles');
+    if (p == null) return;
+    _currentItemIndex = p.itemIndex;
+    _score = p.score;
+    _consecutiveFailures = 0;
+    _instr.rehydrate(p.items);
+    _demoPhase = false;
+    _startRealTest();
+  }
+
   void _finish() {
+    // Terminé : plus rien à reprendre.
+    unawaited(SubtestProgressStore.instance.clear());
+
     _logSummary();
 
     // Les mesures partent MAINTENANT, sous-test par sous-test : une app fermée

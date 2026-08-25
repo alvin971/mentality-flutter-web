@@ -9,6 +9,7 @@ import '../../domain/picture_span_generator.dart';
 import '../../../../../core/theme/kepler_colors.dart';
 import '../../../../../core/services/results_sync.dart';
 import '../../../../../core/services/subtest_instrumentation.dart';
+import '../../../../../core/services/subtest_progress_store.dart';
 
 /// Page du test Mémoire des Images (Picture Span)
 /// Présentation séquentielle puis rappel ordonné sur grille
@@ -23,6 +24,10 @@ class PictureSpanTestPage extends StatefulWidget {
 class _PictureSpanTestPageState extends State<PictureSpanTestPage> {
   final PictureSpanGenerator _generator = PictureSpanGenerator();
   late List<PictureSpanItem> _generatedItems;
+
+  /// Rang restauré par une reprise, consommé par `_startTest`. `null` = départ
+  /// normal.
+  int? _rangRepris;
 
   int _currentItemIndex = 0;
   int _score = 0;
@@ -48,6 +53,7 @@ class _PictureSpanTestPageState extends State<PictureSpanTestPage> {
   void initState() {
     super.initState();
     _generatedItems = _generator.generateComplete12Items();
+      _reprendreSiInterrompu();
   }
 
   @override
@@ -61,7 +67,10 @@ class _PictureSpanTestPageState extends State<PictureSpanTestPage> {
   void _startTest() {
     setState(() {
       _currentPhase = TestPhase.presentation;
-      _currentItemIndex = 0;
+      // Une reprise a restauré le rang : le remettre à zéro ici ferait
+      // recommencer l'exercice entier, ce que la pause doit justement éviter.
+      _currentItemIndex = _rangRepris ?? 0;
+      _rangRepris = null;
       _currentLevel = _currentItem.level;
     });
     _startPresentation();
@@ -131,6 +140,13 @@ class _PictureSpanTestPageState extends State<PictureSpanTestPage> {
       score: isCorrect ? 1 : 0,
     );
 
+    unawaited(SubtestProgressStore.instance.jalon(
+      subtest: 'picture_span',
+      prochainItem: _currentItemIndex + 1,
+      score: _score,
+      instr: _instr,
+    ));
+
     setState(() {
       if (isCorrect) {
         _score++;
@@ -166,7 +182,24 @@ class _PictureSpanTestPageState extends State<PictureSpanTestPage> {
     }
   }
 
+  /// Reprend l'exercice au STADE où une pause l'a laissé.
+  ///
+  /// Le rang transite par `_rangRepris` plutôt que d'être posé directement :
+  /// `_startTest`, déclenché ensuite par l'utilisateur, remettait l'index à
+  /// zéro et aurait effacé la reprise.
+  void _reprendreSiInterrompu() {
+    final p = SubtestProgressStore.instance.pour('picture_span');
+    if (p == null) return;
+    _rangRepris = p.itemIndex;
+    _score = p.score;
+    _consecutiveFailuresAtLevel = 0;
+    _instr.rehydrate(p.items);
+  }
+
   void _showFinalResults() {
+    // Terminé : plus rien à reprendre.
+    unawaited(SubtestProgressStore.instance.clear());
+
     _presentationTimer?.cancel();
 
     // Les mesures partent MAINTENANT, sous-test par sous-test : une app

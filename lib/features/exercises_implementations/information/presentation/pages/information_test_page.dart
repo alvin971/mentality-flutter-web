@@ -11,6 +11,7 @@ import '../../domain/information_generator.dart';
 import '../../../../../core/theme/kepler_colors.dart';
 import '../../../../../core/services/results_sync.dart';
 import '../../../../../core/services/subtest_instrumentation.dart';
+import '../../../../../core/services/subtest_progress_store.dart';
 
 /// Page du test d'Information (Connaissances générales)
 /// WAIS-IV : 28 questions
@@ -67,6 +68,7 @@ class _InformationTestPageState extends State<InformationTestPage> {
     _generateItems();
     // La démonstration n'est pas chronométrée : le timer ne démarre qu'au
     // passage au premier item réel (_startRealTest).
+      _reprendreSiInterrompu();
   }
 
   @override
@@ -178,6 +180,13 @@ class _InformationTestPageState extends State<InformationTestPage> {
       score: isCorrect ? 1 : 0,
     );
 
+    unawaited(SubtestProgressStore.instance.jalon(
+      subtest: 'information',
+      prochainItem: currentLevel + 1,
+      score: score,
+      instr: _instr,
+    ));
+
     if (isCorrect) {
       score++;
       _consecutiveFailures = 0;
@@ -207,7 +216,31 @@ class _InformationTestPageState extends State<InformationTestPage> {
     }
   }
 
+  /// Reprend l'exercice au STADE où une pause l'a laissé.
+  ///
+  /// On restitue le stade — rang, score, progression — jamais l'énoncé : les
+  /// items sont regénérés au hasard à chaque lancement, et c'est voulu. Le
+  /// compteur d'échecs consécutifs repart à zéro : il porte sur une série en
+  /// cours, notion qui ne survit pas à une interruption. Au pire l'exercice
+  /// dure un item de plus, jamais un de moins.
+  ///
+  /// La démonstration est sautée : elle a déjà été vue avant la pause, et la
+  /// reposer à chaque reprise en ferait un péage.
+  void _reprendreSiInterrompu() {
+    final p = SubtestProgressStore.instance.pour('information');
+    if (p == null) return;
+    currentLevel = p.itemIndex;
+    score = p.score;
+    _consecutiveFailures = 0;
+    _instr.rehydrate(p.items);
+    _startRealTest();
+  }
+
   void _showFinalResults() {
+    // L'exercice est terminé : plus rien à reprendre. Laisser le point de
+    // reprise en place le ferait redémarrer au milieu la fois suivante.
+    unawaited(SubtestProgressStore.instance.clear());
+
     // Les mesures partent MAINTENANT, sous-test par sous-test : une app
     // fermée plus loin dans la batterie ne doit pas emporter ce qui a déjà
     // été mesuré. Tir-et-oublie, fail-soft.

@@ -10,6 +10,7 @@ import '../../domain/pattern_generator.dart';
 import '../../../../../core/theme/kepler_colors.dart';
 import '../../../../../core/services/results_sync.dart';
 import '../../../../../core/services/subtest_instrumentation.dart';
+import '../../../../../core/services/subtest_progress_store.dart';
 
 /// Page de test des Cubes avec progression par niveaux
 class CubesTestPage extends StatefulWidget {
@@ -78,6 +79,7 @@ class _CubesTestPageState extends State<CubesTestPage> {
     // La démonstration n'est pas chronométrée : le chrono (interne au
     // widget d'exercice) ne démarre qu'au passage au premier item réel
     // (_startRealTest), car on passe timeLimitSeconds: null pendant la démo.
+      _reprendreSiInterrompu();
   }
 
   void _generateLevels() {
@@ -143,6 +145,13 @@ class _CubesTestPageState extends State<CubesTestPage> {
       latencyMs: timeSeconds * 1000,
     );
 
+    unawaited(SubtestProgressStore.instance.jalon(
+      subtest: 'block_design',
+      prochainItem: currentLevel + 1,
+      score: score,
+      instr: _instr,
+    ));
+
       // Gestion des échecs consécutifs
       if (isCorrect) {
         _consecutiveFailures = 0;
@@ -179,7 +188,31 @@ class _CubesTestPageState extends State<CubesTestPage> {
     return 4;
   }
 
+  /// Reprend l'exercice au STADE où une pause l'a laissé.
+  ///
+  /// On restitue le stade — rang, score, progression — jamais l'énoncé : les
+  /// items sont regénérés au hasard à chaque lancement, et c'est voulu. Le
+  /// compteur d'échecs consécutifs repart à zéro : il porte sur une série en
+  /// cours, notion qui ne survit pas à une interruption. Au pire l'exercice
+  /// dure un item de plus, jamais un de moins.
+  ///
+  /// La démonstration est sautée : elle a déjà été vue avant la pause, et la
+  /// reposer à chaque reprise en ferait un péage.
+  void _reprendreSiInterrompu() {
+    final p = SubtestProgressStore.instance.pour('block_design');
+    if (p == null) return;
+    currentLevel = p.itemIndex;
+    score = p.score;
+    _consecutiveFailures = 0;
+    _instr.rehydrate(p.items);
+    _startRealTest();
+  }
+
   void _showFinalResults() {
+    // L'exercice est terminé : plus rien à reprendre. Laisser le point de
+    // reprise en place le ferait redémarrer au milieu la fois suivante.
+    unawaited(SubtestProgressStore.instance.clear());
+
     // Les mesures partent MAINTENANT, sous-test par sous-test : une app
     // fermée plus loin dans la batterie ne doit pas emporter ce qui a déjà
     // été mesuré. Tir-et-oublie, fail-soft.

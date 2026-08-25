@@ -12,6 +12,7 @@ import '../../domain/vocabulary_generator.dart';
 import '../../../../../core/services/results_sync.dart';
 import '../../../../../core/models/complete_test_session.dart';
 import '../../../../../core/services/subtest_instrumentation.dart';
+import '../../../../../core/services/subtest_progress_store.dart';
 
 /// Page du test de Vocabulaire (Vocabulary)
 /// WAIS-IV : 30 mots
@@ -91,6 +92,7 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
     // La démonstration n'est pas chronométrée : le chrono ne démarre qu'au
     // passage au premier item réel (_startRealTest).
     _answerController.clear();
+      _reprendreSiInterrompu();
   }
 
   /// Quitte la phase de démonstration et démarre le premier item réel
@@ -168,6 +170,13 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
 
     _instr.endItem(response: userAnswer, skipped: renonce);
 
+    unawaited(SubtestProgressStore.instance.jalon(
+      subtest: 'vocabulary',
+      prochainItem: currentLevel + 1,
+      score: 0,
+      instr: _instr,
+    ));
+
     if (renonce) {
       _consecutiveSkips++;
     } else {
@@ -186,7 +195,30 @@ class _VocabularyTestPageState extends State<VocabularyTestPage> {
     }
   }
 
+  /// Reprend l'exercice au STADE où une pause l'a laissé.
+  ///
+  /// On restitue le stade — rang, score, progression — jamais l'énoncé : les
+  /// items sont regénérés au hasard à chaque lancement, et c'est voulu. Le
+  /// compteur d'échecs consécutifs repart à zéro : il porte sur une série en
+  /// cours, notion qui ne survit pas à une interruption. Au pire l'exercice
+  /// dure un item de plus, jamais un de moins.
+  ///
+  /// La démonstration est sautée : elle a déjà été vue avant la pause, et la
+  /// reposer à chaque reprise en ferait un péage.
+  void _reprendreSiInterrompu() {
+    final p = SubtestProgressStore.instance.pour('vocabulary');
+    if (p == null) return;
+    currentLevel = p.itemIndex;
+    _consecutiveSkips = 0;
+    _instr.rehydrate(p.items);
+    _startRealTest();
+  }
+
   void _showFinalResults() {
+    // L'exercice est terminé : plus rien à reprendre. Laisser le point de
+    // reprise en place le ferait redémarrer au milieu la fois suivante.
+    unawaited(SubtestProgressStore.instance.clear());
+
     // Les mesures partent MAINTENANT, sous-test par sous-test, plutôt qu'en un
     // seul envoi à la fin des 12 : une app fermée plus loin dans la batterie ne
     // doit pas emporter ce qui a déjà été mesuré. Tir-et-oublie, fail-soft.
