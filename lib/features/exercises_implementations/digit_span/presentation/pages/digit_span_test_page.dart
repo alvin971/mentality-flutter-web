@@ -38,6 +38,15 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
   // Progression
   int _currentItemIndex = 0;
 
+  /// Rang DANS LA PARTIE restauré par une reprise, consommé par `_startPart`.
+  ///
+  /// `_startPart()` remet `_currentItemIndex` à zéro — c'est son rôle au départ
+  /// normal d'une partie. Mais la reprise entre justement par l'introduction de
+  /// partie : poser le rang directement, c'était le voir effacé à l'écran
+  /// suivant et repartir au premier item. Le bug que le fondateur a constaté
+  /// (« ça revient au début de l'exercice »).
+  int? _rangReprisDansPartie;
+
   /// Rang de l'item DANS TOUT LE SOUS-TEST, qui ne redescend jamais.
   ///
   /// `_currentItemIndex` repart à zéro à chaque partie (direct, inverse,
@@ -93,6 +102,7 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
       orElse: () => SpanType.forward,
     );
     _currentItemIndex = e['itemIndex'] is int ? e['itemIndex'] as int : 0;
+    _rangReprisDansPartie = _currentItemIndex;
     // Repli sur le NOMBRE de mesures déjà collectées, pas sur zéro : un point
     // de reprise écrit par une version antérieure ne porte pas `rangGlobal`,
     // et repartir de zéro ferait entrer en collision les rangs des nouveaux
@@ -167,7 +177,10 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
   void _startPart() {
     setState(() {
       _currentPhase = TestPhase.sequencePresentation;
-      _currentItemIndex = 0;
+      // Une reprise a restauré le rang : le remettre à zéro ferait recommencer
+      // la partie. Assigné AVANT `_currentItem`, qui en dépend.
+      _currentItemIndex = _rangReprisDansPartie ?? 0;
+      _rangReprisDansPartie = null;
       _currentLength = _currentItem.length;
       _failuresAtCurrentLength = 0;
     });
