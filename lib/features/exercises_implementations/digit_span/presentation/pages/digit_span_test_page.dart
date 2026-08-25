@@ -38,6 +38,17 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
   // Progression
   int _currentItemIndex = 0;
 
+  /// Rang de l'item DANS TOUT LE SOUS-TEST, qui ne redescend jamais.
+  ///
+  /// `_currentItemIndex` repart à zéro à chaque partie (direct, inverse,
+  /// croissant) : s'en servir comme identifiant d'item produisait des rangs
+  /// dupliqués (0,1,2,3 puis 0,1…). La clé d'unicité côté base est
+  /// (session, sous-test, rang) : Postgres refuse un upsert qui touche deux
+  /// fois la même ligne, et TOUT le lot d'items était rejeté d'un bloc. Les
+  /// réponses de cet exercice n'ont donc jamais été enregistrées — personne ne
+  /// s'en était aperçu, l'exercice n'ayant jamais été mené à terme en vrai.
+  int _rangGlobal = 0;
+
   /// Mesure item par item (latence, hésitation, reprises).
   /// Aucune frappe individuelle n'est captée — cf. SubtestInstrumentation.
   final SubtestInstrumentation _instr =
@@ -82,6 +93,7 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
       orElse: () => SpanType.forward,
     );
     _currentItemIndex = e['itemIndex'] is int ? e['itemIndex'] as int : 0;
+    _rangGlobal = e['rangGlobal'] is int ? e['rangGlobal'] as int : 0;
     _forwardScore = e['forward'] is int ? e['forward'] as int : 0;
     _backwardScore = e['backward'] is int ? e['backward'] as int : 0;
     _sequencingScore = e['sequencing'] is int ? e['sequencing'] as int : 0;
@@ -173,6 +185,11 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
           _isPlayingSequence = false;
           _currentPhase = TestPhase.userInput;
         });
+        // L'item s'ouvre ICI : la séquence vient d'être jouée, la saisie
+        // devient possible. L'ouvrir dans `_submitAnswer`, juste avant de le
+        // fermer, faisait relever une latence de zéro milliseconde sur tous
+        // les items — une mesure fausse, pire qu'absente.
+        _instr.startItem(index: _rangGlobal);
       } else {
         setState(() {
           _currentDigitIndex++;
@@ -199,11 +216,6 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
 
   void _submitAnswer() {
     final isCorrect = _currentItem.isCorrect(_userAnswer);
-
-    // Empan : l'item s'ouvre à la présentation de la séquence, mais seule
-    // la saisie est mesurable. On ouvre et ferme au même endroit — la
-    // latence porte donc le temps de RESTITUTION, pas d'écoute.
-    _instr.startItem(index: _currentItemIndex);
 
     int pointsEarned = 0;
 
@@ -236,14 +248,17 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
         break;
     }
 
+    _rangGlobal++;
+
     unawaited(SubtestProgressStore.instance.jalon(
       subtest: 'digit_span',
-      prochainItem: _currentItemIndex + 1,
+      prochainItem: _rangGlobal,
       score: _forwardScore + _backwardScore + _sequencingScore,
       instr: _instr,
       etat: {
         'spanType': _currentSpanType.name,
         'itemIndex': _currentItemIndex + 1,
+        'rangGlobal': _rangGlobal,
         'forward': _forwardScore,
         'backward': _backwardScore,
         'sequencing': _sequencingScore,

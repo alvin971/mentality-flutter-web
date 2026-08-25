@@ -992,13 +992,23 @@ async function handleResults(env, origin, account, body, identite) {
       }
     }
 
+    // DÉDOUBLONNAGE PAR RANG. La cible du conflit est (session, sous-test,
+    // rang) : deux items de même rang dans un seul envoi font échouer TOUT le
+    // lot — Postgres refuse un upsert qui touche deux fois la même ligne, et on
+    // perd les mesures de l'exercice entier, pas seulement le doublon. C'est
+    // arrivé sur Mémoire des Chiffres, dont le compteur d'items repartait à
+    // zéro à chaque partie. Le dernier état d'un rang gagne.
+    const parRang = new Map();
+    for (const it of items) parRang.set(`${it.subtest}#${it.item_index}`, it);
+    const itemsUniques = [...parRang.values()];
+
     let itemsOk = true;
-    if (items.length > 0) {
+    if (itemsUniques.length > 0) {
       const iRes = await fetch(
         `${env.SUPABASE_URL}/rest/v1/test_items?on_conflict=session_id,subtest,item_index`, {
           method: 'POST',
           headers: { ...headers, Prefer: 'resolution=merge-duplicates' },
-          body: JSON.stringify(items),
+          body: JSON.stringify(itemsUniques),
         });
       itemsOk = iRes.ok;
     }
@@ -1031,7 +1041,7 @@ async function handleResults(env, origin, account, body, identite) {
 
     return json({
       stored: rRes.ok, status: statut, sessionId,
-      subtests: payload.length, items: items.length, itemsOk,
+      subtests: payload.length, items: itemsUniques.length, itemsOk,
       oral: oralRows.length, oralOk,
     }, 200, origin);
   } catch {

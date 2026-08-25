@@ -1153,6 +1153,65 @@ console.log('\n/results/session — reprise : lire où en est la passation');
   }
 }
 
+console.log('\n/results — un rang dupliqué ne doit pas emporter tout le lot');
+{
+  const vraiFetch = globalThis.fetch;
+  const SB = { SUPABASE_URL: 'https://sb.test', SUPABASE_SERVICE_KEY: 'sb_secret_faux' };
+  const capte = [];
+  globalThis.fetch = async (url, init) => {
+    capte.push({ url: String(url), body: JSON.parse(init.body) });
+    if (String(url).includes('test_sessions')) {
+      return new Response(JSON.stringify([{ id: 'sess-1' }]), { status: 201 });
+    }
+    return new Response('[]', { status: 201 });
+  };
+  const { corps } = await appel(kvNu(), { ...PROD, ...SB }, '/results', 'POST', {
+    clientSessionId: '6c0ac833-fb7f-4450-9e52-6721cdd6a498',
+    startedAt: '2026-08-25T09:00:00.000Z', status: 'in_progress',
+    subtests: [{
+      subtest: 'digit_span', partial: true, resumeItemIndex: 3,
+      items: [
+        { index: 0, response: 'premier' },
+        { index: 1, response: 'b' },
+        { index: 0, response: 'DERNIER' },   // même rang : la partie a redémarré
+      ],
+    }],
+  });
+  globalThis.fetch = vraiFetch;
+
+  const it = capte.find((c) => c.url.includes('test_items'));
+  verifie('un rang dupliqué est fusionné au lieu de tout faire échouer',
+    it && it.body.length === 2, JSON.stringify(it && it.body.map((x) => x.item_index)));
+  verifie("c'est le DERNIER état du rang qui est conservé",
+    it && it.body.find((x) => x.item_index === 0).response === 'DERNIER',
+    JSON.stringify(it && it.body));
+  verifie('le compte rendu annonce les items réellement écrits',
+    corps.items === 2, JSON.stringify(corps));
+
+  // Le dédoublonnage porte sur le COUPLE : deux sous-tests peuvent
+  // légitimement avoir chacun leur rang 0.
+  const capte2 = [];
+  globalThis.fetch = async (url, init) => {
+    capte2.push({ url: String(url), body: JSON.parse(init.body) });
+    if (String(url).includes('test_sessions')) {
+      return new Response(JSON.stringify([{ id: 'sess-1' }]), { status: 201 });
+    }
+    return new Response('[]', { status: 201 });
+  };
+  await appel(kvNu(), { ...PROD, ...SB }, '/results', 'POST', {
+    clientSessionId: '6c0ac833-fb7f-4450-9e52-6721cdd6a498',
+    startedAt: '2026-08-25T09:00:00.000Z', status: 'in_progress',
+    subtests: [
+      { subtest: 'digit_span', rawScore: 1, items: [{ index: 0, response: 'a' }] },
+      { subtest: 'block_design', rawScore: 1, items: [{ index: 0, response: 'b' }] },
+    ],
+  });
+  globalThis.fetch = vraiFetch;
+  const it2 = capte2.find((c) => c.url.includes('test_items'));
+  verifie('deux sous-tests gardent chacun leur rang 0',
+    it2 && it2.body.length === 2, JSON.stringify(it2 && it2.body));
+}
+
 console.log('\n/results/session — exercice INTERROMPU : reprendre, pas sauter');
 {
   const vraiFetch = globalThis.fetch;
