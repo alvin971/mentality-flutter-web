@@ -795,6 +795,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'The exercises you have already taken will be discarded and cannot be resumed. This cannot be undone.';
 
   @override
+  String homeResumeCurrent(String name) {
+    return 'In progress: $name';
+  }
+
+  @override
   String get infoTestName => 'Information';
 
   @override
@@ -4481,6 +4486,11 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   @override
   String get homeResumeRestartBody =>
       'The exercises you have already taken will be discarded and cannot be resumed. This cannot be undone.';
+
+  @override
+  String homeResumeCurrent(String name) {
+    return 'In progress: $name';
+  }
 
   @override
   String get infoTestName => 'Information';

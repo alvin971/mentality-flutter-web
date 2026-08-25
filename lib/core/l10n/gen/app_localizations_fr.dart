@@ -799,6 +799,11 @@ class AppLocalizationsFr extends AppLocalizations {
       'Les exercices déjà passés seront abandonnés et ne pourront plus être repris. Vous ne pourrez pas revenir en arrière.';
 
   @override
+  String homeResumeCurrent(String name) {
+    return 'En cours : $name';
+  }
+
+  @override
   String get infoTestName => 'Information';
 
   @override

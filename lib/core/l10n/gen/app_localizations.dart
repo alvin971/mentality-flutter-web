@@ -1545,6 +1545,12 @@ abstract class AppLocalizations {
   /// **'Les exercices déjà passés seront abandonnés et ne pourront plus être repris. Vous ne pourrez pas revenir en arrière.'**
   String get homeResumeRestartBody;
 
+  /// Bannière de reprise quand l'exercice a été mis en pause en cours de route
+  ///
+  /// In fr, this message translates to:
+  /// **'En cours : {name}'**
+  String homeResumeCurrent(String name);
+
   /// Information — nom du test affiché dans le scaffold
   ///
   /// In fr, this message translates to:

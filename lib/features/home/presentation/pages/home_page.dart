@@ -443,8 +443,14 @@ class _ResumeBanner extends StatelessWidget {
                     Text(
                       suivant == null
                           ? context.l10n.homeResumeFinish
-                          : context.l10n.homeResumeNext(
-                              _localizedSubtest(context, suivant)),
+                          // « En cours » et non « prochain » quand la pause est
+                          // tombée EN PLEIN exercice : on n'en propose pas un
+                          // nouveau, on finit celui qui est ouvert.
+                          : reprise.reprendEnPleinExercice
+                              ? context.l10n.homeResumeCurrent(
+                                  _localizedSubtest(context, suivant))
+                              : context.l10n.homeResumeNext(
+                                  _localizedSubtest(context, suivant)),
                       style: AppText.of(context).bodySmall(),
                     ),
                   ],

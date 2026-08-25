@@ -1011,6 +1011,15 @@
   "@homeResumeRestartBody": {
     "description": "Corps de la confirmation avant abandon du bilan en cours"
   },
+  "homeResumeCurrent": "En cours : {name}",
+  "@homeResumeCurrent": {
+    "description": "Bannière de reprise quand l'exercice a été mis en pause en cours de route",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "infoTestName": "Information",
   "@infoTestName": {
     "description": "Information — nom du test affiché dans le scaffold"

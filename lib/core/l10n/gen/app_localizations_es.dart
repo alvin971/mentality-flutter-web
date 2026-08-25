@@ -800,6 +800,11 @@ class AppLocalizationsEs extends AppLocalizations {
       'Los ejercicios ya realizados se descartarán y no podrán reanudarse. No podrás deshacerlo.';
 
   @override
+  String homeResumeCurrent(String name) {
+    return 'En curso: $name';
+  }
+
+  @override
   String get infoTestName => 'Información';
 
   @override

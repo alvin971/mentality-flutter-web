@@ -182,5 +182,17 @@
     "de": "Bereits absolvierte Übungen werden verworfen und können nicht fortgesetzt werden. Dies lässt sich nicht rückgängig machen.",
     "en_GB": "The exercises you have already taken will be discarded and cannot be resumed. This cannot be undone.",
     "desc": "Corps de la confirmation avant abandon du bilan en cours"
+  },
+  "homeResumeCurrent": {
+    "fr": "En cours : {name}",
+    "en": "In progress: {name}",
+    "es": "En curso: {name}",
+    "pt": "Em curso: {name}",
+    "de": "Läuft: {name}",
+    "en_GB": "In progress: {name}",
+    "desc": "Bannière de reprise quand l'exercice a été mis en pause en cours de route",
+    "placeholders": {
+      "name": "String"
+    }
   }
 }

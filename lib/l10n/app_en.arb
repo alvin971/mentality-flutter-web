@@ -240,6 +240,7 @@
   "homeResumeRestart": "Start over",
   "homeResumeRestartTitle": "Start over from the beginning?",
   "homeResumeRestartBody": "The exercises you have already taken will be discarded and cannot be resumed. This cannot be undone.",
+  "homeResumeCurrent": "In progress: {name}",
   "infoTestName": "Information",
   "infoEyebrow": "VERBAL COMPREHENSION · VCI",
   "infoTrailingStatus": "{seconds}s · {score}/{attempted}",

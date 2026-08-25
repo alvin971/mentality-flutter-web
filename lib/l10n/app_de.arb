@@ -240,6 +240,7 @@
   "homeResumeRestart": "Neu beginnen",
   "homeResumeRestartTitle": "Von vorne beginnen?",
   "homeResumeRestartBody": "Bereits absolvierte Übungen werden verworfen und können nicht fortgesetzt werden. Dies lässt sich nicht rückgängig machen.",
+  "homeResumeCurrent": "Läuft: {name}",
   "infoTestName": "Allgemeinwissen",
   "infoEyebrow": "SPRACHVERSTÄNDNIS · VCI",
   "infoTrailingStatus": "{seconds}s · {score}/{attempted}",

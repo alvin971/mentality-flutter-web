@@ -31,6 +31,7 @@ import '../../services/session_persistence_service.dart';
 import '../models/complete_test_session.dart';
 import 'auth_local_store.dart';
 import 'results_sync.dart';
+import 'subtest_progress_store.dart';
 
 /// Une passation interrompue, prête à repartir.
 class ResumableSession {
@@ -41,6 +42,7 @@ class ResumableSession {
     required this.serverStartedOn,
     required this.clientSessionId,
     required this.knownToServer,
+    this.exerciceEnCours,
   });
 
   /// Codes WAIS-IV stables des sous-tests ADMINISTRÉS — indépendamment du fait
@@ -75,6 +77,15 @@ class ResumableSession {
   /// (hors ligne, ou envois jamais partis).
   final bool knownToServer;
 
+  /// Code de l'exercice COMMENCÉ mais pas fini, s'il y en a un.
+  ///
+  /// Il ne compte pas parmi les exercices faits — il est justement à finir —
+  /// mais il suffit à lui seul à justifier une reprise. Sans lui, mettre en
+  /// pause pendant le TOUT PREMIER exercice ne laissait aucune trace visible :
+  /// aucun exercice terminé, donc aucune bannière, alors que le point de
+  /// reprise existait bel et bien.
+  final String? exerciceEnCours;
+
   /// Libellés de [CompleteTestSession.testSequence] déjà terminés, dans l'ordre
   /// de la séquence — c'est ce que le modèle de session attend.
   List<String> get completedTests => [
@@ -101,6 +112,11 @@ class ResumableSession {
 
   /// Les 12 sous-tests notés sont faits : il ne reste que la clôture.
   bool get isComplete => nextIndex >= totalTests;
+
+  /// Vrai quand le prochain exercice est celui qu'on a laissé en plan.
+  bool get reprendEnPleinExercice =>
+      exerciceEnCours != null &&
+      CompleteTestSession.subtestCodes[nextTestName] == exerciceEnCours;
 
   /// Libellé du prochain exercice, `null` s'il n'en reste aucun.
   String? get nextTestName =>
@@ -176,6 +192,9 @@ class ResumeService {
         local: local,
         distant: distant,
         identifiantLocal: await _identifiantLocal(),
+        // Source LOCALE : c'est elle qui porte le point de reprise fin, le
+        // serveur n'en connaît que le rang.
+        exerciceEnCours: SubtestProgressStore.instance.enCours()?.subtest,
       );
     } catch (_) {
       // Cet appel a lieu à CHAQUE affichage de l'accueil. Ne pas savoir s'il y
@@ -195,8 +214,9 @@ class ResumeService {
     CompleteTestSession? local,
     RemoteResumableSession? distant,
     String? identifiantLocal,
+    String? exerciceEnCours,
   }) {
-    if (local == null && distant == null) return null;
+    if (local == null && distant == null && exerciceEnCours == null) return null;
 
     // ADMINISTRÉS : union de ce que chaque côté a vu passer. Un sous-test noté
     // par IA n'a pas de score et compte quand même — sans quoi la reprise le
@@ -207,7 +227,9 @@ class ResumeService {
           .whereType<String>(),
       ...?distant?.completedCodes,
     };
-    if (faits.isEmpty) return null;
+    // Un exercice COMMENCÉ suffit : c'est le cas d'une pause prise pendant le
+    // premier exercice, où rien n'est encore terminé.
+    if (faits.isEmpty && exerciceEnCours == null) return null;
 
     // SCORES : le serveur fait autorité sur ceux qu'il connaît. Le local peut
     // porter un score qu'un envoi n'a jamais réussi à transmettre, mais jamais
@@ -231,6 +253,7 @@ class ResumeService {
       serverStartedOn: distant?.startedOn ?? local?.startTime,
       clientSessionId: distant?.clientSessionId ?? identifiantLocal,
       knownToServer: distant != null,
+      exerciceEnCours: exerciceEnCours,
     );
   }
 
@@ -240,8 +263,12 @@ class ResumeService {
     if (charge == null) return null;
     if (_joursPleins(charge.session.startTime) > fenetreJours) return null;
     // Sur `completedTests` et non sur les scores : un sous-test noté par IA est
-    // terminé sans porter de score.
-    if (charge.session.completedTests.isEmpty) return null;
+    // terminé sans porter de score. Et un exercice simplement COMMENCÉ suffit
+    // à justifier la reprise, même si aucun n'est encore terminé.
+    if (charge.session.completedTests.isEmpty &&
+        SubtestProgressStore.instance.enCours() == null) {
+      return null;
+    }
     return charge.session;
   }
 

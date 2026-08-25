@@ -240,6 +240,7 @@
   "homeResumeRestart": "Recomeçar",
   "homeResumeRestartTitle": "Recomeçar do início?",
   "homeResumeRestartBody": "Os exercícios já realizados serão descartados e não poderão ser retomados. Não será possível voltar atrás.",
+  "homeResumeCurrent": "Em curso: {name}",
   "infoTestName": "Informação",
   "infoEyebrow": "COMPREENSÃO VERBAL · VCI",
   "infoTrailingStatus": "{seconds}s · {score}/{attempted}",

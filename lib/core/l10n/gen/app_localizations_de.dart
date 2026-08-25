@@ -802,6 +802,11 @@ class AppLocalizationsDe extends AppLocalizations {
       'Bereits absolvierte Übungen werden verworfen und können nicht fortgesetzt werden. Dies lässt sich nicht rückgängig machen.';
 
   @override
+  String homeResumeCurrent(String name) {
+    return 'Läuft: $name';
+  }
+
+  @override
   String get infoTestName => 'Allgemeinwissen';
 
   @override

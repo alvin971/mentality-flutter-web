@@ -801,6 +801,11 @@ class AppLocalizationsPt extends AppLocalizations {
       'Os exercícios já realizados serão descartados e não poderão ser retomados. Não será possível voltar atrás.';
 
   @override
+  String homeResumeCurrent(String name) {
+    return 'Em curso: $name';
+  }
+
+  @override
   String get infoTestName => 'Informação';
 
   @override

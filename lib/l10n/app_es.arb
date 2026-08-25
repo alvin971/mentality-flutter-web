@@ -240,6 +240,7 @@
   "homeResumeRestart": "Empezar de nuevo",
   "homeResumeRestartTitle": "¿Empezar de nuevo desde el principio?",
   "homeResumeRestartBody": "Los ejercicios ya realizados se descartarán y no podrán reanudarse. No podrás deshacerlo.",
+  "homeResumeCurrent": "En curso: {name}",
   "infoTestName": "Información",
   "infoEyebrow": "COMPRENSIÓN VERBAL · ICV",
   "infoTrailingStatus": "{seconds}s · {score}/{attempted}",

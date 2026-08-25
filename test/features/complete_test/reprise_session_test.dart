@@ -190,6 +190,43 @@ void main() {
     });
   });
 
+  group('pause pendant le TOUT PREMIER exercice', () {
+    test(
+        'un exercice commencé suffit à proposer la reprise, même sans aucun '
+        'exercice terminé', () {
+      // Le défaut constaté : mettre en pause pendant Cubes ne faisait
+      // apparaître AUCUNE bannière, parce que la fusion exigeait au moins un
+      // exercice terminé. Le point de reprise existait pourtant.
+      final r = ResumeService.fusionne(exerciceEnCours: 'block_design');
+      expect(r, isNotNull);
+      expect(r!.completedCount, 0);
+      expect(r.nextTestName, 'Cubes');
+      expect(r.reprendEnPleinExercice, isTrue);
+    });
+
+    test('sans exercice commencé NI exercice terminé, rien à reprendre', () {
+      expect(ResumeService.fusionne(), isNull);
+    });
+
+    test(
+        "l'exercice commencé ne compte pas parmi les faits — il est justement "
+        'à finir', () {
+      final r = ResumeService.fusionne(
+        distant: distante({'block_design': 42}),
+        exerciceEnCours: 'similarities',
+      )!;
+      expect(r.completedCount, 1);
+      expect(r.nextTestName, 'Similitudes');
+      expect(r.reprendEnPleinExercice, isTrue);
+    });
+
+    test('reprendre un exercice NEUF ne se dit pas « en cours »', () {
+      final r = ResumeService.fusionne(distant: distante({'block_design': 42}))!;
+      expect(r.nextTestName, 'Similitudes');
+      expect(r.reprendEnPleinExercice, isFalse);
+    });
+  });
+
   group('durée déjà acquise', () {
     test(
         "sur appareil neuf, le départ recule de la durée serveur — sinon la "
