@@ -93,7 +93,13 @@ class _DigitSpanTestPageState extends State<DigitSpanTestPage> {
       orElse: () => SpanType.forward,
     );
     _currentItemIndex = e['itemIndex'] is int ? e['itemIndex'] as int : 0;
-    _rangGlobal = e['rangGlobal'] is int ? e['rangGlobal'] as int : 0;
+    // Repli sur le NOMBRE de mesures déjà collectées, pas sur zéro : un point
+    // de reprise écrit par une version antérieure ne porte pas `rangGlobal`,
+    // et repartir de zéro ferait entrer en collision les rangs des nouveaux
+    // items avec ceux des anciens — le dédoublonnage serveur en écraserait la
+    // moitié. Constaté en base : 12 items déclarés, 6 enregistrés.
+    _rangGlobal =
+        e['rangGlobal'] is int ? e['rangGlobal'] as int : p.items.length;
     _forwardScore = e['forward'] is int ? e['forward'] as int : 0;
     _backwardScore = e['backward'] is int ? e['backward'] as int : 0;
     _sequencingScore = e['sequencing'] is int ? e['sequencing'] as int : 0;
