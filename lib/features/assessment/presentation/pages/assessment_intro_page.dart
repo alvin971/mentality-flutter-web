@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../core/services/resume_service.dart';
 import '../../../../core/theme/app_typography.dart';
 import '../../../../core/theme/kepler_colors.dart';
 import '../../../../core/widgets/kepler_button.dart';
@@ -21,8 +22,92 @@ import '../../../exercises_implementations/coding/presentation/pages/coding_test
 import '../../../exercises_implementations/symbol_search/presentation/pages/symbol_search_test_page.dart';
 import '../../../../core/l10n/l10n_ext.dart';
 
-class AssessmentIntroPage extends StatelessWidget {
+class AssessmentIntroPage extends StatefulWidget {
   const AssessmentIntroPage({super.key});
+
+  @override
+  State<AssessmentIntroPage> createState() => _AssessmentIntroPageState();
+}
+
+class _AssessmentIntroPageState extends State<AssessmentIntroPage> {
+  /// La passation à poursuivre, s'il y en a une.
+  ///
+  /// C'est ICI que la question se pose : cette page est la porte d'entrée du
+  /// bilan, et n'offrir que « Lancer le bilan complet » à quelqu'un qui en a un
+  /// en cours lui faisait effacer son travail d'un seul bouton, sans un mot.
+  ResumableSession? _reprise;
+  bool _recherche = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _chercher();
+  }
+
+  Future<void> _chercher() async {
+    final r = await ResumeService.instance.lookup();
+    if (!mounted) return;
+    setState(() {
+      _reprise = r;
+      _recherche = false;
+    });
+  }
+
+  /// Poursuit la passation en cours. L'écran suivant se contente d'obéir : la
+  /// question ne se pose qu'ICI, une seule fois.
+  Future<void> _reprendre() async {
+    final r = _reprise;
+    if (r == null) return;
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) =>
+            CompleteTestOrchestratorPage(reprise: r),
+      ),
+    );
+    if (mounted) _chercher();
+  }
+
+  /// Repart de zéro. Irréversible, donc confirmé : la passation en cours est
+  /// close côté serveur et son état local effacé.
+  Future<void> _recommencer() async {
+    final r = _reprise;
+    if (r != null) {
+      final ok = await showDialog<bool>(
+        context: context,
+        builder: (d) => AlertDialog(
+          title: Text(d.l10n.homeResumeRestartTitle),
+          content: Text(d.l10n.homeResumeRestartBody),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(d, false),
+              child: Text(d.l10n.commonCancel),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(d, true),
+              child: Text(d.l10n.homeResumeRestart),
+            ),
+          ],
+        ),
+      );
+      if (ok != true || !mounted) return;
+      await ResumeService.instance.abandon(r);
+      if (!mounted) return;
+      setState(() => _reprise = null);
+    }
+    if (!mounted) return;
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const CompleteTestOrchestratorPage(),
+      ),
+    );
+    if (mounted) _chercher();
+  }
+
+  /// Libellé localisé d'un sous-test à partir de sa clé de séquence.
+  String _nomExercice(BuildContext context, String cle) =>
+      localizedSubtestName(context, cle);
 
   @override
   Widget build(BuildContext context) {
@@ -90,16 +175,72 @@ class AssessmentIntroPage extends StatelessWidget {
             ),
           ),
           SizedBox(height: 28.h),
-          KeplerButton(
-            label: context.l10n.assessLaunchFullAssessment,
-            icon: Icons.east,
-            expand: true,
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (_) => const CompleteTestOrchestratorPage()),
+          // Un bilan en cours ? On propose de le POURSUIVRE, et recommencer
+          // devient un choix explicite. Sans bilan en cours, l'écran ne change
+          // pas d'un pixel : un bouton « Recommencer » permanent serait un
+          // bouton sans objet.
+          if (_reprise != null) ...[
+            KeplerCard(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                      width: 3.w,
+                      height: 36.h,
+                      color: KeplerColors.of(context).primary),
+                  SizedBox(width: 14.w),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(context.l10n.homeResumeEyebrow,
+                            style: AppText.of(context).monoLabel(
+                                color: KeplerColors.of(context).primary)),
+                        SizedBox(height: 4.h),
+                        Text(
+                          context.l10n.homeResumeProgress(
+                              _reprise!.completedCount, _reprise!.totalTests),
+                          style: AppText.of(context).bodyStrong(),
+                        ),
+                        SizedBox(height: 4.h),
+                        Text(
+                          _reprise!.nextTestName == null
+                              ? context.l10n.homeResumeFinish
+                              : _reprise!.reprendEnPleinExercice
+                                  ? context.l10n.homeResumeCurrent(
+                                      _nomExercice(
+                                          context, _reprise!.nextTestName!))
+                                  : context.l10n.homeResumeNext(_nomExercice(
+                                      context, _reprise!.nextTestName!)),
+                          style: AppText.of(context).bodySmall(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
+            SizedBox(height: 14.h),
+            KeplerButton(
+              label: context.l10n.ctResumeFullTest,
+              icon: Icons.east,
+              expand: true,
+              onPressed: _reprendre,
+            ),
+            SizedBox(height: 12.h),
+            KeplerButton(
+              label: context.l10n.homeResumeRestart,
+              variant: KeplerButtonVariant.secondary,
+              expand: true,
+              onPressed: _recommencer,
+            ),
+          ] else
+            KeplerButton(
+              label: context.l10n.assessLaunchFullAssessment,
+              icon: Icons.east,
+              expand: true,
+              onPressed: _recherche ? null : _recommencer,
+            ),
           SizedBox(height: 36.h),
           Row(
             children: [
