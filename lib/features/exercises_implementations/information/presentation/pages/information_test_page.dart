@@ -14,7 +14,7 @@ import '../../../../../core/services/subtest_instrumentation.dart';
 import '../../../../../core/services/subtest_progress_store.dart';
 
 /// Page du test d'Information (Connaissances générales)
-/// WAIS-IV : 28 questions
+/// 28 questions
 /// QCM à 4 options
 /// Scoring dichotomique : 0 ou 1
 /// Règle de discontinuation : 3 échecs consécutifs
@@ -204,7 +204,7 @@ class _InformationTestPageState extends State<InformationTestPage> {
     ));
 
     // Test non noté à l'écran : on enchaîne sans retour « juste/faux ».
-    // Discontinuation WAIS-IV : 3 échecs consécutifs.
+ // Discontinuation 3 échecs consécutifs.
     if (_consecutiveFailures >= 3 ||
         currentLevel >= _generatedItems.length - 1) {
       _showFinalResults();

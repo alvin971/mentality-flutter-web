@@ -1,0 +1,15 @@
+{
+  "name": "mental-et-scripts",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Scripts d'automatisation App Store Connect et screenshots",
+  "scripts": {
+    "push-metadata": "node push_metadata_asc.js",
+    "screenshots": "node generate_screenshots.js"
+  },
+  "dependencies": {
+    "jsonwebtoken": "^9.0.2",
+    "node-fetch": "^2.7.0",
+    "playwright": "^1.59.1"
+  }
+}

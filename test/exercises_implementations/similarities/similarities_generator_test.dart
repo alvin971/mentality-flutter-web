@@ -4,7 +4,7 @@ import 'package:mentality/features/exercises_implementations/similarities/domain
 String _pairKey(SimilarityItem i) => '${i.word1}|${i.word2}';
 
 void main() {
-  group('SimilaritiesGenerator — structure WAIS conservée', () {
+  group('SimilaritiesGenerator — structure de la banque conservée', () {
     test('génère exactement 21 items', () {
       expect(SimilaritiesGenerator(seed: 1).generateComplete21Items().length, 21);
     });

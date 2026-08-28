@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mentality/features/exercises_implementations/vocabulary/domain/vocabulary_generator.dart';
 
 void main() {
-  group('VocabularyGenerator — structure WAIS conservée', () {
+  group('VocabularyGenerator — structure de la banque conservée', () {
     test('génère exactement 30 items', () {
       final items = VocabularyGenerator(seed: 1).generateComplete30Items();
       expect(items.length, 30);

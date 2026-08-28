@@ -7,7 +7,7 @@ Un assistant conversationnel IA intégré à Mentality, alimenté par **Claude 3
 ## ✨ Fonctionnalités
 
 - 💬 **Chat en temps réel** avec l'assistant IA
-- 🧠 **Spécialisé** dans les tests cognitifs WAIS-IV
+- 🧠 **Spécialisé** en psychologie cognitive
 - 📊 **Explications** sur les résultats et domaines cognitifs
 - 💡 **Conseils personnalisés** pour améliorer vos capacités
 - 🔄 **Historique contextuel** pour conversations naturelles
@@ -57,7 +57,7 @@ flutter run
 ### 5. Tester le chat
 
 1. Sur la page d'accueil → Cliquez sur **"Parler avec Mentality"**
-2. Posez une question comme "Qu'est-ce que le WAIS-IV ?"
+2. Posez une question comme "Que mesure la mémoire de travail ?"
 3. Profitez ! 🎉
 
 ## 📖 Documentation Complète

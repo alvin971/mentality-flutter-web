@@ -1,61 +1,53 @@
-Évaluez vos capacités cognitives avec la précision des tests utilisés par les psychologues. Mental E.T. est basée sur le WAIS-IV (Échelles de Wechsler d'Intelligence pour Adultes), la référence mondiale en évaluation neuropsychologique.
+Découvrez votre profil cognitif.
 
-Aucun compte requis — lancez votre évaluation dès le premier écran.
-
-
-QU'EST-CE QUE MENTAL E.T. ?
-
-Mental E.T. est une plateforme de tests cognitifs adaptatifs conçue pour les professionnels de santé mentale et leurs patients. Chaque évaluation est calibrée en temps réel sur votre niveau grâce à un algorithme adaptatif (CAT) basé sur la Théorie de Réponse à l'Item (IRT).
+Mental E.T. propose une série d'exercices originaux pour explorer votre façon de raisonner, de mémoriser et de traiter l'information. Aucun compte requis — commencez dès le premier écran.
 
 
-12 TESTS COGNITIFS SCIENTIFIQUEMENT VALIDÉS
+CE QUE C'EST
 
-L'application couvre les 5 domaines cognitifs du WAIS-IV :
-
-• Compréhension Verbale — similitudes, vocabulaire, information générale
-• Raisonnement Visuo-Spatial — cubes, puzzles visuels
-• Raisonnement Fluide — matrices progressives, balances quantitatives
-• Mémoire de Travail — empan de chiffres, arithmétique mentale
-• Vitesse de Traitement — codage symboles (120s), recherche de symboles
-
-+ Module optionnel Langage Oral : lecture à voix haute et résumé avec enregistrement.
+13 exercices cognitifs construits selon le modèle CHC (Cattell-Horn-Carroll), le cadre de référence académique des aptitudes humaines. Chaque exercice explore une aptitude ; l'ensemble dessine votre profil.
 
 
-VOS RÉSULTATS EN DÉTAIL
+CE QUE CE N'EST PAS
 
-• Score global FSIQ avec classification verbale (Très supérieur → Extrêmement faible)
-• 5 indices composites (ICV, IVS, IRF, IMT, IVT)
-• Notes standardisées pour chacun des 12 sous-tests
-• Percentiles et intervalles de confiance à 95%
-• Export PDF du rapport complet, prêt pour vos dossiers cliniques
+Ni un test clinique, ni un diagnostic, ni un substitut à l'évaluation d'un psychologue. Vos résultats sont indicatifs.
 
 
-ALGORITHME ADAPTATIF (CAT + IRT)
+LES CINQ DOMAINES EXPLORÉS
 
-La difficulté s'ajuste après chaque réponse. Le test s'arrête automatiquement quand la précision est suffisante. Évaluation fiable en 30 à 60 minutes pour un bilan complet.
+• Compréhension verbale — points communs, vocabulaire, culture générale
+• Raisonnement visuo-spatial — cubes, assemblages
+• Raisonnement fluide — matrices, équilibres
+• Mémoire de travail — suites de chiffres, calcul mental, mémoire des images
+• Vitesse de traitement — transcription, détection de symboles
 
-
-ASSISTANT IA INTÉGRÉ
-
-Posez vos questions à l'assistant IA spécialisé en psychologie cognitive : interprétation des résultats, explication des indices, conseils personnalisés. Disponible depuis l'écran d'accueil.
-
-
-HISTORIQUE ET SUIVI
-
-Toutes vos évaluations sont sauvegardées. Consultez l'historique de vos sessions, suivez l'évolution de vos scores, et reprenez un test interrompu là où vous l'avez laissé.
++ Module optionnel Langage oral : lecture à voix haute et résumé.
 
 
-POUR LES PSYCHOLOGUES
+VOS RÉSULTATS
 
-Administrez des bilans cognitifs complets à distance ou en présentiel. Consultez les scores détaillés et l'historique de vos patients. Exportez des rapports PDF pour vos dossiers cliniques.
-
-
-SÉCURISÉ ET CONFIDENTIEL
-
-• Chiffrement AES-256 de toutes les données locales
-• Stockage local uniquement — vos résultats restent sur votre appareil
-• Conformité RGPD et recommandations de la CNIL
-• Aucune publicité, aucun achat intégré, gratuit
+• Un profil sur les cinq domaines
+• Un score global qui les résume
+• Un rang percentile pour situer votre résultat
+• Un rapport PDF exportable
 
 
-Mental E.T. — La psychologie cognitive, accessible à tous.
+DIFFICULTÉ ADAPTATIVE
+
+La difficulté s'ajuste au fil de vos réponses (théorie de réponse à l'item). Comptez 60 à 90 minutes pour le parcours complet. Vous pouvez l'interrompre et le reprendre là où vous l'aviez laissé.
+
+
+ASSISTANT IA
+
+Posez vos questions sur vos résultats et sur le fonctionnement cognitif. L'assistant n'établit aucun diagnostic et vous oriente vers un professionnel quand c'est utile.
+
+
+VOS DONNÉES
+
+• Chiffrement AES-256 sur l'appareil
+• Hébergement en France (Paris)
+• Traitement conforme au RGPD
+• Aucune publicité, aucune revente de données, gratuit
+
+
+Mental E.T. — Explorez votre fonctionnement cognitif.

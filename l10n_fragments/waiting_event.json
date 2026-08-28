@@ -101,7 +101,7 @@
     "desc": "Titre du jour 6"
   },
   "weDay7Title": {
-    "fr": "Bilan autisme",
+    "fr": "Profil autisme",
     "en": "Autism profile",
     "desc": "Titre du jour 7"
   },
@@ -275,17 +275,17 @@
     }
   },
   "weRvCaveat": {
-    "fr": "Un indice est une mesure, avec sa marge d'erreur — pas un verdict. Repasser le même bilan ne redonnerait pas exactement le même nombre.",
+    "fr": "Un indice est une mesure, avec sa marge d'erreur — pas un verdict. Repasser la même évaluation ne redonnerait pas exactement le même nombre.",
     "en": "An index is a measurement, with its margin of error — not a verdict. Taking the same assessment again would not give exactly the same number.",
     "desc": "Mise en garde présente sur TOUTES les révélations : un score est une mesure avec sa marge d'erreur"
   },
   "weRvUnavailableTitle": {
-    "fr": "Aucun bilan à révéler",
+    "fr": "Aucune évaluation à révéler",
     "en": "No assessment to reveal",
     "desc": "Titre quand aucun bilan n'est rattaché au passe courant"
   },
   "weRvUnavailableBody": {
-    "fr": "Aucun bilan terminé n'est rattaché à ce passe sur cet appareil. Rien n'est perdu : la révélation s'affichera dès que tes résultats seront de nouveau lisibles ici.",
+    "fr": "Aucune évaluation terminée n'est rattachée à ce passe sur cet appareil. Rien n'est perdu : la révélation s'affichera dès que tes résultats seront de nouveau lisibles ici.",
     "en": "No completed assessment is attached to this pass on this device. Nothing is lost: the reveal will appear as soon as your results are readable here again.",
     "desc": "Corps du message quand aucun bilan n'est rattaché au passe courant"
   },
@@ -295,7 +295,7 @@
     "desc": "Titre quand l'indice du jour n'a pas été calculé (sous-test manquant)"
   },
   "weRvMissingBody": {
-    "fr": "Ton bilan enregistré ne contient pas cet indice — il y manquait un sous-test. Les autres révélations restent disponibles.",
+    "fr": "Ton évaluation enregistrée ne contient pas cet indice — il y manquait un sous-test. Les autres révélations restent disponibles.",
     "en": "Your saved assessment does not include this index — a subtest was missing. The other reveals remain available.",
     "desc": "Corps du message quand l'indice du jour n'a pas été calculé"
   },

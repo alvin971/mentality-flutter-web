@@ -257,7 +257,7 @@ class _EntryCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Text('FSIQ',
+                    Text(context.l10n.histScoreShortIq,
                         style: AppText.of(context).monoLabel(
                             color: Theme.of(context).colorScheme.outline)),
                     if (locked) ...[

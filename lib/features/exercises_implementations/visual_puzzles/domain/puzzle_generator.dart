@@ -158,7 +158,7 @@ class PuzzleItem {
 
 /// Générateur d'items "Puzzles visuels".
 ///
-/// Principe fidèle au subtest VP du WAIS-IV (contenu 100 % original) :
+/// Principe fidèle au subtest VP (contenu 100 % original):
 /// une silhouette cible pleine, 6 pièces numérotées, choisir les 3 qui la
 /// reconstituent. Les pièces peuvent être tournées mentalement, jamais
 /// retournées.

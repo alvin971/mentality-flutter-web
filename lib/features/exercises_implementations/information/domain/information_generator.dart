@@ -8,7 +8,7 @@ import 'information_items_fr.dart';
 import 'information_items_de.dart';
 import 'information_items_pt.dart';
 
-/// Générateur de 28 items d'Information (Connaissances générales - WAIS-IV).
+/// Générateur de 28 items d'Information (Connaissances générales).
 ///
 /// Les 28 questions sont TIRÉES ALÉATOIREMENT dans une banque élargie
 /// (~180 QCM répartis en 15 cellules domaine × difficulté) à chaque création :

@@ -36,7 +36,7 @@ class _CubesTestPageState extends State<CubesTestPage> {
   late final CubePatternGenerator _patternGenerator;
   late List<CubePattern> _generatedPatterns;
 
-  // 14 items selon WAIS-IV : 2 exemples + 3 faciles + 4 moyens + 5 difficiles.
+ // 14 items selon 2 exemples + 3 faciles + 4 moyens + 5 difficiles.
   // L'ordre canonique (figé, versionné) est défini une seule fois dans le
   // générateur → source unique de vérité pour la banque déterministe.
   final List<DifficultyLevel> _difficultyProgression =
@@ -222,7 +222,7 @@ class _CubesTestPageState extends State<CubesTestPage> {
 
     // Test non noté à l'écran : aucun récapitulatif de points/temps/réussite,
     // simple confirmation de fin — le score repart vers l'appelant, sans être montré.
-    // Aucune option « Recommencer » : un sous-test WAIS-IV ne se repasse pas
+ // Aucune option « Recommencer »: un sous-test ne se repasse pas
     // (effet d'apprentissage sur des items déjà vus → normes invalidées).
     showDialog(
       context: context,
@@ -259,7 +259,7 @@ class _CubesTestPageState extends State<CubesTestPage> {
       // Tout tient à l'écran : les deux grilles se redimensionnent à la
       // hauteur disponible, les boutons restent toujours visibles.
       scrollable: false,
-      // Aucun score visible pendant la passation (protocole WAIS-IV) : seule
+ // Aucun score visible pendant la passation (protocole ): seule
       // la progression d'items est affichée, jamais les points obtenus.
       bottomBar: _demoPhase && _demoLastCorrect != null
           ? KeplerTestButton.primary(

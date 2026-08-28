@@ -115,7 +115,7 @@ Documentation/
   PROMPT SYSTÈME DE MENTALITY
 ═══════════════════════════════════════════════════════════════
 
-Rôle : Assistant IA spécialisé WAIS-IV
+Rôle : Assistant IA spécialisé en psychologie cognitive
 Aide :
   - Comprendre résultats des tests
   - Expliquer domaines cognitifs
@@ -159,7 +159,7 @@ Limites :
 
 5. Tester le chat
    → Page d'accueil > "Parler avec Mentality"
-   → Poser une question : "Qu'est-ce que le WAIS-IV ?"
+   → Poser une question : "Que mesure la mémoire de travail ?"
    → Profiter ! 🎉
 
 ═══════════════════════════════════════════════════════════════

@@ -1,4 +1,4 @@
-/// Banque de QCM FRANCAISE du sous-test Information (WAIS-IV).
+/// Banque de QCM FRANCAISE du sous-test Information.
 /// GENERE automatiquement (genere par IA, fact-checke). 15 cellules domaine x difficulte.
 /// Ordre : bloc easy (5 domaines), medium (5), hard (5). NE PAS editer a la main.
 import 'information_generator.dart';

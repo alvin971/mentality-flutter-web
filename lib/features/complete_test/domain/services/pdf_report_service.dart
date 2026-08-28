@@ -5,7 +5,7 @@ import '../../../../core/models/complete_test_session.dart';
 import '../../../scoring/domain/entities/iq_score.dart';
 import '../../../../core/l10n/l10n_ext.dart';
 
-/// Service de génération et d'impression du rapport PDF WAIS-IV.
+/// Service de génération et d'impression du rapport PDF.
 ///
 /// Utilise les packages `pdf` + `printing` pour générer un document
 /// imprimable / téléchargeable directement dans le navigateur.

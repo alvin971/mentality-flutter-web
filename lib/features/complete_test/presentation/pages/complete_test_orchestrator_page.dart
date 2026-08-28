@@ -404,7 +404,7 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
   Widget _buildIntroScreen(BuildContext context) {
     return KeplerScaffold(
       title: context.l10n.ctIntroTitle,
-      eyebrow: 'WAIS-IV',
+      eyebrow: context.l10n.assessIntroEyebrow,
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -552,7 +552,7 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
 
     return KeplerScaffold(
       title: context.l10n.ctRunningTitle,
-      eyebrow: 'WAIS-IV',
+      eyebrow: context.l10n.assessIntroEyebrow,
       scroll: false,
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
       child: Column(

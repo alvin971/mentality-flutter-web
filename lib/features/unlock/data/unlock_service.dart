@@ -438,7 +438,7 @@ class RemoteResumableSession {
   /// `raw_score` est nul, et ils ne doivent surtout pas être refaits.
   final Set<String> completedCodes;
 
-  /// Code WAIS-IV stable → score brut, pour les seuls sous-tests qui en ont un.
+ /// Code stable → score brut, pour les seuls sous-tests qui en ont un.
   final Map<String, int> scoresByCode;
 
   /// Jour de début tel que le serveur le connaît. La granularité est la JOURNÉE

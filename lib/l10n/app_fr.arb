@@ -41,15 +41,15 @@
   "@oralConsentPrivacyLink": {
     "description": "Lien vers la politique de confidentialité sur l'écran de consentement"
   },
-  "matDiscontinue3": "3 échecs consécutifs - Test terminé (WAIS-IV)",
+  "matDiscontinue3": "3 échecs consécutifs — exercice terminé.",
   "@matDiscontinue3": {
-    "description": "Matrices — message de règle de discontinuation après 3 échecs"
+    "description": "Matrices — message de règle de discontinuation sur renoncement (3 items passés d'affilée)"
   },
   "assessIntroTitle": "Nouvelle évaluation",
   "@assessIntroTitle": {
     "description": "Titre de la page d'introduction au bilan cognitif"
   },
-  "assessIntroEyebrow": "BILAN COGNITIF",
+  "assessIntroEyebrow": "ÉVALUATION COGNITIVE",
   "@assessIntroEyebrow": {
     "description": "Eyebrow (sur-titre) de la page d'introduction au bilan"
   },
@@ -61,7 +61,7 @@
   "@assessIntroHero2": {
     "description": "Titre hero ligne 2 (italique) de la page d'intro évaluation"
   },
-  "assessIntroDescription": "Cette évaluation mesure vos capacités cognitives à travers six domaines issus du WAIS-IV. Un score global (FSIQ) en est la synthèse.",
+  "assessIntroDescription": "Cette évaluation explore vos capacités cognitives à travers six domaines du modèle CHC (Cattell-Horn-Carroll). Un score global en est la synthèse.",
   "@assessIntroDescription": {
     "description": "Paragraphe descriptif de l'intro évaluation"
   },
@@ -71,23 +71,23 @@
   },
   "assessDomainVci": "Compréhension Verbale",
   "@assessDomainVci": {
-    "description": "Libellé du domaine VCI"
+    "description": "Libellé du domaine"
   },
   "assessDomainVsi": "Raisonnement Visuo-Spatial",
   "@assessDomainVsi": {
-    "description": "Libellé du domaine VSI"
+    "description": "Libellé du domaine"
   },
   "assessDomainFri": "Raisonnement Fluide",
   "@assessDomainFri": {
-    "description": "Libellé du domaine FRI"
+    "description": "Libellé du domaine"
   },
   "assessDomainWmi": "Mémoire de Travail",
   "@assessDomainWmi": {
-    "description": "Libellé du domaine WMI"
+    "description": "Libellé du domaine"
   },
   "assessDomainPsi": "Vitesse de Traitement",
   "@assessDomainPsi": {
-    "description": "Libellé du domaine PSI"
+    "description": "Libellé du domaine"
   },
   "assessDomainLo": "Langage Oral",
   "@assessDomainLo": {
@@ -101,7 +101,7 @@
   "@assessBeforeStartBody": {
     "description": "Texte de consigne avant le bilan"
   },
-  "assessLaunchFullAssessment": "Lancer le bilan complet",
+  "assessLaunchFullAssessment": "Lancer l'évaluation complète",
   "@assessLaunchFullAssessment": {
     "description": "Bouton pour lancer le bilan complet"
   },
@@ -109,7 +109,7 @@
   "@assessOrIndividualSubtest": {
     "description": "Séparateur entre bilan complet et subtests individuels"
   },
-  "assessSubtestCubes": "Cubes (Block Design)",
+  "assessSubtestCubes": "Cubes",
   "@assessSubtestCubes": {
     "description": "Libellé du subtest Cubes dans la liste des tests individuels"
   },
@@ -117,17 +117,17 @@
   "@assessSubtestMatrices": {
     "description": "Libellé du subtest Matrices dans la liste des tests individuels"
   },
-  "assessSubtestFigureWeights": "Balances Quantitatives",
+  "assessSubtestFigureWeights": "Équilibres",
   "@assessSubtestFigureWeights": {
-    "description": "Libellé du subtest Balances dans la liste des tests individuels"
+    "description": "Libellé du subtest Équilibres dans la liste des tests individuels"
   },
-  "assessSubtestVisualPuzzles": "Puzzles Visuels",
+  "assessSubtestVisualPuzzles": "Assemblages",
   "@assessSubtestVisualPuzzles": {
-    "description": "Libellé du subtest Puzzles Visuels"
+    "description": "Libellé du subtest Assemblages"
   },
-  "assessSubtestSimilarities": "Similitudes",
+  "assessSubtestSimilarities": "Points communs",
   "@assessSubtestSimilarities": {
-    "description": "Libellé du subtest Similitudes"
+    "description": "Libellé du subtest Points communs"
   },
   "assessSubtestVocabulary": "Vocabulaire",
   "@assessSubtestVocabulary": {
@@ -137,9 +137,9 @@
   "@assessSubtestInformation": {
     "description": "Libellé du subtest Information"
   },
-  "assessSubtestDigitSpan": "Mémoire des Chiffres",
+  "assessSubtestDigitSpan": "Suites de chiffres",
   "@assessSubtestDigitSpan": {
-    "description": "Libellé du subtest Mémoire des Chiffres"
+    "description": "Libellé du subtest Suites de chiffres"
   },
   "assessSubtestArithmetic": "Arithmétique",
   "@assessSubtestArithmetic": {
@@ -149,13 +149,13 @@
   "@assessSubtestPictureSpan": {
     "description": "Libellé du subtest Mémoire des Images"
   },
-  "assessSubtestCoding": "Code",
+  "assessSubtestCoding": "Transcription",
   "@assessSubtestCoding": {
     "description": "Libellé du subtest Code"
   },
-  "assessSubtestSymbolSearch": "Recherche de Symboles",
+  "assessSubtestSymbolSearch": "Détection de symboles",
   "@assessSubtestSymbolSearch": {
-    "description": "Libellé du subtest Recherche de Symboles"
+    "description": "Libellé du subtest Détection de symboles"
   },
   "assessSubtestOralComprehension": "Compréhension Orale",
   "@assessSubtestOralComprehension": {
@@ -254,29 +254,33 @@
       }
     }
   },
-  "histScoreFsiq": "QI Total (FSIQ)",
+  "histScoreFsiq": "QI Total",
   "@histScoreFsiq": {
     "description": "Libellé de la ligne du QI total dans le détail d'un résultat"
   },
-  "histScoreVci": "VCI — Verbal",
+  "histScoreShortIq": "QI",
+  "@histScoreShortIq": {
+    "description": "Étiquette courte de la colonne du score global dans l'historique (« QI » est un terme générique, sans marque)"
+  },
+  "histScoreVci": "Compréhension Verbale",
   "@histScoreVci": {
-    "description": "Libellé de la ligne VCI dans le détail d'un résultat"
+    "description": "Libellé de la ligne dans le détail d'un résultat"
   },
-  "histScoreVsi": "VSI — Visuo-Spatial",
+  "histScoreVsi": "Visuo-Spatial",
   "@histScoreVsi": {
-    "description": "Libellé de la ligne VSI dans le détail d'un résultat"
+    "description": "Libellé de la ligne dans le détail d'un résultat"
   },
-  "histScoreFri": "FRI — Raisonnement",
+  "histScoreFri": "Raisonnement Fluide",
   "@histScoreFri": {
-    "description": "Libellé de la ligne FRI dans le détail d'un résultat"
+    "description": "Libellé de la ligne dans le détail d'un résultat"
   },
-  "histScoreWmi": "WMI — Mémoire",
+  "histScoreWmi": "Mémoire de Travail",
   "@histScoreWmi": {
-    "description": "Libellé de la ligne WMI dans le détail d'un résultat"
+    "description": "Libellé de la ligne dans le détail d'un résultat"
   },
-  "histScorePsi": "PSI — Vitesse",
+  "histScorePsi": "Vitesse de Traitement",
   "@histScorePsi": {
-    "description": "Libellé de la ligne PSI dans le détail d'un résultat"
+    "description": "Libellé de la ligne dans le détail d'un résultat"
   },
   "histEmptyEyebrow": "AUCUN RÉSULTAT",
   "@histEmptyEyebrow": {
@@ -290,7 +294,7 @@
   "@histEmptyHero2": {
     "description": "Titre hero ligne 2 (italique) de l'état vide"
   },
-  "histEmptyDescription": "Complétez votre première évaluation WAIS-IV pour voir vos résultats apparaître ici.",
+  "histEmptyDescription": "Complétez votre première évaluation pour voir vos résultats apparaître ici.",
   "@histEmptyDescription": {
     "description": "Texte descriptif de l'état vide de l'historique"
   },
@@ -334,7 +338,7 @@
   "@ctIntroContentTitle": {
     "description": "Titre de la carte contenu"
   },
-  "ctIntroContentBody": "Cubes · Similitudes · Mémoire · Matrices · Vocabulaire · Arithmétique · Symboles · Puzzles · Information · Code · Images · Balances · Langage oral.",
+  "ctIntroContentBody": "Cubes · Points communs · Suites de chiffres · Matrices · Vocabulaire · Arithmétique · Symboles · Assemblages · Information · Transcription · Images · Équilibres · Langage oral.",
   "@ctIntroContentBody": {
     "description": "Liste des subtests dans la carte contenu"
   },
@@ -350,7 +354,7 @@
   "@ctIntroImportantBody": {
     "description": "Corps de la carte avertissement"
   },
-  "ctPatientAgeHeader": "ÂGE DU PATIENT",
+  "ctPatientAgeHeader": "VOTRE ÂGE",
   "@ctPatientAgeHeader": {
     "description": "En-tête de la carte de saisie de l'âge"
   },
@@ -390,7 +394,7 @@
   "@ctComputingResultsTitle": {
     "description": "Titre de l'écran de calcul des résultats"
   },
-  "ctComputingResultsEyebrow": "BILAN",
+  "ctComputingResultsEyebrow": "ÉVALUATION",
   "@ctComputingResultsEyebrow": {
     "description": "Eyebrow de l'écran de calcul des résultats"
   },
@@ -411,13 +415,13 @@
   "@ctTestCubes": {
     "description": "Nom affiché du subtest Cubes"
   },
-  "ctTestSimilarities": "Similitudes",
+  "ctTestSimilarities": "Points communs",
   "@ctTestSimilarities": {
-    "description": "Nom affiché du subtest Similitudes"
+    "description": "Nom affiché du subtest Points communs"
   },
-  "ctTestDigitSpan": "Mémoire des Chiffres",
+  "ctTestDigitSpan": "Suites de chiffres",
   "@ctTestDigitSpan": {
-    "description": "Nom affiché du subtest Mémoire des Chiffres"
+    "description": "Nom affiché du subtest Suites de chiffres"
   },
   "ctTestMatrices": "Matrices",
   "@ctTestMatrices": {
@@ -431,19 +435,19 @@
   "@ctTestArithmetic": {
     "description": "Nom affiché du subtest Arithmétique"
   },
-  "ctTestSymbolSearch": "Recherche de Symboles",
+  "ctTestSymbolSearch": "Détection de symboles",
   "@ctTestSymbolSearch": {
-    "description": "Nom affiché du subtest Recherche de Symboles"
+    "description": "Nom affiché du subtest Détection de symboles"
   },
-  "ctTestVisualPuzzles": "Puzzles Visuels",
+  "ctTestVisualPuzzles": "Assemblages",
   "@ctTestVisualPuzzles": {
-    "description": "Nom affiché du subtest Puzzles Visuels"
+    "description": "Nom affiché du subtest Assemblages"
   },
   "ctTestInformation": "Information",
   "@ctTestInformation": {
     "description": "Nom affiché du subtest Information"
   },
-  "ctTestCoding": "Code",
+  "ctTestCoding": "Transcription",
   "@ctTestCoding": {
     "description": "Nom affiché du subtest Code"
   },
@@ -451,27 +455,27 @@
   "@ctTestPictureSpan": {
     "description": "Nom affiché du subtest Mémoire des Images"
   },
-  "ctTestFigureWeights": "Balances",
+  "ctTestFigureWeights": "Équilibres",
   "@ctTestFigureWeights": {
-    "description": "Nom affiché du subtest Balances"
+    "description": "Nom affiché du subtest Équilibres"
   },
   "ctResultsTitle": "Résultats",
   "@ctResultsTitle": {
     "description": "Titre de la page de résultats du test complet"
   },
-  "ctResultsEyebrow": "BILAN WAIS-IV",
+  "ctResultsEyebrow": "VOTRE PROFIL COGNITIF",
   "@ctResultsEyebrow": {
     "description": "Eyebrow de la page de résultats"
   },
-  "ctResultsHero1": "Bilan",
+  "ctResultsHero1": "Évaluation",
   "@ctResultsHero1": {
     "description": "Titre hero ligne 1 de la page de résultats"
   },
-  "ctResultsHero2": "terminé.",
+  "ctResultsHero2": "terminée.",
   "@ctResultsHero2": {
     "description": "Titre hero ligne 2 (italique) de la page de résultats"
   },
-  "ctResultsSummary": "Synthèse de vos performances cognitives sur les subtests notés du WAIS-IV.",
+  "ctResultsSummary": "Synthèse de vos performances cognitives sur les exercices notés.",
   "@ctResultsSummary": {
     "description": "Paragraphe de synthèse en tête de page de résultats"
   },
@@ -498,9 +502,9 @@
   },
   "ctMetaAge": "ÂGE",
   "@ctMetaAge": {
-    "description": "Libellé méta : âge du patient"
+    "description": "Libellé méta : âge de la personne"
   },
-  "ctFsiqCardLabel": "QI TOTAL · FSIQ",
+  "ctFsiqCardLabel": "SCORE GLOBAL",
   "@ctFsiqCardLabel": {
     "description": "Libellé de la carte du QI total"
   },
@@ -531,23 +535,23 @@
   },
   "ctIndexVci": "Compréhension Verbale",
   "@ctIndexVci": {
-    "description": "Libellé complet de l'indice VCI"
+    "description": "Libellé complet de l'indice concerné"
   },
   "ctIndexVsi": "Visuo-Spatial",
   "@ctIndexVsi": {
-    "description": "Libellé complet de l'indice VSI"
+    "description": "Libellé complet de l'indice concerné"
   },
   "ctIndexFri": "Raisonnement Fluide",
   "@ctIndexFri": {
-    "description": "Libellé complet de l'indice FRI"
+    "description": "Libellé complet de l'indice concerné"
   },
   "ctIndexWmi": "Mémoire de Travail",
   "@ctIndexWmi": {
-    "description": "Libellé complet de l'indice WMI"
+    "description": "Libellé complet de l'indice concerné"
   },
   "ctIndexPsi": "Vitesse de Traitement",
   "@ctIndexPsi": {
-    "description": "Libellé complet de l'indice PSI"
+    "description": "Libellé complet de l'indice concerné"
   },
   "ctIndexCiPercentile": "IC {lower}–{upper} · {rank}e %ile",
   "@ctIndexCiPercentile": {
@@ -577,25 +581,25 @@
   "@ctStandardizedScoresHeader": {
     "description": "En-tête de la carte des notes standardisées par subtest"
   },
-  "ctGroupVciVerbal": "VCI · Verbal",
+  "ctGroupVciVerbal": "Compréhension Verbale",
   "@ctGroupVciVerbal": {
-    "description": "Titre du groupe VCI dans le détail des subtests"
+    "description": "Titre du groupe dans le détail des subtests"
   },
-  "ctGroupVsiVisuoSpatial": "VSI · Visuo-Spatial",
+  "ctGroupVsiVisuoSpatial": "Visuo-Spatial",
   "@ctGroupVsiVisuoSpatial": {
-    "description": "Titre du groupe VSI dans le détail des subtests"
+    "description": "Titre du groupe dans le détail des subtests"
   },
-  "ctGroupFriReasoning": "FRI · Raisonnement",
+  "ctGroupFriReasoning": "Raisonnement Fluide",
   "@ctGroupFriReasoning": {
-    "description": "Titre du groupe FRI dans le détail des subtests"
+    "description": "Titre du groupe dans le détail des subtests"
   },
-  "ctGroupWmiMemory": "WMI · Mémoire",
+  "ctGroupWmiMemory": "Mémoire de Travail",
   "@ctGroupWmiMemory": {
-    "description": "Titre du groupe WMI dans le détail des subtests"
+    "description": "Titre du groupe dans le détail des subtests"
   },
-  "ctGroupPsiSpeed": "PSI · Vitesse",
+  "ctGroupPsiSpeed": "Vitesse de Traitement",
   "@ctGroupPsiSpeed": {
-    "description": "Titre du groupe PSI dans le détail des subtests"
+    "description": "Titre du groupe dans le détail des subtests"
   },
   "ctRawScore": "brut {raw}",
   "@ctRawScore": {
@@ -647,7 +651,7 @@
   "@ctMissingAgeHeader": {
     "description": "En-tête de l'avis 'âge manquant'"
   },
-  "ctMissingAgeBody": "Sans l'âge du patient, seuls les scores bruts sont affichés. Relancez le test en renseignant l'âge pour obtenir le QI standardisé, les percentiles et les intervalles de confiance.",
+  "ctMissingAgeBody": "Sans votre âge, seuls les scores bruts sont affichés. Relancez le test en renseignant l'âge pour obtenir le QI standardisé, les percentiles et les intervalles de confiance.",
   "@ctMissingAgeBody": {
     "description": "Corps de l'avis 'âge manquant'"
   },
@@ -668,7 +672,7 @@
   "@ctBackToHome": {
     "description": "Bouton de retour à l'accueil depuis les résultats"
   },
-  "ctPdfSubtitle": "Rapport d'évaluation cognitive WAIS-IV",
+  "ctPdfSubtitle": "Rapport de profil cognitif",
   "@ctPdfSubtitle": {
     "description": "Sous-titre du rapport PDF (sous le titre de marque)"
   },
@@ -700,9 +704,9 @@
   "@ctPdfDate": {
     "description": "Libellé 'Date' dans le bandeau d'info du PDF"
   },
-  "ctPdfFsiqLabel": "SCORE QI GLOBAL (FSIQ)",
+  "ctPdfFsiqLabel": "SCORE GLOBAL",
   "@ctPdfFsiqLabel": {
-    "description": "Libellé du bloc FSIQ dans le PDF"
+    "description": "Libellé du bloc dans le PDF"
   },
   "ctPdfConfidenceInterval95": "Intervalle de confiance 95%",
   "@ctPdfConfidenceInterval95": {
@@ -725,25 +729,25 @@
   "@ctPdfIndexProfileHeader": {
     "description": "En-tête du tableau des indices dans le PDF"
   },
-  "ctPdfIndexVci": "VCI — Compréhension Verbale",
+  "ctPdfIndexVci": "Compréhension Verbale",
   "@ctPdfIndexVci": {
-    "description": "Libellé de l'indice VCI dans le tableau PDF"
+    "description": "Libellé de l'indice dans le tableau PDF"
   },
-  "ctPdfIndexVsi": "VSI — Visuo-Spatial",
+  "ctPdfIndexVsi": "Visuo-Spatial",
   "@ctPdfIndexVsi": {
-    "description": "Libellé de l'indice VSI dans le tableau PDF"
+    "description": "Libellé de l'indice dans le tableau PDF"
   },
-  "ctPdfIndexFri": "FRI — Raisonnement Fluide",
+  "ctPdfIndexFri": "Raisonnement Fluide",
   "@ctPdfIndexFri": {
-    "description": "Libellé de l'indice FRI dans le tableau PDF"
+    "description": "Libellé de l'indice dans le tableau PDF"
   },
-  "ctPdfIndexWmi": "WMI — Mémoire de Travail",
+  "ctPdfIndexWmi": "Mémoire de Travail",
   "@ctPdfIndexWmi": {
-    "description": "Libellé de l'indice WMI dans le tableau PDF"
+    "description": "Libellé de l'indice dans le tableau PDF"
   },
-  "ctPdfIndexPsi": "PSI — Vitesse de Traitement",
+  "ctPdfIndexPsi": "Vitesse de Traitement",
   "@ctPdfIndexPsi": {
-    "description": "Libellé de l'indice PSI dans le tableau PDF"
+    "description": "Libellé de l'indice dans le tableau PDF"
   },
   "ctPdfColIndex": "Indice",
   "@ctPdfColIndex": {
@@ -773,7 +777,7 @@
   "@ctPdfDisclaimer": {
     "description": "Avertissement en bas du rapport PDF"
   },
-  "ctResumeFullTest": "Reprendre le bilan",
+  "ctResumeFullTest": "Reprendre l'évaluation",
   "@ctResumeFullTest": {
     "description": "Bouton de lancement quand un bilan interrompu est repris"
   },
@@ -902,7 +906,7 @@
   "@homeHeroTitleItalic": {
     "description": "Home hero, line 2 (italic)"
   },
-  "homeHeroBody": "Une évaluation scientifique adaptative, inspirée des échelles Wechsler. 13 sous-tests, 5 indices, un score global.",
+  "homeHeroBody": "Une évaluation cognitive adaptative. 13 sous-tests, 5 indices, un score global.",
   "homeActionStartTitle": "Commencer une évaluation",
   "@homeActionStartTitle": {
     "description": "Home action card 1 title"
@@ -939,17 +943,17 @@
   "@homeAboutSubtestsTitle": {
     "description": "About tile 1 title"
   },
-  "homeAboutSubtestsBody": "Évaluation complète des cinq indices cognitifs WAIS-IV.",
+  "homeAboutSubtestsBody": "Évaluation complète des cinq indices cognitifs du modèle CHC.",
   "homeAboutAdaptiveTitle": "IA adaptative",
   "@homeAboutAdaptiveTitle": {
     "description": "About tile 2 title"
   },
   "homeAboutAdaptiveBody": "Difficulté ajustée en temps réel via inférence IRT.",
-  "homeAboutValidationTitle": "Validation scientifique",
+  "homeAboutValidationTitle": "Cadre théorique",
   "@homeAboutValidationTitle": {
     "description": "About tile 3 title"
   },
-  "homeAboutValidationBody": "Items inspirés des échelles Wechsler (WPPSI / WISC / WAIS).",
+  "homeAboutValidationBody": "Items originaux, écrits pour Mental E.T. et construits sur le modèle CHC.",
   "homeResumeEyebrow": "TEST EN COURS",
   "@homeResumeEyebrow": {
     "description": "Resume banner eyebrow"
@@ -1024,7 +1028,7 @@
   "@infoTestName": {
     "description": "Information — nom du test affiché dans le scaffold"
   },
-  "infoEyebrow": "COMPRÉHENSION VERBALE · VCI",
+  "infoEyebrow": "COMPRÉHENSION VERBALE",
   "@infoEyebrow": {
     "description": "Information — sur-titre (indice mesuré)"
   },
@@ -1107,9 +1111,9 @@
       }
     }
   },
-  "infoDiscontinue3": "3 échecs consécutifs - Test terminé (WAIS-IV)",
+  "infoDiscontinue3": "3 échecs consécutifs — exercice terminé.",
   "@infoDiscontinue3": {
-    "description": "Information — message de règle de discontinuation après 3 échecs"
+    "description": "Information — message de règle de discontinuation sur renoncement (3 items passés d'affilée)"
   },
   "infoSeeResults": "Voir les résultats",
   "@infoSeeResults": {
@@ -1240,7 +1244,7 @@
   "@arithTestName": {
     "description": "Arithmétique — nom du test affiché dans le scaffold/AppBar"
   },
-  "arithEyebrow": "MÉMOIRE DE TRAVAIL · WMI",
+  "arithEyebrow": "MÉMOIRE DE TRAVAIL",
   "@arithEyebrow": {
     "description": "Arithmétique — sur-titre (indice mesuré)"
   },
@@ -1935,31 +1939,31 @@
   },
   "scoringClassificationVerySuperior": "Très supérieur",
   "@scoringClassificationVerySuperior": {
-    "description": "Classification Wechsler pour un score composite >= 130 ou note standard >= 16"
+    "description": "Classification pour un score composite >= 130 ou note standard >= 16"
   },
   "scoringClassificationSuperior": "Supérieur",
   "@scoringClassificationSuperior": {
-    "description": "Classification Wechsler pour un score composite 120-129 ou note standard 13-15"
+    "description": "Classification pour un score composite 120-129 ou note standard 13-15"
   },
   "scoringClassificationHighAverage": "Moyen fort",
   "@scoringClassificationHighAverage": {
-    "description": "Classification Wechsler pour un score composite 110-119 ou note standard 11-12"
+    "description": "Classification pour un score composite 110-119 ou note standard 11-12"
   },
   "scoringClassificationAverage": "Moyen",
   "@scoringClassificationAverage": {
-    "description": "Classification Wechsler pour un score composite 90-109 ou note standard 8-10"
+    "description": "Classification pour un score composite 90-109 ou note standard 8-10"
   },
   "scoringClassificationLowAverage": "Moyen faible",
   "@scoringClassificationLowAverage": {
-    "description": "Classification Wechsler pour un score composite 80-89 ou note standard 6-7"
+    "description": "Classification pour un score composite 80-89 ou note standard 6-7"
   },
   "scoringClassificationBorderline": "Limite",
   "@scoringClassificationBorderline": {
-    "description": "Classification Wechsler pour un score composite 70-79 ou note standard 4-5"
+    "description": "Classification pour un score composite 70-79 ou note standard 4-5"
   },
   "scoringClassificationExtremelyLow": "Extrêmement bas",
   "@scoringClassificationExtremelyLow": {
-    "description": "Classification Wechsler pour un score composite < 70 ou note standard < 4"
+    "description": "Classification pour un score composite < 70 ou note standard < 4"
   },
   "scoringNotAvailable": "N/A",
   "@scoringNotAvailable": {
@@ -2000,23 +2004,23 @@
   },
   "scoringIndexVerbalComprehension": "Compréhension Verbale",
   "@scoringIndexVerbalComprehension": {
-    "description": "Nom affiché de l'indice VCI (WAIS-IV)"
+    "description": "Nom affiché de l'indice de compréhension verbale"
   },
   "scoringIndexVisualSpatial": "Visuo-Spatial",
   "@scoringIndexVisualSpatial": {
-    "description": "Nom affiché de l'indice VSI (WAIS-IV)"
+    "description": "Nom affiché de l'indice visuo-spatial"
   },
   "scoringIndexFluidReasoning": "Raisonnement Fluide",
   "@scoringIndexFluidReasoning": {
-    "description": "Nom affiché de l'indice FRI (WAIS-IV)"
+    "description": "Nom affiché de l'indice de raisonnement fluide"
   },
   "scoringIndexWorkingMemory": "Mémoire de Travail",
   "@scoringIndexWorkingMemory": {
-    "description": "Nom affiché de l'indice WMI (WAIS-IV)"
+    "description": "Nom affiché de l'indice de mémoire de travail"
   },
   "scoringIndexProcessingSpeed": "Vitesse de Traitement",
   "@scoringIndexProcessingSpeed": {
-    "description": "Nom affiché de l'indice PSI (WAIS-IV)"
+    "description": "Nom affiché de l'indice de vitesse de traitement"
   },
   "scoringSummaryRelativeStrengths": "Forces relatives: {list}",
   "@scoringSummaryRelativeStrengths": {
@@ -2049,17 +2053,17 @@
       }
     }
   },
-  "simTestName": "Similitudes",
+  "simTestName": "Points communs",
   "@simTestName": {
-    "description": "Similitudes — nom du test affiché dans le scaffold"
+    "description": "Points communs — nom du test affiché dans le scaffold"
   },
-  "simEyebrow": "COMPRÉHENSION VERBALE · VCI",
+  "simEyebrow": "COMPRÉHENSION VERBALE",
   "@simEyebrow": {
-    "description": "Similitudes — sur-titre (catégorie d'indice) dans le scaffold"
+    "description": "Points communs — sur-titre (catégorie d'indice) dans le scaffold"
   },
   "simStatusBar": "{seconds} s · {score} pts",
   "@simStatusBar": {
-    "description": "Similitudes — barre d'état (temps écoulé + score) dans l'AppBar",
+    "description": "Points communs — barre d'état (temps écoulé + score) dans l'AppBar",
     "placeholders": {
       "seconds": {
         "type": "int"
@@ -2071,11 +2075,11 @@
   },
   "simQuestionPrompt": "En quoi ces deux mots sont-ils similaires ?",
   "@simQuestionPrompt": {
-    "description": "Similitudes — consigne affichée au-dessus de la paire de mots"
+    "description": "Points communs — consigne affichée au-dessus de la paire de mots"
   },
   "simLevelLabel": "Niveau : {level}",
   "@simLevelLabel": {
-    "description": "Similitudes — badge indiquant le niveau d'abstraction de l'item",
+    "description": "Points communs — badge indiquant le niveau d'abstraction de l'item",
     "placeholders": {
       "level": {
         "type": "String"
@@ -2084,67 +2088,67 @@
   },
   "simLevelConcrete": "Concret",
   "@simLevelConcrete": {
-    "description": "Similitudes — nom du niveau d'abstraction concret"
+    "description": "Points communs — nom du niveau d'abstraction concret"
   },
   "simLevelFunctional": "Fonctionnel",
   "@simLevelFunctional": {
-    "description": "Similitudes — nom du niveau d'abstraction fonctionnel"
+    "description": "Points communs — nom du niveau d'abstraction fonctionnel"
   },
   "simLevelCategorical": "Catégoriel",
   "@simLevelCategorical": {
-    "description": "Similitudes — nom du niveau d'abstraction catégoriel"
+    "description": "Points communs — nom du niveau d'abstraction catégoriel"
   },
   "simLevelAbstract": "Abstrait",
   "@simLevelAbstract": {
-    "description": "Similitudes — nom du niveau d'abstraction abstrait"
+    "description": "Points communs — nom du niveau d'abstraction abstrait"
   },
   "simAnswerLabel": "Votre réponse :",
   "@simAnswerLabel": {
-    "description": "Similitudes — libellé au-dessus du champ de saisie de la réponse"
+    "description": "Points communs — libellé au-dessus du champ de saisie de la réponse"
   },
   "simAnswerHint": "Expliquez en quoi ils sont similaires...",
   "@simAnswerHint": {
-    "description": "Similitudes — texte d'invite (hint) du champ de réponse"
+    "description": "Points communs — texte d'invite (hint) du champ de réponse"
   },
   "simTipsTitle": "Conseils pour obtenir 2 points :",
   "@simTipsTitle": {
-    "description": "Similitudes — titre du bloc d'aide au scoring"
+    "description": "Points communs — titre du bloc d'aide au scoring"
   },
   "simTipsLine1": "• Donnez une catégorie abstraite ou superordonnée",
   "@simTipsLine1": {
-    "description": "Similitudes — premier conseil d'aide au scoring"
+    "description": "Points communs — premier conseil d'aide au scoring"
   },
   "simTipsLine2": "• Ex: \"Ce sont des...\", \"Formes de...\", \"Types de...\"",
   "@simTipsLine2": {
-    "description": "Similitudes — deuxième conseil d'aide au scoring (exemples)"
+    "description": "Points communs — deuxième conseil d'aide au scoring (exemples)"
   },
   "simFeedbackExcellent": "Excellent !",
   "@simFeedbackExcellent": {
-    "description": "Similitudes — titre du dialogue de feedback pour une réponse à 2 points"
+    "description": "Points communs — titre du dialogue de feedback pour une réponse à 2 points"
   },
   "simFeedbackCorrect": "Correct",
   "@simFeedbackCorrect": {
-    "description": "Similitudes — titre du dialogue de feedback pour une réponse à 1 point"
+    "description": "Points communs — titre du dialogue de feedback pour une réponse à 1 point"
   },
   "simFeedbackIncomplete": "Réponse incomplète",
   "@simFeedbackIncomplete": {
-    "description": "Similitudes — titre du dialogue de feedback pour une réponse à 0 point"
+    "description": "Points communs — titre du dialogue de feedback pour une réponse à 0 point"
   },
   "simFeedbackMsg2pts": "Réponse abstraite/catégorielle ! +2 points",
   "@simFeedbackMsg2pts": {
-    "description": "Similitudes — message de feedback pour une réponse à 2 points"
+    "description": "Points communs — message de feedback pour une réponse à 2 points"
   },
   "simFeedbackMsg1pt": "Réponse fonctionnelle/propriété. +1 point",
   "@simFeedbackMsg1pt": {
-    "description": "Similitudes — message de feedback pour une réponse à 1 point"
+    "description": "Points communs — message de feedback pour une réponse à 1 point"
   },
   "simFeedbackMsg0pt": "Réponse incorrecte ou trop vague. 0 point",
   "@simFeedbackMsg0pt": {
-    "description": "Similitudes — message de feedback pour une réponse à 0 point"
+    "description": "Points communs — message de feedback pour une réponse à 0 point"
   },
   "simYourAnswerQuoted": "Votre réponse : \"{answer}\"",
   "@simYourAnswerQuoted": {
-    "description": "Similitudes — rappel de la réponse saisie par l'utilisateur",
+    "description": "Points communs — rappel de la réponse saisie par l'utilisateur",
     "placeholders": {
       "answer": {
         "type": "String"
@@ -2153,15 +2157,15 @@
   },
   "simExamples2pts": "Exemples de réponses à 2 points :",
   "@simExamples2pts": {
-    "description": "Similitudes — titre de la liste d'exemples de réponses à 2 points"
+    "description": "Points communs — titre de la liste d'exemples de réponses à 2 points"
   },
   "simExamples1pt": "Exemples de réponses à 1 point :",
   "@simExamples1pt": {
-    "description": "Similitudes — titre de la liste d'exemples de réponses à 1 point"
+    "description": "Points communs — titre de la liste d'exemples de réponses à 1 point"
   },
   "simTimeSeconds": "Temps : {seconds} s",
   "@simTimeSeconds": {
-    "description": "Similitudes — temps passé sur l'item dans le dialogue de feedback",
+    "description": "Points communs — temps passé sur l'item dans le dialogue de feedback",
     "placeholders": {
       "seconds": {
         "type": "int"
@@ -2170,28 +2174,28 @@
   },
   "simTotalScore": "Score total : {score} points",
   "@simTotalScore": {
-    "description": "Similitudes — score total dans le dialogue de feedback",
+    "description": "Points communs — score total dans le dialogue de feedback",
     "placeholders": {
       "score": {
         "type": "int"
       }
     }
   },
-  "simDiscontinue": "3 scores de 0 consécutifs - Test terminé (WAIS-IV)",
+  "simDiscontinue": "3 items passés d'affilée — exercice terminé.",
   "@simDiscontinue": {
-    "description": "Similitudes — message de règle de discontinuation après 3 échecs"
+    "description": "Points communs — message de règle de discontinuation sur renoncement (3 items passés d'affilée)"
   },
   "simSeeResults": "Voir les résultats",
   "@simSeeResults": {
-    "description": "Similitudes — bouton du dialogue de feedback lorsque le test est terminé"
+    "description": "Points communs — bouton du dialogue de feedback lorsque le test est terminé"
   },
-  "simResultsTitle": "Test des Similitudes - Résultats",
+  "simResultsTitle": "Points communs - Résultats",
   "@simResultsTitle": {
-    "description": "Similitudes — titre du dialogue de résultats finaux"
+    "description": "Points communs — titre du dialogue de résultats finaux"
   },
   "simRawScore": "Score brut : {score}/{max} points",
   "@simRawScore": {
-    "description": "Similitudes — score brut dans le dialogue de résultats",
+    "description": "Points communs — score brut dans le dialogue de résultats",
     "placeholders": {
       "score": {
         "type": "int"
@@ -2203,7 +2207,7 @@
   },
   "simItemsCompleted": "Items complétés : {completed}/{total}",
   "@simItemsCompleted": {
-    "description": "Similitudes — nombre d'items complétés dans le dialogue de résultats",
+    "description": "Points communs — nombre d'items complétés dans le dialogue de résultats",
     "placeholders": {
       "completed": {
         "type": "int"
@@ -2215,7 +2219,7 @@
   },
   "simPercentage": "Pourcentage : {percent}%",
   "@simPercentage": {
-    "description": "Similitudes — pourcentage de réussite dans le dialogue de résultats",
+    "description": "Points communs — pourcentage de réussite dans le dialogue de résultats",
     "placeholders": {
       "percent": {
         "type": "int"
@@ -2224,7 +2228,7 @@
   },
   "simTotalTime": "Temps total : {seconds} s",
   "@simTotalTime": {
-    "description": "Similitudes — temps total dans le dialogue de résultats",
+    "description": "Points communs — temps total dans le dialogue de résultats",
     "placeholders": {
       "seconds": {
         "type": "int"
@@ -2233,15 +2237,15 @@
   },
   "simSubtitle": "Test de raisonnement verbal et abstraction conceptuelle",
   "@simSubtitle": {
-    "description": "Similitudes — sous-titre descriptif dans le dialogue de résultats"
+    "description": "Points communs — sous-titre descriptif dans le dialogue de résultats"
   },
   "simBreakdownTitle": "Répartition par niveau :",
   "@simBreakdownTitle": {
-    "description": "Similitudes — titre de la répartition des scores par niveau"
+    "description": "Points communs — titre de la répartition des scores par niveau"
   },
   "simBreakdownLine": "{level}: {total}/{max} points",
   "@simBreakdownLine": {
-    "description": "Similitudes — ligne de répartition du score pour un niveau",
+    "description": "Points communs — ligne de répartition du score pour un niveau",
     "placeholders": {
       "level": {
         "type": "String"
@@ -2256,33 +2260,33 @@
   },
   "simPerfExceptional": "Performance exceptionnelle (θ > +2.0)",
   "@simPerfExceptional": {
-    "description": "Similitudes — niveau de performance exceptionnel"
+    "description": "Points communs — niveau de performance exceptionnel"
   },
   "simPerfSuperior": "Performance supérieure (θ > +1.0)",
   "@simPerfSuperior": {
-    "description": "Similitudes — niveau de performance supérieur"
+    "description": "Points communs — niveau de performance supérieur"
   },
   "simPerfAverage": "Performance moyenne (θ ≈ 0)",
   "@simPerfAverage": {
-    "description": "Similitudes — niveau de performance moyen"
+    "description": "Points communs — niveau de performance moyen"
   },
   "simPerfBelow": "Performance inférieure (θ < 0)",
   "@simPerfBelow": {
-    "description": "Similitudes — niveau de performance inférieur"
+    "description": "Points communs — niveau de performance inférieur"
   },
   "simPerfLow": "Performance faible (θ < -1.0)",
   "@simPerfLow": {
-    "description": "Similitudes — niveau de performance faible"
+    "description": "Points communs — niveau de performance faible"
   },
   "simBack": "Retour",
   "@simBack": {
-    "description": "Similitudes — bouton de retour du dialogue de résultats"
+    "description": "Points communs — bouton de retour du dialogue de résultats"
   },
   "matTestName": "Matrices Progressives",
   "@matTestName": {
     "description": "Matrices — nom du test affiché dans le scaffold"
   },
-  "matEyebrow": "TEST DE QI · FSIQ",
+  "matEyebrow": "TEST DE QI",
   "@matEyebrow": {
     "description": "Matrices — sur-titre (catégorie d'indice) dans le scaffold"
   },
@@ -2292,7 +2296,7 @@
   },
   "matIncorrect": "Incorrect",
   "@matIncorrect": {
-    "description": "Matrices/Balances — titre du dialogue de feedback quand la réponse est fausse"
+    "description": "Matrices/Équilibres — titre du dialogue de feedback quand la réponse est fausse"
   },
   "matResponseTime": "Temps de réponse : {seconds} s",
   "@matResponseTime": {
@@ -2305,7 +2309,7 @@
   },
   "matScoreFraction": "Score : {score}/{total}",
   "@matScoreFraction": {
-    "description": "Matrices/Balances — score courant (réussites sur items tentés)",
+    "description": "Matrices/Équilibres — score courant (réussites sur items tentés)",
     "placeholders": {
       "score": {
         "type": "int"
@@ -2315,7 +2319,7 @@
       }
     }
   },
-  "matDiscontinue4": "4 échecs consécutifs - Test terminé (WAIS-IV)",
+  "matDiscontinue4": "4 échecs consécutifs — exercice terminé.",
   "@matDiscontinue4": {
     "description": "Matrices — message de règle de discontinuation après 4 échecs"
   },
@@ -2406,7 +2410,7 @@
   },
   "matChooseAnswer": "Choisissez la réponse :",
   "@matChooseAnswer": {
-    "description": "Matrices/Balances — libellé au-dessus des options de réponse"
+    "description": "Matrices/Équilibres — libellé au-dessus des options de réponse"
   },
   "matDiffEasy": "Facile",
   "@matDiffEasy": {
@@ -2428,7 +2432,7 @@
   "@matDiffHard": {
     "description": "Matrices/Cubes — étiquette de difficulté : difficile"
   },
-  "cubesTestName": "Test des Cubes",
+  "cubesTestName": "Cubes",
   "@cubesTestName": {
     "description": "Cubes — nom du test affiché dans le scaffold"
   },
@@ -2566,46 +2570,46 @@
   "@cubesReset": {
     "description": "Cubes — bouton de réinitialisation de la grille"
   },
-  "fwTestName": "Balances Quantitatives",
+  "fwTestName": "Équilibres",
   "@fwTestName": {
-    "description": "Balances — nom du test affiché dans le scaffold"
+    "description": "Équilibres — nom du test affiché dans le scaffold"
   },
-  "fwEyebrow": "RAISONNEMENT FLUIDE · FRI",
+  "fwEyebrow": "RAISONNEMENT FLUIDE",
   "@fwEyebrow": {
-    "description": "Balances/Cubes — sur-titre (catégorie d'indice FRI) dans le scaffold"
+    "description": "Équilibres/Cubes — sur-titre (catégorie d'indice dans le scaffold"
   },
   "fwCorrectAnswerPoint": "Bonne réponse ! +1 point",
   "@fwCorrectAnswerPoint": {
-    "description": "Balances — message de feedback réponse juste"
+    "description": "Équilibres — message de feedback réponse juste"
   },
   "fwWrongAnswer": "Mauvaise réponse. La bonne réponse était :",
   "@fwWrongAnswer": {
-    "description": "Balances — message de feedback réponse fausse"
+    "description": "Équilibres — message de feedback réponse fausse"
   },
   "fwTime": "Temps : {seconds} s",
   "@fwTime": {
-    "description": "Balances — temps passé sur l'item",
+    "description": "Équilibres — temps passé sur l'item",
     "placeholders": {
       "seconds": {
         "type": "int"
       }
     }
   },
-  "fwDiscontinue3": "3 échecs consécutifs - Test terminé (WAIS-IV)",
+  "fwDiscontinue3": "3 échecs consécutifs — exercice terminé.",
   "@fwDiscontinue3": {
-    "description": "Balances — message de règle de discontinuation après 3 échecs"
+    "description": "Équilibres — message de règle de discontinuation sur renoncement (3 items passés d'affilée)"
   },
   "fwSeeResults": "Voir les résultats",
   "@fwSeeResults": {
-    "description": "Balances — bouton dialogue pour voir les résultats"
+    "description": "Équilibres — bouton dialogue pour voir les résultats"
   },
-  "fwResultsTitle": "Test des Balances Quantitatives - Résultats",
+  "fwResultsTitle": "Équilibres - Résultats",
   "@fwResultsTitle": {
-    "description": "Balances — titre du dialogue de résultats finaux"
+    "description": "Équilibres — titre du dialogue de résultats finaux"
   },
   "fwRawScorePoints": "Score brut : {score}/27 points",
   "@fwRawScorePoints": {
-    "description": "Balances — score brut sur 27",
+    "description": "Équilibres — score brut sur 27",
     "placeholders": {
       "score": {
         "type": "int"
@@ -2614,7 +2618,7 @@
   },
   "fwItemsCompleted": "Items complétés : {count}/27",
   "@fwItemsCompleted": {
-    "description": "Balances — items complétés sur 27",
+    "description": "Équilibres — items complétés sur 27",
     "placeholders": {
       "count": {
         "type": "int"
@@ -2623,7 +2627,7 @@
   },
   "fwPercentage": "Pourcentage : {percent}%",
   "@fwPercentage": {
-    "description": "Balances — pourcentage de réussite",
+    "description": "Équilibres — pourcentage de réussite",
     "placeholders": {
       "percent": {
         "type": "int"
@@ -2632,40 +2636,40 @@
   },
   "fwTotalTime": "Temps total : {seconds} s",
   "@fwTotalTime": {
-    "description": "Balances — temps total",
+    "description": "Équilibres — temps total",
     "placeholders": {
       "seconds": {
         "type": "int"
       }
     }
   },
-  "fwGLoading": "g-loading : 0.78 (le plus élevé du WAIS-IV)",
+  "fwGLoading": "Cet exercice est fortement lié au raisonnement général.",
   "@fwGLoading": {
-    "description": "Balances — note technique sur la saturation en facteur g"
+    "description": "Équilibres — note technique sur la saturation en facteur g"
   },
   "fwPerfExceptional": "Performance exceptionnelle (θ > +2.0)",
   "@fwPerfExceptional": {
-    "description": "Balances — niveau de performance score ≥ 23"
+    "description": "Équilibres — niveau de performance score ≥ 23"
   },
   "fwPerfSuperior": "Performance supérieure (θ > +1.0)",
   "@fwPerfSuperior": {
-    "description": "Balances — niveau de performance score ≥ 18"
+    "description": "Équilibres — niveau de performance score ≥ 18"
   },
   "fwPerfAverage": "Performance moyenne (θ ≈ 0)",
   "@fwPerfAverage": {
-    "description": "Balances — niveau de performance score ≥ 12"
+    "description": "Équilibres — niveau de performance score ≥ 12"
   },
   "fwPerfInferior": "Performance inférieure (θ < 0)",
   "@fwPerfInferior": {
-    "description": "Balances — niveau de performance score ≥ 7"
+    "description": "Équilibres — niveau de performance score ≥ 7"
   },
   "fwPerfLow": "Performance faible (θ < -1.0)",
   "@fwPerfLow": {
-    "description": "Balances — niveau de performance score < 7"
+    "description": "Équilibres — niveau de performance score < 7"
   },
   "fwScoreFraction": "{score}/{total}",
   "@fwScoreFraction": {
-    "description": "Balances — badge score/total dans l'AppBar",
+    "description": "Équilibres — badge score/total dans l'AppBar",
     "placeholders": {
       "score": {
         "type": "int"
@@ -2677,28 +2681,28 @@
   },
   "fwInstruction": "Trouvez la valeur manquante qui équilibre la balance.",
   "@fwInstruction": {
-    "description": "Balances — consigne en haut de l'écran"
+    "description": "Équilibres — consigne en haut de l'écran"
   },
   "fwWhatIs": "Que vaut ",
   "@fwWhatIs": {
-    "description": "Balances — début de la question (suivi des jetons cibles puis « ? »)"
+    "description": "Équilibres — début de la question (suivi des jetons cibles puis « ? »)"
   },
   "fwSeconds": "{seconds} s",
   "@fwSeconds": {
-    "description": "Balances — badge de compte à rebours du timer",
+    "description": "Équilibres — badge de compte à rebours du timer",
     "placeholders": {
       "seconds": {
         "type": "int"
       }
     }
   },
-  "vpTestName": "Puzzles Visuels",
+  "vpTestName": "Assemblages",
   "@vpTestName": {
     "description": "Puzzles visuels — nom du test affiché dans le scaffold"
   },
-  "vpEyebrow": "VISUO-SPATIAL · VSI",
+  "vpEyebrow": "VISUO-SPATIAL",
   "@vpEyebrow": {
-    "description": "Puzzles visuels — sur-titre (catégorie d'indice VSI) dans le scaffold"
+    "description": "Puzzles visuels — sur-titre (catégorie d'indice dans le scaffold"
   },
   "vpCorrect": "Correct",
   "@vpCorrect": {
@@ -2754,77 +2758,77 @@
   "@vpTargetTitle": {
     "description": "Puzzles visuels — titre en capitales au-dessus de la figure cible"
   },
-  "codingTestName": "Code (Digit Symbol)",
+  "codingTestName": "Transcription",
   "@codingTestName": {
-    "description": "Coding test name (scaffold header)"
+    "description": "Transcription test name (scaffold header)"
   },
-  "codingEyebrow": "VITESSE DE TRAITEMENT · PSI",
+  "codingEyebrow": "VITESSE DE TRAITEMENT",
   "@codingEyebrow": {
-    "description": "Coding test eyebrow label"
+    "description": "Transcription test eyebrow label"
   },
   "codingStartTraining": "Commencer l'entraînement",
   "@codingStartTraining": {
-    "description": "Coding/Symbol Search start training button"
+    "description": "Transcription/Symbol Detection start training button"
   },
-  "codingTitle": "Test de Code",
+  "codingTitle": "Transcription",
   "@codingTitle": {
-    "description": "Coding intro title"
+    "description": "Transcription intro title"
   },
   "codingDescription": "Ce test mesure votre vitesse de traitement et votre coordination visuomotrice.",
   "@codingDescription": {
-    "description": "Coding intro description"
+    "description": "Transcription intro description"
   },
   "codingReferenceKey": "Clé de référence :",
   "@codingReferenceKey": {
-    "description": "Coding reference key label (intro)"
+    "description": "Transcription reference key label (intro)"
   },
   "codingTaskTitle": "Votre tâche",
   "@codingTaskTitle": {
-    "description": "Coding info card title - task"
+    "description": "Transcription info card title - task"
   },
   "codingTaskDesc": "Pour chaque chiffre affiché, sélectionnez le symbole correspondant",
   "@codingTaskDesc": {
-    "description": "Coding info card subtitle - task"
+    "description": "Transcription info card subtitle - task"
   },
   "codingTimeLimitTitle": "Temps limité",
   "@codingTimeLimitTitle": {
-    "description": "Coding info card title - time limit"
+    "description": "Transcription info card title - time limit"
   },
   "codingTimeLimitDesc": "120 secondes pour compléter le maximum de cases (135 au total)",
   "@codingTimeLimitDesc": {
-    "description": "Coding info card subtitle - time limit"
+    "description": "Transcription info card subtitle - time limit"
   },
   "codingScoringTitle": "Scoring",
   "@codingScoringTitle": {
-    "description": "Coding info card title - scoring"
+    "description": "Transcription info card title - scoring"
   },
   "codingScoringDesc": "1 point par case correcte, pas de pénalité pour les erreurs",
   "@codingScoringDesc": {
-    "description": "Coding info card subtitle - scoring"
+    "description": "Transcription info card subtitle - scoring"
   },
   "codingTrainingDoneTitle": "Entraînement terminé",
   "@codingTrainingDoneTitle": {
-    "description": "Coding training-finished dialog title"
+    "description": "Transcription training-finished dialog title"
   },
   "codingTrainingDoneBody": "Vous êtes prêt à commencer le test. Vous aurez 120 secondes pour compléter le maximum de cases.",
   "@codingTrainingDoneBody": {
-    "description": "Coding training-finished dialog body"
+    "description": "Transcription training-finished dialog body"
   },
   "codingStartTest": "Commencer le test",
   "@codingStartTest": {
-    "description": "Coding/Symbol Search/Digit Span start test button"
+    "description": "Transcription/Symbol Detection/Digit Sequences start test button"
   },
   "codingTestDoneTitle": "Test terminé !",
   "@codingTestDoneTitle": {
-    "description": "Test finished dialog title (Coding/Symbol Search/Digit Span/Picture Span)"
+    "description": "Test finished dialog title (Transcription/Symbol Detection/Digit Sequences/Picture Span)"
   },
   "codingTimeElapsed": "Temps écoulé : 120 secondes",
   "@codingTimeElapsed": {
-    "description": "Coding result - time elapsed"
+    "description": "Transcription result - time elapsed"
   },
   "codingCellsCompleted": "Cases complétées : {count}/135",
   "@codingCellsCompleted": {
-    "description": "Coding result - completed cells",
+    "description": "Transcription result - completed cells",
     "placeholders": {
       "count": {
         "type": "int"
@@ -2833,7 +2837,7 @@
   },
   "codingCellsCorrect": "Cases correctes : {count}",
   "@codingCellsCorrect": {
-    "description": "Coding result - correct cells",
+    "description": "Transcription result - correct cells",
     "placeholders": {
       "count": {
         "type": "int"
@@ -2842,7 +2846,7 @@
   },
   "codingScorePoints": "Score : {count} points",
   "@codingScorePoints": {
-    "description": "Coding result - score points",
+    "description": "Transcription result - score points",
     "placeholders": {
       "count": {
         "type": "int"
@@ -2851,35 +2855,35 @@
   },
   "codingPerfExceptional": "Performance exceptionnelle !",
   "@codingPerfExceptional": {
-    "description": "Coding/Symbol Search performance message - exceptional"
+    "description": "Transcription/Symbol Detection performance message - exceptional"
   },
   "codingPerfVeryGood": "Très bonne performance",
   "@codingPerfVeryGood": {
-    "description": "Coding/Symbol Search performance message - very good"
+    "description": "Transcription/Symbol Detection performance message - very good"
   },
   "codingPerfAboveAverage": "Performance moyenne-haute",
   "@codingPerfAboveAverage": {
-    "description": "Coding performance message - above average"
+    "description": "Transcription performance message - above average"
   },
   "codingPerfAverage": "Performance moyenne",
   "@codingPerfAverage": {
-    "description": "Coding/Symbol Search performance message - average"
+    "description": "Transcription/Symbol Detection performance message - average"
   },
   "codingPerfBelowAverage": "Performance en-dessous de la moyenne",
   "@codingPerfBelowAverage": {
-    "description": "Coding/Symbol Search performance message - below average"
+    "description": "Transcription/Symbol Detection performance message - below average"
   },
   "codingTrainingTab": "Entraînement",
   "@codingTrainingTab": {
-    "description": "Coding/Symbol Search app bar title in training mode"
+    "description": "Transcription/Symbol Detection app bar title in training mode"
   },
   "codingReferenceShort": "Référence :",
   "@codingReferenceShort": {
-    "description": "Coding reference key label (test screen)"
+    "description": "Transcription reference key label (test screen)"
   },
   "codingCellProgress": "Case {current}/{total}",
   "@codingCellProgress": {
-    "description": "Coding cell progress",
+    "description": "Transcription cell progress",
     "placeholders": {
       "current": {
         "type": "int"
@@ -2891,7 +2895,7 @@
   },
   "codingCompletedProgress": "Complétées : {count}/{total}",
   "@codingCompletedProgress": {
-    "description": "Coding completed-cells progress",
+    "description": "Transcription completed-cells progress",
     "placeholders": {
       "count": {
         "type": "int"
@@ -2903,79 +2907,79 @@
   },
   "codingSelectSymbol": "Sélectionnez un symbole :",
   "@codingSelectSymbol": {
-    "description": "Coding palette label"
+    "description": "Transcription palette label"
   },
   "codingClear": "Effacer",
   "@codingClear": {
-    "description": "Coding clear-cell button"
+    "description": "Transcription clear-cell button"
   },
   "codingFinishTraining": "Terminer l'entraînement",
   "@codingFinishTraining": {
-    "description": "Coding finish-training button"
+    "description": "Transcription finish-training button"
   },
-  "ssTestName": "Recherche de Symboles",
+  "ssTestName": "Détection de symboles",
   "@ssTestName": {
-    "description": "Symbol Search test name / title / app bar title"
+    "description": "Symbol Detection test name / title / app bar title"
   },
   "ssDescription": "Ce test mesure votre vitesse de traitement visuelle et votre capacité de discrimination.",
   "@ssDescription": {
-    "description": "Symbol Search intro description"
+    "description": "Symbol Detection intro description"
   },
   "ssExampleLabel": "Exemple d'item :",
   "@ssExampleLabel": {
-    "description": "Symbol Search example label"
+    "description": "Symbol Detection example label"
   },
   "ssTargets": "CIBLES",
   "@ssTargets": {
-    "description": "Symbol Search targets label (example)"
+    "description": "Symbol Detection targets label (example)"
   },
   "ssGroup": "GROUPE",
   "@ssGroup": {
-    "description": "Symbol Search group label (example)"
+    "description": "Symbol Detection group label (example)"
   },
   "ssExampleAnswer": "→ Réponse : OUI (┴ est présent)",
   "@ssExampleAnswer": {
-    "description": "Symbol Search example answer line"
+    "description": "Symbol Detection example answer line"
   },
   "ssTaskTitle": "Votre tâche",
   "@ssTaskTitle": {
-    "description": "Symbol Search info card title - task"
+    "description": "Symbol Detection info card title - task"
   },
   "ssTaskDesc": "Cherchez si l'un des symboles cibles apparaît dans le groupe",
   "@ssTaskDesc": {
-    "description": "Symbol Search info card subtitle - task"
+    "description": "Symbol Detection info card subtitle - task"
   },
   "ssQuickAnswerTitle": "Réponse rapide",
   "@ssQuickAnswerTitle": {
-    "description": "Symbol Search info card title - quick answer"
+    "description": "Symbol Detection info card title - quick answer"
   },
   "ssQuickAnswerDesc": "Cliquez OUI ou NON aussi vite que possible",
   "@ssQuickAnswerDesc": {
-    "description": "Symbol Search info card subtitle - quick answer"
+    "description": "Symbol Detection info card subtitle - quick answer"
   },
   "ssScoringPenaltyTitle": "Scoring avec pénalité",
   "@ssScoringPenaltyTitle": {
-    "description": "Symbol Search info card title - scoring"
+    "description": "Symbol Detection info card title - scoring"
   },
   "ssScoringPenaltyDesc": "Score = Réponses correctes - Réponses incorrectes",
   "@ssScoringPenaltyDesc": {
-    "description": "Symbol Search scoring formula"
+    "description": "Symbol Detection scoring formula"
   },
   "ssTimeLimitTitle": "Temps limité",
   "@ssTimeLimitTitle": {
-    "description": "Symbol Search info card title - time limit"
+    "description": "Symbol Detection info card title - time limit"
   },
   "ssTimeLimitDesc": "120 secondes pour 60 items",
   "@ssTimeLimitDesc": {
-    "description": "Symbol Search info card subtitle - time limit"
+    "description": "Symbol Detection info card subtitle - time limit"
   },
   "ssTrainingDoneBody": "Vous êtes prêt ! Vous aurez 120 secondes pour compléter le maximum d'items.\n\nRappel : Score = Réponses correctes - Réponses incorrectes",
   "@ssTrainingDoneBody": {
-    "description": "Symbol Search training-finished dialog body"
+    "description": "Symbol Detection training-finished dialog body"
   },
   "ssItemsAnswered": "Items répondus : {count}/60",
   "@ssItemsAnswered": {
-    "description": "Symbol Search result - items answered",
+    "description": "Symbol Detection result - items answered",
     "placeholders": {
       "count": {
         "type": "int"
@@ -2984,7 +2988,7 @@
   },
   "ssCorrectAnswers": "Réponses correctes : {count}",
   "@ssCorrectAnswers": {
-    "description": "Symbol Search result - correct answers",
+    "description": "Symbol Detection result - correct answers",
     "placeholders": {
       "count": {
         "type": "int"
@@ -2993,7 +2997,7 @@
   },
   "ssIncorrectAnswers": "Réponses incorrectes : {count}",
   "@ssIncorrectAnswers": {
-    "description": "Symbol Search result - incorrect answers",
+    "description": "Symbol Detection result - incorrect answers",
     "placeholders": {
       "count": {
         "type": "int"
@@ -3002,7 +3006,7 @@
   },
   "ssNotAnswered": "Non répondus : {count}",
   "@ssNotAnswered": {
-    "description": "Symbol Search result - not answered",
+    "description": "Symbol Detection result - not answered",
     "placeholders": {
       "count": {
         "type": "int"
@@ -3011,7 +3015,7 @@
   },
   "ssRawScore": "Score brut : {count}",
   "@ssRawScore": {
-    "description": "Symbol Search result - raw score",
+    "description": "Symbol Detection result - raw score",
     "placeholders": {
       "count": {
         "type": "int"
@@ -3020,15 +3024,15 @@
   },
   "ssScoreFormulaShort": "(Corrects - Incorrects)",
   "@ssScoreFormulaShort": {
-    "description": "Symbol Search raw-score formula caption"
+    "description": "Symbol Detection raw-score formula caption"
   },
   "ssPerfGood": "Bonne performance",
   "@ssPerfGood": {
-    "description": "Symbol Search performance message - good"
+    "description": "Symbol Detection performance message - good"
   },
   "ssItemProgress": "Item {current}/{total}",
   "@ssItemProgress": {
-    "description": "Symbol Search item progress",
+    "description": "Symbol Detection item progress",
     "placeholders": {
       "current": {
         "type": "int"
@@ -3040,7 +3044,7 @@
   },
   "ssAnsweredProgress": "Répondus : {count}/60",
   "@ssAnsweredProgress": {
-    "description": "Symbol Search answered progress",
+    "description": "Symbol Detection answered progress",
     "placeholders": {
       "count": {
         "type": "int"
@@ -3049,79 +3053,79 @@
   },
   "ssTargetSymbols": "SYMBOLES CIBLES",
   "@ssTargetSymbols": {
-    "description": "Symbol Search target symbols section label"
+    "description": "Symbol Detection target symbols section label"
   },
   "ssSearchGroup": "GROUPE DE RECHERCHE",
   "@ssSearchGroup": {
-    "description": "Symbol Search search group section label"
+    "description": "Symbol Detection search group section label"
   },
   "ssNo": "NON",
   "@ssNo": {
-    "description": "Symbol Search NO answer button"
+    "description": "Symbol Detection NO answer button"
   },
   "ssYes": "OUI",
   "@ssYes": {
-    "description": "Symbol Search YES answer button"
+    "description": "Symbol Detection YES answer button"
   },
-  "dsTestName": "Mémoire des Chiffres",
+  "dsTestName": "Suites de chiffres",
   "@dsTestName": {
-    "description": "Digit Span test name / title"
+    "description": "Digit Sequences test name / title"
   },
-  "dsEyebrow": "MÉMOIRE DE TRAVAIL · WMI",
+  "dsEyebrow": "MÉMOIRE DE TRAVAIL",
   "@dsEyebrow": {
-    "description": "Digit Span / Picture Span eyebrow label"
+    "description": "Digit Sequences / Picture Span eyebrow label"
   },
   "dsDescription": "Ce test mesure votre mémoire de travail à travers 3 parties distinctes :",
   "@dsDescription": {
-    "description": "Digit Span intro description"
+    "description": "Digit Sequences intro description"
   },
   "dsForwardTitle": "Partie 1 : Empan Direct",
   "@dsForwardTitle": {
-    "description": "Digit Span intro card - forward title"
+    "description": "Digit Sequences intro card - forward title"
   },
   "dsForwardInstruction": "Répétez les chiffres dans le même ordre",
   "@dsForwardInstruction": {
-    "description": "Digit Span forward instruction"
+    "description": "Digit Sequences forward instruction"
   },
   "dsBackwardTitle": "Partie 2 : Empan Inverse",
   "@dsBackwardTitle": {
-    "description": "Digit Span intro card - backward title"
+    "description": "Digit Sequences intro card - backward title"
   },
   "dsBackwardInstruction": "Répétez les chiffres en ordre inverse",
   "@dsBackwardInstruction": {
-    "description": "Digit Span backward instruction"
+    "description": "Digit Sequences backward instruction"
   },
   "dsSequencingTitle": "Partie 3 : Séquençage",
   "@dsSequencingTitle": {
-    "description": "Digit Span intro card - sequencing title"
+    "description": "Digit Sequences intro card - sequencing title"
   },
   "dsSequencingInstruction": "Répétez les chiffres en ordre croissant",
   "@dsSequencingInstruction": {
-    "description": "Digit Span sequencing instruction"
+    "description": "Digit Sequences sequencing instruction"
   },
   "dsPresentationInfo": "Les chiffres seront présentés à raison de 1 chiffre par seconde.",
   "@dsPresentationInfo": {
-    "description": "Digit Span presentation rate info"
+    "description": "Digit Sequences presentation rate info"
   },
   "dsTypeForward": "Empan Direct",
   "@dsTypeForward": {
-    "description": "Digit Span type label - forward (app bar / part title)"
+    "description": "Digit Sequences type label - forward (app bar / part title)"
   },
   "dsTypeBackward": "Empan Inverse",
   "@dsTypeBackward": {
-    "description": "Digit Span type label - backward"
+    "description": "Digit Sequences type label - backward"
   },
   "dsTypeSequencing": "Séquençage",
   "@dsTypeSequencing": {
-    "description": "Digit Span type label - sequencing"
+    "description": "Digit Sequences type label - sequencing"
   },
   "dsStartPart": "Commencer",
   "@dsStartPart": {
-    "description": "Digit Span start-part button"
+    "description": "Digit Sequences start-part button"
   },
   "dsLengthTrial": "Longueur {length} - Essai {trial}",
   "@dsLengthTrial": {
-    "description": "Digit Span length/trial header",
+    "description": "Digit Sequences length/trial header",
     "placeholders": {
       "length": {
         "type": "int"
@@ -3133,19 +3137,19 @@
   },
   "dsListenCarefully": "Écoutez attentivement",
   "@dsListenCarefully": {
-    "description": "Digit Span presentation prompt"
+    "description": "Digit Sequences presentation prompt"
   },
   "dsCorrect": "Correct !",
   "@dsCorrect": {
-    "description": "Digit Span / Picture Span feedback - correct"
+    "description": "Digit Sequences / Picture Span feedback - correct"
   },
   "dsIncorrect": "Incorrect",
   "@dsIncorrect": {
-    "description": "Digit Span / Picture Span feedback - incorrect"
+    "description": "Digit Sequences / Picture Span feedback - incorrect"
   },
   "dsPointsEarned": "Points gagnés : {count}",
   "@dsPointsEarned": {
-    "description": "Digit Span feedback - points earned",
+    "description": "Digit Sequences feedback - points earned",
     "placeholders": {
       "count": {
         "type": "int"
@@ -3154,7 +3158,7 @@
   },
   "dsCorrectAnswer": "Réponse correcte : {answer}",
   "@dsCorrectAnswer": {
-    "description": "Digit Span feedback - correct answer",
+    "description": "Digit Sequences feedback - correct answer",
     "placeholders": {
       "answer": {
         "type": "String"
@@ -3163,7 +3167,7 @@
   },
   "dsYourAnswer": "Votre réponse : {answer}",
   "@dsYourAnswer": {
-    "description": "Digit Span feedback - your answer",
+    "description": "Digit Sequences feedback - your answer",
     "placeholders": {
       "answer": {
         "type": "String"
@@ -3172,11 +3176,11 @@
   },
   "dsResultsByPart": "Résultats par partie :",
   "@dsResultsByPart": {
-    "description": "Digit Span final results header"
+    "description": "Digit Sequences final results header"
   },
   "dsForwardScore": "Empan Direct : {count} points",
   "@dsForwardScore": {
-    "description": "Digit Span final - forward score",
+    "description": "Digit Sequences final - forward score",
     "placeholders": {
       "count": {
         "type": "int"
@@ -3185,7 +3189,7 @@
   },
   "dsBackwardScore": "Empan Inverse : {count} points",
   "@dsBackwardScore": {
-    "description": "Digit Span final - backward score",
+    "description": "Digit Sequences final - backward score",
     "placeholders": {
       "count": {
         "type": "int"
@@ -3194,7 +3198,7 @@
   },
   "dsSequencingScore": "Séquençage : {count} points",
   "@dsSequencingScore": {
-    "description": "Digit Span final - sequencing score",
+    "description": "Digit Sequences final - sequencing score",
     "placeholders": {
       "count": {
         "type": "int"
@@ -3203,7 +3207,7 @@
   },
   "dsTotalScore": "Score Total : {count} points",
   "@dsTotalScore": {
-    "description": "Digit Span / Picture Span final - total score",
+    "description": "Digit Sequences / Picture Span final - total score",
     "placeholders": {
       "count": {
         "type": "int"
@@ -3212,11 +3216,11 @@
   },
   "dsEnterAnswer": "Saisissez votre réponse...",
   "@dsEnterAnswer": {
-    "description": "Digit Span input placeholder"
+    "description": "Digit Sequences input placeholder"
   },
   "dsValidateProgress": "Valider ({count}/{total})",
   "@dsValidateProgress": {
-    "description": "Digit Span submit button with progress",
+    "description": "Digit Sequences submit button with progress",
     "placeholders": {
       "count": {
         "type": "int"
@@ -3533,7 +3537,7 @@
     "description": "Bouton confirmant le démarrage d'un exercice chronométré"
   },
   "ctShareScore": "Partager mon score",
-  "ctSubtestExitBody": "Vous avez quitté cet exercice avant de le terminer. Les exercices déjà terminés sont enregistrés : vous pourrez reprendre le bilan ici même, à cet exercice.",
+  "ctSubtestExitBody": "Vous avez quitté cet exercice avant de le terminer. Les exercices déjà terminés sont enregistrés : vous pourrez reprendre l'évaluation ici même, à cet exercice.",
   "@ctSubtestExitBody": {
     "description": "Corps du dialogue de sortie d'un exercice — la pause est un choix légitime, pas un incident"
   },
@@ -3726,7 +3730,7 @@
   "@vocabTestName": {
     "description": "Vocabulaire — nom du test affiché dans le scaffold"
   },
-  "vocabEyebrow": "COMPRÉHENSION VERBALE · VCI",
+  "vocabEyebrow": "COMPRÉHENSION VERBALE",
   "@vocabEyebrow": {
     "description": "Vocabulaire — sur-titre (catégorie d'indice) dans le scaffold"
   },
@@ -3814,9 +3818,9 @@
       }
     }
   },
-  "vocabDiscontinued": "3 scores de 0 consécutifs - Test terminé (WAIS-IV)",
+  "vocabDiscontinued": "3 items passés d'affilée — exercice terminé.",
   "@vocabDiscontinued": {
-    "description": "Vocabulaire — message de règle d'arrêt après 3 échecs consécutifs"
+    "description": "Vocabulaire — message de règle d'arrêt sur renoncement (3 items passés d'affilée) consécutifs"
   },
   "vocabViewResults": "Voir les résultats",
   "@vocabViewResults": {
@@ -4045,7 +4049,7 @@
   "@weDay6Title": {
     "description": "Titre du jour 6"
   },
-  "weDay7Title": "Bilan autisme",
+  "weDay7Title": "Profil autisme",
   "@weDay7Title": {
     "description": "Titre du jour 7"
   },
@@ -4189,15 +4193,15 @@
       }
     }
   },
-  "weRvCaveat": "Un indice est une mesure, avec sa marge d'erreur — pas un verdict. Repasser le même bilan ne redonnerait pas exactement le même nombre.",
+  "weRvCaveat": "Un indice est une mesure, avec sa marge d'erreur — pas un verdict. Repasser la même évaluation ne redonnerait pas exactement le même nombre.",
   "@weRvCaveat": {
     "description": "Mise en garde présente sur TOUTES les révélations : un score est une mesure avec sa marge d'erreur"
   },
-  "weRvUnavailableTitle": "Aucun bilan à révéler",
+  "weRvUnavailableTitle": "Aucune évaluation à révéler",
   "@weRvUnavailableTitle": {
     "description": "Titre quand aucun bilan n'est rattaché au passe courant"
   },
-  "weRvUnavailableBody": "Aucun bilan terminé n'est rattaché à ce passe sur cet appareil. Rien n'est perdu : la révélation s'affichera dès que tes résultats seront de nouveau lisibles ici.",
+  "weRvUnavailableBody": "Aucune évaluation terminée n'est rattachée à ce passe sur cet appareil. Rien n'est perdu : la révélation s'affichera dès que tes résultats seront de nouveau lisibles ici.",
   "@weRvUnavailableBody": {
     "description": "Corps du message quand aucun bilan n'est rattaché au passe courant"
   },
@@ -4205,7 +4209,7 @@
   "@weRvMissingTitle": {
     "description": "Titre quand l'indice du jour n'a pas été calculé (sous-test manquant)"
   },
-  "weRvMissingBody": "Ton bilan enregistré ne contient pas cet indice — il y manquait un sous-test. Les autres révélations restent disponibles.",
+  "weRvMissingBody": "Ton évaluation enregistrée ne contient pas cet indice — il y manquait un sous-test. Les autres révélations restent disponibles.",
   "@weRvMissingBody": {
     "description": "Corps du message quand l'indice du jour n'a pas été calculé"
   },

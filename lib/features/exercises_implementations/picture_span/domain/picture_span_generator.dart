@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-/// Générateur de Mémoire des Images (Picture Span - WISC-V)
+/// Générateur de Mémoire des Images (Picture Span)
 /// 6 niveaux avec 2 essais chacun = 12 essais au total
 /// Mesure la mémoire de travail visuelle et l'attention sélective
 ///
@@ -212,7 +212,7 @@ class ImageStimulus {
   final ImageCategory category;
   final IconData icon;
 
-  /// Chemin de l'asset image réel (WISC-V : stimulus visuel sans texte).
+ /// Chemin de l'asset image réel (stimulus visuel sans texte).
   /// [icon] sert de fallback si l'image ne charge pas.
   final String imagePath;
 

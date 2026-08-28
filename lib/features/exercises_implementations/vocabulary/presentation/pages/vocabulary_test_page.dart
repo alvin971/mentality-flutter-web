@@ -15,7 +15,7 @@ import '../../../../../core/services/subtest_instrumentation.dart';
 import '../../../../../core/services/subtest_progress_store.dart';
 
 /// Page du test de Vocabulaire (Vocabulary)
-/// WAIS-IV : 30 mots
+/// 30 mots
 /// Définir le mot présenté
 /// Scoring : 0, 1, ou 2 points selon la précision de la définition
 /// Règle de discontinuation : 3 scores consécutifs de 0

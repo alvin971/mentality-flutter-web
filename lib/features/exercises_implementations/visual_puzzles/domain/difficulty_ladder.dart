@@ -47,7 +47,7 @@ class ItemRecipe {
   final int palier;
 
   /// Pool de formes cibles autorisées. Toujours `[BaseShape.square]` depuis
-  /// la refonte 2026-07 : comme dans le WAIS-IV réel, un contour distinctif
+ /// La refonte 2026-07: comme dans réel, un contour distinctif
   /// (pointe de triangle, arc de cercle) donnerait des indices gratuits de
   /// localisation — la difficulté vient exclusivement de la découpe, du
   /// motif, des rotations et des pièges. (Les autres [BaseShape] restent
@@ -261,7 +261,7 @@ ItemRecipe _p8(double subtlety, ColorMode colorMode) => ItemRecipe(
 
 /// L'échelle des 26 items — la MÊME pour tous les patients.
 ///
-/// Cible = CARRÉ pour les 26 items (protocole WAIS-IV). Progression des
+/// Cible = CARRÉ pour les 26 items (protocole ). Progression des
 /// radicaux, portée par la DÉCOUPE :
 /// P1 bandes parallèles · P2 + L perpendiculaire · P3 + 1 oblique ·
 /// P4 + 2 obliques · P5 + éventail · P6 obliques rapprochées / éventail

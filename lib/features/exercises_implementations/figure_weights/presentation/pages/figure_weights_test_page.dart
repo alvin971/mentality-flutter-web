@@ -14,7 +14,7 @@ import '../../../../../core/services/subtest_instrumentation.dart';
 import '../../../../../core/services/subtest_progress_store.dart';
 
 /// Page du test des Balances Quantitatives (Figure Weights)
-/// WAIS-IV : 27 items, g-loading = 0.78
+/// 27 items, g-loading = 0.78
 /// Temps limite : 20s (facile), 30s (moyen), 45s (difficile)
 /// Règle de discontinuation : 3 échecs consécutifs
 class FigureWeightsTestPage extends StatefulWidget {
@@ -288,7 +288,7 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
     }
 
     // Test non noté à l'écran : on enchaîne sans retour « juste/faux ».
-    // Discontinuation WAIS-IV : 3 échecs consécutifs.
+ // Discontinuation 3 échecs consécutifs.
     if (_consecutiveFailures >= 3 ||
         currentLevel >= _generatedItems.length - 1) {
       _showFinalResults();
@@ -375,7 +375,7 @@ class _FigureWeightsTestPageState extends State<FigureWeightsTestPage> {
       totalItems: _demoPhase ? _demoItems.length : _generatedItems.length,
       // Chrono seul dans l'AppBar (gain de hauteur) et bouton Valider sticky
       // en bas : plus jamais besoin de scroller pour valider. Aucun score
-      // visible pendant la passation (protocole WAIS-IV), et pas de chrono
+ // Visible pendant la passation (protocole ), et pas de chrono
       // pendant la démo (non chronométrée, non notée).
       trailing: _demoPhase
           ? null

@@ -6,7 +6,7 @@
 ![Dart](https://img.shields.io/badge/Dart-3.5.0+-0175C2?style=for-the-badge&logo=dart)
 ![License](https://img.shields.io/badge/License-Proprietary-red?style=for-the-badge)
 
-**Évaluation cognitive scientifiquement rigoureuse inspirée des échelles Wechsler**
+**Exercices cognitifs originaux, construits sur le modèle CHC**
 
 [Fonctionnalités](#-fonctionnalités) • [Architecture](#-architecture) • [Installation](#-installation) • [Documentation](#-documentation)
 
@@ -16,33 +16,33 @@
 
 ## 📋 Vue d'ensemble
 
-**Mentality** est une application mobile Flutter révolutionnaire qui démocratise l'accès à une évaluation cognitive de qualité professionnelle. Inspirée des tests de QI standardisés mondialement reconnus (WPPSI, WISC, WAIS), l'application combine :
+**Mentality** est une application mobile Flutter qui rend accessible une évaluation cognitive grand public. Construite sur le modèle CHC (Cattell-Horn-Carroll), cadre de référence académique des aptitudes humaines, l'application combine :
 
 - 🎯 **Testing adaptatif informatisé (CAT)** basé sur la théorie de réponse aux items (IRT)
 - 🤖 **Génération d'items par IA** pour des exercices uniques et adaptés
-- 📊 **Scoring psychométrique rigoureux** conforme aux standards internationaux
+- 📊 **Scoring psychométrique** fondé sur la théorie de réponse à l'item
 - 🌐 **Couverture d'âge complète** : de 2 ans 6 mois à 90 ans
 - 🔒 **Conformité RGPD** et protection des données sensibles
 
-### 🎓 Fondements scientifiques
+### 🎓 Cadre théorique
 
 L'application évalue l'intelligence à travers **5 indices composites** alignés sur le modèle CHC (Cattell-Horn-Carroll) :
 
-| Indice | Domaine | Sous-tests |
-|--------|---------|------------|
-| **ICV** | Compréhension Verbale | Similitudes, Vocabulaire, Information |
-| **IVS** | Visuo-Spatial | Cubes, Puzzles Visuels |
-| **IRF** | Raisonnement Fluide | Matrices, Balances |
-| **IMT** | Mémoire de Travail | Mémoire des Chiffres, Mémoire des Images |
-| **IVT** | Vitesse de Traitement | Code, Symboles |
+| Domaine | Exercices |
+|---------|-----------|
+| Compréhension Verbale | Points communs, Vocabulaire, Information |
+| Visuo-Spatial | Cubes, Assemblages |
+| Raisonnement Fluide | Matrices, Équilibres |
+| Mémoire de Travail | Suites de chiffres, Mémoire des images |
+| Vitesse de Traitement | Transcription, Détection de symboles |
 
-**Score final** : QI Total (FSIQ) avec intervalle de confiance à 95%
+**Score final** : un score global, avec son intervalle de confiance
 
 ---
 
 ## ✨ Fonctionnalités
 
-### 🎮 12 Types d'Exercices Cognitifs
+### 🎮 13 Exercices Cognitifs
 
 #### Priorité 1 - Implémentation Immédiate
 
@@ -438,19 +438,14 @@ flutter test integration_test/
 Cette application :
 
 - ✅ **EST** un outil de screening cognitif indicatif
-- ✅ **EST** inspirée de tests standardisés validés
+- ✅ **EST** construite sur le modèle CHC, avec des items originaux
 - ❌ **N'EST PAS** un diagnostic clinique officiel
 - ❌ **NE REMPLACE PAS** une évaluation par psychologue
 
-### Différences avec tests officiels
+### Ce que l'application n'est pas
 
-| Aspect | Tests Wechsler® | Mentality |
-|--------|----------------|-----------|
-| Administration | Psychologue certifié | Auto-administré |
-| Durée | 60-90 min | 30-45 min |
-| Items | Propriétaires | Générés par IA |
-| Validité | 100+ ans de recherche | En cours de validation |
-| Coût | 300-500€ | Gratuit/Freemium |
+Mental E.T. est auto-administrée, gratuite, et ses items sont écrits par nos soins.
+Elle ne remplace pas l'évaluation d'un psychologue et ne produit aucun diagnostic.
 
 ---
 
@@ -472,8 +467,8 @@ Les contributions sont les bienvenues ! Veuillez lire [CONTRIBUTING.md](CONTRIBU
 
 **Propriétaire** - Tous droits réservés
 
-Les échelles Wechsler (WPPSI, WISC, WAIS) sont des marques déposées de Pearson Clinical Assessment.
-Cette application s'inspire de leur structure psychométrique mais ne reproduit pas les items propriétaires.
+Les items de l'application sont originaux, écrits pour Mental E.T. Sa structure suit le
+modèle CHC (Cattell-Horn-Carroll), cadre théorique académique relevant du domaine public.
 
 ---
 

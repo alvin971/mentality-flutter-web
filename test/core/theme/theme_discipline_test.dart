@@ -35,13 +35,20 @@ bool _isStimulusFile(String path) =>
     path.contains('/exercises_implementations/') &&
     path.contains('/presentation/widgets/');
 
+/// Worktrees git imbriqués : checkouts d'autres branches, ignorés par git et
+/// jamais livrés. Sans ce filtre les gardes de thème sont rouges en permanence.
+bool _horsPerimetre(String chemin) => chemin.contains('/.claude/');
+
 List<File> _dartFiles() {
   final out = <File>[];
   for (final root in _scannedRoots) {
     final dir = Directory(root);
     if (!dir.existsSync()) continue;
     for (final e in dir.listSync(recursive: true)) {
-      if (e is File && e.path.endsWith('.dart') && !_isStimulusFile(e.path)) {
+      if (e is File &&
+          e.path.endsWith('.dart') &&
+          !_isStimulusFile(e.path) &&
+          !_horsPerimetre(e.path)) {
         out.add(e);
       }
     }
@@ -83,6 +90,7 @@ void main() {
     final offenders = <String>[];
     for (final e in Directory('lib').listSync(recursive: true)) {
       if (e is! File || !e.path.endsWith('.dart')) continue;
+      if (_horsPerimetre(e.path)) continue;
       final lines = e.readAsLinesSync();
       for (var i = 0; i < lines.length; i++) {
         if (_googleFonts.hasMatch(lines[i])) {

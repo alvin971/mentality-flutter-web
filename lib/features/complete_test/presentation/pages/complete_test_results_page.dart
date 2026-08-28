@@ -400,9 +400,12 @@ class _IndexProfile extends StatelessWidget {
           children: [
             Row(
               children: [
+                // `code` reste la CLÉ de lookup (intervalles, percentiles,
+                // classifications) mais n'est plus affiché : c'est la
+                // nomenclature d'un test tiers. Seul le nom de l'indice est vu.
                 SizedBox(
                     width: 44.w,
-                    child: Text(code,
+                    child: Text('\u2022',
                         style: AppText.of(context).monoLabel(color: KeplerColors.of(context).primary))),
                 Text(label, style: AppText.of(context).bodyStrong()),
               ],

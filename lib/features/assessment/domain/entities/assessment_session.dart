@@ -11,7 +11,7 @@ class AssessmentSession extends Equatable {
   /// ID de l'utilisateur évalué
   final String userId;
 
-  /// Groupe d'âge déterminant la batterie de tests (WPPSI, WISC, WAIS)
+ /// Groupe d'âge déterminant la batterie de tests
   final String ageGroup;
 
   /// Âge exact en mois au moment de l'évaluation

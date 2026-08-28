@@ -1,4 +1,4 @@
-/// Constantes psychométriques basées sur les échelles Wechsler
+/// Constantes psychométriques du modèle CHC
 /// Respecte les standards internationaux de psychométrie
 class PsychometricConstants {
   PsychometricConstants._();
@@ -185,23 +185,13 @@ class PsychometricConstants {
   };
 
   // ========================================
-  // GROUPES D'ÂGE (Wechsler Scales)
+  // GROUPES D'ÂGE
   // ========================================
-
-  /// WPPSI-IV Bande 1 (2 ans 6 mois à 3 ans 11 mois)
-  static const String ageGroupPreschool1 = 'WPPSI_BAND1';
-
-  /// WPPSI-IV Bande 2 (4 ans à 5 ans 11 mois)
-  static const String ageGroupPreschool2 = 'WPPSI_BAND2';
-
-  /// Zone de chevauchement WPPSI/WISC (6 ans à 7 ans 7 mois)
-  static const String ageGroupOverlap = 'OVERLAP';
-
-  /// WISC-V (6 ans à 16 ans 11 mois)
-  static const String ageGroupChild = 'WISC';
-
-  /// WAIS-IV (16 ans et plus)
-  static const String ageGroupAdult = 'WAIS';
+  // Les 5 constantes de bande d'âge héritées d'une version multi-tranches ont
+  // été retirées le 2026-08-28 : elles étaient MORTES — aucune référence dans
+  // lib/ ni test/ — et leurs valeurs reprenaient la nomenclature d'un test
+  // tiers. L'app est aujourd'hui adulte uniquement (16 à 90 ans, cf.
+  // ctPatientAgeHint). Voir docs/CHANTIER_LEXIQUE_RESTE.md, LOT M.
 
   /// Âge minimum en mois (2 ans 6 mois)
   static const int minAgeMonths = 30;

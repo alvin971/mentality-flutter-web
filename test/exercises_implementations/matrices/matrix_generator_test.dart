@@ -66,7 +66,7 @@ void main() {
         final items = MatrixGenerator(seed: seed).generateComplete26Items();
         for (final item in items) {
           expect(item.options.length, 5,
-              reason: 'seed=$seed: le WAIS-IV présente 5 options');
+              reason: 'seed=$seed: chaque item doit présenter 5 options');
 
           final signatures =
               item.options.map(MatrixGenerator.visualSignature).toSet();

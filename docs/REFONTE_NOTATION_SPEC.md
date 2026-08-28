@@ -99,7 +99,7 @@ scaled = clamp( round( 10 + 3 · (raw − µ_raw(age)) / σ_raw(age) ), 1, 19 )
 | PSI (vitesse) | CD + SS | 2 |
 | FSIQ | 10 primaires (BD,SI,DS,MR,VO,AR,SS,VP,IN,CD) | 10 |
 
-> PM alimente **l'indice WMI** mais **pas le FSIQ** (logique « sous-test supplémentaire » du WAIS : il enrichit son indice sans déstabiliser le score global). À rediscuter avec les psy.
+> PM alimente **l'indice WMI** mais **pas le FSIQ** (logique « sous-test supplémentaire » : il enrichit son indice sans déstabiliser le score global). À rediscuter avec les psy.
 
 ### 4.2 σ dérivé, plus deviné
 

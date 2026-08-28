@@ -1,6 +1,6 @@
 import 'dart:math';
 
-/// Générateur de séquences pour Mémoire des Chiffres (Digit Span - WAIS-IV)
+/// Générateur de séquences pour Mémoire des Chiffres (Digit Span)
 /// 3 parties : Empan Direct, Empan Inverse, Séquençage
 /// Mesure la mémoire de travail, l'attention auditive et le contrôle exécutif
 ///

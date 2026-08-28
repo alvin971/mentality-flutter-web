@@ -10,8 +10,8 @@
     "desc": "Home hero, line 2 (italic)"
   },
   "homeHeroBody": {
-    "fr": "Une évaluation scientifique adaptative, inspirée des échelles Wechsler. 13 sous-tests, 5 indices, un score global.",
-    "en": "An adaptive, scientific assessment inspired by the Wechsler scales. 13 subtests, 5 indices, one global score."
+    "fr": "Une évaluation cognitive adaptative. 13 sous-tests, 5 indices, un score global.",
+    "en": "An adaptive cognitive assessment. 13 subtests, 5 indices, one global score."
   },
   "homeActionStartTitle": {
     "fr": "Commencer une évaluation",
@@ -59,8 +59,8 @@
     "desc": "About tile 1 title"
   },
   "homeAboutSubtestsBody": {
-    "fr": "Évaluation complète des cinq indices cognitifs WAIS-IV.",
-    "en": "A complete assessment of the five WAIS-IV cognitive indices."
+    "fr": "Évaluation complète des cinq indices cognitifs du modèle CHC.",
+    "en": "A complete assessment of the five CHC cognitive indices."
   },
   "homeAboutAdaptiveTitle": {
     "fr": "IA adaptative",
@@ -72,13 +72,13 @@
     "en": "Difficulty adjusted in real time through IRT inference."
   },
   "homeAboutValidationTitle": {
-    "fr": "Validation scientifique",
-    "en": "Scientific validation",
+    "fr": "Cadre théorique",
+    "en": "Theoretical framework",
     "desc": "About tile 3 title"
   },
   "homeAboutValidationBody": {
-    "fr": "Items inspirés des échelles Wechsler (WPPSI / WISC / WAIS).",
-    "en": "Items inspired by the Wechsler scales (WPPSI / WISC / WAIS)."
+    "fr": "Items originaux, écrits pour Mental E.T. et construits sur le modèle CHC.",
+    "en": "Original items, written for Mental E.T. and built on the CHC model."
   },
   "homeResumeEyebrow": {
     "fr": "TEST EN COURS",

@@ -1,4 +1,4 @@
-/// Bibliothèque de TEMPLATES d'énoncés du sous-test Arithmétique (WAIS-IV).
+/// Bibliothèque de TEMPLATES d'énoncés du sous-test Arithmétique.
 ///
 /// Chaque template est un « moule à trous » bilingue (FR/EN). Le générateur
 /// tire des opérandes aléatoires dans des plages dépendant de la bande de

@@ -29,7 +29,7 @@ class SubtestProgress {
     this.etat = const {},
   });
 
-  /// Code WAIS-IV stable de l'exercice (`digit_span`, jamais son libellé).
+ /// Code stable de l'exercice (`digit_span`, jamais son libellé).
   final String subtest;
 
   /// Rang du PROCHAIN item à présenter. C'est un point de reprise, pas un

@@ -8,12 +8,12 @@ import 'similarities_items_fr.dart';
 import 'similarities_items_de.dart';
 import 'similarities_items_pt.dart';
 
-/// Générateur de 21 items de Similitudes (Similarities - WAIS-IV).
+/// Générateur de 21 items de Similitudes (Similarities).
 ///
 /// Les 21 paires sont TIRÉES ALÉATOIREMENT dans une banque élargie
 /// (~100 paires réparties en 4 niveaux d'abstraction) à chaque création du
 /// générateur : deux passations ne donnent pas le même test.
-/// La structure WAIS est conservée : 4/6/6/5 paires par niveau, échelle theta
+/// La structure est conservée: 4/6/6/5 paires par niveau, échelle theta
 /// croissante de -1.5 à +2.5 par pas de 0.2.
 /// Mesure l'abstraction conceptuelle et le raisonnement verbal.
 class SimilaritiesGenerator {

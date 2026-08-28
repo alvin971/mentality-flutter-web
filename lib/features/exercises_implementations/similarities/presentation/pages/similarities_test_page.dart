@@ -15,7 +15,7 @@ import '../../../../../core/services/subtest_instrumentation.dart';
 import '../../../../../core/services/subtest_progress_store.dart';
 
 /// Page du test des Similitudes (Similarities)
-/// WAIS-IV : 21 items
+/// 21 items
 /// Expliquer la similitude entre deux mots/concepts
 /// Scoring : 0, 1, ou 2 points selon le niveau d'abstraction
 /// Règle de discontinuation : 3 scores consécutifs de 0

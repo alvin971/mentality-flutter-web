@@ -3,7 +3,7 @@ import 'dart:math';
 import '../../_shared/stratified_draw.dart';
 import 'arithmetic_templates.dart';
 
-/// Générateur de 22 problèmes d'Arithmétique (WAIS-IV).
+/// Générateur de 22 problèmes d'Arithmétique.
 ///
 /// Contrairement aux autres sous-tests, l'arithmétique est CALCULABLE : le code
 /// tire un template d'énoncé + des opérandes aléatoires (plages par bande), puis

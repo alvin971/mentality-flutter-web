@@ -2,7 +2,7 @@
 
 ## Vue d'ensemble
 
-**Mentality** est une application mobile Flutter d'évaluation cognitive inspirée des échelles Wechsler (WPPSI, WISC, WAIS), utilisant l'intelligence artificielle pour générer des items adaptatifs et la théorie de réponse aux items (IRT) pour une évaluation précise.
+**Mentality** est une application mobile Flutter d'évaluation cognitive construite sur le modèle CHC (Cattell-Horn-Carroll), avec des items originaux et la théorie de réponse à l'item (IRT) pour ajuster la difficulté.
 
 ## Principes Architecturaux
 
@@ -804,7 +804,7 @@ jobs:
 - [BLoC Library](https://bloclibrary.dev)
 - [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 - [IRT Theory](https://en.wikipedia.org/wiki/Item_response_theory)
-- [Wechsler Scales](https://www.pearsonassessments.com/store/usassessments/en/Store/Professional-Assessments/Wechsler)
+- [Modèle CHC (Cattell-Horn-Carroll)](https://en.wikipedia.org/wiki/Cattell%E2%80%93Horn%E2%80%93Carroll_theory)
 
 ---
 

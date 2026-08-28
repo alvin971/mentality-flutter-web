@@ -375,7 +375,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                           borderRadius: BorderRadius.circular(20.r),
                           border: Border.all(color: AppColors.indexWMI, width: 4),
                         ),
-                        // WISC-V : stimulus visuel seul, sans texte.
+ // Stimulus visuel seul, sans texte.
                         child: Padding(
                           padding: EdgeInsets.all(10.w),
                           child: ClipRRect(
@@ -564,7 +564,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                         padding: EdgeInsets.all(6.w),
                         // FittedBox : le contenu se réduit au lieu de
                         // déborder quand les tuiles sont petites.
-                        // WISC-V : tuile image seule, sans texte.
+ // Tuile image seule, sans texte.
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(8.r),
                           child: Image.asset(

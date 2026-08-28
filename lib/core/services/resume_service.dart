@@ -45,7 +45,7 @@ class ResumableSession {
     this.exerciceEnCours,
   });
 
-  /// Codes WAIS-IV stables des sous-tests ADMINISTRÉS — indépendamment du fait
+ /// Codes stables des sous-tests ADMINISTRÉS — indépendamment du fait
   /// qu'ils portent un score.
   ///
   /// C'est la distinction qui compte depuis que Similitudes et Vocabulaire sont

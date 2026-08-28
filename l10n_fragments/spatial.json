@@ -5,8 +5,8 @@
     "desc": "Matrices — nom du test affiché dans le scaffold"
   },
   "matEyebrow": {
-    "fr": "TEST DE QI · FSIQ",
-    "en": "IQ TEST · FSIQ",
+    "fr": "TEST DE QI",
+    "en": "IQ TEST",
     "desc": "Matrices — sur-titre (catégorie d'indice) dans le scaffold"
   },
   "matCorrect": {
@@ -17,23 +17,28 @@
   "matIncorrect": {
     "fr": "Incorrect",
     "en": "Incorrect",
-    "desc": "Matrices/Balances — titre du dialogue de feedback quand la réponse est fausse"
+    "desc": "Matrices/Équilibres — titre du dialogue de feedback quand la réponse est fausse"
   },
   "matResponseTime": {
     "fr": "Temps de réponse : {seconds} s",
     "en": "Response time: {seconds}s",
     "desc": "Matrices — temps de réponse à l'item",
-    "placeholders": {"seconds": "int"}
+    "placeholders": {
+      "seconds": "int"
+    }
   },
   "matScoreFraction": {
     "fr": "Score : {score}/{total}",
     "en": "Score: {score}/{total}",
-    "desc": "Matrices/Balances — score courant (réussites sur items tentés)",
-    "placeholders": {"score": "int", "total": "int"}
+    "desc": "Matrices/Équilibres — score courant (réussites sur items tentés)",
+    "placeholders": {
+      "score": "int",
+      "total": "int"
+    }
   },
   "matDiscontinue4": {
-    "fr": "4 échecs consécutifs - Test terminé (WAIS-IV)",
-    "en": "4 consecutive failures - Test ended (WAIS-IV)",
+    "fr": "4 échecs consécutifs — exercice terminé.",
+    "en": "4 consecutive failures — exercise ended.",
     "desc": "Matrices — message de règle de discontinuation après 4 échecs"
   },
   "matSeeResultsEnded": {
@@ -105,7 +110,9 @@
     "fr": "{score} pts",
     "en": "{score} pts",
     "desc": "Matrices/Cubes — badge de score en pts dans l'AppBar",
-    "placeholders": {"score": "int"}
+    "placeholders": {
+      "score": "int"
+    }
   },
   "matValidateAnswer": {
     "fr": "Valider la réponse",
@@ -121,7 +128,10 @@
     "fr": "Règles : {rules} | θ = {theta}",
     "en": "Rules: {rules} | θ = {theta}",
     "desc": "Matrices — métadonnées techniques de l'item (nombre de règles et thêta IRT)",
-    "placeholders": {"rules": "int", "theta": "String"}
+    "placeholders": {
+      "rules": "int",
+      "theta": "String"
+    }
   },
   "matInstruction": {
     "fr": "Trouvez la pièce manquante qui complète logiquement la matrice",
@@ -131,7 +141,7 @@
   "matChooseAnswer": {
     "fr": "Choisissez la réponse :",
     "en": "Choose your answer:",
-    "desc": "Matrices/Balances — libellé au-dessus des options de réponse"
+    "desc": "Matrices/Équilibres — libellé au-dessus des options de réponse"
   },
   "matDiffEasy": {
     "fr": "Facile",
@@ -158,10 +168,9 @@
     "en": "Hard",
     "desc": "Matrices/Cubes — étiquette de difficulté : difficile"
   },
-
   "cubesTestName": {
-    "fr": "Test des Cubes",
-    "en": "Block Design",
+    "fr": "Cubes",
+    "en": "Blocks",
     "desc": "Cubes — nom du test affiché dans le scaffold"
   },
   "cubesBravo": {
@@ -173,19 +182,25 @@
     "fr": "Temps écoulé : {time}",
     "en": "Elapsed time: {time}",
     "desc": "Cubes — temps écoulé (format mm:ss)",
-    "placeholders": {"time": "String"}
+    "placeholders": {
+      "time": "String"
+    }
   },
   "cubesPointsEarned": {
     "fr": "Points gagnés : {points}",
     "en": "Points earned: {points}",
     "desc": "Cubes — points gagnés sur l'item",
-    "placeholders": {"points": "int"}
+    "placeholders": {
+      "points": "int"
+    }
   },
   "cubesTotalScore": {
     "fr": "Score total : {score}",
     "en": "Total score: {score}",
     "desc": "Cubes — score total dans le dialogue de feedback",
-    "placeholders": {"score": "int"}
+    "placeholders": {
+      "score": "int"
+    }
   },
   "cubesFinishedTitle": {
     "fr": "Test terminé !",
@@ -201,7 +216,10 @@
     "fr": "{score}/{max} pts",
     "en": "{score}/{max} pts",
     "desc": "Cubes — valeur du score total sur le maximum",
-    "placeholders": {"score": "int", "max": "int"}
+    "placeholders": {
+      "score": "int",
+      "max": "int"
+    }
   },
   "cubesItemsCompletedLabel": {
     "fr": "Items complétés",
@@ -212,7 +230,9 @@
     "fr": "{count}/14",
     "en": "{count}/14",
     "desc": "Cubes — valeur items complétés sur 14",
-    "placeholders": {"count": "int"}
+    "placeholders": {
+      "count": "int"
+    }
   },
   "cubesAvgTime": {
     "fr": "Temps moyen",
@@ -263,13 +283,17 @@
     "fr": "Cohésion: {score}",
     "en": "Cohesion: {score}",
     "desc": "Cubes — métadonnée score de cohésion de l'item",
-    "placeholders": {"score": "int"}
+    "placeholders": {
+      "score": "int"
+    }
   },
   "cubesRemaining": {
     "fr": "Reste: {time}",
     "en": "Left: {time}",
     "desc": "Cubes — temps restant dans l'en-tête de l'exercice (format mm:ss)",
-    "placeholders": {"time": "String"}
+    "placeholders": {
+      "time": "String"
+    }
   },
   "cubesReproduceInstruction": {
     "fr": "Reproduisez le pattern ci-dessous en tapant sur les cubes",
@@ -291,134 +315,147 @@
     "en": "Reset",
     "desc": "Cubes — bouton de réinitialisation de la grille"
   },
-
   "fwTestName": {
-    "fr": "Balances Quantitatives",
-    "en": "Figure Weights",
-    "desc": "Balances — nom du test affiché dans le scaffold"
+    "fr": "Équilibres",
+    "en": "Equilibrium",
+    "desc": "Équilibres — nom du test affiché dans le scaffold"
   },
   "fwEyebrow": {
-    "fr": "RAISONNEMENT FLUIDE · FRI",
-    "en": "FLUID REASONING · FRI",
-    "desc": "Balances/Cubes — sur-titre (catégorie d'indice FRI) dans le scaffold"
+    "fr": "RAISONNEMENT FLUIDE",
+    "en": "FLUID REASONING",
+    "desc": "Équilibres/Cubes — sur-titre (catégorie d'indice dans le scaffold"
   },
   "fwCorrectAnswerPoint": {
     "fr": "Bonne réponse ! +1 point",
     "en": "Correct answer! +1 point",
-    "desc": "Balances — message de feedback réponse juste"
+    "desc": "Équilibres — message de feedback réponse juste"
   },
   "fwWrongAnswer": {
     "fr": "Mauvaise réponse. La bonne réponse était :",
     "en": "Wrong answer. The correct answer was:",
-    "desc": "Balances — message de feedback réponse fausse"
+    "desc": "Équilibres — message de feedback réponse fausse"
   },
   "fwTime": {
     "fr": "Temps : {seconds} s",
     "en": "Time: {seconds}s",
-    "desc": "Balances — temps passé sur l'item",
-    "placeholders": {"seconds": "int"}
+    "desc": "Équilibres — temps passé sur l'item",
+    "placeholders": {
+      "seconds": "int"
+    }
   },
   "fwDiscontinue3": {
-    "fr": "3 échecs consécutifs - Test terminé (WAIS-IV)",
-    "en": "3 consecutive failures - Test ended (WAIS-IV)",
-    "desc": "Balances — message de règle de discontinuation après 3 échecs"
+    "fr": "3 échecs consécutifs — exercice terminé.",
+    "en": "3 consecutive failures — exercise ended.",
+    "desc": "Équilibres — message de règle de discontinuation sur renoncement (3 items passés d'affilée)"
   },
   "fwSeeResults": {
     "fr": "Voir les résultats",
     "en": "See results",
-    "desc": "Balances — bouton dialogue pour voir les résultats"
+    "desc": "Équilibres — bouton dialogue pour voir les résultats"
   },
   "fwResultsTitle": {
-    "fr": "Test des Balances Quantitatives - Résultats",
-    "en": "Figure Weights Test - Results",
-    "desc": "Balances — titre du dialogue de résultats finaux"
+    "fr": "Équilibres - Résultats",
+    "en": "Equilibrium - Results",
+    "desc": "Équilibres — titre du dialogue de résultats finaux"
   },
   "fwRawScorePoints": {
     "fr": "Score brut : {score}/27 points",
     "en": "Raw score: {score}/27 points",
-    "desc": "Balances — score brut sur 27",
-    "placeholders": {"score": "int"}
+    "desc": "Équilibres — score brut sur 27",
+    "placeholders": {
+      "score": "int"
+    }
   },
   "fwItemsCompleted": {
     "fr": "Items complétés : {count}/27",
     "en": "Items completed: {count}/27",
-    "desc": "Balances — items complétés sur 27",
-    "placeholders": {"count": "int"}
+    "desc": "Équilibres — items complétés sur 27",
+    "placeholders": {
+      "count": "int"
+    }
   },
   "fwPercentage": {
     "fr": "Pourcentage : {percent}%",
     "en": "Percentage: {percent}%",
-    "desc": "Balances — pourcentage de réussite",
-    "placeholders": {"percent": "int"}
+    "desc": "Équilibres — pourcentage de réussite",
+    "placeholders": {
+      "percent": "int"
+    }
   },
   "fwTotalTime": {
     "fr": "Temps total : {seconds} s",
     "en": "Total time: {seconds}s",
-    "desc": "Balances — temps total",
-    "placeholders": {"seconds": "int"}
+    "desc": "Équilibres — temps total",
+    "placeholders": {
+      "seconds": "int"
+    }
   },
   "fwGLoading": {
-    "fr": "g-loading : 0.78 (le plus élevé du WAIS-IV)",
-    "en": "g-loading: 0.78 (the highest in WAIS-IV)",
-    "desc": "Balances — note technique sur la saturation en facteur g"
+    "fr": "Cet exercice est fortement lié au raisonnement général.",
+    "en": "This exercise is strongly linked to general reasoning.",
+    "desc": "Équilibres — note technique sur la saturation en facteur g"
   },
   "fwPerfExceptional": {
     "fr": "Performance exceptionnelle (θ > +2.0)",
     "en": "Exceptional performance (θ > +2.0)",
-    "desc": "Balances — niveau de performance score ≥ 23"
+    "desc": "Équilibres — niveau de performance score ≥ 23"
   },
   "fwPerfSuperior": {
     "fr": "Performance supérieure (θ > +1.0)",
     "en": "Superior performance (θ > +1.0)",
-    "desc": "Balances — niveau de performance score ≥ 18"
+    "desc": "Équilibres — niveau de performance score ≥ 18"
   },
   "fwPerfAverage": {
     "fr": "Performance moyenne (θ ≈ 0)",
     "en": "Average performance (θ ≈ 0)",
-    "desc": "Balances — niveau de performance score ≥ 12"
+    "desc": "Équilibres — niveau de performance score ≥ 12"
   },
   "fwPerfInferior": {
     "fr": "Performance inférieure (θ < 0)",
     "en": "Below-average performance (θ < 0)",
-    "desc": "Balances — niveau de performance score ≥ 7"
+    "desc": "Équilibres — niveau de performance score ≥ 7"
   },
   "fwPerfLow": {
     "fr": "Performance faible (θ < -1.0)",
     "en": "Low performance (θ < -1.0)",
-    "desc": "Balances — niveau de performance score < 7"
+    "desc": "Équilibres — niveau de performance score < 7"
   },
   "fwScoreFraction": {
     "fr": "{score}/{total}",
     "en": "{score}/{total}",
-    "desc": "Balances — badge score/total dans l'AppBar",
-    "placeholders": {"score": "int", "total": "int"}
+    "desc": "Équilibres — badge score/total dans l'AppBar",
+    "placeholders": {
+      "score": "int",
+      "total": "int"
+    }
   },
   "fwInstruction": {
     "fr": "Trouvez la valeur manquante qui équilibre la balance.",
     "en": "Find the missing value that balances the scale.",
-    "desc": "Balances — consigne en haut de l'écran"
+    "desc": "Équilibres — consigne en haut de l'écran"
   },
   "fwWhatIs": {
     "fr": "Que vaut ",
     "en": "What is ",
-    "desc": "Balances — début de la question (suivi des jetons cibles puis « ? »)"
+    "desc": "Équilibres — début de la question (suivi des jetons cibles puis « ? »)"
   },
   "fwSeconds": {
     "fr": "{seconds} s",
     "en": "{seconds}s",
-    "desc": "Balances — badge de compte à rebours du timer",
-    "placeholders": {"seconds": "int"}
+    "desc": "Équilibres — badge de compte à rebours du timer",
+    "placeholders": {
+      "seconds": "int"
+    }
   },
-
   "vpTestName": {
-    "fr": "Puzzles Visuels",
-    "en": "Visual Puzzles",
+    "fr": "Assemblages",
+    "en": "Assembly",
     "desc": "Puzzles visuels — nom du test affiché dans le scaffold"
   },
   "vpEyebrow": {
-    "fr": "VISUO-SPATIAL · VSI",
-    "en": "VISUOSPATIAL · VSI",
-    "desc": "Puzzles visuels — sur-titre (catégorie d'indice VSI) dans le scaffold"
+    "fr": "VISUO-SPATIAL",
+    "en": "VISUOSPATIAL",
+    "desc": "Puzzles visuels — sur-titre (catégorie d'indice dans le scaffold"
   },
   "vpCorrect": {
     "fr": "Correct",
@@ -439,7 +476,9 @@
     "fr": "{count} / 3 sélectionnées",
     "en": "{count} / 3 selected",
     "desc": "Puzzles visuels — libellé du bouton tant que moins de 3 pièces sont sélectionnées",
-    "placeholders": {"count": "int"}
+    "placeholders": {
+      "count": "int"
+    }
   },
   "vpInstruction": {
     "fr": "Choisissez les 3 pièces qui forment la figure (rotations permises, retournements interdits).",
@@ -450,7 +489,10 @@
     "fr": "Sélection : {filled} sur {total} pièces",
     "en": "Selection: {filled} of {total} pieces",
     "desc": "Puzzles visuels — étiquette d'accessibilité de l'indicateur de sélection",
-    "placeholders": {"filled": "int", "total": "int"}
+    "placeholders": {
+      "filled": "int",
+      "total": "int"
+    }
   },
   "vpSelectionLabel": {
     "fr": "SÉLECTION",
@@ -461,7 +503,9 @@
     "fr": "Pièce {label}",
     "en": "Piece {label}",
     "desc": "Puzzles visuels — étiquette d'accessibilité d'une pièce (le label est un chiffre)",
-    "placeholders": {"label": "String"}
+    "placeholders": {
+      "label": "String"
+    }
   },
   "vpTargetTitle": {
     "fr": "FIGURE À RECONSTITUER",

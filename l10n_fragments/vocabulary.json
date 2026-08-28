@@ -5,15 +5,18 @@
     "desc": "Vocabulaire — nom du test affiché dans le scaffold"
   },
   "vocabEyebrow": {
-    "fr": "COMPRÉHENSION VERBALE · VCI",
-    "en": "VERBAL COMPREHENSION · VCI",
+    "fr": "COMPRÉHENSION VERBALE",
+    "en": "VERBAL COMPREHENSION",
     "desc": "Vocabulaire — sur-titre (catégorie d'indice) dans le scaffold"
   },
   "vocabTimerScore": {
     "fr": "{seconds} s · {score} pts",
     "en": "{seconds}s · {score} pts",
     "desc": "Vocabulaire — chrono et score affichés dans l'AppBar",
-    "placeholders": {"seconds": "int", "score": "int"}
+    "placeholders": {
+      "seconds": "int",
+      "score": "int"
+    }
   },
   "vocabFeedbackExcellent": {
     "fr": "Excellent !",
@@ -49,13 +52,17 @@
     "fr": "Mot : « {word} »",
     "en": "Word: “{word}”",
     "desc": "Vocabulaire — rappel du mot évalué dans le feedback",
-    "placeholders": {"word": "String"}
+    "placeholders": {
+      "word": "String"
+    }
   },
   "vocabYourAnswerLabel": {
     "fr": "Votre réponse : « {answer} »",
     "en": "Your answer: “{answer}”",
     "desc": "Vocabulaire — rappel de la réponse de l'utilisateur dans le feedback",
-    "placeholders": {"answer": "String"}
+    "placeholders": {
+      "answer": "String"
+    }
   },
   "vocabEmptyAnswer": {
     "fr": "(vide)",
@@ -76,18 +83,22 @@
     "fr": "Temps : {seconds} s",
     "en": "Time: {seconds}s",
     "desc": "Vocabulaire — temps passé sur l'item dans le feedback",
-    "placeholders": {"seconds": "int"}
+    "placeholders": {
+      "seconds": "int"
+    }
   },
   "vocabTotalScore": {
     "fr": "Score total : {score} points",
     "en": "Total score: {score} points",
     "desc": "Vocabulaire — score cumulé affiché dans le feedback",
-    "placeholders": {"score": "int"}
+    "placeholders": {
+      "score": "int"
+    }
   },
   "vocabDiscontinued": {
-    "fr": "3 scores de 0 consécutifs - Test terminé (WAIS-IV)",
-    "en": "3 consecutive zero scores - Test ended (WAIS-IV)",
-    "desc": "Vocabulaire — message de règle d'arrêt après 3 échecs consécutifs"
+    "fr": "3 items passés d'affilée — exercice terminé.",
+    "en": "3 items skipped in a row — exercise ended.",
+    "desc": "Vocabulaire — message de règle d'arrêt sur renoncement (3 items passés d'affilée) consécutifs"
   },
   "vocabViewResults": {
     "fr": "Voir les résultats",
@@ -103,25 +114,35 @@
     "fr": "Score brut : {score}/{max} points",
     "en": "Raw score: {score}/{max} points",
     "desc": "Vocabulaire — score brut dans les résultats",
-    "placeholders": {"score": "int", "max": "int"}
+    "placeholders": {
+      "score": "int",
+      "max": "int"
+    }
   },
   "vocabItemsCompleted": {
     "fr": "Items complétés : {completed}/{total}",
     "en": "Items completed: {completed}/{total}",
     "desc": "Vocabulaire — nombre d'items complétés dans les résultats",
-    "placeholders": {"completed": "int", "total": "int"}
+    "placeholders": {
+      "completed": "int",
+      "total": "int"
+    }
   },
   "vocabPercentage": {
     "fr": "Pourcentage : {percent}%",
     "en": "Percentage: {percent}%",
     "desc": "Vocabulaire — pourcentage de réussite dans les résultats",
-    "placeholders": {"percent": "int"}
+    "placeholders": {
+      "percent": "int"
+    }
   },
   "vocabTotalTime": {
     "fr": "Temps total : {seconds} s",
     "en": "Total time: {seconds}s",
     "desc": "Vocabulaire — temps total dans les résultats",
-    "placeholders": {"seconds": "int"}
+    "placeholders": {
+      "seconds": "int"
+    }
   },
   "vocabTestCaption": {
     "fr": "Test de connaissance lexicale et compréhension verbale",
@@ -137,7 +158,11 @@
     "fr": "{name} : {score}/{max} points",
     "en": "{name}: {score}/{max} points",
     "desc": "Vocabulaire — ligne de répartition score par niveau de fréquence",
-    "placeholders": {"name": "String", "score": "int", "max": "int"}
+    "placeholders": {
+      "name": "String",
+      "score": "int",
+      "max": "int"
+    }
   },
   "vocabPerfExceptional": {
     "fr": "Performance exceptionnelle (θ > +2.0)",

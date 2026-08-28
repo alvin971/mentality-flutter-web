@@ -1,1 +1,1 @@
-WAIS,QI,bilan cognitif,mémoire,attention,psychologie,concentration,cognitif,CAT,IQ test,FSIQ
+profil cognitif,exercices,mémoire,raisonnement,logique,attention,concentration,QI,cognition,CHC

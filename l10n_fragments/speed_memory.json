@@ -1,93 +1,93 @@
 {
   "codingTestName": {
-    "fr": "Code (Digit Symbol)",
-    "en": "Coding (Digit Symbol)",
-    "desc": "Coding test name (scaffold header)"
+    "fr": "Transcription",
+    "en": "Transcription",
+    "desc": "Transcription test name (scaffold header)"
   },
   "codingEyebrow": {
-    "fr": "VITESSE DE TRAITEMENT · PSI",
-    "en": "PROCESSING SPEED · PSI",
-    "desc": "Coding test eyebrow label"
+    "fr": "VITESSE DE TRAITEMENT",
+    "en": "PROCESSING SPEED",
+    "desc": "Transcription test eyebrow label"
   },
   "codingStartTraining": {
     "fr": "Commencer l'entraînement",
     "en": "Start training",
-    "desc": "Coding/Symbol Search start training button"
+    "desc": "Transcription/Symbol Detection start training button"
   },
   "codingTitle": {
-    "fr": "Test de Code",
-    "en": "Coding Test",
-    "desc": "Coding intro title"
+    "fr": "Transcription",
+    "en": "Transcription",
+    "desc": "Transcription intro title"
   },
   "codingDescription": {
     "fr": "Ce test mesure votre vitesse de traitement et votre coordination visuomotrice.",
     "en": "This test measures your processing speed and visuomotor coordination.",
-    "desc": "Coding intro description"
+    "desc": "Transcription intro description"
   },
   "codingReferenceKey": {
     "fr": "Clé de référence :",
     "en": "Reference key:",
-    "desc": "Coding reference key label (intro)"
+    "desc": "Transcription reference key label (intro)"
   },
   "codingTaskTitle": {
     "fr": "Votre tâche",
     "en": "Your task",
-    "desc": "Coding info card title - task"
+    "desc": "Transcription info card title - task"
   },
   "codingTaskDesc": {
     "fr": "Pour chaque chiffre affiché, sélectionnez le symbole correspondant",
     "en": "For each displayed digit, select the matching symbol",
-    "desc": "Coding info card subtitle - task"
+    "desc": "Transcription info card subtitle - task"
   },
   "codingTimeLimitTitle": {
     "fr": "Temps limité",
     "en": "Time limit",
-    "desc": "Coding info card title - time limit"
+    "desc": "Transcription info card title - time limit"
   },
   "codingTimeLimitDesc": {
     "fr": "120 secondes pour compléter le maximum de cases (135 au total)",
     "en": "120 seconds to complete as many cells as possible (135 total)",
-    "desc": "Coding info card subtitle - time limit"
+    "desc": "Transcription info card subtitle - time limit"
   },
   "codingScoringTitle": {
     "fr": "Scoring",
     "en": "Scoring",
-    "desc": "Coding info card title - scoring"
+    "desc": "Transcription info card title - scoring"
   },
   "codingScoringDesc": {
     "fr": "1 point par case correcte, pas de pénalité pour les erreurs",
     "en": "1 point per correct cell, no penalty for errors",
-    "desc": "Coding info card subtitle - scoring"
+    "desc": "Transcription info card subtitle - scoring"
   },
   "codingTrainingDoneTitle": {
     "fr": "Entraînement terminé",
     "en": "Training complete",
-    "desc": "Coding training-finished dialog title"
+    "desc": "Transcription training-finished dialog title"
   },
   "codingTrainingDoneBody": {
     "fr": "Vous êtes prêt à commencer le test. Vous aurez 120 secondes pour compléter le maximum de cases.",
     "en": "You are ready to start the test. You will have 120 seconds to complete as many cells as possible.",
-    "desc": "Coding training-finished dialog body"
+    "desc": "Transcription training-finished dialog body"
   },
   "codingStartTest": {
     "fr": "Commencer le test",
     "en": "Start test",
-    "desc": "Coding/Symbol Search/Digit Span start test button"
+    "desc": "Transcription/Symbol Detection/Digit Sequences start test button"
   },
   "codingTestDoneTitle": {
     "fr": "Test terminé !",
     "en": "Test complete!",
-    "desc": "Test finished dialog title (Coding/Symbol Search/Digit Span/Picture Span)"
+    "desc": "Test finished dialog title (Transcription/Symbol Detection/Digit Sequences/Picture Span)"
   },
   "codingTimeElapsed": {
     "fr": "Temps écoulé : 120 secondes",
     "en": "Time elapsed: 120 seconds",
-    "desc": "Coding result - time elapsed"
+    "desc": "Transcription result - time elapsed"
   },
   "codingCellsCompleted": {
     "fr": "Cases complétées : {count}/135",
     "en": "Cells completed: {count}/135",
-    "desc": "Coding result - completed cells",
+    "desc": "Transcription result - completed cells",
     "placeholders": {
       "count": "int"
     }
@@ -95,7 +95,7 @@
   "codingCellsCorrect": {
     "fr": "Cases correctes : {count}",
     "en": "Correct cells: {count}",
-    "desc": "Coding result - correct cells",
+    "desc": "Transcription result - correct cells",
     "placeholders": {
       "count": "int"
     }
@@ -103,7 +103,7 @@
   "codingScorePoints": {
     "fr": "Score : {count} points",
     "en": "Score: {count} points",
-    "desc": "Coding result - score points",
+    "desc": "Transcription result - score points",
     "placeholders": {
       "count": "int"
     }
@@ -111,42 +111,42 @@
   "codingPerfExceptional": {
     "fr": "Performance exceptionnelle !",
     "en": "Exceptional performance!",
-    "desc": "Coding/Symbol Search performance message - exceptional"
+    "desc": "Transcription/Symbol Detection performance message - exceptional"
   },
   "codingPerfVeryGood": {
     "fr": "Très bonne performance",
     "en": "Very good performance",
-    "desc": "Coding/Symbol Search performance message - very good"
+    "desc": "Transcription/Symbol Detection performance message - very good"
   },
   "codingPerfAboveAverage": {
     "fr": "Performance moyenne-haute",
     "en": "Above-average performance",
-    "desc": "Coding performance message - above average"
+    "desc": "Transcription performance message - above average"
   },
   "codingPerfAverage": {
     "fr": "Performance moyenne",
     "en": "Average performance",
-    "desc": "Coding/Symbol Search performance message - average"
+    "desc": "Transcription/Symbol Detection performance message - average"
   },
   "codingPerfBelowAverage": {
     "fr": "Performance en-dessous de la moyenne",
     "en": "Below-average performance",
-    "desc": "Coding/Symbol Search performance message - below average"
+    "desc": "Transcription/Symbol Detection performance message - below average"
   },
   "codingTrainingTab": {
     "fr": "Entraînement",
     "en": "Training",
-    "desc": "Coding/Symbol Search app bar title in training mode"
+    "desc": "Transcription/Symbol Detection app bar title in training mode"
   },
   "codingReferenceShort": {
     "fr": "Référence :",
     "en": "Reference:",
-    "desc": "Coding reference key label (test screen)"
+    "desc": "Transcription reference key label (test screen)"
   },
   "codingCellProgress": {
     "fr": "Case {current}/{total}",
     "en": "Cell {current}/{total}",
-    "desc": "Coding cell progress",
+    "desc": "Transcription cell progress",
     "placeholders": {
       "current": "int",
       "total": "int"
@@ -155,7 +155,7 @@
   "codingCompletedProgress": {
     "fr": "Complétées : {count}/{total}",
     "en": "Completed: {count}/{total}",
-    "desc": "Coding completed-cells progress",
+    "desc": "Transcription completed-cells progress",
     "placeholders": {
       "count": "int",
       "total": "int"
@@ -164,97 +164,97 @@
   "codingSelectSymbol": {
     "fr": "Sélectionnez un symbole :",
     "en": "Select a symbol:",
-    "desc": "Coding palette label"
+    "desc": "Transcription palette label"
   },
   "codingClear": {
     "fr": "Effacer",
     "en": "Clear",
-    "desc": "Coding clear-cell button"
+    "desc": "Transcription clear-cell button"
   },
   "codingFinishTraining": {
     "fr": "Terminer l'entraînement",
     "en": "Finish training",
-    "desc": "Coding finish-training button"
+    "desc": "Transcription finish-training button"
   },
   "ssTestName": {
-    "fr": "Recherche de Symboles",
-    "en": "Symbol Search",
-    "desc": "Symbol Search test name / title / app bar title"
+    "fr": "Détection de symboles",
+    "en": "Symbol Detection",
+    "desc": "Symbol Detection test name / title / app bar title"
   },
   "ssDescription": {
     "fr": "Ce test mesure votre vitesse de traitement visuelle et votre capacité de discrimination.",
     "en": "This test measures your visual processing speed and discrimination ability.",
-    "desc": "Symbol Search intro description"
+    "desc": "Symbol Detection intro description"
   },
   "ssExampleLabel": {
     "fr": "Exemple d'item :",
     "en": "Example item:",
-    "desc": "Symbol Search example label"
+    "desc": "Symbol Detection example label"
   },
   "ssTargets": {
     "fr": "CIBLES",
     "en": "TARGETS",
-    "desc": "Symbol Search targets label (example)"
+    "desc": "Symbol Detection targets label (example)"
   },
   "ssGroup": {
     "fr": "GROUPE",
     "en": "GROUP",
-    "desc": "Symbol Search group label (example)"
+    "desc": "Symbol Detection group label (example)"
   },
   "ssExampleAnswer": {
     "fr": "→ Réponse : OUI (┴ est présent)",
     "en": "→ Answer: YES (┴ is present)",
-    "desc": "Symbol Search example answer line"
+    "desc": "Symbol Detection example answer line"
   },
   "ssTaskTitle": {
     "fr": "Votre tâche",
     "en": "Your task",
-    "desc": "Symbol Search info card title - task"
+    "desc": "Symbol Detection info card title - task"
   },
   "ssTaskDesc": {
     "fr": "Cherchez si l'un des symboles cibles apparaît dans le groupe",
     "en": "Check whether one of the target symbols appears in the group",
-    "desc": "Symbol Search info card subtitle - task"
+    "desc": "Symbol Detection info card subtitle - task"
   },
   "ssQuickAnswerTitle": {
     "fr": "Réponse rapide",
     "en": "Quick answer",
-    "desc": "Symbol Search info card title - quick answer"
+    "desc": "Symbol Detection info card title - quick answer"
   },
   "ssQuickAnswerDesc": {
     "fr": "Cliquez OUI ou NON aussi vite que possible",
     "en": "Tap YES or NO as fast as possible",
-    "desc": "Symbol Search info card subtitle - quick answer"
+    "desc": "Symbol Detection info card subtitle - quick answer"
   },
   "ssScoringPenaltyTitle": {
     "fr": "Scoring avec pénalité",
     "en": "Scoring with penalty",
-    "desc": "Symbol Search info card title - scoring"
+    "desc": "Symbol Detection info card title - scoring"
   },
   "ssScoringPenaltyDesc": {
     "fr": "Score = Réponses correctes - Réponses incorrectes",
     "en": "Score = Correct answers - Incorrect answers",
-    "desc": "Symbol Search scoring formula"
+    "desc": "Symbol Detection scoring formula"
   },
   "ssTimeLimitTitle": {
     "fr": "Temps limité",
     "en": "Time limit",
-    "desc": "Symbol Search info card title - time limit"
+    "desc": "Symbol Detection info card title - time limit"
   },
   "ssTimeLimitDesc": {
     "fr": "120 secondes pour 60 items",
     "en": "120 seconds for 60 items",
-    "desc": "Symbol Search info card subtitle - time limit"
+    "desc": "Symbol Detection info card subtitle - time limit"
   },
   "ssTrainingDoneBody": {
     "fr": "Vous êtes prêt ! Vous aurez 120 secondes pour compléter le maximum d'items.\n\nRappel : Score = Réponses correctes - Réponses incorrectes",
     "en": "You are ready! You will have 120 seconds to complete as many items as possible.\n\nReminder: Score = Correct answers - Incorrect answers",
-    "desc": "Symbol Search training-finished dialog body"
+    "desc": "Symbol Detection training-finished dialog body"
   },
   "ssItemsAnswered": {
     "fr": "Items répondus : {count}/60",
     "en": "Items answered: {count}/60",
-    "desc": "Symbol Search result - items answered",
+    "desc": "Symbol Detection result - items answered",
     "placeholders": {
       "count": "int"
     }
@@ -262,7 +262,7 @@
   "ssCorrectAnswers": {
     "fr": "Réponses correctes : {count}",
     "en": "Correct answers: {count}",
-    "desc": "Symbol Search result - correct answers",
+    "desc": "Symbol Detection result - correct answers",
     "placeholders": {
       "count": "int"
     }
@@ -270,7 +270,7 @@
   "ssIncorrectAnswers": {
     "fr": "Réponses incorrectes : {count}",
     "en": "Incorrect answers: {count}",
-    "desc": "Symbol Search result - incorrect answers",
+    "desc": "Symbol Detection result - incorrect answers",
     "placeholders": {
       "count": "int"
     }
@@ -278,7 +278,7 @@
   "ssNotAnswered": {
     "fr": "Non répondus : {count}",
     "en": "Not answered: {count}",
-    "desc": "Symbol Search result - not answered",
+    "desc": "Symbol Detection result - not answered",
     "placeholders": {
       "count": "int"
     }
@@ -286,7 +286,7 @@
   "ssRawScore": {
     "fr": "Score brut : {count}",
     "en": "Raw score: {count}",
-    "desc": "Symbol Search result - raw score",
+    "desc": "Symbol Detection result - raw score",
     "placeholders": {
       "count": "int"
     }
@@ -294,17 +294,17 @@
   "ssScoreFormulaShort": {
     "fr": "(Corrects - Incorrects)",
     "en": "(Correct - Incorrect)",
-    "desc": "Symbol Search raw-score formula caption"
+    "desc": "Symbol Detection raw-score formula caption"
   },
   "ssPerfGood": {
     "fr": "Bonne performance",
     "en": "Good performance",
-    "desc": "Symbol Search performance message - good"
+    "desc": "Symbol Detection performance message - good"
   },
   "ssItemProgress": {
     "fr": "Item {current}/{total}",
     "en": "Item {current}/{total}",
-    "desc": "Symbol Search item progress",
+    "desc": "Symbol Detection item progress",
     "placeholders": {
       "current": "int",
       "total": "int"
@@ -313,7 +313,7 @@
   "ssAnsweredProgress": {
     "fr": "Répondus : {count}/60",
     "en": "Answered: {count}/60",
-    "desc": "Symbol Search answered progress",
+    "desc": "Symbol Detection answered progress",
     "placeholders": {
       "count": "int"
     }
@@ -321,97 +321,97 @@
   "ssTargetSymbols": {
     "fr": "SYMBOLES CIBLES",
     "en": "TARGET SYMBOLS",
-    "desc": "Symbol Search target symbols section label"
+    "desc": "Symbol Detection target symbols section label"
   },
   "ssSearchGroup": {
     "fr": "GROUPE DE RECHERCHE",
     "en": "SEARCH GROUP",
-    "desc": "Symbol Search search group section label"
+    "desc": "Symbol Detection search group section label"
   },
   "ssNo": {
     "fr": "NON",
     "en": "NO",
-    "desc": "Symbol Search NO answer button"
+    "desc": "Symbol Detection NO answer button"
   },
   "ssYes": {
     "fr": "OUI",
     "en": "YES",
-    "desc": "Symbol Search YES answer button"
+    "desc": "Symbol Detection YES answer button"
   },
   "dsTestName": {
-    "fr": "Mémoire des Chiffres",
-    "en": "Digit Span",
-    "desc": "Digit Span test name / title"
+    "fr": "Suites de chiffres",
+    "en": "Digit Sequences",
+    "desc": "Digit Sequences test name / title"
   },
   "dsEyebrow": {
-    "fr": "MÉMOIRE DE TRAVAIL · WMI",
-    "en": "WORKING MEMORY · WMI",
-    "desc": "Digit Span / Picture Span eyebrow label"
+    "fr": "MÉMOIRE DE TRAVAIL",
+    "en": "WORKING MEMORY",
+    "desc": "Digit Sequences / Picture Span eyebrow label"
   },
   "dsDescription": {
     "fr": "Ce test mesure votre mémoire de travail à travers 3 parties distinctes :",
     "en": "This test measures your working memory across 3 distinct parts:",
-    "desc": "Digit Span intro description"
+    "desc": "Digit Sequences intro description"
   },
   "dsForwardTitle": {
     "fr": "Partie 1 : Empan Direct",
     "en": "Part 1: Forward Span",
-    "desc": "Digit Span intro card - forward title"
+    "desc": "Digit Sequences intro card - forward title"
   },
   "dsForwardInstruction": {
     "fr": "Répétez les chiffres dans le même ordre",
     "en": "Repeat the digits in the same order",
-    "desc": "Digit Span forward instruction"
+    "desc": "Digit Sequences forward instruction"
   },
   "dsBackwardTitle": {
     "fr": "Partie 2 : Empan Inverse",
     "en": "Part 2: Backward Span",
-    "desc": "Digit Span intro card - backward title"
+    "desc": "Digit Sequences intro card - backward title"
   },
   "dsBackwardInstruction": {
     "fr": "Répétez les chiffres en ordre inverse",
     "en": "Repeat the digits in reverse order",
-    "desc": "Digit Span backward instruction"
+    "desc": "Digit Sequences backward instruction"
   },
   "dsSequencingTitle": {
     "fr": "Partie 3 : Séquençage",
     "en": "Part 3: Sequencing",
-    "desc": "Digit Span intro card - sequencing title"
+    "desc": "Digit Sequences intro card - sequencing title"
   },
   "dsSequencingInstruction": {
     "fr": "Répétez les chiffres en ordre croissant",
     "en": "Repeat the digits in ascending order",
-    "desc": "Digit Span sequencing instruction"
+    "desc": "Digit Sequences sequencing instruction"
   },
   "dsPresentationInfo": {
     "fr": "Les chiffres seront présentés à raison de 1 chiffre par seconde.",
     "en": "The digits will be presented at a rate of 1 digit per second.",
-    "desc": "Digit Span presentation rate info"
+    "desc": "Digit Sequences presentation rate info"
   },
   "dsTypeForward": {
     "fr": "Empan Direct",
     "en": "Forward Span",
-    "desc": "Digit Span type label - forward (app bar / part title)"
+    "desc": "Digit Sequences type label - forward (app bar / part title)"
   },
   "dsTypeBackward": {
     "fr": "Empan Inverse",
     "en": "Backward Span",
-    "desc": "Digit Span type label - backward"
+    "desc": "Digit Sequences type label - backward"
   },
   "dsTypeSequencing": {
     "fr": "Séquençage",
     "en": "Sequencing",
-    "desc": "Digit Span type label - sequencing"
+    "desc": "Digit Sequences type label - sequencing"
   },
   "dsStartPart": {
     "fr": "Commencer",
     "en": "Start",
-    "desc": "Digit Span start-part button"
+    "desc": "Digit Sequences start-part button"
   },
   "dsLengthTrial": {
     "fr": "Longueur {length} - Essai {trial}",
     "en": "Length {length} - Trial {trial}",
-    "desc": "Digit Span length/trial header",
+    "desc": "Digit Sequences length/trial header",
     "placeholders": {
       "length": "int",
       "trial": "int"
@@ -420,22 +420,22 @@
   "dsListenCarefully": {
     "fr": "Écoutez attentivement",
     "en": "Listen carefully",
-    "desc": "Digit Span presentation prompt"
+    "desc": "Digit Sequences presentation prompt"
   },
   "dsCorrect": {
     "fr": "Correct !",
     "en": "Correct!",
-    "desc": "Digit Span / Picture Span feedback - correct"
+    "desc": "Digit Sequences / Picture Span feedback - correct"
   },
   "dsIncorrect": {
     "fr": "Incorrect",
     "en": "Incorrect",
-    "desc": "Digit Span / Picture Span feedback - incorrect"
+    "desc": "Digit Sequences / Picture Span feedback - incorrect"
   },
   "dsPointsEarned": {
     "fr": "Points gagnés : {count}",
     "en": "Points earned: {count}",
-    "desc": "Digit Span feedback - points earned",
+    "desc": "Digit Sequences feedback - points earned",
     "placeholders": {
       "count": "int"
     }
@@ -443,7 +443,7 @@
   "dsCorrectAnswer": {
     "fr": "Réponse correcte : {answer}",
     "en": "Correct answer: {answer}",
-    "desc": "Digit Span feedback - correct answer",
+    "desc": "Digit Sequences feedback - correct answer",
     "placeholders": {
       "answer": "String"
     }
@@ -451,7 +451,7 @@
   "dsYourAnswer": {
     "fr": "Votre réponse : {answer}",
     "en": "Your answer: {answer}",
-    "desc": "Digit Span feedback - your answer",
+    "desc": "Digit Sequences feedback - your answer",
     "placeholders": {
       "answer": "String"
     }
@@ -459,12 +459,12 @@
   "dsResultsByPart": {
     "fr": "Résultats par partie :",
     "en": "Results by part:",
-    "desc": "Digit Span final results header"
+    "desc": "Digit Sequences final results header"
   },
   "dsForwardScore": {
     "fr": "Empan Direct : {count} points",
     "en": "Forward Span: {count} points",
-    "desc": "Digit Span final - forward score",
+    "desc": "Digit Sequences final - forward score",
     "placeholders": {
       "count": "int"
     }
@@ -472,7 +472,7 @@
   "dsBackwardScore": {
     "fr": "Empan Inverse : {count} points",
     "en": "Backward Span: {count} points",
-    "desc": "Digit Span final - backward score",
+    "desc": "Digit Sequences final - backward score",
     "placeholders": {
       "count": "int"
     }
@@ -480,7 +480,7 @@
   "dsSequencingScore": {
     "fr": "Séquençage : {count} points",
     "en": "Sequencing: {count} points",
-    "desc": "Digit Span final - sequencing score",
+    "desc": "Digit Sequences final - sequencing score",
     "placeholders": {
       "count": "int"
     }
@@ -488,7 +488,7 @@
   "dsTotalScore": {
     "fr": "Score Total : {count} points",
     "en": "Total score: {count} points",
-    "desc": "Digit Span / Picture Span final - total score",
+    "desc": "Digit Sequences / Picture Span final - total score",
     "placeholders": {
       "count": "int"
     }
@@ -496,12 +496,12 @@
   "dsEnterAnswer": {
     "fr": "Saisissez votre réponse...",
     "en": "Enter your answer...",
-    "desc": "Digit Span input placeholder"
+    "desc": "Digit Sequences input placeholder"
   },
   "dsValidateProgress": {
     "fr": "Valider ({count}/{total})",
     "en": "Submit ({count}/{total})",
-    "desc": "Digit Span submit button with progress",
+    "desc": "Digit Sequences submit button with progress",
     "placeholders": {
       "count": "int",
       "total": "int"
