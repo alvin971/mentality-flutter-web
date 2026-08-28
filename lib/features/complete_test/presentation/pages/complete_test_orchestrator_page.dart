@@ -128,11 +128,74 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
   @override
   void initState() {
     super.initState();
+    _reprise = widget.reprise;
+    if (_reprise == null) _chercherUneReprise();
     _loadAgeFromToken();
   }
 
+  /// Cherche une passation en cours, pour proposer le choix plutôt que de
+  /// lancer un bilan neuf par-dessus.
+  Future<void> _chercherUneReprise() async {
+    setState(() => _repriseEnRecherche = true);
+    final trouvee = await ResumeService.instance.lookup();
+    if (!mounted) return;
+    setState(() {
+      _reprise = trouvee;
+      _repriseEnRecherche = false;
+    });
+  }
+
+  /// L'utilisateur renonce à sa passation en cours et repart de zéro.
+  ///
+  /// Confirmé, parce que c'est irréversible : la passation est close côté
+  /// serveur et l'état local effacé.
+  Future<void> _recommencerDeZero(BuildContext context) async {
+    final reprise = _reprise;
+    if (reprise == null) return;
+    final confirme = await showDialog<bool>(
+      context: context,
+      builder: (d) => AlertDialog(
+        title: Text(d.l10n.homeResumeRestartTitle),
+        content: Text(d.l10n.homeResumeRestartBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(d, false),
+            child: Text(d.l10n.commonCancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(d, true),
+            child: Text(d.l10n.homeResumeRestart),
+          ),
+        ],
+      ),
+    );
+    if (confirme != true || !mounted) return;
+    await ResumeService.instance.abandon(reprise);
+    if (!mounted) return;
+    setState(() => _reprise = null);
+    if (_ageInMonths != null && context.mounted) {
+      await _startBattery(context, _ageInMonths!);
+    }
+  }
+
   /// Vrai quand cet écran poursuit un bilan interrompu.
-  bool get _estReprise => widget.reprise != null;
+  /// La passation à poursuivre.
+  ///
+  /// Vient de l'accueil quand l'utilisateur a cliqué « Reprendre » — ce choix
+  /// est déjà fait, on enchaîne. Sinon on la CHERCHE : cet écran est aussi
+  /// atteint par « Commencer une évaluation », et proposer « Lancer le test
+  /// complet » à quelqu'un qui a un bilan en cours, c'est lui faire effacer son
+  /// travail d'un bouton, sans un mot.
+  ResumableSession? _reprise;
+
+  /// Vrai tant qu'on cherche une passation à poursuivre.
+  bool _repriseEnRecherche = false;
+
+  bool get _estReprise => _reprise != null;
+
+  /// Vrai quand la reprise a été confirmée AILLEURS (bannière d'accueil) : on
+  /// n'a alors rien à redemander.
+  bool get _repriseDejaChoisie => widget.reprise != null;
 
   /// Dérive l'âge (en mois) depuis l'année/mois de naissance du token.
   /// Plage acceptée identique à l'ancienne saisie (16–90 ans) pour rester
@@ -157,7 +220,7 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
     // réafficher l'écran d'introduction (« Lancer le test complet ») serait au
     // mieux redondant, au pire trompeur — c'est le bouton qui repart de zéro.
     // On enchaîne donc directement, dès que l'âge est connu.
-    if (_estReprise && _ageInMonths != null) {
+    if (_repriseDejaChoisie && _ageInMonths != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) _startBattery(context, _ageInMonths!);
       });
@@ -189,7 +252,7 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
       // terminé ouvrirait une SECONDE passation et la première resterait
       // ouverte à jamais. C'est le seul endroit où la batterie démarre, donc
       // le seul où cette garantie tient.
-      final reprise = widget.reprise;
+      final reprise = _reprise;
       if (reprise != null) await ResumeService.instance.adopt(reprise);
       // `context.mounted` et non `mounted` : c'est le contexte PASSÉ EN
       // PARAMÈTRE qui traverse l'await, pas celui de l'État.
@@ -374,7 +437,7 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
           // En reprise avec un âge lisible dans le token, l'intro n'est qu'un
           // clignotement avant le lancement automatique : on montre directement
           // l'écran d'attente, qui porte la vraie progression.
-          return (_estReprise && (_ageLoading || _ageFromToken))
+          return (_repriseDejaChoisie && (_ageLoading || _ageFromToken))
               ? _buildProgressScreen(context, state)
               : _buildIntroScreen(context);
         }
@@ -421,6 +484,24 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
             context.l10n.ctIntroDescription,
             style: AppText.of(context).body(),
           ),
+          // Ce qui est en jeu, AVANT le choix : « Recommencer » est
+          // irréversible, et on ne décide pas d'abandonner un bilan sans savoir
+          // ce qu'on abandonne.
+          if (_estReprise) ...[
+            SizedBox(height: 24.h),
+            _InfoCard(
+              eyebrow: context.l10n.homeResumeEyebrow,
+              title: context.l10n.homeResumeProgress(
+                  _reprise!.completedCount, _reprise!.totalTests),
+              body: _reprise!.nextTestName == null
+                  ? context.l10n.homeResumeFinish
+                  : _reprise!.reprendEnPleinExercice
+                      ? context.l10n.homeResumeCurrent(_localizedTestName(
+                          context, _reprise!.nextTestName!))
+                      : context.l10n.homeResumeNext(_localizedTestName(
+                          context, _reprise!.nextTestName!)),
+            ),
+          ],
           SizedBox(height: 24.h),
           _InfoCard(
               eyebrow: context.l10n.ctIntroDurationEyebrow,
@@ -517,10 +598,26 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
                 : context.l10n.ctLaunchFullTest,
             icon: Icons.east,
             expand: true,
-            onPressed: (_ageInMonths != null && !_launching)
-                ? () => _startBattery(context, _ageInMonths!)
-                : null,
+            onPressed:
+                (_ageInMonths != null && !_launching && !_repriseEnRecherche)
+                    ? () => _startBattery(context, _ageInMonths!)
+                    : null,
           ),
+          // « Recommencer » n'apparaît QUE s'il y a quelque chose à abandonner.
+          // Le proposer en permanence en ferait un bouton sans objet, et le
+          // taire quand un bilan est en cours faisait effacer le travail de
+          // quelqu'un d'un seul bouton, sans un mot.
+          if (_estReprise) ...[
+            SizedBox(height: 12.h),
+            KeplerButton(
+              label: context.l10n.homeResumeRestart,
+              variant: KeplerButtonVariant.secondary,
+              expand: true,
+              onPressed: (_ageInMonths != null && !_launching)
+                  ? () => _recommencerDeZero(context)
+                  : null,
+            ),
+          ],
           SizedBox(height: 12.h),
           KeplerButton(
             label: context.l10n.commonCancel,
@@ -544,7 +641,7 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
     // Pendant la reprise, la session du BLoC n'existe pas encore (l'âge se lit
     // d'abord depuis le token). Afficher 0/12 à ce moment-là ferait croire à un
     // redémarrage : on montre la progression réelle, connue avant même le BLoC.
-    final reprise = widget.reprise;
+    final reprise = _reprise;
     final total = session?.totalTests ?? reprise?.totalTests ?? 12;
     final completed = session?.completedTestsCount ?? reprise?.completedCount ?? 0;
     final progress = total == 0 ? 0.0 : completed / total;
