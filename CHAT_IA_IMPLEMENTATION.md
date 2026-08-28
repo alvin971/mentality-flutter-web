@@ -128,8 +128,8 @@ CHAT_IA_IMPLEMENTATION.md                         # 🆕 NOUVEAU
 Le prompt système définit la personnalité et le rôle de l'assistant IA :
 
 ```
-Tu es Mentality, un assistant IA spécialisé dans l'évaluation cognitive
-basée sur les échelles WAIS-IV (Wechsler Adult Intelligence Scale).
+Tu es Mental E.T., un assistant IA spécialisé en psychologie cognitive,
+qui accompagne les utilisateurs de Mental E.T.
 
 Ton rôle est d'aider les utilisateurs à :
 1. Comprendre leurs résultats aux tests cognitifs
@@ -179,7 +179,7 @@ flutter run
 ### Étape 4 : Tester le chat
 
 1. Sur la page d'accueil, cliquez sur **"Parler avec Mentality"**
-2. Posez une question : "Qu'est-ce que le WAIS-IV ?"
+2. Posez une question : "Que mesure la mémoire de travail ?"
 3. Attendez la réponse de l'IA
 
 ## 💡 Exemples d'Utilisation
@@ -251,13 +251,13 @@ renforcer votre mémoire de travail :
 │  À l'instant                     │
 │                                  │
 │              ┌──────────────┐    │
-│              │ Qu'est-ce    │    │
-│              │ que le WAIS? │    │
+│              │ Que mesure   │    │
+│              │ la mémoire ? │    │
 │              └──────────────┘    │
 │              5 min                │
 │                                  │
 │  ┌─────────────────────────┐    │
-│  │ Le WAIS-IV est...       │    │
+│  │ La mémoire de travail...│    │
 │  └─────────────────────────┘    │
 │  À l'instant                     │
 │                                  │

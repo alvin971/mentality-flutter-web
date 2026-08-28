@@ -126,7 +126,7 @@ Le service `ClaudeChatService` gère automatiquement :
 
 ### 2. Prompt système
 Le prompt système définit le comportement de Mentality :
-- Assistant spécialisé en évaluation cognitive WAIS-IV
+- Assistant spécialisé en psychologie cognitive
 - Ton bienveillant et encourageant
 - Explications claires et accessibles
 - Rappelle de consulter un professionnel si nécessaire
@@ -179,7 +179,7 @@ Future<String> sendMessage({
 2. Lancez l'application
 3. Cliquez sur "Parler avec Mentality"
 4. Posez une question, par exemple :
-   - "Qu'est-ce que le test WAIS-IV ?"
+   - "Que mesure la mémoire de travail ?"
    - "Comment puis-je améliorer ma mémoire de travail ?"
    - "Explique-moi le raisonnement fluide"
 

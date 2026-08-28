@@ -1,4 +1,4 @@
-/// Banque d'items FRANCAISE du sous-test Vocabulaire (WAIS-IV).
+/// Banque d'items FRANCAISE du sous-test Vocabulaire.
 /// GENERE automatiquement (genere par IA, verifie). 5 bandes de frequence.
 /// NE PAS editer a la main : regenerer via le pipeline de generation.
 import 'vocabulary_generator.dart';

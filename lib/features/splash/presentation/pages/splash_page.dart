@@ -91,7 +91,7 @@ class _SplashPageState extends State<SplashPage>
                   color: KeplerColors.of(context).primary.withValues(alpha: 0.3),
                 ),
                 SizedBox(height: 14.h),
-                Text('WAIS-IV · WISC-V · WPPSI-IV',
+                Text('CATTELL · HORN · CARROLL',
                     style: AppText.of(context).monoLabel(
                         color: Theme.of(context).colorScheme.outline)),
               ],

@@ -1,6 +1,6 @@
 import 'dart:math';
 
-/// Générateur de Recherche de Symboles (Symbol Search - WAIS-IV)
+/// Générateur de Recherche de Symboles (Symbol Search)
 /// 60 items à compléter en 120 secondes
 /// Mesure la vitesse de traitement et la discrimination visuelle
 class SymbolSearchGenerator {

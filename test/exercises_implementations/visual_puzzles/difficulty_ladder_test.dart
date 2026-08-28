@@ -23,7 +23,7 @@ void main() {
       expect(kLadder.map((r) => r.palier).toList(), expectedPaliers);
     });
 
-    test('temps WAIS : 20 s pour les items 1-7, 30 s ensuite', () {
+    test('temps imparti : 20 s pour les items 1-7, 30 s ensuite', () {
       for (int i = 0; i < kLadder.length; i++) {
         expect(kLadder[i].timeLimitSeconds, i < 7 ? 20 : 30,
             reason: 'item ${i + 1}');
@@ -96,7 +96,7 @@ void main() {
 
     test('refonte 2026-07 : toutes les recettes ciblent uniquement le carré',
         () {
-      // Protocole WAIS-IV : un contour distinctif (triangle, arc) donnerait
+      // Choix de conception : un contour distinctif (triangle, arc) donnerait
       // des indices gratuits de localisation. La difficulté vient de la
       // découpe, du motif, des rotations et des pièges — jamais de la forme.
       for (int i = 0; i < kLadder.length; i++) {

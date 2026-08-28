@@ -520,9 +520,9 @@ mentality/
 │   │
 │   └── data/
 │       ├── norms/
-│       │   ├── wppsi_norms.json
-│       │   ├── wisc_norms.json
-│       │   └── wais_norms.json
+│       │   ├── norms_enfant.json
+│       │   ├── norms_adolescent.json
+│       │   └── norms_adulte.json
 │       ├── items/
 │       │   ├── matrices_bank.json
 │       │   ├── vocabulary_bank.json

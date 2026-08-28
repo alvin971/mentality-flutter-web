@@ -140,7 +140,7 @@ class MatrixGenerator {
   /// S'assure que toutes les options sont VISUELLEMENT uniques et visibles
   /// (jamais de cellule vide en option, jamais deux rendus identiques)
   List<MatrixCell> _ensureUniqueOptions(MatrixCell correct, List<MatrixCell> distractors) {
-    const targetDistractors = 4; // 5 options au total, comme le WAIS-IV
+ const targetDistractors = 4; // 5 options au total, comme
     const maxAttempts = 20;
     final seenSignatures = <String>{visualSignature(correct)};
     final uniqueDistractors = <MatrixCell>[];
@@ -544,7 +544,7 @@ class MatrixGenerator {
   // ========== GÉNÉRATEURS DE DISTRACTEURS ==========
 
   /// Génère des distracteurs contextuels basés sur erreurs cognitives documentées
-  /// (4 distracteurs + 1 réponse correcte = 5 options, comme le WAIS-IV)
+ /// (4 distracteurs + 1 réponse correcte = 5 options, comme )
   List<MatrixCell> _generateContextualDistractors(MatrixContext context) {
     final distractors = <MatrixCell>[];
 

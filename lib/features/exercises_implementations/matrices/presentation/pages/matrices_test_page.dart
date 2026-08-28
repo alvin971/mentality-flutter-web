@@ -12,7 +12,7 @@ import '../../../../../core/services/results_sync.dart';
 import '../../../../../core/services/subtest_instrumentation.dart';
 import '../../../../../core/services/subtest_progress_store.dart';
 
-/// Page de test des Matrices Progressives (WAIS-IV: 26 items, WISC-V: 32 items)
+/// Page de test des Matrices Progressives (26 items, 32 items)
 class MatricesTestPage extends StatefulWidget {
   final String? filterLevel;
   const MatricesTestPage({super.key, this.filterLevel});
@@ -172,7 +172,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
     });
 
     // Test non noté à l'écran : aucun retour « juste/faux », on enchaîne.
-    // Discontinuation WAIS-IV : 3 scores 0 consécutifs.
+ // Discontinuation 3 scores 0 consécutifs.
     if (_consecutiveFailures >= 3 ||
         currentLevel >= _generatedItems.length - 1) {
       _showFinalResults();
@@ -220,7 +220,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
 
     // Test non noté à l'écran : aucun récapitulatif de points/temps/réussite,
     // simple confirmation de fin — le score repart vers l'appelant, sans être montré.
-    // Aucune option « Recommencer » : un sous-test WAIS-IV ne se repasse pas
+ // Aucune option « Recommencer »: un sous-test ne se repasse pas
     // (effet d'apprentissage sur des items déjà vus → normes invalidées).
     showDialog(
       context: context,
@@ -256,7 +256,7 @@ class _MatricesTestPageState extends State<MatricesTestPage> {
       // Tout tient à l'écran : matrice redimensionnée à la hauteur disponible,
       // bouton Valider sticky en bas (jamais besoin de scroller).
       scrollable: false,
-      // Aucun score visible pendant la passation (protocole WAIS-IV) : seule
+ // Aucun score visible pendant la passation (protocole ): seule
       // la progression d'items est affichée, jamais les points obtenus.
       bottomBar: KeplerTestButton.primary(
         label: _bottomBarLabel(context, item),

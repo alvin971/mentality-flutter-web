@@ -1,25 +1,102 @@
 {
-  "appTitle": {"fr": "Mental E.T.", "en": "Mental E.T."},
-  "languageSwitcherTooltip": {"fr": "Changer de langue", "en": "Change language"},
-  "commonValidate": {"fr": "Valider", "en": "Confirm"},
-  "commonNext": {"fr": "Suivant", "en": "Next"},
-  "commonBack": {"fr": "Retour", "en": "Back"},
-  "commonContinue": {"fr": "Continuer", "en": "Continue"},
-  "commonStart": {"fr": "Commencer", "en": "Start"},
-  "commonSkip": {"fr": "Passer", "en": "Skip"},
-  "commonCancel": {"fr": "Annuler", "en": "Cancel"},
-  "commonClose": {"fr": "Fermer", "en": "Close"},
-  "commonRetry": {"fr": "Réessayer", "en": "Retry"},
-  "commonLoading": {"fr": "Chargement...", "en": "Loading..."},
-  "commonError": {"fr": "Une erreur est survenue", "en": "An error occurred"},
-  "commonYes": {"fr": "Oui", "en": "Yes"},
-  "commonNo": {"fr": "Non", "en": "No"},
-  "commonOk": {"fr": "OK", "en": "OK"},
-  "commonFinish": {"fr": "Terminer", "en": "Finish"},
-  "commonSeconds": {"fr": "{count} s", "en": "{count} s", "placeholders": {"count": "int"}},
-  "oralConsentRequiredCheckbox": {"fr": "J'autorise l'enregistrement de ma voix et son analyse, le temps de réaliser ce test. (obligatoire)", "en": "I allow my voice to be recorded and analyzed for the duration of this test. (required)", "desc": "Case à cocher OBLIGATOIRE du consentement audio"},
-  "oralConsentCommercialCheckbox": {"fr": "J'autorise aussi la réutilisation de mes enregistrements, sous forme anonymisée, à des fins de recherche et commerciales — y compris leur cession à des tiers. (facultatif)", "en": "I also allow my recordings to be reused, in anonymized form, for research and commercial purposes — including transfer to third parties. (optional)", "desc": "Case à cocher OPTIONNELLE du consentement à la réutilisation commerciale"},
-  "oralConsentRequiredHint": {"fr": "Cochez la première case pour pouvoir commencer le test.", "en": "Tick the first box to start the test.", "desc": "Indice affiché tant que la case obligatoire n'est pas cochée"},
-  "oralConsentPrivacyLink": {"fr": "Lire la politique de confidentialité", "en": "Read the privacy policy", "desc": "Lien vers la politique de confidentialité sur l'écran de consentement"},
-  "matDiscontinue3": {"fr": "3 échecs consécutifs - Test terminé (WAIS-IV)", "en": "3 consecutive failures - Test ended (WAIS-IV)", "desc": "Matrices — message de règle de discontinuation après 3 échecs"}
+  "appTitle": {
+    "fr": "Mental E.T.",
+    "en": "Mental E.T."
+  },
+  "languageSwitcherTooltip": {
+    "fr": "Changer de langue",
+    "en": "Change language"
+  },
+  "commonValidate": {
+    "fr": "Valider",
+    "en": "Confirm"
+  },
+  "commonNext": {
+    "fr": "Suivant",
+    "en": "Next"
+  },
+  "commonBack": {
+    "fr": "Retour",
+    "en": "Back"
+  },
+  "commonContinue": {
+    "fr": "Continuer",
+    "en": "Continue"
+  },
+  "commonStart": {
+    "fr": "Commencer",
+    "en": "Start"
+  },
+  "commonSkip": {
+    "fr": "Passer",
+    "en": "Skip"
+  },
+  "commonCancel": {
+    "fr": "Annuler",
+    "en": "Cancel"
+  },
+  "commonClose": {
+    "fr": "Fermer",
+    "en": "Close"
+  },
+  "commonRetry": {
+    "fr": "Réessayer",
+    "en": "Retry"
+  },
+  "commonLoading": {
+    "fr": "Chargement...",
+    "en": "Loading..."
+  },
+  "commonError": {
+    "fr": "Une erreur est survenue",
+    "en": "An error occurred"
+  },
+  "commonYes": {
+    "fr": "Oui",
+    "en": "Yes"
+  },
+  "commonNo": {
+    "fr": "Non",
+    "en": "No"
+  },
+  "commonOk": {
+    "fr": "OK",
+    "en": "OK"
+  },
+  "commonFinish": {
+    "fr": "Terminer",
+    "en": "Finish"
+  },
+  "commonSeconds": {
+    "fr": "{count} s",
+    "en": "{count} s",
+    "placeholders": {
+      "count": "int"
+    }
+  },
+  "oralConsentRequiredCheckbox": {
+    "fr": "J'autorise l'enregistrement de ma voix et son analyse, le temps de réaliser ce test. (obligatoire)",
+    "en": "I allow my voice to be recorded and analyzed for the duration of this test. (required)",
+    "desc": "Case à cocher OBLIGATOIRE du consentement audio"
+  },
+  "oralConsentCommercialCheckbox": {
+    "fr": "J'autorise aussi la réutilisation de mes enregistrements, sous forme anonymisée, à des fins de recherche et commerciales — y compris leur cession à des tiers. (facultatif)",
+    "en": "I also allow my recordings to be reused, in anonymized form, for research and commercial purposes — including transfer to third parties. (optional)",
+    "desc": "Case à cocher OPTIONNELLE du consentement à la réutilisation commerciale"
+  },
+  "oralConsentRequiredHint": {
+    "fr": "Cochez la première case pour pouvoir commencer le test.",
+    "en": "Tick the first box to start the test.",
+    "desc": "Indice affiché tant que la case obligatoire n'est pas cochée"
+  },
+  "oralConsentPrivacyLink": {
+    "fr": "Lire la politique de confidentialité",
+    "en": "Read the privacy policy",
+    "desc": "Lien vers la politique de confidentialité sur l'écran de consentement"
+  },
+  "matDiscontinue3": {
+    "fr": "3 échecs consécutifs — exercice terminé.",
+    "en": "3 consecutive failures — exercise ended.",
+    "desc": "Matrices — message de règle de discontinuation sur renoncement (3 items passés d'affilée)"
+  }
 }

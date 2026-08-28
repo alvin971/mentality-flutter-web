@@ -1,7 +1,8 @@
 Première version de Mental E.T.
 
-• Tests cognitifs adaptatifs basés sur le WAIS-IV
-• 5 domaines cognitifs : mémoire, attention, raisonnement fluide, visuo-spatial, vitesse de traitement
-• Algorithme adaptatif CAT — difficulté ajustée en temps réel
-• Export PDF des résultats
+• 13 exercices cognitifs originaux, construits selon le modèle CHC (Cattell-Horn-Carroll)
+• Un profil sur 5 domaines : mémoire de travail, attention, raisonnement fluide, visuo-spatial, vitesse de traitement
+• Difficulté adaptative (théorie de réponse à l'item) — ajustée au fil de vos réponses
+• Export PDF de votre rapport de profil cognitif
+• Assistant IA pour explorer vos résultats
 • Interface intuitive et accessible

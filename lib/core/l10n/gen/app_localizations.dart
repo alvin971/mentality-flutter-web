@@ -237,10 +237,10 @@ abstract class AppLocalizations {
   /// **'Lire la politique de confidentialité'**
   String get oralConsentPrivacyLink;
 
-  /// Matrices — message de règle de discontinuation après 3 échecs
+  /// Matrices — message de règle de discontinuation sur renoncement (3 items passés d'affilée)
   ///
   /// In fr, this message translates to:
-  /// **'3 échecs consécutifs - Test terminé (WAIS-IV)'**
+  /// **'3 échecs consécutifs — exercice terminé.'**
   String get matDiscontinue3;
 
   /// Titre de la page d'introduction au bilan cognitif
@@ -252,7 +252,7 @@ abstract class AppLocalizations {
   /// Eyebrow (sur-titre) de la page d'introduction au bilan
   ///
   /// In fr, this message translates to:
-  /// **'BILAN COGNITIF'**
+  /// **'ÉVALUATION COGNITIVE'**
   String get assessIntroEyebrow;
 
   /// Titre hero ligne 1 de la page d'intro évaluation
@@ -270,7 +270,7 @@ abstract class AppLocalizations {
   /// Paragraphe descriptif de l'intro évaluation
   ///
   /// In fr, this message translates to:
-  /// **'Cette évaluation mesure vos capacités cognitives à travers six domaines issus du WAIS-IV. Un score global (FSIQ) en est la synthèse.'**
+  /// **'Cette évaluation explore vos capacités cognitives à travers six domaines du modèle CHC (Cattell-Horn-Carroll). Un score global en est la synthèse.'**
   String get assessIntroDescription;
 
   /// En-tête de la carte listant les domaines mesurés
@@ -279,31 +279,31 @@ abstract class AppLocalizations {
   /// **'DOMAINES MESURÉS'**
   String get assessDomainsHeader;
 
-  /// Libellé du domaine VCI
+  /// Libellé du domaine
   ///
   /// In fr, this message translates to:
   /// **'Compréhension Verbale'**
   String get assessDomainVci;
 
-  /// Libellé du domaine VSI
+  /// Libellé du domaine
   ///
   /// In fr, this message translates to:
   /// **'Raisonnement Visuo-Spatial'**
   String get assessDomainVsi;
 
-  /// Libellé du domaine FRI
+  /// Libellé du domaine
   ///
   /// In fr, this message translates to:
   /// **'Raisonnement Fluide'**
   String get assessDomainFri;
 
-  /// Libellé du domaine WMI
+  /// Libellé du domaine
   ///
   /// In fr, this message translates to:
   /// **'Mémoire de Travail'**
   String get assessDomainWmi;
 
-  /// Libellé du domaine PSI
+  /// Libellé du domaine
   ///
   /// In fr, this message translates to:
   /// **'Vitesse de Traitement'**
@@ -330,7 +330,7 @@ abstract class AppLocalizations {
   /// Bouton pour lancer le bilan complet
   ///
   /// In fr, this message translates to:
-  /// **'Lancer le bilan complet'**
+  /// **'Lancer l\'évaluation complète'**
   String get assessLaunchFullAssessment;
 
   /// Séparateur entre bilan complet et subtests individuels
@@ -342,7 +342,7 @@ abstract class AppLocalizations {
   /// Libellé du subtest Cubes dans la liste des tests individuels
   ///
   /// In fr, this message translates to:
-  /// **'Cubes (Block Design)'**
+  /// **'Cubes'**
   String get assessSubtestCubes;
 
   /// Libellé du subtest Matrices dans la liste des tests individuels
@@ -351,22 +351,22 @@ abstract class AppLocalizations {
   /// **'Matrices Progressives'**
   String get assessSubtestMatrices;
 
-  /// Libellé du subtest Balances dans la liste des tests individuels
+  /// Libellé du subtest Équilibres dans la liste des tests individuels
   ///
   /// In fr, this message translates to:
-  /// **'Balances Quantitatives'**
+  /// **'Équilibres'**
   String get assessSubtestFigureWeights;
 
-  /// Libellé du subtest Puzzles Visuels
+  /// Libellé du subtest Assemblages
   ///
   /// In fr, this message translates to:
-  /// **'Puzzles Visuels'**
+  /// **'Assemblages'**
   String get assessSubtestVisualPuzzles;
 
-  /// Libellé du subtest Similitudes
+  /// Libellé du subtest Points communs
   ///
   /// In fr, this message translates to:
-  /// **'Similitudes'**
+  /// **'Points communs'**
   String get assessSubtestSimilarities;
 
   /// Libellé du subtest Vocabulaire
@@ -381,10 +381,10 @@ abstract class AppLocalizations {
   /// **'Information'**
   String get assessSubtestInformation;
 
-  /// Libellé du subtest Mémoire des Chiffres
+  /// Libellé du subtest Suites de chiffres
   ///
   /// In fr, this message translates to:
-  /// **'Mémoire des Chiffres'**
+  /// **'Suites de chiffres'**
   String get assessSubtestDigitSpan;
 
   /// Libellé du subtest Arithmétique
@@ -402,13 +402,13 @@ abstract class AppLocalizations {
   /// Libellé du subtest Code
   ///
   /// In fr, this message translates to:
-  /// **'Code'**
+  /// **'Transcription'**
   String get assessSubtestCoding;
 
-  /// Libellé du subtest Recherche de Symboles
+  /// Libellé du subtest Détection de symboles
   ///
   /// In fr, this message translates to:
-  /// **'Recherche de Symboles'**
+  /// **'Détection de symboles'**
   String get assessSubtestSymbolSearch;
 
   /// Libellé du subtest Compréhension Orale
@@ -552,37 +552,43 @@ abstract class AppLocalizations {
   /// Libellé de la ligne du QI total dans le détail d'un résultat
   ///
   /// In fr, this message translates to:
-  /// **'QI Total (FSIQ)'**
+  /// **'QI Total'**
   String get histScoreFsiq;
 
-  /// Libellé de la ligne VCI dans le détail d'un résultat
+  /// Étiquette courte de la colonne du score global dans l'historique (« QI » est un terme générique, sans marque)
   ///
   /// In fr, this message translates to:
-  /// **'VCI — Verbal'**
+  /// **'QI'**
+  String get histScoreShortIq;
+
+  /// Libellé de la ligne dans le détail d'un résultat
+  ///
+  /// In fr, this message translates to:
+  /// **'Compréhension Verbale'**
   String get histScoreVci;
 
-  /// Libellé de la ligne VSI dans le détail d'un résultat
+  /// Libellé de la ligne dans le détail d'un résultat
   ///
   /// In fr, this message translates to:
-  /// **'VSI — Visuo-Spatial'**
+  /// **'Visuo-Spatial'**
   String get histScoreVsi;
 
-  /// Libellé de la ligne FRI dans le détail d'un résultat
+  /// Libellé de la ligne dans le détail d'un résultat
   ///
   /// In fr, this message translates to:
-  /// **'FRI — Raisonnement'**
+  /// **'Raisonnement Fluide'**
   String get histScoreFri;
 
-  /// Libellé de la ligne WMI dans le détail d'un résultat
+  /// Libellé de la ligne dans le détail d'un résultat
   ///
   /// In fr, this message translates to:
-  /// **'WMI — Mémoire'**
+  /// **'Mémoire de Travail'**
   String get histScoreWmi;
 
-  /// Libellé de la ligne PSI dans le détail d'un résultat
+  /// Libellé de la ligne dans le détail d'un résultat
   ///
   /// In fr, this message translates to:
-  /// **'PSI — Vitesse'**
+  /// **'Vitesse de Traitement'**
   String get histScorePsi;
 
   /// Eyebrow de l'état vide de l'historique
@@ -606,7 +612,7 @@ abstract class AppLocalizations {
   /// Texte descriptif de l'état vide de l'historique
   ///
   /// In fr, this message translates to:
-  /// **'Complétez votre première évaluation WAIS-IV pour voir vos résultats apparaître ici.'**
+  /// **'Complétez votre première évaluation pour voir vos résultats apparaître ici.'**
   String get histEmptyDescription;
 
   /// Bouton pour démarrer une évaluation depuis l'état vide
@@ -672,7 +678,7 @@ abstract class AppLocalizations {
   /// Liste des subtests dans la carte contenu
   ///
   /// In fr, this message translates to:
-  /// **'Cubes · Similitudes · Mémoire · Matrices · Vocabulaire · Arithmétique · Symboles · Puzzles · Information · Code · Images · Balances · Langage oral.'**
+  /// **'Cubes · Points communs · Suites de chiffres · Matrices · Vocabulaire · Arithmétique · Symboles · Assemblages · Information · Transcription · Images · Équilibres · Langage oral.'**
   String get ctIntroContentBody;
 
   /// Eyebrow de la carte avertissement
@@ -696,7 +702,7 @@ abstract class AppLocalizations {
   /// En-tête de la carte de saisie de l'âge
   ///
   /// In fr, this message translates to:
-  /// **'ÂGE DU PATIENT'**
+  /// **'VOTRE ÂGE'**
   String get ctPatientAgeHeader;
 
   /// Indication sous le champ d'âge
@@ -756,7 +762,7 @@ abstract class AppLocalizations {
   /// Eyebrow de l'écran de calcul des résultats
   ///
   /// In fr, this message translates to:
-  /// **'BILAN'**
+  /// **'ÉVALUATION'**
   String get ctComputingResultsEyebrow;
 
   /// Texte affiché pendant le traitement des résultats
@@ -777,16 +783,16 @@ abstract class AppLocalizations {
   /// **'Cubes'**
   String get ctTestCubes;
 
-  /// Nom affiché du subtest Similitudes
+  /// Nom affiché du subtest Points communs
   ///
   /// In fr, this message translates to:
-  /// **'Similitudes'**
+  /// **'Points communs'**
   String get ctTestSimilarities;
 
-  /// Nom affiché du subtest Mémoire des Chiffres
+  /// Nom affiché du subtest Suites de chiffres
   ///
   /// In fr, this message translates to:
-  /// **'Mémoire des Chiffres'**
+  /// **'Suites de chiffres'**
   String get ctTestDigitSpan;
 
   /// Nom affiché du subtest Matrices
@@ -807,16 +813,16 @@ abstract class AppLocalizations {
   /// **'Arithmétique'**
   String get ctTestArithmetic;
 
-  /// Nom affiché du subtest Recherche de Symboles
+  /// Nom affiché du subtest Détection de symboles
   ///
   /// In fr, this message translates to:
-  /// **'Recherche de Symboles'**
+  /// **'Détection de symboles'**
   String get ctTestSymbolSearch;
 
-  /// Nom affiché du subtest Puzzles Visuels
+  /// Nom affiché du subtest Assemblages
   ///
   /// In fr, this message translates to:
-  /// **'Puzzles Visuels'**
+  /// **'Assemblages'**
   String get ctTestVisualPuzzles;
 
   /// Nom affiché du subtest Information
@@ -828,7 +834,7 @@ abstract class AppLocalizations {
   /// Nom affiché du subtest Code
   ///
   /// In fr, this message translates to:
-  /// **'Code'**
+  /// **'Transcription'**
   String get ctTestCoding;
 
   /// Nom affiché du subtest Mémoire des Images
@@ -837,10 +843,10 @@ abstract class AppLocalizations {
   /// **'Mémoire des Images'**
   String get ctTestPictureSpan;
 
-  /// Nom affiché du subtest Balances
+  /// Nom affiché du subtest Équilibres
   ///
   /// In fr, this message translates to:
-  /// **'Balances'**
+  /// **'Équilibres'**
   String get ctTestFigureWeights;
 
   /// Titre de la page de résultats du test complet
@@ -852,25 +858,25 @@ abstract class AppLocalizations {
   /// Eyebrow de la page de résultats
   ///
   /// In fr, this message translates to:
-  /// **'BILAN WAIS-IV'**
+  /// **'VOTRE PROFIL COGNITIF'**
   String get ctResultsEyebrow;
 
   /// Titre hero ligne 1 de la page de résultats
   ///
   /// In fr, this message translates to:
-  /// **'Bilan'**
+  /// **'Évaluation'**
   String get ctResultsHero1;
 
   /// Titre hero ligne 2 (italique) de la page de résultats
   ///
   /// In fr, this message translates to:
-  /// **'terminé.'**
+  /// **'terminée.'**
   String get ctResultsHero2;
 
   /// Paragraphe de synthèse en tête de page de résultats
   ///
   /// In fr, this message translates to:
-  /// **'Synthèse de vos performances cognitives sur les subtests notés du WAIS-IV.'**
+  /// **'Synthèse de vos performances cognitives sur les exercices notés.'**
   String get ctResultsSummary;
 
   /// Âge en années affiché dans les résultats
@@ -897,7 +903,7 @@ abstract class AppLocalizations {
   /// **'SUBTESTS'**
   String get ctMetaSubtests;
 
-  /// Libellé méta : âge du patient
+  /// Libellé méta : âge de la personne
   ///
   /// In fr, this message translates to:
   /// **'ÂGE'**
@@ -906,7 +912,7 @@ abstract class AppLocalizations {
   /// Libellé de la carte du QI total
   ///
   /// In fr, this message translates to:
-  /// **'QI TOTAL · FSIQ'**
+  /// **'SCORE GLOBAL'**
   String get ctFsiqCardLabel;
 
   /// Intervalle de confiance à 95% du QI total
@@ -927,31 +933,31 @@ abstract class AppLocalizations {
   /// **'PROFIL DES INDICES'**
   String get ctIndexProfileHeader;
 
-  /// Libellé complet de l'indice VCI
+  /// Libellé complet de l'indice concerné
   ///
   /// In fr, this message translates to:
   /// **'Compréhension Verbale'**
   String get ctIndexVci;
 
-  /// Libellé complet de l'indice VSI
+  /// Libellé complet de l'indice concerné
   ///
   /// In fr, this message translates to:
   /// **'Visuo-Spatial'**
   String get ctIndexVsi;
 
-  /// Libellé complet de l'indice FRI
+  /// Libellé complet de l'indice concerné
   ///
   /// In fr, this message translates to:
   /// **'Raisonnement Fluide'**
   String get ctIndexFri;
 
-  /// Libellé complet de l'indice WMI
+  /// Libellé complet de l'indice concerné
   ///
   /// In fr, this message translates to:
   /// **'Mémoire de Travail'**
   String get ctIndexWmi;
 
-  /// Libellé complet de l'indice PSI
+  /// Libellé complet de l'indice concerné
   ///
   /// In fr, this message translates to:
   /// **'Vitesse de Traitement'**
@@ -975,34 +981,34 @@ abstract class AppLocalizations {
   /// **'NOTES STANDARDISÉES'**
   String get ctStandardizedScoresHeader;
 
-  /// Titre du groupe VCI dans le détail des subtests
+  /// Titre du groupe dans le détail des subtests
   ///
   /// In fr, this message translates to:
-  /// **'VCI · Verbal'**
+  /// **'Compréhension Verbale'**
   String get ctGroupVciVerbal;
 
-  /// Titre du groupe VSI dans le détail des subtests
+  /// Titre du groupe dans le détail des subtests
   ///
   /// In fr, this message translates to:
-  /// **'VSI · Visuo-Spatial'**
+  /// **'Visuo-Spatial'**
   String get ctGroupVsiVisuoSpatial;
 
-  /// Titre du groupe FRI dans le détail des subtests
+  /// Titre du groupe dans le détail des subtests
   ///
   /// In fr, this message translates to:
-  /// **'FRI · Raisonnement'**
+  /// **'Raisonnement Fluide'**
   String get ctGroupFriReasoning;
 
-  /// Titre du groupe WMI dans le détail des subtests
+  /// Titre du groupe dans le détail des subtests
   ///
   /// In fr, this message translates to:
-  /// **'WMI · Mémoire'**
+  /// **'Mémoire de Travail'**
   String get ctGroupWmiMemory;
 
-  /// Titre du groupe PSI dans le détail des subtests
+  /// Titre du groupe dans le détail des subtests
   ///
   /// In fr, this message translates to:
-  /// **'PSI · Vitesse'**
+  /// **'Vitesse de Traitement'**
   String get ctGroupPsiSpeed;
 
   /// Note brute d'un subtest dans le détail
@@ -1068,7 +1074,7 @@ abstract class AppLocalizations {
   /// Corps de l'avis 'âge manquant'
   ///
   /// In fr, this message translates to:
-  /// **'Sans l\'âge du patient, seuls les scores bruts sont affichés. Relancez le test en renseignant l\'âge pour obtenir le QI standardisé, les percentiles et les intervalles de confiance.'**
+  /// **'Sans votre âge, seuls les scores bruts sont affichés. Relancez le test en renseignant l\'âge pour obtenir le QI standardisé, les percentiles et les intervalles de confiance.'**
   String get ctMissingAgeBody;
 
   /// Bouton d'export PDF des résultats
@@ -1092,7 +1098,7 @@ abstract class AppLocalizations {
   /// Sous-titre du rapport PDF (sous le titre de marque)
   ///
   /// In fr, this message translates to:
-  /// **'Rapport d\'évaluation cognitive WAIS-IV'**
+  /// **'Rapport de profil cognitif'**
   String get ctPdfSubtitle;
 
   /// Valeur affichée dans le PDF quand l'âge n'est pas renseigné
@@ -1125,10 +1131,10 @@ abstract class AppLocalizations {
   /// **'Date'**
   String get ctPdfDate;
 
-  /// Libellé du bloc FSIQ dans le PDF
+  /// Libellé du bloc dans le PDF
   ///
   /// In fr, this message translates to:
-  /// **'SCORE QI GLOBAL (FSIQ)'**
+  /// **'SCORE GLOBAL'**
   String get ctPdfFsiqLabel;
 
   /// Libellé de l'intervalle de confiance dans le PDF
@@ -1155,34 +1161,34 @@ abstract class AppLocalizations {
   /// **'PROFIL DES INDICES COGNITIFS'**
   String get ctPdfIndexProfileHeader;
 
-  /// Libellé de l'indice VCI dans le tableau PDF
+  /// Libellé de l'indice dans le tableau PDF
   ///
   /// In fr, this message translates to:
-  /// **'VCI — Compréhension Verbale'**
+  /// **'Compréhension Verbale'**
   String get ctPdfIndexVci;
 
-  /// Libellé de l'indice VSI dans le tableau PDF
+  /// Libellé de l'indice dans le tableau PDF
   ///
   /// In fr, this message translates to:
-  /// **'VSI — Visuo-Spatial'**
+  /// **'Visuo-Spatial'**
   String get ctPdfIndexVsi;
 
-  /// Libellé de l'indice FRI dans le tableau PDF
+  /// Libellé de l'indice dans le tableau PDF
   ///
   /// In fr, this message translates to:
-  /// **'FRI — Raisonnement Fluide'**
+  /// **'Raisonnement Fluide'**
   String get ctPdfIndexFri;
 
-  /// Libellé de l'indice WMI dans le tableau PDF
+  /// Libellé de l'indice dans le tableau PDF
   ///
   /// In fr, this message translates to:
-  /// **'WMI — Mémoire de Travail'**
+  /// **'Mémoire de Travail'**
   String get ctPdfIndexWmi;
 
-  /// Libellé de l'indice PSI dans le tableau PDF
+  /// Libellé de l'indice dans le tableau PDF
   ///
   /// In fr, this message translates to:
-  /// **'PSI — Vitesse de Traitement'**
+  /// **'Vitesse de Traitement'**
   String get ctPdfIndexPsi;
 
   /// En-tête de colonne 'Indice' dans le tableau PDF des indices
@@ -1230,7 +1236,7 @@ abstract class AppLocalizations {
   /// Bouton de lancement quand un bilan interrompu est repris
   ///
   /// In fr, this message translates to:
-  /// **'Reprendre le bilan'**
+  /// **'Reprendre l\'évaluation'**
   String get ctResumeFullTest;
 
   /// App bar eyebrow on chat screen
@@ -1386,7 +1392,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeHeroBody.
   ///
   /// In fr, this message translates to:
-  /// **'Une évaluation scientifique adaptative, inspirée des échelles Wechsler. 13 sous-tests, 5 indices, un score global.'**
+  /// **'Une évaluation cognitive adaptative. 13 sous-tests, 5 indices, un score global.'**
   String get homeHeroBody;
 
   /// Home action card 1 title
@@ -1446,7 +1452,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeAboutSubtestsBody.
   ///
   /// In fr, this message translates to:
-  /// **'Évaluation complète des cinq indices cognitifs WAIS-IV.'**
+  /// **'Évaluation complète des cinq indices cognitifs du modèle CHC.'**
   String get homeAboutSubtestsBody;
 
   /// About tile 2 title
@@ -1464,13 +1470,13 @@ abstract class AppLocalizations {
   /// About tile 3 title
   ///
   /// In fr, this message translates to:
-  /// **'Validation scientifique'**
+  /// **'Cadre théorique'**
   String get homeAboutValidationTitle;
 
   /// No description provided for @homeAboutValidationBody.
   ///
   /// In fr, this message translates to:
-  /// **'Items inspirés des échelles Wechsler (WPPSI / WISC / WAIS).'**
+  /// **'Items originaux, écrits pour Mental E.T. et construits sur le modèle CHC.'**
   String get homeAboutValidationBody;
 
   /// Resume banner eyebrow
@@ -1560,7 +1566,7 @@ abstract class AppLocalizations {
   /// Information — sur-titre (indice mesuré)
   ///
   /// In fr, this message translates to:
-  /// **'COMPRÉHENSION VERBALE · VCI'**
+  /// **'COMPRÉHENSION VERBALE'**
   String get infoEyebrow;
 
   /// Information — statut en AppBar : temps écoulé · score/items tentés
@@ -1623,10 +1629,10 @@ abstract class AppLocalizations {
   /// **'Domaine : {domain}'**
   String infoDomainLabel(String domain);
 
-  /// Information — message de règle de discontinuation après 3 échecs
+  /// Information — message de règle de discontinuation sur renoncement (3 items passés d'affilée)
   ///
   /// In fr, this message translates to:
-  /// **'3 échecs consécutifs - Test terminé (WAIS-IV)'**
+  /// **'3 échecs consécutifs — exercice terminé.'**
   String get infoDiscontinue3;
 
   /// Information — bouton qui ouvre l'écran de résultats final
@@ -1770,7 +1776,7 @@ abstract class AppLocalizations {
   /// Arithmétique — sur-titre (indice mesuré)
   ///
   /// In fr, this message translates to:
-  /// **'MÉMOIRE DE TRAVAIL · WMI'**
+  /// **'MÉMOIRE DE TRAVAIL'**
   String get arithEyebrow;
 
   /// Arithmétique — bouton de démarrage du test
@@ -2715,43 +2721,43 @@ abstract class AppLocalizations {
   /// **'66 ans et plus'**
   String get regAge66plus;
 
-  /// Classification Wechsler pour un score composite >= 130 ou note standard >= 16
+  /// Classification pour un score composite >= 130 ou note standard >= 16
   ///
   /// In fr, this message translates to:
   /// **'Très supérieur'**
   String get scoringClassificationVerySuperior;
 
-  /// Classification Wechsler pour un score composite 120-129 ou note standard 13-15
+  /// Classification pour un score composite 120-129 ou note standard 13-15
   ///
   /// In fr, this message translates to:
   /// **'Supérieur'**
   String get scoringClassificationSuperior;
 
-  /// Classification Wechsler pour un score composite 110-119 ou note standard 11-12
+  /// Classification pour un score composite 110-119 ou note standard 11-12
   ///
   /// In fr, this message translates to:
   /// **'Moyen fort'**
   String get scoringClassificationHighAverage;
 
-  /// Classification Wechsler pour un score composite 90-109 ou note standard 8-10
+  /// Classification pour un score composite 90-109 ou note standard 8-10
   ///
   /// In fr, this message translates to:
   /// **'Moyen'**
   String get scoringClassificationAverage;
 
-  /// Classification Wechsler pour un score composite 80-89 ou note standard 6-7
+  /// Classification pour un score composite 80-89 ou note standard 6-7
   ///
   /// In fr, this message translates to:
   /// **'Moyen faible'**
   String get scoringClassificationLowAverage;
 
-  /// Classification Wechsler pour un score composite 70-79 ou note standard 4-5
+  /// Classification pour un score composite 70-79 ou note standard 4-5
   ///
   /// In fr, this message translates to:
   /// **'Limite'**
   String get scoringClassificationBorderline;
 
-  /// Classification Wechsler pour un score composite < 70 ou note standard < 4
+  /// Classification pour un score composite < 70 ou note standard < 4
   ///
   /// In fr, this message translates to:
   /// **'Extrêmement bas'**
@@ -2781,31 +2787,31 @@ abstract class AppLocalizations {
   /// **'Intervalle de confiance 95%: {lower} - {upper}'**
   String scoringSummaryConfidenceInterval(int lower, int upper);
 
-  /// Nom affiché de l'indice VCI (WAIS-IV)
+  /// Nom affiché de l'indice de compréhension verbale
   ///
   /// In fr, this message translates to:
   /// **'Compréhension Verbale'**
   String get scoringIndexVerbalComprehension;
 
-  /// Nom affiché de l'indice VSI (WAIS-IV)
+  /// Nom affiché de l'indice visuo-spatial
   ///
   /// In fr, this message translates to:
   /// **'Visuo-Spatial'**
   String get scoringIndexVisualSpatial;
 
-  /// Nom affiché de l'indice FRI (WAIS-IV)
+  /// Nom affiché de l'indice de raisonnement fluide
   ///
   /// In fr, this message translates to:
   /// **'Raisonnement Fluide'**
   String get scoringIndexFluidReasoning;
 
-  /// Nom affiché de l'indice WMI (WAIS-IV)
+  /// Nom affiché de l'indice de mémoire de travail
   ///
   /// In fr, this message translates to:
   /// **'Mémoire de Travail'**
   String get scoringIndexWorkingMemory;
 
-  /// Nom affiché de l'indice PSI (WAIS-IV)
+  /// Nom affiché de l'indice de vitesse de traitement
   ///
   /// In fr, this message translates to:
   /// **'Vitesse de Traitement'**
@@ -2835,247 +2841,247 @@ abstract class AppLocalizations {
   /// **'Profil cognitif hétérogène (écart max: {points} points)'**
   String scoringSummaryHeterogeneousProfile(int points);
 
-  /// Similitudes — nom du test affiché dans le scaffold
+  /// Points communs — nom du test affiché dans le scaffold
   ///
   /// In fr, this message translates to:
-  /// **'Similitudes'**
+  /// **'Points communs'**
   String get simTestName;
 
-  /// Similitudes — sur-titre (catégorie d'indice) dans le scaffold
+  /// Points communs — sur-titre (catégorie d'indice) dans le scaffold
   ///
   /// In fr, this message translates to:
-  /// **'COMPRÉHENSION VERBALE · VCI'**
+  /// **'COMPRÉHENSION VERBALE'**
   String get simEyebrow;
 
-  /// Similitudes — barre d'état (temps écoulé + score) dans l'AppBar
+  /// Points communs — barre d'état (temps écoulé + score) dans l'AppBar
   ///
   /// In fr, this message translates to:
   /// **'{seconds} s · {score} pts'**
   String simStatusBar(int seconds, int score);
 
-  /// Similitudes — consigne affichée au-dessus de la paire de mots
+  /// Points communs — consigne affichée au-dessus de la paire de mots
   ///
   /// In fr, this message translates to:
   /// **'En quoi ces deux mots sont-ils similaires ?'**
   String get simQuestionPrompt;
 
-  /// Similitudes — badge indiquant le niveau d'abstraction de l'item
+  /// Points communs — badge indiquant le niveau d'abstraction de l'item
   ///
   /// In fr, this message translates to:
   /// **'Niveau : {level}'**
   String simLevelLabel(String level);
 
-  /// Similitudes — nom du niveau d'abstraction concret
+  /// Points communs — nom du niveau d'abstraction concret
   ///
   /// In fr, this message translates to:
   /// **'Concret'**
   String get simLevelConcrete;
 
-  /// Similitudes — nom du niveau d'abstraction fonctionnel
+  /// Points communs — nom du niveau d'abstraction fonctionnel
   ///
   /// In fr, this message translates to:
   /// **'Fonctionnel'**
   String get simLevelFunctional;
 
-  /// Similitudes — nom du niveau d'abstraction catégoriel
+  /// Points communs — nom du niveau d'abstraction catégoriel
   ///
   /// In fr, this message translates to:
   /// **'Catégoriel'**
   String get simLevelCategorical;
 
-  /// Similitudes — nom du niveau d'abstraction abstrait
+  /// Points communs — nom du niveau d'abstraction abstrait
   ///
   /// In fr, this message translates to:
   /// **'Abstrait'**
   String get simLevelAbstract;
 
-  /// Similitudes — libellé au-dessus du champ de saisie de la réponse
+  /// Points communs — libellé au-dessus du champ de saisie de la réponse
   ///
   /// In fr, this message translates to:
   /// **'Votre réponse :'**
   String get simAnswerLabel;
 
-  /// Similitudes — texte d'invite (hint) du champ de réponse
+  /// Points communs — texte d'invite (hint) du champ de réponse
   ///
   /// In fr, this message translates to:
   /// **'Expliquez en quoi ils sont similaires...'**
   String get simAnswerHint;
 
-  /// Similitudes — titre du bloc d'aide au scoring
+  /// Points communs — titre du bloc d'aide au scoring
   ///
   /// In fr, this message translates to:
   /// **'Conseils pour obtenir 2 points :'**
   String get simTipsTitle;
 
-  /// Similitudes — premier conseil d'aide au scoring
+  /// Points communs — premier conseil d'aide au scoring
   ///
   /// In fr, this message translates to:
   /// **'• Donnez une catégorie abstraite ou superordonnée'**
   String get simTipsLine1;
 
-  /// Similitudes — deuxième conseil d'aide au scoring (exemples)
+  /// Points communs — deuxième conseil d'aide au scoring (exemples)
   ///
   /// In fr, this message translates to:
   /// **'• Ex: \"Ce sont des...\", \"Formes de...\", \"Types de...\"'**
   String get simTipsLine2;
 
-  /// Similitudes — titre du dialogue de feedback pour une réponse à 2 points
+  /// Points communs — titre du dialogue de feedback pour une réponse à 2 points
   ///
   /// In fr, this message translates to:
   /// **'Excellent !'**
   String get simFeedbackExcellent;
 
-  /// Similitudes — titre du dialogue de feedback pour une réponse à 1 point
+  /// Points communs — titre du dialogue de feedback pour une réponse à 1 point
   ///
   /// In fr, this message translates to:
   /// **'Correct'**
   String get simFeedbackCorrect;
 
-  /// Similitudes — titre du dialogue de feedback pour une réponse à 0 point
+  /// Points communs — titre du dialogue de feedback pour une réponse à 0 point
   ///
   /// In fr, this message translates to:
   /// **'Réponse incomplète'**
   String get simFeedbackIncomplete;
 
-  /// Similitudes — message de feedback pour une réponse à 2 points
+  /// Points communs — message de feedback pour une réponse à 2 points
   ///
   /// In fr, this message translates to:
   /// **'Réponse abstraite/catégorielle ! +2 points'**
   String get simFeedbackMsg2pts;
 
-  /// Similitudes — message de feedback pour une réponse à 1 point
+  /// Points communs — message de feedback pour une réponse à 1 point
   ///
   /// In fr, this message translates to:
   /// **'Réponse fonctionnelle/propriété. +1 point'**
   String get simFeedbackMsg1pt;
 
-  /// Similitudes — message de feedback pour une réponse à 0 point
+  /// Points communs — message de feedback pour une réponse à 0 point
   ///
   /// In fr, this message translates to:
   /// **'Réponse incorrecte ou trop vague. 0 point'**
   String get simFeedbackMsg0pt;
 
-  /// Similitudes — rappel de la réponse saisie par l'utilisateur
+  /// Points communs — rappel de la réponse saisie par l'utilisateur
   ///
   /// In fr, this message translates to:
   /// **'Votre réponse : \"{answer}\"'**
   String simYourAnswerQuoted(String answer);
 
-  /// Similitudes — titre de la liste d'exemples de réponses à 2 points
+  /// Points communs — titre de la liste d'exemples de réponses à 2 points
   ///
   /// In fr, this message translates to:
   /// **'Exemples de réponses à 2 points :'**
   String get simExamples2pts;
 
-  /// Similitudes — titre de la liste d'exemples de réponses à 1 point
+  /// Points communs — titre de la liste d'exemples de réponses à 1 point
   ///
   /// In fr, this message translates to:
   /// **'Exemples de réponses à 1 point :'**
   String get simExamples1pt;
 
-  /// Similitudes — temps passé sur l'item dans le dialogue de feedback
+  /// Points communs — temps passé sur l'item dans le dialogue de feedback
   ///
   /// In fr, this message translates to:
   /// **'Temps : {seconds} s'**
   String simTimeSeconds(int seconds);
 
-  /// Similitudes — score total dans le dialogue de feedback
+  /// Points communs — score total dans le dialogue de feedback
   ///
   /// In fr, this message translates to:
   /// **'Score total : {score} points'**
   String simTotalScore(int score);
 
-  /// Similitudes — message de règle de discontinuation après 3 échecs
+  /// Points communs — message de règle de discontinuation sur renoncement (3 items passés d'affilée)
   ///
   /// In fr, this message translates to:
-  /// **'3 scores de 0 consécutifs - Test terminé (WAIS-IV)'**
+  /// **'3 items passés d\'affilée — exercice terminé.'**
   String get simDiscontinue;
 
-  /// Similitudes — bouton du dialogue de feedback lorsque le test est terminé
+  /// Points communs — bouton du dialogue de feedback lorsque le test est terminé
   ///
   /// In fr, this message translates to:
   /// **'Voir les résultats'**
   String get simSeeResults;
 
-  /// Similitudes — titre du dialogue de résultats finaux
+  /// Points communs — titre du dialogue de résultats finaux
   ///
   /// In fr, this message translates to:
-  /// **'Test des Similitudes - Résultats'**
+  /// **'Points communs - Résultats'**
   String get simResultsTitle;
 
-  /// Similitudes — score brut dans le dialogue de résultats
+  /// Points communs — score brut dans le dialogue de résultats
   ///
   /// In fr, this message translates to:
   /// **'Score brut : {score}/{max} points'**
   String simRawScore(int score, int max);
 
-  /// Similitudes — nombre d'items complétés dans le dialogue de résultats
+  /// Points communs — nombre d'items complétés dans le dialogue de résultats
   ///
   /// In fr, this message translates to:
   /// **'Items complétés : {completed}/{total}'**
   String simItemsCompleted(int completed, int total);
 
-  /// Similitudes — pourcentage de réussite dans le dialogue de résultats
+  /// Points communs — pourcentage de réussite dans le dialogue de résultats
   ///
   /// In fr, this message translates to:
   /// **'Pourcentage : {percent}%'**
   String simPercentage(int percent);
 
-  /// Similitudes — temps total dans le dialogue de résultats
+  /// Points communs — temps total dans le dialogue de résultats
   ///
   /// In fr, this message translates to:
   /// **'Temps total : {seconds} s'**
   String simTotalTime(int seconds);
 
-  /// Similitudes — sous-titre descriptif dans le dialogue de résultats
+  /// Points communs — sous-titre descriptif dans le dialogue de résultats
   ///
   /// In fr, this message translates to:
   /// **'Test de raisonnement verbal et abstraction conceptuelle'**
   String get simSubtitle;
 
-  /// Similitudes — titre de la répartition des scores par niveau
+  /// Points communs — titre de la répartition des scores par niveau
   ///
   /// In fr, this message translates to:
   /// **'Répartition par niveau :'**
   String get simBreakdownTitle;
 
-  /// Similitudes — ligne de répartition du score pour un niveau
+  /// Points communs — ligne de répartition du score pour un niveau
   ///
   /// In fr, this message translates to:
   /// **'{level}: {total}/{max} points'**
   String simBreakdownLine(String level, int total, int max);
 
-  /// Similitudes — niveau de performance exceptionnel
+  /// Points communs — niveau de performance exceptionnel
   ///
   /// In fr, this message translates to:
   /// **'Performance exceptionnelle (θ > +2.0)'**
   String get simPerfExceptional;
 
-  /// Similitudes — niveau de performance supérieur
+  /// Points communs — niveau de performance supérieur
   ///
   /// In fr, this message translates to:
   /// **'Performance supérieure (θ > +1.0)'**
   String get simPerfSuperior;
 
-  /// Similitudes — niveau de performance moyen
+  /// Points communs — niveau de performance moyen
   ///
   /// In fr, this message translates to:
   /// **'Performance moyenne (θ ≈ 0)'**
   String get simPerfAverage;
 
-  /// Similitudes — niveau de performance inférieur
+  /// Points communs — niveau de performance inférieur
   ///
   /// In fr, this message translates to:
   /// **'Performance inférieure (θ < 0)'**
   String get simPerfBelow;
 
-  /// Similitudes — niveau de performance faible
+  /// Points communs — niveau de performance faible
   ///
   /// In fr, this message translates to:
   /// **'Performance faible (θ < -1.0)'**
   String get simPerfLow;
 
-  /// Similitudes — bouton de retour du dialogue de résultats
+  /// Points communs — bouton de retour du dialogue de résultats
   ///
   /// In fr, this message translates to:
   /// **'Retour'**
@@ -3090,7 +3096,7 @@ abstract class AppLocalizations {
   /// Matrices — sur-titre (catégorie d'indice) dans le scaffold
   ///
   /// In fr, this message translates to:
-  /// **'TEST DE QI · FSIQ'**
+  /// **'TEST DE QI'**
   String get matEyebrow;
 
   /// Matrices — titre du dialogue de feedback quand la réponse est juste
@@ -3099,7 +3105,7 @@ abstract class AppLocalizations {
   /// **'Correct !'**
   String get matCorrect;
 
-  /// Matrices/Balances — titre du dialogue de feedback quand la réponse est fausse
+  /// Matrices/Équilibres — titre du dialogue de feedback quand la réponse est fausse
   ///
   /// In fr, this message translates to:
   /// **'Incorrect'**
@@ -3111,7 +3117,7 @@ abstract class AppLocalizations {
   /// **'Temps de réponse : {seconds} s'**
   String matResponseTime(int seconds);
 
-  /// Matrices/Balances — score courant (réussites sur items tentés)
+  /// Matrices/Équilibres — score courant (réussites sur items tentés)
   ///
   /// In fr, this message translates to:
   /// **'Score : {score}/{total}'**
@@ -3120,7 +3126,7 @@ abstract class AppLocalizations {
   /// Matrices — message de règle de discontinuation après 4 échecs
   ///
   /// In fr, this message translates to:
-  /// **'4 échecs consécutifs - Test terminé (WAIS-IV)'**
+  /// **'4 échecs consécutifs — exercice terminé.'**
   String get matDiscontinue4;
 
   /// Matrices/Cubes — bouton dialogue lorsque le test est terminé par discontinuation
@@ -3231,7 +3237,7 @@ abstract class AppLocalizations {
   /// **'Trouvez la pièce manquante qui complète logiquement la matrice'**
   String get matInstruction;
 
-  /// Matrices/Balances — libellé au-dessus des options de réponse
+  /// Matrices/Équilibres — libellé au-dessus des options de réponse
   ///
   /// In fr, this message translates to:
   /// **'Choisissez la réponse :'**
@@ -3270,7 +3276,7 @@ abstract class AppLocalizations {
   /// Cubes — nom du test affiché dans le scaffold
   ///
   /// In fr, this message translates to:
-  /// **'Test des Cubes'**
+  /// **'Cubes'**
   String get cubesTestName;
 
   /// Cubes — titre du dialogue de feedback quand la réponse est juste
@@ -3417,133 +3423,133 @@ abstract class AppLocalizations {
   /// **'Réinitialiser'**
   String get cubesReset;
 
-  /// Balances — nom du test affiché dans le scaffold
+  /// Équilibres — nom du test affiché dans le scaffold
   ///
   /// In fr, this message translates to:
-  /// **'Balances Quantitatives'**
+  /// **'Équilibres'**
   String get fwTestName;
 
-  /// Balances/Cubes — sur-titre (catégorie d'indice FRI) dans le scaffold
+  /// Équilibres/Cubes — sur-titre (catégorie d'indice dans le scaffold
   ///
   /// In fr, this message translates to:
-  /// **'RAISONNEMENT FLUIDE · FRI'**
+  /// **'RAISONNEMENT FLUIDE'**
   String get fwEyebrow;
 
-  /// Balances — message de feedback réponse juste
+  /// Équilibres — message de feedback réponse juste
   ///
   /// In fr, this message translates to:
   /// **'Bonne réponse ! +1 point'**
   String get fwCorrectAnswerPoint;
 
-  /// Balances — message de feedback réponse fausse
+  /// Équilibres — message de feedback réponse fausse
   ///
   /// In fr, this message translates to:
   /// **'Mauvaise réponse. La bonne réponse était :'**
   String get fwWrongAnswer;
 
-  /// Balances — temps passé sur l'item
+  /// Équilibres — temps passé sur l'item
   ///
   /// In fr, this message translates to:
   /// **'Temps : {seconds} s'**
   String fwTime(int seconds);
 
-  /// Balances — message de règle de discontinuation après 3 échecs
+  /// Équilibres — message de règle de discontinuation sur renoncement (3 items passés d'affilée)
   ///
   /// In fr, this message translates to:
-  /// **'3 échecs consécutifs - Test terminé (WAIS-IV)'**
+  /// **'3 échecs consécutifs — exercice terminé.'**
   String get fwDiscontinue3;
 
-  /// Balances — bouton dialogue pour voir les résultats
+  /// Équilibres — bouton dialogue pour voir les résultats
   ///
   /// In fr, this message translates to:
   /// **'Voir les résultats'**
   String get fwSeeResults;
 
-  /// Balances — titre du dialogue de résultats finaux
+  /// Équilibres — titre du dialogue de résultats finaux
   ///
   /// In fr, this message translates to:
-  /// **'Test des Balances Quantitatives - Résultats'**
+  /// **'Équilibres - Résultats'**
   String get fwResultsTitle;
 
-  /// Balances — score brut sur 27
+  /// Équilibres — score brut sur 27
   ///
   /// In fr, this message translates to:
   /// **'Score brut : {score}/27 points'**
   String fwRawScorePoints(int score);
 
-  /// Balances — items complétés sur 27
+  /// Équilibres — items complétés sur 27
   ///
   /// In fr, this message translates to:
   /// **'Items complétés : {count}/27'**
   String fwItemsCompleted(int count);
 
-  /// Balances — pourcentage de réussite
+  /// Équilibres — pourcentage de réussite
   ///
   /// In fr, this message translates to:
   /// **'Pourcentage : {percent}%'**
   String fwPercentage(int percent);
 
-  /// Balances — temps total
+  /// Équilibres — temps total
   ///
   /// In fr, this message translates to:
   /// **'Temps total : {seconds} s'**
   String fwTotalTime(int seconds);
 
-  /// Balances — note technique sur la saturation en facteur g
+  /// Équilibres — note technique sur la saturation en facteur g
   ///
   /// In fr, this message translates to:
-  /// **'g-loading : 0.78 (le plus élevé du WAIS-IV)'**
+  /// **'Cet exercice est fortement lié au raisonnement général.'**
   String get fwGLoading;
 
-  /// Balances — niveau de performance score ≥ 23
+  /// Équilibres — niveau de performance score ≥ 23
   ///
   /// In fr, this message translates to:
   /// **'Performance exceptionnelle (θ > +2.0)'**
   String get fwPerfExceptional;
 
-  /// Balances — niveau de performance score ≥ 18
+  /// Équilibres — niveau de performance score ≥ 18
   ///
   /// In fr, this message translates to:
   /// **'Performance supérieure (θ > +1.0)'**
   String get fwPerfSuperior;
 
-  /// Balances — niveau de performance score ≥ 12
+  /// Équilibres — niveau de performance score ≥ 12
   ///
   /// In fr, this message translates to:
   /// **'Performance moyenne (θ ≈ 0)'**
   String get fwPerfAverage;
 
-  /// Balances — niveau de performance score ≥ 7
+  /// Équilibres — niveau de performance score ≥ 7
   ///
   /// In fr, this message translates to:
   /// **'Performance inférieure (θ < 0)'**
   String get fwPerfInferior;
 
-  /// Balances — niveau de performance score < 7
+  /// Équilibres — niveau de performance score < 7
   ///
   /// In fr, this message translates to:
   /// **'Performance faible (θ < -1.0)'**
   String get fwPerfLow;
 
-  /// Balances — badge score/total dans l'AppBar
+  /// Équilibres — badge score/total dans l'AppBar
   ///
   /// In fr, this message translates to:
   /// **'{score}/{total}'**
   String fwScoreFraction(int score, int total);
 
-  /// Balances — consigne en haut de l'écran
+  /// Équilibres — consigne en haut de l'écran
   ///
   /// In fr, this message translates to:
   /// **'Trouvez la valeur manquante qui équilibre la balance.'**
   String get fwInstruction;
 
-  /// Balances — début de la question (suivi des jetons cibles puis « ? »)
+  /// Équilibres — début de la question (suivi des jetons cibles puis « ? »)
   ///
   /// In fr, this message translates to:
   /// **'Que vaut '**
   String get fwWhatIs;
 
-  /// Balances — badge de compte à rebours du timer
+  /// Équilibres — badge de compte à rebours du timer
   ///
   /// In fr, this message translates to:
   /// **'{seconds} s'**
@@ -3552,13 +3558,13 @@ abstract class AppLocalizations {
   /// Puzzles visuels — nom du test affiché dans le scaffold
   ///
   /// In fr, this message translates to:
-  /// **'Puzzles Visuels'**
+  /// **'Assemblages'**
   String get vpTestName;
 
-  /// Puzzles visuels — sur-titre (catégorie d'indice VSI) dans le scaffold
+  /// Puzzles visuels — sur-titre (catégorie d'indice dans le scaffold
   ///
   /// In fr, this message translates to:
-  /// **'VISUO-SPATIAL · VSI'**
+  /// **'VISUO-SPATIAL'**
   String get vpEyebrow;
 
   /// Puzzles visuels — état du bouton après validation correcte
@@ -3615,529 +3621,529 @@ abstract class AppLocalizations {
   /// **'FIGURE À RECONSTITUER'**
   String get vpTargetTitle;
 
-  /// Coding test name (scaffold header)
+  /// Transcription test name (scaffold header)
   ///
   /// In fr, this message translates to:
-  /// **'Code (Digit Symbol)'**
+  /// **'Transcription'**
   String get codingTestName;
 
-  /// Coding test eyebrow label
+  /// Transcription test eyebrow label
   ///
   /// In fr, this message translates to:
-  /// **'VITESSE DE TRAITEMENT · PSI'**
+  /// **'VITESSE DE TRAITEMENT'**
   String get codingEyebrow;
 
-  /// Coding/Symbol Search start training button
+  /// Transcription/Symbol Detection start training button
   ///
   /// In fr, this message translates to:
   /// **'Commencer l\'entraînement'**
   String get codingStartTraining;
 
-  /// Coding intro title
+  /// Transcription intro title
   ///
   /// In fr, this message translates to:
-  /// **'Test de Code'**
+  /// **'Transcription'**
   String get codingTitle;
 
-  /// Coding intro description
+  /// Transcription intro description
   ///
   /// In fr, this message translates to:
   /// **'Ce test mesure votre vitesse de traitement et votre coordination visuomotrice.'**
   String get codingDescription;
 
-  /// Coding reference key label (intro)
+  /// Transcription reference key label (intro)
   ///
   /// In fr, this message translates to:
   /// **'Clé de référence :'**
   String get codingReferenceKey;
 
-  /// Coding info card title - task
+  /// Transcription info card title - task
   ///
   /// In fr, this message translates to:
   /// **'Votre tâche'**
   String get codingTaskTitle;
 
-  /// Coding info card subtitle - task
+  /// Transcription info card subtitle - task
   ///
   /// In fr, this message translates to:
   /// **'Pour chaque chiffre affiché, sélectionnez le symbole correspondant'**
   String get codingTaskDesc;
 
-  /// Coding info card title - time limit
+  /// Transcription info card title - time limit
   ///
   /// In fr, this message translates to:
   /// **'Temps limité'**
   String get codingTimeLimitTitle;
 
-  /// Coding info card subtitle - time limit
+  /// Transcription info card subtitle - time limit
   ///
   /// In fr, this message translates to:
   /// **'120 secondes pour compléter le maximum de cases (135 au total)'**
   String get codingTimeLimitDesc;
 
-  /// Coding info card title - scoring
+  /// Transcription info card title - scoring
   ///
   /// In fr, this message translates to:
   /// **'Scoring'**
   String get codingScoringTitle;
 
-  /// Coding info card subtitle - scoring
+  /// Transcription info card subtitle - scoring
   ///
   /// In fr, this message translates to:
   /// **'1 point par case correcte, pas de pénalité pour les erreurs'**
   String get codingScoringDesc;
 
-  /// Coding training-finished dialog title
+  /// Transcription training-finished dialog title
   ///
   /// In fr, this message translates to:
   /// **'Entraînement terminé'**
   String get codingTrainingDoneTitle;
 
-  /// Coding training-finished dialog body
+  /// Transcription training-finished dialog body
   ///
   /// In fr, this message translates to:
   /// **'Vous êtes prêt à commencer le test. Vous aurez 120 secondes pour compléter le maximum de cases.'**
   String get codingTrainingDoneBody;
 
-  /// Coding/Symbol Search/Digit Span start test button
+  /// Transcription/Symbol Detection/Digit Sequences start test button
   ///
   /// In fr, this message translates to:
   /// **'Commencer le test'**
   String get codingStartTest;
 
-  /// Test finished dialog title (Coding/Symbol Search/Digit Span/Picture Span)
+  /// Test finished dialog title (Transcription/Symbol Detection/Digit Sequences/Picture Span)
   ///
   /// In fr, this message translates to:
   /// **'Test terminé !'**
   String get codingTestDoneTitle;
 
-  /// Coding result - time elapsed
+  /// Transcription result - time elapsed
   ///
   /// In fr, this message translates to:
   /// **'Temps écoulé : 120 secondes'**
   String get codingTimeElapsed;
 
-  /// Coding result - completed cells
+  /// Transcription result - completed cells
   ///
   /// In fr, this message translates to:
   /// **'Cases complétées : {count}/135'**
   String codingCellsCompleted(int count);
 
-  /// Coding result - correct cells
+  /// Transcription result - correct cells
   ///
   /// In fr, this message translates to:
   /// **'Cases correctes : {count}'**
   String codingCellsCorrect(int count);
 
-  /// Coding result - score points
+  /// Transcription result - score points
   ///
   /// In fr, this message translates to:
   /// **'Score : {count} points'**
   String codingScorePoints(int count);
 
-  /// Coding/Symbol Search performance message - exceptional
+  /// Transcription/Symbol Detection performance message - exceptional
   ///
   /// In fr, this message translates to:
   /// **'Performance exceptionnelle !'**
   String get codingPerfExceptional;
 
-  /// Coding/Symbol Search performance message - very good
+  /// Transcription/Symbol Detection performance message - very good
   ///
   /// In fr, this message translates to:
   /// **'Très bonne performance'**
   String get codingPerfVeryGood;
 
-  /// Coding performance message - above average
+  /// Transcription performance message - above average
   ///
   /// In fr, this message translates to:
   /// **'Performance moyenne-haute'**
   String get codingPerfAboveAverage;
 
-  /// Coding/Symbol Search performance message - average
+  /// Transcription/Symbol Detection performance message - average
   ///
   /// In fr, this message translates to:
   /// **'Performance moyenne'**
   String get codingPerfAverage;
 
-  /// Coding/Symbol Search performance message - below average
+  /// Transcription/Symbol Detection performance message - below average
   ///
   /// In fr, this message translates to:
   /// **'Performance en-dessous de la moyenne'**
   String get codingPerfBelowAverage;
 
-  /// Coding/Symbol Search app bar title in training mode
+  /// Transcription/Symbol Detection app bar title in training mode
   ///
   /// In fr, this message translates to:
   /// **'Entraînement'**
   String get codingTrainingTab;
 
-  /// Coding reference key label (test screen)
+  /// Transcription reference key label (test screen)
   ///
   /// In fr, this message translates to:
   /// **'Référence :'**
   String get codingReferenceShort;
 
-  /// Coding cell progress
+  /// Transcription cell progress
   ///
   /// In fr, this message translates to:
   /// **'Case {current}/{total}'**
   String codingCellProgress(int current, int total);
 
-  /// Coding completed-cells progress
+  /// Transcription completed-cells progress
   ///
   /// In fr, this message translates to:
   /// **'Complétées : {count}/{total}'**
   String codingCompletedProgress(int count, int total);
 
-  /// Coding palette label
+  /// Transcription palette label
   ///
   /// In fr, this message translates to:
   /// **'Sélectionnez un symbole :'**
   String get codingSelectSymbol;
 
-  /// Coding clear-cell button
+  /// Transcription clear-cell button
   ///
   /// In fr, this message translates to:
   /// **'Effacer'**
   String get codingClear;
 
-  /// Coding finish-training button
+  /// Transcription finish-training button
   ///
   /// In fr, this message translates to:
   /// **'Terminer l\'entraînement'**
   String get codingFinishTraining;
 
-  /// Symbol Search test name / title / app bar title
+  /// Symbol Detection test name / title / app bar title
   ///
   /// In fr, this message translates to:
-  /// **'Recherche de Symboles'**
+  /// **'Détection de symboles'**
   String get ssTestName;
 
-  /// Symbol Search intro description
+  /// Symbol Detection intro description
   ///
   /// In fr, this message translates to:
   /// **'Ce test mesure votre vitesse de traitement visuelle et votre capacité de discrimination.'**
   String get ssDescription;
 
-  /// Symbol Search example label
+  /// Symbol Detection example label
   ///
   /// In fr, this message translates to:
   /// **'Exemple d\'item :'**
   String get ssExampleLabel;
 
-  /// Symbol Search targets label (example)
+  /// Symbol Detection targets label (example)
   ///
   /// In fr, this message translates to:
   /// **'CIBLES'**
   String get ssTargets;
 
-  /// Symbol Search group label (example)
+  /// Symbol Detection group label (example)
   ///
   /// In fr, this message translates to:
   /// **'GROUPE'**
   String get ssGroup;
 
-  /// Symbol Search example answer line
+  /// Symbol Detection example answer line
   ///
   /// In fr, this message translates to:
   /// **'→ Réponse : OUI (┴ est présent)'**
   String get ssExampleAnswer;
 
-  /// Symbol Search info card title - task
+  /// Symbol Detection info card title - task
   ///
   /// In fr, this message translates to:
   /// **'Votre tâche'**
   String get ssTaskTitle;
 
-  /// Symbol Search info card subtitle - task
+  /// Symbol Detection info card subtitle - task
   ///
   /// In fr, this message translates to:
   /// **'Cherchez si l\'un des symboles cibles apparaît dans le groupe'**
   String get ssTaskDesc;
 
-  /// Symbol Search info card title - quick answer
+  /// Symbol Detection info card title - quick answer
   ///
   /// In fr, this message translates to:
   /// **'Réponse rapide'**
   String get ssQuickAnswerTitle;
 
-  /// Symbol Search info card subtitle - quick answer
+  /// Symbol Detection info card subtitle - quick answer
   ///
   /// In fr, this message translates to:
   /// **'Cliquez OUI ou NON aussi vite que possible'**
   String get ssQuickAnswerDesc;
 
-  /// Symbol Search info card title - scoring
+  /// Symbol Detection info card title - scoring
   ///
   /// In fr, this message translates to:
   /// **'Scoring avec pénalité'**
   String get ssScoringPenaltyTitle;
 
-  /// Symbol Search scoring formula
+  /// Symbol Detection scoring formula
   ///
   /// In fr, this message translates to:
   /// **'Score = Réponses correctes - Réponses incorrectes'**
   String get ssScoringPenaltyDesc;
 
-  /// Symbol Search info card title - time limit
+  /// Symbol Detection info card title - time limit
   ///
   /// In fr, this message translates to:
   /// **'Temps limité'**
   String get ssTimeLimitTitle;
 
-  /// Symbol Search info card subtitle - time limit
+  /// Symbol Detection info card subtitle - time limit
   ///
   /// In fr, this message translates to:
   /// **'120 secondes pour 60 items'**
   String get ssTimeLimitDesc;
 
-  /// Symbol Search training-finished dialog body
+  /// Symbol Detection training-finished dialog body
   ///
   /// In fr, this message translates to:
   /// **'Vous êtes prêt ! Vous aurez 120 secondes pour compléter le maximum d\'items.\n\nRappel : Score = Réponses correctes - Réponses incorrectes'**
   String get ssTrainingDoneBody;
 
-  /// Symbol Search result - items answered
+  /// Symbol Detection result - items answered
   ///
   /// In fr, this message translates to:
   /// **'Items répondus : {count}/60'**
   String ssItemsAnswered(int count);
 
-  /// Symbol Search result - correct answers
+  /// Symbol Detection result - correct answers
   ///
   /// In fr, this message translates to:
   /// **'Réponses correctes : {count}'**
   String ssCorrectAnswers(int count);
 
-  /// Symbol Search result - incorrect answers
+  /// Symbol Detection result - incorrect answers
   ///
   /// In fr, this message translates to:
   /// **'Réponses incorrectes : {count}'**
   String ssIncorrectAnswers(int count);
 
-  /// Symbol Search result - not answered
+  /// Symbol Detection result - not answered
   ///
   /// In fr, this message translates to:
   /// **'Non répondus : {count}'**
   String ssNotAnswered(int count);
 
-  /// Symbol Search result - raw score
+  /// Symbol Detection result - raw score
   ///
   /// In fr, this message translates to:
   /// **'Score brut : {count}'**
   String ssRawScore(int count);
 
-  /// Symbol Search raw-score formula caption
+  /// Symbol Detection raw-score formula caption
   ///
   /// In fr, this message translates to:
   /// **'(Corrects - Incorrects)'**
   String get ssScoreFormulaShort;
 
-  /// Symbol Search performance message - good
+  /// Symbol Detection performance message - good
   ///
   /// In fr, this message translates to:
   /// **'Bonne performance'**
   String get ssPerfGood;
 
-  /// Symbol Search item progress
+  /// Symbol Detection item progress
   ///
   /// In fr, this message translates to:
   /// **'Item {current}/{total}'**
   String ssItemProgress(int current, int total);
 
-  /// Symbol Search answered progress
+  /// Symbol Detection answered progress
   ///
   /// In fr, this message translates to:
   /// **'Répondus : {count}/60'**
   String ssAnsweredProgress(int count);
 
-  /// Symbol Search target symbols section label
+  /// Symbol Detection target symbols section label
   ///
   /// In fr, this message translates to:
   /// **'SYMBOLES CIBLES'**
   String get ssTargetSymbols;
 
-  /// Symbol Search search group section label
+  /// Symbol Detection search group section label
   ///
   /// In fr, this message translates to:
   /// **'GROUPE DE RECHERCHE'**
   String get ssSearchGroup;
 
-  /// Symbol Search NO answer button
+  /// Symbol Detection NO answer button
   ///
   /// In fr, this message translates to:
   /// **'NON'**
   String get ssNo;
 
-  /// Symbol Search YES answer button
+  /// Symbol Detection YES answer button
   ///
   /// In fr, this message translates to:
   /// **'OUI'**
   String get ssYes;
 
-  /// Digit Span test name / title
+  /// Digit Sequences test name / title
   ///
   /// In fr, this message translates to:
-  /// **'Mémoire des Chiffres'**
+  /// **'Suites de chiffres'**
   String get dsTestName;
 
-  /// Digit Span / Picture Span eyebrow label
+  /// Digit Sequences / Picture Span eyebrow label
   ///
   /// In fr, this message translates to:
-  /// **'MÉMOIRE DE TRAVAIL · WMI'**
+  /// **'MÉMOIRE DE TRAVAIL'**
   String get dsEyebrow;
 
-  /// Digit Span intro description
+  /// Digit Sequences intro description
   ///
   /// In fr, this message translates to:
   /// **'Ce test mesure votre mémoire de travail à travers 3 parties distinctes :'**
   String get dsDescription;
 
-  /// Digit Span intro card - forward title
+  /// Digit Sequences intro card - forward title
   ///
   /// In fr, this message translates to:
   /// **'Partie 1 : Empan Direct'**
   String get dsForwardTitle;
 
-  /// Digit Span forward instruction
+  /// Digit Sequences forward instruction
   ///
   /// In fr, this message translates to:
   /// **'Répétez les chiffres dans le même ordre'**
   String get dsForwardInstruction;
 
-  /// Digit Span intro card - backward title
+  /// Digit Sequences intro card - backward title
   ///
   /// In fr, this message translates to:
   /// **'Partie 2 : Empan Inverse'**
   String get dsBackwardTitle;
 
-  /// Digit Span backward instruction
+  /// Digit Sequences backward instruction
   ///
   /// In fr, this message translates to:
   /// **'Répétez les chiffres en ordre inverse'**
   String get dsBackwardInstruction;
 
-  /// Digit Span intro card - sequencing title
+  /// Digit Sequences intro card - sequencing title
   ///
   /// In fr, this message translates to:
   /// **'Partie 3 : Séquençage'**
   String get dsSequencingTitle;
 
-  /// Digit Span sequencing instruction
+  /// Digit Sequences sequencing instruction
   ///
   /// In fr, this message translates to:
   /// **'Répétez les chiffres en ordre croissant'**
   String get dsSequencingInstruction;
 
-  /// Digit Span presentation rate info
+  /// Digit Sequences presentation rate info
   ///
   /// In fr, this message translates to:
   /// **'Les chiffres seront présentés à raison de 1 chiffre par seconde.'**
   String get dsPresentationInfo;
 
-  /// Digit Span type label - forward (app bar / part title)
+  /// Digit Sequences type label - forward (app bar / part title)
   ///
   /// In fr, this message translates to:
   /// **'Empan Direct'**
   String get dsTypeForward;
 
-  /// Digit Span type label - backward
+  /// Digit Sequences type label - backward
   ///
   /// In fr, this message translates to:
   /// **'Empan Inverse'**
   String get dsTypeBackward;
 
-  /// Digit Span type label - sequencing
+  /// Digit Sequences type label - sequencing
   ///
   /// In fr, this message translates to:
   /// **'Séquençage'**
   String get dsTypeSequencing;
 
-  /// Digit Span start-part button
+  /// Digit Sequences start-part button
   ///
   /// In fr, this message translates to:
   /// **'Commencer'**
   String get dsStartPart;
 
-  /// Digit Span length/trial header
+  /// Digit Sequences length/trial header
   ///
   /// In fr, this message translates to:
   /// **'Longueur {length} - Essai {trial}'**
   String dsLengthTrial(int length, int trial);
 
-  /// Digit Span presentation prompt
+  /// Digit Sequences presentation prompt
   ///
   /// In fr, this message translates to:
   /// **'Écoutez attentivement'**
   String get dsListenCarefully;
 
-  /// Digit Span / Picture Span feedback - correct
+  /// Digit Sequences / Picture Span feedback - correct
   ///
   /// In fr, this message translates to:
   /// **'Correct !'**
   String get dsCorrect;
 
-  /// Digit Span / Picture Span feedback - incorrect
+  /// Digit Sequences / Picture Span feedback - incorrect
   ///
   /// In fr, this message translates to:
   /// **'Incorrect'**
   String get dsIncorrect;
 
-  /// Digit Span feedback - points earned
+  /// Digit Sequences feedback - points earned
   ///
   /// In fr, this message translates to:
   /// **'Points gagnés : {count}'**
   String dsPointsEarned(int count);
 
-  /// Digit Span feedback - correct answer
+  /// Digit Sequences feedback - correct answer
   ///
   /// In fr, this message translates to:
   /// **'Réponse correcte : {answer}'**
   String dsCorrectAnswer(String answer);
 
-  /// Digit Span feedback - your answer
+  /// Digit Sequences feedback - your answer
   ///
   /// In fr, this message translates to:
   /// **'Votre réponse : {answer}'**
   String dsYourAnswer(String answer);
 
-  /// Digit Span final results header
+  /// Digit Sequences final results header
   ///
   /// In fr, this message translates to:
   /// **'Résultats par partie :'**
   String get dsResultsByPart;
 
-  /// Digit Span final - forward score
+  /// Digit Sequences final - forward score
   ///
   /// In fr, this message translates to:
   /// **'Empan Direct : {count} points'**
   String dsForwardScore(int count);
 
-  /// Digit Span final - backward score
+  /// Digit Sequences final - backward score
   ///
   /// In fr, this message translates to:
   /// **'Empan Inverse : {count} points'**
   String dsBackwardScore(int count);
 
-  /// Digit Span final - sequencing score
+  /// Digit Sequences final - sequencing score
   ///
   /// In fr, this message translates to:
   /// **'Séquençage : {count} points'**
   String dsSequencingScore(int count);
 
-  /// Digit Span / Picture Span final - total score
+  /// Digit Sequences / Picture Span final - total score
   ///
   /// In fr, this message translates to:
   /// **'Score Total : {count} points'**
   String dsTotalScore(int count);
 
-  /// Digit Span input placeholder
+  /// Digit Sequences input placeholder
   ///
   /// In fr, this message translates to:
   /// **'Saisissez votre réponse...'**
   String get dsEnterAnswer;
 
-  /// Digit Span submit button with progress
+  /// Digit Sequences submit button with progress
   ///
   /// In fr, this message translates to:
   /// **'Valider ({count}/{total})'**
@@ -4542,7 +4548,7 @@ abstract class AppLocalizations {
   /// Corps du dialogue de sortie d'un exercice — la pause est un choix légitime, pas un incident
   ///
   /// In fr, this message translates to:
-  /// **'Vous avez quitté cet exercice avant de le terminer. Les exercices déjà terminés sont enregistrés : vous pourrez reprendre le bilan ici même, à cet exercice.'**
+  /// **'Vous avez quitté cet exercice avant de le terminer. Les exercices déjà terminés sont enregistrés : vous pourrez reprendre l\'évaluation ici même, à cet exercice.'**
   String get ctSubtestExitBody;
 
   /// Bouton pour reprendre l'exercice interrompu
@@ -4920,7 +4926,7 @@ abstract class AppLocalizations {
   /// Vocabulaire — sur-titre (catégorie d'indice) dans le scaffold
   ///
   /// In fr, this message translates to:
-  /// **'COMPRÉHENSION VERBALE · VCI'**
+  /// **'COMPRÉHENSION VERBALE'**
   String get vocabEyebrow;
 
   /// Vocabulaire — chrono et score affichés dans l'AppBar
@@ -5007,10 +5013,10 @@ abstract class AppLocalizations {
   /// **'Score total : {score} points'**
   String vocabTotalScore(int score);
 
-  /// Vocabulaire — message de règle d'arrêt après 3 échecs consécutifs
+  /// Vocabulaire — message de règle d'arrêt sur renoncement (3 items passés d'affilée) consécutifs
   ///
   /// In fr, this message translates to:
-  /// **'3 scores de 0 consécutifs - Test terminé (WAIS-IV)'**
+  /// **'3 items passés d\'affilée — exercice terminé.'**
   String get vocabDiscontinued;
 
   /// Vocabulaire — bouton du feedback qui mène à l'écran de résultats
@@ -5286,7 +5292,7 @@ abstract class AppLocalizations {
   /// Titre du jour 7
   ///
   /// In fr, this message translates to:
-  /// **'Bilan autisme'**
+  /// **'Profil autisme'**
   String get weDay7Title;
 
   /// Titre du jour 8
@@ -5490,19 +5496,19 @@ abstract class AppLocalizations {
   /// Mise en garde présente sur TOUTES les révélations : un score est une mesure avec sa marge d'erreur
   ///
   /// In fr, this message translates to:
-  /// **'Un indice est une mesure, avec sa marge d\'erreur — pas un verdict. Repasser le même bilan ne redonnerait pas exactement le même nombre.'**
+  /// **'Un indice est une mesure, avec sa marge d\'erreur — pas un verdict. Repasser la même évaluation ne redonnerait pas exactement le même nombre.'**
   String get weRvCaveat;
 
   /// Titre quand aucun bilan n'est rattaché au passe courant
   ///
   /// In fr, this message translates to:
-  /// **'Aucun bilan à révéler'**
+  /// **'Aucune évaluation à révéler'**
   String get weRvUnavailableTitle;
 
   /// Corps du message quand aucun bilan n'est rattaché au passe courant
   ///
   /// In fr, this message translates to:
-  /// **'Aucun bilan terminé n\'est rattaché à ce passe sur cet appareil. Rien n\'est perdu : la révélation s\'affichera dès que tes résultats seront de nouveau lisibles ici.'**
+  /// **'Aucune évaluation terminée n\'est rattachée à ce passe sur cet appareil. Rien n\'est perdu : la révélation s\'affichera dès que tes résultats seront de nouveau lisibles ici.'**
   String get weRvUnavailableBody;
 
   /// Titre quand l'indice du jour n'a pas été calculé (sous-test manquant)
@@ -5514,7 +5520,7 @@ abstract class AppLocalizations {
   /// Corps du message quand l'indice du jour n'a pas été calculé
   ///
   /// In fr, this message translates to:
-  /// **'Ton bilan enregistré ne contient pas cet indice — il y manquait un sous-test. Les autres révélations restent disponibles.'**
+  /// **'Ton évaluation enregistrée ne contient pas cet indice — il y manquait un sous-test. Les autres révélations restent disponibles.'**
   String get weRvMissingBody;
 
   /// Explication de l'indice de compréhension verbale, jour 1

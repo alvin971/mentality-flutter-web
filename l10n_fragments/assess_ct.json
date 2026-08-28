@@ -5,7 +5,7 @@
     "desc": "Titre de la page d'introduction au bilan cognitif"
   },
   "assessIntroEyebrow": {
-    "fr": "BILAN COGNITIF",
+    "fr": "ÉVALUATION COGNITIVE",
     "en": "COGNITIVE ASSESSMENT",
     "desc": "Eyebrow (sur-titre) de la page d'introduction au bilan"
   },
@@ -20,8 +20,8 @@
     "desc": "Titre hero ligne 2 (italique) de la page d'intro évaluation"
   },
   "assessIntroDescription": {
-    "fr": "Cette évaluation mesure vos capacités cognitives à travers six domaines issus du WAIS-IV. Un score global (FSIQ) en est la synthèse.",
-    "en": "This assessment measures your cognitive abilities across six domains from the WAIS-IV. A full-scale score (FSIQ) is its synthesis.",
+    "fr": "Cette évaluation explore vos capacités cognitives à travers six domaines du modèle CHC (Cattell-Horn-Carroll). Un score global en est la synthèse.",
+    "en": "This assessment explores your cognitive abilities across six domains of the CHC (Cattell-Horn-Carroll) model. A full-scale score is its synthesis.",
     "desc": "Paragraphe descriptif de l'intro évaluation"
   },
   "assessDomainsHeader": {
@@ -32,27 +32,27 @@
   "assessDomainVci": {
     "fr": "Compréhension Verbale",
     "en": "Verbal Comprehension",
-    "desc": "Libellé du domaine VCI"
+    "desc": "Libellé du domaine"
   },
   "assessDomainVsi": {
     "fr": "Raisonnement Visuo-Spatial",
     "en": "Visual-Spatial Reasoning",
-    "desc": "Libellé du domaine VSI"
+    "desc": "Libellé du domaine"
   },
   "assessDomainFri": {
     "fr": "Raisonnement Fluide",
     "en": "Fluid Reasoning",
-    "desc": "Libellé du domaine FRI"
+    "desc": "Libellé du domaine"
   },
   "assessDomainWmi": {
     "fr": "Mémoire de Travail",
     "en": "Working Memory",
-    "desc": "Libellé du domaine WMI"
+    "desc": "Libellé du domaine"
   },
   "assessDomainPsi": {
     "fr": "Vitesse de Traitement",
     "en": "Processing Speed",
-    "desc": "Libellé du domaine PSI"
+    "desc": "Libellé du domaine"
   },
   "assessDomainLo": {
     "fr": "Langage Oral",
@@ -70,7 +70,7 @@
     "desc": "Texte de consigne avant le bilan"
   },
   "assessLaunchFullAssessment": {
-    "fr": "Lancer le bilan complet",
+    "fr": "Lancer l'évaluation complète",
     "en": "Start the full assessment",
     "desc": "Bouton pour lancer le bilan complet"
   },
@@ -80,8 +80,8 @@
     "desc": "Séparateur entre bilan complet et subtests individuels"
   },
   "assessSubtestCubes": {
-    "fr": "Cubes (Block Design)",
-    "en": "Block Design",
+    "fr": "Cubes",
+    "en": "Blocks",
     "desc": "Libellé du subtest Cubes dans la liste des tests individuels"
   },
   "assessSubtestMatrices": {
@@ -90,19 +90,19 @@
     "desc": "Libellé du subtest Matrices dans la liste des tests individuels"
   },
   "assessSubtestFigureWeights": {
-    "fr": "Balances Quantitatives",
-    "en": "Figure Weights",
-    "desc": "Libellé du subtest Balances dans la liste des tests individuels"
+    "fr": "Équilibres",
+    "en": "Equilibrium",
+    "desc": "Libellé du subtest Équilibres dans la liste des tests individuels"
   },
   "assessSubtestVisualPuzzles": {
-    "fr": "Puzzles Visuels",
-    "en": "Visual Puzzles",
-    "desc": "Libellé du subtest Puzzles Visuels"
+    "fr": "Assemblages",
+    "en": "Assembly",
+    "desc": "Libellé du subtest Assemblages"
   },
   "assessSubtestSimilarities": {
-    "fr": "Similitudes",
-    "en": "Similarities",
-    "desc": "Libellé du subtest Similitudes"
+    "fr": "Points communs",
+    "en": "Common Ground",
+    "desc": "Libellé du subtest Points communs"
   },
   "assessSubtestVocabulary": {
     "fr": "Vocabulaire",
@@ -115,9 +115,9 @@
     "desc": "Libellé du subtest Information"
   },
   "assessSubtestDigitSpan": {
-    "fr": "Mémoire des Chiffres",
-    "en": "Digit Span",
-    "desc": "Libellé du subtest Mémoire des Chiffres"
+    "fr": "Suites de chiffres",
+    "en": "Digit Sequences",
+    "desc": "Libellé du subtest Suites de chiffres"
   },
   "assessSubtestArithmetic": {
     "fr": "Arithmétique",
@@ -130,14 +130,14 @@
     "desc": "Libellé du subtest Mémoire des Images"
   },
   "assessSubtestCoding": {
-    "fr": "Code",
-    "en": "Coding",
+    "fr": "Transcription",
+    "en": "Transcription",
     "desc": "Libellé du subtest Code"
   },
   "assessSubtestSymbolSearch": {
-    "fr": "Recherche de Symboles",
-    "en": "Symbol Search",
-    "desc": "Libellé du subtest Recherche de Symboles"
+    "fr": "Détection de symboles",
+    "en": "Symbol Detection",
+    "desc": "Libellé du subtest Détection de symboles"
   },
   "assessSubtestOralComprehension": {
     "fr": "Compréhension Orale",
@@ -258,34 +258,43 @@
     }
   },
   "histScoreFsiq": {
-    "fr": "QI Total (FSIQ)",
-    "en": "Full Scale IQ (FSIQ)",
+    "fr": "QI Total",
+    "en": "Full Scale IQ",
     "desc": "Libellé de la ligne du QI total dans le détail d'un résultat"
   },
+  "histScoreShortIq": {
+    "fr": "QI",
+    "en": "IQ",
+    "es": "CI",
+    "pt": "QI",
+    "de": "IQ",
+    "en_GB": "IQ",
+    "desc": "Étiquette courte de la colonne du score global dans l'historique (« QI » est un terme générique, sans marque)"
+  },
   "histScoreVci": {
-    "fr": "VCI — Verbal",
-    "en": "VCI — Verbal",
-    "desc": "Libellé de la ligne VCI dans le détail d'un résultat"
+    "fr": "Compréhension Verbale",
+    "en": "Verbal Comprehension",
+    "desc": "Libellé de la ligne dans le détail d'un résultat"
   },
   "histScoreVsi": {
-    "fr": "VSI — Visuo-Spatial",
-    "en": "VSI — Visual-Spatial",
-    "desc": "Libellé de la ligne VSI dans le détail d'un résultat"
+    "fr": "Visuo-Spatial",
+    "en": "Visual-Spatial",
+    "desc": "Libellé de la ligne dans le détail d'un résultat"
   },
   "histScoreFri": {
-    "fr": "FRI — Raisonnement",
-    "en": "FRI — Reasoning",
-    "desc": "Libellé de la ligne FRI dans le détail d'un résultat"
+    "fr": "Raisonnement Fluide",
+    "en": "Fluid Reasoning",
+    "desc": "Libellé de la ligne dans le détail d'un résultat"
   },
   "histScoreWmi": {
-    "fr": "WMI — Mémoire",
-    "en": "WMI — Memory",
-    "desc": "Libellé de la ligne WMI dans le détail d'un résultat"
+    "fr": "Mémoire de Travail",
+    "en": "Working Memory",
+    "desc": "Libellé de la ligne dans le détail d'un résultat"
   },
   "histScorePsi": {
-    "fr": "PSI — Vitesse",
-    "en": "PSI — Speed",
-    "desc": "Libellé de la ligne PSI dans le détail d'un résultat"
+    "fr": "Vitesse de Traitement",
+    "en": "Processing Speed",
+    "desc": "Libellé de la ligne dans le détail d'un résultat"
   },
   "histEmptyEyebrow": {
     "fr": "AUCUN RÉSULTAT",
@@ -303,8 +312,8 @@
     "desc": "Titre hero ligne 2 (italique) de l'état vide"
   },
   "histEmptyDescription": {
-    "fr": "Complétez votre première évaluation WAIS-IV pour voir vos résultats apparaître ici.",
-    "en": "Complete your first WAIS-IV assessment to see your results appear here.",
+    "fr": "Complétez votre première évaluation pour voir vos résultats apparaître ici.",
+    "en": "Complete your first assessment to see your results appear here.",
     "desc": "Texte descriptif de l'état vide de l'historique"
   },
   "histStartAssessment": {
@@ -358,8 +367,8 @@
     "desc": "Titre de la carte contenu"
   },
   "ctIntroContentBody": {
-    "fr": "Cubes · Similitudes · Mémoire · Matrices · Vocabulaire · Arithmétique · Symboles · Puzzles · Information · Code · Images · Balances · Langage oral.",
-    "en": "Block Design · Similarities · Memory · Matrix Reasoning · Vocabulary · Arithmetic · Symbols · Puzzles · Information · Coding · Pictures · Figure Weights · Oral language.",
+    "fr": "Cubes · Points communs · Suites de chiffres · Matrices · Vocabulaire · Arithmétique · Symboles · Assemblages · Information · Transcription · Images · Équilibres · Langage oral.",
+    "en": "Blocks · Common Ground · Digit Sequences · Matrices · Vocabulary · Arithmetic · Symbols · Assembly · Information · Transcription · Pictures · Equilibrium · Oral language.",
     "desc": "Liste des subtests dans la carte contenu"
   },
   "ctIntroImportantEyebrow": {
@@ -378,8 +387,8 @@
     "desc": "Corps de la carte avertissement"
   },
   "ctPatientAgeHeader": {
-    "fr": "ÂGE DU PATIENT",
-    "en": "PATIENT AGE",
+    "fr": "VOTRE ÂGE",
+    "en": "YOUR AGE",
     "desc": "En-tête de la carte de saisie de l'âge"
   },
   "ctPatientAgeHint": {
@@ -428,7 +437,7 @@
     "desc": "Titre de l'écran de calcul des résultats"
   },
   "ctComputingResultsEyebrow": {
-    "fr": "BILAN",
+    "fr": "ÉVALUATION",
     "en": "ASSESSMENT",
     "desc": "Eyebrow de l'écran de calcul des résultats"
   },
@@ -447,18 +456,18 @@
   },
   "ctTestCubes": {
     "fr": "Cubes",
-    "en": "Block Design",
+    "en": "Blocks",
     "desc": "Nom affiché du subtest Cubes"
   },
   "ctTestSimilarities": {
-    "fr": "Similitudes",
-    "en": "Similarities",
-    "desc": "Nom affiché du subtest Similitudes"
+    "fr": "Points communs",
+    "en": "Common Ground",
+    "desc": "Nom affiché du subtest Points communs"
   },
   "ctTestDigitSpan": {
-    "fr": "Mémoire des Chiffres",
-    "en": "Digit Span",
-    "desc": "Nom affiché du subtest Mémoire des Chiffres"
+    "fr": "Suites de chiffres",
+    "en": "Digit Sequences",
+    "desc": "Nom affiché du subtest Suites de chiffres"
   },
   "ctTestMatrices": {
     "fr": "Matrices",
@@ -476,14 +485,14 @@
     "desc": "Nom affiché du subtest Arithmétique"
   },
   "ctTestSymbolSearch": {
-    "fr": "Recherche de Symboles",
-    "en": "Symbol Search",
-    "desc": "Nom affiché du subtest Recherche de Symboles"
+    "fr": "Détection de symboles",
+    "en": "Symbol Detection",
+    "desc": "Nom affiché du subtest Détection de symboles"
   },
   "ctTestVisualPuzzles": {
-    "fr": "Puzzles Visuels",
-    "en": "Visual Puzzles",
-    "desc": "Nom affiché du subtest Puzzles Visuels"
+    "fr": "Assemblages",
+    "en": "Assembly",
+    "desc": "Nom affiché du subtest Assemblages"
   },
   "ctTestInformation": {
     "fr": "Information",
@@ -491,8 +500,8 @@
     "desc": "Nom affiché du subtest Information"
   },
   "ctTestCoding": {
-    "fr": "Code",
-    "en": "Coding",
+    "fr": "Transcription",
+    "en": "Transcription",
     "desc": "Nom affiché du subtest Code"
   },
   "ctTestPictureSpan": {
@@ -501,9 +510,9 @@
     "desc": "Nom affiché du subtest Mémoire des Images"
   },
   "ctTestFigureWeights": {
-    "fr": "Balances",
-    "en": "Figure Weights",
-    "desc": "Nom affiché du subtest Balances"
+    "fr": "Équilibres",
+    "en": "Equilibrium",
+    "desc": "Nom affiché du subtest Équilibres"
   },
   "ctResultsTitle": {
     "fr": "Résultats",
@@ -511,23 +520,23 @@
     "desc": "Titre de la page de résultats du test complet"
   },
   "ctResultsEyebrow": {
-    "fr": "BILAN WAIS-IV",
-    "en": "WAIS-IV ASSESSMENT",
+    "fr": "VOTRE PROFIL COGNITIF",
+    "en": "YOUR COGNITIVE PROFILE",
     "desc": "Eyebrow de la page de résultats"
   },
   "ctResultsHero1": {
-    "fr": "Bilan",
+    "fr": "Évaluation",
     "en": "Assessment",
     "desc": "Titre hero ligne 1 de la page de résultats"
   },
   "ctResultsHero2": {
-    "fr": "terminé.",
+    "fr": "terminée.",
     "en": "complete.",
     "desc": "Titre hero ligne 2 (italique) de la page de résultats"
   },
   "ctResultsSummary": {
-    "fr": "Synthèse de vos performances cognitives sur les subtests notés du WAIS-IV.",
-    "en": "Summary of your cognitive performance across the scored WAIS-IV subtests.",
+    "fr": "Synthèse de vos performances cognitives sur les exercices notés.",
+    "en": "Summary of your cognitive performance across the scored exercises.",
     "desc": "Paragraphe de synthèse en tête de page de résultats"
   },
   "ctAgeYears": {
@@ -556,11 +565,11 @@
   "ctMetaAge": {
     "fr": "ÂGE",
     "en": "AGE",
-    "desc": "Libellé méta : âge du patient"
+    "desc": "Libellé méta : âge de la personne"
   },
   "ctFsiqCardLabel": {
-    "fr": "QI TOTAL · FSIQ",
-    "en": "FULL SCALE IQ · FSIQ",
+    "fr": "SCORE GLOBAL",
+    "en": "OVERALL SCORE",
     "desc": "Libellé de la carte du QI total"
   },
   "ctConfidenceInterval95": {
@@ -588,27 +597,27 @@
   "ctIndexVci": {
     "fr": "Compréhension Verbale",
     "en": "Verbal Comprehension",
-    "desc": "Libellé complet de l'indice VCI"
+    "desc": "Libellé complet de l'indice concerné"
   },
   "ctIndexVsi": {
     "fr": "Visuo-Spatial",
     "en": "Visual-Spatial",
-    "desc": "Libellé complet de l'indice VSI"
+    "desc": "Libellé complet de l'indice concerné"
   },
   "ctIndexFri": {
     "fr": "Raisonnement Fluide",
     "en": "Fluid Reasoning",
-    "desc": "Libellé complet de l'indice FRI"
+    "desc": "Libellé complet de l'indice concerné"
   },
   "ctIndexWmi": {
     "fr": "Mémoire de Travail",
     "en": "Working Memory",
-    "desc": "Libellé complet de l'indice WMI"
+    "desc": "Libellé complet de l'indice concerné"
   },
   "ctIndexPsi": {
     "fr": "Vitesse de Traitement",
     "en": "Processing Speed",
-    "desc": "Libellé complet de l'indice PSI"
+    "desc": "Libellé complet de l'indice concerné"
   },
   "ctIndexCiPercentile": {
     "fr": "IC {lower}–{upper} · {rank}e %ile",
@@ -634,29 +643,29 @@
     "desc": "En-tête de la carte des notes standardisées par subtest"
   },
   "ctGroupVciVerbal": {
-    "fr": "VCI · Verbal",
-    "en": "VCI · Verbal",
-    "desc": "Titre du groupe VCI dans le détail des subtests"
+    "fr": "Compréhension Verbale",
+    "en": "Verbal Comprehension",
+    "desc": "Titre du groupe dans le détail des subtests"
   },
   "ctGroupVsiVisuoSpatial": {
-    "fr": "VSI · Visuo-Spatial",
-    "en": "VSI · Visual-Spatial",
-    "desc": "Titre du groupe VSI dans le détail des subtests"
+    "fr": "Visuo-Spatial",
+    "en": "Visual-Spatial",
+    "desc": "Titre du groupe dans le détail des subtests"
   },
   "ctGroupFriReasoning": {
-    "fr": "FRI · Raisonnement",
-    "en": "FRI · Reasoning",
-    "desc": "Titre du groupe FRI dans le détail des subtests"
+    "fr": "Raisonnement Fluide",
+    "en": "Fluid Reasoning",
+    "desc": "Titre du groupe dans le détail des subtests"
   },
   "ctGroupWmiMemory": {
-    "fr": "WMI · Mémoire",
-    "en": "WMI · Memory",
-    "desc": "Titre du groupe WMI dans le détail des subtests"
+    "fr": "Mémoire de Travail",
+    "en": "Working Memory",
+    "desc": "Titre du groupe dans le détail des subtests"
   },
   "ctGroupPsiSpeed": {
-    "fr": "PSI · Vitesse",
-    "en": "PSI · Speed",
-    "desc": "Titre du groupe PSI dans le détail des subtests"
+    "fr": "Vitesse de Traitement",
+    "en": "Processing Speed",
+    "desc": "Titre du groupe dans le détail des subtests"
   },
   "ctRawScore": {
     "fr": "brut {raw}",
@@ -715,8 +724,8 @@
     "desc": "En-tête de l'avis 'âge manquant'"
   },
   "ctMissingAgeBody": {
-    "fr": "Sans l'âge du patient, seuls les scores bruts sont affichés. Relancez le test en renseignant l'âge pour obtenir le QI standardisé, les percentiles et les intervalles de confiance.",
-    "en": "Without the patient's age, only raw scores are shown. Run the test again with the age provided to obtain the standardized IQ, percentiles, and confidence intervals.",
+    "fr": "Sans votre âge, seuls les scores bruts sont affichés. Relancez le test en renseignant l'âge pour obtenir le QI standardisé, les percentiles et les intervalles de confiance.",
+    "en": "Without your age, only raw scores are shown. Run the test again with the age provided to obtain the standardized IQ, percentiles, and confidence intervals.",
     "desc": "Corps de l'avis 'âge manquant'"
   },
   "ctExportPdf": {
@@ -738,8 +747,8 @@
     "desc": "Bouton de retour à l'accueil depuis les résultats"
   },
   "ctPdfSubtitle": {
-    "fr": "Rapport d'évaluation cognitive WAIS-IV",
-    "en": "WAIS-IV cognitive assessment report",
+    "fr": "Rapport de profil cognitif",
+    "en": "Cognitive profile report",
     "desc": "Sous-titre du rapport PDF (sous le titre de marque)"
   },
   "ctPdfNotProvided": {
@@ -772,9 +781,9 @@
     "desc": "Libellé 'Date' dans le bandeau d'info du PDF"
   },
   "ctPdfFsiqLabel": {
-    "fr": "SCORE QI GLOBAL (FSIQ)",
-    "en": "FULL SCALE IQ SCORE (FSIQ)",
-    "desc": "Libellé du bloc FSIQ dans le PDF"
+    "fr": "SCORE GLOBAL",
+    "en": "OVERALL SCORE",
+    "desc": "Libellé du bloc dans le PDF"
   },
   "ctPdfConfidenceInterval95": {
     "fr": "Intervalle de confiance 95%",
@@ -800,29 +809,29 @@
     "desc": "En-tête du tableau des indices dans le PDF"
   },
   "ctPdfIndexVci": {
-    "fr": "VCI — Compréhension Verbale",
-    "en": "VCI — Verbal Comprehension",
-    "desc": "Libellé de l'indice VCI dans le tableau PDF"
+    "fr": "Compréhension Verbale",
+    "en": "Verbal Comprehension",
+    "desc": "Libellé de l'indice dans le tableau PDF"
   },
   "ctPdfIndexVsi": {
-    "fr": "VSI — Visuo-Spatial",
-    "en": "VSI — Visual-Spatial",
-    "desc": "Libellé de l'indice VSI dans le tableau PDF"
+    "fr": "Visuo-Spatial",
+    "en": "Visual-Spatial",
+    "desc": "Libellé de l'indice dans le tableau PDF"
   },
   "ctPdfIndexFri": {
-    "fr": "FRI — Raisonnement Fluide",
-    "en": "FRI — Fluid Reasoning",
-    "desc": "Libellé de l'indice FRI dans le tableau PDF"
+    "fr": "Raisonnement Fluide",
+    "en": "Fluid Reasoning",
+    "desc": "Libellé de l'indice dans le tableau PDF"
   },
   "ctPdfIndexWmi": {
-    "fr": "WMI — Mémoire de Travail",
-    "en": "WMI — Working Memory",
-    "desc": "Libellé de l'indice WMI dans le tableau PDF"
+    "fr": "Mémoire de Travail",
+    "en": "Working Memory",
+    "desc": "Libellé de l'indice dans le tableau PDF"
   },
   "ctPdfIndexPsi": {
-    "fr": "PSI — Vitesse de Traitement",
-    "en": "PSI — Processing Speed",
-    "desc": "Libellé de l'indice PSI dans le tableau PDF"
+    "fr": "Vitesse de Traitement",
+    "en": "Processing Speed",
+    "desc": "Libellé de l'indice dans le tableau PDF"
   },
   "ctPdfColIndex": {
     "fr": "Indice",
@@ -860,7 +869,7 @@
     "desc": "Avertissement en bas du rapport PDF"
   },
   "ctResumeFullTest": {
-    "fr": "Reprendre le bilan",
+    "fr": "Reprendre l'évaluation",
     "en": "Resume the assessment",
     "es": "Reanudar la evaluación",
     "pt": "Retomar a avaliação",

@@ -45,10 +45,18 @@ const List<String> _ecransDEntree = [
   'TimeEstimationGamePage',
 ];
 
+/// Les worktrees git imbriqués (`.claude/worktrees/`) sont des CHECKOUTS
+/// D'AUTRES BRANCHES : ignorés par git (`.gitignore`), jamais livrés, et hors
+/// du périmètre de cette garde. Sans ce filtre la garde est rouge en
+/// permanence — donc morte : elle ne signalerait plus une vraie infraction.
+bool _horsPerimetre(String chemin) => chemin.contains('/.claude/');
+
 List<File> _fichiersDart() {
   final out = <File>[];
   for (final e in Directory('lib').listSync(recursive: true)) {
-    if (e is File && e.path.endsWith('.dart')) out.add(e);
+    if (e is File && e.path.endsWith('.dart') && !_horsPerimetre(e.path)) {
+      out.add(e);
+    }
   }
   return out;
 }

@@ -76,7 +76,7 @@ différents, et aucun n'a mis à jour le reste :
 
 **Pourquoi c'est un problème d'UX et pas une coquille :**
 
-1. **`LO` n'est pas un indice WAIS-IV.** Les 12 autres cartes portent `VCI / VSI / FRI / WMI / PSI` —
+1. **`LO` n'est pas un indice normé.** Les 12 autres cartes portent `VCI / VSI / FRI / WMI / PSI` —
    des indices normés. La 13ᵉ porte `LO` (« Langage Oral »), avec la même carte, la même typo, le même
    traitement visuel. Elle **ressemble** à un sous-test normé.
 2. **Elle n'est pas notée.** Aucune occurrence d'`oral` ou de `LO` dans

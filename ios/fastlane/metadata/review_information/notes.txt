@@ -1,24 +1,30 @@
-Mental E.T. est une application de tests cognitifs adaptatifs basée sur le WAIS-IV (Échelles de Wechsler d'Intelligence pour Adultes), standard mondial en évaluation neuropsychologique.
+Mental E.T. est une application grand public d'exercices cognitifs. Elle propose 13 exercices originaux construits selon le modèle CHC (Cattell-Horn-Carroll), cadre théorique académique des aptitudes humaines.
+
+Ce n'est ni un test clinique, ni un dispositif de diagnostic, ni un substitut à l'évaluation d'un professionnel. L'application l'indique explicitement à l'utilisateur, dans l'écran de résultats comme dans le rapport PDF.
 
 ACCÈS SANS COMPTE :
 L'application est entièrement accessible sans authentification.
-Depuis l'écran d'accueil, appuyez sur "Commencer une évaluation" pour lancer immédiatement un test.
+Depuis l'écran d'accueil, appuyez sur "Commencer une évaluation" pour lancer immédiatement le parcours.
 
 FONCTIONNALITÉS TESTABLES :
-1. Tests cognitifs adaptatifs (12 sous-tests : Matrices, Cubes, Mémoire, Code, Similitudes, etc.)
-2. Résultats détaillés : score FSIQ, 5 indices composites, percentiles
-3. Export PDF du rapport de résultats
-4. Chat IA pour interpréter les résultats (nécessite connexion internet)
-5. Historique des sessions précédentes
+1. 13 exercices cognitifs à difficulté adaptative (Matrices, Cubes, Suites de chiffres, Transcription, Points communs, etc.)
+2. Résultats : score global, profil sur 5 domaines, rang percentile
+3. Export PDF du rapport de profil cognitif
+4. Assistant IA pour explorer les résultats (nécessite une connexion internet)
+5. Historique des parcours précédents et reprise d'un parcours interrompu
+
+DURÉE :
+Comptez 60 à 90 minutes pour le parcours complet. Le parcours peut être interrompu et repris là où il a été laissé.
 
 MICROPHONE :
-Le module "Langage Oral" utilise le microphone (optionnel — peut être ignoré sans impact).
-Tous les autres tests fonctionnent sans microphone.
+Le module "Langage oral" utilise le microphone (optionnel — peut être ignoré sans impact).
+Tous les autres exercices fonctionnent sans microphone.
 
 DONNÉES ET SÉCURITÉ :
-- Toutes les données sont stockées localement sur l'appareil (IndexedDB chiffré AES-256)
-- Aucune transmission de données à des serveurs tiers sans consentement explicite
-- Conformité RGPD
+- Chiffrement AES-256 des données sur l'appareil
+- Les résultats sont synchronisés vers nos serveurs hébergés en France (Paris) ; le module audio optionnel n'envoie d'enregistrement qu'après consentement explicite
+- Traitement conforme au RGPD, aucune revente de données
+- Aucune publicité, aucun achat intégré, aucun abonnement
 
-AUCUN contenu sensible, violence, publicité, achat intégré ou abonnement dans l'application.
+AUCUN contenu sensible ni violent dans l'application.
 Application entièrement gratuite.

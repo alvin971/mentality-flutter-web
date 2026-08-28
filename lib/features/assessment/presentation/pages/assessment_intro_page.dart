@@ -111,13 +111,15 @@ class _AssessmentIntroPageState extends State<AssessmentIntroPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Les sigles d'indice (VCI/VSI/FRI/WMI/PSI) ne sont plus affichés : c'est la
+    // nomenclature d'un test tiers. Seul le nom du domaine est montré.
     final domains = [
-      ('VCI', context.l10n.assessDomainVci),
-      ('VSI', context.l10n.assessDomainVsi),
-      ('FRI', context.l10n.assessDomainFri),
-      ('WMI', context.l10n.assessDomainWmi),
-      ('PSI', context.l10n.assessDomainPsi),
-      ('LO', context.l10n.assessDomainLo),
+      context.l10n.assessDomainVci,
+      context.l10n.assessDomainVsi,
+      context.l10n.assessDomainFri,
+      context.l10n.assessDomainWmi,
+      context.l10n.assessDomainPsi,
+      context.l10n.assessDomainLo,
     ];
     return KeplerScaffold(
       title: context.l10n.assessIntroTitle,
@@ -147,7 +149,7 @@ class _AssessmentIntroPageState extends State<AssessmentIntroPage> {
                 Text(context.l10n.assessDomainsHeader,
                     style: AppText.of(context).monoLabel(color: KeplerColors.of(context).primary)),
                 SizedBox(height: 16.h),
-                for (final d in domains) _DomainRow(code: d.$1, label: d.$2),
+                for (final d in domains) _DomainRow(label: d),
               ],
             ),
           ),
@@ -269,8 +271,7 @@ class _AssessmentIntroPageState extends State<AssessmentIntroPage> {
 }
 
 class _DomainRow extends StatelessWidget {
-  const _DomainRow({required this.code, required this.label});
-  final String code;
+  const _DomainRow({required this.label});
   final String label;
 
   @override
@@ -281,7 +282,7 @@ class _DomainRow extends StatelessWidget {
         children: [
           SizedBox(
               width: 48.w,
-              child: Text(code,
+              child: Text('\u2022',
                   style: AppText.of(context).monoLabel(color: KeplerColors.of(context).primary))),
           Expanded(child: Text(label, style: AppText.of(context).body())),
         ],
@@ -330,9 +331,11 @@ class _IndividualTests extends StatelessWidget {
             ),
             child: Row(
               children: [
+                // Le sigle d'indice (t.$1) reste dans la liste comme repère
+                // interne, mais n'est plus affiché : nomenclature d'un tiers.
                 SizedBox(
                     width: 40.w,
-                    child: Text(t.$1,
+                    child: Text('\u2022',
                         style: AppText.of(context).monoLabel(color: KeplerColors.of(context).primary))),
                 Expanded(child: Text(t.$2, style: AppText.of(context).bodyStrong())),
                 Icon(Icons.east, size: 16.sp, color: KeplerColors.of(context).primary),

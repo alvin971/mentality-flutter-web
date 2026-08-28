@@ -1,5 +1,5 @@
 name: mentality
-description: Application mobile de test de QI adaptatif par IA - Inspirée des échelles Wechsler (WPPSI, WISC, WAIS)
+description: Application mobile d'exercices cognitifs adaptatifs, construits sur le modele CHC (Cattell-Horn-Carroll)
 publish_to: 'none'
 version: 2.0.0+1
 

@@ -43,10 +43,10 @@ class _OnboardingPageState extends State<OnboardingPage> {
       titleA: 'Cinq indices,',
       titleB: 'un score global.',
       body:
-          'Mental E.T. évalue les cinq domaines cognitifs du WAIS-IV : '
-          'compréhension verbale (VCI), raisonnement visuo-spatial (VSI), '
-          'raisonnement fluide (FRI), mémoire de travail (WMI), '
-          'et vitesse de traitement (PSI). Le score FSIQ en est la synthèse.',
+          'Mental E.T. explore les cinq domaines cognitifs du modèle CHC : '
+          'compréhension verbale, raisonnement visuo-spatial, '
+          'raisonnement fluide, mémoire de travail '
+          'et vitesse de traitement. Un score global en est la synthèse.',
     ),
   ];
 

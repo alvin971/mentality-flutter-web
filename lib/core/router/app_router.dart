@@ -110,7 +110,7 @@ final GoRouter appRouter = GoRouter(
       builder: (_, __) => const AssessmentIntroPage(),
     ),
 
-    // Test complet WAIS-IV
+ // Test complet
     GoRoute(
       path: '/test/complete',
       name: 'test-complete',

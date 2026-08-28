@@ -39,7 +39,7 @@ List<T> stratifiedDraw<T>(
 }
 
 /// Theta du slot [slotIndex] sur une échelle linéaire commençant à [start]
-/// avec un pas [step] (par défaut : -2.0 + 0.2 × index, comme la WAIS).
+/// Avec un pas [step] (par défaut: -2.0 + 0.2 × index, comme ).
 /// [decimals] : précision d'arrondi (1 pour un pas de 0.2, 2 pour 0.15…).
 double thetaForSlot(int slotIndex,
     {double start = -2.0, double step = 0.2, int decimals = 1}) {

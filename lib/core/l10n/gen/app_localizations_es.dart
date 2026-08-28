@@ -80,8 +80,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get oralConsentPrivacyLink => 'Leer la política de privacidad';
 
   @override
-  String get matDiscontinue3 =>
-      '3 fallos consecutivos: prueba finalizada (WAIS-IV)';
+  String get matDiscontinue3 => '3 fallos consecutivos: ejercicio finalizado.';
 
   @override
   String get assessIntroTitle => 'Nueva evaluación';
@@ -97,7 +96,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get assessIntroDescription =>
-      'Esta evaluación mide tus capacidades cognitivas a través de seis dominios del WAIS-IV. Una puntuación global (CIT) constituye su síntesis.';
+      'Esta evaluación explora tus capacidades cognitivas a través de seis dominios del modelo CHC (Cattell-Horn-Carroll). Una puntuación global constituye su síntesis.';
 
   @override
   String get assessDomainsHeader => 'DOMINIOS EVALUADOS';
@@ -134,19 +133,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get assessOrIndividualSubtest => 'O SUBPRUEBA INDIVIDUAL';
 
   @override
-  String get assessSubtestCubes => 'Cubos (Block Design)';
+  String get assessSubtestCubes => 'Cubos';
 
   @override
   String get assessSubtestMatrices => 'Matrices Progresivas';
 
   @override
-  String get assessSubtestFigureWeights => 'Balanzas Cuantitativas';
+  String get assessSubtestFigureWeights => 'Equilibrios';
 
   @override
-  String get assessSubtestVisualPuzzles => 'Rompecabezas Visuales';
+  String get assessSubtestVisualPuzzles => 'Ensamblajes';
 
   @override
-  String get assessSubtestSimilarities => 'Semejanzas';
+  String get assessSubtestSimilarities => 'Puntos en común';
 
   @override
   String get assessSubtestVocabulary => 'Vocabulario';
@@ -155,7 +154,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get assessSubtestInformation => 'Información';
 
   @override
-  String get assessSubtestDigitSpan => 'Dígitos';
+  String get assessSubtestDigitSpan => 'Series de dígitos';
 
   @override
   String get assessSubtestArithmetic => 'Aritmética';
@@ -164,10 +163,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get assessSubtestPictureSpan => 'Memoria de Imágenes';
 
   @override
-  String get assessSubtestCoding => 'Clave de Números';
+  String get assessSubtestCoding => 'Transcripción';
 
   @override
-  String get assessSubtestSymbolSearch => 'Búsqueda de Símbolos';
+  String get assessSubtestSymbolSearch => 'Detección de símbolos';
 
   @override
   String get assessSubtestOralComprehension => 'Comprensión Oral';
@@ -244,22 +243,25 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get histScoreFsiq => 'CI Total (CIT)';
+  String get histScoreFsiq => 'CI Total';
 
   @override
-  String get histScoreVci => 'ICV — Verbal';
+  String get histScoreShortIq => 'CI';
 
   @override
-  String get histScoreVsi => 'IVE — Visoespacial';
+  String get histScoreVci => 'Comprensión Verbal';
 
   @override
-  String get histScoreFri => 'IRF — Razonamiento';
+  String get histScoreVsi => 'Visoespacial';
 
   @override
-  String get histScoreWmi => 'IMT — Memoria';
+  String get histScoreFri => 'Razonamiento Fluido';
 
   @override
-  String get histScorePsi => 'IVP — Velocidad';
+  String get histScoreWmi => 'Memoria de Trabajo';
+
+  @override
+  String get histScorePsi => 'Velocidad de Procesamiento';
 
   @override
   String get histEmptyEyebrow => 'SIN RESULTADOS';
@@ -272,7 +274,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get histEmptyDescription =>
-      'Completa tu primera evaluación WAIS-IV para que tus resultados aparezcan aquí.';
+      'Completa tu primera evaluación para que tus resultados aparezcan aquí.';
 
   @override
   String get histStartAssessment => 'Empezar una evaluación';
@@ -307,7 +309,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get ctIntroContentBody =>
-      'Cubos · Semejanzas · Memoria · Matrices · Vocabulario · Aritmética · Símbolos · Rompecabezas · Información · Clave · Imágenes · Balanzas · Lenguaje oral.';
+      'Cubos · Puntos en común · Series de dígitos · Matrices · Vocabulario · Aritmética · Símbolos · Ensamblajes · Información · Transcripción · Imágenes · Equilibrios · Lenguaje oral.';
 
   @override
   String get ctIntroImportantEyebrow => 'IMPORTANTE';
@@ -320,7 +322,7 @@ class AppLocalizationsEs extends AppLocalizations {
       'Los tests se iniciarán uno tras otro. Asegúrate de disponer de tiempo suficiente.';
 
   @override
-  String get ctPatientAgeHeader => 'EDAD DEL PACIENTE';
+  String get ctPatientAgeHeader => 'TU EDAD';
 
   @override
   String get ctPatientAgeHint => 'Necesaria para los baremos (16 a 90 años)';
@@ -364,10 +366,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get ctTestCubes => 'Cubos';
 
   @override
-  String get ctTestSimilarities => 'Semejanzas';
+  String get ctTestSimilarities => 'Puntos en común';
 
   @override
-  String get ctTestDigitSpan => 'Dígitos';
+  String get ctTestDigitSpan => 'Series de dígitos';
 
   @override
   String get ctTestMatrices => 'Matrices';
@@ -379,28 +381,28 @@ class AppLocalizationsEs extends AppLocalizations {
   String get ctTestArithmetic => 'Aritmética';
 
   @override
-  String get ctTestSymbolSearch => 'Búsqueda de Símbolos';
+  String get ctTestSymbolSearch => 'Detección de símbolos';
 
   @override
-  String get ctTestVisualPuzzles => 'Rompecabezas Visuales';
+  String get ctTestVisualPuzzles => 'Ensamblajes';
 
   @override
   String get ctTestInformation => 'Información';
 
   @override
-  String get ctTestCoding => 'Clave';
+  String get ctTestCoding => 'Transcripción';
 
   @override
   String get ctTestPictureSpan => 'Memoria de Imágenes';
 
   @override
-  String get ctTestFigureWeights => 'Balanzas';
+  String get ctTestFigureWeights => 'Equilibrios';
 
   @override
   String get ctResultsTitle => 'Resultados';
 
   @override
-  String get ctResultsEyebrow => 'EVALUACIÓN WAIS-IV';
+  String get ctResultsEyebrow => 'TU PERFIL COGNITIVO';
 
   @override
   String get ctResultsHero1 => 'Evaluación';
@@ -410,7 +412,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get ctResultsSummary =>
-      'Síntesis de tu rendimiento cognitivo en las subpruebas puntuadas del WAIS-IV.';
+      'Síntesis de tu rendimiento cognitivo en los ejercicios puntuados.';
 
   @override
   String ctAgeYears(int age) {
@@ -430,7 +432,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get ctMetaAge => 'EDAD';
 
   @override
-  String get ctFsiqCardLabel => 'CI TOTAL · CIT';
+  String get ctFsiqCardLabel => 'PUNTUACIÓN GLOBAL';
 
   @override
   String ctConfidenceInterval95(int lower, int upper) {
@@ -474,19 +476,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get ctStandardizedScoresHeader => 'PUNTUACIONES ESTANDARIZADAS';
 
   @override
-  String get ctGroupVciVerbal => 'ICV · Verbal';
+  String get ctGroupVciVerbal => 'Comprensión Verbal';
 
   @override
-  String get ctGroupVsiVisuoSpatial => 'IVE · Visoespacial';
+  String get ctGroupVsiVisuoSpatial => 'Visoespacial';
 
   @override
-  String get ctGroupFriReasoning => 'IRF · Razonamiento';
+  String get ctGroupFriReasoning => 'Razonamiento Fluido';
 
   @override
-  String get ctGroupWmiMemory => 'IMT · Memoria';
+  String get ctGroupWmiMemory => 'Memoria de Trabajo';
 
   @override
-  String get ctGroupPsiSpeed => 'IVP · Velocidad';
+  String get ctGroupPsiSpeed => 'Velocidad de Procesamiento';
 
   @override
   String ctRawScore(int raw) {
@@ -527,7 +529,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get ctMissingAgeBody =>
-      'Sin la edad del paciente solo se muestran las puntuaciones brutas. Repite el test indicando la edad para obtener el CI estandarizado, los percentiles y los intervalos de confianza.';
+      'Sin tu edad solo se muestran las puntuaciones brutas. Repite el test indicando la edad para obtener el CI estandarizado, los percentiles y los intervalos de confianza.';
 
   @override
   String get ctExportPdf => 'Exportar a PDF';
@@ -541,7 +543,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get ctBackToHome => 'Volver al inicio';
 
   @override
-  String get ctPdfSubtitle => 'Informe de evaluación cognitiva WAIS-IV';
+  String get ctPdfSubtitle => 'Informe de perfil cognitivo';
 
   @override
   String get ctPdfNotProvided => 'No indicada';
@@ -561,7 +563,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get ctPdfDate => 'Fecha';
 
   @override
-  String get ctPdfFsiqLabel => 'PUNTUACIÓN DE CI GLOBAL (CIT)';
+  String get ctPdfFsiqLabel => 'PUNTUACIÓN GLOBAL';
 
   @override
   String get ctPdfConfidenceInterval95 => 'Intervalo de confianza del 95 %';
@@ -578,19 +580,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get ctPdfIndexProfileHeader => 'PERFIL DE LOS ÍNDICES COGNITIVOS';
 
   @override
-  String get ctPdfIndexVci => 'ICV — Comprensión Verbal';
+  String get ctPdfIndexVci => 'Comprensión Verbal';
 
   @override
-  String get ctPdfIndexVsi => 'IVE — Visoespacial';
+  String get ctPdfIndexVsi => 'Visoespacial';
 
   @override
-  String get ctPdfIndexFri => 'IRF — Razonamiento Fluido';
+  String get ctPdfIndexFri => 'Razonamiento Fluido';
 
   @override
-  String get ctPdfIndexWmi => 'IMT — Memoria de Trabajo';
+  String get ctPdfIndexWmi => 'Memoria de Trabajo';
 
   @override
-  String get ctPdfIndexPsi => 'IVP — Velocidad de Procesamiento';
+  String get ctPdfIndexPsi => 'Velocidad de Procesamiento';
 
   @override
   String get ctPdfColIndex => 'Índice';
@@ -708,7 +710,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get homeHeroBody =>
-      'Una evaluación científica y adaptativa, inspirada en las escalas Wechsler. 13 subpruebas, 5 índices, una puntuación global.';
+      'Una evaluación cognitiva y adaptativa. 13 subpruebas, 5 índices, una puntuación global.';
 
   @override
   String get homeActionStartTitle => 'Comenzar una evaluación';
@@ -740,7 +742,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get homeAboutSubtestsBody =>
-      'Una evaluación completa de los cinco índices cognitivos del WAIS-IV.';
+      'Una evaluación completa de los cinco índices cognitivos del modelo CHC.';
 
   @override
   String get homeAboutAdaptiveTitle => 'IA adaptativa';
@@ -750,11 +752,11 @@ class AppLocalizationsEs extends AppLocalizations {
       'Dificultad ajustada en tiempo real mediante inferencia TRI.';
 
   @override
-  String get homeAboutValidationTitle => 'Validación científica';
+  String get homeAboutValidationTitle => 'Marco teórico';
 
   @override
   String get homeAboutValidationBody =>
-      'Ítems inspirados en las escalas Wechsler (WPPSI / WISC / WAIS).';
+      'Ítems originales, escritos para Mental E.T. y construidos sobre el modelo CHC.';
 
   @override
   String get homeResumeEyebrow => 'TEST EN CURSO';
@@ -808,7 +810,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get infoTestName => 'Información';
 
   @override
-  String get infoEyebrow => 'COMPRENSIÓN VERBAL · ICV';
+  String get infoEyebrow => 'COMPRENSIÓN VERBAL';
 
   @override
   String infoTrailingStatus(int seconds, int score, int attempted) {
@@ -853,8 +855,7 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get infoDiscontinue3 =>
-      '3 fallos consecutivos: prueba finalizada (WAIS-IV)';
+  String get infoDiscontinue3 => '3 fallos consecutivos: ejercicio finalizado.';
 
   @override
   String get infoSeeResults => 'Ver los resultados';
@@ -936,7 +937,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get arithTestName => 'Aritmética';
 
   @override
-  String get arithEyebrow => 'MEMORIA DE TRABAJO · IMT';
+  String get arithEyebrow => 'MEMORIA DE TRABAJO';
 
   @override
   String get arithStartTest => 'Comenzar la prueba';
@@ -1539,10 +1540,10 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get simTestName => 'Semejanzas';
+  String get simTestName => 'Puntos en común';
 
   @override
-  String get simEyebrow => 'COMPRENSIÓN VERBAL · ICV';
+  String get simEyebrow => 'COMPRENSIÓN VERBAL';
 
   @override
   String simStatusBar(int seconds, int score) {
@@ -1628,13 +1629,13 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get simDiscontinue =>
-      '3 puntuaciones de 0 consecutivas: prueba finalizada (WAIS-IV)';
+      '3 ítems omitidos seguidos: ejercicio finalizado.';
 
   @override
   String get simSeeResults => 'Ver resultados';
 
   @override
-  String get simResultsTitle => 'Prueba de Semejanzas — Resultados';
+  String get simResultsTitle => 'Puntos en común - Resultados';
 
   @override
   String simRawScore(int score, int max) {
@@ -1690,7 +1691,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get matTestName => 'Matrices Progresivas';
 
   @override
-  String get matEyebrow => 'TEST DE CI · CIT';
+  String get matEyebrow => 'TEST DE CI';
 
   @override
   String get matCorrect => '¡Correcto!';
@@ -1709,8 +1710,7 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get matDiscontinue4 =>
-      '4 fallos consecutivos - Test finalizado (WAIS-IV)';
+  String get matDiscontinue4 => '4 fallos consecutivos: ejercicio finalizado.';
 
   @override
   String get matSeeResultsEnded => 'Ver resultados (test finalizado)';
@@ -1793,7 +1793,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get matDiffHard => 'Difícil';
 
   @override
-  String get cubesTestName => 'Test de Cubos';
+  String get cubesTestName => 'Cubos';
 
   @override
   String get cubesBravo => '¡Bien hecho!';
@@ -1886,10 +1886,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get cubesReset => 'Reiniciar';
 
   @override
-  String get fwTestName => 'Balanzas Cuantitativas';
+  String get fwTestName => 'Equilibrios';
 
   @override
-  String get fwEyebrow => 'RAZONAMIENTO FLUIDO · IRF';
+  String get fwEyebrow => 'RAZONAMIENTO FLUIDO';
 
   @override
   String get fwCorrectAnswerPoint => '¡Respuesta correcta! +1 punto';
@@ -1904,14 +1904,13 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get fwDiscontinue3 =>
-      '3 fallos consecutivos - Test finalizado (WAIS-IV)';
+  String get fwDiscontinue3 => '3 fallos consecutivos: ejercicio finalizado.';
 
   @override
   String get fwSeeResults => 'Ver los resultados';
 
   @override
-  String get fwResultsTitle => 'Test de Balanzas Cuantitativas - Resultados';
+  String get fwResultsTitle => 'Equilibrios - Resultados';
 
   @override
   String fwRawScorePoints(int score) {
@@ -1934,7 +1933,8 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get fwGLoading => 'carga en g: 0,78 (la más alta del WAIS-IV)';
+  String get fwGLoading =>
+      'Este ejercicio está fuertemente vinculado al razonamiento general.';
 
   @override
   String get fwPerfExceptional => 'Rendimiento excepcional (θ > +2.0)';
@@ -1969,10 +1969,10 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get vpTestName => 'Puzles Visuales';
+  String get vpTestName => 'Ensamblajes';
 
   @override
-  String get vpEyebrow => 'VISOESPACIAL · IVE';
+  String get vpEyebrow => 'VISOESPACIAL';
 
   @override
   String get vpCorrect => 'Correcto';
@@ -2009,16 +2009,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get vpTargetTitle => 'FIGURA A RECONSTRUIR';
 
   @override
-  String get codingTestName => 'Clave de números (Dígitos y Símbolos)';
+  String get codingTestName => 'Transcripción';
 
   @override
-  String get codingEyebrow => 'VELOCIDAD DE PROCESAMIENTO · IVP';
+  String get codingEyebrow => 'VELOCIDAD DE PROCESAMIENTO';
 
   @override
   String get codingStartTraining => 'Empezar el entrenamiento';
 
   @override
-  String get codingTitle => 'Prueba de Clave de Números';
+  String get codingTitle => 'Transcripción';
 
   @override
   String get codingDescription =>
@@ -2120,7 +2120,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get codingFinishTraining => 'Terminar el entrenamiento';
 
   @override
-  String get ssTestName => 'Búsqueda de Símbolos';
+  String get ssTestName => 'Detección de símbolos';
 
   @override
   String get ssDescription =>
@@ -2222,10 +2222,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get ssYes => 'SÍ';
 
   @override
-  String get dsTestName => 'Memoria de Dígitos';
+  String get dsTestName => 'Series de dígitos';
 
   @override
-  String get dsEyebrow => 'MEMORIA DE TRABAJO · IMT';
+  String get dsEyebrow => 'MEMORIA DE TRABAJO';
 
   @override
   String get dsDescription =>
@@ -2797,7 +2797,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get vocabTestName => 'Vocabulario';
 
   @override
-  String get vocabEyebrow => 'COMPRENSIÓN VERBAL · ICV';
+  String get vocabEyebrow => 'COMPRENSIÓN VERBAL';
 
   @override
   String vocabTimerScore(int seconds, int score) {
@@ -2856,7 +2856,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get vocabDiscontinued =>
-      '3 puntuaciones de 0 consecutivas: prueba finalizada (WAIS-IV)';
+      '3 ítems omitidos seguidos: ejercicio finalizado.';
 
   @override
   String get vocabViewResults => 'Ver resultados';

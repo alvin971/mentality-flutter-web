@@ -1,4 +1,4 @@
-/// Banque de paires FRANCAISE du sous-test Similitudes (WAIS-IV).
+/// Banque de paires FRANCAISE du sous-test Similitudes.
 /// GENERE automatiquement (genere par IA, verifie). 4 niveaux d'abstraction.
 /// NE PAS editer a la main.
 import 'similarities_generator.dart';

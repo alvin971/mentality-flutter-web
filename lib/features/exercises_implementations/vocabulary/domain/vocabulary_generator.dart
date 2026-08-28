@@ -1,4 +1,4 @@
-/// Générateur de 30 items UNIQUES de Vocabulaire (Vocabulary - WAIS-IV)
+/// Générateur de 30 items UNIQUES de Vocabulaire (Vocabulary)
 /// Tous les items créés en UNE SEULE FOIS au démarrage
 /// Mesure la connaissance lexicale et la compréhension verbale
 ///

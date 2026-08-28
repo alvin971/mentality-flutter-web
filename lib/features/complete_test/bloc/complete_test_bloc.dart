@@ -5,7 +5,7 @@ import '../../../services/session_persistence_service.dart';
 import 'complete_test_event.dart';
 import 'complete_test_state.dart';
 
-/// BLoC qui orchestre le déroulement du test complet WAIS-IV.
+/// BLoC qui orchestre le déroulement du test complet.
 ///
 /// Gère :
 /// - La séquence des 12 sous-tests NOTÉS (la 13e épreuve, le langage oral,

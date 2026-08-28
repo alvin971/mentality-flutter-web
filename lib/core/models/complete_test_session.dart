@@ -1,4 +1,4 @@
-/// Modèle pour une session de test complet WAIS-IV
+/// Modèle pour une session de test complet
 /// Stocke tous les résultats de tous les subtests
 class CompleteTestSession {
   final DateTime startTime;
@@ -88,7 +88,7 @@ class CompleteTestSession {
   ///
   /// [testSequence] contient des LIBELLÉS D'AFFICHAGE français : ils changent
   /// avec la langue et ne peuvent pas servir de clé. Cette table fige les noms
-  /// WAIS-IV standards, qui eux ne bougeront pas.
+ /// Codes stables, qui eux ne bougeront pas.
   static const Map<String, String> subtestCodes = {
     'Cubes': 'block_design',
     'Similitudes': 'similarities',
@@ -203,7 +203,7 @@ class CompleteTestSession {
   }
 
   /// Calcule le QI Total estimé (simplifié)
-  /// Note: Dans un vrai test WAIS-IV, il faudrait des tables de conversion normatives
+ /// Note: Dans un vrai test, il faudrait des tables de conversion normatives
   int? get estimatedIQ {
     final icv = icvRawScore;
     final irp = irpRawScore;

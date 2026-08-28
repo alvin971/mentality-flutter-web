@@ -148,7 +148,7 @@ class _ArithmeticTestPageState extends State<ArithmeticTestPage> {
           ],
         ),
         // Pas de révélation de la bonne réponse : le participant ne reçoit
-        // aucun retour de justesse pendant la passation (protocole WAIS-IV).
+ // Aucun retour de justesse pendant la passation (protocole ).
         actions: [
           TextButton(
             onPressed: () {

@@ -1,4 +1,4 @@
-/// Générateur de Code (Coding / Digit Symbol - WAIS-IV)
+/// Générateur de Code (Coding / Digit Symbol)
 /// 135 cases à compléter en 120 secondes
 /// Mesure la vitesse de traitement et la coordination visuomotrice
 class CodingGenerator {

@@ -5,15 +5,19 @@
     "desc": "Information — nom du test affiché dans le scaffold"
   },
   "infoEyebrow": {
-    "fr": "COMPRÉHENSION VERBALE · VCI",
-    "en": "VERBAL COMPREHENSION · VCI",
+    "fr": "COMPRÉHENSION VERBALE",
+    "en": "VERBAL COMPREHENSION",
     "desc": "Information — sur-titre (indice mesuré)"
   },
   "infoTrailingStatus": {
     "fr": "{seconds}s · {score}/{attempted}",
     "en": "{seconds}s · {score}/{attempted}",
     "desc": "Information — statut en AppBar : temps écoulé · score/items tentés",
-    "placeholders": {"seconds": "int", "score": "int", "attempted": "int"}
+    "placeholders": {
+      "seconds": "int",
+      "score": "int",
+      "attempted": "int"
+    }
   },
   "infoCorrect": {
     "fr": "Correct !",
@@ -39,36 +43,47 @@
     "fr": "Question : {question}",
     "en": "Question: {question}",
     "desc": "Information — rappel de l'énoncé dans le feedback",
-    "placeholders": {"question": "String"}
+    "placeholders": {
+      "question": "String"
+    }
   },
   "infoCorrectAnswerLabel": {
     "fr": "Bonne réponse : {answer}",
     "en": "Correct answer: {answer}",
     "desc": "Information — affiche la bonne réponse après un échec",
-    "placeholders": {"answer": "String"}
+    "placeholders": {
+      "answer": "String"
+    }
   },
   "infoTimeLabel": {
     "fr": "Temps : {seconds}s",
     "en": "Time: {seconds}s",
     "desc": "Information — temps passé sur l'item",
-    "placeholders": {"seconds": "int"}
+    "placeholders": {
+      "seconds": "int"
+    }
   },
   "infoScoreLabel": {
     "fr": "Score : {score}/{attempted}",
     "en": "Score: {score}/{attempted}",
     "desc": "Information — score courant",
-    "placeholders": {"score": "int", "attempted": "int"}
+    "placeholders": {
+      "score": "int",
+      "attempted": "int"
+    }
   },
   "infoDomainLabel": {
     "fr": "Domaine : {domain}",
     "en": "Domain: {domain}",
     "desc": "Information — domaine de connaissance de l'item",
-    "placeholders": {"domain": "String"}
+    "placeholders": {
+      "domain": "String"
+    }
   },
   "infoDiscontinue3": {
-    "fr": "3 échecs consécutifs - Test terminé (WAIS-IV)",
-    "en": "3 consecutive failures - Test ended (WAIS-IV)",
-    "desc": "Information — message de règle de discontinuation après 3 échecs"
+    "fr": "3 échecs consécutifs — exercice terminé.",
+    "en": "3 consecutive failures — exercise ended.",
+    "desc": "Information — message de règle de discontinuation sur renoncement (3 items passés d'affilée)"
   },
   "infoSeeResults": {
     "fr": "Voir les résultats",
@@ -84,25 +99,35 @@
     "fr": "Score brut : {score}/{max} points",
     "en": "Raw score: {score}/{max} points",
     "desc": "Information — score brut final",
-    "placeholders": {"score": "int", "max": "int"}
+    "placeholders": {
+      "score": "int",
+      "max": "int"
+    }
   },
   "infoItemsCompleted": {
     "fr": "Items complétés : {completed}/{total}",
     "en": "Items completed: {completed}/{total}",
     "desc": "Information — nombre d'items complétés",
-    "placeholders": {"completed": "int", "total": "int"}
+    "placeholders": {
+      "completed": "int",
+      "total": "int"
+    }
   },
   "infoPercentage": {
     "fr": "Pourcentage : {percent}%",
     "en": "Percentage: {percent}%",
     "desc": "Information — pourcentage de réussite",
-    "placeholders": {"percent": "int"}
+    "placeholders": {
+      "percent": "int"
+    }
   },
   "infoTotalTime": {
     "fr": "Temps total : {seconds}s",
     "en": "Total time: {seconds}s",
     "desc": "Information — temps total du test",
-    "placeholders": {"seconds": "int"}
+    "placeholders": {
+      "seconds": "int"
+    }
   },
   "infoTestSubtitle": {
     "fr": "Test de connaissances générales acquises",
@@ -118,7 +143,11 @@
     "fr": "{domain}: {correct}/{total}",
     "en": "{domain}: {correct}/{total}",
     "desc": "Information — ligne de répartition par domaine",
-    "placeholders": {"domain": "String", "correct": "int", "total": "int"}
+    "placeholders": {
+      "domain": "String",
+      "correct": "int",
+      "total": "int"
+    }
   },
   "infoPerfExceptional": {
     "fr": "Performance exceptionnelle (θ > +2.0)",
@@ -191,8 +220,8 @@
     "desc": "Arithmétique — nom du test affiché dans le scaffold/AppBar"
   },
   "arithEyebrow": {
-    "fr": "MÉMOIRE DE TRAVAIL · WMI",
-    "en": "WORKING MEMORY · WMI",
+    "fr": "MÉMOIRE DE TRAVAIL",
+    "en": "WORKING MEMORY",
     "desc": "Arithmétique — sur-titre (indice mesuré)"
   },
   "arithStartTest": {
@@ -259,7 +288,10 @@
     "fr": "Problème {current}/{total}",
     "en": "Problem {current}/{total}",
     "desc": "Arithmétique — compteur de problème en AppBar",
-    "placeholders": {"current": "int", "total": "int"}
+    "placeholders": {
+      "current": "int",
+      "total": "int"
+    }
   },
   "arithRepeatTitle": {
     "fr": "Répétition du problème",
@@ -280,7 +312,9 @@
     "fr": "Réponse correcte : {answer}",
     "en": "Correct answer: {answer}",
     "desc": "Arithmétique — affiche la bonne réponse",
-    "placeholders": {"answer": "int"}
+    "placeholders": {
+      "answer": "int"
+    }
   },
   "arithCorrect": {
     "fr": "Correct !",
@@ -296,7 +330,9 @@
     "fr": "Temps : {seconds} secondes",
     "en": "Time: {seconds} seconds",
     "desc": "Arithmétique — temps passé sur l'item",
-    "placeholders": {"seconds": "int"}
+    "placeholders": {
+      "seconds": "int"
+    }
   },
   "arithSpeedBonus": {
     "fr": "🎉 Bonus de rapidité ! (+1 point)",
@@ -312,25 +348,34 @@
     "fr": "Items complétés : {completed}/{total}",
     "en": "Items completed: {completed}/{total}",
     "desc": "Arithmétique — nombre d'items complétés",
-    "placeholders": {"completed": "int", "total": "int"}
+    "placeholders": {
+      "completed": "int",
+      "total": "int"
+    }
   },
   "arithBaseScore": {
     "fr": "Score de base : {score} points",
     "en": "Base score: {score} points",
     "desc": "Arithmétique — score de base",
-    "placeholders": {"score": "int"}
+    "placeholders": {
+      "score": "int"
+    }
   },
   "arithBonusScore": {
     "fr": "Bonus de rapidité : {bonus} points",
     "en": "Speed bonus: {bonus} points",
     "desc": "Arithmétique — points de bonus",
-    "placeholders": {"bonus": "int"}
+    "placeholders": {
+      "bonus": "int"
+    }
   },
   "arithTotalScore": {
     "fr": "Score Total : {total} points",
     "en": "Total Score: {total} points",
     "desc": "Arithmétique — score total final",
-    "placeholders": {"total": "int"}
+    "placeholders": {
+      "total": "int"
+    }
   },
   "arithRepeat": {
     "fr": "Répéter",

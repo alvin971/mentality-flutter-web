@@ -9,7 +9,7 @@ import '../../../../core/models/complete_test_session.dart';
 /// Pipeline : score brut → note standardisée → indice composite → FSIQ
 /// Avec intervalles de confiance à 95% et percentiles
 ///
-/// Basé sur les standards WAIS-IV (Wechsler Adult Intelligence Scale, 4e édition)
+/// Barème maison, aligné sur les usages psychométriques
 class ScoringService {
   const ScoringService();
 
