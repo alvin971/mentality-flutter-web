@@ -274,7 +274,13 @@ List<ColoredRegion> clipToZones(Polygon piece, List<ColoredRegion> zones) {
   if (pieceArea < kGeomEps) return out;
   for (final z in zones) {
     final inter = intersectConvex(piece, z.polygon);
-    if (inter.vertices.length >= 3 && inter.area() > pieceArea * 0.02) {
+    // Seuil GÉOMÉTRIQUE, pas perceptuel : la pièce montrée au sujet doit être
+    // le calque exact du fragment découpé dans la cible. Un seuil à 2 % de
+    // l'aire supprimait les petits coins de couleur (mesuré : 1,85 % de cyan
+    // perdu sur graine 1 / item 5 / pièce E, et 3 autres pièces sur les 8
+    // modèles de référence) — la pièce affichée n'était alors plus identique
+    // à sa découpe. On ne retire plus qu'un artefact numérique d'intersection.
+    if (inter.vertices.length >= 3 && inter.area() > pieceArea * 1e-4) {
       out.add(ColoredRegion(inter, z.colorIndex));
     }
   }
