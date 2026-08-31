@@ -496,13 +496,13 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
         final gridHeightBudget =
             (constraints.maxHeight - fixedChrome - minTarget)
                 .clamp(150.0, 380.0);
-        // Largeur de grille correspondante : 2 rangées + espacement 10.
-        final gridWidth = ((gridHeightBudget - 10) / 2) * 3 + 20;
+        // Largeur de grille correspondante : 2 rangées + espacement 6.
+        final gridWidth = ((gridHeightBudget - 6) / 2) * 3 + 12;
         final effectiveGridWidth =
             gridWidth.clamp(210.0, constraints.maxWidth).toDouble();
         // Échelle UNIFIÉE cible/pièces : additionner les 3 bonnes pièces
         // redonne exactement la taille affichée de la figure.
-        final tileSide = (effectiveGridWidth - 20) / 3;
+        final tileSide = (effectiveGridWidth - 12) / 3;
         final ppu =
             PuzzlePieceWidget.pixelsPerUnit(tileSide, item.maxPieceExtent);
 
@@ -532,9 +532,9 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
   /// tout visible sans défilement (important pour un test chronométré).
   /// FittedBox : sur fenêtre basse, l'ensemble est réduit plutôt que coupé.
   Widget _buildWide(BuildContext context, PuzzleItem item) {
-    // Échelle UNIFIÉE cible/pièces (cases de (560−20)/3 = 180 px).
+    // Échelle UNIFIÉE cible/pièces (cases de (560−12)/3 ≈ 182,7 px).
     final ppu =
-        PuzzlePieceWidget.pixelsPerUnit(180, item.maxPieceExtent);
+        PuzzlePieceWidget.pixelsPerUnit((560 - 12) / 3, item.maxPieceExtent);
     return Center(
       child: FittedBox(
         fit: BoxFit.scaleDown,
@@ -602,8 +602,8 @@ class _VisualPuzzlesTestPageState extends State<VisualPuzzlesTestPage> {
         crossAxisCount: 3,
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
-        mainAxisSpacing: 10,
-        crossAxisSpacing: 10,
+        mainAxisSpacing: 6,
+        crossAxisSpacing: 6,
         childAspectRatio: 1.0,
         children: List.generate(item.options.length, (i) {
           final piece = item.options[i];
