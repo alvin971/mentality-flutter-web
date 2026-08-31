@@ -45,16 +45,22 @@ class PuzzlePieceWidget extends StatelessWidget {
   /// Pixels par unité normalisée pour une case CARRÉE de côté [tileSide].
   ///
   /// DOIT rester aligné sur la géométrie interne du widget : padding du
-  /// conteneur (4 de chaque côté), zone de dessin LTRB(4, 20, 4, 4) — bande
-  /// haute réservée à la pastille — et padding 0.03 du painter.
+  /// conteneur (3 de chaque côté), zone de dessin LTRB(3, 16, 3, 3) — bande
+  /// haute réservée à la pastille — et padding 0.02 du painter.
   ///
   /// Sert à dessiner la FIGURE CIBLE à la MÊME échelle que les pièces
   /// (échelle unifiée : les 3 bonnes pièces s'additionnent visuellement à
   /// la taille affichée de la cible).
+  ///
+  /// Le chrome de la case a été resserré (2026-08-31) : la norme suppose un
+  /// cahier de stimuli imprimé, l'app dispose de 375 px de large. Tout ce qui
+  /// n'est pas le dessin est donc réduit au minimum lisible, ce qui agrandit
+  /// cible ET pièces du MÊME facteur — l'échelle reste unifiée par
+  /// construction, puisque les deux dérivent de cette seule fonction.
   static double pixelsPerUnit(double tileSide, double unitsPerTile) {
-    // Côté le plus court de la zone de dessin : hauteur = tile − 8 − 24.
-    final paintShortest = math.max(tileSide - 32.0, 1.0);
-    return paintShortest * 0.94 / math.max(unitsPerTile, 1e-6);
+    // Côté le plus court de la zone de dessin : hauteur = tile − 6 − 19.
+    final paintShortest = math.max(tileSide - 25.0, 1.0);
+    return paintShortest * 0.96 / math.max(unitsPerTile, 1e-6);
   }
 
   @override
@@ -90,7 +96,7 @@ class PuzzlePieceWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 160),
-            padding: const EdgeInsets.all(4),
+            padding: const EdgeInsets.all(3),
             decoration: BoxDecoration(
               color: isSelected
                   ? accent.withValues(alpha: 0.12)
@@ -109,12 +115,12 @@ class PuzzlePieceWidget extends StatelessWidget {
             ),
             child: Stack(
               children: [
-                // Bande haute réservée à la pastille (20 px + marge) : le
+                // Bande haute réservée à la pastille (16 px + marge) : le
                 // numéro ne recouvre JAMAIS le dessin de la pièce. Padding
                 // identique sur les 6 cases → l'échelle commune (et donc la
                 // détection des pièges de taille) est préservée.
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(4, 20, 4, 4),
+                  padding: const EdgeInsets.fromLTRB(3, 16, 3, 3),
                   child: CustomPaint(
                     size: Size.infinite,
                     painter: RegionedPolygonPainter(
@@ -122,7 +128,7 @@ class PuzzlePieceWidget extends StatelessWidget {
                       regions: piece.displayRegions,
                       palette: palette,
                       outlineColor: cs.outline.withValues(alpha: 0.55),
-                      padding: 0.03,
+                      padding: 0.02,
                       unitsPerTile: unitsPerTile,
                     ),
                   ),
@@ -130,15 +136,15 @@ class PuzzlePieceWidget extends StatelessWidget {
                 Align(
                   alignment: Alignment.topLeft,
                   child: Container(
-                    width: 20,
-                    height: 20,
+                    width: 16,
+                    height: 16,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: accent.withValues(alpha: 0.14),
-                      borderRadius: BorderRadius.circular(6),
+                      borderRadius: BorderRadius.circular(5),
                     ),
                     child: Text(label,
-                        style: AppText.of(context).mono(color: accent, size: 11)),
+                        style: AppText.of(context).mono(color: accent, size: 10)),
                   ),
                 ),
               ],
