@@ -287,8 +287,33 @@ console.log('\nÉmission sv 3 (plan Gratuit / Payant)');
   const { statut, corps } = await appel(envPlan(kv()), '/', 'POST',
     { ...CLAIMS, p: 'free', cc: false, cv: CV });
   const p = corps.token ? payloadDe(corps.token) : {};
-  verifie('free + cc:false, interrupteur fermé → 200 sv 3 (consentement facultatif)',
+  verifie('free + cc:false, Payant fermé, CORPUS_CONSENT_REQUIRED absente → 200 sv 3 (comportement antérieur conservé)',
     statut === 200 && p.sv === 3 && p.cc === false, `HTTP ${statut} ${JSON.stringify(corps)}`);
+}
+
+console.log('\nInterrupteur CORPUS_CONSENT_REQUIRED = "true" (Payant fermé) — décision produit 2026-09-02');
+{
+  // Le site exige la case pour tout passe Gratuit, indépendamment du Payant :
+  // le serveur doit pouvoir dire la même chose SANS ouvrir la vente.
+  const e = (s) => envPlan(s, { PAID_PLAN_ENABLED: 'false', CORPUS_CONSENT_REQUIRED: 'true' });
+  const sans = await appel(e(kv()), '/', 'POST', { ...CLAIMS, p: 'free', cc: false, cv: CV });
+  verifie('CORPUS_CONSENT_REQUIRED="true", Payant fermé, free + cc:false → 400 CONSENT_REQUIRED',
+    sans.statut === 400 && sans.corps.code === 'CONSENT_REQUIRED' && !('token' in sans.corps),
+    `HTTP ${sans.statut} ${JSON.stringify(sans.corps)}`);
+
+  const avec = await appel(e(kv()), '/', 'POST', { ...CLAIMS, p: 'free', cc: true, cv: CV });
+  const pa = avec.corps.token ? payloadDe(avec.corps.token) : {};
+  verifie('CORPUS_CONSENT_REQUIRED="true", Payant fermé, free + cc:true → 200 sv 3',
+    avec.statut === 200 && pa.sv === 3 && pa.p === 'free' && pa.cc === true,
+    `HTTP ${avec.statut} ${JSON.stringify(avec.corps)}`);
+
+  // L'exigence est un interrupteur EXPLICITE : var absente + Payant fermé →
+  // comportement antérieur (facultatif), jamais un défaut implicite.
+  const absente = await appel(envPlan(kv()), '/', 'POST', { ...CLAIMS, p: 'free', cc: false, cv: CV });
+  const pb = absente.corps.token ? payloadDe(absente.corps.token) : {};
+  verifie('CORPUS_CONSENT_REQUIRED absente, Payant fermé, free + cc:false → 200 (interrupteur explicite)',
+    absente.statut === 200 && pb.sv === 3 && pb.cc === false,
+    `HTTP ${absente.statut} ${JSON.stringify(absente.corps)}`);
 }
 {
   const { statut, corps } = await appel(envPlan(kv()), '/', 'POST',
@@ -437,6 +462,7 @@ console.log("\nÉtat DÉPLOYÉ : ni RATE_KV ni AUDIO_BUCKET (les deux bindings s
     ED25519_PRIVATE_KEY_B64: PRIV_B64,
     LEGAL_VERSIONS: CV,
     PAID_PLAN_ENABLED: 'false',
+    CORPUS_CONSENT_REQUIRED: 'true', // miroir des [vars] livrées (wrangler.toml)
   };
   verifie('le scénario n\'expose AUCUN binding (garde-fou : ne pas en réintroduire un ici)',
     !('RATE_KV' in deploye) && !('AUDIO_BUCKET' in deploye), JSON.stringify(Object.keys(deploye)));
@@ -521,8 +547,12 @@ console.log('\nConfiguration déployable (wrangler.toml)');
     !actif.includes('6c70f3aab78c4aeb92d1255f62edbafd'), 'id REFERRAL_KV présent');
   verifie('les [vars] restent ACTIVES (chaînes pures, aucune ressource requise)',
     actif.includes('PAID_PLAN_ENABLED') && actif.includes('LEGAL_VERSIONS') &&
-    actif.includes('ISSUE_CAP_ENABLED') && actif.includes('ISSUE_MAX_PER_WINDOW'),
+    actif.includes('ISSUE_CAP_ENABLED') && actif.includes('ISSUE_MAX_PER_WINDOW') &&
+    actif.includes('CORPUS_CONSENT_REQUIRED'),
     'une [vars] a disparu');
+  verifie('CORPUS_CONSENT_REQUIRED livrée à "true" (pas de passe Gratuit sans consentement corpus)',
+    /CORPUS_CONSENT_REQUIRED\s*=\s*"true"/.test(actif),
+    'CORPUS_CONSENT_REQUIRED absente ou ≠ "true" dans le toml livré');
   verifie('ISSUE_CAP_ENABLED livrée à une valeur INACTIVE (le plafond ne s\'allume pas tout seul)',
     /ISSUE_CAP_ENABLED\s*=\s*"(?!true")/.test(actif),
     'ISSUE_CAP_ENABLED est à "true" dans le toml livré');

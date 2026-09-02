@@ -136,16 +136,23 @@ autorité, jamais un en-tête client. Lecture confortable : `readPlan()` de
 Var wrangler. **Seule la chaîne `"true"`** ouvre le plan payant ; absente, vide,
 `"TRUE"` ou `"1"` → fermé (**défaut fermé assumé** : une var oubliée ne doit pas
 ouvrir la vente). À basculer **en même temps** que `SITE.plans.paidEnabled` côté
-site Astro : tant qu'il n'existe pas d'alternative payante réelle, le
-consentement au corpus ne serait pas « libre » (RGPD art. 7(4)) et reste donc
-**facultatif**.
+site Astro.
+
+Les trois interrupteurs `[vars]` du worker, même convention (seule la chaîne
+exacte `"true"` allume) :
+
+| Var | Livrée | Effet à `"true"` | Défaut (absente) |
+|---|---|---|---|
+| `PAID_PLAN_ENABLED` | `"false"` | ouvre le passe Payant (`p=paid` → 200) et exige `cc=true` pour le Gratuit | fermé |
+| `CORPUS_CONSENT_REQUIRED` | `"true"` | exige `cc=true` pour le passe Gratuit **même Payant fermé** (décision produit 2026-09-02 : pas de passe Gratuit sans consentement corpus) | comportement antérieur : facultatif tant que le Payant est fermé |
+| `ISSUE_CAP_ENABLED` | `"false"` | arme le refus 429 du plafond d'émission (§ Garanties) | éteint |
 
 | Entrée | `"false"` (aujourd'hui) | `"true"` (jour de Stripe) | `code` |
 |---|---|---|---|
 | pas de `p` (ni `cc`/`cv`) | `sv 2` | `sv 2` | — |
 | `cc` ou `cv` sans `p` | 400 | 400 | `PLAN_REQUIRED` |
 | `p=free, cc=true` | 200 `sv 3` | 200 `sv 3` | — |
-| `p=free, cc=false` | 200 `sv 3` (facultatif) | **400** | `CONSENT_REQUIRED` |
+| `p=free, cc=false` | **400** si `CORPUS_CONSENT_REQUIRED="true"` (livré), sinon 200 `sv 3` | **400** | `CONSENT_REQUIRED` |
 | `p=paid, cc=false` | **403** | 200 `sv 3` | `PAID_PLAN_DISABLED` |
 | `p=paid, cc=true` | 400 | 400 | `PLAN_INCONSISTENT` |
 | `cv` absente / ∉ `LEGAL_VERSIONS` | 400 | 400 | `LEGAL_VERSION_UNKNOWN` |

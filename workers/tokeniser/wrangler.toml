@@ -139,14 +139,21 @@ ISSUE_CAP_ENABLED = "false"
 # vide, "TRUE" ou "1" → désactivé (défaut FERMÉ, assumé). Matrice complète dans
 # le doc-comment de validatePlan() (index.js) :
 #
-#   PAID_PLAN_ENABLED  | p=paid, cc=false   | p=free, cc=false
-#   "false" (ici)      | 403 PAID_PLAN_DISABLED | 200 sv 3 (consentement facultatif)
+#   PAID_PLAN_ENABLED  | p=paid, cc=false       | p=free, cc=false
+#   "false" (ici)      | 403 PAID_PLAN_DISABLED | 400 CONSENT_REQUIRED si
+#                      |                        | CORPUS_CONSENT_REQUIRED="true"
+#                      |                        | (ci-dessous), sinon 200 sv 3
 #   "true"  (Stripe)   | 200 sv 3               | 400 CONSENT_REQUIRED
 #
 # ⚠️ À basculer EN MÊME TEMPS que `SITE.plans.paidEnabled` côté site Astro : le
-# site propose alors le passe Payant, et le consentement au corpus devient
-# exigible parce qu'une alternative réelle existe (RGPD art. 7(4)).
+# site propose alors le passe Payant.
 PAID_PLAN_ENABLED = "false"
+# Décision produit (2026-09-02) : PAS de passe Gratuit sans consentement au
+# corpus vocal, MÊME AVANT l'ouverture du Payant. Le site exige déjà la case ;
+# cette var fait dire la même chose au serveur sans ouvrir la vente.
+# SEULE la chaîne "true" l'active ; absente, vide, "TRUE" ou "1" → comportement
+# antérieur (consentement facultatif tant que PAID_PLAN_ENABLED est fermé).
+CORPUS_CONSENT_REQUIRED = "true"
 # Versions de textes légaux acceptées dans la claim `cv`, en CSV. Fail-closed :
 # vide ou absente → 500 SERVER_MISCONFIGURED sur toute émission avec plan (on ne
 # signe jamais un consentement dont on ignore le texte). Garder l'ancienne

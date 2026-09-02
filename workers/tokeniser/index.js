@@ -34,6 +34,16 @@
  *
  * Déploiement : voir README.md. Secret : wrangler secret put ED25519_PRIVATE_KEY_B64.
  *
+ * INTERRUPTEURS ([vars] de wrangler.toml, comparés STRICTEMENT à 'true' ;
+ * absente, vide, 'TRUE' ou '1' = éteint) :
+ *   - PAID_PLAN_ENABLED       ouvre le passe Payant (défaut fermé). Voir validatePlan().
+ *   - ISSUE_CAP_ENABLED       arme le refus 429 du plafond d'émission. Voir checkIssueCap().
+ *   - CORPUS_CONSENT_REQUIRED exige cc=true pour un passe Gratuit MÊME quand le
+ *                             Payant est fermé (décision produit 2026-09-02 : pas
+ *                             de passe Gratuit sans consentement corpus). Absente
+ *                             = comportement antérieur (facultatif tant que le
+ *                             Payant est fermé). Voir validatePlan().
+ *
  * ANONYMAT : aucun log par requête (IP/timestamp/claims/token), aucun stockage
  * PAR UTILISATEUR. Tout l'état serveur tient dans TROIS familles de clés KV
  * (namespace RATE_KV), toutes AGRÉGÉES ou publiques — rien de rattachable à
@@ -422,20 +432,28 @@ function validateClaims(body) {
  * FERMÉ assumé : tant que Stripe n'est pas branché, on ne veut surtout pas
  * qu'une var oubliée ouvre la vente.
  *
- * Matrice (plan §3), colonne gauche = interrupteur false (aujourd'hui) :
+ * Interrupteur `CORPUS_CONSENT_REQUIRED` (var wrangler, même convention) :
+ * « true » exige cc=true pour un passe Gratuit même quand le Payant est fermé.
+ * Décision produit (2026-09-02) : pas de passe Gratuit sans consentement au
+ * corpus, indépendamment de l'ouverture du Payant. Le site l'exige toujours ;
+ * ce serveur doit pouvoir dire la même chose sans ouvrir la vente.
+ *
+ * Matrice (plan §3), colonne gauche = PAID_PLAN_ENABLED false (aujourd'hui) :
  *   pas de p (ni cc/cv)      → sv 2                      | sv 2
  *   cc ou cv sans p          → 400 PLAN_REQUIRED         | idem
  *   p=free, cc=true          → 200 sv 3                  | 200 sv 3
- *   p=free, cc=false         → 200 sv 3 (facultatif)     | 400 CONSENT_REQUIRED
+ *   p=free, cc=false         → 400 CONSENT_REQUIRED si   | 400 CONSENT_REQUIRED
+ *                              CORPUS_CONSENT_REQUIRED,
+ *                              sinon 200 sv 3
  *   p=paid, cc=false         → 403 PAID_PLAN_DISABLED    | 200 sv 3
  *   p=paid, cc=true          → 400 PLAN_INCONSISTENT     | idem
  *   cv absent / ∉ LEGAL_VERSIONS → 400 LEGAL_VERSION_UNKNOWN | idem
  *   LEGAL_VERSIONS non configuré → 500 SERVER_MISCONFIGURED  | idem
  *   p=free, cc=true, âge < 15    → 400 AGE_CONSENT           | idem
  *
- * Le consentement au corpus est FACULTATIF tant que le plan payant est fermé :
- * sans alternative réelle, il ne serait pas « libre » au sens de l'art. 7(4)
- * RGPD, donc il ne peut pas être exigé.
+ * Sans CORPUS_CONSENT_REQUIRED (var absente), le comportement antérieur est
+ * conservé : consentement facultatif tant que le Payant est fermé. L'exigence
+ * est un interrupteur EXPLICITE, jamais un défaut implicite.
  *
  * ⚠️ APPELER APRÈS validateClaims() : la garde d'âge lit body.y / body.m, dont
  * le type et les bornes ont déjà été vérifiés là-bas.
@@ -479,6 +497,8 @@ function validatePlan(body, env) {
   const cv = body.cv;
 
   const paidEnabled = env.PAID_PLAN_ENABLED === 'true';
+  // Même comparaison stricte : seule la chaîne exacte 'true' exige la case.
+  const consentRequired = env.CORPUS_CONSENT_REQUIRED === 'true';
 
   if (p === 'paid') {
     // Incohérence AVANT l'interrupteur : un passe payant ne porte jamais de
@@ -505,11 +525,14 @@ function validatePlan(body, env) {
     return { plan: { p, cc, cv } };
   }
 
-  // p === 'free'
-  if (!cc && paidEnabled) {
+  // p === 'free' — la case est exigée dès qu'une alternative payante existe
+  // (PAID_PLAN_ENABLED) OU que la décision produit l'impose (CORPUS_CONSENT_REQUIRED).
+  if (!cc && (paidEnabled || consentRequired)) {
     return refus(
       'CONSENT_REQUIRED', 400,
-      'Le passe Gratuit exige le consentement au corpus vocal (ou choisis le passe Payant)',
+      paidEnabled
+        ? 'Le passe Gratuit exige le consentement au corpus vocal (ou choisis le passe Payant)'
+        : 'Le passe Gratuit exige le consentement au corpus vocal',
     );
   }
   if (cc && ageAtIssue(body.y, body.m) < CONSENT_MIN_AGE) {
