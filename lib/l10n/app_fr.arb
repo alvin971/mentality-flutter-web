@@ -61,7 +61,7 @@
   "@assessIntroHero2": {
     "description": "Titre hero ligne 2 (italique) de la page d'intro évaluation"
   },
-  "assessIntroDescription": "Cette évaluation explore vos capacités cognitives à travers six domaines du modèle CHC (Cattell-Horn-Carroll). Un score global en est la synthèse.",
+  "assessIntroDescription": "Cette évaluation explore vos capacités cognitives à travers cinq domaines du modèle CHC (Cattell-Horn-Carroll). Un score global en est la synthèse.",
   "@assessIntroDescription": {
     "description": "Paragraphe descriptif de l'intro évaluation"
   },
@@ -88,10 +88,6 @@
   "assessDomainPsi": "Vitesse de Traitement",
   "@assessDomainPsi": {
     "description": "Libellé du domaine"
-  },
-  "assessDomainLo": "Langage Oral",
-  "@assessDomainLo": {
-    "description": "Libellé du domaine Langage Oral (LO)"
   },
   "assessBeforeStartHeader": "AVANT DE COMMENCER",
   "@assessBeforeStartHeader": {
@@ -156,10 +152,6 @@
   "assessSubtestSymbolSearch": "Détection de symboles",
   "@assessSubtestSymbolSearch": {
     "description": "Libellé du subtest Détection de symboles"
-  },
-  "assessSubtestOralComprehension": "Compréhension Orale",
-  "@assessSubtestOralComprehension": {
-    "description": "Libellé du subtest Compréhension Orale"
   },
   "authLoginTitle": "Connexion",
   "@authLoginTitle": {
@@ -334,11 +326,11 @@
   "@ctIntroContentEyebrow": {
     "description": "Eyebrow de la carte contenu"
   },
-  "ctIntroContentTitle": "13 subtests inclus",
+  "ctIntroContentTitle": "12 subtests inclus",
   "@ctIntroContentTitle": {
     "description": "Titre de la carte contenu"
   },
-  "ctIntroContentBody": "Cubes · Points communs · Suites de chiffres · Matrices · Vocabulaire · Arithmétique · Symboles · Assemblages · Information · Transcription · Images · Équilibres · Langage oral.",
+  "ctIntroContentBody": "Cubes · Points communs · Suites de chiffres · Matrices · Vocabulaire · Arithmétique · Symboles · Assemblages · Information · Transcription · Images · Équilibres.",
   "@ctIntroContentBody": {
     "description": "Liste des subtests dans la carte contenu"
   },
@@ -906,7 +898,7 @@
   "@homeHeroTitleItalic": {
     "description": "Home hero, line 2 (italic)"
   },
-  "homeHeroBody": "Une évaluation cognitive adaptative. 13 sous-tests, 5 indices, un score global.",
+  "homeHeroBody": "Une évaluation cognitive adaptative. 12 sous-tests, 5 indices, un score global.",
   "homeActionStartTitle": "Commencer une évaluation",
   "@homeActionStartTitle": {
     "description": "Home action card 1 title"
@@ -939,7 +931,7 @@
   "@homeAboutEyebrow": {
     "description": "About section eyebrow"
   },
-  "homeAboutSubtestsTitle": "13 sous-tests",
+  "homeAboutSubtestsTitle": "12 sous-tests",
   "@homeAboutSubtestsTitle": {
     "description": "About tile 1 title"
   },
@@ -1716,6 +1708,59 @@
   "@preEstimateIncrease": {
     "description": "Info-bulle du bouton qui augmente l'estimation d'un point"
   },
+  "privacyEyebrow": "DONNÉES PERSONNELLES",
+  "@privacyEyebrow": {
+    "description": "Surtitre de l'écran Confidentialité et consentement"
+  },
+  "privacyTitle": "Confidentialité et consentement",
+  "@privacyTitle": {
+    "description": "Titre de l'écran de gestion du consentement (accessible depuis l'accueil)"
+  },
+  "privacySubtitle": "Gérer ou retirer mon consentement",
+  "@privacySubtitle": {
+    "description": "Sous-titre de la carte d'accueil menant à l'écran de consentement"
+  },
+  "privacyIntro": "L'épreuve orale du bilan enregistre votre voix. Ce consentement vous appartient : vous pouvez le retirer ici, à tout moment, sans avoir à vous justifier.",
+  "privacyStatusEyebrow": "ÉTAT ACTUEL",
+  "@privacyStatusEyebrow": {
+    "description": "Surtitre du bloc résumant l'état du consentement"
+  },
+  "privacyStatusActive": "Consentement actif : l'épreuve orale peut enregistrer votre voix.",
+  "privacyStatusWithdrawn": "Consentement retiré. Aucun nouvel enregistrement ne sera fait ni envoyé.",
+  "privacyStatusNone": "Aucun consentement enregistré sur cet appareil : rien n'autorise le microphone aujourd'hui.",
+  "privacySourceToken": "Recueilli lors de la création de votre passe, sur mental-et.com.",
+  "privacySourceInApp": "Recueilli dans l'application, avant l'épreuve orale.",
+  "privacyReuseYes": "Réutilisation des enregistrements par des tiers : acceptée.",
+  "privacyReuseNo": "Réutilisation des enregistrements par des tiers : refusée.",
+  "privacyVersionLine": "Texte accepté : version {version}, le {date}.",
+  "@privacyVersionLine": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "privacyWithdrawAction": "Retirer mon consentement",
+  "@privacyWithdrawAction": {
+    "description": "Bouton principal de l'écran de consentement"
+  },
+  "privacyWithdrawDialogTitle": "Retirer votre consentement ?",
+  "privacyWithdrawDialogBody": "Ce que cela change immédiatement :\n\n• L'épreuve orale ne démarrera plus et aucun nouvel enregistrement ne sera fait.\n• Les enregistrements pas encore envoyés ne partiront pas.\n• Les enregistrements déjà envoyés ne peuvent plus être retrouvés sans votre passe : ils sont anonymes, nous ne savons pas lesquels sont les vôtres.\n\nLe reste du bilan (les 12 épreuves notées) n'est pas affecté. Vous pourrez consentir de nouveau plus tard si vous le souhaitez.",
+  "privacyWithdrawConfirm": "Oui, retirer",
+  "privacyWithdrawDone": "Consentement retiré. Plus aucun enregistrement ne sera fait ni envoyé.",
+  "privacyWithdrawnOnLine": "Retiré le {date}.",
+  "@privacyWithdrawnOnLine": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "privacyErasureTitle": "Effacement des enregistrements déjà envoyés",
+  "privacyErasureBody": "Le retrait vaut pour l'avenir. Pour demander l'effacement d'enregistrements déjà envoyés (art. 17 du RGPD), écrivez-nous en joignant votre passe : sans lui, personne — nous compris — ne peut savoir lesquels sont les vôtres.",
   "regStepEyebrow": "ÉTAPE {step} / 4",
   "@regStepEyebrow": {
     "description": "Eyebrow label showing the current registration step out of 4",

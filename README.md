@@ -42,7 +42,7 @@ L'application évalue l'intelligence à travers **5 indices composites** aligné
 
 ## ✨ Fonctionnalités
 
-### 🎮 13 Exercices Cognitifs
+### 🎮 12 Exercices Cognitifs
 
 #### Priorité 1 - Implémentation Immédiate
 

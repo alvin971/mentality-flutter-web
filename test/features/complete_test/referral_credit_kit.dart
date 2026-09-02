@@ -209,6 +209,34 @@ String get tokenDeTest {
   return 'M2.$b64';
 }
 
+/// Token DEV porteur d'un PLAN (`sv: 3`), tel qu'en émet mental-et.com depuis
+/// le 2026-09-02 : le passe dit lui-même s'il est Gratuit (financé par
+/// l'enregistrement vocal) ou Payant (aucun enregistrement), et porte la
+/// preuve du consentement au corpus recueilli sur le site.
+///
+/// Mêmes données démographiques que [tokenDeTest] : seul le plan change d'un
+/// scénario à l'autre.
+String tokenDeTestPlan({
+  String p = 'free',
+  bool cc = true,
+  String cv = '2026-09-02.v1',
+}) {
+  final claims = jsonEncode({
+    's': 'M',
+    'y': 2005,
+    'm': 4,
+    'r': 'GES',
+    'd': 20659,
+    'n': 'testnonce',
+    'sv': 3,
+    'p': p,
+    'cc': cc,
+    'cv': cv,
+  });
+  final b64 = base64Url.encode(utf8.encode(claims)).replaceAll('=', '');
+  return 'M2.$b64';
+}
+
 /// Session identique à celle produite par le BLoC en fin de batterie.
 CompleteTestSession sessionTerminee(Duration duree) {
   final debut = DateTime.now().subtract(duree);
@@ -291,9 +319,11 @@ Future<bool> resteEnAttente(WidgetTester tester) async =>
     (await tester.runAsync(() => CompletionReporter.instance.hasPending())) ??
     false;
 
-/// Joue les 12 sous-tests NOTÉS dans le VRAI BLoC (hors test de widget).
-/// La 13e épreuve du bilan — le langage oral — n'est pas notée et n'est pas
-/// pilotée par le BLoC : elle est lancée par l'orchestrateur.
+/// Joue les 12 sous-tests NOTÉS dans le VRAI BLoC (hors test de widget) —
+/// soit le bilan annoncé en entier. L'épreuve orale n'en fait plus partie :
+/// sortie du décompte (12 épreuves, pas 13) tout en restant dans le code, elle
+/// n'est ni notée ni pilotée par le BLoC, et c'est l'orchestrateur qui la
+/// lance, en contrepartie du passe Gratuit.
 // ignore: unintended_html_in_doc_comment
 Future<void> joueLaBatterie(CompleteTestBloc bloc) async {
   bloc.add(const StartTestEvent(300));

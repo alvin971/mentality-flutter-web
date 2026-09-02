@@ -17,6 +17,8 @@
  * À lancer avant chaque `wrangler deploy`.
  */
 
+import { readFileSync } from 'node:fs';
+
 import worker from '../index.js';
 import { verifyToken, TOKEN_SIGNING_PUBLIC_KEYS } from '../../_shared/token_verify.js';
 
@@ -34,6 +36,27 @@ TOKEN_SIGNING_PUBLIC_KEYS.k1 =
 const CLAIMS = { s: 'M', y: 1990, m: 5, r: 'IDF' };
 const FENETRE_MIN = 60;
 const MAX_FENETRE = 300;
+
+// Version des textes légaux utilisée par les scénarios de plan (miroir de la
+// var wrangler LEGAL_VERSIONS).
+const CV = '2026-09-02.v1';
+
+/** Payload JWS décodé sans vérification (assertions de FORME du token). */
+const payloadDe = (token) =>
+  JSON.parse(Buffer.from(token.split('.')[1], 'base64url').toString('utf8'));
+
+/** Clés `consent:` écrites dans un KV en mémoire. */
+const clesConsent = (store) => [...store._m.keys()].filter((k) => k.startsWith('consent:'));
+
+/**
+ * Année de naissance donnant exactement [age] ans aujourd'hui avec le MOIS
+ * COURANT comme mois de naissance (mois en cours non révolu, formule §3 du
+ * plan : age = Y − y − (m ≥ M ? 1 : 0)). Indépendant de la date du run.
+ */
+function naissancePourAge(age) {
+  const now = new Date();
+  return { y: now.getUTCFullYear() - age - 1, m: now.getUTCMonth() + 1 };
+}
 
 /** KV en mémoire qui ENREGISTRE les options de put (assertion du TTL). */
 function kv(seed = {}) {
@@ -68,6 +91,29 @@ function env(store, extra = {}) {
     ...(store ? { RATE_KV: store } : {}),
     ...extra,
   };
+}
+
+/**
+ * Env des scénarios de plan : LEGAL_VERSIONS configurée, interrupteur payant
+ * FERMÉ (l'état de production d'aujourd'hui). Les scénarios « jour de Stripe »
+ * passent { PAID_PLAN_ENABLED: 'true' } en extra.
+ */
+function envPlan(store, extra = {}) {
+  return env(store, { LEGAL_VERSIONS: CV, PAID_PLAN_ENABLED: 'false', ...extra });
+}
+
+/**
+ * Env dont le PLAFOND est explicitement ALLUMÉ.
+ *
+ * Depuis 2026-09-02, lier RATE_KV ne suffit plus à refuser au-delà du seuil :
+ * il faut ISSUE_CAP_ENABLED === 'true' (deux gestes séparés, cf. le
+ * doc-comment de checkIssueCap). Tous les scénarios qui exercent le REFUS
+ * passent donc par ici — ils testent exactement ce qu'ils testaient avant, en
+ * nommant désormais l'état dans lequel ce refus a lieu. L'état LIVRÉ, lui
+ * (plafond éteint), a sa propre section plus bas.
+ */
+function envCap(store, extra = {}) {
+  return env(store, { ISSUE_CAP_ENABLED: 'true', ...extra });
 }
 
 async function appel(environnement, path = '/', method = 'POST', body = CLAIMS, opts = {}) {
@@ -111,20 +157,20 @@ console.log('Émission signée (POST /)');
 console.log("\nPlafond d'émission (compteur agrégé)");
 {
   const s = kv(seedPlein());
-  const { statut, corps } = await appel(env(s));
+  const { statut, corps } = await appel(envCap(s));
   verifie('compteur plein → 429, aucun token', statut === 429 && !('token' in corps),
     `HTTP ${statut}`);
 }
 {
   const presque = Object.fromEntries(tranches().map((k) => [k, String(MAX_FENETRE - 1)]));
   const s = kv(presque);
-  const un = await appel(env(s));
-  const deux = await appel(env(s));
+  const un = await appel(envCap(s));
+  const deux = await appel(envCap(s));
   verifie('max−1 → 200 (dernière place), puis 429 (off-by-one exclu)',
     un.statut === 200 && deux.statut === 429, `${un.statut} puis ${deux.statut}`);
 }
 {
-  const { statut } = await appel(env(null)); // pas de RATE_KV
+  const { statut } = await appel(envCap(null)); // pas de RATE_KV, plafond pourtant allumé
   verifie('binding RATE_KV absent → FAIL-OPEN (200), l\'inscription n\'est jamais murée',
     statut === 200, `HTTP ${statut}`);
 }
@@ -141,8 +187,8 @@ console.log("\nPlafond d'émission (compteur agrégé)");
     get: async () => null,
     put: async () => { throw new Error('KV put rate-limited'); },
   };
-  const surGet = await appel(env(casseGet));
-  const surPut = await appel(env(cassePut));
+  const surGet = await appel(envCap(casseGet));
+  const surPut = await appel(envCap(cassePut));
   verifie('KV en panne (get ou put qui jette) → FAIL-OPEN (200), jamais 500',
     surGet.statut === 200 && surPut.statut === 200,
     `get=${surGet.statut}, put=${surPut.statut}`);
@@ -150,13 +196,13 @@ console.log("\nPlafond d'émission (compteur agrégé)");
 {
   const b = Math.floor(Date.now() / (FENETRE_MIN * 60000));
   const s = kv({ [`issue:${b - 1}`]: String(MAX_FENETRE) }); // tranche PASSÉE pleine
-  const { statut } = await appel(env(s));
+  const { statut } = await appel(envCap(s));
   verifie('tranche passée pleine → 200 (la fenêtre glisse, pas de plafond global)',
     statut === 200, `HTTP ${statut}`);
 }
 {
   const s = kv();
-  const { statut } = await appel(env(s), '/', 'POST', { ...CLAIMS, s: 'Z' });
+  const { statut } = await appel(envCap(s), '/', 'POST', { ...CLAIMS, s: 'Z' });
   verifie('claims invalides → 400 SANS consommer le budget',
     statut === 400 && compteur(s) === null, `HTTP ${statut}, compteur ${compteur(s)}`);
 }
@@ -165,13 +211,13 @@ console.log("\nPlafond d'émission (compteur agrégé)");
   // (ici 500 « Bucket R2 non lié », le binding AUDIO_BUCKET étant désactivé).
   const s = kv(seedPlein());
   const jeton = (await appel(env(kv()))).corps.token;
-  const { statut, corps } = await appel(env(s), '/validate', 'POST', { token: jeton });
+  const { statut, corps } = await appel(envCap(s), '/validate', 'POST', { token: jeton });
   verifie('/validate au plafond → jamais 429 (500 bucket R2 non lié)',
     statut === 500 && String(corps.error).includes('R2'), `HTTP ${statut} ${JSON.stringify(corps)}`);
 }
 {
   const s = kv(seedPlein());
-  const { statut } = await appel(env(s), '/geo', 'GET');
+  const { statut } = await appel(envCap(s), '/geo', 'GET');
   verifie('GET /geo au plafond → 200, compteur inchangé',
     statut === 200 && compteur(s) === String(MAX_FENETRE), `HTTP ${statut}`);
 }
@@ -208,6 +254,282 @@ console.log("\nPolitique d'Origin");
   }
   verifie("les domaines de la page d'inscription en PRODUCTION émettent (200)",
     statuts.every((s) => s === 200), `${domaines.join(', ')} → ${statuts.join(', ')}`);
+}
+
+console.log('\nÉmission sv 3 (plan Gratuit / Payant)');
+{
+  // ⚠️ INVARIANT DE PRODUCTION — le corps historique {s,y,m,r} doit continuer
+  // à produire EXACTEMENT le même token sv 2 qu'aujourd'hui : mêmes clés, même
+  // ordre, aucune claim de plan. C'est ce qui garde l'inscription live de
+  // mental-et.com en vie pendant toute la transition vers sv 3.
+  const { statut, corps } = await appel(envPlan(kv()));
+  const p = corps.token ? payloadDe(corps.token) : {};
+  verifie('corps sans `p` → payload sv 2 EXACT (s,y,m,r,d,n,sv), aucun p/cc/cv',
+    statut === 200 && Object.keys(p).join(',') === 's,y,m,r,d,n,sv' && p.sv === 2 &&
+    p.s === 'M' && p.y === 1990 && p.m === 5 && p.r === 'IDF',
+    `HTTP ${statut} ${JSON.stringify(Object.keys(p))}`);
+}
+{
+  const { statut, corps } = await appel(envPlan(kv()), '/', 'POST', { ...CLAIMS, cc: true, cv: CV });
+  verifie('cc/cv sans `p` → 400 PLAN_REQUIRED (on ne devine jamais le plan)',
+    statut === 400 && corps.code === 'PLAN_REQUIRED', `HTTP ${statut} ${JSON.stringify(corps)}`);
+}
+{
+  const { statut, corps } = await appel(envPlan(kv()), '/', 'POST',
+    { ...CLAIMS, p: 'free', cc: true, cv: CV });
+  const v = corps.token ? await verifyToken(corps.token, TOKEN_SIGNING_PUBLIC_KEYS) : { valid: false };
+  verifie('free + cc:true → 200 sv 3 signé, qui passe la VRAIE verifyToken',
+    statut === 200 && v.valid === true && v.claims.sv === 3 && v.claims.p === 'free' &&
+    v.claims.cc === true && v.claims.cv === CV,
+    `HTTP ${statut} ${JSON.stringify(v.claims || corps)}`);
+}
+{
+  const { statut, corps } = await appel(envPlan(kv()), '/', 'POST',
+    { ...CLAIMS, p: 'free', cc: false, cv: CV });
+  const p = corps.token ? payloadDe(corps.token) : {};
+  verifie('free + cc:false, interrupteur fermé → 200 sv 3 (consentement facultatif)',
+    statut === 200 && p.sv === 3 && p.cc === false, `HTTP ${statut} ${JSON.stringify(corps)}`);
+}
+{
+  const { statut, corps } = await appel(envPlan(kv()), '/', 'POST',
+    { ...CLAIMS, p: 'paid', cc: false, cv: CV });
+  verifie('paid, interrupteur fermé → 403 PAID_PLAN_DISABLED (code, pas juste le statut)',
+    statut === 403 && corps.code === 'PAID_PLAN_DISABLED' && !('token' in corps),
+    `HTTP ${statut} ${JSON.stringify(corps)}`);
+}
+{
+  const { statut } = await appel(envPlan(kv()), '/', 'POST',
+    { ...CLAIMS, p: 'gold', cc: false, cv: CV });
+  verifie('p hors allow-list ("gold") → 400 (jamais de repli sur free)',
+    statut === 400, `HTTP ${statut}`);
+}
+{
+  const { statut, corps } = await appel(envPlan(kv()), '/', 'POST',
+    { ...CLAIMS, p: 'free', cc: true, cv: '0000-00-00.v0' });
+  verifie('cv absente de LEGAL_VERSIONS → 400 LEGAL_VERSION_UNKNOWN',
+    statut === 400 && corps.code === 'LEGAL_VERSION_UNKNOWN',
+    `HTTP ${statut} ${JSON.stringify(corps)}`);
+}
+{
+  // Fail-closed : sans liste de versions, on ignore SUR QUOI la personne a
+  // consenti → erreur serveur, jamais un passe signé au hasard.
+  const { statut, corps } = await appel(env(kv()), '/', 'POST',
+    { ...CLAIMS, p: 'free', cc: true, cv: CV });
+  verifie('LEGAL_VERSIONS non configurée → 500 SERVER_MISCONFIGURED',
+    statut === 500 && corps.code === 'SERVER_MISCONFIGURED',
+    `HTTP ${statut} ${JSON.stringify(corps)}`);
+}
+{
+  // Défaut FERMÉ : une var oubliée ne doit pas ouvrir la vente.
+  const { statut, corps } = await appel(env(kv(), { LEGAL_VERSIONS: CV }), '/', 'POST',
+    { ...CLAIMS, p: 'paid', cc: false, cv: CV });
+  verifie('PAID_PLAN_ENABLED absente → paid refusé (403, défaut fermé)',
+    statut === 403 && corps.code === 'PAID_PLAN_DISABLED', `HTTP ${statut} ${JSON.stringify(corps)}`);
+}
+{
+  const { statut, corps } = await appel(env(kv(), { LEGAL_VERSIONS: CV, PAID_PLAN_ENABLED: 'TRUE' }),
+    '/', 'POST', { ...CLAIMS, p: 'paid', cc: false, cv: CV });
+  verifie('PAID_PLAN_ENABLED = "TRUE" ≠ "true" → paid toujours refusé (403)',
+    statut === 403 && corps.code === 'PAID_PLAN_DISABLED', `HTTP ${statut} ${JSON.stringify(corps)}`);
+}
+{
+  const jeune = naissancePourAge(14);
+  const { statut, corps } = await appel(envPlan(kv()), '/', 'POST',
+    { ...CLAIMS, ...jeune, p: 'free', cc: true, cv: CV });
+  verifie('14 ans (mois de naissance en cours) + cc:true → 400 AGE_CONSENT',
+    statut === 400 && corps.code === 'AGE_CONSENT',
+    `y=${jeune.y} m=${jeune.m} → HTTP ${statut} ${JSON.stringify(corps)}`);
+}
+{
+  const pile = naissancePourAge(15);
+  const { statut } = await appel(envPlan(kv()), '/', 'POST',
+    { ...CLAIMS, ...pile, p: 'free', cc: true, cv: CV });
+  verifie('15 ans pile + cc:true → 200 (la borne n\'exclut pas les 15 ans)',
+    statut === 200, `y=${pile.y} m=${pile.m} → HTTP ${statut}`);
+}
+{
+  const jeune = naissancePourAge(14);
+  const { statut } = await appel(envPlan(kv()), '/', 'POST',
+    { ...CLAIMS, ...jeune, p: 'free', cc: false, cv: CV });
+  verifie('14 ans SANS consentement corpus → 200 (le bilan reste accessible)',
+    statut === 200, `HTTP ${statut}`);
+}
+
+console.log('\nInterrupteur PAID_PLAN_ENABLED = "true" (jour de Stripe)');
+{
+  const e = (s) => envPlan(s, { PAID_PLAN_ENABLED: 'true' });
+  const libre = await appel(e(kv()), '/', 'POST', { ...CLAIMS, p: 'free', cc: false, cv: CV });
+  verifie('free + cc:false → 400 CONSENT_REQUIRED (l\'alternative payante existe)',
+    libre.statut === 400 && libre.corps.code === 'CONSENT_REQUIRED',
+    `HTTP ${libre.statut} ${JSON.stringify(libre.corps)}`);
+
+  const paye = await appel(e(kv()), '/', 'POST', { ...CLAIMS, p: 'paid', cc: false, cv: CV });
+  const pp = paye.corps.token ? payloadDe(paye.corps.token) : {};
+  verifie('paid + cc:false → 200 sv 3 avec p:"paid", cc:false',
+    paye.statut === 200 && pp.sv === 3 && pp.p === 'paid' && pp.cc === false,
+    `HTTP ${paye.statut} ${JSON.stringify(paye.corps)}`);
+
+  const incoherent = await appel(e(kv()), '/', 'POST', { ...CLAIMS, p: 'paid', cc: true, cv: CV });
+  verifie('paid + cc:true → 400 PLAN_INCONSISTENT (un passe payant ne consent pas)',
+    incoherent.statut === 400 && incoherent.corps.code === 'PLAN_INCONSISTENT',
+    `HTTP ${incoherent.statut} ${JSON.stringify(incoherent.corps)}`);
+}
+
+console.log('\nCompteur de consentement agrégé (preuve art. 7(1))');
+{
+  const s = kv();
+  const { statut } = await appel(envPlan(s), '/', 'POST',
+    { ...CLAIMS, p: 'free', cc: true, cv: CV });
+  const cles = clesConsent(s);
+  const attendu = new RegExp(`^consent:${CV}:free:true:\\d{4}-\\d{2}-\\d{2}:(1[0-5]|[0-9])$`);
+  verifie('une émission avec plan → 1 seule clé consent:<cv>:<p>:<cc>:<jour>:<shard>',
+    statut === 200 && cles.length === 1 && attendu.test(cles[0]), JSON.stringify(cles));
+  verifie('la clé vaut "1" et n\'a AUCUN expirationTtl (une preuve ne s\'auto-détruit pas)',
+    s._m.get(cles[0]) === '1' && s._options.get(cles[0]) === undefined,
+    `${s._m.get(cles[0])} / ${JSON.stringify(s._options.get(cles[0]))}`);
+}
+{
+  const s = kv();
+  await appel(envPlan(s)); // corps historique, sans plan
+  verifie('émission sv 2 → AUCUNE clé consent: (rien de nouveau n\'est écrit)',
+    clesConsent(s).length === 0, JSON.stringify(clesConsent(s)));
+}
+{
+  // FAIL-OPEN : le token est déjà signé quand le compteur s'écrit. Un KV en
+  // panne ne doit jamais transformer une émission réussie en 500.
+  const casse = {
+    get: async (k) => { if (k.startsWith('consent:')) throw new Error('KV consent down'); return null; },
+    put: async (k) => { if (k.startsWith('consent:')) throw new Error('KV consent down'); },
+  };
+  const { statut, corps } = await appel(envPlan(casse), '/', 'POST',
+    { ...CLAIMS, p: 'free', cc: true, cv: CV });
+  verifie('KV qui jette sur consent: → 200 quand même, token remis (FAIL-OPEN)',
+    statut === 200 && typeof corps.token === 'string', `HTTP ${statut}`);
+}
+{
+  const refuse = kv();
+  await appel(envPlan(refuse), '/', 'POST', { ...CLAIMS, p: 'paid', cc: false, cv: CV }); // 403
+  const invalide = kv();
+  await appel(envPlan(invalide), '/', 'POST', { ...CLAIMS, p: 'free', cc: true, cv: 'x' }); // 400
+  verifie('un refus (400/403) n\'écrit NI consent: NI issue: (pas de trace, pas de budget)',
+    clesConsent(refuse).length === 0 && clesConsent(invalide).length === 0 &&
+    refuse._m.size === 0 && invalide._m.size === 0,
+    `${JSON.stringify([...refuse._m.keys()])} / ${JSON.stringify([...invalide._m.keys()])}`);
+}
+
+console.log('\n/validate accepte les tokens sv 3');
+{
+  const jeton = (await appel(envPlan(kv()), '/', 'POST',
+    { ...CLAIMS, p: 'free', cc: true, cv: CV })).corps.token;
+  const { statut, corps } = await appel(envPlan(kv()), '/validate', 'POST', { token: jeton });
+  verifie('token sv 3 sur /validate → plus de 401 schema_version (500 bucket R2 non lié)',
+    statut !== 401 && statut === 500 && String(corps.error).includes('R2'),
+    `HTTP ${statut} ${JSON.stringify(corps)}`);
+}
+
+console.log("\nÉtat DÉPLOYÉ : ni RATE_KV ni AUDIO_BUCKET (les deux bindings sont commentés)");
+{
+  // C'est l'état RÉEL du worker en production : R2 est désactivé sur le compte
+  // (erreur API 10042) et le namespace RATE_KV n'existe pas encore. Le worker
+  // doit rester PLEINEMENT fonctionnel dedans, sinon le recommenter des
+  // bindings — le geste qui le rend déployable — casserait l'inscription.
+  const deploye = {
+    ED25519_PRIVATE_KEY_B64: PRIV_B64,
+    LEGAL_VERSIONS: CV,
+    PAID_PLAN_ENABLED: 'false',
+  };
+  verifie('le scénario n\'expose AUCUN binding (garde-fou : ne pas en réintroduire un ici)',
+    !('RATE_KV' in deploye) && !('AUDIO_BUCKET' in deploye), JSON.stringify(Object.keys(deploye)));
+
+  const legacy = await appel(deploye);
+  const pl = legacy.corps.token ? payloadDe(legacy.corps.token) : {};
+  verifie('sans RATE_KV ni AUDIO_BUCKET → émission sv 2 OK (l\'inscription live tient)',
+    legacy.statut === 200 && pl.sv === 2 && Object.keys(pl).join(',') === 's,y,m,r,d,n,sv',
+    `HTTP ${legacy.statut} ${JSON.stringify(Object.keys(pl))}`);
+
+  const sv3 = await appel(deploye, '/', 'POST', { ...CLAIMS, p: 'free', cc: true, cv: CV });
+  const v3 = sv3.corps.token ? await verifyToken(sv3.corps.token, TOKEN_SIGNING_PUBLIC_KEYS)
+    : { valid: false };
+  verifie('sans RATE_KV ni AUDIO_BUCKET → émission sv 3 OK et SIGNÉE (fail-open du compteur)',
+    sv3.statut === 200 && v3.valid === true && v3.claims.sv === 3 && v3.claims.p === 'free' &&
+    v3.claims.cc === true && v3.claims.cv === CV,
+    `HTTP ${sv3.statut} ${JSON.stringify(v3.claims || sv3.corps)}`);
+
+  const val = await appel(deploye, '/validate', 'POST', { token: sv3.corps.token });
+  verifie('sans AUDIO_BUCKET → /validate répond un 500 EXPLICITE, jamais un crash',
+    val.statut === 500 && String(val.corps.error).includes('Bucket R2 non lié'),
+    `HTTP ${val.statut} ${JSON.stringify(val.corps)}`);
+}
+
+console.log("\nInterrupteur ISSUE_CAP_ENABLED (lier le KV ≠ allumer le plafond)");
+{
+  // Le jour où RATE_KV sera lié, un seuil JAMAIS éprouvé (300/heure, valeur
+  // devinée) ne doit pas s'appliquer d'un coup au trafic live. La 301e émission
+  // dans la fenêtre doit donc encore passer tant que l'interrupteur est fermé.
+  const s = kv(seedPlein()); // 300 déjà comptées dans la fenêtre
+  const { statut, corps } = await appel(env(s)); // RATE_KV lié, ISSUE_CAP_ENABLED absente
+  verifie('RATE_KV lié + ISSUE_CAP_ENABLED absente → la 301e émission PASSE (200, token remis)',
+    statut === 200 && typeof corps.token === 'string', `HTTP ${statut}`);
+  verifie('… et le compteur monte quand même à 301 (sans mesure, rien à observer avant d\'allumer)',
+    compteur(s) === String(MAX_FENETRE + 1), String(compteur(s)));
+}
+{
+  const s = kv(seedPlein()); // exactement le même état de départ
+  const { statut, corps } = await appel(envCap(s));
+  verifie('mêmes 300 dans la fenêtre + ISSUE_CAP_ENABLED="true" → 429, aucun token',
+    statut === 429 && !('token' in corps), `HTTP ${statut} ${JSON.stringify(corps)}`);
+}
+{
+  // Même convention stricte que PAID_PLAN_ENABLED : seule la chaîne exacte
+  // 'true' allume. Une valeur approchante laisse le plafond ÉTEINT (défaut
+  // ouvert assumé ici : une var mal orthographiée ne doit pas murer l'inscription).
+  const variantes = ['TRUE', '1', 'yes', ''];
+  const statuts = [];
+  for (const val of variantes) {
+    statuts.push((await appel(env(kv(seedPlein()), { ISSUE_CAP_ENABLED: val }))).statut);
+  }
+  verifie('ISSUE_CAP_ENABLED "TRUE"/"1"/"yes"/"" ≠ "true" → plafond inactif (200)',
+    statuts.every((c) => c === 200), `${variantes.map((v) => `"${v}"`).join(', ')} → ${statuts.join(', ')}`);
+}
+{
+  // Le plafond reste inopérant sans KV, quel que soit l'interrupteur : il n'y a
+  // pas de compteur à lire. Aucun 429 ne peut donc sortir dans l'état déployé.
+  const { statut } = await appel(envCap(null), '/', 'POST', CLAIMS);
+  verifie('ISSUE_CAP_ENABLED="true" mais RATE_KV absent → 200 (aucun 429 possible aujourd\'hui)',
+    statut === 200, `HTTP ${statut}`);
+}
+
+console.log('\nConfiguration déployable (wrangler.toml)');
+{
+  // ⚠️ CETTE SECTION EST LA GARDE ANTI-RÉGRESSION DU DÉPLOIEMENT.
+  // `wrangler deploy` refuse de publier si un binding pointe vers une ressource
+  // absente ; `wrangler deploy --dry-run`, lui, ne bundle que le code et ne
+  // vérifie AUCUNE ressource — un dry-run vert ne prouve donc rien. Ces
+  // assertions relisent le toml et sont la seule vérification hors-ligne
+  // possible que le worker reste publiable.
+  const toml = readFileSync(new URL('../wrangler.toml', import.meta.url), 'utf8');
+  // Lignes ACTIVES uniquement : tout ce qui commence par '#' est un commentaire.
+  const actif = toml.split('\n').filter((l) => !l.trimStart().startsWith('#')).join('\n');
+
+  verifie('aucun [[r2_buckets]] ACTIF (R2 désactivé sur le compte, erreur API 10042)',
+    !actif.includes('[[r2_buckets]]'), 'binding R2 actif dans le toml');
+  verifie('aucun [[kv_namespaces]] ACTIF (le namespace RATE_KV n\'existe pas)',
+    !actif.includes('[[kv_namespaces]]'), 'binding KV actif dans le toml');
+  verifie('aucun `id` PLACEHOLDER actif (une chaîne littérale ferait échouer le deploy)',
+    !actif.includes('REMPLACER_PAR_LA_SORTIE_DE'), 'placeholder actif dans le toml');
+  verifie('l\'id de REFERRAL_KV n\'est collé nulle part (namespace d\'un AUTRE worker)',
+    !actif.includes('6c70f3aab78c4aeb92d1255f62edbafd'), 'id REFERRAL_KV présent');
+  verifie('les [vars] restent ACTIVES (chaînes pures, aucune ressource requise)',
+    actif.includes('PAID_PLAN_ENABLED') && actif.includes('LEGAL_VERSIONS') &&
+    actif.includes('ISSUE_CAP_ENABLED') && actif.includes('ISSUE_MAX_PER_WINDOW'),
+    'une [vars] a disparu');
+  verifie('ISSUE_CAP_ENABLED livrée à une valeur INACTIVE (le plafond ne s\'allume pas tout seul)',
+    /ISSUE_CAP_ENABLED\s*=\s*"(?!true")/.test(actif),
+    'ISSUE_CAP_ENABLED est à "true" dans le toml livré');
+  verifie('procédure d\'activation présente et copiable pour les DEUX bindings commentés',
+    /r2 bucket create mentality-audio --jurisdiction eu/.test(toml) &&
+    /kv namespace create RATE_KV/.test(toml),
+    'procédure d\'activation absente du toml');
 }
 
 console.log(`\n${ok} vérifications OK, ${echecs.length} en échec`);

@@ -163,6 +163,66 @@ void main() {
     expect(res.reason, 'schema_version');
   });
 
+  // ─── sv 3 : le token porte le plan ────────────────────────────────────────
+  //
+  // La vérification de signature ne juge PAS la forme des claims de plan
+  // (c'est le rôle de TokenClaimsReader.planFromVerifiedClaims) : elle dit
+  // seulement que le schéma est connu et que les octets n'ont pas bougé.
+
+  test('accepte un token sv:3 signé et renvoie ses claims de plan', () async {
+    final payload = _validPayload()
+      ..['sv'] = 3
+      ..['p'] = 'free'
+      ..['cc'] = true
+      ..['cv'] = '2026-09-02.v1';
+    final token = await _makeToken(header: _validHeader(), payload: payload);
+    final res = await TokenSignatureVerifier.verifyAndDecode(token);
+    expect(res.valid, isTrue, reason: res.reason);
+    expect(res.claims!['p'], 'free');
+    expect(res.claims!['cc'], isTrue);
+    expect(res.claims!['cv'], '2026-09-02.v1');
+  });
+
+  test('un sv:3 dont le PAYLOAD est altéré reste rejeté', () async {
+    // Le claim qui décide de l'enregistrement vocal est le premier qu'on
+    // chercherait à retoucher : la signature doit le protéger comme le reste.
+    final payload = _validPayload()
+      ..['sv'] = 3
+      ..['p'] = 'free'
+      ..['cc'] = true
+      ..['cv'] = '2026-09-02.v1';
+    final token = await _makeToken(header: _validHeader(), payload: payload);
+    final parts = token.split('.');
+    final falsifie = _b64url(utf8.encode(jsonEncode({
+      ...payload,
+      'p': 'paid',
+    })));
+    final res = await TokenSignatureVerifier.verifyAndDecode(
+        '${parts[0]}.$falsifie.${parts[2]}');
+    expect(res.valid, isFalse);
+    expect(res.reason, 'signature');
+  });
+
+  test('rejette toujours un sv:4 (schéma d\'après-demain)', () async {
+    final payload = _validPayload()..['sv'] = 4;
+    final token = await _makeToken(header: _validHeader(), payload: payload);
+    final res = await TokenSignatureVerifier.verifyAndDecode(token);
+    expect(res.valid, isFalse);
+    expect(res.reason, 'schema_version');
+  });
+
+  test('les passes sv:2 déjà émis restent valides après l\'ouverture du sv:3',
+      () async {
+    // RÉGRESSION — l'ensemble supporté doit rester {2, 3}. Le remplacer par
+    // une égalité stricte à la version courante invaliderait, d'un déploiement
+    // à l'autre, tous les passes vivant sur les téléphones.
+    final token =
+        await _makeToken(header: _validHeader(), payload: _validPayload());
+    final res = await TokenSignatureVerifier.verifyAndDecode(token);
+    expect(res.valid, isTrue, reason: res.reason);
+    expect(res.claims!['sv'], 2);
+  });
+
   // TODO(interop) : après déploiement du Worker mis à jour (sv:2), capturer
   // un NOUVEAU token signé par WebCrypto V8 (cf. README.md §4 « Vérifier
   // l'interop crypto ») et l'ajouter ici pour re-couvrir l'interop

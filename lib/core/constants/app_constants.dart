@@ -112,6 +112,28 @@ class AppConstants {
     'k1': 'mb7Vw9W63IPYxTzTiVYbkFk9LYBEhIm7w7meIjK8Dd4',
   };
 
+  /// Versions des TEXTES LÉGAUX du site (claim `cv`) que cette build reconnaît.
+  ///
+  /// ⚠️ Miroir de la variable `LEGAL_VERSIONS` des workers. Les deux listes
+  /// disent la même chose de deux côtés : le worker refuse d'ÉCRIRE un
+  /// enregistrement dont la version de consentement lui est inconnue, cette
+  /// liste-ci refuse de la CROIRE dans l'app.
+  ///
+  /// À quoi elle sert. Le consentement porté par le passe (`sv: 3`) n'expire
+  /// pas : le token ne contient aucune claim de péremption, et rien ne
+  /// vieillit tout seul. Sans cette liste, un `cv` quelconque — y compris une
+  /// version que nous aurions retirée après coup, par exemple parce que le
+  /// texte était erroné — continuerait d'autoriser le micro indéfiniment.
+  ///
+  /// Retirer une version d'ici la rend NON VALABLE dans l'app : le
+  /// consentement retombe sur l'écran in-app, qui re-sollicite la personne sur
+  /// le texte courant. C'est le seul levier de révocation dont l'app dispose.
+  ///
+  /// Y AJOUTER une version, jamais y substituer, tant que des passes émis sous
+  /// cette version circulent : une liste réduite à la dernière version
+  /// couperait le micro à tous ceux qui se sont inscrits la veille.
+  static const Set<String> kAcceptedLegalVersions = {'2026-09-02.v1'};
+
   static const String endpointAuth = '/auth';
   static const String endpointUsers = '/users';
   static const String endpointAssessments = '/assessments';

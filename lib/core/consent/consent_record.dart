@@ -34,6 +34,25 @@ const String kEventConsentVersion = '2026-07-28.e1';
 /// envoi de données de santé.
 const String kEventDataPurpose = 'event-health-research';
 
+/// D'où vient le consentement AUDIO consigné.
+///
+/// La distinction est juridique, pas cosmétique : depuis le 2026-09-02, le
+/// consentement au corpus vocal est recueilli SUR LE SITE, avant l'émission du
+/// passe, et voyage dans le token signé. Sa preuve, c'est le token ; sa
+/// version, c'est celle des textes légaux du site (`cv`), qui n'a aucune
+/// raison de coïncider avec [kConsentVersion], la version du texte de l'écran
+/// in-app. Sans ce champ, un consentement porté par le token serait jugé
+/// périmé à la première comparaison de version — et l'étape orale
+/// re-demanderait un accord déjà donné.
+enum ConsentSource {
+  /// Recueilli par l'écran de consentement de l'application (chemin
+  /// historique, toujours en service pour les passes `sv: 2`).
+  inApp,
+
+  /// Porté par le token signé émis après recueil sur mental-et.com.
+  token,
+}
+
 /// Un consentement granulaire, horodaté et versionné.
 class ConsentRecord {
   /// Identifiant de session auquel ce consentement se rattache.
@@ -84,6 +103,11 @@ class ConsentRecord {
   /// consentement au prochain octroi sans que le texte ait été relu.
   final String? eventHealthDataVersion;
 
+  /// Origine du consentement AUDIO ([version] désigne alors le texte de cette
+  /// origine-là). Défaut [ConsentSource.inApp] : c'était le seul chemin
+  /// possible avant le 2026-09-02.
+  final ConsentSource source;
+
   const ConsentRecord({
     required this.sessionId,
     required this.version,
@@ -94,6 +118,7 @@ class ConsentRecord {
     this.parentalConsent,
     this.eventHealthData = false,
     this.eventHealthDataVersion,
+    this.source = ConsentSource.inApp,
   });
 
   Map<String, dynamic> toMap() => {
@@ -107,6 +132,7 @@ class ConsentRecord {
         'event_health_data': eventHealthData,
         if (eventHealthDataVersion != null)
           'event_health_data_version': eventHealthDataVersion,
+        'source': source.name,
       };
 
   static ConsentRecord fromMap(Map<dynamic, dynamic> map) => ConsentRecord(
@@ -125,7 +151,18 @@ class ConsentRecord {
         // Absente = pas de preuve = pas de consentement exploitable, quoi que
         // dise le booléen ci-dessus (voir [isCurrentEventConsent]).
         eventHealthDataVersion: map['event_health_data_version'] as String?,
+        // Absente = in-app : c'est le comportement de TOUS les enregistrements
+        // écrits avant que le token ne porte le consentement. Fail-safe — la
+        // règle in-app (version courante exigée) reste alors celle qui décide.
+        source: _sourceFromName(map['source']),
       );
+
+  static ConsentSource _sourceFromName(Object? raw) {
+    for (final s in ConsentSource.values) {
+      if (s.name == raw) return s;
+    }
+    return ConsentSource.inApp;
+  }
 
   /// `true` si le consentement AUDIO correspond à la version courante de SON
   /// texte. Sert à re-solliciter l'utilisateur quand la politique change.
@@ -154,5 +191,34 @@ class ConsentRecord {
         parentalConsent: parentalConsent,
         eventHealthData: granted,
         eventHealthDataVersion: granted ? kEventConsentVersion : null,
+        source: source,
+      );
+
+  /// Remplace la SEULE partie AUDIO du consentement (portée, version, date,
+  /// origine) en reconduisant l'art. 9 tel quel.
+  ///
+  /// Le pendant exact de [withEventHealthData], dans l'autre sens : re-poser
+  /// le consentement audio depuis le token ne dit rien des données de santé,
+  /// et ne doit donc ni les accorder, ni les retirer, ni les re-dater.
+  ConsentRecord copyAudio({
+    String? sessionId,
+    String? version,
+    DateTime? grantedAt,
+    String? locale,
+    bool? recordingAndAnalysis,
+    bool? commercialReuse,
+    ConsentSource? source,
+  }) =>
+      ConsentRecord(
+        sessionId: sessionId ?? this.sessionId,
+        version: version ?? this.version,
+        grantedAt: grantedAt ?? this.grantedAt,
+        locale: locale ?? this.locale,
+        recordingAndAnalysis: recordingAndAnalysis ?? this.recordingAndAnalysis,
+        commercialReuse: commercialReuse ?? this.commercialReuse,
+        parentalConsent: parentalConsent,
+        eventHealthData: eventHealthData,
+        eventHealthDataVersion: eventHealthDataVersion,
+        source: source ?? this.source,
       );
 }

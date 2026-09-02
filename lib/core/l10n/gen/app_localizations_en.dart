@@ -95,7 +95,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get assessIntroDescription =>
-      'This assessment explores your cognitive abilities across six domains of the CHC (Cattell-Horn-Carroll) model. A full-scale score is its synthesis.';
+      'This assessment explores your cognitive abilities across five domains of the CHC (Cattell-Horn-Carroll) model. A full-scale score is its synthesis.';
 
   @override
   String get assessDomainsHeader => 'DOMAINS MEASURED';
@@ -114,9 +114,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get assessDomainPsi => 'Processing Speed';
-
-  @override
-  String get assessDomainLo => 'Oral Language';
 
   @override
   String get assessBeforeStartHeader => 'BEFORE YOU START';
@@ -166,9 +163,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get assessSubtestSymbolSearch => 'Symbol Detection';
-
-  @override
-  String get assessSubtestOralComprehension => 'Oral Comprehension';
 
   @override
   String get authLoginTitle => 'Sign in';
@@ -303,11 +297,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ctIntroContentEyebrow => 'CONTENT';
 
   @override
-  String get ctIntroContentTitle => '13 subtests included';
+  String get ctIntroContentTitle => '12 subtests included';
 
   @override
   String get ctIntroContentBody =>
-      'Blocks · Common Ground · Digit Sequences · Matrices · Vocabulary · Arithmetic · Symbols · Assembly · Information · Transcription · Pictures · Equilibrium · Oral language.';
+      'Blocks · Common Ground · Digit Sequences · Matrices · Vocabulary · Arithmetic · Symbols · Assembly · Information · Transcription · Pictures · Equilibrium.';
 
   @override
   String get ctIntroImportantEyebrow => 'IMPORTANT';
@@ -707,7 +701,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeHeroBody =>
-      'An adaptive cognitive assessment. 13 subtests, 5 indices, one global score.';
+      'An adaptive cognitive assessment. 12 subtests, 5 indices, one global score.';
 
   @override
   String get homeActionStartTitle => 'Start an assessment';
@@ -734,7 +728,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeAboutEyebrow => 'ABOUT';
 
   @override
-  String get homeAboutSubtestsTitle => '13 subtests';
+  String get homeAboutSubtestsTitle => '12 subtests';
 
   @override
   String get homeAboutSubtestsBody =>
@@ -1287,6 +1281,84 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get preEstimateIncrease => 'Increase by one point';
+
+  @override
+  String get privacyEyebrow => 'PERSONAL DATA';
+
+  @override
+  String get privacyTitle => 'Privacy and consent';
+
+  @override
+  String get privacySubtitle => 'Manage or withdraw my consent';
+
+  @override
+  String get privacyIntro =>
+      'The spoken part of the assessment records your voice. This consent is yours: you can withdraw it here, at any time, without having to justify yourself.';
+
+  @override
+  String get privacyStatusEyebrow => 'CURRENT STATUS';
+
+  @override
+  String get privacyStatusActive =>
+      'Consent active: the spoken task may record your voice.';
+
+  @override
+  String get privacyStatusWithdrawn =>
+      'Consent withdrawn. No new recording will be made or sent.';
+
+  @override
+  String get privacyStatusNone =>
+      'No consent stored on this device: nothing authorises the microphone today.';
+
+  @override
+  String get privacySourceToken =>
+      'Collected when your pass was created, on mental-et.com.';
+
+  @override
+  String get privacySourceInApp =>
+      'Collected inside the app, before the spoken task.';
+
+  @override
+  String get privacyReuseYes =>
+      'Reuse of the recordings by third parties: accepted.';
+
+  @override
+  String get privacyReuseNo =>
+      'Reuse of the recordings by third parties: refused.';
+
+  @override
+  String privacyVersionLine(String version, String date) {
+    return 'Text accepted: version $version, on $date.';
+  }
+
+  @override
+  String get privacyWithdrawAction => 'Withdraw my consent';
+
+  @override
+  String get privacyWithdrawDialogTitle => 'Withdraw your consent?';
+
+  @override
+  String get privacyWithdrawDialogBody =>
+      'What changes immediately:\n\n• The spoken task will no longer start, and no new recording will be made.\n• Recordings not yet sent will not be sent.\n• Recordings already sent can no longer be found without your pass: they are anonymous, we do not know which ones are yours.\n\nThe rest of the assessment (the 12 scored tasks) is unaffected. You may consent again later if you wish.';
+
+  @override
+  String get privacyWithdrawConfirm => 'Yes, withdraw';
+
+  @override
+  String get privacyWithdrawDone =>
+      'Consent withdrawn. No further recording will be made or sent.';
+
+  @override
+  String privacyWithdrawnOnLine(String date) {
+    return 'Withdrawn on $date.';
+  }
+
+  @override
+  String get privacyErasureTitle => 'Erasing recordings already sent';
+
+  @override
+  String get privacyErasureBody =>
+      'Withdrawal applies to the future. To request erasure of recordings already sent (GDPR art. 17), write to us and include your pass: without it nobody — ourselves included — can tell which ones are yours.';
 
   @override
   String regStepEyebrow(int step) {
@@ -3788,7 +3860,7 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get assessIntroDescription =>
-      'This assessment measures your cognitive abilities across six domains of the CHC (Cattell-Horn-Carroll) model. A full-scale score brings them together.';
+      'This assessment measures your cognitive abilities across five domains of the CHC (Cattell-Horn-Carroll) model. A full-scale score brings them together.';
 
   @override
   String get assessDomainsHeader => 'DOMAINS MEASURED';
@@ -3807,9 +3879,6 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get assessDomainPsi => 'Processing Speed';
-
-  @override
-  String get assessDomainLo => 'Oral Language';
 
   @override
   String get assessBeforeStartHeader => 'BEFORE YOU START';
@@ -3859,9 +3928,6 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get assessSubtestSymbolSearch => 'Symbol Detection';
-
-  @override
-  String get assessSubtestOralComprehension => 'Oral Comprehension';
 
   @override
   String get authLoginTitle => 'Sign in';
@@ -3996,11 +4062,11 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get ctIntroContentEyebrow => 'CONTENT';
 
   @override
-  String get ctIntroContentTitle => '13 subtests included';
+  String get ctIntroContentTitle => '12 subtests included';
 
   @override
   String get ctIntroContentBody =>
-      'Blocks · Common Ground · Digit Sequences · Matrices · Vocabulary · Arithmetic · Symbols · Assembly · Information · Transcription · Pictures · Equilibrium · Oral language.';
+      'Blocks · Common Ground · Digit Sequences · Matrices · Vocabulary · Arithmetic · Symbols · Assembly · Information · Transcription · Pictures · Equilibrium.';
 
   @override
   String get ctIntroImportantEyebrow => 'IMPORTANT';
@@ -4401,7 +4467,7 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get homeHeroBody =>
-      'An adaptive cognitive assessment. 13 subtests, 5 indices, one overall score.';
+      'An adaptive cognitive assessment. 12 subtests, 5 indices, one overall score.';
 
   @override
   String get homeActionStartTitle => 'Start an assessment';
@@ -4428,7 +4494,7 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
   String get homeAboutEyebrow => 'ABOUT';
 
   @override
-  String get homeAboutSubtestsTitle => '13 subtests';
+  String get homeAboutSubtestsTitle => '12 subtests';
 
   @override
   String get homeAboutSubtestsBody =>
@@ -4981,6 +5047,84 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get preEstimateIncrease => 'Increase by one point';
+
+  @override
+  String get privacyEyebrow => 'PERSONAL DATA';
+
+  @override
+  String get privacyTitle => 'Privacy and consent';
+
+  @override
+  String get privacySubtitle => 'Manage or withdraw my consent';
+
+  @override
+  String get privacyIntro =>
+      'The spoken part of the assessment records your voice. This consent is yours: you can withdraw it here, at any time, without having to justify yourself.';
+
+  @override
+  String get privacyStatusEyebrow => 'CURRENT STATUS';
+
+  @override
+  String get privacyStatusActive =>
+      'Consent active: the spoken task may record your voice.';
+
+  @override
+  String get privacyStatusWithdrawn =>
+      'Consent withdrawn. No new recording will be made or sent.';
+
+  @override
+  String get privacyStatusNone =>
+      'No consent stored on this device: nothing authorises the microphone today.';
+
+  @override
+  String get privacySourceToken =>
+      'Collected when your pass was created, on mental-et.com.';
+
+  @override
+  String get privacySourceInApp =>
+      'Collected inside the app, before the spoken task.';
+
+  @override
+  String get privacyReuseYes =>
+      'Reuse of the recordings by third parties: accepted.';
+
+  @override
+  String get privacyReuseNo =>
+      'Reuse of the recordings by third parties: refused.';
+
+  @override
+  String privacyVersionLine(String version, String date) {
+    return 'Text accepted: version $version, on $date.';
+  }
+
+  @override
+  String get privacyWithdrawAction => 'Withdraw my consent';
+
+  @override
+  String get privacyWithdrawDialogTitle => 'Withdraw your consent?';
+
+  @override
+  String get privacyWithdrawDialogBody =>
+      'What changes immediately:\n\n• The spoken task will no longer start, and no new recording will be made.\n• Recordings not yet sent will not be sent.\n• Recordings already sent can no longer be found without your pass: they are anonymous, we do not know which ones are yours.\n\nThe rest of the assessment (the 12 scored tasks) is unaffected. You may consent again later if you wish.';
+
+  @override
+  String get privacyWithdrawConfirm => 'Yes, withdraw';
+
+  @override
+  String get privacyWithdrawDone =>
+      'Consent withdrawn. No further recording will be made or sent.';
+
+  @override
+  String privacyWithdrawnOnLine(String date) {
+    return 'Withdrawn on $date.';
+  }
+
+  @override
+  String get privacyErasureTitle => 'Erasing recordings already sent';
+
+  @override
+  String get privacyErasureBody =>
+      'Withdrawal applies to the future. To request erasure of recordings already sent (GDPR art. 17), write to us and include your pass: without it nobody, ourselves included, can tell which ones are yours.';
 
   @override
   String regStepEyebrow(int step) {

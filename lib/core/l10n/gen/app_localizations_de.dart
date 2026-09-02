@@ -96,7 +96,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get assessIntroDescription =>
-      'Diese Untersuchung erfasst Ihre kognitiven Fähigkeiten in sechs Bereichen des CHC-Modells (Cattell-Horn-Carroll). Ein Gesamtwert fasst sie zusammen.';
+      'Diese Untersuchung erfasst Ihre kognitiven Fähigkeiten in fünf Bereichen des CHC-Modells (Cattell-Horn-Carroll). Ein Gesamtwert fasst sie zusammen.';
 
   @override
   String get assessDomainsHeader => 'ERFASSTE BEREICHE';
@@ -115,9 +115,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get assessDomainPsi => 'Verarbeitungsgeschwindigkeit';
-
-  @override
-  String get assessDomainLo => 'Mündliche Sprache';
 
   @override
   String get assessBeforeStartHeader => 'VOR DEM BEGINN';
@@ -167,9 +164,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get assessSubtestSymbolSearch => 'Symbolerkennung';
-
-  @override
-  String get assessSubtestOralComprehension => 'Mündliches Verständnis';
 
   @override
   String get authLoginTitle => 'Anmelden';
@@ -308,11 +302,11 @@ class AppLocalizationsDe extends AppLocalizations {
   String get ctIntroContentEyebrow => 'INHALT';
 
   @override
-  String get ctIntroContentTitle => '13 Untertests enthalten';
+  String get ctIntroContentTitle => '12 Untertests enthalten';
 
   @override
   String get ctIntroContentBody =>
-      'Würfel · Gemeinsame Merkmale · Zahlenfolgen · Matrizen · Wortschatz · Rechnen · Symbole · Zusammensetzen · Wissen · Transkription · Bilder · Gleichgewichte · Mündliche Sprache.';
+      'Würfel · Gemeinsame Merkmale · Zahlenfolgen · Matrizen · Wortschatz · Rechnen · Symbole · Zusammensetzen · Wissen · Transkription · Bilder · Gleichgewichte.';
 
   @override
   String get ctIntroImportantEyebrow => 'WICHTIG';
@@ -714,7 +708,7 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get homeHeroBody =>
-      'Eine adaptive kognitive Untersuchung. 13 Untertests, 5 Indizes, ein Gesamtwert.';
+      'Eine adaptive kognitive Untersuchung. 12 Untertests, 5 Indizes, ein Gesamtwert.';
 
   @override
   String get homeActionStartTitle => 'Untersuchung beginnen';
@@ -741,7 +735,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get homeAboutEyebrow => 'ÜBER UNS';
 
   @override
-  String get homeAboutSubtestsTitle => '13 Untertests';
+  String get homeAboutSubtestsTitle => '12 Untertests';
 
   @override
   String get homeAboutSubtestsBody =>
@@ -1298,6 +1292,84 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get preEstimateIncrease => 'Um einen Punkt erhöhen';
+
+  @override
+  String get privacyEyebrow => 'PERSONENBEZOGENE DATEN';
+
+  @override
+  String get privacyTitle => 'Datenschutz und Einwilligung';
+
+  @override
+  String get privacySubtitle => 'Meine Einwilligung verwalten oder widerrufen';
+
+  @override
+  String get privacyIntro =>
+      'Die mündliche Aufgabe der Testung zeichnet Ihre Stimme auf. Diese Einwilligung gehört Ihnen: Sie können sie hier jederzeit widerrufen, ohne sich rechtfertigen zu müssen.';
+
+  @override
+  String get privacyStatusEyebrow => 'AKTUELLER STAND';
+
+  @override
+  String get privacyStatusActive =>
+      'Einwilligung aktiv: Die mündliche Aufgabe darf Ihre Stimme aufzeichnen.';
+
+  @override
+  String get privacyStatusWithdrawn =>
+      'Einwilligung widerrufen. Es wird keine neue Aufnahme erstellt oder gesendet.';
+
+  @override
+  String get privacyStatusNone =>
+      'Auf diesem Gerät ist keine Einwilligung gespeichert: Derzeit erlaubt nichts den Zugriff auf das Mikrofon.';
+
+  @override
+  String get privacySourceToken =>
+      'Erhoben bei der Erstellung Ihres Passes auf mental-et.com.';
+
+  @override
+  String get privacySourceInApp =>
+      'Erhoben in der App, vor der mündlichen Aufgabe.';
+
+  @override
+  String get privacyReuseYes =>
+      'Weiterverwendung der Aufnahmen durch Dritte: akzeptiert.';
+
+  @override
+  String get privacyReuseNo =>
+      'Weiterverwendung der Aufnahmen durch Dritte: abgelehnt.';
+
+  @override
+  String privacyVersionLine(String version, String date) {
+    return 'Akzeptierter Text: Version $version, am $date.';
+  }
+
+  @override
+  String get privacyWithdrawAction => 'Einwilligung widerrufen';
+
+  @override
+  String get privacyWithdrawDialogTitle => 'Ihre Einwilligung widerrufen?';
+
+  @override
+  String get privacyWithdrawDialogBody =>
+      'Was sich sofort ändert:\n\n• Die mündliche Aufgabe startet nicht mehr, und es wird keine neue Aufnahme erstellt.\n• Noch nicht gesendete Aufnahmen werden nicht gesendet.\n• Bereits gesendete Aufnahmen lassen sich ohne Ihren Pass nicht wiederfinden: Sie sind anonym, wir wissen nicht, welche Ihre sind.\n\nDer Rest der Testung (die 12 bewerteten Aufgaben) bleibt unberührt. Sie können später erneut einwilligen, wenn Sie möchten.';
+
+  @override
+  String get privacyWithdrawConfirm => 'Ja, widerrufen';
+
+  @override
+  String get privacyWithdrawDone =>
+      'Einwilligung widerrufen. Es wird keine weitere Aufnahme erstellt oder gesendet.';
+
+  @override
+  String privacyWithdrawnOnLine(String date) {
+    return 'Widerrufen am $date.';
+  }
+
+  @override
+  String get privacyErasureTitle => 'Löschung bereits gesendeter Aufnahmen';
+
+  @override
+  String get privacyErasureBody =>
+      'Der Widerruf gilt für die Zukunft. Um die Löschung bereits gesendeter Aufnahmen zu verlangen (Art. 17 DSGVO), schreiben Sie uns und fügen Sie Ihren Pass bei: Ohne ihn kann niemand, auch wir nicht, feststellen, welche Aufnahmen Ihre sind.';
 
   @override
   String regStepEyebrow(int step) {

@@ -40,3 +40,29 @@ crons = ["0 3 * * *"]
 [vars]
 RETENTION_DAYS = "30"
 CLEANUP_MAX_OBJECTS = "20000"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# LEGAL_VERSIONS — versions de textes légaux dont ce worker accepte d'ARCHIVER
+# le consentement. CSV, même convention et mêmes valeurs que la var du même nom
+# dans workers/tokeniser/wrangler.toml (qui, elle, filtre à l'ÉMISSION).
+#
+# POURQUOI ELLE EXISTE ICI AUSSI. La `cv` d'un passe sv 3 est recopiée telle
+# quelle dans `customMetadata.consent_version` : elle est LA preuve conservée
+# avec le fichier. Un worker qui écrit une preuve sans savoir à quel texte elle
+# renvoie archive un consentement invérifiable. Le contrôle à l'émission ne
+# suffit pas : les passes déjà signés circulent, et rien ne permettrait d'en
+# révoquer une version sans cette liste côté écriture.
+#
+# LEVIER DE RÉVOCATION : retirer une version d'ici bloque immédiatement les
+# nouveaux uploads qui s'en réclament (403 LEGAL_VERSION_UNKNOWN), sans
+# ré-émettre un seul passe. Les objets DÉJÀ écrits ne sont pas touchés.
+#
+# ⚠️ Vider ou supprimer cette var ferme le worker en sv 3 (500
+# SERVER_MISCONFIGURED) : fail-closed assumé, on préfère ne rien écrire à
+# écrire un consentement dont on ne peut pas produire le texte.
+#
+# À la publication d'une nouvelle version de textes : AJOUTER la nouvelle
+# valeur (« ancienne,nouvelle ») le temps que les passes en circulation se
+# renouvellent, puis retirer l'ancienne.
+# ─────────────────────────────────────────────────────────────────────────────
+LEGAL_VERSIONS = "2026-09-02.v1"

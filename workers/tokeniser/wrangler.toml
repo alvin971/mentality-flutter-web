@@ -13,35 +13,100 @@ compatibility_date = "2025-01-01"
 #     → coller le base64 du DER PKCS#8 (48 octets) de la clé privée.
 #
 # Voir README.md pour la génération du keypair et le déploiement.
-
-# Binding R2 (MÊME bucket EU que r2-upload) : utilisé par POST /validate pour
-# vérifier qu'un test a réellement produit des enregistrements sous le compte
-# (preuve de complétion) avant de valider le token, et pour écrire le marqueur
-# validated/<account>. jurisdiction = "eu" OBLIGATOIRE (résidence RGPD).
 #
-# ⚠️ TEMPORAIREMENT DÉSACTIVÉ (2026-07-03) : R2 n'est pas encore activé sur le
-# compte Cloudflare (1 clic dashboard requis). L'émission (POST /) fonctionne
-# sans ; seul POST /validate répond 503 (le code garde env.AUDIO_BUCKET).
-# → RÉACTIVER ces 4 lignes + `wrangler r2 bucket create mentality-audio
-#   --jurisdiction eu` + redéployer, dès que R2 est activé.
+# ═════════════════════════════════════════════════════════════════════════════
+# ⚠️ RÈGLE DE DÉPLOYABILITÉ — À LIRE AVANT DE DÉCOMMENTER QUOI QUE CE SOIT
+# ═════════════════════════════════════════════════════════════════════════════
+# Ce worker sert l'inscription EN PRODUCTION de mental-et.com. Il doit rester
+# déployable À TOUT MOMENT, sans préparatif : le jour d'un correctif urgent, un
+# `wrangler deploy` ne doit pas échouer sur une ressource qui n'existe pas.
+#
+# `wrangler deploy` REFUSE de publier si un binding pointe vers une ressource
+# absente (bucket R2 inexistant, `id` de namespace KV invalide). Un binding ne
+# se décommente donc QUE lorsque sa ressource existe réellement sur le compte.
+# ⚠️ `wrangler deploy --dry-run` ne le détecte PAS : il ne fait que bundler, sans
+# jamais interroger l'API Cloudflare. Un dry-run vert ne prouve RIEN sur
+# l'existence des ressources — seules les deux commandes ci-dessous le prouvent :
+#
+#   npx --yes wrangler@latest kv namespace list   # l'`id` collé doit y figurer
+#   npx --yes wrangler@latest r2 bucket list      # le bucket doit y figurer
+#
+# ÉTAT CONSTATÉ LE 2026-09-02 (les deux bindings restent donc commentés) :
+#   - R2 est DÉSACTIVÉ sur le compte → `r2 bucket list` renvoie l'erreur API
+#     10042 « Please enable R2 through the Cloudflare Dashboard ». Le bucket
+#     `mentality-audio` n'existe pas.
+#   - `kv namespace list` ne renvoie que BOARD_DATA et REFERRAL_KV. RATE_KV
+#     n'existe pas.
+#
+# LE CODE EST CORRECT DANS LES DEUX ÉTATS (verrouillé par scripts/selftest.mjs,
+# section « État déployé ») :
+#   - sans RATE_KV : `checkIssueCap` et `bumpConsentCounter` sortent
+#     immédiatement (FAIL-OPEN) — l'émission des passes sv 2 ET sv 3 fonctionne ;
+#   - sans AUDIO_BUCKET : POST /validate répond un 500 explicite (« Bucket R2
+#     non lié ») — seule la confirmation de complétion est indisponible,
+#     l'inscription n'est pas touchée.
+
+# ─────────────────────────────────────────────────────────────────────────────
+# [[r2_buckets]] AUDIO_BUCKET — COMMENTÉ : le bucket n'existe pas (R2 désactivé)
+# ─────────────────────────────────────────────────────────────────────────────
+# MÊME bucket EU que r2-upload. Utilisé par POST /validate pour vérifier qu'un
+# test a réellement produit des enregistrements sous le compte (preuve de
+# complétion) avant de valider le token, et pour écrire le marqueur
+# `validated/<account>`. jurisdiction = "eu" OBLIGATOIRE (résidence RGPD).
+#
+# PROCÉDURE D'ACTIVATION (dans cet ordre) :
+#   1. Activer R2 sur le compte, au dashboard Cloudflare (Dashboard → R2 →
+#      « Enable R2 »). Une seule fois, un clic ; impossible par API tant que
+#      l'erreur 10042 est renvoyée.
+#   2. Créer le bucket, en juridiction EU :
+#        npx --yes wrangler@latest r2 bucket create mentality-audio --jurisdiction eu
+#   3. Contrôler qu'il existe :
+#        npx --yes wrangler@latest r2 bucket list
+#   4. Décommenter les 4 lignes ci-dessous.
+#   5. Re-déployer :  cd workers/tokeniser && npx --yes wrangler@latest deploy
+#   6. Vérifier que POST /validate ne renvoie plus « Bucket R2 non lié ».
+#
 # [[r2_buckets]]
 # binding = "AUDIO_BUCKET"
 # bucket_name = "mentality-audio"
 # jurisdiction = "eu"
 
-# Plafond d'émission de tokens (LOT 0 anti-faux-test) : compteur AGRÉGÉ par
-# tranche de temps dans KV — clé issue:<n°>, un entier, TTL court. Ni IP, ni
-# claims, ni token : rien de rattachable à quiconque (cf. README, « Garanties
-# & limites »). Sans ce binding, le code est FAIL-OPEN (plafond inactif) : un
+# ─────────────────────────────────────────────────────────────────────────────
+# [[kv_namespaces]] RATE_KV — COMMENTÉ : le namespace n'existe pas encore
+# ─────────────────────────────────────────────────────────────────────────────
+# Namespace KV du worker. Il porte TROIS familles de clés, toutes agrégées ou
+# publiques (détail en tête d'index.js) : `issue:` (plafond d'émission),
+# `consent:` (preuve agrégée du recueil de consentement, sans TTL) et `legal:`
+# (archive des textes légaux, poussée par scripts/publish-legal.mjs).
+# Sans ce binding, le code est FAIL-OPEN (plafond inactif, compteur muet) : un
 # frein anti-abus ne doit jamais murer l'inscription.
 #
-# → ACTIVER en 2 étapes avant `wrangler deploy` :
-#   1. npx wrangler kv namespace create RATE_KV
-#   2. décommenter ces 3 lignes et coller l'id rendu par la commande.
+# PROCÉDURE D'ACTIVATION (dans cet ordre) :
+#   1. Créer un namespace NOUVEAU et DISTINCT :
+#        npx --yes wrangler@latest kv namespace create RATE_KV
+#   2. Copier l'`id` hexadécimal (32 caractères) renvoyé par la commande.
+#      ⚠️ NE PAS y coller l'id de REFERRAL_KV (6c70f3aab78c4aeb92d1255f62edbafd) :
+#      c'est le namespace du worker referral, qui porte des données de
+#      parrainage. Les mélanger ferait cohabiter deux jeux de clés sans rapport,
+#      et une purge de l'un emporterait l'autre.
+#   3. Coller cet id dans `id = "…"` ci-dessous, puis décommenter les 3 lignes.
+#   4. Contrôler que l'id figure bien dans :
+#        npx --yes wrangler@latest kv namespace list
+#   5. Re-déployer :  cd workers/tokeniser && npx --yes wrangler@latest deploy
+#   6. Publier l'archive des textes légaux, qui exige ce binding (elle est
+#      IMPOSSIBLE tant que le namespace n'existe pas) :
+#        node workers/tokeniser/scripts/publish-legal.mjs --dir <…>/legal/2026-09-02.v1
+#   7. Le plafond d'émission reste INACTIF à ce stade — c'est voulu. Voir
+#      ISSUE_CAP_ENABLED plus bas : c'est un SECOND geste, séparé.
+#
 # [[kv_namespaces]]
 # binding = "RATE_KV"
-# id = "<id rendu par `npx wrangler kv namespace create RATE_KV`>"
+# id = "REMPLACER_PAR_LA_SORTIE_DE_wrangler_kv_namespace_create_RATE_KV"
 
+# ⚠️ `wrangler deploy` RÉÉCRIT toutes les [vars] depuis ce fichier : une valeur
+# changée à la main dans le dashboard est écrasée au prochain déploiement.
+# Ces valeurs sont de simples chaînes : elles ne dépendent d'AUCUNE ressource
+# Cloudflare et n'empêchent jamais un déploiement.
 [vars]
 # Nombre minimal d'enregistrements exigé sous le compte pour valider le token
 # (proxy de « test complété » ; best-effort uploads → garder bas, ajustable).
@@ -51,3 +116,41 @@ MIN_RECORDINGS = "1"
 # prudent-large, à affiner après observation du compteur en KV.
 ISSUE_WINDOW_MINUTES = "60"
 ISSUE_MAX_PER_WINDOW = "300"
+# Interrupteur du PLAFOND lui-même, distinct de la présence du binding RATE_KV.
+# SEULE la chaîne "true" l'active ; absente, vide, "TRUE" ou "1" → INACTIF.
+#
+# POURQUOI DEUX GESTES SÉPARÉS : `checkIssueCap` n'a JAMAIS tourné en production
+# — le binding RATE_KV est commenté depuis toujours, donc `if (!env.RATE_KV)
+# return true` court-circuitait tout. Lier RATE_KV sans cet interrupteur
+# allumerait d'un coup un plafond jamais éprouvé (300/heure, valeur devinée) sur
+# TOUT le trafic, chemin sv 2 historique compris, avec un 429 sur l'inscription
+# à la clé.
+#
+# Le compteur `issue:` est incrémenté MÊME quand l'interrupteur est fermé :
+# c'est précisément ce qui permet d'OBSERVER le trafic réel avant de décider.
+# Ordre attendu : (1) lier RATE_KV → (2) laisser tourner et lire le compteur
+#   npx --yes wrangler@latest kv key list --binding RATE_KV --remote --prefix issue:
+# → (3) ajuster ISSUE_MAX_PER_WINDOW sur le volume constaté → (4) seulement
+# alors passer ISSUE_CAP_ENABLED à "true" et re-déployer.
+ISSUE_CAP_ENABLED = "false"
+
+# ─── Plan Gratuit / Payant (token sv 3) ──────────────────────────────────────
+# Interrupteur UNIQUE du plan payant. SEULE la chaîne "true" l'active ; absente,
+# vide, "TRUE" ou "1" → désactivé (défaut FERMÉ, assumé). Matrice complète dans
+# le doc-comment de validatePlan() (index.js) :
+#
+#   PAID_PLAN_ENABLED  | p=paid, cc=false   | p=free, cc=false
+#   "false" (ici)      | 403 PAID_PLAN_DISABLED | 200 sv 3 (consentement facultatif)
+#   "true"  (Stripe)   | 200 sv 3               | 400 CONSENT_REQUIRED
+#
+# ⚠️ À basculer EN MÊME TEMPS que `SITE.plans.paidEnabled` côté site Astro : le
+# site propose alors le passe Payant, et le consentement au corpus devient
+# exigible parce qu'une alternative réelle existe (RGPD art. 7(4)).
+PAID_PLAN_ENABLED = "false"
+# Versions de textes légaux acceptées dans la claim `cv`, en CSV. Fail-closed :
+# vide ou absente → 500 SERVER_MISCONFIGURED sur toute émission avec plan (on ne
+# signe jamais un consentement dont on ignore le texte). Garder l'ancienne
+# version le temps qu'un site en cache finisse de se propager, puis la retirer.
+# Chaque version listée doit avoir son archive `legal:<cv>:*` en KV
+# (scripts/publish-legal.mjs) — donc RATE_KV lié (voir la procédure plus haut).
+LEGAL_VERSIONS = "2026-09-02.v1"

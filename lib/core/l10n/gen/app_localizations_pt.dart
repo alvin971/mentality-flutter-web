@@ -96,7 +96,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get assessIntroDescription =>
-      'Esta avaliação explora as suas capacidades cognitivas em seis domínios do modelo CHC (Cattell-Horn-Carroll). Um resultado global constitui a sua síntese.';
+      'Esta avaliação explora as suas capacidades cognitivas em cinco domínios do modelo CHC (Cattell-Horn-Carroll). Um resultado global constitui a sua síntese.';
 
   @override
   String get assessDomainsHeader => 'DOMÍNIOS AVALIADOS';
@@ -115,9 +115,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get assessDomainPsi => 'Velocidade de Processamento';
-
-  @override
-  String get assessDomainLo => 'Linguagem Oral';
 
   @override
   String get assessBeforeStartHeader => 'ANTES DE COMEÇAR';
@@ -167,9 +164,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get assessSubtestSymbolSearch => 'Deteção de símbolos';
-
-  @override
-  String get assessSubtestOralComprehension => 'Compreensão Oral';
 
   @override
   String get authLoginTitle => 'Iniciar sessão';
@@ -306,11 +300,11 @@ class AppLocalizationsPt extends AppLocalizations {
   String get ctIntroContentEyebrow => 'CONTEÚDO';
 
   @override
-  String get ctIntroContentTitle => '13 subtestes incluídos';
+  String get ctIntroContentTitle => '12 subtestes incluídos';
 
   @override
   String get ctIntroContentBody =>
-      'Cubos · Pontos em comum · Sequências de dígitos · Matrizes · Vocabulário · Aritmética · Símbolos · Montagens · Informação · Transcrição · Imagens · Equilíbrios · Linguagem oral.';
+      'Cubos · Pontos em comum · Sequências de dígitos · Matrizes · Vocabulário · Aritmética · Símbolos · Montagens · Informação · Transcrição · Imagens · Equilíbrios.';
 
   @override
   String get ctIntroImportantEyebrow => 'IMPORTANTE';
@@ -711,7 +705,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get homeHeroBody =>
-      'Uma avaliação cognitiva e adaptativa. 13 subtestes, 5 índices, uma pontuação global.';
+      'Uma avaliação cognitiva e adaptativa. 12 subtestes, 5 índices, uma pontuação global.';
 
   @override
   String get homeActionStartTitle => 'Iniciar uma avaliação';
@@ -739,7 +733,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get homeAboutEyebrow => 'SOBRE';
 
   @override
-  String get homeAboutSubtestsTitle => '13 subtestes';
+  String get homeAboutSubtestsTitle => '12 subtestes';
 
   @override
   String get homeAboutSubtestsBody =>
@@ -1293,6 +1287,84 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get preEstimateIncrease => 'Aumentar um ponto';
+
+  @override
+  String get privacyEyebrow => 'DADOS PESSOAIS';
+
+  @override
+  String get privacyTitle => 'Privacidade e consentimento';
+
+  @override
+  String get privacySubtitle => 'Gerir ou retirar o meu consentimento';
+
+  @override
+  String get privacyIntro =>
+      'A prova oral da avaliação grava a sua voz. Este consentimento é seu: pode retirá-lo aqui, a qualquer momento, sem ter de se justificar.';
+
+  @override
+  String get privacyStatusEyebrow => 'ESTADO ATUAL';
+
+  @override
+  String get privacyStatusActive =>
+      'Consentimento ativo: a prova oral pode gravar a sua voz.';
+
+  @override
+  String get privacyStatusWithdrawn =>
+      'Consentimento retirado. Não será feita nem enviada qualquer nova gravação.';
+
+  @override
+  String get privacyStatusNone =>
+      'Nenhum consentimento guardado neste dispositivo: hoje nada autoriza o microfone.';
+
+  @override
+  String get privacySourceToken =>
+      'Recolhido ao criar o seu passe, em mental-et.com.';
+
+  @override
+  String get privacySourceInApp =>
+      'Recolhido na aplicação, antes da prova oral.';
+
+  @override
+  String get privacyReuseYes =>
+      'Reutilização das gravações por terceiros: aceite.';
+
+  @override
+  String get privacyReuseNo =>
+      'Reutilização das gravações por terceiros: recusada.';
+
+  @override
+  String privacyVersionLine(String version, String date) {
+    return 'Texto aceite: versão $version, em $date.';
+  }
+
+  @override
+  String get privacyWithdrawAction => 'Retirar o meu consentimento';
+
+  @override
+  String get privacyWithdrawDialogTitle => 'Retirar o seu consentimento?';
+
+  @override
+  String get privacyWithdrawDialogBody =>
+      'O que muda imediatamente:\n\n• A prova oral deixará de começar e não será feita qualquer nova gravação.\n• As gravações ainda não enviadas não serão enviadas.\n• As gravações já enviadas não podem ser reencontradas sem o seu passe: são anónimas, não sabemos quais são as suas.\n\nO resto da avaliação (as 12 provas pontuadas) não é afetado. Poderá consentir de novo mais tarde, se assim o desejar.';
+
+  @override
+  String get privacyWithdrawConfirm => 'Sim, retirar';
+
+  @override
+  String get privacyWithdrawDone =>
+      'Consentimento retirado. Não será feita nem enviada mais nenhuma gravação.';
+
+  @override
+  String privacyWithdrawnOnLine(String date) {
+    return 'Retirado em $date.';
+  }
+
+  @override
+  String get privacyErasureTitle => 'Eliminação das gravações já enviadas';
+
+  @override
+  String get privacyErasureBody =>
+      'A retirada vale para o futuro. Para pedir a eliminação de gravações já enviadas (art. 17.º do RGPD), escreva-nos juntando o seu passe: sem ele ninguém, nós incluídos, pode saber quais são as suas.';
 
   @override
   String regStepEyebrow(int step) {

@@ -7,8 +7,10 @@ import '../et_logo_animated.dart';
 import '../kepler_progress.dart';
 import 'kepler_stimulus_surface.dart';
 
-/// Scaffold unifié pour les 12 pages de sous-tests NOTÉS (le langage oral,
-/// 13e épreuve, a sa propre mise en page).
+/// Scaffold unifié pour les 12 pages de sous-tests NOTÉS — c'est-à-dire pour
+/// la totalité du bilan annoncé. L'épreuve orale, elle, n'en fait plus partie
+/// (elle est sortie du décompte tout en restant dans le code, comme
+/// contrepartie du passe Gratuit) et garde sa propre mise en page.
 ///
 /// - Fond Kepler (light/dark via [KeplerColors.of]).
 /// - AppBar Kepler : eyebrow mono + titre serif italique

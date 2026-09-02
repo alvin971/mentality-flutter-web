@@ -1,0 +1,98 @@
+{
+  "privacyEyebrow": {
+    "fr": "DONNÉES PERSONNELLES",
+    "en": "PERSONAL DATA",
+    "desc": "Surtitre de l'écran Confidentialité et consentement"
+  },
+  "privacyTitle": {
+    "fr": "Confidentialité et consentement",
+    "en": "Privacy and consent",
+    "desc": "Titre de l'écran de gestion du consentement (accessible depuis l'accueil)"
+  },
+  "privacySubtitle": {
+    "fr": "Gérer ou retirer mon consentement",
+    "en": "Manage or withdraw my consent",
+    "desc": "Sous-titre de la carte d'accueil menant à l'écran de consentement"
+  },
+  "privacyIntro": {
+    "fr": "L'épreuve orale du bilan enregistre votre voix. Ce consentement vous appartient : vous pouvez le retirer ici, à tout moment, sans avoir à vous justifier.",
+    "en": "The spoken part of the assessment records your voice. This consent is yours: you can withdraw it here, at any time, without having to justify yourself."
+  },
+  "privacyStatusEyebrow": {
+    "fr": "ÉTAT ACTUEL",
+    "en": "CURRENT STATUS",
+    "desc": "Surtitre du bloc résumant l'état du consentement"
+  },
+  "privacyStatusActive": {
+    "fr": "Consentement actif : l'épreuve orale peut enregistrer votre voix.",
+    "en": "Consent active: the spoken task may record your voice."
+  },
+  "privacyStatusWithdrawn": {
+    "fr": "Consentement retiré. Aucun nouvel enregistrement ne sera fait ni envoyé.",
+    "en": "Consent withdrawn. No new recording will be made or sent."
+  },
+  "privacyStatusNone": {
+    "fr": "Aucun consentement enregistré sur cet appareil : rien n'autorise le microphone aujourd'hui.",
+    "en": "No consent stored on this device: nothing authorises the microphone today."
+  },
+  "privacySourceToken": {
+    "fr": "Recueilli lors de la création de votre passe, sur mental-et.com.",
+    "en": "Collected when your pass was created, on mental-et.com."
+  },
+  "privacySourceInApp": {
+    "fr": "Recueilli dans l'application, avant l'épreuve orale.",
+    "en": "Collected inside the app, before the spoken task."
+  },
+  "privacyReuseYes": {
+    "fr": "Réutilisation des enregistrements par des tiers : acceptée.",
+    "en": "Reuse of the recordings by third parties: accepted."
+  },
+  "privacyReuseNo": {
+    "fr": "Réutilisation des enregistrements par des tiers : refusée.",
+    "en": "Reuse of the recordings by third parties: refused."
+  },
+  "privacyVersionLine": {
+    "fr": "Texte accepté : version {version}, le {date}.",
+    "en": "Text accepted: version {version}, on {date}.",
+    "placeholders": {
+      "version": "String",
+      "date": "String"
+    }
+  },
+  "privacyWithdrawAction": {
+    "fr": "Retirer mon consentement",
+    "en": "Withdraw my consent",
+    "desc": "Bouton principal de l'écran de consentement"
+  },
+  "privacyWithdrawDialogTitle": {
+    "fr": "Retirer votre consentement ?",
+    "en": "Withdraw your consent?"
+  },
+  "privacyWithdrawDialogBody": {
+    "fr": "Ce que cela change immédiatement :\n\n• L'épreuve orale ne démarrera plus et aucun nouvel enregistrement ne sera fait.\n• Les enregistrements pas encore envoyés ne partiront pas.\n• Les enregistrements déjà envoyés ne peuvent plus être retrouvés sans votre passe : ils sont anonymes, nous ne savons pas lesquels sont les vôtres.\n\nLe reste du bilan (les 12 épreuves notées) n'est pas affecté. Vous pourrez consentir de nouveau plus tard si vous le souhaitez.",
+    "en": "What changes immediately:\n\n• The spoken task will no longer start, and no new recording will be made.\n• Recordings not yet sent will not be sent.\n• Recordings already sent can no longer be found without your pass: they are anonymous, we do not know which ones are yours.\n\nThe rest of the assessment (the 12 scored tasks) is unaffected. You may consent again later if you wish."
+  },
+  "privacyWithdrawConfirm": {
+    "fr": "Oui, retirer",
+    "en": "Yes, withdraw"
+  },
+  "privacyWithdrawDone": {
+    "fr": "Consentement retiré. Plus aucun enregistrement ne sera fait ni envoyé.",
+    "en": "Consent withdrawn. No further recording will be made or sent."
+  },
+  "privacyWithdrawnOnLine": {
+    "fr": "Retiré le {date}.",
+    "en": "Withdrawn on {date}.",
+    "placeholders": {
+      "date": "String"
+    }
+  },
+  "privacyErasureTitle": {
+    "fr": "Effacement des enregistrements déjà envoyés",
+    "en": "Erasing recordings already sent"
+  },
+  "privacyErasureBody": {
+    "fr": "Le retrait vaut pour l'avenir. Pour demander l'effacement d'enregistrements déjà envoyés (art. 17 du RGPD), écrivez-nous en joignant votre passe : sans lui, personne — nous compris — ne peut savoir lesquels sont les vôtres.",
+    "en": "Withdrawal applies to the future. To request erasure of recordings already sent (GDPR art. 17), write to us and include your pass: without it nobody — ourselves included — can tell which ones are yours."
+  }
+}

@@ -270,7 +270,7 @@ abstract class AppLocalizations {
   /// Paragraphe descriptif de l'intro évaluation
   ///
   /// In fr, this message translates to:
-  /// **'Cette évaluation explore vos capacités cognitives à travers six domaines du modèle CHC (Cattell-Horn-Carroll). Un score global en est la synthèse.'**
+  /// **'Cette évaluation explore vos capacités cognitives à travers cinq domaines du modèle CHC (Cattell-Horn-Carroll). Un score global en est la synthèse.'**
   String get assessIntroDescription;
 
   /// En-tête de la carte listant les domaines mesurés
@@ -308,12 +308,6 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Vitesse de Traitement'**
   String get assessDomainPsi;
-
-  /// Libellé du domaine Langage Oral (LO)
-  ///
-  /// In fr, this message translates to:
-  /// **'Langage Oral'**
-  String get assessDomainLo;
 
   /// En-tête de la carte de consignes avant le bilan
   ///
@@ -410,12 +404,6 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Détection de symboles'**
   String get assessSubtestSymbolSearch;
-
-  /// Libellé du subtest Compréhension Orale
-  ///
-  /// In fr, this message translates to:
-  /// **'Compréhension Orale'**
-  String get assessSubtestOralComprehension;
 
   /// Titre AppBar de la page de connexion (mode connexion)
   ///
@@ -672,13 +660,13 @@ abstract class AppLocalizations {
   /// Titre de la carte contenu
   ///
   /// In fr, this message translates to:
-  /// **'13 subtests inclus'**
+  /// **'12 subtests inclus'**
   String get ctIntroContentTitle;
 
   /// Liste des subtests dans la carte contenu
   ///
   /// In fr, this message translates to:
-  /// **'Cubes · Points communs · Suites de chiffres · Matrices · Vocabulaire · Arithmétique · Symboles · Assemblages · Information · Transcription · Images · Équilibres · Langage oral.'**
+  /// **'Cubes · Points communs · Suites de chiffres · Matrices · Vocabulaire · Arithmétique · Symboles · Assemblages · Information · Transcription · Images · Équilibres.'**
   String get ctIntroContentBody;
 
   /// Eyebrow de la carte avertissement
@@ -1392,7 +1380,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeHeroBody.
   ///
   /// In fr, this message translates to:
-  /// **'Une évaluation cognitive adaptative. 13 sous-tests, 5 indices, un score global.'**
+  /// **'Une évaluation cognitive adaptative. 12 sous-tests, 5 indices, un score global.'**
   String get homeHeroBody;
 
   /// Home action card 1 title
@@ -1446,7 +1434,7 @@ abstract class AppLocalizations {
   /// About tile 1 title
   ///
   /// In fr, this message translates to:
-  /// **'13 sous-tests'**
+  /// **'12 sous-tests'**
   String get homeAboutSubtestsTitle;
 
   /// No description provided for @homeAboutSubtestsBody.
@@ -2396,6 +2384,132 @@ abstract class AppLocalizations {
   /// In fr, this message translates to:
   /// **'Augmenter d\'un point'**
   String get preEstimateIncrease;
+
+  /// Surtitre de l'écran Confidentialité et consentement
+  ///
+  /// In fr, this message translates to:
+  /// **'DONNÉES PERSONNELLES'**
+  String get privacyEyebrow;
+
+  /// Titre de l'écran de gestion du consentement (accessible depuis l'accueil)
+  ///
+  /// In fr, this message translates to:
+  /// **'Confidentialité et consentement'**
+  String get privacyTitle;
+
+  /// Sous-titre de la carte d'accueil menant à l'écran de consentement
+  ///
+  /// In fr, this message translates to:
+  /// **'Gérer ou retirer mon consentement'**
+  String get privacySubtitle;
+
+  /// No description provided for @privacyIntro.
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'épreuve orale du bilan enregistre votre voix. Ce consentement vous appartient : vous pouvez le retirer ici, à tout moment, sans avoir à vous justifier.'**
+  String get privacyIntro;
+
+  /// Surtitre du bloc résumant l'état du consentement
+  ///
+  /// In fr, this message translates to:
+  /// **'ÉTAT ACTUEL'**
+  String get privacyStatusEyebrow;
+
+  /// No description provided for @privacyStatusActive.
+  ///
+  /// In fr, this message translates to:
+  /// **'Consentement actif : l\'épreuve orale peut enregistrer votre voix.'**
+  String get privacyStatusActive;
+
+  /// No description provided for @privacyStatusWithdrawn.
+  ///
+  /// In fr, this message translates to:
+  /// **'Consentement retiré. Aucun nouvel enregistrement ne sera fait ni envoyé.'**
+  String get privacyStatusWithdrawn;
+
+  /// No description provided for @privacyStatusNone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Aucun consentement enregistré sur cet appareil : rien n\'autorise le microphone aujourd\'hui.'**
+  String get privacyStatusNone;
+
+  /// No description provided for @privacySourceToken.
+  ///
+  /// In fr, this message translates to:
+  /// **'Recueilli lors de la création de votre passe, sur mental-et.com.'**
+  String get privacySourceToken;
+
+  /// No description provided for @privacySourceInApp.
+  ///
+  /// In fr, this message translates to:
+  /// **'Recueilli dans l\'application, avant l\'épreuve orale.'**
+  String get privacySourceInApp;
+
+  /// No description provided for @privacyReuseYes.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réutilisation des enregistrements par des tiers : acceptée.'**
+  String get privacyReuseYes;
+
+  /// No description provided for @privacyReuseNo.
+  ///
+  /// In fr, this message translates to:
+  /// **'Réutilisation des enregistrements par des tiers : refusée.'**
+  String get privacyReuseNo;
+
+  /// No description provided for @privacyVersionLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'Texte accepté : version {version}, le {date}.'**
+  String privacyVersionLine(String version, String date);
+
+  /// Bouton principal de l'écran de consentement
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer mon consentement'**
+  String get privacyWithdrawAction;
+
+  /// No description provided for @privacyWithdrawDialogTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retirer votre consentement ?'**
+  String get privacyWithdrawDialogTitle;
+
+  /// No description provided for @privacyWithdrawDialogBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Ce que cela change immédiatement :\n\n• L\'épreuve orale ne démarrera plus et aucun nouvel enregistrement ne sera fait.\n• Les enregistrements pas encore envoyés ne partiront pas.\n• Les enregistrements déjà envoyés ne peuvent plus être retrouvés sans votre passe : ils sont anonymes, nous ne savons pas lesquels sont les vôtres.\n\nLe reste du bilan (les 12 épreuves notées) n\'est pas affecté. Vous pourrez consentir de nouveau plus tard si vous le souhaitez.'**
+  String get privacyWithdrawDialogBody;
+
+  /// No description provided for @privacyWithdrawConfirm.
+  ///
+  /// In fr, this message translates to:
+  /// **'Oui, retirer'**
+  String get privacyWithdrawConfirm;
+
+  /// No description provided for @privacyWithdrawDone.
+  ///
+  /// In fr, this message translates to:
+  /// **'Consentement retiré. Plus aucun enregistrement ne sera fait ni envoyé.'**
+  String get privacyWithdrawDone;
+
+  /// No description provided for @privacyWithdrawnOnLine.
+  ///
+  /// In fr, this message translates to:
+  /// **'Retiré le {date}.'**
+  String privacyWithdrawnOnLine(String date);
+
+  /// No description provided for @privacyErasureTitle.
+  ///
+  /// In fr, this message translates to:
+  /// **'Effacement des enregistrements déjà envoyés'**
+  String get privacyErasureTitle;
+
+  /// No description provided for @privacyErasureBody.
+  ///
+  /// In fr, this message translates to:
+  /// **'Le retrait vaut pour l\'avenir. Pour demander l\'effacement d\'enregistrements déjà envoyés (art. 17 du RGPD), écrivez-nous en joignant votre passe : sans lui, personne — nous compris — ne peut savoir lesquels sont les vôtres.'**
+  String get privacyErasureBody;
 
   /// Eyebrow label showing the current registration step out of 4
   ///

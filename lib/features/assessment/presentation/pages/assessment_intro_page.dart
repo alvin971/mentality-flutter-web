@@ -7,7 +7,6 @@ import '../../../../core/widgets/kepler_button.dart';
 import '../../../../core/widgets/kepler_card.dart';
 import '../../../../core/widgets/kepler_scaffold.dart';
 import '../../../complete_test/presentation/pages/complete_test_orchestrator_page.dart';
-import '../../../data_collection/oral_test_flow.dart';
 import '../../../exercises_implementations/cubes/presentation/pages/cubes_test_page.dart';
 import '../../../exercises_implementations/matrices/presentation/pages/matrices_test_page.dart';
 import '../../../exercises_implementations/figure_weights/presentation/pages/figure_weights_test_page.dart';
@@ -119,7 +118,6 @@ class _AssessmentIntroPageState extends State<AssessmentIntroPage> {
       context.l10n.assessDomainFri,
       context.l10n.assessDomainWmi,
       context.l10n.assessDomainPsi,
-      context.l10n.assessDomainLo,
     ];
     return KeplerScaffold(
       title: context.l10n.assessIntroTitle,
@@ -317,8 +315,6 @@ class _IndividualTests extends StatelessWidget {
       ('PSI', context.l10n.assessSubtestCoding, () => const CodingTestPage()),
       ('PSI', context.l10n.assessSubtestSymbolSearch,
           () => const SymbolSearchTestPage()),
-      ('LO', context.l10n.assessSubtestOralComprehension,
-          () => const OralTestFlow()),
     ];
     return Column(
       children: [

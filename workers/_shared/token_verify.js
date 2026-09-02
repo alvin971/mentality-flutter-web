@@ -12,7 +12,18 @@
  *             d'accès aux données (jamais la chaîne token complète ni la
  *             signature : la signature Ed25519 est malléable, le nonce est
  *             dans les octets signés)
- *   - claims : payload décodé (si valide), clés compactes {s,y,m,r,d,n,sv}
+ *   - claims : payload décodé (si valide), clés compactes selon `sv` :
+ *       sv 2 : {s, y, m, r, d, n, sv}
+ *       sv 3 : {s, y, m, r, p, cc, cv, d, n, sv} — le token porte en plus le
+ *              PLAN choisi sur le site et la preuve de consentement :
+ *                p  : 'free' | 'paid'  (plan du passe)
+ *                cc : booléen          (consentement au corpus vocal)
+ *                cv : chaîne non vide  (version des textes légaux acceptés)
+ *              Ces trois claims sont SIGNÉES : elles font autorité côté serveur,
+ *              jamais un en-tête client. Un sv 3 dont la forme ne colle pas
+ *              exactement est REFUSÉ (`reason: 'claims'`) — on ne devine rien,
+ *              un plan mal formé ne doit jamais valoir consentement.
+ *              Lecture confortable : `readPlan()` de `token_plan.js`.
  *
  * Usage (dans un Worker) :
  *   import { verifyToken, TOKEN_SIGNING_PUBLIC_KEYS } from '../_shared/token_verify.js';
@@ -29,9 +40,16 @@ export const TOKEN_SIGNING_PUBLIC_KEYS = {
   k1: 'mb7Vw9W63IPYxTzTiVYbkFk9LYBEhIm7w7meIjK8Dd4',
 };
 
-// Versions de schéma de claims supportées. Miroir de `kTokenSchemaVersion`
-// dans lib/core/services/token_issuer.dart.
-const SUPPORTED_SCHEMA_VERSIONS = new Set([2]);
+// Versions de schéma de claims supportées. Miroir de
+// `kTokenSupportedSchemaVersions` dans lib/core/services/token_issuer.dart.
+// sv 2 = passe historique ; sv 3 = passe porteur du plan et du consentement.
+const SUPPORTED_SCHEMA_VERSIONS = new Set([2, 3]);
+
+// Première version de schéma qui porte les claims de plan (p, cc, cv).
+const SCHEMA_VERSION_PLAN = 3;
+
+// Plans admis pour la claim `p` d'un token sv ≥ 3.
+const TOKEN_PLANS = new Set(['free', 'paid']);
 
 // Alphabet base64url strict (anti-octets parasites / homoglyphes).
 const B64URL_SEGMENT = /^[A-Za-z0-9\-_]+$/;
@@ -91,6 +109,17 @@ export async function verifyToken(token, pubKeysByKid) {
     const payload = decodeJson(payloadSeg);
     if (!payload) return fail('payload');
     if (!SUPPORTED_SCHEMA_VERSIONS.has(payload.sv)) return fail('schema_version');
+
+    // Forme STRICTE des claims de plan (sv ≥ 3). Un token signé mais mal formé
+    // serait pire qu'un token refusé : les lecteurs (r2-upload notamment) en
+    // tirent le droit de conserver et céder un enregistrement vocal. On préfère
+    // donc l'échec net à une valeur devinée ou à un défaut permissif.
+    if (payload.sv >= SCHEMA_VERSION_PLAN) {
+      if (!TOKEN_PLANS.has(payload.p)) return fail('claims');
+      if (typeof payload.cc !== 'boolean') return fail('claims');
+      if (typeof payload.cv !== 'string' || payload.cv.length === 0) return fail('claims');
+    }
+
     if (typeof payload.n !== 'string' || !B64URL_SEGMENT.test(payload.n)) {
       return fail('nonce');
     }

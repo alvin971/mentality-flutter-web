@@ -7,6 +7,7 @@ import '../../features/complete_test/presentation/pages/complete_test_orchestrat
 import '../../features/chat/presentation/pages/mentality_chat_page.dart';
 import '../../features/results_history/presentation/pages/results_history_page.dart';
 import '../../features/onboarding/presentation/pages/onboarding_page.dart';
+import '../../features/privacy/presentation/pages/privacy_consent_page.dart';
 import '../../features/data_collection/oral_test_flow.dart';
 import '../../features/exercises_implementations/cubes/presentation/pages/cubes_test_page.dart';
 import '../../features/exercises_implementations/matrices/presentation/pages/matrices_test_page.dart';
@@ -206,6 +207,16 @@ final GoRouter appRouter = GoRouter(
       path: AppConstants.routeResults,
       name: 'results',
       builder: (_, __) => const ResultsHistoryPage(),
+    ),
+
+    // Confidentialité et consentement — le retrait (RGPD art. 7-3).
+    // La porte NORMALE est la carte 04 de l'accueil ; cette route rend le même
+    // écran adressable, parce que les textes de l'app et la politique de
+    // confidentialité du site renvoient tous deux aux « paramètres ».
+    GoRoute(
+      path: AppConstants.routeSettings,
+      name: 'settings',
+      builder: (_, __) => const PrivacyConsentPage(),
     ),
   ],
 

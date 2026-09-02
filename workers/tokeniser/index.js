@@ -13,8 +13,16 @@
  *                       départ. Idempotent (rejouer /validate est sans effet).
  *
  * Format : JWS compact EdDSA  header_b64url . payload_b64url . signature_b64url
- * Claims compactes (sv: 2) : {s, y, m, r, d, n, sv} — voir validateClaims()
- * et lib/core/services/token_issuer.dart (miroir exact côté client).
+ * Claims compactes — voir validateClaims() / validatePlan() et
+ * lib/core/services/token_issuer.dart (miroir exact côté client) :
+ *   sv 2 : {s, y, m, r, d, n, sv}             passe historique. TOUJOURS émis
+ *          quand le corps de la requête n'a AUCUN champ de plan : c'est le
+ *          comportement de l'inscription EN PRODUCTION, il ne bouge pas.
+ *   sv 3 : {s, y, m, r, p, cc, cv, d, n, sv}  passe porteur du plan choisi sur
+ *          le site et de la preuve de consentement au corpus vocal :
+ *            p  : 'free' | 'paid'  (plan du passe)
+ *            cc : booléen          (consentement au corpus vocal)
+ *            cv : version des textes légaux acceptés (∈ LEGAL_VERSIONS)
  *
  * La clé privée Ed25519 ne quitte JAMAIS ce worker (Worker Secret,
  * extractable=false). Le client ne reçoit que la signature ; la clé PUBLIQUE
@@ -27,16 +35,54 @@
  * Déploiement : voir README.md. Secret : wrangler secret put ED25519_PRIVATE_KEY_B64.
  *
  * ANONYMAT : aucun log par requête (IP/timestamp/claims/token), aucun stockage
- * PAR UTILISATEUR. Seul état serveur (LOT 0 anti-faux-test) : un compteur
- * AGRÉGÉ d'émissions par tranche de temps (clé issue:<n°>, un entier, TTL
- * court) — ni IP, ni claims, ni token, rien de rattachable à quiconque.
+ * PAR UTILISATEUR. Tout l'état serveur tient dans TROIS familles de clés KV
+ * (namespace RATE_KV), toutes AGRÉGÉES ou publiques — rien de rattachable à
+ * quiconque, l'engagement d'anonymat est intact :
+ *
+ *   1. `issue:<n° de tranche>`
+ *      Compteur d'émissions par tranche de temps (LOT 0 anti-faux-test) : un
+ *      entier, TTL court. Ni IP, ni claims, ni token. Voir checkIssueCap().
+ *      Toujours incrémenté quand RATE_KV est lié ; le REFUS au-delà du seuil,
+ *      lui, dépend de la var ISSUE_CAP_ENABLED (deux gestes séparés).
+ *
+ *   2. `consent:<cv>:<p>:<cc>:<jour UTC>:<shard 0-15>`
+ *      Compteur d'émissions par version de textes légaux × plan × consentement.
+ *      C'est la PREUVE AGRÉGÉE que le consentement a bien été recueilli (RGPD
+ *      art. 7(1)) : combien de passes ont été émis sous telle version des
+ *      textes, avec ou sans consentement au corpus. Un entier, SANS TTL (une
+ *      preuve ne s'auto-détruit pas), sans IP, sans token, sans aucune claim
+ *      individuelle — deux personnes du même jour sont indiscernables dedans.
+ *      Le shard (1 octet aléatoire & 15) contourne la limite Cloudflare d'une
+ *      écriture par seconde et par clé. Voir bumpConsentCounter().
+ *
+ *   3. `legal:<cv>:{cgu,confidentialite,consent-corpus,sha256}`
+ *      Archive des TEXTES acceptés, poussée par scripts/publish-legal.mjs.
+ *      Contenu strictement PUBLIC (les pages du site), aucune donnée
+ *      personnelle : c'est la contrepartie du `cv` signé dans le token — sans
+ *      elle, « la version 2026-09-02.v1 » ne prouverait rien.
  */
 
 import { verifyToken, TOKEN_SIGNING_PUBLIC_KEYS, sha256hex } from '../_shared/token_verify.js';
 import { checkOrigin } from '../_shared/origin_policy.js';
 
 const KID = 'k1';
-const SCHEMA_VERSION = 2;
+
+// Version de schéma du passe HISTORIQUE. Émise à l'identique dès que le corps
+// n'a aucun champ de plan — c'est l'invariant qui garde l'inscription live en
+// vie pendant toute la transition (épinglé par scripts/selftest.mjs).
+const SCHEMA_VERSION_LEGACY = 2;
+
+// Première version de schéma qui porte les claims de plan (p, cc, cv). Miroir
+// de SCHEMA_VERSION_PLAN dans workers/_shared/token_verify.js.
+const SCHEMA_VERSION_PLAN = 3;
+
+// Plans admis pour la claim `p`. Allow-list FERMÉE : toute autre valeur est
+// refusée (jamais de repli sur « free », qui vaudrait consentement implicite).
+const ALLOWED_PLANS = new Set(['free', 'paid']);
+
+// Âge minimal pour consentir seul au corpus vocal (art. 45 de la loi
+// Informatique et Libertés, plancher français de l'art. 8 RGPD).
+const CONSENT_MIN_AGE = 15;
 
 // ⚠️ RÉCONCILIATION AVEC LA PRODUCTION (2026-08-07) — cette liste était EN
 // RETARD sur le worker déployé, qui accepte déjà les 4 origines ajoutées
@@ -166,8 +212,27 @@ function regionFromCf(cf) {
  * entière, un TTL court. Ni IP, ni claims, ni token, ni horodatage individuel
  * — rien de rattachable à quiconque (engagement d'anonymat en tête de fichier).
  *
+ * DEUX INTERRUPTEURS DISTINCTS, et c'est volontaire :
+ *
+ *   1. le binding RATE_KV (wrangler.toml) → COMPTER ou non ;
+ *   2. la var ISSUE_CAP_ENABLED === 'true' → REFUSER ou non au-delà du max.
+ *
+ * Les séparer évite un piège précis : ce plafond n'a JAMAIS tourné en
+ * production (RATE_KV est resté commenté depuis toujours, donc le
+ * court-circuit `if (!env.RATE_KV) return true` avalait tout). Lier le
+ * namespace allumerait sinon d'un coup un seuil jamais éprouvé — 300/heure,
+ * une valeur devinée — sur TOUT le trafic, chemin sv 2 historique compris,
+ * avec des 429 sur l'inscription live à la clé. On compte donc d'abord, on
+ * observe le volume réel, on ajuste ISSUE_MAX_PER_WINDOW, et on ferme
+ * seulement ensuite. D'où l'incrément qui a lieu MÊME quand le plafond est
+ * inactif : sans compteur, il n'y a rien à observer.
+ *
  * FAIL-OPEN si RATE_KV n'est pas lié : le plafond est un frein anti-abus, pas
  * un invariant de sécurité — un binding manquant ne doit pas murer l'inscription.
+ *
+ * DÉFAUT OUVERT ASSUMÉ, à l'inverse de PAID_PLAN_ENABLED (défaut fermé) : là,
+ * une var oubliée ouvrirait la vente ; ici, elle ne ferait que laisser passer
+ * du trafic déjà accepté depuis toujours.
  *
  * APPROXIMATIF et assumé : KV n'a pas d'incrément atomique (courses d'écriture
  * concurrentes, propagation inter-colo ~60 s → sous-comptage léger possible).
@@ -175,13 +240,18 @@ function regionFromCf(cf) {
  */
 async function checkIssueCap(env) {
   if (!env.RATE_KV) return true;
+  // Comparaison stricte à 'true', même convention que PAID_PLAN_ENABLED :
+  // 'TRUE', '1', '' ou la var absente laissent le plafond INACTIF.
+  const plafondActif = env.ISSUE_CAP_ENABLED === 'true';
   const winMin = parsePositiveInt(env.ISSUE_WINDOW_MINUTES, 60);
   const max = parsePositiveInt(env.ISSUE_MAX_PER_WINDOW, 300);
   const bucket = Math.floor(Date.now() / (winMin * 60000));
   const key = `issue:${bucket}`;
   try {
     const cur = parseInt(await env.RATE_KV.get(key), 10) || 0;
-    if (cur >= max) return false;
+    if (plafondActif && cur >= max) return false;
+    // Incrément même au-delà du max quand le plafond est inactif : c'est la
+    // mesure du dépassement qui dira si le seuil est bien calibré.
     await env.RATE_KV.put(key, String(cur + 1), {
       // ≥ 2 fenêtres pour couvrir la tranche courante entière (minimum KV : 60 s).
       expirationTtl: Math.max(2 * winMin * 60, 120),
@@ -203,10 +273,26 @@ function parsePositiveInt(raw, fallback) {
   return Number.isFinite(n) && n > 0 ? n : fallback;
 }
 
-/** POST / — émet le token (immuable) depuis des claims démographiques larges. */
+/**
+ * POST / — émet le token (immuable) depuis des claims démographiques larges.
+ *
+ * Ordre STRICT : validateClaims → validatePlan → checkIssueCap → payload →
+ * signature → bumpConsentCounter.
+ *   - les deux validations passent avant le plafond : un corps invalide ne
+ *     consomme pas le budget d'émission ;
+ *   - le compteur de consentement n'est incrémenté qu'APRÈS une signature
+ *     réussie : il compte des passes réellement remis, jamais des tentatives.
+ */
 async function handleIssue(body, env, origin) {
   const v = validateClaims(body);
   if (v.error) return json({ error: v.error }, 400, origin);
+
+  // Plan / consentement (sv 3). Sans champ de plan → { plan: null } → sv 2 à
+  // l'identique. Les erreurs portent un `code` MACHINE : le site discrimine
+  // dessus, le statut seul ne suffit pas (403 y signifie déjà « Origin non
+  // autorisée », cf. checkOrigin plus haut).
+  const pl = validatePlan(body, env);
+  if (pl.error) return json({ error: pl.error, code: pl.code }, pl.status, origin);
 
   // Plafond d'émission, APRÈS la validation des claims (un corps grossièrement
   // invalide ne consomme pas le budget) et AVANT toute signature. Le 429 est
@@ -218,18 +304,24 @@ async function handleIssue(body, env, origin) {
 
   const nonceBytes = new Uint8Array(16); // 128 bits — identifiant de partition, pas un secret
   crypto.getRandomValues(nonceBytes);
+  const d = daysSinceEpoch(new Date());
+  const n = b64url(nonceBytes);
 
-  const payload = {
-    ...v.claims,
-    d: daysSinceEpoch(new Date()),
-    n: b64url(nonceBytes),
-    sv: SCHEMA_VERSION,
-  };
+  // ⚠️ INVARIANT DE PRODUCTION : sans plan, le payload est construit
+  // EXACTEMENT comme avant (mêmes clés, même ordre, sv 2). Toute autre forme
+  // casserait l'inscription live de mental-et.com.
+  const payload = pl.plan
+    ? { ...v.claims, p: pl.plan.p, cc: pl.plan.cc, cv: pl.plan.cv, d, n, sv: SCHEMA_VERSION_PLAN }
+    : { ...v.claims, d, n, sv: SCHEMA_VERSION_LEGACY };
+
+  let token;
   try {
-    return json({ token: await signPayload(payload, env.ED25519_PRIVATE_KEY_B64) }, 200, origin);
+    token = await signPayload(payload, env.ED25519_PRIVATE_KEY_B64);
   } catch {
     return json({ error: 'Échec de signature (clé invalide ?)' }, 500, origin);
   }
+  if (pl.plan) await bumpConsentCounter(env, pl.plan);
+  return json({ token }, 200, origin);
 }
 
 /**
@@ -286,15 +378,20 @@ async function hasEnoughRecordings(bucket, account, min) {
 }
 
 /**
- * Valide et NORMALISE les claims d'émission (clés compactes : s/y/m/r). Le
- * jour d'inscription (`d`) n'est PAS un champ d'entrée : il est calculé côté
- * serveur (UTC, au jour) — autorité serveur, jamais client.
+ * Valide et NORMALISE les claims démographiques d'émission (clés compactes :
+ * s/y/m/r). Le jour d'inscription (`d`) n'est PAS un champ d'entrée : il est
+ * calculé côté serveur (UTC, au jour) — autorité serveur, jamais client.
+ *
+ * L'allow-list d'ENTRÉE accepte en plus p/cc/cv, dont la cohérence est jugée
+ * par validatePlan() : ici on se contente de ne plus les refuser en bloc
+ * (avant, `p` déclenchait « Champ non autorisé: p »). Tout autre champ reste
+ * refusé — allow-list fermée, anti-injection de quasi-identifiants.
  */
 function validateClaims(body) {
   if (typeof body !== 'object' || body === null || Array.isArray(body)) {
     return { error: 'Payload invalide' };
   }
-  const allowedInputKeys = new Set(['s', 'y', 'm', 'r']);
+  const allowedInputKeys = new Set(['s', 'y', 'm', 'r', 'p', 'cc', 'cv']);
   for (const k of Object.keys(body)) {
     if (!allowedInputKeys.has(k)) return { error: `Champ non autorisé: ${k}` };
   }
@@ -309,6 +406,185 @@ function validateClaims(body) {
     return { error: 'y (année de naissance) invalide' };
   }
   return { claims: { s, y, m, r } };
+}
+
+/**
+ * Valide le TRIPLET de plan {p, cc, cv} et décide de la version de schéma.
+ *
+ * Renvoie exactement l'une des trois formes :
+ *   { plan: null }                → aucun champ de plan : émettre un sv 2 À
+ *                                   L'IDENTIQUE (inscription live inchangée).
+ *   { plan: { p, cc, cv } }       → émettre un sv 3 avec ces claims.
+ *   { error, code, status }       → refus, avec un CODE MACHINE pour le site.
+ *
+ * Interrupteur `PAID_PLAN_ENABLED` (var wrangler) : « true » (et rien d'autre)
+ * active le plan payant. Absent, vide, « TRUE », « 1 » → désactivé. Défaut
+ * FERMÉ assumé : tant que Stripe n'est pas branché, on ne veut surtout pas
+ * qu'une var oubliée ouvre la vente.
+ *
+ * Matrice (plan §3), colonne gauche = interrupteur false (aujourd'hui) :
+ *   pas de p (ni cc/cv)      → sv 2                      | sv 2
+ *   cc ou cv sans p          → 400 PLAN_REQUIRED         | idem
+ *   p=free, cc=true          → 200 sv 3                  | 200 sv 3
+ *   p=free, cc=false         → 200 sv 3 (facultatif)     | 400 CONSENT_REQUIRED
+ *   p=paid, cc=false         → 403 PAID_PLAN_DISABLED    | 200 sv 3
+ *   p=paid, cc=true          → 400 PLAN_INCONSISTENT     | idem
+ *   cv absent / ∉ LEGAL_VERSIONS → 400 LEGAL_VERSION_UNKNOWN | idem
+ *   LEGAL_VERSIONS non configuré → 500 SERVER_MISCONFIGURED  | idem
+ *   p=free, cc=true, âge < 15    → 400 AGE_CONSENT           | idem
+ *
+ * Le consentement au corpus est FACULTATIF tant que le plan payant est fermé :
+ * sans alternative réelle, il ne serait pas « libre » au sens de l'art. 7(4)
+ * RGPD, donc il ne peut pas être exigé.
+ *
+ * ⚠️ APPELER APRÈS validateClaims() : la garde d'âge lit body.y / body.m, dont
+ * le type et les bornes ont déjà été vérifiés là-bas.
+ */
+function validatePlan(body, env) {
+  const has = (k) => Object.prototype.hasOwnProperty.call(body, k);
+  const hasP = has('p');
+  const hasCc = has('cc');
+  const hasCv = has('cv');
+
+  // Aucun champ de plan → passe historique, chemin de production intact.
+  if (!hasP && !hasCc && !hasCv) return { plan: null };
+
+  // Une preuve de consentement sans plan n'a pas de sens : on ne devine pas le
+  // plan (deviner « free » reviendrait à inventer un consentement).
+  if (!hasP) {
+    return refus('PLAN_REQUIRED', 400, 'p (plan) requis dès que cc ou cv est fourni');
+  }
+  const p = body.p;
+  if (!ALLOWED_PLANS.has(p)) {
+    return refus('PLAN_REQUIRED', 400, 'p (plan) invalide : "free" ou "paid" attendu');
+  }
+  if (!hasCc || typeof body.cc !== 'boolean') {
+    return refus('PLAN_REQUIRED', 400, 'cc (consentement corpus) booléen requis');
+  }
+  const cc = body.cc;
+
+  // Version des textes légaux : fail-closed des deux côtés. Sans liste
+  // configurée on ne peut PAS savoir sur quoi la personne a consenti → 500
+  // (erreur serveur assumée, pas un rejet de l'utilisateur).
+  const versions = parseLegalVersions(env);
+  if (versions.length === 0) {
+    return refus(
+      'SERVER_MISCONFIGURED', 500,
+      'LEGAL_VERSIONS non configuré : émission de passe avec plan impossible',
+    );
+  }
+  if (typeof body.cv !== 'string' || !versions.includes(body.cv)) {
+    return refus('LEGAL_VERSION_UNKNOWN', 400, 'cv (version des textes légaux) inconnue');
+  }
+  const cv = body.cv;
+
+  const paidEnabled = env.PAID_PLAN_ENABLED === 'true';
+
+  if (p === 'paid') {
+    // Incohérence AVANT l'interrupteur : un passe payant ne porte jamais de
+    // consentement au corpus (il existe précisément pour ne pas consentir).
+    if (cc) {
+      return refus(
+        'PLAN_INCONSISTENT', 400,
+        'plan payant et consentement au corpus sont incompatibles',
+      );
+    }
+    if (!paidEnabled) {
+      return refus('PAID_PLAN_DISABLED', 403, "Le passe Payant n'est pas encore disponible");
+    }
+    // ── Point d'accroche Stripe (hors périmètre aujourd'hui) ──────────────
+    // Quand la vente ouvrira, la preuve de paiement sera exigée ICI, avant de
+    // rendre le plan — jamais après, un passe payant ne doit pas être signé
+    // sans paiement constaté :
+    //   const preuve = await checkPaidProof(body, env);
+    //   if (!preuve.ok) return refus('PAYMENT_REQUIRED', 402, preuve.error);
+    // `checkPaidProof` interrogera Stripe avec une référence opaque de session
+    // et ne rapportera QUE { ok } — ni nom, ni carte, ni identité (cf.
+    // politique de confidentialité §5). validatePlan deviendra alors `async`
+    // et handleIssue devra l'attendre.
+    return { plan: { p, cc, cv } };
+  }
+
+  // p === 'free'
+  if (!cc && paidEnabled) {
+    return refus(
+      'CONSENT_REQUIRED', 400,
+      'Le passe Gratuit exige le consentement au corpus vocal (ou choisis le passe Payant)',
+    );
+  }
+  if (cc && ageAtIssue(body.y, body.m) < CONSENT_MIN_AGE) {
+    return refus(
+      'AGE_CONSENT', 400,
+      `Consentement au corpus impossible avant ${CONSENT_MIN_AGE} ans`,
+    );
+  }
+  return { plan: { p, cc, cv } };
+}
+
+function refus(code, status, error) {
+  return { error, code, status };
+}
+
+/** Versions de textes légaux admises : CSV de la var wrangler LEGAL_VERSIONS. */
+function parseLegalVersions(env) {
+  const raw = typeof env.LEGAL_VERSIONS === 'string' ? env.LEGAL_VERSIONS : '';
+  return raw.split(',').map((s) => s.trim()).filter((s) => s.length > 0);
+}
+
+/**
+ * Âge au jour de l'émission, en UTC, depuis l'année et le mois de naissance.
+ *
+ *     age = Y − y − (m ≥ M ? 1 : 0)
+ *
+ * Y/M = année et mois courants UTC (M ∈ 1..12), y/m = naissance. Le MOIS DE
+ * NAISSANCE EN COURS compte comme NON RÉVOLU (on ne connaît pas le jour) :
+ * y=2011, m=9 en septembre 2026 → 14 ans, pas 15.
+ *
+ * ⚠️ Cette formule doit rester IDENTIQUE côté site (`ageAt(y, m)` de
+ * signup.js) : un écart ferait afficher « tu peux cocher » à quelqu'un que le
+ * serveur refusera ensuite, ou l'inverse.
+ */
+function ageAtIssue(y, m) {
+  const now = new Date();
+  const Y = now.getUTCFullYear();
+  const M = now.getUTCMonth() + 1;
+  return Y - y - (m >= M ? 1 : 0);
+}
+
+/**
+ * Compteur AGRÉGÉ de consentements — preuve du recueil (RGPD art. 7(1)).
+ *
+ * Clé : `consent:<cv>:<p>:<cc>:<jour UTC>:<shard 0-15>`, valeur = un entier.
+ * Ce qui est écrit : « le 2026-09-02, sous la version 2026-09-02.v1, N passes
+ * gratuits ont été émis avec consentement au corpus ». Rien d'autre — ni IP,
+ * ni token, ni nonce, ni aucune claim individuelle. Deux personnes du même
+ * jour, même plan, même version sont strictement indiscernables dedans.
+ *
+ * SANS `expirationTtl`, contrairement à `issue:` : une preuve de consentement
+ * qui s'auto-détruit ne prouve plus rien. C'est un agrégat, pas un frein.
+ *
+ * Le SHARD (1 octet aléatoire & 15) répartit les écritures sur 16 clés pour
+ * contourner la limite Cloudflare d'« une écriture par seconde et par clé » :
+ * sans lui, une rafale d'inscriptions perdrait la plupart des incréments. La
+ * lecture se fait en sommant le préfixe (`kv key list --prefix consent:<cv>:`).
+ *
+ * FAIL-OPEN intégral (try/catch vide, même doctrine que checkIssueCap) : un KV
+ * absent ou en panne ne doit JAMAIS transformer une émission réussie — token
+ * déjà signé — en erreur. Le prix assumé est un sous-comptage.
+ */
+async function bumpConsentCounter(env, { p, cc, cv }) {
+  if (!env.RATE_KV) return;
+  try {
+    const shardByte = new Uint8Array(1);
+    crypto.getRandomValues(shardByte);
+    const shard = shardByte[0] & 15;
+    const day = new Date().toISOString().slice(0, 10); // AAAA-MM-JJ UTC
+    const key = `consent:${cv}:${p}:${cc}:${day}:${shard}`;
+    const cur = parseInt(await env.RATE_KV.get(key), 10) || 0;
+    await env.RATE_KV.put(key, String(cur + 1));
+  } catch {
+    // Fail-open volontaire : voir le doc-comment ci-dessus.
+  }
 }
 
 /** Jours écoulés depuis epoch UTC (au jour, jamais l'heure). */

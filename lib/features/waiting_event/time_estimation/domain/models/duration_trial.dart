@@ -25,7 +25,7 @@
 // chronométrés). Ici RIEN n'est chronométré du côté de la personne : elle répond
 // quand elle veut, et aucun temps de réponse n'entre dans le score. Ce qui est
 // mesuré est la finesse avec laquelle deux intervalles se distinguent — une
-// acuité perceptive, qu'aucun des treize sous-tests n'approche.
+// acuité perceptive, qu'aucun des douze sous-tests n'approche.
 //
 // ═══ LE STANDARD CHANGE D'UN ESSAI À L'AUTRE ═══
 //

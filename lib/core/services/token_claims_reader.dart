@@ -11,7 +11,9 @@ import 'package:flutter/foundation.dart' show kDebugMode, visibleForTesting;
 
 import '../constants/app_constants.dart';
 import 'auth_local_store.dart';
+import 'token_claim_numbers.dart';
 import 'token_issuer.dart';
+import 'token_plan.dart';
 import 'token_signature_verifier.dart';
 
 class TokenClaimsReader {
@@ -77,9 +79,9 @@ class TokenClaimsReader {
   static Future<int?> currentAgeInMonths({DateTime? now}) async {
     final claims = await currentClaims();
     if (claims == null) return null;
-    final y = claims['y'];
-    final m = claims['m'];
-    if (y is! int || m is! int) return null;
+    final y = claimEntier(claims['y']);
+    final m = claimEntier(claims['m']);
+    if (y == null || m == null) return null;
     return ageInMonthsFrom(y, m, now ?? DateTime.now());
   }
 
@@ -88,5 +90,84 @@ class TokenClaimsReader {
   static int? ageInMonthsFrom(int birthYear, int birthMonth, DateTime now) {
     final months = (now.year - birthYear) * 12 + (now.month - birthMonth);
     return months >= 0 ? months : null;
+  }
+
+  // ─── Plan porté par le token (sv 3) ────────────────────────────────────────
+
+  /// Le plan du token COURANT, relu à chaque appel (jamais mémorisé : un
+  /// changement de passe doit se voir immédiatement).
+  ///
+  /// Renvoie [TokenPlanInfo.unknown] s'il n'y a pas de token, si le token n'est
+  /// pas digne de foi, ou s'il est antérieur au plan (`sv: 2`).
+  static Future<TokenPlanInfo> currentPlan() async {
+    try {
+      final token = await AuthLocalStore.instance.getToken();
+      if (token == null || token.isEmpty) return TokenPlanInfo.unknown;
+      return planFromToken(token);
+    } catch (_) {
+      return TokenPlanInfo.unknown;
+    }
+  }
+
+  /// Le plan d'un token donné.
+  ///
+  /// ⚠️ CONTRÔLE D'INTÉGRITÉ OBLIGATOIRE — deux sources seulement :
+  ///   1. un token signé dont la SIGNATURE est vérifiée ;
+  ///   2. un token DEV `M2.…` non signé, et UNIQUEMENT en `kDebugMode`.
+  ///
+  /// Le repli démographique [payloadClaimsUnverified] n'est JAMAIS employé
+  /// ici, et `AppConstants.kAllowUnsignedTokenInRelease` (qui vaut `true` en
+  /// release) n'ouvre volontairement pas la porte 2. La raison est le sens de
+  /// l'enjeu : falsifier son âge ne fausse que son propre score, alors que
+  /// falsifier `p: 'paid'` supprimerait l'enregistrement vocal qui finance le
+  /// passe Gratuit, et `cc: true` fabriquerait une preuve de consentement sur
+  /// un texte que personne n'a lu. Un plan non signé ne se croit pas.
+  static Future<TokenPlanInfo> planFromToken(String token) async {
+    try {
+      final res = await TokenSignatureVerifier.verifyAndDecode(token);
+      if (res.valid && res.claims != null) {
+        return planFromVerifiedClaims(res.claims!);
+      }
+      if (kDebugMode) {
+        final dev = TokenIssuer.tryDecode(token);
+        if (dev != null) return planFromVerifiedClaims(dev);
+      }
+      return TokenPlanInfo.unknown;
+    } catch (_) {
+      return TokenPlanInfo.unknown;
+    }
+  }
+
+  /// Traduit des claims DÉJÀ DIGNES DE FOI en [TokenPlanInfo].
+  ///
+  /// Pur et synchrone (donc testable directement). Toute anomalie de forme
+  /// donne [TokenPlanInfo.unknown] : `sv` antérieur à 3, `p` hors allow-list,
+  /// `cc` non booléen, `cv` absent ou vide.
+  ///
+  /// `paid` force `corpusConsent` à `false` : un passe Payant n'enregistre
+  /// rien, il n'y a donc rien à céder — même si le claim disait le contraire.
+  @visibleForTesting
+  static TokenPlanInfo planFromVerifiedClaims(Map<String, dynamic> claims) {
+    // Voir token_claim_numbers.dart : `sv: 3.0` est un sv 3 pour le worker,
+    // il doit l'être ici aussi.
+    final sv = claimEntier(claims['sv']);
+    if (sv == null || sv < 3) return TokenPlanInfo.unknown;
+
+    final p = claims['p'];
+    if (p is! String || !kTokenPlans.contains(p)) return TokenPlanInfo.unknown;
+
+    final cc = claims['cc'];
+    if (cc is! bool) return TokenPlanInfo.unknown;
+
+    final cv = claims['cv'];
+    if (cv is! String || cv.isEmpty) return TokenPlanInfo.unknown;
+
+    final plan = p == 'paid' ? TokenPlan.paid : TokenPlan.free;
+    return TokenPlanInfo(
+      plan: plan,
+      corpusConsent: plan == TokenPlan.free && cc,
+      legalVersion: cv,
+      issuedDay: claimEntier(claims['d']),
+    );
   }
 }

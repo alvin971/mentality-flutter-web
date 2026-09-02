@@ -49,9 +49,10 @@ class CompleteTestSession {
     List<String>? completedTests,
   }) : completedTests = completedTests ?? [];
 
-  /// Liste ordonnée des sous-tests NOTÉS (12). Le bilan compte une 13e
-  /// épreuve — le langage oral — qui ne produit aucun score et ne figure donc
-  /// pas ici ; elle est exécutée par l'orchestrateur après cette séquence.
+  /// Liste ordonnée des sous-tests NOTÉS (12) : c'est le bilan annoncé.
+  /// L'épreuve de langage oral ne produit aucun score, ne fait pas partie du
+  /// bilan et ne figure donc pas ici ; elle est exécutée par l'orchestrateur
+  /// après cette séquence, hors bilan.
   static const List<String> testSequence = [
     'Cubes',
     'Similitudes',

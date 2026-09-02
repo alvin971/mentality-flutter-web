@@ -18,6 +18,7 @@ import '../../../../core/widgets/kepler_scaffold.dart';
 import '../../../assessment/presentation/pages/assessment_intro_page.dart';
 import '../../../chat/presentation/pages/mentality_chat_page.dart';
 import '../../../complete_test/presentation/pages/complete_test_orchestrator_page.dart';
+import '../../../privacy/presentation/pages/privacy_consent_page.dart';
 import '../../../results_history/presentation/pages/results_history_page.dart';
 
 /// Home Kepler — hero éditorial + 3 cards d'action + résumé "À propos".
@@ -44,7 +45,13 @@ class _HomePageState extends State<HomePage> {
 
   void _rafraichir() {
     if (!mounted) return;
-    setState(() => _reprise = ResumeService.instance.lookup());
+    // Corps de bloc, pas une flèche : l'affectation renverrait la Future et
+    // Flutter lèverait « setState() callback argument returned a Future » —
+    // à chaque retour du bilan sur l'accueil, en debug.
+    final futur = ResumeService.instance.lookup();
+    setState(() {
+      _reprise = futur;
+    });
   }
 
   /// Efface le token local et renvoie à l'écran de connexion.
@@ -223,6 +230,22 @@ class _Actions extends StatelessWidget {
           icon: Icons.east,
           comingSoon: true,
           onTap: () {},
+        ),
+        SizedBox(height: 14.h),
+        // LA PORTE DU RETRAIT DE CONSENTEMENT (RGPD art. 7-3). Elle est ici,
+        // en clair, et non repliée derrière une icône de barre de titre : les
+        // textes de l'app promettent le retrait « à tout moment », et une
+        // promesse qu'il faut chercher n'est pas tenue. C'est le seul chemin
+        // d'interface qui atteigne `ConsentService.withdraw()`.
+        _ActionCard(
+          eyebrow: '04',
+          title: context.l10n.privacyTitle,
+          subtitle: context.l10n.privacySubtitle,
+          icon: Icons.east,
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const PrivacyConsentPage()),
+          ),
         ),
       ],
     );

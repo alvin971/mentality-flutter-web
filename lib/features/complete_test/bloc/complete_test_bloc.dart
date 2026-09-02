@@ -8,8 +8,9 @@ import 'complete_test_state.dart';
 /// BLoC qui orchestre le déroulement du test complet.
 ///
 /// Gère :
-/// - La séquence des 12 sous-tests NOTÉS (la 13e épreuve, le langage oral,
-///   n'est pas notée : elle est orchestrée par la page, pas par ce BLoC)
+/// - La séquence des 12 sous-tests NOTÉS du bilan (l'épreuve de langage oral
+///   n'est pas notée et ne fait pas partie du bilan annoncé : elle est
+///   orchestrée par la page, pas par ce BLoC)
 /// - L'accumulation des scores
 /// - La transition vers la page de résultats
 class CompleteTestBloc extends Bloc<CompleteTestEvent, CompleteTestState> {

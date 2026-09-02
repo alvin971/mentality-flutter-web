@@ -20,8 +20,8 @@
     "desc": "Titre hero ligne 2 (italique) de la page d'intro évaluation"
   },
   "assessIntroDescription": {
-    "fr": "Cette évaluation explore vos capacités cognitives à travers six domaines du modèle CHC (Cattell-Horn-Carroll). Un score global en est la synthèse.",
-    "en": "This assessment explores your cognitive abilities across six domains of the CHC (Cattell-Horn-Carroll) model. A full-scale score is its synthesis.",
+    "fr": "Cette évaluation explore vos capacités cognitives à travers cinq domaines du modèle CHC (Cattell-Horn-Carroll). Un score global en est la synthèse.",
+    "en": "This assessment explores your cognitive abilities across five domains of the CHC (Cattell-Horn-Carroll) model. A full-scale score is its synthesis.",
     "desc": "Paragraphe descriptif de l'intro évaluation"
   },
   "assessDomainsHeader": {
@@ -53,11 +53,6 @@
     "fr": "Vitesse de Traitement",
     "en": "Processing Speed",
     "desc": "Libellé du domaine"
-  },
-  "assessDomainLo": {
-    "fr": "Langage Oral",
-    "en": "Oral Language",
-    "desc": "Libellé du domaine Langage Oral (LO)"
   },
   "assessBeforeStartHeader": {
     "fr": "AVANT DE COMMENCER",
@@ -138,11 +133,6 @@
     "fr": "Détection de symboles",
     "en": "Symbol Detection",
     "desc": "Libellé du subtest Détection de symboles"
-  },
-  "assessSubtestOralComprehension": {
-    "fr": "Compréhension Orale",
-    "en": "Oral Comprehension",
-    "desc": "Libellé du subtest Compréhension Orale"
   },
   "authLoginTitle": {
     "fr": "Connexion",
@@ -362,13 +352,13 @@
     "desc": "Eyebrow de la carte contenu"
   },
   "ctIntroContentTitle": {
-    "fr": "13 subtests inclus",
-    "en": "13 subtests included",
+    "fr": "12 subtests inclus",
+    "en": "12 subtests included",
     "desc": "Titre de la carte contenu"
   },
   "ctIntroContentBody": {
-    "fr": "Cubes · Points communs · Suites de chiffres · Matrices · Vocabulaire · Arithmétique · Symboles · Assemblages · Information · Transcription · Images · Équilibres · Langage oral.",
-    "en": "Blocks · Common Ground · Digit Sequences · Matrices · Vocabulary · Arithmetic · Symbols · Assembly · Information · Transcription · Pictures · Equilibrium · Oral language.",
+    "fr": "Cubes · Points communs · Suites de chiffres · Matrices · Vocabulaire · Arithmétique · Symboles · Assemblages · Information · Transcription · Images · Équilibres.",
+    "en": "Blocks · Common Ground · Digit Sequences · Matrices · Vocabulary · Arithmetic · Symbols · Assembly · Information · Transcription · Pictures · Equilibrium.",
     "desc": "Liste des subtests dans la carte contenu"
   },
   "ctIntroImportantEyebrow": {

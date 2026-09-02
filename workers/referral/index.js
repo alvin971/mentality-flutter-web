@@ -43,6 +43,16 @@
  *   ref:<referrerCode>:<acct> → timestamp ISO (une entrée = un filleul ayant fini)
  *   completed:<account>       → JSON de la preuve de complétion (1re fois gagne)
  *
+ * INDEX DE CORPUS ORAL (table oral_recordings, écrite par /results) : les
+ * colonnes `layer` et `commercial_reuse` sont DÉRIVÉES DES CLAIMS SIGNÉES du
+ * passe (`readPlan()` de workers/_shared/token_plan.js), jamais du corps de la
+ * requête. C'est la MÊME règle que r2-upload applique au préfixe de clé R2 :
+ * 'reusable' exige un passe sv ≥ 3 vérifié portant p='free' ∧ cc=true ; tout le
+ * reste — sv 2 compris, et passe DEV non vérifié — vaut 'internal'. Sans cela
+ * la base pourrait affirmer qu'un enregistrement est cessible à des tiers alors
+ * que R2 l'a rangé en `internal/`, et c'est cet index qui servirait de
+ * catalogue à une cession.
+ *
  * ANONYMAT : seule la partition account = SHA256(nonce)[:32] est stockée —
  * plus AUCUNE donnée personnelle. Le pseudo Instagram, seule donnée nominative
  * qu'ait connue ce worker, a été supprimé du code ET des lignes déjà en
@@ -51,6 +61,7 @@
 
 import { verifyToken, TOKEN_SIGNING_PUBLIC_KEYS, sha256hex } from '../_shared/token_verify.js';
 import { checkOrigin } from '../_shared/origin_policy.js';
+import { readPlan } from '../_shared/token_plan.js';
 
 const REQUIRED_REFERRALS = 3;
 
@@ -154,8 +165,11 @@ export default {
   },
 };
 
-// Versions de schéma de claims supportées (miroir de kTokenSchemaVersion).
-const SUPPORTED_SV = new Set([2]);
+// Versions de schéma de claims supportées (miroir de
+// kTokenSupportedSchemaVersions). sv 3 = passe porteur du plan (p, cc, cv) :
+// ce worker ne lit que s/y/m/r/d/n, donc plan et consentement ne sont JAMAIS
+// persistés par compte ici — il lui suffit de ne pas refuser ces passes.
+const SUPPORTED_SV = new Set([2, 3]);
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const B64URL = /^[A-Za-z0-9\-_]+$/;
 
@@ -1015,6 +1029,27 @@ async function handleResults(env, origin, account, body, identite) {
 
     // Épreuve orale : quel texte, quel cycle, quelle couche R2, quel consentement.
     // L'audio reste dans R2 ; rien de sonore ne transite ici.
+    //
+    // ─── LA COUCHE ET LE CONSENTEMENT NE SONT PLUS DÉCLARÉS PAR LE CLIENT ────
+    // `layer` et `commercial_reuse` disaient jusqu'ici ce que le CORPS de la
+    // requête affirmait. La base pouvait donc soutenir qu'un enregistrement
+    // était cessible à des tiers alors que r2-upload l'avait rangé en
+    // `internal/` — et l'inverse. Cet index est le point d'entrée d'une
+    // éventuelle cession : une déclaration cliente n'y a pas sa place.
+    //
+    // Ce worker VIENT de vérifier la signature du passe : il lit donc la même
+    // source d'autorité que r2-upload, `readPlan()` sur les claims signées, et
+    // applique EXACTEMENT la même règle — sans quoi les deux systèmes
+    // divergeraient à nouveau, en silence :
+    //   • passe sv ≥ 3 SIGNÉ  → p='free' ∧ cc ? 'reusable'/true : 'internal'/false ;
+    //   • passe sv 2, ou passe non vérifié (repli DEV « M2. ») → 'internal'/false
+    //     en dur : depuis le durcissement de r2-upload, un sv 2 ne PEUT PLUS
+    //     produire d'objet sous `reusable/`, la base ne doit donc jamais
+    //     prétendre le contraire.
+    const porteur = readPlan(identite && identite.verified ? identite.claims : null);
+    const cessible = porteur.corpusConsent === true; // 'free' ∧ cc, jamais 'paid'
+    const coucheR2 = cessible ? 'reusable' : 'internal';
+
     let oralOk = true;
     const oralRows = oral.slice(0, 40).map((o) => ({
       session_id: sessionId,
@@ -1022,11 +1057,17 @@ async function handleResults(env, origin, account, body, identite) {
       kind: o?.kind === 'summary' ? 'summary' : 'reading',
       text_id: o?.textId != null ? String(o.textId).slice(0, 128) : null,
       r2_session_id: o?.r2SessionId != null ? String(o.r2SessionId).slice(0, 128) : null,
-      layer: o?.layer === 'internal' ? 'internal' : (o?.layer === 'reusable' ? 'reusable' : null),
+      // DÉRIVÉS DES CLAIMS SIGNÉES. `o.layer` et `o.commercialReuse` du corps
+      // sont volontairement IGNORÉS : ne jamais les relire ici.
+      layer: coucheR2,
       duration_ms: Number.isInteger(o?.durationMs) ? o.durationMs : null,
       latency_ms: Number.isInteger(o?.latencyMs) ? o.latencyMs : null,
+      // DÉCLARATION CLIENTE NON VÉRIFIABLE ICI, conservée telle quelle : seul
+      // r2-upload sait si l'octet a atteint R2, et il ne le rapporte pas à ce
+      // worker. `upload_ok` est donc un indice de télémétrie, jamais une preuve
+      // qu'un fichier existe — ne rien en déduire sur la cessibilité.
       upload_ok: typeof o?.uploadOk === 'boolean' ? o.uploadOk : null,
-      commercial_reuse: typeof o?.commercialReuse === 'boolean' ? o.commercialReuse : null,
+      commercial_reuse: cessible,
     })).filter((o) => o.cycle !== null);
 
     if (oralRows.length > 0) {

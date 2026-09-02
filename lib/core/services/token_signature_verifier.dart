@@ -16,10 +16,17 @@ import 'package:cryptography/cryptography.dart';
 import 'package:flutter/foundation.dart';
 
 import '../constants/app_constants.dart';
+import 'token_claim_numbers.dart';
 
 /// Versions de schéma de claims (`sv`) que cette build sait interpréter.
 /// Miroir de `SUPPORTED_SCHEMA_VERSIONS` dans workers/_shared/token_verify.js.
-const Set<int> _kSupportedSchemaVersions = {2};
+///
+/// `sv: 3` ajoute les claims de plan (`p`, `cc`, `cv`). Ils ne sont PAS
+/// validés ici : cette classe ne garantit que l'intégrité de la signature et
+/// le fait que le schéma est connu. La forme des claims de plan est vérifiée
+/// par `TokenClaimsReader.planFromVerifiedClaims` — un `sv: 3` mal formé donne
+/// un plan `unknown`, jamais un accès.
+const Set<int> _kSupportedSchemaVersions = {2, 3};
 
 /// Caractères autorisés dans un segment base64url (anti-octets parasites).
 final RegExp _b64urlSegment = RegExp(r'^[A-Za-z0-9\-_]+$');
@@ -108,8 +115,12 @@ class TokenSignatureVerifier {
       // Payload : décodable + version de schéma supportée.
       final payload = _decodeJson(payloadSeg);
       if (payload == null) return TokenVerificationResult.fail('payload');
-      final sv = payload['sv'];
-      if (sv is! int || !_kSupportedSchemaVersions.contains(sv)) {
+      // `sv` est lu comme un NOMBRE À VALEUR ENTIÈRE, pas comme un `int`
+      // Dart : le tokeniser est écrit en JS, où `3` et `3.0` sont la même
+      // valeur. Un `sv: 3.0` signé par le worker était refusé ici alors que
+      // le worker l'acceptait — voir token_claim_numbers.dart.
+      final sv = claimEntier(payload['sv']);
+      if (sv == null || !_kSupportedSchemaVersions.contains(sv)) {
         return TokenVerificationResult.fail('schema_version');
       }
       return TokenVerificationResult.ok(payload);

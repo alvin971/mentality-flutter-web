@@ -10,8 +10,8 @@
     "desc": "Home hero, line 2 (italic)"
   },
   "homeHeroBody": {
-    "fr": "Une évaluation cognitive adaptative. 13 sous-tests, 5 indices, un score global.",
-    "en": "An adaptive cognitive assessment. 13 subtests, 5 indices, one global score."
+    "fr": "Une évaluation cognitive adaptative. 12 sous-tests, 5 indices, un score global.",
+    "en": "An adaptive cognitive assessment. 12 subtests, 5 indices, one global score."
   },
   "homeActionStartTitle": {
     "fr": "Commencer une évaluation",
@@ -54,8 +54,8 @@
     "desc": "About section eyebrow"
   },
   "homeAboutSubtestsTitle": {
-    "fr": "13 sous-tests",
-    "en": "13 subtests",
+    "fr": "12 sous-tests",
+    "en": "12 subtests",
     "desc": "About tile 1 title"
   },
   "homeAboutSubtestsBody": {

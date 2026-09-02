@@ -29,6 +29,7 @@ import '../../../unlock/data/completion_reporter.dart';
 import '../../../../core/services/results_sync.dart';
 import '../../../../core/services/resume_service.dart';
 import '../../../../core/services/token_claims_reader.dart';
+import '../../../../core/services/token_plan.dart';
 import '../../data/pretest_store.dart';
 import '../pretest_chain.dart';
 import 'complete_test_results_page.dart';
@@ -260,14 +261,22 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
     }
   }
 
-  /// Étape FINALE non notée : compréhension orale (collecte audio).
+  /// Collecte audio de fin de parcours — HORS du bilan annoncé.
   ///
-  /// Elle ne produit aucun score → elle n'entre pas dans la séquence notée ni
-  /// dans le calcul du QI — mais elle FAIT PARTIE du bilan : c'est la 13e
-  /// épreuve, et le 6e domaine (LO) annoncé dès l'écran d'entrée. On l'exécute
-  /// une fois les 12 sous-tests notés terminés,
-  /// juste avant les résultats. Le consentement est géré par [OralTestFlow] ;
-  /// un refus la fait simplement sauter (pop immédiat) → on passe aux résultats.
+  /// Le bilan, c'est **12 épreuves réparties en 5 domaines** : c'est ce que
+  /// l'écran d'entrée promet, c'est ce qui est noté, c'est ce qui entre dans le
+  /// calcul du QI. L'étape orale n'en fait pas partie : elle ne produit aucun
+  /// score et n'apparaît nulle part dans les résultats.
+  ///
+  /// Elle est la CONTREPARTIE du passe Gratuit — le bilan y est financé par un
+  /// enregistrement vocal destiné au corpus. Elle n'est donc jouée que pour ce
+  /// plan-là : un passe Payant passe directement aux résultats, et un passe
+  /// sans plan lisible (`sv: 2`, antérieur au 2026-09-02) retombe sur l'écran
+  /// de consentement in-app géré par [OralTestFlow], dont un refus fait
+  /// simplement sauter l'étape (pop immédiat).
+  ///
+  /// Le plan est relu APRÈS la déclaration de fin de test — voir plus bas :
+  /// aucun `await` ne doit s'intercaler avant elle.
   Future<void> _finishWithOralThenResults(
     BuildContext context,
     CompleteTestDoneState state,
@@ -304,11 +313,22 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
       subtests: session.toResultsPayload(),
     ));
 
-    await Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => const OralTestFlow()),
-    );
+    // LE PLAN SE LIT ICI, PAS PLUS HAUT. Cette lecture touche le disque
+    // (token persisté) : la placer avant `declare()` y insérerait un `await`,
+    // et une app fermée dans cette fenêtre perdrait définitivement le crédit
+    // du parrain — exactement le bug de juillet 2026, réintroduit par la
+    // bande. Les deux envois ci-dessus sont déjà partis (tir-et-oublie,
+    // rejoués jusqu'à confirmation), on peut prendre notre temps.
+    final plan = await TokenClaimsReader.currentPlan();
     if (!context.mounted) return;
+
+    if (plan.plan != TokenPlan.paid) {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const OralTestFlow()),
+      );
+      if (!context.mounted) return;
+    }
 
     Navigator.pushReplacement(
       context,

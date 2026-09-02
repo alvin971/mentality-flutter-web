@@ -45,6 +45,42 @@ const TOKEN_SIGNE = `${signingInput}.` + Buffer
   .toString('base64url');
 const accountSigne = (await sha256hex('selftest-signe')).slice(0, 32);
 
+// ─── Passes sv 3 (porteurs du plan : p / cc / cv). Ce worker n'en lit RIEN
+//     d'autre que le nonce et les claims démographiques : il doit simplement
+//     ne pas les refuser, sans quoi tout passe émis après le site v2 perdrait
+//     ses paliers de parrainage. Un signé ET un DEV « M2. », car les deux
+//     chemins de resolveIdentity filtrent la version de schéma. ────────────
+const claims3 = (extra = {}) => ({
+  s: 'M', y: 1998, m: 7, r: 'IDF',
+  p: 'free', cc: true, cv: '2026-09-02.v1',
+  d: 20700, n: 'selftest-sv3', sv: 3,
+  ...extra,
+});
+const entree3 =
+  `${segment({ alg: 'EdDSA', kid: 'selftest' })}.${segment(claims3())}`;
+const TOKEN_SIGNE_SV3 = `${entree3}.` + Buffer
+  .from(new Uint8Array(await crypto.subtle.sign(
+    { name: 'Ed25519' }, kpSelftest.privateKey, new TextEncoder().encode(entree3))))
+  .toString('base64url');
+const accountSv3 = (await sha256hex('selftest-sv3')).slice(0, 32);
+const TOKEN_DEV_SV3 = 'M2.' + segment(claims3({ n: 'selftest-sv3-dev' }));
+const accountSv3Dev = (await sha256hex('selftest-sv3-dev')).slice(0, 32);
+
+/** Signe un jeu de claims avec la clé du selftest (forme exacte de production). */
+async function signeClaims(claims) {
+  const entree = `${segment({ alg: 'EdDSA', kid: 'selftest' })}.${segment(claims)}`;
+  const sig = await crypto.subtle.sign(
+    { name: 'Ed25519' }, kpSelftest.privateKey, new TextEncoder().encode(entree));
+  return `${entree}.` + Buffer.from(new Uint8Array(sig)).toString('base64url');
+}
+
+// Passes sv 3 signés couvrant les trois verdicts de `readPlan()`. Ils servent à
+// vérifier que l'index oral en base est DÉRIVÉ des claims, jamais déclaré.
+const TOKEN_SIGNE_SV3_SANS_CC =
+  await signeClaims(claims3({ cc: false, n: 'selftest-sv3-nocc' }));
+const TOKEN_SIGNE_SV3_PAID =
+  await signeClaims(claims3({ p: 'paid', cc: false, n: 'selftest-sv3-paid' }));
+
 const HUIT_JOURS_MIN = 11520;
 const PROD = { UNLOCK_DELAY_MINUTES: String(HUIT_JOURS_MIN) };
 
@@ -350,6 +386,28 @@ console.log('\nToken SIGNÉ Ed25519 — chemin nominal de production');
   verifie('token signé accepté : 200, ligne sous le compte dérivé du nonce SIGNÉ',
     statut === 200 && rowSigne !== null && rowSigne.firstSeenVia === 'complete',
     `HTTP ${statut}`);
+}
+{
+  // Passe sv 3 SIGNÉ : accepté comme un sv 2, ligne créée sous le compte dérivé
+  // de SON nonce. Si SUPPORTED_SV oubliait le 3, verifyToken refuserait et le
+  // client déployé recevrait un 401 DÉFINITIF sur /progress/init.
+  const s = kvNu();
+  const { statut } = await appel(s, PROD, '/progress/init', 'POST', {},
+    { token: TOKEN_SIGNE_SV3 });
+  const row = JSON.parse(s._m.get(`progress:${accountSv3}`) ?? 'null');
+  verifie('passe sv 3 signé accepté sur /progress/init → 200, ligne créée',
+    statut === 200 && row !== null && row.account === accountSv3, `HTTP ${statut}`);
+}
+{
+  // Repli DEV « M2. » en sv 3 : le gate marketing accepte les claims non
+  // signées (données non sensibles) — le plan qu'elles annoncent n'est JAMAIS
+  // persisté, seul le nonce sert de compte.
+  const s = kvNu();
+  const { statut } = await appel(s, PROD, '/progress/init', 'POST', {},
+    { token: TOKEN_DEV_SV3 });
+  const row = JSON.parse(s._m.get(`progress:${accountSv3Dev}`) ?? 'null');
+  verifie('passe DEV « M2. » en sv 3 accepté par le repli de resolveIdentity',
+    statut === 200 && row !== null && row.account === accountSv3Dev, `HTTP ${statut}`);
 }
 {
   // Signature invalide sans repli M2 possible : 401, rien d'écrit.
@@ -879,7 +937,17 @@ console.log('\n/results — passations rattachées au token, écrites au fil de 
   }
 
   console.log('\n/results — épreuve orale');
+  //
+  // L'INDEX DE CORPUS N'EST PLUS UNE DÉCLARATION CLIENTE.
+  // `layer` et `commercial_reuse` étaient recopiés du corps de la requête. La
+  // base pouvait donc affirmer qu'un enregistrement était cessible à des tiers
+  // alors que r2-upload l'avait rangé en `internal/` — et l'inverse. Ces deux
+  // colonnes sont désormais DÉRIVÉES des claims signées, comme dans r2-upload.
+  // Les charges ci-dessous mentent EXPRÈS pour le prouver.
   {
+    // ─── (e) PASSE sv 2 : la déclaration 'reusable' est ignorée ──────────────
+    // `appel` utilise par défaut TOKEN, un passe DEV « M2. » sv 2 — donc NON
+    // vérifié : le cas le plus permissif que ce worker accepte.
     capte.length = 0; brancher(supabaseOk);
     const { corps } = await appel(kvNu(), { ...PROD, ...SB }, '/results', 'POST', {
       clientSessionId: CSID,
@@ -896,12 +964,74 @@ console.log('\n/results — passations rattachées au token, écrites au fil de 
     const o = capte.find((c) => c.url.includes('oral_recordings'));
     verifie('les enregistrements oraux sont écrits, sans cycle ils sont rejetés',
       corps.oral === 2 && o && o.body.length === 2, JSON.stringify(corps));
-    verifie('le texte lu, la couche R2 et le consentement sont conservés',
-      o && o.body[0].text_id === 'fr_0042' && o.body[0].layer === 'reusable'
-      && o.body[0].commercial_reuse === true && o.body[1].layer === 'internal',
+    verifie('le texte lu et l\'identifiant R2 sont conservés',
+      o && o.body[0].text_id === 'fr_0042' && o.body[0].r2_session_id === 'sess-r2-1',
       JSON.stringify(o && o.body[0]));
+    verifie('(e) passe sv 2 + corps déclarant layer:\'reusable\' → « internal » en base',
+      o && o.body[0].layer === 'internal', JSON.stringify(o && o.body[0]));
+    verifie('(e) passe sv 2 + commercialReuse:true déclaré → false en base',
+      o && o.body[0].commercial_reuse === false, JSON.stringify(o && o.body[0]));
+    verifie('(e) aucune ligne cessible pour un passe sv 2, quelle que soit la ligne',
+      o && o.body.every((r) => r.layer === 'internal' && r.commercial_reuse === false),
+      JSON.stringify(o && o.body));
+    verifie('la télémétrie non vérifiable (upload_ok) reste telle quelle',
+      o && o.body[0].upload_ok === true && o.body[1].upload_ok === false,
+      JSON.stringify(o && o.body));
     verifie('aucune donnée sonore ne transite par la base',
       o && !JSON.stringify(o.body).match(/audio|webm|base64|blob/i));
+  }
+
+  {
+    // ─── (f) PASSE sv 3 SIGNÉ free/cc:true : la déclaration 'internal' perd ──
+    // Le chemin légitime doit rester ouvert, sinon « tout en internal » suffirait
+    // à faire passer (e) et le corpus ne se remplirait jamais.
+    capte.length = 0; brancher(supabaseOk);
+    await appel(kvNu(), { ...PROD, ...SB }, '/results', 'POST', {
+      clientSessionId: CSID,
+      oral: [{ cycle: 0, kind: 'reading', textId: 'fr_0042', layer: 'internal',
+        durationMs: 61000, uploadOk: true, commercialReuse: false }],
+    }, { token: TOKEN_SIGNE_SV3 });
+    debrancher();
+    const o = capte.find((c) => c.url.includes('oral_recordings'));
+    verifie('(f) passe sv 3 free/cc:true + corps déclarant \'internal\' → « reusable »',
+      o && o.body[0].layer === 'reusable', JSON.stringify(o && o.body[0]));
+    verifie('(f) … et commercial_reuse:false déclaré → true en base (claims signées)',
+      o && o.body[0].commercial_reuse === true, JSON.stringify(o && o.body[0]));
+  }
+
+  {
+    // Les deux autres verdicts de readPlan() : sans consentement au corpus, et
+    // plan payant (qui n'a par construction aucun enregistrement à céder).
+    for (const [nom, token] of [
+      ['sv 3 free SANS cc', TOKEN_SIGNE_SV3_SANS_CC],
+      ['sv 3 payant', TOKEN_SIGNE_SV3_PAID],
+    ]) {
+      capte.length = 0; brancher(supabaseOk);
+      await appel(kvNu(), { ...PROD, ...SB }, '/results', 'POST', {
+        clientSessionId: CSID,
+        oral: [{ cycle: 0, kind: 'reading', layer: 'reusable', commercialReuse: true }],
+      }, { token });
+      debrancher();
+      const o = capte.find((c) => c.url.includes('oral_recordings'));
+      verifie(`${nom} + corps déclarant 'reusable' → « internal » en base`,
+        o && o.body[0].layer === 'internal' && o.body[0].commercial_reuse === false,
+        JSON.stringify(o && o.body[0]));
+    }
+  }
+
+  {
+    // La base et R2 doivent trancher IDENTIQUEMENT : même règle, même source.
+    // Un passe non vérifié (repli DEV) n'ouvre pas non plus la couche cessible.
+    capte.length = 0; brancher(supabaseOk);
+    await appel(kvNu(), { ...PROD, ...SB }, '/results', 'POST', {
+      clientSessionId: CSID,
+      oral: [{ cycle: 0, kind: 'reading', layer: 'reusable', commercialReuse: true }],
+    }, { token: TOKEN_DEV_SV3 });
+    debrancher();
+    const o = capte.find((c) => c.url.includes('oral_recordings'));
+    verifie('passe DEV « M2. » sv 3 (NON signé) → « internal », les claims ne valent rien',
+      o && o.body[0].layer === 'internal' && o.body[0].commercial_reuse === false,
+      JSON.stringify(o && o.body[0]));
   }
 
   console.log('\n/results — entrées invalides et robustesse');

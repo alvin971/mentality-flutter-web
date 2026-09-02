@@ -22,10 +22,50 @@
  *   sous-regroupement d'une session de test. uuid (pas un timestamp) → anti
  *   ré-identification temporelle. Effacement = lister/supprimer par account.
  *
- * RGPD : SANS preuve de consentement (X-Consent-Version), upload REFUSÉ (403).
+ * ⚠️ LA COUCHE CESSIBLE EST DÉSORMAIS INATTEIGNABLE SANS CLAIMS SIGNÉES.
+ * Un objet ne peut atterrir sous `reusable/` QUE si le passe est un sv ≥ 3
+ * SIGNÉ portant p='free' ET cc=true ET une `cv` appartenant à LEGAL_VERSIONS.
+ * Aucun en-tête, aucune combinaison d'en-têtes, aucun passe sv 2 ne peut plus y
+ * conduire. C'est une règle de fond, pas une commodité : la seule preuve de
+ * consentement d'un fichier cessible à des tiers doit être une chaîne SIGNÉE
+ * par le tokeniser, jamais une chaîne choisie par l'appelant.
+ *
+ * RGPD — D'OÙ VIENT LA PREUVE DE CONSENTEMENT (deux régimes selon `sv`) :
+ *
+ *   sv ≥ 3 : les CLAIMS SIGNÉES DU PASSE FONT AUTORITÉ, lues par `readPlan()`
+ *            (workers/_shared/token_plan.js). Les en-têtes X-Consent-Version et
+ *            X-Commercial-Reuse sont IGNORÉS : ils sont déclaratifs, donc
+ *            forgeables, et un enregistrement classé « cessible » par un
+ *            en-tête menti serait un consentement fabriqué. Concrètement :
+ *              - plan 'paid'  → 403, RIEN n'est écrit (le passe Payant est
+ *                l'alternative sans enregistrement : c'est elle qui rend libre
+ *                le consentement du plan Gratuit, RGPD art. 7(4)) ;
+ *              - plan absent/inconnu, ou version légale (`cv`) manquante → 403 ;
+ *              - LEGAL_VERSIONS absente/vide → 500 (fail-closed : on n'écrit
+ *                PAS un consentement dont on ne peut pas prouver le texte) ;
+ *              - `cv` ∉ LEGAL_VERSIONS → 403 LEGAL_VERSION_UNKNOWN. Retirer une
+ *                version de cette liste RÉVOQUE les nouveaux uploads qui s'en
+ *                réclament : c'est le levier de révocation côté écriture, le
+ *                pendant de la même liste côté tokeniser (à l'émission) ;
+ *              - plan 'free'  → consent_version = cv, commercial_reuse = cc.
+ *
+ *   sv 2   : régime historique CONSERVÉ pour les uploads, mais DURCI sur un
+ *            point : la destination est TOUJOURS `internal/`, quoi que dise
+ *            X-Commercial-Reuse. Un passe sv 2 ne porte aucune claim de
+ *            consentement au corpus ; sa seule « preuve » serait une chaîne
+ *            X-Consent-Version choisie par l'appelant — c'est-à-dire un
+ *            consentement fabriqué. Les passes déjà distribués continuent donc
+ *            d'envoyer (sans X-Consent-Version, 403 comme avant), mais leur
+ *            audio reste en usage interne. Le durcissement ne coûte rien : R2
+ *            est désactivé sur le compte, le bucket n'existe pas, il n'y a
+ *            aucun corpus historique sous `reusable/` à préserver.
+ *
+ * Chaque objet garde la trace du régime appliqué : `customMetadata.plan`
+ * ('free' | 'legacy') et `customMetadata.consent_source` ('token' | 'header').
  */
 
 import { verifyToken, TOKEN_SIGNING_PUBLIC_KEYS, sha256hex } from '../_shared/token_verify.js';
+import { readPlan } from '../_shared/token_plan.js';
 
 const ALLOWED_ORIGINS = [
   'https://mentality-flutter-web.pages.dev',
@@ -42,6 +82,10 @@ const CONTENT_TYPES = {
 };
 
 const MAX_BYTES = 25 * 1024 * 1024; // 25 Mo
+
+// Première version de schéma où le passe porte lui-même le plan et le
+// consentement. À partir d'elle, les en-têtes client ne décident plus de rien.
+const SCHEMA_VERSION_PLAN = 3;
 
 export default {
   async fetch(request, env) {
@@ -75,19 +119,87 @@ export default {
     const account = (await sha256hex(auth.nonce)).slice(0, 32);
 
     // ─── Métadonnées (en-têtes, le corps étant binaire) ──────────────────────
-    const sessionId = sanitize(request.headers.get('X-Session-Id'));
-    const textId = sanitize(request.headers.get('X-Text-Id'));
-    const layer = sanitize(request.headers.get('X-Layer')) || 'C';
-    const recordType = sanitize(request.headers.get('X-Record-Type')) || 'audio';
-    const consentVersion = request.headers.get('X-Consent-Version') || '';
-    const commercialReuse = request.headers.get('X-Commercial-Reuse') === 'true';
+    // Ces valeurs composent la clé R2 : on REFUSE ce qui sort du format, on ne
+    // le nettoie plus (cf. `lisChamps`, granularité de l'effacement art. 17).
+    const champs = lisChamps(request);
+    if (champs.erreur) {
+      return json(
+        { error: `En-tête ${champs.erreur} de format invalide`, code: 'FIELD_FORMAT' },
+        400,
+        origin,
+      );
+    }
+    const { sessionId, textId, layer, recordType, language } = champs;
     const durationSeconds = request.headers.get('X-Duration-Seconds') || '';
-    const language = sanitize(request.headers.get('X-Language')) || 'fr';
     const contentType = request.headers.get('Content-Type') || '';
 
-    // ─── Garde-fou RGPD : pas de consentement → pas de stockage ──────────────
-    if (!consentVersion) {
-      return json({ error: 'Consentement absent : upload refusé (RGPD).' }, 403, origin);
+    // ─── Garde-fou RGPD : pas de consentement prouvé → pas de stockage ───────
+    // Le passe décide, pas le client : voir l'en-tête de fichier (deux régimes).
+    const porteur = readPlan(auth.claims);
+    let consentVersion;
+    let commercialReuse;
+    let planLabel;
+    let consentSource;
+
+    if (porteur.sv >= SCHEMA_VERSION_PLAN) {
+      // Régime autoritaire : tout vient des octets signés.
+      if (porteur.plan === 'paid') {
+        return json({ error: 'Plan payant : aucun enregistrement vocal' }, 403, origin);
+      }
+      if (porteur.plan !== 'free' || !porteur.legalVersion) {
+        // Défense en profondeur : `verifyToken()` refuse déjà cette forme (401).
+        // Si elle arrivait ici, elle ne vaut pas consentement.
+        return json({ error: 'Consentement absent : upload refusé (RGPD).' }, 403, origin);
+      }
+      // `cv` EST LA PREUVE recopiée dans customMetadata.consent_version. Le
+      // worker qui ÉCRIT doit donc savoir à quel texte elle renvoie, sans quoi
+      // il conserve un consentement dont il ne peut pas produire le contenu.
+      // La vérification à l'émission (tokeniser) ne suffit pas : ce worker doit
+      // pouvoir révoquer une version SANS ré-émettre les passes déjà signés.
+      const versions = versionsLegales(env);
+      if (versions.length === 0) {
+        // Fail-closed assumé : une liste absente est une erreur de config, pas
+        // un motif de refuser l'utilisateur — d'où 500 et non 403.
+        return json(
+          {
+            error: 'LEGAL_VERSIONS non configuré : stockage d\'un consentement impossible',
+            code: 'SERVER_MISCONFIGURED',
+          },
+          500,
+          origin,
+        );
+      }
+      if (!versions.includes(porteur.legalVersion)) {
+        return json(
+          {
+            error: 'Version des textes légaux inconnue de ce worker : upload refusé',
+            code: 'LEGAL_VERSION_UNKNOWN',
+          },
+          403,
+          origin,
+        );
+      }
+      consentVersion = porteur.legalVersion;
+      commercialReuse = porteur.corpusConsent;
+      planLabel = porteur.plan;
+      consentSource = 'token';
+    } else {
+      // Régime historique (sv 2) : consentement recueilli in-app, porté par les
+      // en-têtes. Les passes déjà émis continuent d'envoyer…
+      consentVersion = request.headers.get('X-Consent-Version') || '';
+      planLabel = 'legacy';
+      consentSource = 'header';
+      if (!consentVersion) {
+        return json({ error: 'Consentement absent : upload refusé (RGPD).' }, 403, origin);
+      }
+      // … MAIS JAMAIS VERS LA COUCHE CESSIBLE. X-Commercial-Reuse est ignoré
+      // ici, exactement comme en sv 3 : un passe sv 2 ne porte aucune claim de
+      // consentement au corpus, donc rien de signé ne peut soutenir une
+      // cession à des tiers. Écrire sous `reusable/` sur la seule foi de deux
+      // en-têtes reviendrait à fabriquer le consentement qu'on prétend prouver.
+      // NE JAMAIS remettre `=== 'true'` ici : c'était la faille (libre-service
+      // permanent de la couche cessible via un passe sv 2 signé).
+      commercialReuse = false;
     }
     if (!sessionId) {
       return json({ error: 'X-Session-Id requis' }, 400, origin);
@@ -103,7 +215,12 @@ export default {
     if (body.byteLength > MAX_BYTES) return json({ error: 'Fichier trop volumineux' }, 413, origin);
 
     // ─── Clé R2 : compartiment lié au token (H(nonce)) + uuid (pas de timestamp) ─
-    const bucket = commercialReuse ? 'reusable' : 'internal';
+    // DERNIER VERROU, volontairement redondant avec les deux branches ci-dessus :
+    // `reusable/` exige une preuve SIGNÉE. Si un futur remaniement rendait
+    // `commercialReuse` vrai sur un chemin déclaratif, la couche cessible
+    // resterait fermée plutôt que de s'ouvrir en silence.
+    const cessible = commercialReuse === true && consentSource === 'token';
+    const bucket = cessible ? 'reusable' : 'internal';
     const uid = crypto.randomUUID();
     const key = `${bucket}/${account}/${sessionId}/${layer}-${recordType}-${textId || 'na'}-${uid}.${ext}`;
 
@@ -117,7 +234,11 @@ export default {
           layer,
           record_type: recordType,
           consent_version: consentVersion,
-          commercial_reuse: String(commercialReuse),
+          // Miroir EXACT du préfixe de clé : la base et le bucket ne peuvent
+          // pas se contredire sur la cessibilité d'un enregistrement.
+          commercial_reuse: String(cessible),
+          plan: planLabel, // 'free' (passe sv 3) | 'legacy' (passe sv 2)
+          consent_source: consentSource, // 'token' = signé | 'header' = déclaré
           duration_seconds: durationSeconds,
           language,
           uploaded_day: new Date().toISOString().slice(0, 10), // DATE, jamais l'heure
@@ -127,7 +248,7 @@ export default {
       return json({ error: 'Échec écriture R2', detail: error.message }, 502, origin);
     }
 
-    return json({ key, size: body.byteLength, reusable: commercialReuse }, 200, origin);
+    return json({ key, size: body.byteLength, reusable: cessible }, 200, origin);
   },
 
   // Cron : supprime les données des comptes PROVISOIRES abandonnés — ceux sans
@@ -170,10 +291,60 @@ async function cleanupAbandoned(env) {
   }
 }
 
-// Neutralise les caractères dangereux pour une clé R2 (évite l'injection de chemin).
-function sanitize(v) {
-  if (!v) return '';
-  return v.replace(/[^a-zA-Z0-9_-]/g, '').slice(0, 80);
+/**
+ * Format admis pour tout fragment de clé R2 : lettres, chiffres, tiret,
+ * souligné, 80 caractères au plus. Les valeurs réelles de l'app le respectent
+ * toutes : UUID v4 (session), `fr_0042` (texte), `C`/`D` (couche),
+ * `reading`/`summary` (type), `fr`/`en-GB` (langue).
+ */
+const FORMAT_CHAMP = /^[A-Za-z0-9_-]{1,80}$/;
+
+/**
+ * Lit les fragments de clé portés par les en-têtes et REFUSE ceux qui sortent
+ * du format, au lieu de les nettoyer.
+ *
+ * POURQUOI REFUSER PLUTÔT QUE NETTOYER. L'ancienne `sanitize()` supprimait les
+ * caractères interdits : `sess/1` et `sess?1` se repliaient tous deux sur
+ * `sess1`. Deux sessions distinctes finissaient donc dans le MÊME dossier R2,
+ * et un effacement art. 17 ciblé sur l'une emportait l'autre — ou la manquait.
+ * La granularité de l'effacement dépend de l'injectivité de la clé : un nom
+ * qu'on ne peut pas écrire fidèlement doit être refusé, pas déformé.
+ *
+ * Renvoie {sessionId, textId, layer, recordType, language} ou {erreur: <en-tête>}.
+ * Un en-tête absent ou vide retombe sur son défaut (aucune régression pour les
+ * clients qui ne les envoient pas) ; seule une valeur PRÉSENTE et hors format
+ * est refusée.
+ */
+function lisChamps(request) {
+  const attendus = [
+    ['sessionId', 'X-Session-Id', ''],
+    ['textId', 'X-Text-Id', ''],
+    ['layer', 'X-Layer', 'C'],
+    ['recordType', 'X-Record-Type', 'audio'],
+    ['language', 'X-Language', 'fr'],
+  ];
+  const lus = {};
+  for (const [nom, entete, defaut] of attendus) {
+    const brut = request.headers.get(entete);
+    if (brut === null || brut === '') {
+      lus[nom] = defaut;
+      continue;
+    }
+    if (!FORMAT_CHAMP.test(brut)) return { erreur: entete };
+    lus[nom] = brut;
+  }
+  return lus;
+}
+
+/**
+ * Versions de textes légaux admises : CSV de la var wrangler LEGAL_VERSIONS.
+ * MÊME CONVENTION que `parseLegalVersions()` du tokeniser — la liste vit des
+ * deux côtés (émission ET écriture) pour que retirer une version suffise à
+ * bloquer les nouveaux uploads qui s'en réclament, sans ré-émettre de passe.
+ */
+function versionsLegales(env) {
+  const raw = typeof env.LEGAL_VERSIONS === 'string' ? env.LEGAL_VERSIONS : '';
+  return raw.split(',').map((s) => s.trim()).filter((s) => s.length > 0);
 }
 
 function corsHeaders(origin) {

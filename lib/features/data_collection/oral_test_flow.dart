@@ -2,6 +2,9 @@
 // Orchestrateur : 5 cycles complets Lecture → Pause → Résumé.
 //
 // Gère :
+//   - le GARDE DE PLAN : un passe Payant n'est jamais enregistré (sortie
+//     immédiate), quelle que soit la porte d'entrée — orchestrateur de fin de
+//     bilan, écran d'accueil des épreuves, ou route directe /test/oral
 //   - vérification du consentement audio (ConsentService, granulaire + versionné)
 //   - mélange aléatoire des 5 textes
 //   - machine d'états _FlowStep
@@ -13,12 +16,16 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import '../../core/constants/app_constants.dart';
 import '../../core/consent/consent_service.dart';
 import '../../core/services/results_sync.dart';
 import '../../core/l10n/l10n_ext.dart';
 import '../../core/l10n/locale_notifier.dart';
 import '../../core/services/auth_local_store.dart';
+import '../../core/services/token_claims_reader.dart';
 import '../../core/services/token_issuer.dart';
+import '../../core/services/token_plan.dart';
 import '../../core/theme/app_colors.dart';
 import '../../data/reading_corpus_service.dart';
 import '../../data/reading_texts.dart';
@@ -67,9 +74,28 @@ class _OralTestFlowState extends State<OralTestFlow> {
     _initializeFlow();
   }
 
-  /// Charge les 5 textes de la session (corpus complet, anti-répétition) en
-  /// parallèle de la vérification du consentement.
+  /// Aligne le consentement sur le passe, puis charge les 5 textes de la
+  /// session (corpus complet, anti-répétition).
+  ///
+  /// LE GARDE VIT ICI, pas seulement chez l'appelant. L'épreuve a trois portes
+  /// d'entrée — l'orchestrateur de fin de bilan, l'écran d'accueil des
+  /// épreuves et la route `/test/oral` — et un garde posé sur l'une d'elles
+  /// laisse les deux autres ouvertes. Un passe Payant sort immédiatement :
+  /// il a payé pour que rien ne soit enregistré.
   Future<void> _initializeFlow() async {
+    final plan = await TokenClaimsReader.currentPlan();
+    if (!mounted) return;
+    if (plan.plan == TokenPlan.paid) {
+      _quitterLEtape();
+      return;
+    }
+
+    // `free` réécrit le consentement local depuis le token (aucun écran :
+    // il a été recueilli sur le site) ; `unknown` est un no-op, sauf s'il
+    // neutralise un consentement dont le passe porteur a disparu.
+    await ConsentService.instance
+        .syncFromToken(plan, locale: localeNotifier.contentTag);
+
     final results = await Future.wait([
       ReadingCorpusService.instance.pickSessionTexts(count: 5),
       ConsentService.instance.hasValidConsent(),
@@ -104,7 +130,27 @@ class _OralTestFlowState extends State<OralTestFlow> {
   }
 
   void _declineConsent() {
-    Navigator.of(context).pop();
+    _quitterLEtape();
+  }
+
+  /// Referme l'étape orale — depuis n'importe laquelle de ses trois portes.
+  ///
+  /// LE PIÈGE : `Navigator.pop()` seul ne marchait que si l'on était ARRIVÉ
+  /// d'ailleurs. Sur la route go_router de premier niveau `/test/oral`
+  /// (app_router.dart), l'étape orale est la seule page de la pile : il n'y a
+  /// rien à dépiler, le pop est un no-op silencieux, et l'écran reste figé sur
+  /// « vérification » — un passe Payant se retrouvait bloqué là, et un refus
+  /// de consentement ne refusait rien du tout.
+  void _quitterLEtape() {
+    final navigateur = Navigator.of(context);
+    if (navigateur.canPop()) {
+      navigateur.pop();
+      return;
+    }
+    // Rien à dépiler : on repart de l'accueil, qui est toujours une
+    // destination valable. `maybeOf` parce qu'un banc d'essai peut monter
+    // cette page sans routeur du tout.
+    GoRouter.maybeOf(context)?.go(AppConstants.routeHome);
   }
 
   // ─── Progression des cycles ───────────────────────────────────────────────────
@@ -159,7 +205,11 @@ class _OralTestFlowState extends State<OralTestFlow> {
   /// ce qu'ils contenaient.
   ///
   /// `layer` reprend la règle du worker r2-upload : `reusable/` quand la
-  /// personne a consenti à la cession commerciale, `internal/` sinon.
+  /// personne a consenti à la cession commerciale, `internal/` sinon. La
+  /// source est le consentement PERSISTÉ, jamais les cases de cet écran :
+  /// quand le consentement vient du token, ces cases n'ont jamais été
+  /// affichées et resteraient à `false` — la base aurait dit `internal` là où
+  /// R2 a réellement écrit sous `reusable/`.
   ///
   /// Tir-et-oublie : un échec ne doit jamais interrompre l'épreuve.
   void _consigneOral({
@@ -167,13 +217,14 @@ class _OralTestFlowState extends State<OralTestFlow> {
     required String textId,
     required String r2SessionId,
   }) {
+    final cession = ConsentService.instance.current?.commercialReuse ?? false;
     unawaited(ResultsSync.instance.flushOral(<String, dynamic>{
       'cycle': _currentCycle,
       'kind': kind,
       'textId': textId,
       'r2SessionId': r2SessionId,
-      'layer': _consentCommercial ? 'reusable' : 'internal',
-      'commercialReuse': _consentCommercial,
+      'layer': cession ? 'reusable' : 'internal',
+      'commercialReuse': cession,
       'uploadOk': true,
     }));
   }
