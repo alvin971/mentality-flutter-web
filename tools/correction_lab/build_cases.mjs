@@ -121,18 +121,28 @@ const stripCopula = (s, lang) => s.replace(L[lang].copula, '').replace(/[.!]$/, 
 const bareNoun = (s, lang) => stripCopula(s, lang).replace(L[lang].article, '').trim();
 const words = (s) => norm(s).split(' ').filter((w) => w.length > 3);
 const overlap = (a, b) => { const A = new Set(words(a)); return words(b).some((w) => A.has(w)); };
+const KEYS = { a: 'qsz', b: 'vn', c: 'xv', d: 'sf', e: 'rz', f: 'dg', g: 'fh', h: 'gj', i: 'ou', j: 'hk', k: 'jl', l: 'km', m: 'ln', n: 'bm', o: 'ip', p: 'ol', q: 'as', r: 'et', s: 'ad', t: 'ry', u: 'yi', v: 'cb', w: 'qe', x: 'zc', y: 'tu', z: 'ax' };
+/** Faute de frappe LISIBLE : ne touche que des mots ≥ 6 lettres, jamais les 2 premières
+ *  lettres, une seule mutation par mot (inversion de deux lettres voisines ou touche
+ *  voisine sur le clavier), au plus 2 mots. Les mutations aléatoires de v1 rendaient
+ *  « Coloré » → « Coljré » illisible : l'attendu n'était plus certain. */
 function typo(s) {
-  const idx = [];
-  for (let i = 1; i < s.length; i++) if (/\p{L}/u.test(s[i]) && /\p{L}/u.test(s[i - 1])) idx.push(i);
-  if (idx.length < 2) return null;
-  const n = s.length > 14 ? 2 : 1;
-  let out = s.split('');
-  for (let k = 0; k < n; k++) {
-    const i = pick(idx);
-    if (R() < 0.5) [out[i], out[i - 1]] = [out[i - 1], out[i]]; // inversion
-    else out[i] = 'abcdefghijklmnopqrstuvwxyz'[Math.floor(R() * 26)]; // substitution
+  const words = s.split(' ');
+  const idx = words.map((w, i) => (w.replace(/[^\p{L}]/gu, '').length >= 6 ? i : -1)).filter((i) => i >= 0);
+  if (!idx.length) return null;
+  const targets = shuffle(idx).slice(0, s.length > 25 ? 2 : 1);
+  for (const t of targets) {
+    const w = words[t].split('');
+    const pos = [];
+    for (let i = 2; i < w.length - 1; i++) if (/\p{L}/u.test(w[i]) && /\p{L}/u.test(w[i + 1])) pos.push(i);
+    if (!pos.length) continue;
+    const i = pick(pos);
+    const neigh = KEYS[w[i].toLowerCase()];
+    if (R() < 0.5 || !neigh) [w[i], w[i + 1]] = [w[i + 1], w[i]];
+    else w[i] = neigh[Math.floor(R() * neigh.length)];
+    words[t] = w.join('');
   }
-  const r = out.join('');
+  const r = words.join(' ');
   return r === s ? null : r;
 }
 const deaccent = (s) => { const r = s.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ß/g, 'ss'); return r === s ? null : r; };
@@ -172,8 +182,17 @@ function emit(setName, it, kind, rule, response, expected, extra = {}) {
 const byBank = {};
 for (const it of banks) (byBank[`${it.subtest}/${it.lang}`] ??= []).push(it);
 /** Un autre item de la même banque sans mot commun dans les exemples. */
+const LEVEL_ORDER = { concrete: 0, functional: 1, categorical: 2, abstract: 3, veryHigh: 0, high: 1, medium: 2, low: 3, veryLow: 4 };
+/** sameLevel=true : même niveau ; sameLevel='far' : niveau le plus éloigné (une propriété
+ *  concrète empruntée à une paire abstraite, ou l'inverse, est un 0 bien plus sûr qu'un
+ *  emprunt au hasard — en v1, 12 emprunts « sans rapport » étaient en fait vrais). */
 function otherItem(it, sameLevel) {
-  const pool = byBank[`${it.subtest}/${it.lang}`].filter((o) => o.id !== it.id && (!sameLevel || o.level === it.level));
+  let pool = byBank[`${it.subtest}/${it.lang}`].filter((o) => o.id !== it.id && (sameLevel !== true || o.level === it.level));
+  if (sameLevel === 'far') {
+    const d = (o) => Math.abs(LEVEL_ORDER[o.level] - LEVEL_ORDER[it.level]);
+    const max = Math.max(...pool.map(d));
+    pool = pool.filter((o) => d(o) === max);
+  }
   const all = (x) => [...x.two, ...x.one, JSON.stringify(x.stimulus)].join(' ');
   const clean = pool.filter((o) => !overlap(all(it), all(o)));
   return pick(clean.length ? clean : pool);
@@ -195,7 +214,7 @@ for (const it of banks) {
     () => emit('gold', it, 'zero_empty', 'réponse vide = 0', '', 0),
     () => emit('gold', it, 'zero_dontknow', 'ne sait pas = 0', pick(T.dontknow), 0),
     () => emit('gold', it, 'zero_repeat', 'répéter le stimulus = 0', isSI ? `${it.stimulus.word1} et ${it.stimulus.word2}` : it.stimulus.word, 0),
-    () => { const o = otherItem(it, false); emit('gold', it, 'zero_other_one', "1 point d'un item sans rapport = 0", pick(o.one), 0, { from_item: o.id }); },
+    () => { const o = otherItem(it, 'far'); emit('gold', it, 'zero_other_one', "1 point d'un item de niveau opposé = 0", pick(o.one), 0, { from_item: o.id }); },
     () => {
       // En SI, les catégories des niveaux categorical/abstract se recouvrent souvent
       // (« des qualités morales » convient à plusieurs paires abstraites) : l'emprunt
