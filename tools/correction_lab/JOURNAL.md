@@ -153,7 +153,7 @@ Trois passages consécutifs, ordres mélangés, même version, tous les seuils t
 Rien n'est déployé ni fusionné. Tout est sur `chantier/correcteur-ia` (app **et** admin).
 
 1. **Clé Anthropic NEUVE** — ne pas réutiliser celle de `claude-proxy` (dans l'historique git, **à révoquer** sur console.anthropic.com).
-2. **Migration** : appliquer `mentality-admin/supabase/migrations/019_ai_correcteur.sql` (branche `chantier/correcteur-ia` de l'admin, commit `8f8f1ef`) sur le projet Supabase Cloud `ktrnievuknfhwffbxaog`, AVANT le premier déploiement.
+2. **Migration** : appliquer `mentality-admin/supabase/migrations/019_ai_correcteur.sql` (branche `chantier/correcteur-ia` de l'admin, commit `8f8f1ef` — **locale seulement**, le push a été refusé par les permissions de la session : `cd ~/projects/mentality/mentality-admin && git push -u origin chantier/correcteur-ia`) sur le projet Supabase Cloud `ktrnievuknfhwffbxaog`, AVANT le premier déploiement.
 3. **Secrets** (depuis `workers/correcteur/`) :
    ```bash
    wrangler secret put SUPABASE_URL
