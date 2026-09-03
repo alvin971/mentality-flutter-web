@@ -1,0 +1,12 @@
+# Mini-worker du banc d'essai — JAMAIS déployé (protocole §8). Il ne tourne que
+# sous `wrangler dev` (le binding AI s'exécute à distance, facturé au compte,
+# exactement comme en production). Le token du compte n'a pas la permission
+# « Workers AI » nécessaire à l'API REST /ai/run : c'est ce détour qui donne au
+# banc la même primitive que workers/r2-upload (env.AI.run).
+name = "mentality-verif-lab"
+main = "index.js"
+compatibility_date = "2025-01-01"
+workers_dev = false
+
+[ai]
+binding = "AI"

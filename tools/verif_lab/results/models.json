@@ -1,0 +1,84 @@
+{
+  "day": "2026-09-03",
+  "models": [
+    {
+      "name": "@cf/openai/whisper",
+      "description": "Whisper is a general-purpose speech recognition model. It is trained on a large dataset of diverse audio and is also a multitasking model that can perform multi",
+      "price": [
+        {
+          "unit": "per audio minute",
+          "price": 0.000453,
+          "currency": "USD"
+        }
+      ],
+      "partner": false,
+      "beta": false,
+      "async_queue": false,
+      "realtime": false,
+      "languages": null
+    },
+    {
+      "name": "@cf/deepgram/flux",
+      "description": "Flux is the first conversational speech recognition model built specifically for voice agents.",
+      "price": [
+        {
+          "unit": "per audio minute (websocket)",
+          "price": 0.0077,
+          "currency": "USD"
+        }
+      ],
+      "partner": true,
+      "beta": false,
+      "async_queue": false,
+      "realtime": true,
+      "languages": null
+    },
+    {
+      "name": "@cf/deepgram/nova-3",
+      "description": "Transcribe audio using Deepgram’s speech-to-text model",
+      "price": [
+        {
+          "unit": "per audio minute",
+          "price": 0.0052,
+          "currency": "USD"
+        },
+        {
+          "unit": "per audio minute (websocket)",
+          "price": 0.0092,
+          "currency": "USD"
+        }
+      ],
+      "partner": true,
+      "beta": false,
+      "async_queue": true,
+      "realtime": true,
+      "languages": null
+    },
+    {
+      "name": "@cf/openai/whisper-tiny-en",
+      "description": "Whisper is a pre-trained model for automatic speech recognition (ASR) and speech translation. Trained on 680k hours of labelled data, Whisper models demonstrate",
+      "price": null,
+      "partner": false,
+      "beta": true,
+      "async_queue": false,
+      "realtime": false,
+      "languages": null
+    },
+    {
+      "name": "@cf/openai/whisper-large-v3-turbo",
+      "description": "Whisper is a pre-trained model for automatic speech recognition (ASR) and speech translation. ",
+      "price": [
+        {
+          "unit": "per audio minute",
+          "price": 0.000513,
+          "currency": "USD"
+        }
+      ],
+      "partner": false,
+      "beta": false,
+      "async_queue": true,
+      "realtime": false,
+      "languages": null
+    }
+  ]
+}

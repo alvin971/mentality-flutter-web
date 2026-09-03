@@ -1,0 +1,2167 @@
+{
+ "seed": 20260903,
+ "per_lang": 40,
+ "holdout_per_lang": 6,
+ "texts": [
+  {
+   "lang": "fr",
+   "id": "fr_00163",
+   "holdout": false,
+   "index": 0,
+   "words": 132,
+   "words_ref": 78,
+   "chars": 839
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00251",
+   "holdout": false,
+   "index": 1,
+   "words": 130,
+   "words_ref": 78,
+   "chars": 830
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00355",
+   "holdout": false,
+   "index": 2,
+   "words": 133,
+   "words_ref": 77,
+   "chars": 813
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00201",
+   "holdout": false,
+   "index": 3,
+   "words": 126,
+   "words_ref": 72,
+   "chars": 789
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00301",
+   "holdout": false,
+   "index": 4,
+   "words": 134,
+   "words_ref": 79,
+   "chars": 820
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00178",
+   "holdout": false,
+   "index": 5,
+   "words": 132,
+   "words_ref": 82,
+   "chars": 848
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00302",
+   "holdout": false,
+   "index": 6,
+   "words": 134,
+   "words_ref": 75,
+   "chars": 809
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00213",
+   "holdout": false,
+   "index": 7,
+   "words": 136,
+   "words_ref": 80,
+   "chars": 820
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00014",
+   "holdout": false,
+   "index": 8,
+   "words": 135,
+   "words_ref": 89,
+   "chars": 894
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00040",
+   "holdout": false,
+   "index": 9,
+   "words": 136,
+   "words_ref": 75,
+   "chars": 839
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00493",
+   "holdout": false,
+   "index": 10,
+   "words": 139,
+   "words_ref": 75,
+   "chars": 851
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00325",
+   "holdout": false,
+   "index": 11,
+   "words": 132,
+   "words_ref": 78,
+   "chars": 855
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00482",
+   "holdout": false,
+   "index": 12,
+   "words": 143,
+   "words_ref": 80,
+   "chars": 847
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00474",
+   "holdout": false,
+   "index": 13,
+   "words": 132,
+   "words_ref": 73,
+   "chars": 746
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00080",
+   "holdout": false,
+   "index": 14,
+   "words": 126,
+   "words_ref": 70,
+   "chars": 807
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00490",
+   "holdout": false,
+   "index": 15,
+   "words": 137,
+   "words_ref": 73,
+   "chars": 849
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00324",
+   "holdout": false,
+   "index": 16,
+   "words": 128,
+   "words_ref": 77,
+   "chars": 836
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00459",
+   "holdout": false,
+   "index": 17,
+   "words": 127,
+   "words_ref": 74,
+   "chars": 771
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00032",
+   "holdout": false,
+   "index": 18,
+   "words": 131,
+   "words_ref": 79,
+   "chars": 821
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00072",
+   "holdout": false,
+   "index": 19,
+   "words": 124,
+   "words_ref": 80,
+   "chars": 771
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00456",
+   "holdout": false,
+   "index": 20,
+   "words": 127,
+   "words_ref": 78,
+   "chars": 821
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00060",
+   "holdout": false,
+   "index": 21,
+   "words": 131,
+   "words_ref": 80,
+   "chars": 857
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00450",
+   "holdout": false,
+   "index": 22,
+   "words": 132,
+   "words_ref": 72,
+   "chars": 811
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00015",
+   "holdout": false,
+   "index": 23,
+   "words": 138,
+   "words_ref": 74,
+   "chars": 865
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00160",
+   "holdout": false,
+   "index": 24,
+   "words": 133,
+   "words_ref": 82,
+   "chars": 877
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00375",
+   "holdout": false,
+   "index": 25,
+   "words": 134,
+   "words_ref": 80,
+   "chars": 838
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00457",
+   "holdout": false,
+   "index": 26,
+   "words": 129,
+   "words_ref": 79,
+   "chars": 837
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00380",
+   "holdout": false,
+   "index": 27,
+   "words": 142,
+   "words_ref": 75,
+   "chars": 893
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00327",
+   "holdout": false,
+   "index": 28,
+   "words": 129,
+   "words_ref": 78,
+   "chars": 824
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00140",
+   "holdout": false,
+   "index": 29,
+   "words": 135,
+   "words_ref": 85,
+   "chars": 876
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00141",
+   "holdout": false,
+   "index": 30,
+   "words": 139,
+   "words_ref": 74,
+   "chars": 818
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00475",
+   "holdout": false,
+   "index": 31,
+   "words": 140,
+   "words_ref": 87,
+   "chars": 845
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00328",
+   "holdout": false,
+   "index": 32,
+   "words": 131,
+   "words_ref": 80,
+   "chars": 871
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00435",
+   "holdout": false,
+   "index": 33,
+   "words": 122,
+   "words_ref": 74,
+   "chars": 792
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00297",
+   "holdout": true,
+   "index": 0,
+   "words": 134,
+   "words_ref": 76,
+   "chars": 799
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00111",
+   "holdout": true,
+   "index": 1,
+   "words": 124,
+   "words_ref": 68,
+   "chars": 810
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00494",
+   "holdout": true,
+   "index": 2,
+   "words": 128,
+   "words_ref": 79,
+   "chars": 836
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00113",
+   "holdout": true,
+   "index": 3,
+   "words": 127,
+   "words_ref": 76,
+   "chars": 795
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00289",
+   "holdout": true,
+   "index": 4,
+   "words": 132,
+   "words_ref": 82,
+   "chars": 860
+  },
+  {
+   "lang": "fr",
+   "id": "fr_00411",
+   "holdout": true,
+   "index": 5,
+   "words": 135,
+   "words_ref": 93,
+   "chars": 965
+  },
+  {
+   "lang": "en",
+   "id": "en_00045",
+   "holdout": false,
+   "index": 0,
+   "words": 133,
+   "words_ref": 86,
+   "chars": 785
+  },
+  {
+   "lang": "en",
+   "id": "en_00041",
+   "holdout": false,
+   "index": 1,
+   "words": 139,
+   "words_ref": 94,
+   "chars": 889
+  },
+  {
+   "lang": "en",
+   "id": "en_00022",
+   "holdout": false,
+   "index": 2,
+   "words": 136,
+   "words_ref": 80,
+   "chars": 780
+  },
+  {
+   "lang": "en",
+   "id": "en_00033",
+   "holdout": false,
+   "index": 3,
+   "words": 132,
+   "words_ref": 87,
+   "chars": 831
+  },
+  {
+   "lang": "en",
+   "id": "en_00026",
+   "holdout": false,
+   "index": 4,
+   "words": 137,
+   "words_ref": 88,
+   "chars": 863
+  },
+  {
+   "lang": "en",
+   "id": "en_00023",
+   "holdout": false,
+   "index": 5,
+   "words": 139,
+   "words_ref": 80,
+   "chars": 747
+  },
+  {
+   "lang": "en",
+   "id": "en_00008",
+   "holdout": false,
+   "index": 6,
+   "words": 135,
+   "words_ref": 86,
+   "chars": 832
+  },
+  {
+   "lang": "en",
+   "id": "en_00016",
+   "holdout": false,
+   "index": 7,
+   "words": 136,
+   "words_ref": 68,
+   "chars": 739
+  },
+  {
+   "lang": "en",
+   "id": "en_00036",
+   "holdout": false,
+   "index": 8,
+   "words": 133,
+   "words_ref": 82,
+   "chars": 781
+  },
+  {
+   "lang": "en",
+   "id": "en_00014",
+   "holdout": false,
+   "index": 9,
+   "words": 138,
+   "words_ref": 86,
+   "chars": 812
+  },
+  {
+   "lang": "en",
+   "id": "en_00048",
+   "holdout": false,
+   "index": 10,
+   "words": 136,
+   "words_ref": 78,
+   "chars": 840
+  },
+  {
+   "lang": "en",
+   "id": "en_00050",
+   "holdout": false,
+   "index": 11,
+   "words": 137,
+   "words_ref": 82,
+   "chars": 792
+  },
+  {
+   "lang": "en",
+   "id": "en_00003",
+   "holdout": false,
+   "index": 12,
+   "words": 145,
+   "words_ref": 74,
+   "chars": 786
+  },
+  {
+   "lang": "en",
+   "id": "en_00030",
+   "holdout": false,
+   "index": 13,
+   "words": 138,
+   "words_ref": 94,
+   "chars": 892
+  },
+  {
+   "lang": "en",
+   "id": "en_00040",
+   "holdout": false,
+   "index": 14,
+   "words": 138,
+   "words_ref": 74,
+   "chars": 783
+  },
+  {
+   "lang": "en",
+   "id": "en_00038",
+   "holdout": false,
+   "index": 15,
+   "words": 133,
+   "words_ref": 87,
+   "chars": 817
+  },
+  {
+   "lang": "en",
+   "id": "en_00001",
+   "holdout": false,
+   "index": 16,
+   "words": 131,
+   "words_ref": 74,
+   "chars": 717
+  },
+  {
+   "lang": "en",
+   "id": "en_00047",
+   "holdout": false,
+   "index": 17,
+   "words": 138,
+   "words_ref": 73,
+   "chars": 795
+  },
+  {
+   "lang": "en",
+   "id": "en_00027",
+   "holdout": false,
+   "index": 18,
+   "words": 134,
+   "words_ref": 92,
+   "chars": 829
+  },
+  {
+   "lang": "en",
+   "id": "en_00031",
+   "holdout": false,
+   "index": 19,
+   "words": 137,
+   "words_ref": 80,
+   "chars": 797
+  },
+  {
+   "lang": "en",
+   "id": "en_00025",
+   "holdout": false,
+   "index": 20,
+   "words": 139,
+   "words_ref": 93,
+   "chars": 864
+  },
+  {
+   "lang": "en",
+   "id": "en_00032",
+   "holdout": false,
+   "index": 21,
+   "words": 138,
+   "words_ref": 97,
+   "chars": 845
+  },
+  {
+   "lang": "en",
+   "id": "en_00011",
+   "holdout": false,
+   "index": 22,
+   "words": 138,
+   "words_ref": 79,
+   "chars": 801
+  },
+  {
+   "lang": "en",
+   "id": "en_00046",
+   "holdout": false,
+   "index": 23,
+   "words": 136,
+   "words_ref": 74,
+   "chars": 809
+  },
+  {
+   "lang": "en",
+   "id": "en_00042",
+   "holdout": false,
+   "index": 24,
+   "words": 141,
+   "words_ref": 86,
+   "chars": 858
+  },
+  {
+   "lang": "en",
+   "id": "en_00044",
+   "holdout": false,
+   "index": 25,
+   "words": 145,
+   "words_ref": 96,
+   "chars": 945
+  },
+  {
+   "lang": "en",
+   "id": "en_00018",
+   "holdout": false,
+   "index": 26,
+   "words": 137,
+   "words_ref": 79,
+   "chars": 857
+  },
+  {
+   "lang": "en",
+   "id": "en_00009",
+   "holdout": false,
+   "index": 27,
+   "words": 135,
+   "words_ref": 73,
+   "chars": 752
+  },
+  {
+   "lang": "en",
+   "id": "en_00006",
+   "holdout": false,
+   "index": 28,
+   "words": 136,
+   "words_ref": 98,
+   "chars": 845
+  },
+  {
+   "lang": "en",
+   "id": "en_00017",
+   "holdout": false,
+   "index": 29,
+   "words": 132,
+   "words_ref": 75,
+   "chars": 740
+  },
+  {
+   "lang": "en",
+   "id": "en_00037",
+   "holdout": false,
+   "index": 30,
+   "words": 130,
+   "words_ref": 74,
+   "chars": 713
+  },
+  {
+   "lang": "en",
+   "id": "en_00043",
+   "holdout": false,
+   "index": 31,
+   "words": 142,
+   "words_ref": 87,
+   "chars": 842
+  },
+  {
+   "lang": "en",
+   "id": "en_00028",
+   "holdout": false,
+   "index": 32,
+   "words": 134,
+   "words_ref": 84,
+   "chars": 841
+  },
+  {
+   "lang": "en",
+   "id": "en_00020",
+   "holdout": false,
+   "index": 33,
+   "words": 136,
+   "words_ref": 73,
+   "chars": 794
+  },
+  {
+   "lang": "en",
+   "id": "en_00039",
+   "holdout": true,
+   "index": 0,
+   "words": 137,
+   "words_ref": 78,
+   "chars": 792
+  },
+  {
+   "lang": "en",
+   "id": "en_00004",
+   "holdout": true,
+   "index": 1,
+   "words": 136,
+   "words_ref": 86,
+   "chars": 811
+  },
+  {
+   "lang": "en",
+   "id": "en_00010",
+   "holdout": true,
+   "index": 2,
+   "words": 137,
+   "words_ref": 80,
+   "chars": 783
+  },
+  {
+   "lang": "en",
+   "id": "en_00002",
+   "holdout": true,
+   "index": 3,
+   "words": 136,
+   "words_ref": 88,
+   "chars": 851
+  },
+  {
+   "lang": "en",
+   "id": "en_00049",
+   "holdout": true,
+   "index": 4,
+   "words": 136,
+   "words_ref": 84,
+   "chars": 746
+  },
+  {
+   "lang": "en",
+   "id": "en_00034",
+   "holdout": true,
+   "index": 5,
+   "words": 133,
+   "words_ref": 92,
+   "chars": 883
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00048",
+   "holdout": false,
+   "index": 0,
+   "words": 143,
+   "words_ref": 76,
+   "chars": 858
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00045",
+   "holdout": false,
+   "index": 1,
+   "words": 141,
+   "words_ref": 96,
+   "chars": 886
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00040",
+   "holdout": false,
+   "index": 2,
+   "words": 141,
+   "words_ref": 87,
+   "chars": 947
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00034",
+   "holdout": false,
+   "index": 3,
+   "words": 152,
+   "words_ref": 97,
+   "chars": 964
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00009",
+   "holdout": false,
+   "index": 4,
+   "words": 130,
+   "words_ref": 71,
+   "chars": 711
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00008",
+   "holdout": false,
+   "index": 5,
+   "words": 137,
+   "words_ref": 74,
+   "chars": 778
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00032",
+   "holdout": false,
+   "index": 6,
+   "words": 142,
+   "words_ref": 96,
+   "chars": 904
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00013",
+   "holdout": false,
+   "index": 7,
+   "words": 135,
+   "words_ref": 73,
+   "chars": 708
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00050",
+   "holdout": false,
+   "index": 8,
+   "words": 150,
+   "words_ref": 94,
+   "chars": 993
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00014",
+   "holdout": false,
+   "index": 9,
+   "words": 132,
+   "words_ref": 69,
+   "chars": 726
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00004",
+   "holdout": false,
+   "index": 10,
+   "words": 137,
+   "words_ref": 85,
+   "chars": 822
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00033",
+   "holdout": false,
+   "index": 11,
+   "words": 154,
+   "words_ref": 86,
+   "chars": 867
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00017",
+   "holdout": false,
+   "index": 12,
+   "words": 133,
+   "words_ref": 80,
+   "chars": 900
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00002",
+   "holdout": false,
+   "index": 13,
+   "words": 135,
+   "words_ref": 91,
+   "chars": 847
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00046",
+   "holdout": false,
+   "index": 14,
+   "words": 146,
+   "words_ref": 83,
+   "chars": 924
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00041",
+   "holdout": false,
+   "index": 15,
+   "words": 141,
+   "words_ref": 90,
+   "chars": 965
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00003",
+   "holdout": false,
+   "index": 16,
+   "words": 135,
+   "words_ref": 83,
+   "chars": 792
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00039",
+   "holdout": false,
+   "index": 17,
+   "words": 141,
+   "words_ref": 91,
+   "chars": 893
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00006",
+   "holdout": false,
+   "index": 18,
+   "words": 135,
+   "words_ref": 78,
+   "chars": 810
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00043",
+   "holdout": false,
+   "index": 19,
+   "words": 143,
+   "words_ref": 101,
+   "chars": 1067
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00030",
+   "holdout": false,
+   "index": 20,
+   "words": 144,
+   "words_ref": 93,
+   "chars": 962
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00019",
+   "holdout": false,
+   "index": 21,
+   "words": 133,
+   "words_ref": 87,
+   "chars": 923
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00038",
+   "holdout": false,
+   "index": 22,
+   "words": 144,
+   "words_ref": 91,
+   "chars": 965
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00031",
+   "holdout": false,
+   "index": 23,
+   "words": 144,
+   "words_ref": 86,
+   "chars": 829
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00020",
+   "holdout": false,
+   "index": 24,
+   "words": 138,
+   "words_ref": 86,
+   "chars": 861
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00005",
+   "holdout": false,
+   "index": 25,
+   "words": 129,
+   "words_ref": 71,
+   "chars": 717
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00018",
+   "holdout": false,
+   "index": 26,
+   "words": 134,
+   "words_ref": 76,
+   "chars": 798
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00047",
+   "holdout": false,
+   "index": 27,
+   "words": 139,
+   "words_ref": 86,
+   "chars": 894
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00001",
+   "holdout": false,
+   "index": 28,
+   "words": 138,
+   "words_ref": 94,
+   "chars": 862
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00026",
+   "holdout": false,
+   "index": 29,
+   "words": 150,
+   "words_ref": 84,
+   "chars": 916
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00035",
+   "holdout": false,
+   "index": 30,
+   "words": 149,
+   "words_ref": 85,
+   "chars": 902
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00011",
+   "holdout": false,
+   "index": 31,
+   "words": 135,
+   "words_ref": 80,
+   "chars": 742
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00012",
+   "holdout": false,
+   "index": 32,
+   "words": 136,
+   "words_ref": 88,
+   "chars": 836
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00037",
+   "holdout": false,
+   "index": 33,
+   "words": 134,
+   "words_ref": 92,
+   "chars": 901
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00010",
+   "holdout": true,
+   "index": 0,
+   "words": 131,
+   "words_ref": 87,
+   "chars": 794
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00024",
+   "holdout": true,
+   "index": 1,
+   "words": 144,
+   "words_ref": 92,
+   "chars": 957
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00023",
+   "holdout": true,
+   "index": 2,
+   "words": 140,
+   "words_ref": 78,
+   "chars": 836
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00016",
+   "holdout": true,
+   "index": 3,
+   "words": 137,
+   "words_ref": 79,
+   "chars": 762
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00027",
+   "holdout": true,
+   "index": 4,
+   "words": 129,
+   "words_ref": 76,
+   "chars": 767
+  },
+  {
+   "lang": "en_GB",
+   "id": "en_GB_00028",
+   "holdout": true,
+   "index": 5,
+   "words": 137,
+   "words_ref": 97,
+   "chars": 942
+  },
+  {
+   "lang": "es",
+   "id": "es_00028",
+   "holdout": false,
+   "index": 0,
+   "words": 135,
+   "words_ref": 80,
+   "chars": 937
+  },
+  {
+   "lang": "es",
+   "id": "es_00020",
+   "holdout": false,
+   "index": 1,
+   "words": 146,
+   "words_ref": 79,
+   "chars": 891
+  },
+  {
+   "lang": "es",
+   "id": "es_00035",
+   "holdout": false,
+   "index": 2,
+   "words": 127,
+   "words_ref": 76,
+   "chars": 813
+  },
+  {
+   "lang": "es",
+   "id": "es_00050",
+   "holdout": false,
+   "index": 3,
+   "words": 144,
+   "words_ref": 80,
+   "chars": 936
+  },
+  {
+   "lang": "es",
+   "id": "es_00047",
+   "holdout": false,
+   "index": 4,
+   "words": 137,
+   "words_ref": 83,
+   "chars": 933
+  },
+  {
+   "lang": "es",
+   "id": "es_00005",
+   "holdout": false,
+   "index": 5,
+   "words": 123,
+   "words_ref": 62,
+   "chars": 789
+  },
+  {
+   "lang": "es",
+   "id": "es_00031",
+   "holdout": false,
+   "index": 6,
+   "words": 124,
+   "words_ref": 72,
+   "chars": 753
+  },
+  {
+   "lang": "es",
+   "id": "es_00015",
+   "holdout": false,
+   "index": 7,
+   "words": 145,
+   "words_ref": 67,
+   "chars": 863
+  },
+  {
+   "lang": "es",
+   "id": "es_00036",
+   "holdout": false,
+   "index": 8,
+   "words": 133,
+   "words_ref": 68,
+   "chars": 801
+  },
+  {
+   "lang": "es",
+   "id": "es_00006",
+   "holdout": false,
+   "index": 9,
+   "words": 134,
+   "words_ref": 75,
+   "chars": 812
+  },
+  {
+   "lang": "es",
+   "id": "es_00041",
+   "holdout": false,
+   "index": 10,
+   "words": 131,
+   "words_ref": 81,
+   "chars": 917
+  },
+  {
+   "lang": "es",
+   "id": "es_00013",
+   "holdout": false,
+   "index": 11,
+   "words": 134,
+   "words_ref": 70,
+   "chars": 793
+  },
+  {
+   "lang": "es",
+   "id": "es_00016",
+   "holdout": false,
+   "index": 12,
+   "words": 146,
+   "words_ref": 84,
+   "chars": 962
+  },
+  {
+   "lang": "es",
+   "id": "es_00021",
+   "holdout": false,
+   "index": 13,
+   "words": 128,
+   "words_ref": 79,
+   "chars": 880
+  },
+  {
+   "lang": "es",
+   "id": "es_00019",
+   "holdout": false,
+   "index": 14,
+   "words": 143,
+   "words_ref": 70,
+   "chars": 856
+  },
+  {
+   "lang": "es",
+   "id": "es_00004",
+   "holdout": false,
+   "index": 15,
+   "words": 121,
+   "words_ref": 71,
+   "chars": 820
+  },
+  {
+   "lang": "es",
+   "id": "es_00033",
+   "holdout": false,
+   "index": 16,
+   "words": 127,
+   "words_ref": 74,
+   "chars": 835
+  },
+  {
+   "lang": "es",
+   "id": "es_00048",
+   "holdout": false,
+   "index": 17,
+   "words": 131,
+   "words_ref": 76,
+   "chars": 905
+  },
+  {
+   "lang": "es",
+   "id": "es_00039",
+   "holdout": false,
+   "index": 18,
+   "words": 141,
+   "words_ref": 77,
+   "chars": 817
+  },
+  {
+   "lang": "es",
+   "id": "es_00012",
+   "holdout": false,
+   "index": 19,
+   "words": 126,
+   "words_ref": 79,
+   "chars": 855
+  },
+  {
+   "lang": "es",
+   "id": "es_00024",
+   "holdout": false,
+   "index": 20,
+   "words": 129,
+   "words_ref": 72,
+   "chars": 824
+  },
+  {
+   "lang": "es",
+   "id": "es_00023",
+   "holdout": false,
+   "index": 21,
+   "words": 132,
+   "words_ref": 79,
+   "chars": 843
+  },
+  {
+   "lang": "es",
+   "id": "es_00001",
+   "holdout": false,
+   "index": 22,
+   "words": 119,
+   "words_ref": 62,
+   "chars": 749
+  },
+  {
+   "lang": "es",
+   "id": "es_00037",
+   "holdout": false,
+   "index": 23,
+   "words": 138,
+   "words_ref": 76,
+   "chars": 867
+  },
+  {
+   "lang": "es",
+   "id": "es_00045",
+   "holdout": false,
+   "index": 24,
+   "words": 134,
+   "words_ref": 87,
+   "chars": 924
+  },
+  {
+   "lang": "es",
+   "id": "es_00042",
+   "holdout": false,
+   "index": 25,
+   "words": 133,
+   "words_ref": 75,
+   "chars": 858
+  },
+  {
+   "lang": "es",
+   "id": "es_00003",
+   "holdout": false,
+   "index": 26,
+   "words": 119,
+   "words_ref": 71,
+   "chars": 825
+  },
+  {
+   "lang": "es",
+   "id": "es_00002",
+   "holdout": false,
+   "index": 27,
+   "words": 117,
+   "words_ref": 70,
+   "chars": 742
+  },
+  {
+   "lang": "es",
+   "id": "es_00030",
+   "holdout": false,
+   "index": 28,
+   "words": 136,
+   "words_ref": 73,
+   "chars": 891
+  },
+  {
+   "lang": "es",
+   "id": "es_00029",
+   "holdout": false,
+   "index": 29,
+   "words": 135,
+   "words_ref": 84,
+   "chars": 1000
+  },
+  {
+   "lang": "es",
+   "id": "es_00008",
+   "holdout": false,
+   "index": 30,
+   "words": 129,
+   "words_ref": 71,
+   "chars": 803
+  },
+  {
+   "lang": "es",
+   "id": "es_00032",
+   "holdout": false,
+   "index": 31,
+   "words": 132,
+   "words_ref": 65,
+   "chars": 791
+  },
+  {
+   "lang": "es",
+   "id": "es_00010",
+   "holdout": false,
+   "index": 32,
+   "words": 137,
+   "words_ref": 74,
+   "chars": 791
+  },
+  {
+   "lang": "es",
+   "id": "es_00034",
+   "holdout": false,
+   "index": 33,
+   "words": 134,
+   "words_ref": 70,
+   "chars": 843
+  },
+  {
+   "lang": "es",
+   "id": "es_00025",
+   "holdout": true,
+   "index": 0,
+   "words": 128,
+   "words_ref": 78,
+   "chars": 917
+  },
+  {
+   "lang": "es",
+   "id": "es_00046",
+   "holdout": true,
+   "index": 1,
+   "words": 137,
+   "words_ref": 74,
+   "chars": 842
+  },
+  {
+   "lang": "es",
+   "id": "es_00040",
+   "holdout": true,
+   "index": 2,
+   "words": 143,
+   "words_ref": 79,
+   "chars": 897
+  },
+  {
+   "lang": "es",
+   "id": "es_00007",
+   "holdout": true,
+   "index": 3,
+   "words": 130,
+   "words_ref": 73,
+   "chars": 872
+  },
+  {
+   "lang": "es",
+   "id": "es_00044",
+   "holdout": true,
+   "index": 4,
+   "words": 129,
+   "words_ref": 79,
+   "chars": 957
+  },
+  {
+   "lang": "es",
+   "id": "es_00011",
+   "holdout": true,
+   "index": 5,
+   "words": 127,
+   "words_ref": 63,
+   "chars": 755
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00017",
+   "holdout": false,
+   "index": 0,
+   "words": 134,
+   "words_ref": 77,
+   "chars": 903
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00040",
+   "holdout": false,
+   "index": 1,
+   "words": 135,
+   "words_ref": 75,
+   "chars": 846
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00032",
+   "holdout": false,
+   "index": 2,
+   "words": 135,
+   "words_ref": 76,
+   "chars": 792
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00012",
+   "holdout": false,
+   "index": 3,
+   "words": 120,
+   "words_ref": 71,
+   "chars": 739
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00033",
+   "holdout": false,
+   "index": 4,
+   "words": 135,
+   "words_ref": 67,
+   "chars": 813
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00025",
+   "holdout": false,
+   "index": 5,
+   "words": 145,
+   "words_ref": 81,
+   "chars": 997
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00034",
+   "holdout": false,
+   "index": 6,
+   "words": 137,
+   "words_ref": 78,
+   "chars": 903
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00014",
+   "holdout": false,
+   "index": 7,
+   "words": 134,
+   "words_ref": 79,
+   "chars": 802
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00042",
+   "holdout": false,
+   "index": 8,
+   "words": 136,
+   "words_ref": 85,
+   "chars": 897
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00026",
+   "holdout": false,
+   "index": 9,
+   "words": 140,
+   "words_ref": 73,
+   "chars": 881
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00035",
+   "holdout": false,
+   "index": 10,
+   "words": 139,
+   "words_ref": 76,
+   "chars": 867
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00049",
+   "holdout": false,
+   "index": 11,
+   "words": 154,
+   "words_ref": 72,
+   "chars": 950
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00043",
+   "holdout": false,
+   "index": 12,
+   "words": 147,
+   "words_ref": 80,
+   "chars": 878
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00007",
+   "holdout": false,
+   "index": 13,
+   "words": 134,
+   "words_ref": 81,
+   "chars": 859
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00046",
+   "holdout": false,
+   "index": 14,
+   "words": 148,
+   "words_ref": 96,
+   "chars": 980
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00008",
+   "holdout": false,
+   "index": 15,
+   "words": 141,
+   "words_ref": 79,
+   "chars": 867
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00015",
+   "holdout": false,
+   "index": 16,
+   "words": 131,
+   "words_ref": 77,
+   "chars": 783
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00029",
+   "holdout": false,
+   "index": 17,
+   "words": 146,
+   "words_ref": 84,
+   "chars": 1018
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00047",
+   "holdout": false,
+   "index": 18,
+   "words": 148,
+   "words_ref": 82,
+   "chars": 943
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00045",
+   "holdout": false,
+   "index": 19,
+   "words": 153,
+   "words_ref": 83,
+   "chars": 1030
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00044",
+   "holdout": false,
+   "index": 20,
+   "words": 134,
+   "words_ref": 86,
+   "chars": 913
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00001",
+   "holdout": false,
+   "index": 21,
+   "words": 162,
+   "words_ref": 87,
+   "chars": 1037
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00028",
+   "holdout": false,
+   "index": 22,
+   "words": 138,
+   "words_ref": 81,
+   "chars": 938
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00011",
+   "holdout": false,
+   "index": 23,
+   "words": 136,
+   "words_ref": 80,
+   "chars": 829
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00002",
+   "holdout": false,
+   "index": 24,
+   "words": 122,
+   "words_ref": 69,
+   "chars": 759
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00004",
+   "holdout": false,
+   "index": 25,
+   "words": 127,
+   "words_ref": 79,
+   "chars": 864
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00013",
+   "holdout": false,
+   "index": 26,
+   "words": 126,
+   "words_ref": 71,
+   "chars": 739
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00036",
+   "holdout": false,
+   "index": 27,
+   "words": 134,
+   "words_ref": 80,
+   "chars": 928
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00050",
+   "holdout": false,
+   "index": 28,
+   "words": 145,
+   "words_ref": 91,
+   "chars": 980
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00010",
+   "holdout": false,
+   "index": 29,
+   "words": 136,
+   "words_ref": 84,
+   "chars": 854
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00005",
+   "holdout": false,
+   "index": 30,
+   "words": 132,
+   "words_ref": 84,
+   "chars": 866
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00037",
+   "holdout": false,
+   "index": 31,
+   "words": 141,
+   "words_ref": 69,
+   "chars": 846
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00041",
+   "holdout": false,
+   "index": 32,
+   "words": 146,
+   "words_ref": 80,
+   "chars": 943
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00030",
+   "holdout": false,
+   "index": 33,
+   "words": 148,
+   "words_ref": 85,
+   "chars": 986
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00018",
+   "holdout": true,
+   "index": 0,
+   "words": 139,
+   "words_ref": 79,
+   "chars": 851
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00022",
+   "holdout": true,
+   "index": 1,
+   "words": 126,
+   "words_ref": 83,
+   "chars": 910
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00024",
+   "holdout": true,
+   "index": 2,
+   "words": 137,
+   "words_ref": 75,
+   "chars": 900
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00039",
+   "holdout": true,
+   "index": 3,
+   "words": 143,
+   "words_ref": 76,
+   "chars": 881
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00003",
+   "holdout": true,
+   "index": 4,
+   "words": 130,
+   "words_ref": 78,
+   "chars": 757
+  },
+  {
+   "lang": "pt",
+   "id": "pt_00016",
+   "holdout": true,
+   "index": 5,
+   "words": 134,
+   "words_ref": 76,
+   "chars": 867
+  },
+  {
+   "lang": "de",
+   "id": "de_00046",
+   "holdout": false,
+   "index": 0,
+   "words": 124,
+   "words_ref": 92,
+   "chars": 936
+  },
+  {
+   "lang": "de",
+   "id": "de_00014",
+   "holdout": false,
+   "index": 1,
+   "words": 125,
+   "words_ref": 83,
+   "chars": 942
+  },
+  {
+   "lang": "de",
+   "id": "de_00029",
+   "holdout": false,
+   "index": 2,
+   "words": 110,
+   "words_ref": 82,
+   "chars": 921
+  },
+  {
+   "lang": "de",
+   "id": "de_00027",
+   "holdout": false,
+   "index": 3,
+   "words": 114,
+   "words_ref": 81,
+   "chars": 883
+  },
+  {
+   "lang": "de",
+   "id": "de_00040",
+   "holdout": false,
+   "index": 4,
+   "words": 114,
+   "words_ref": 78,
+   "chars": 868
+  },
+  {
+   "lang": "de",
+   "id": "de_00034",
+   "holdout": false,
+   "index": 5,
+   "words": 122,
+   "words_ref": 77,
+   "chars": 940
+  },
+  {
+   "lang": "de",
+   "id": "de_00041",
+   "holdout": false,
+   "index": 6,
+   "words": 127,
+   "words_ref": 81,
+   "chars": 889
+  },
+  {
+   "lang": "de",
+   "id": "de_00008",
+   "holdout": false,
+   "index": 7,
+   "words": 122,
+   "words_ref": 75,
+   "chars": 888
+  },
+  {
+   "lang": "de",
+   "id": "de_00023",
+   "holdout": false,
+   "index": 8,
+   "words": 126,
+   "words_ref": 72,
+   "chars": 876
+  },
+  {
+   "lang": "de",
+   "id": "de_00019",
+   "holdout": false,
+   "index": 9,
+   "words": 118,
+   "words_ref": 77,
+   "chars": 833
+  },
+  {
+   "lang": "de",
+   "id": "de_00048",
+   "holdout": false,
+   "index": 10,
+   "words": 117,
+   "words_ref": 61,
+   "chars": 777
+  },
+  {
+   "lang": "de",
+   "id": "de_00001",
+   "holdout": false,
+   "index": 11,
+   "words": 145,
+   "words_ref": 77,
+   "chars": 1026
+  },
+  {
+   "lang": "de",
+   "id": "de_00044",
+   "holdout": false,
+   "index": 12,
+   "words": 120,
+   "words_ref": 76,
+   "chars": 851
+  },
+  {
+   "lang": "de",
+   "id": "de_00003",
+   "holdout": false,
+   "index": 13,
+   "words": 152,
+   "words_ref": 109,
+   "chars": 1253
+  },
+  {
+   "lang": "de",
+   "id": "de_00022",
+   "holdout": false,
+   "index": 14,
+   "words": 117,
+   "words_ref": 85,
+   "chars": 931
+  },
+  {
+   "lang": "de",
+   "id": "de_00036",
+   "holdout": false,
+   "index": 15,
+   "words": 120,
+   "words_ref": 73,
+   "chars": 919
+  },
+  {
+   "lang": "de",
+   "id": "de_00037",
+   "holdout": false,
+   "index": 16,
+   "words": 128,
+   "words_ref": 86,
+   "chars": 929
+  },
+  {
+   "lang": "de",
+   "id": "de_00024",
+   "holdout": false,
+   "index": 17,
+   "words": 130,
+   "words_ref": 82,
+   "chars": 946
+  },
+  {
+   "lang": "de",
+   "id": "de_00006",
+   "holdout": false,
+   "index": 18,
+   "words": 158,
+   "words_ref": 100,
+   "chars": 1080
+  },
+  {
+   "lang": "de",
+   "id": "de_00039",
+   "holdout": false,
+   "index": 19,
+   "words": 119,
+   "words_ref": 89,
+   "chars": 916
+  },
+  {
+   "lang": "de",
+   "id": "de_00032",
+   "holdout": false,
+   "index": 20,
+   "words": 120,
+   "words_ref": 77,
+   "chars": 922
+  },
+  {
+   "lang": "de",
+   "id": "de_00021",
+   "holdout": false,
+   "index": 21,
+   "words": 125,
+   "words_ref": 72,
+   "chars": 828
+  },
+  {
+   "lang": "de",
+   "id": "de_00025",
+   "holdout": false,
+   "index": 22,
+   "words": 131,
+   "words_ref": 70,
+   "chars": 891
+  },
+  {
+   "lang": "de",
+   "id": "de_00050",
+   "holdout": false,
+   "index": 23,
+   "words": 117,
+   "words_ref": 59,
+   "chars": 741
+  },
+  {
+   "lang": "de",
+   "id": "de_00002",
+   "holdout": false,
+   "index": 24,
+   "words": 160,
+   "words_ref": 102,
+   "chars": 1186
+  },
+  {
+   "lang": "de",
+   "id": "de_00043",
+   "holdout": false,
+   "index": 25,
+   "words": 121,
+   "words_ref": 77,
+   "chars": 906
+  },
+  {
+   "lang": "de",
+   "id": "de_00012",
+   "holdout": false,
+   "index": 26,
+   "words": 123,
+   "words_ref": 83,
+   "chars": 961
+  },
+  {
+   "lang": "de",
+   "id": "de_00045",
+   "holdout": false,
+   "index": 27,
+   "words": 115,
+   "words_ref": 80,
+   "chars": 926
+  },
+  {
+   "lang": "de",
+   "id": "de_00026",
+   "holdout": false,
+   "index": 28,
+   "words": 112,
+   "words_ref": 77,
+   "chars": 856
+  },
+  {
+   "lang": "de",
+   "id": "de_00033",
+   "holdout": false,
+   "index": 29,
+   "words": 122,
+   "words_ref": 80,
+   "chars": 936
+  },
+  {
+   "lang": "de",
+   "id": "de_00005",
+   "holdout": false,
+   "index": 30,
+   "words": 148,
+   "words_ref": 86,
+   "chars": 1039
+  },
+  {
+   "lang": "de",
+   "id": "de_00042",
+   "holdout": false,
+   "index": 31,
+   "words": 118,
+   "words_ref": 76,
+   "chars": 904
+  },
+  {
+   "lang": "de",
+   "id": "de_00009",
+   "holdout": false,
+   "index": 32,
+   "words": 129,
+   "words_ref": 74,
+   "chars": 788
+  },
+  {
+   "lang": "de",
+   "id": "de_00011",
+   "holdout": false,
+   "index": 33,
+   "words": 127,
+   "words_ref": 74,
+   "chars": 848
+  },
+  {
+   "lang": "de",
+   "id": "de_00017",
+   "holdout": true,
+   "index": 0,
+   "words": 122,
+   "words_ref": 69,
+   "chars": 777
+  },
+  {
+   "lang": "de",
+   "id": "de_00028",
+   "holdout": true,
+   "index": 1,
+   "words": 110,
+   "words_ref": 78,
+   "chars": 879
+  },
+  {
+   "lang": "de",
+   "id": "de_00004",
+   "holdout": true,
+   "index": 2,
+   "words": 165,
+   "words_ref": 117,
+   "chars": 1410
+  },
+  {
+   "lang": "de",
+   "id": "de_00010",
+   "holdout": true,
+   "index": 3,
+   "words": 122,
+   "words_ref": 83,
+   "chars": 975
+  },
+  {
+   "lang": "de",
+   "id": "de_00007",
+   "holdout": true,
+   "index": 4,
+   "words": 143,
+   "words_ref": 101,
+   "chars": 1258
+  },
+  {
+   "lang": "de",
+   "id": "de_00031",
+   "holdout": true,
+   "index": 5,
+   "words": 126,
+   "words_ref": 72,
+   "chars": 882
+  }
+ ]
+}

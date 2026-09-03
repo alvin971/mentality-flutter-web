@@ -1,0 +1,8 @@
+# Jamais commité : audio synthétique, cache de transcription (comptes seulement),
+# voix piper, fichiers de travail. Tout se régénère depuis synth.mjs + la graine.
+audio/
+cache/
+work/
+voices/
+*.log
+node_modules/
