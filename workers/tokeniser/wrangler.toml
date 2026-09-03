@@ -47,7 +47,7 @@ compatibility_date = "2025-01-01"
 #     l'inscription n'est pas touchée.
 
 # ─────────────────────────────────────────────────────────────────────────────
-# [[r2_buckets]] AUDIO_BUCKET — COMMENTÉ : le bucket n'existe pas (R2 désactivé)
+# [[r2_buckets]] AUDIO_BUCKET — ACTIF depuis le 2026-09-03 : le bucket n'existe pas (R2 désactivé)
 # ─────────────────────────────────────────────────────────────────────────────
 # MÊME bucket EU que r2-upload. Utilisé par POST /validate pour vérifier qu'un
 # test a réellement produit des enregistrements sous le compte (preuve de
@@ -66,10 +66,10 @@ compatibility_date = "2025-01-01"
 #   5. Re-déployer :  cd workers/tokeniser && npx --yes wrangler@latest deploy
 #   6. Vérifier que POST /validate ne renvoie plus « Bucket R2 non lié ».
 #
-# [[r2_buckets]]
-# binding = "AUDIO_BUCKET"
-# bucket_name = "mentality-audio"
-# jurisdiction = "eu"
+[[r2_buckets]]
+binding = "AUDIO_BUCKET"
+bucket_name = "mentality-audio"
+jurisdiction = "eu"   # créé le 2026-09-03 : wrangler r2 bucket create mentality-audio --jurisdiction eu
 
 # ─────────────────────────────────────────────────────────────────────────────
 # [[kv_namespaces]] RATE_KV — ACTIF depuis le 2026-09-03 (id 76e73504…)

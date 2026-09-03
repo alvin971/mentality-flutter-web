@@ -699,8 +699,13 @@ console.log('\nConfiguration déployable (wrangler.toml)');
   // Lignes ACTIVES uniquement : tout ce qui commence par '#' est un commentaire.
   const actif = toml.split('\n').filter((l) => !l.trimStart().startsWith('#')).join('\n');
 
-  verifie('aucun [[r2_buckets]] ACTIF (R2 désactivé sur le compte, erreur API 10042)',
-    !actif.includes('[[r2_buckets]]'), 'binding R2 actif dans le toml');
+  // Le bucket mentality-audio existe (EU) depuis le 2026-09-03 : le binding est
+  // ACTIF et doit viser ce bucket en juridiction eu, sans quoi /validate et le
+  // nettoyage liraient un bucket standard du même nom (hors UE).
+  const blocR2 = (actif.match(/\[\[r2_buckets\]\][\s\S]*?(?=\n\[|$)/) || [''])[0];
+  verifie('[[r2_buckets]] AUDIO_BUCKET ACTIF sur mentality-audio en juridiction eu',
+    /bucket_name\s*=\s*"mentality-audio"/.test(blocR2) && /jurisdiction\s*=\s*"eu"/.test(blocR2),
+    `bloc R2 lu : « ${blocR2.slice(0,120)} »`);
   // Le namespace RATE_KV existe depuis le 2026-09-03 : le binding est ACTIF, et
   // il doit porter un id hexadécimal réel (32 caractères) — jamais le placeholder,
   // jamais celui d'un autre worker (garde REFERRAL_KV plus bas).

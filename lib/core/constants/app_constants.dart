@@ -68,7 +68,7 @@ class AppConstants {
   /// reste le placeholder, l'upload est désactivé (no-op) et l'app fonctionne
   /// normalement en stockage local seulement.
   static const String r2UploadWorkerUrl =
-      'https://mentality-r2-upload.YOUR_SUBDOMAIN.workers.dev';
+      'https://mentality-r2-upload.devgreenpro.workers.dev';
 
   /// URL du Cloudflare Worker qui SIGNE le token anonyme (Ed25519).
   /// Déployer workers/tokeniser/ et remplacer cette valeur.
@@ -83,7 +83,7 @@ class AppConstants {
   /// le placeholder, RIEN n'est envoyé : les questionnaires se passent, le
   /// score s'affiche, et les réponses restent en local (chiffrées).
   static const String eventWorkerUrl =
-      'https://mentality-event.YOUR_SUBDOMAIN.workers.dev';
+      'https://mentality-event.devgreenpro.workers.dev';
 
   /// URL du Cloudflare Worker referral (déblocage des résultats par paliers).
   /// Déployer workers/referral/ et remplacer cette valeur. Tant que l'URL
