@@ -164,3 +164,15 @@ Comparaison à budget égal (mêmes fichiers) :
 d'abord sur turbo, whisper reste mesuré sur les vagues 2 puis 3 comme repli
 (il est le modèle déployé). Prochain réveil : reste de la vague 1 turbo
 (130 lectures, 2 réveils) ou vague 2 turbo si la synthèse a fini.
+
+**Piège (§5 à compléter) — le texte « mots mélangés » tuait piper par manque de
+mémoire.** La variante `shuffle` produisait une seule « phrase » de ~130 mots
+sans ponctuation : l'attention du modèle VITS est quadratique en longueur de
+phrase, la machine (32 Gio, chargée par ailleurs) a été mise en OOM et le noyau
+a tué les processus python (23 bases perdues au premier essai, 268 encodages
+sans base). Correctif : le mélange rend des phrases de 8 à 12 mots ponctuées —
+plus proche d'une lecture réelle, et sans effet sur le sac de mots mesuré. Les
+21 fichiers `shuffle` déjà produits ont été supprimés et retirés de
+`audio_index.json` (aucun n'avait été transcrit). Deuxième piège, sans rapport
+avec le banc : `pkill -f 'synth.mjs --wave 2'` tue le shell qui l'exécute (sa
+propre ligne de commande contient le motif) — tuer par PID, ou grep `synth[.]mjs`.

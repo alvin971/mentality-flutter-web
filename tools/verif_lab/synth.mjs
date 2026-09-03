@@ -66,7 +66,12 @@ function premierePhrase(t) { const m = t.match(/^[\s\S]*?[.!?](?=\s|$)/); return
 function melange(t, graine) {
   const rnd = mulberry32(graine); const m = mots(t).map((w) => w.replace(/[.,;:!?…«»"()]/g, '')).filter(Boolean);
   for (let i = m.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [m[i], m[j]] = [m[j], m[i]]; }
-  return m.join(', ') + '.';
+  // Phrases de 8 a 12 mots : une seule phrase de 130 mots fait exploser la
+  // memoire du modele VITS (attention quadratique -> OOM tue par le noyau,
+  // reveil 2) et personne ne lit 130 mots sans reprendre son souffle.
+  const phrases = []; let i = 0;
+  while (i < m.length) { const n = 8 + Math.floor(rnd() * 5); phrases.push(m.slice(i, i + n).join(' ')); i += n; }
+  return phrases.map((x) => x.charAt(0).toUpperCase() + x.slice(1) + '.').join(' ');
 }
 
 /** Texte à synthétiser + voix pour la base wav d'un cas ; null si source manquante. */
