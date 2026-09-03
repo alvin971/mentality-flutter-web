@@ -115,11 +115,22 @@ async function appel(buf, language) {
   const r = await fetch(`${LAB}/transcribe`, { method: 'POST', headers: h, body: buf, signal: AbortSignal.timeout(180000) });
   return r.json();
 }
+/** Un échec RÉSEAU (mini-worker redémarré, session distante coupée) est
+ *  transitoire : on réessaie deux fois avant d'abandonner le fichier. Une
+ *  erreur du MODÈLE, elle, remonte telle quelle — c'est une mesure. */
+async function appelResilient(buf, language) {
+  let derniere;
+  for (let essai = 0; essai < 3; essai++) {
+    try { return await appel(buf, language); }
+    catch (e) { derniere = e; await new Promise((r) => setTimeout(r, 2000 * (essai + 1))); }
+  }
+  throw derniere;
+}
 async function transcrire(f) {
   const buf = fs.readFileSync(path.join(ICI, f.rel));
   const t0 = Date.now();
-  let r = await appel(buf, f.langParam); let fallback = false;
-  if (!r.ok && f.langParam) { r = await appel(buf, ''); fallback = true; }
+  let r = await appelResilient(buf, f.langParam); let fallback = false;
+  if (!r.ok && f.langParam) { r = await appelResilient(buf, ''); fallback = true; }
   const ms = Date.now() - t0;
   const entree = {
     model: MODEL, form, policy: POLICY, audio: f.rel, audio_sha: f.meta.sha256, bytes: f.meta.bytes, duration_s: f.meta.duration_s,

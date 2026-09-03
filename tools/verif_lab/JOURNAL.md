@@ -243,3 +243,48 @@ valeur envoyée. D'où la mesure de la policy `none` au prochain réveil.
 côté). Prochain réveil : vague 2 sous policy `none` (même fichiers, budget
 égal) pour trancher le paramètre `language` et instrumenter la détection de
 langue ; puis vagues 3–5 (mp4, partielles, dégradations).
+
+## Réveil 4 — 2026-09-03 — quota du jour épuisé ; ce que ça révèle sur la production
+
+**Deux incidents, tous deux instructifs.**
+
+1. **La session distante de `wrangler dev` est morte en cours de route**
+   (`Error: internal error; reference = …` côté Cloudflare, 24 fichiers perdus
+   sur un lot). Rien à voir avec le quota ni la mémoire. `transcribe.mjs`
+   réessaie désormais **deux fois** un échec RÉSEAU (2 s puis 4 s) ; une erreur
+   du MODÈLE, elle, remonte telle quelle — c'est une mesure, pas un incident.
+2. **Allocation gratuite épuisée** : `4006: you have used up your daily free
+   allocation of 10,000 neurons`. Conformément au §0, on consigne et on attend
+   le prochain réveil (reset à 00:00 UTC) — on ne contourne pas.
+
+**Ce que le quota nous apprend (mesure, pas estimation).** Total transcrit
+aujourd'hui avant blocage : **252,7 min d'audio pour 10 000 neurones**, soit
+**4,2 h/jour** — cohérent avec les tarifs affichés (0,11 $/jour ÷ 0,000453 à
+0,000513 $/min ≈ 215–240 min). À 2,56 min par bilan (3 lectures + 1 résumé),
+l'allocation gratuite couvre donc **≈ 99 bilans par jour**, et pas un de plus :
+le compte n'est pas sur Workers Paid, l'appel échoue au lieu d'être facturé.
+
+**⚠️ Défaut de production trouvé par ce blocage — un jour de forte affluence
+prive définitivement les gens honnêtes de leurs résultats.** Chaîne exacte :
+au-delà de ~99 bilans dans la journée, `env.AI.run` renvoie 4006 → `calculerVerdict`
+écrit un verdict **définitif** `{ok:false, reason:'ai_error'}` → `bilanVerification`
+du tokeniser compte ce verdict comme `failed` (il n'est `pending` que si le
+fichier de verdict est **absent**) → `/validate` répond **400 VERIFICATION_FAILED**,
+qui est définitif, alors que la personne a parfaitement lu. Même chaîne pour
+`ai_unavailable` (binding absent) et `ai_response_format`.
+
+La distinction manquante : `low_overlap` est un **jugement** (la lecture ne
+correspond pas), `ai_error` est une **panne d'infrastructure**. Les deux
+s'écrivent aujourd'hui de la même façon. Correctif à porter au §7 (pas
+maintenant : une seule règle par réveil, et celle-ci touche deux workers) —
+ne pas écrire de verdict quand la cause est infrastructurelle, **et** donner un
+chemin de reprise, sinon la lecture reste `pending` pour toujours (la
+transcription n'a lieu qu'une fois, dans le `waitUntil` du dépôt). Le cron
+quotidien de `r2-upload` (03:00 UTC, après le reset de quota à 00:00 UTC) est
+le bon endroit : reprendre les lectures sans verdict. À écrire et tester à la
+livraison.
+
+**État.** Cache turbo : 203 fichiers en policy `app`, 91/204 en policy `none`
+(vague 1). La comparaison `app` vs `none` sera close au prochain réveil.
+Synthèse des vagues 3 et 4 (480 cas : mp4 voix B, lectures partielles) en cours
+en local — elle ne consomme aucun neurone.
