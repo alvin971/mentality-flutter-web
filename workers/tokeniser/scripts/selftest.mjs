@@ -20,7 +20,7 @@
 import { readFileSync } from 'node:fs';
 
 import worker from '../index.js';
-import { verifyToken, TOKEN_SIGNING_PUBLIC_KEYS } from '../../_shared/token_verify.js';
+import { verifyToken, TOKEN_SIGNING_PUBLIC_KEYS, sha256hex } from '../../_shared/token_verify.js';
 
 const b64u = (bytes) => Buffer.from(bytes).toString('base64url');
 const segment = (obj) => Buffer.from(JSON.stringify(obj)).toString('base64url');
@@ -525,6 +525,168 @@ console.log("\nInterrupteur ISSUE_CAP_ENABLED (lier le KV ≠ allumer le plafond
     statut === 200, `HTTP ${statut}`);
 }
 
+console.log('\n/validate : la preuve de complétion est un VERDICT de lecture, pas un objet');
+/**
+ * Bucket R2 en mémoire pour /validate : `list` honore `prefix`, `limit` et
+ * `include` (customMetadata renvoyées SEULEMENT si demandées, comme R2),
+ * `put`/`head`/`get` comme le binding. [ignoreInclude] simule un listing sans
+ * métadonnées, pour exercer le repli sur l'analyse de la clé.
+ */
+function bucketR2({ ignoreInclude = false } = {}) {
+  const m = new Map();
+  return {
+    _m: m,
+    put: async (k, v, opts) => { m.set(k, { value: v, customMetadata: (opts && opts.customMetadata) || {} }); },
+    head: async (k) => (m.has(k) ? {} : null),
+    get: async (k) => (m.has(k)
+      ? { json: async () => JSON.parse(String(m.get(k).value)), text: async () => String(m.get(k).value) }
+      : null),
+    list: async ({ prefix = '', limit = 1000, include } = {}) => {
+      const avecMd = !ignoreInclude && Array.isArray(include) && include.includes('customMetadata');
+      const objects = [...m.entries()]
+        .filter(([k]) => k.startsWith(prefix))
+        .slice(0, limit)
+        .map(([k, e]) => ({ key: k, ...(avecMd ? { customMetadata: e.customMetadata } : {}) }));
+      return { objects, truncated: false };
+    },
+  };
+}
+const jetonValide = (await appel(envPlan(kv()), '/', 'POST',
+  { ...CLAIMS, p: 'free', cc: true, cv: CV })).corps.token;
+const COMPTE = (await sha256hex(payloadDe(jetonValide).n)).slice(0, 32);
+let uuidN = 0;
+const uuid = () => `00000000-0000-4000-8000-${String(++uuidN).padStart(12, '0')}`;
+/** Un enregistrement tel que l'écrit r2-upload (clé + customMetadata). */
+async function semerAudio(store, { session, type = 'reading', textId, sansMd = false }) {
+  await store.put(`internal/${COMPTE}/${session}/C-${type}-${textId}-${uuid()}.webm`, new Uint8Array(1),
+    sansMd ? {} : { customMetadata: { account: COMPTE, session_id: session, record_type: type, text_id: textId } });
+}
+/** Un verdict tel que l'écrit r2-upload (corps JSON + customMetadata.ok). */
+async function semerVerdict(store, { session, type = 'reading', textId, ok, sansMd = false }) {
+  await store.put(`verified/${COMPTE}/${session}/${type}-${textId}.json`,
+    JSON.stringify({ ok, reason: ok ? null : 'low_overlap', overlap: ok ? 0.5 : 0.1 }),
+    sansMd ? {} : { customMetadata: { ok: String(ok), record_type: type, session_id: session, text_id: textId } });
+}
+const envValidate = (store, extra = {}) =>
+  envPlan(kv(), { AUDIO_BUCKET: store, MIN_RECORDINGS: '1', MIN_VERIFIED_READINGS: '3', ...extra });
+const valider = (store, extra) => appel(envValidate(store, extra), '/validate', 'POST', { token: jetonValide });
+const marque = (store) => store._m.has(`validated/${COMPTE}`);
+{
+  // ─── Aucun objet → 400 comme avant (garde-fou MIN_RECORDINGS) ──────────────
+  const vide = bucketR2();
+  const r0 = await valider(vide);
+  verifie('aucun objet sous le compte → 400 « aucun enregistrement », pas de code de vérification',
+    r0.statut === 400 && String(r0.corps.error).includes('aucun enregistrement') && r0.corps.code === undefined,
+    `HTTP ${r0.statut} ${JSON.stringify(r0.corps)}`);
+  verifie('aucun objet → aucun marqueur posé', !marque(vide));
+
+  // ─── 3 lectures, 3 verdicts ok → 200 + marqueur ────────────────────────────
+  const trois = bucketR2();
+  for (const t of ['fr_00001', 'fr_00002', 'fr_00003']) {
+    await semerAudio(trois, { session: 'sessA', textId: t });
+    await semerVerdict(trois, { session: 'sessA', textId: t, ok: true });
+  }
+  const r1 = await valider(trois);
+  verifie('3 lectures au verdict ok → 200 { ok:true }',
+    r1.statut === 200 && r1.corps.ok === true, `HTTP ${r1.statut} ${JSON.stringify(r1.corps)}`);
+  verifie('3 verdicts ok → marqueur validated/<account> posé', marque(trois), [...trois._m.keys()].join(','));
+  const r1bis = await valider(trois);
+  verifie('rejouer /validate → 200 encore (idempotent)', r1bis.statut === 200, `HTTP ${r1bis.statut}`);
+
+  // ─── 3 lectures, 2 verdicts ok, 1 sans verdict → 409 PENDING ──────────────
+  const attente = bucketR2();
+  for (const t of ['fr_00001', 'fr_00002', 'fr_00003']) await semerAudio(attente, { session: 'sessB', textId: t });
+  await semerVerdict(attente, { session: 'sessB', textId: 'fr_00001', ok: true });
+  await semerVerdict(attente, { session: 'sessB', textId: 'fr_00002', ok: true });
+  const r2 = await valider(attente);
+  verifie('2 ok + 1 lecture sans verdict → 409 VERIFICATION_PENDING { verified:2, pending:1 }',
+    r2.statut === 409 && r2.corps.ok === false && r2.corps.code === 'VERIFICATION_PENDING'
+    && r2.corps.verified === 2 && r2.corps.pending === 1,
+    `HTTP ${r2.statut} ${JSON.stringify(r2.corps)}`);
+  verifie('en attente → aucun marqueur posé', !marque(attente));
+
+  // ─── 2 ok + 3 ok:false, tous tombés → 400 FAILED ───────────────────────────
+  const rate = bucketR2();
+  const textes = ['fr_00001', 'fr_00002', 'fr_00003', 'fr_00004', 'fr_00005'];
+  for (const [i, t] of textes.entries()) {
+    await semerAudio(rate, { session: 'sessC', textId: t });
+    await semerVerdict(rate, { session: 'sessC', textId: t, ok: i < 2 });
+  }
+  const r3 = await valider(rate);
+  verifie('2 ok + 3 ok:false → 400 VERIFICATION_FAILED { verified:2, failed:3 }',
+    r3.statut === 400 && r3.corps.ok === false && r3.corps.code === 'VERIFICATION_FAILED'
+    && r3.corps.verified === 2 && r3.corps.failed === 3 && r3.corps.pending === undefined,
+    `HTTP ${r3.statut} ${JSON.stringify(r3.corps)}`);
+  verifie('échec définitif → aucun marqueur posé', !marque(rate));
+
+  // ─── Un fichier de silence : objet présent, verdict ok:false → refusé ──────
+  const silence = bucketR2();
+  await semerAudio(silence, { session: 'sessD', textId: 'fr_00001' });
+  await semerVerdict(silence, { session: 'sessD', textId: 'fr_00001', ok: false });
+  const r4 = await valider(silence);
+  verifie('UN objet au verdict ok:false (silence) → 400 VERIFICATION_FAILED [la faille d\'origine est fermée]',
+    r4.statut === 400 && r4.corps.code === 'VERIFICATION_FAILED' && r4.corps.verified === 0 && !marque(silence),
+    `HTTP ${r4.statut} ${JSON.stringify(r4.corps)}`);
+
+  // ─── Seuls des résumés : rien en attente, rien de vérifié → FAILED ─────────
+  const resumes = bucketR2();
+  await semerAudio(resumes, { session: 'sessE', type: 'summary', textId: 'fr_00001' });
+  await semerVerdict(resumes, { session: 'sessE', type: 'summary', textId: 'fr_00001', ok: true });
+  const r5 = await valider(resumes);
+  verifie('seuls des résumés (même ok) → 400 VERIFICATION_FAILED { verified:0, failed:0 } : les résumés ne comptent pas',
+    r5.statut === 400 && r5.corps.code === 'VERIFICATION_FAILED' && r5.corps.verified === 0 && r5.corps.failed === 0,
+    `HTTP ${r5.statut} ${JSON.stringify(r5.corps)}`);
+
+  // ─── Doublons : deux uploads du même texte n'attendent qu'UN verdict ───────
+  const doublon = bucketR2();
+  await semerAudio(doublon, { session: 'sessF', textId: 'fr_00001' });
+  await semerAudio(doublon, { session: 'sessF', textId: 'fr_00001' });
+  await semerVerdict(doublon, { session: 'sessF', textId: 'fr_00001', ok: true });
+  const r6 = await valider(doublon, { MIN_VERIFIED_READINGS: '1' });
+  verifie('2 uploads du même (session, texte) + 1 verdict ok + seuil 1 → 200, rien en attente',
+    r6.statut === 200 && r6.corps.ok === true, `HTTP ${r6.statut} ${JSON.stringify(r6.corps)}`);
+
+  // ─── MIN_VERIFIED_READINGS honorée, défaut 3 ───────────────────────────────
+  const deux = bucketR2();
+  for (const t of ['fr_00001', 'fr_00002']) {
+    await semerAudio(deux, { session: 'sessG', textId: t });
+    await semerVerdict(deux, { session: 'sessG', textId: t, ok: true });
+  }
+  const r7 = await valider(deux, { MIN_VERIFIED_READINGS: undefined });
+  const r7b = await valider(deux, { MIN_VERIFIED_READINGS: '2' });
+  verifie('2 ok : var absente → défaut 3 → 400 FAILED ; var "2" → 200',
+    r7.statut === 400 && r7.corps.code === 'VERIFICATION_FAILED' && r7b.statut === 200,
+    `HTTP ${r7.statut} / ${r7b.statut}`);
+
+  // ─── Repli sans customMetadata : la clé et le corps JSON suffisent ─────────
+  const nu = bucketR2({ ignoreInclude: true });
+  for (const t of ['fr_00001', 'fr_00002', 'fr_00003']) {
+    await semerAudio(nu, { session: 'sessH', textId: t, sansMd: true });
+    await semerVerdict(nu, { session: 'sessH', textId: t, ok: true, sansMd: true });
+  }
+  await semerAudio(nu, { session: 'sessH', textId: 'fr_00004', sansMd: true }); // sans verdict
+  const r8 = await valider(nu);
+  verifie('listing sans métadonnées → analyse de la clé + lecture du corps : 3 ok, 1 en attente → 200 (seuil atteint)',
+    r8.statut === 200, `HTTP ${r8.statut} ${JSON.stringify(r8.corps)}`);
+  await nu.put(`verified/${COMPTE}/sessH/reading-fr_00003.json`, JSON.stringify({ ok: false }), {});
+  const r8b = await valider(nu);
+  verifie('… et un corps JSON ok:false relu sans métadonnées compte comme échec → 409 (2 ok, 1 en attente)',
+    r8b.statut === 409 && r8b.corps.verified === 2 && r8b.corps.pending === 1,
+    `HTTP ${r8b.statut} ${JSON.stringify(r8b.corps)}`);
+
+  // ─── Compte étranger : les verdicts d'un autre compte ne comptent pas ──────
+  const autre = bucketR2();
+  await semerAudio(autre, { session: 'sessI', textId: 'fr_00001' });
+  for (const t of ['fr_00001', 'fr_00002', 'fr_00003']) {
+    await autre.put(`verified/ffffffffffffffffffffffffffffffff/sessI/reading-${t}.json`,
+      JSON.stringify({ ok: true }), { customMetadata: { ok: 'true' } });
+  }
+  const r9 = await valider(autre);
+  verifie('verdicts ok sous un AUTRE compte → ignorés (409, la lecture propre attend son verdict)',
+    r9.statut === 409 && r9.corps.verified === 0 && r9.corps.pending === 1,
+    `HTTP ${r9.statut} ${JSON.stringify(r9.corps)}`);
+}
+
 console.log('\nConfiguration déployable (wrangler.toml)');
 {
   // ⚠️ CETTE SECTION EST LA GARDE ANTI-RÉGRESSION DU DÉPLOIEMENT.
@@ -548,8 +710,11 @@ console.log('\nConfiguration déployable (wrangler.toml)');
   verifie('les [vars] restent ACTIVES (chaînes pures, aucune ressource requise)',
     actif.includes('PAID_PLAN_ENABLED') && actif.includes('LEGAL_VERSIONS') &&
     actif.includes('ISSUE_CAP_ENABLED') && actif.includes('ISSUE_MAX_PER_WINDOW') &&
-    actif.includes('CORPUS_CONSENT_REQUIRED'),
+    actif.includes('CORPUS_CONSENT_REQUIRED') && actif.includes('MIN_RECORDINGS'),
     'une [vars] a disparu');
+  verifie('MIN_VERIFIED_READINGS livrée à "3" (seuil de lectures vérifiées de /validate)',
+    /MIN_VERIFIED_READINGS\s*=\s*"3"/.test(actif),
+    'MIN_VERIFIED_READINGS absente ou ≠ "3" dans le toml livré');
   verifie('CORPUS_CONSENT_REQUIRED livrée à "true" (pas de passe Gratuit sans consentement corpus)',
     /CORPUS_CONSENT_REQUIRED\s*=\s*"true"/.test(actif),
     'CORPUS_CONSENT_REQUIRED absente ou ≠ "true" dans le toml livré');

@@ -62,10 +62,29 @@
  *
  * Chaque objet garde la trace du régime appliqué : `customMetadata.plan`
  * ('free' | 'legacy') et `customMetadata.consent_source` ('token' | 'header').
+ *
+ * VÉRIFICATION DES ENREGISTREMENTS (décision produit 2026-09-03) : un fichier
+ * de silence ne doit pas donner droit aux résultats du passe Gratuit. Après
+ * chaque `put` réussi, le worker lance en tâche de fond (`ctx.waitUntil`, la
+ * réponse à l'app n'attend pas) une transcription bon marché par Workers AI
+ * (`@cf/openai/whisper`, binding `AI`) et écrit un VERDICT sous
+ *   verified/<account>/<sessionId>/<recordType>-<textId>.json
+ *     { ok, reason, overlap, words_hit, words_ref, words_transcribed, model, day }
+ *   - reading : on connaît le texte à lire (référence `corpus/<textId>.json`,
+ *     publiée par scripts/publish-corpus.mjs) ; ok si la part des mots de la
+ *     référence retrouvés dans la transcription ≥ VERIFY_MIN_OVERLAP ;
+ *   - summary : pas de référence ; ok si la transcription compte au moins
+ *     VERIFY_MIN_SUMMARY_WORDS mots distincts.
+ * Le verdict ne contient QUE des comptes : aucun mot transcrit n'est conservé,
+ * et rien n'est loggé (doctrine d'anonymat des workers). Un binding AI absent
+ * ou un modèle en panne donne un verdict ok:false (`ai_unavailable` /
+ * `ai_error`) et ne fait JAMAIS échouer l'upload. C'est POST /validate du
+ * tokeniser qui lit ces verdicts et exige MIN_VERIFIED_READINGS lectures ok.
  */
 
 import { verifyToken, TOKEN_SIGNING_PUBLIC_KEYS, sha256hex } from '../_shared/token_verify.js';
 import { readPlan } from '../_shared/token_plan.js';
+import { motsDistincts, recouvrement } from '../_shared/text_norm.js';
 
 const ALLOWED_ORIGINS = [
   'https://mentality-flutter-web.pages.dev',
@@ -87,8 +106,27 @@ const MAX_BYTES = 25 * 1024 * 1024; // 25 Mo
 // consentement. À partir d'elle, les en-têtes client ne décident plus de rien.
 const SCHEMA_VERSION_PLAN = 3;
 
+// ─── Vérification des enregistrements ────────────────────────────────────────
+// Modèle Workers AI de transcription. Bon marché et approximatif : il suffit,
+// on ne cherche pas une transcription exacte mais une preuve que le texte
+// attendu a bien été lu (cf. en-tête de fichier).
+const MODELE_TRANSCRIPTION = '@cf/openai/whisper';
+// Au-delà, on ne transcrit pas : les octets sont recopiés dans un tableau JS
+// pour le modèle, et un fichier de 25 Mo ferait déborder la mémoire du worker.
+// À 32 kbps (Opus forcé par l'app), 8 Mo ≈ 33 minutes : très au-dessus d'une
+// lecture ou d'un résumé réels.
+const VERIFY_MAX_BYTES = 8 * 1024 * 1024;
+// Seuils par défaut, surchargeables par [vars] (chaînes, comme toute var wrangler).
+const VERIFY_MIN_OVERLAP_DEFAUT = 0.30;
+const VERIFY_MIN_SUMMARY_WORDS_DEFAUT = 15;
+// Types d'enregistrement vérifiés. Tout autre type (défaut 'audio' d'un client
+// qui n'envoie pas X-Record-Type) est stocké sans verdict : /validate ne
+// compte que les lectures, un verdict sur un type inconnu ne servirait à rien.
+const RECORD_TYPE_READING = 'reading';
+const RECORD_TYPE_SUMMARY = 'summary';
+
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     if (request.method === 'OPTIONS') return handleOptions(request);
 
     const origin = request.headers.get('Origin') || '';
@@ -248,6 +286,16 @@ export default {
       return json({ error: 'Échec écriture R2', detail: error.message }, 502, origin);
     }
 
+    // ─── Vérification en tâche de fond : la réponse à l'app n'attend pas ─────
+    // `ctx.waitUntil` garde le worker vivant le temps de la transcription. La
+    // fonction ne rejette jamais (tout est capturé dedans) : un verdict qui ne
+    // peut pas s'écrire ne remonte nulle part, il manque simplement — et
+    // /validate répondra VERIFICATION_PENDING pour cet enregistrement.
+    const verification = verifierEnregistrement(env, {
+      account, sessionId, recordType, textId, language, audio: body,
+    });
+    if (ctx && typeof ctx.waitUntil === 'function') ctx.waitUntil(verification);
+
     return json({ key, size: body.byteLength, reusable: cessible }, 200, origin);
   },
 
@@ -259,6 +307,169 @@ export default {
     await cleanupAbandoned(env);
   },
 };
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Vérification des enregistrements (transcription + recouvrement)
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Calcule et écrit le verdict d'un enregistrement fraîchement stocké.
+ *
+ * NE REJETTE JAMAIS et n'écrit AUCUN texte : le verdict ne porte que des
+ * comptes (mots de la référence, mots retrouvés, mots transcrits), le jour
+ * (jamais l'heure) et le nom du modèle. Les types autres que reading/summary
+ * ne donnent lieu à aucun verdict.
+ */
+async function verifierEnregistrement(env, champs) {
+  const { account, sessionId, recordType, textId } = champs;
+  if (recordType !== RECORD_TYPE_READING && recordType !== RECORD_TYPE_SUMMARY) return;
+  if (!env.AUDIO_BUCKET) return;
+
+  let resultat;
+  try {
+    resultat = await calculerVerdict(env, champs);
+  } catch {
+    resultat = { ok: false, reason: 'verify_error' };
+  }
+  const ok = resultat.ok === true;
+  const verdict = {
+    ok,
+    reason: ok ? null : (resultat.reason || 'unknown'),
+    overlap: typeof resultat.overlap === 'number' ? resultat.overlap : null,
+    words_hit: resultat.words_hit || 0,
+    words_ref: resultat.words_ref || 0,
+    words_transcribed: resultat.words_transcribed || 0,
+    model: MODELE_TRANSCRIPTION,
+    day: new Date().toISOString().slice(0, 10), // DATE, jamais l'heure
+  };
+  const cle = `verified/${account}/${sessionId}/${recordType}-${textId || 'na'}.json`;
+  try {
+    await env.AUDIO_BUCKET.put(cle, JSON.stringify(verdict), {
+      httpMetadata: { contentType: 'application/json' },
+      // Miroir du corps, lisible par un simple `list({ include })` côté
+      // tokeniser, sans télécharger chaque verdict.
+      customMetadata: {
+        account,
+        session_id: sessionId,
+        record_type: recordType,
+        text_id: textId || '',
+        ok: String(ok),
+        reason: verdict.reason || '',
+        day: verdict.day,
+      },
+    });
+  } catch {
+    // Silencieux, voulu : pas de log par requête. Sans verdict, /validate
+    // classe l'enregistrement « en attente ».
+  }
+}
+
+/**
+ * Le verdict brut : { ok, reason?, overlap?, words_hit?, words_ref?,
+ * words_transcribed? }. Peut jeter : l'appelant capture.
+ *
+ * Ordre volontaire : la référence est cherchée AVANT d'appeler le modèle —
+ * une transcription qu'on ne pourrait comparer à rien serait payée pour rien.
+ */
+async function calculerVerdict(env, { recordType, textId, language, audio }) {
+  let reference = null;
+  if (recordType === RECORD_TYPE_READING) {
+    reference = await chargerReference(env.AUDIO_BUCKET, textId);
+    if (!reference) return { ok: false, reason: 'no_reference' };
+  }
+  if (!env.AI || typeof env.AI.run !== 'function') {
+    return { ok: false, reason: 'ai_unavailable' };
+  }
+  if (audio.byteLength > VERIFY_MAX_BYTES) return { ok: false, reason: 'audio_too_large' };
+
+  let texte;
+  try {
+    texte = await transcrire(env.AI, audio, language);
+  } catch {
+    return { ok: false, reason: 'ai_error' };
+  }
+  if (texte === null) return { ok: false, reason: 'ai_response_format' };
+
+  const transcrits = motsDistincts(texte);
+  if (recordType === RECORD_TYPE_SUMMARY) {
+    const min = entierPositif(env.VERIFY_MIN_SUMMARY_WORDS, VERIFY_MIN_SUMMARY_WORDS_DEFAUT);
+    return {
+      ok: transcrits.length >= min,
+      reason: 'too_few_words',
+      words_transcribed: transcrits.length,
+    };
+  }
+  const r = recouvrement(reference, transcrits);
+  const seuil = tauxEntreZeroEtUn(env.VERIFY_MIN_OVERLAP, VERIFY_MIN_OVERLAP_DEFAUT);
+  return {
+    ok: r.overlap >= seuil,
+    reason: 'low_overlap',
+    overlap: r.overlap,
+    words_hit: r.hit,
+    words_ref: r.ref,
+    words_transcribed: r.transcribed,
+  };
+}
+
+/**
+ * Mots de référence du texte [textId] (`corpus/<textId>.json`, publié par
+ * scripts/publish-corpus.mjs), ou null s'il n'y en a pas.
+ */
+async function chargerReference(bucket, textId) {
+  if (!textId) return null;
+  const objet = await bucket.get(`corpus/${textId}.json`);
+  if (!objet) return null;
+  let data;
+  try {
+    data = await objet.json();
+  } catch {
+    return null;
+  }
+  if (!data || !Array.isArray(data.words)) return null;
+  return data.words.filter((mot) => typeof mot === 'string');
+}
+
+/**
+ * Transcription par Workers AI. Écrit DÉFENSIVEMENT : la forme exacte de
+ * l'entrée et de la sortie de `@cf/openai/whisper` ne se confirme qu'au
+ * premier déploiement.
+ *   - entrée : { audio: [...octets] } ; on tente d'abord AVEC `language`
+ *     (X-Language) et, si le modèle refuse ce champ, une seconde fois sans ;
+ *   - sortie : { text } ou { transcription_info, text } (ou une chaîne nue) ;
+ *     toute autre forme → null (verdict `ai_response_format`).
+ * Jette si le modèle échoue les deux fois.
+ */
+async function transcrire(ai, audio, language) {
+  const octets = [...new Uint8Array(audio)];
+  let reponse;
+  try {
+    reponse = await ai.run(MODELE_TRANSCRIPTION, { audio: octets, language });
+  } catch {
+    reponse = await ai.run(MODELE_TRANSCRIPTION, { audio: octets });
+  }
+  return extraireTexte(reponse);
+}
+
+function extraireTexte(reponse) {
+  if (typeof reponse === 'string') return reponse;
+  if (!reponse || typeof reponse !== 'object') return null;
+  if (typeof reponse.text === 'string') return reponse.text;
+  if (reponse.result && typeof reponse.result.text === 'string') return reponse.result.text;
+  if (typeof reponse.transcription === 'string') return reponse.transcription;
+  return null;
+}
+
+/** Var wrangler → taux dans [0, 1], sinon [defaut]. */
+function tauxEntreZeroEtUn(raw, defaut) {
+  const n = parseFloat(raw);
+  return Number.isFinite(n) && n >= 0 && n <= 1 ? n : defaut;
+}
+
+/** Var wrangler → entier ≥ 0, sinon [defaut]. */
+function entierPositif(raw, defaut) {
+  const n = parseInt(raw, 10);
+  return Number.isInteger(n) && n >= 0 ? n : defaut;
+}
 
 /** Supprime les objets des comptes non validés plus vieux que RETENTION_DAYS. */
 async function cleanupAbandoned(env) {

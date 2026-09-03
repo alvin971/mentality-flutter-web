@@ -37,9 +37,29 @@ jurisdiction = "eu"
 [triggers]
 crons = ["0 3 * * *"]
 
+# ─────────────────────────────────────────────────────────────────────────────
+# Workers AI — transcription des enregistrements (vérification, cf. index.js).
+# Aucune ressource à créer : le binding est disponible dès que Workers AI est
+# actif sur le compte. Modèle appelé : @cf/openai/whisper (facturé à la minute
+# d'audio). Sans ce binding, le worker stocke quand même et écrit un verdict
+# ok:false `ai_unavailable` — l'upload ne dépend jamais de l'IA.
+# ─────────────────────────────────────────────────────────────────────────────
+[ai]
+binding = "AI"
+
 [vars]
 RETENTION_DAYS = "30"
 CLEANUP_MAX_OBJECTS = "20000"
+
+# ─── Vérification des enregistrements ────────────────────────────────────────
+# Lecture : part minimale des mots du texte de référence (corpus/<textId>.json,
+# publié par scripts/publish-corpus.mjs) retrouvés dans la transcription pour
+# que le verdict soit ok. 0.30 = valeur de départ (transcription bon marché,
+# pas exacte) ; à ajuster après observation des verdicts réels.
+VERIFY_MIN_OVERLAP = "0.30"
+# Résumé (pas de référence) : nombre minimal de mots distincts (≥ 4 caractères,
+# après normalisation) dans la transcription pour que le verdict soit ok.
+VERIFY_MIN_SUMMARY_WORDS = "15"
 
 # ─────────────────────────────────────────────────────────────────────────────
 # LEGAL_VERSIONS — versions de textes légaux dont ce worker accepte d'ARCHIVER

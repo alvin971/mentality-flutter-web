@@ -111,6 +111,13 @@ compatibility_date = "2025-01-01"
 # Nombre minimal d'enregistrements exigé sous le compte pour valider le token
 # (proxy de « test complété » ; best-effort uploads → garder bas, ajustable).
 MIN_RECORDINGS = "1"
+# Nombre minimal de LECTURES au verdict ok:true (verdicts `verified/<account>/…`
+# écrits par r2-upload après transcription Workers AI) pour valider le token.
+# C'est la vraie preuve de complétion depuis 2026-09-03 : MIN_RECORDINGS
+# ci-dessus n'est plus qu'un garde-fou amont (aucun objet → 400 immédiat).
+# En dessous du seuil : 409 VERIFICATION_PENDING si des verdicts manquent
+# encore (l'app réessaie), 400 VERIFICATION_FAILED sinon.
+MIN_VERIFIED_READINGS = "3"
 # Plafond d'émission : fenêtre (minutes) et maximum d'émissions par fenêtre.
 # Valeurs de départ actées avec le fondateur (2026-08-06) : 300/heure —
 # prudent-large, à affiner après observation du compteur en KV.

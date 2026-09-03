@@ -101,7 +101,9 @@ curl -s -X POST "$URL/" -H 'Content-Type: application/json' \
 # client garde le MÊME token :
 curl -s -X POST "$URL/validate" -H 'Content-Type: application/json' \
   -d '{"token":"<le token émis au début>"}'
-# → {"ok":true}
+# → {"ok":true}                                                        200
+# → {"ok":false,"code":"VERIFICATION_PENDING","verified":2,"pending":1} 409 (réessayer)
+# → {"ok":false,"code":"VERIFICATION_FAILED","verified":1,"failed":3}   400 (définitif)
 ```
 
 ---
@@ -238,11 +240,29 @@ de `request.cf.regionCode` pour la France (la donnée Cloudflare peut varier).
 - `POST /` → émet le token : émis une fois au début, **ne change jamais
   ensuite**.
 - `POST /validate` → **ne re-signe pas le token**. Vérifie une preuve de
-  complétion (le worker vérifie dans R2, binding `AUDIO_BUCKET`, qu'au moins
-  `MIN_RECORDINGS` enregistrements existent sous le compte `H(nonce)` — sinon
-  400) puis écrit un marqueur `validated/<account>` (utilisé par le cron de
-  nettoyage de r2-upload) et renvoie `{ok:true}`. Idempotent : rejouer l'appel
-  écrase silencieusement le même marqueur.
+  complétion dans R2 (binding `AUDIO_BUCKET`, compte `H(nonce)`) en deux temps :
+  1. garde-fou amont inchangé : au moins `MIN_RECORDINGS` objets sous
+     `reusable/<account>/` ou `internal/<account>/`, sinon **400** ;
+  2. **preuve de lecture réelle** (depuis le 2026-09-03) : compte les verdicts
+     `verified/<account>/<session>/reading-<textId>.json` à `ok:true`, écrits
+     par r2-upload après transcription Workers AI. Il en faut au moins
+     `MIN_VERIFIED_READINGS` (var, défaut `"3"`). Un fichier de silence ne
+     suffit donc plus.
+
+  Réponses :
+  - `200 {ok:true}` — seuil atteint, marqueur `validated/<account>` posé
+    (utilisé par le cron de nettoyage de r2-upload) ;
+  - `409 {ok:false, code:'VERIFICATION_PENDING', verified:n, pending:m}` — des
+    lectures n'ont pas encore de verdict (la transcription est asynchrone) :
+    **l'app réessaie** ;
+  - `400 {ok:false, code:'VERIFICATION_FAILED', verified:n, failed:k}` — tous
+    les verdicts sont tombés et le seuil n'est pas atteint : définitif.
+
+  Seules les lectures comptent (un résumé, même `ok`, n'ouvre rien). Deux
+  uploads du même texte dans la même session n'attendent qu'un verdict. Les
+  métadonnées viennent de `customMetadata` (`list({ include })`), à défaut de
+  la clé et du corps JSON du verdict. Idempotent : rejouer l'appel écrase
+  silencieusement le même marqueur.
 
   L'état « test complété » vit donc **uniquement côté serveur** (ce marqueur
   R2), jamais dans le token — le client n'a rien à re-persister après

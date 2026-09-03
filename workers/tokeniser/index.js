@@ -5,11 +5,19 @@
  *   - POST /          → émet le token (claims démographiques + nonce + sv).
  *                       Créé au DÉBUT (petit formulaire âge/région/sexe = « se
  *                       connecter »).
- *   - POST /validate  → vérifie une PREUVE DE COMPLÉTION (enregistrements
- *                       présents dans R2 sous le compte dérivé du nonce) et
- *                       pose un marqueur serveur permanent
- *                       (`validated/<account>`). Le token N'EST PAS modifié :
- *                       le client garde et réutilise le même token émis au
+ *   - POST /validate  → vérifie une PREUVE DE COMPLÉTION et pose un marqueur
+ *                       serveur permanent (`validated/<account>`). Depuis le
+ *                       2026-09-03, la preuve n'est plus « des objets existent
+ *                       sous le compte » (un fichier de silence suffisait) mais
+ *                       « au moins MIN_VERIFIED_READINGS lectures ont un VERDICT
+ *                       ok:true », verdicts écrits par r2-upload sous
+ *                       `verified/<account>/…` après transcription (Workers AI).
+ *                       La transcription étant asynchrone, /validate répond
+ *                       409 VERIFICATION_PENDING tant que des lectures attendent
+ *                       leur verdict (l'app réessaie), et 400
+ *                       VERIFICATION_FAILED quand tous sont tombés sans
+ *                       atteindre le seuil. Le token N'EST PAS modifié : le
+ *                       client garde et réutilise le même token émis au
  *                       départ. Idempotent (rejouer /validate est sans effet).
  *
  * Format : JWS compact EdDSA  header_b64url . payload_b64url . signature_b64url
@@ -354,10 +362,44 @@ async function handleValidate(body, env, origin) {
     return json({ error: 'Bucket R2 non lié (preuve de test indisponible)' }, 500, origin);
   }
   const account = (await sha256hex(v.claims.n)).slice(0, 32);
+  // Garde-fou amont, inchangé : aucun objet du tout → 400 sans aller plus loin.
   const min = parseInt(env.MIN_RECORDINGS || '1', 10);
   if (!(await hasEnoughRecordings(env.AUDIO_BUCKET, account, min))) {
     return json(
       { error: 'Test non complété : aucun enregistrement trouvé sous ce compte.' },
+      400, origin,
+    );
+  }
+
+  // ─── Preuve de LECTURE RÉELLE : verdicts de transcription (r2-upload) ────
+  // Un objet présent ne prouve rien (silence, bruit). On exige que des
+  // lectures aient été transcrites et reconnues comme le texte attendu.
+  const minVerifies = parseInt(env.MIN_VERIFIED_READINGS || '3', 10);
+  const bilan = await bilanVerification(env.AUDIO_BUCKET, account);
+  if (bilan.verified < minVerifies) {
+    if (bilan.pending > 0) {
+      // Des lectures n'ont pas encore de verdict : la transcription tourne en
+      // tâche de fond côté r2-upload. 409 = « pas maintenant », l'app réessaie.
+      return json(
+        {
+          ok: false,
+          code: 'VERIFICATION_PENDING',
+          verified: bilan.verified,
+          pending: bilan.pending,
+          error: 'Vérification des enregistrements en cours : réessayer dans un instant.',
+        },
+        409, origin,
+      );
+    }
+    // Tous les verdicts sont tombés et le compte n'y est pas : définitif.
+    return json(
+      {
+        ok: false,
+        code: 'VERIFICATION_FAILED',
+        verified: bilan.verified,
+        failed: bilan.failed,
+        error: 'Test non validé : les enregistrements de lecture ne correspondent pas aux textes attendus.',
+      },
       400, origin,
     );
   }
@@ -385,6 +427,94 @@ async function hasEnoughRecordings(bucket, account, min) {
     if (count >= min) return true;
   }
   return count >= min;
+}
+
+/** Préfixe des enregistrements de LECTURE (X-Record-Type côté r2-upload). */
+const RECORD_TYPE_READING = 'reading';
+
+/**
+ * Bilan des verdicts de lecture d'un compte : { verified, failed, pending }.
+ *
+ *   - attendus : un verdict par couple (session, texte) de lecture, déduit
+ *     des enregistrements présents sous reusable/ et internal/ (clé
+ *     `verified/<account>/<session>/reading-<textId>.json`, même convention
+ *     que r2-upload). Deux uploads du même texte dans la même session ne
+ *     comptent qu'une fois ;
+ *   - verified / failed : verdicts de lecture présents, ok:true / ok:false ;
+ *   - pending : attendus sans verdict (transcription pas encore tombée).
+ *
+ * Les métadonnées viennent de `customMetadata` (posées par r2-upload) ; à
+ * défaut, la clé elle-même est analysée — la convention de nommage est la
+ * seconde source de vérité, pas une supposition.
+ */
+async function bilanVerification(bucket, account) {
+  const attendus = new Set();
+  for (const prefix of [`reusable/${account}/`, `internal/${account}/`]) {
+    for await (const obj of listerTout(bucket, prefix)) {
+      const info = infoEnregistrement(obj);
+      if (info.recordType !== RECORD_TYPE_READING) continue;
+      attendus.add(`verified/${account}/${info.session}/${RECORD_TYPE_READING}-${info.textId}.json`);
+    }
+  }
+
+  let verified = 0;
+  let failed = 0;
+  const tombes = new Set();
+  for await (const obj of listerTout(bucket, `verified/${account}/`)) {
+    const nom = obj.key.split('/').pop() || '';
+    if (!nom.startsWith(`${RECORD_TYPE_READING}-`)) continue;
+    tombes.add(obj.key);
+    if (await verdictOk(bucket, obj)) verified++;
+    else failed++;
+  }
+
+  let pending = 0;
+  for (const cle of attendus) if (!tombes.has(cle)) pending++;
+  return { verified, failed, pending };
+}
+
+/** Parcourt toutes les pages d'un préfixe, métadonnées incluses. */
+async function* listerTout(bucket, prefix) {
+  let cursor;
+  do {
+    const page = await bucket.list({ prefix, cursor, limit: 1000, include: ['customMetadata'] });
+    for (const obj of page.objects) yield obj;
+    cursor = page.truncated ? page.cursor : undefined;
+  } while (cursor);
+}
+
+/**
+ * { session, recordType, textId } d'un objet audio. Source 1 : customMetadata
+ * (session_id, record_type, text_id). Source 2 : la clé
+ *   <prefix>/<account>/<session>/<layer>-<recordType>-<textId>-<uuid>.<ext>
+ * où l'uuid occupe toujours les 5 derniers fragments séparés par '-'.
+ */
+function infoEnregistrement(obj) {
+  const md = obj.customMetadata || {};
+  const segments = obj.key.split('/');
+  const session = md.session_id || segments[2] || '';
+  if (md.record_type) {
+    return { session, recordType: md.record_type, textId: md.text_id || 'na' };
+  }
+  const nom = (segments[segments.length - 1] || '').replace(/\.[^.]*$/, '');
+  const parts = nom.split('-');
+  if (parts.length < 7) return { session, recordType: '', textId: 'na' };
+  return { session, recordType: parts[1], textId: parts.slice(2, -5).join('-') || 'na' };
+}
+
+/** ok du verdict : customMetadata.ok si présent, sinon le corps JSON. */
+async function verdictOk(bucket, obj) {
+  const md = obj.customMetadata || {};
+  if (md.ok === 'true') return true;
+  if (md.ok === 'false') return false;
+  try {
+    const corps = await bucket.get(obj.key);
+    if (!corps) return false;
+    const data = await corps.json();
+    return !!data && data.ok === true;
+  } catch {
+    return false;
+  }
 }
 
 /**

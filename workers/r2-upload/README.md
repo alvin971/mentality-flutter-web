@@ -72,6 +72,76 @@ Chaque objet porte aussi des `customMetadata` :
 | `consent_source` | `'token'` (claims signées) ou `'header'` (déclaré par le client) |
 | `session_id`, `text_id`, `layer`, `record_type`, `duration_seconds`, `language`, `uploaded_day` | métadonnées techniques (jamais d'heure, seulement la date) |
 
+Deux autres familles de clés, hors audio :
+
+```
+corpus/<textId>.json                                       ← référence de vérification (publiée, publique)
+verified/<account>/<sessionId>/<recordType>-<textId>.json  ← verdict de vérification (écrit par ce worker)
+```
+
+## Vérification des enregistrements (transcription Workers AI)
+
+Décision produit (2026-09-03) : un enregistrement absent, vide ou sans rapport
+avec le texte à lire **ne donne pas droit aux résultats du passe Gratuit**. Une
+transcription bon marché suffit : on connaît le texte que la personne devait
+lire, on vérifie qu'une part raisonnable de ses mots apparaît dans la
+transcription.
+
+Après chaque `put` réussi, le worker lance **en tâche de fond**
+(`ctx.waitUntil`) : la réponse à l'app n'attend jamais la transcription.
+
+1. `reading` : charge `corpus/<X-Text-Id>.json` (absent → verdict
+   `no_reference`, le modèle n'est pas appelé), transcrit avec
+   `@cf/openai/whisper` (binding `AI`, `[ai]` du `wrangler.toml`), normalise
+   les deux côtés avec `workers/_shared/text_norm.js` (minuscules, sans accent,
+   sans ponctuation, mots ≥ 4 caractères) et calcule
+   `overlap = |transcrits ∩ référence| / |référence|`.
+   `ok` si `overlap ≥ VERIFY_MIN_OVERLAP` (var, défaut `"0.30"`).
+2. `summary` (pas de référence) : `ok` si la transcription compte au moins
+   `VERIFY_MIN_SUMMARY_WORDS` mots distincts (var, défaut `"15"`).
+3. Tout autre `X-Record-Type` (défaut `audio`) est stocké **sans verdict**.
+
+Verdict écrit sous `verified/<account>/<sessionId>/<recordType>-<textId>.json` :
+
+```json
+{ "ok": true, "reason": null, "overlap": 0.5, "words_hit": 10, "words_ref": 20,
+  "words_transcribed": 14, "model": "@cf/openai/whisper", "day": "2026-09-03" }
+```
+
+`reason` (quand `ok:false`) : `low_overlap`, `too_few_words`, `no_reference`,
+`ai_unavailable` (binding `AI` absent), `ai_error` (modèle en panne),
+`ai_response_format`, `audio_too_large` (> 8 Mo), `verify_error`.
+
+**Aucun mot transcrit n'est conservé** — seulement des comptes, le nom du
+modèle et le jour (jamais l'heure). Aucun log par requête. Un binding `AI`
+absent ou un modèle en panne donne un verdict `ok:false` et **ne fait jamais
+échouer l'upload**. C'est `POST /validate` du tokeniser qui lit ces verdicts
+(seuil `MIN_VERIFIED_READINGS`).
+
+### Publier la référence du corpus (`scripts/publish-corpus.mjs`)
+
+```bash
+# Répétition à blanc (seul mode possible tant que R2 n'est pas activé) :
+node workers/r2-upload/scripts/publish-corpus.mjs --dry-run --out /tmp/corpus-dry
+# Publication réelle (CLOUDFLARE_API_TOKEN requis, bucket existant) :
+node workers/r2-upload/scripts/publish-corpus.mjs
+```
+
+Lit `assets/reading_corpus/*.jsonl` (753 textes, 6 langues, ~600 Kio de
+références) et pousse un `corpus/<id>.json` = `{ id, lang, words }` par texte,
+`words` étant calculé par **la même** fonction `motsDistincts` que le worker.
+`id` est exactement la valeur envoyée dans `X-Text-Id` (`fr_00042`,
+`en_GB_00007`…). **À relancer après tout changement du corpus ou de
+`text_norm.js`** : une référence normalisée autrement que la transcription
+fausse tous les recouvrements. Un `wrangler r2 object put --remote` par texte
+(compter 15 à 25 min).
+
+⚠️ La forme exacte de l'entrée (`{ audio: [...octets], language }`) et de la
+sortie (`{ text }` ou `{ transcription_info, text }`) de Whisper ne se confirme
+qu'au premier déploiement : l'appel est écrit défensivement (second essai sans
+`language` si le modèle refuse le champ) — vérifier les premiers verdicts
+réels (`reason` ≠ `ai_error` / `ai_response_format`).
+
 ## RGPD — d'où vient la preuve de consentement
 
 > ⚠️ **La couche cessible est inatteignable sans claims signées.** Un objet ne
@@ -184,7 +254,15 @@ branché sur un bucket R2 en mémoire. Il verrouille notamment :
   `reusable/`, et que le chemin légitime `free`/`cc:true` y reste ouvert ;
 - qu'une `cv` hors `LEGAL_VERSIONS` est refusée (403) et qu'une liste absente
   ferme le worker (500), sans rien écrire dans les deux cas ;
-- qu'un fragment de clé hors format est refusé (400) au lieu d'être nettoyé.
+- qu'un fragment de clé hors format est refusé (400) au lieu d'être nettoyé ;
+- la vérification des enregistrements (binding `AI` factice pilotable, `ctx`
+  qui collecte les promesses de `waitUntil`) : recouvrement 50 % → `ok`,
+  10 % → `low_overlap`, référence absente → `no_reference` sans appel au
+  modèle, `AI` absent → `ai_unavailable` avec upload 200, modèle en panne →
+  `ai_error`, résumé 20 mots → `ok` / 5 mots → `too_few_words`, verdict sans
+  aucun mot transcrit, réponse HTTP rendue avant la transcription ;
+- la normalisation partagée `text_norm.js` (accents, ligatures, ponctuation,
+  mots courts, recouvrement).
 
 **À lancer avant chaque `wrangler deploy`.**
 
