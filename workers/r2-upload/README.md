@@ -109,8 +109,37 @@ Verdict écrit sous `verified/<account>/<sessionId>/<recordType>-<textId>.json` 
 ```
 
 `reason` (quand `ok:false`) : `low_overlap`, `too_few_words`, `no_reference`,
-`ai_unavailable` (binding `AI` absent), `ai_error` (modèle en panne),
-`ai_response_format`, `audio_too_large` (> 8 Mo), `verify_error`.
+`audio_too_large` (> 8 Mo). Ce sont des **jugements** (ou des faits stables) :
+ils s'écrivent et clôturent le sujet.
+
+### Panne d'infrastructure : aucun verdict, et une reprise
+
+`ai_unavailable` (binding `AI` absent), `ai_error` (modèle en panne ou
+**allocation de neurones du jour épuisée**), `ai_response_format` et
+`verify_error` ne jugent rien : la vérification n'a pas eu lieu. Dans ces cas
+le worker **n'écrit aucun verdict**, et c'est voulu.
+
+> Pourquoi. `/validate` ne compte « en attente » que les enregistrements **sans
+> fichier de verdict** ; un verdict `ok:false` le compte comme « tombé » et
+> répond `400 VERIFICATION_FAILED`, qui est définitif. Écrire une panne de
+> notre côté comme un verdict prive donc DÉFINITIVEMENT de ses résultats
+> quelqu'un qui a parfaitement lu. Mesuré au banc (`tools/verif_lab`,
+> 2026-09-03) : l'allocation gratuite couvre ≈ 4,2 h d'audio par jour, soit
+> ≈ 99 bilans ; au-delà, `env.AI.run` renvoie `4006` et **toutes** les lectures
+> du jour tombaient ainsi.
+
+Sans verdict, l'enregistrement reste « en attente » et le **cron quotidien**
+(03:00 UTC, après le reset de l'allocation à 00:00 UTC) le reprend : il liste
+les audios sans verdict, relit les octets depuis R2 et rejoue la vérification.
+Bornes, parce que chaque reprise coûte des neurones :
+
+| Var | Défaut | Rôle |
+|---|---|---|
+| `VERIFY_RETRY_MAX` | `200` | fichiers repris au plus par exécution |
+| `VERIFY_RETRY_GIVE_UP` | `5` | échecs d'infrastructure consécutifs → on arrête (l'allocation est encore épuisée, le lendemain reprendra) |
+
+Un enregistrement plus vieux que `RETENTION_DAYS` n'est pas repris, et le
+ménage passe avant la reprise (inutile de transcrire ce qui va être supprimé).
 
 **Aucun mot transcrit n'est conservé** — seulement des comptes, le nom du
 modèle et le jour (jamais l'heure). Aucun log par requête. Un binding `AI`

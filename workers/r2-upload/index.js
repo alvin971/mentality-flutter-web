@@ -122,6 +122,21 @@ const VERIFY_MIN_SUMMARY_WORDS_DEFAUT = 15;
 // Types d'enregistrement vérifiés. Tout autre type (défaut 'audio' d'un client
 // qui n'envoie pas X-Record-Type) est stocké sans verdict : /validate ne
 // compte que les lectures, un verdict sur un type inconnu ne servirait à rien.
+/**
+ * Raisons d'échec qui ne JUGENT RIEN : la vérification n'a pas pu avoir lieu
+ * (binding absent, modèle en panne, allocation de neurones épuisée, réponse
+ * illisible, bug). Elles ne doivent jamais s'écrire comme un verdict, sinon
+ * `/validate` compte l'enregistrement comme « tombé » et refuse DÉFINITIVEMENT
+ * les résultats à quelqu'un qui a parfaitement lu (bug trouvé au banc, réveil 4 :
+ * au-delà de ~99 bilans dans la journée, `env.AI.run` renvoie 4006 et TOUTES
+ * les lectures du jour deviennent des échecs définitifs). Sans verdict écrit,
+ * l'enregistrement reste « en attente » et le cron le reprend.
+ *
+ * `low_overlap`, `too_few_words`, `no_reference` et `audio_too_large`, eux,
+ * sont des jugements ou des faits stables : ils s'écrivent.
+ */
+const RAISONS_INFRASTRUCTURE = new Set(['ai_unavailable', 'ai_error', 'ai_response_format', 'verify_error']);
+
 const RECORD_TYPE_READING = 'reading';
 const RECORD_TYPE_SUMMARY = 'summary';
 
@@ -305,6 +320,9 @@ export default {
   // conservés. Voir wrangler.toml [triggers].
   async scheduled(event, env, ctx) {
     await cleanupAbandoned(env);
+    // Après le ménage (inutile de transcrire ce qu'on vient de supprimer) et
+    // après le reset quotidien de l'allocation Workers AI, à 00:00 UTC.
+    await reprendreVerifications(env);
   },
 };
 
@@ -332,6 +350,11 @@ async function verifierEnregistrement(env, champs) {
     resultat = { ok: false, reason: 'verify_error' };
   }
   const ok = resultat.ok === true;
+  // Panne d'infrastructure : on n'écrit RIEN. L'enregistrement reste « en
+  // attente » (409 côté /validate, l'app réessaie) et le cron le reprendra
+  // quand le modèle répondra de nouveau. Écrire ici transformerait une panne
+  // de notre côté en échec définitif du côté de la personne.
+  if (!ok && RAISONS_INFRASTRUCTURE.has(resultat.reason)) return;
   const verdict = {
     ok,
     reason: ok ? null : (resultat.reason || 'unknown'),
@@ -500,6 +523,72 @@ async function cleanupAbandoned(env) {
       cursor = listed.truncated ? listed.cursor : undefined;
     } while (cursor && processed < maxObjects);
   }
+}
+
+/**
+ * Reprend les enregistrements restés SANS VERDICT — ceux dont la transcription
+ * n'a pas pu avoir lieu au dépôt (modèle en panne, allocation de neurones du
+ * jour épuisée, worker redémarré au mauvais moment).
+ *
+ * POURQUOI UN CRON. La transcription n'a lieu qu'une fois, dans le `waitUntil`
+ * du dépôt. Sans reprise, un enregistrement sans verdict reste « en attente »
+ * POUR TOUJOURS : `/validate` répond 409 indéfiniment et la personne n'obtient
+ * jamais ses résultats. Ne pas écrire de verdict en cas de panne (voir
+ * RAISONS_INFRASTRUCTURE) n'a donc de sens qu'avec cette reprise.
+ *
+ * Bornes, parce que chaque reprise coûte des neurones :
+ *   - `VERIFY_RETRY_MAX` fichiers repris au plus par exécution (défaut 200) ;
+ *   - `VERIFY_RETRY_GIVE_UP` échecs d'infrastructure CONSÉCUTIFS et on arrête
+ *     (défaut 5) : si l'allocation est de nouveau épuisée, inutile de brûler
+ *     le temps du cron pour rien — le lendemain reprendra la suite ;
+ *   - les enregistrements trop vieux pour être encore utiles (au-delà de
+ *     `RETENTION_DAYS`) ne sont pas repris.
+ */
+async function reprendreVerifications(env) {
+  if (!env.AUDIO_BUCKET || !env.AI) return { repris: 0, ecrits: 0 };
+  const maxReprises = entierPositif(env.VERIFY_RETRY_MAX, 200);
+  const abandonApres = entierPositif(env.VERIFY_RETRY_GIVE_UP, 5);
+  const retentionDays = parseInt(env.RETENTION_DAYS || '30', 10);
+  const cutoff = Date.now() - retentionDays * 86400 * 1000;
+  let repris = 0;
+  let ecrits = 0;
+  let echecsConsecutifs = 0;
+
+  for (const prefix of ['reusable/', 'internal/']) {
+    let cursor;
+    do {
+      const listed = await env.AUDIO_BUCKET.list({ prefix, cursor, limit: 1000, include: ['customMetadata'] });
+      for (const obj of listed.objects) {
+        if (repris >= maxReprises || echecsConsecutifs >= abandonApres) return { repris, ecrits };
+        const meta = obj.customMetadata || {};
+        const recordType = meta.record_type;
+        if (recordType !== RECORD_TYPE_READING && recordType !== RECORD_TYPE_SUMMARY) continue;
+        if (obj.uploaded && obj.uploaded.getTime() < cutoff) continue;
+        const account = meta.account;
+        const sessionId = meta.session_id;
+        if (!account || !sessionId) continue;
+        const cleVerdict = `verified/${account}/${sessionId}/${recordType}-${meta.text_id || 'na'}.json`;
+        if (await env.AUDIO_BUCKET.head(cleVerdict)) continue; // déjà jugé
+
+        const objet = await env.AUDIO_BUCKET.get(obj.key);
+        if (!objet) continue; // supprimé entre le list et le get
+        repris++;
+        await verifierEnregistrement(env, {
+          account,
+          sessionId,
+          recordType,
+          textId: meta.text_id || '',
+          language: meta.language || 'fr',
+          audio: await objet.arrayBuffer(),
+        });
+        // Un verdict écrit = la reprise a abouti (jugement rendu, quel qu'il soit).
+        if (await env.AUDIO_BUCKET.head(cleVerdict)) { ecrits++; echecsConsecutifs = 0; }
+        else echecsConsecutifs++;
+      }
+      cursor = listed.truncated ? listed.cursor : undefined;
+    } while (cursor);
+  }
+  return { repris, ecrits };
 }
 
 /**

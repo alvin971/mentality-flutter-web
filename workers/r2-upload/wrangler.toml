@@ -61,6 +61,17 @@ VERIFY_MIN_OVERLAP = "0.30"
 # après normalisation) dans la transcription pour que le verdict soit ok.
 VERIFY_MIN_SUMMARY_WORDS = "15"
 
+# Reprise des vérifications manquantes par le cron (handler scheduled()).
+# Un enregistrement déposé pendant une panne du modèle — ou après épuisement de
+# l'allocation gratuite de Workers AI (10 000 neurones/jour ≈ 4,2 h d'audio,
+# mesuré au banc le 2026-09-03, soit ≈ 99 bilans) — n'a PAS de verdict : il
+# reste « en attente » et le cron le reprend le lendemain, après le reset de
+# 00:00 UTC. Sans ces reprises, il resterait en attente pour toujours.
+#   VERIFY_RETRY_MAX      : fichiers repris au plus par exécution (coût en neurones)
+#   VERIFY_RETRY_GIVE_UP  : échecs consécutifs après lesquels on arrête (quota encore épuisé)
+VERIFY_RETRY_MAX = "200"
+VERIFY_RETRY_GIVE_UP = "5"
+
 # ─────────────────────────────────────────────────────────────────────────────
 # LEGAL_VERSIONS — versions de textes légaux dont ce worker accepte d'ARCHIVER
 # le consentement. CSV, même convention et mêmes valeurs que la var du même nom

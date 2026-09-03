@@ -117,10 +117,31 @@ function bucket({ echoue = false } = {}) {
     head: async (key) => (m.has(key) ? {} : null),
     get: async (key) => {
       if (!m.has(key)) return null;
-      const texte = String(m.get(key).value);
-      return { text: async () => texte, json: async () => JSON.parse(texte) };
+      const brut = m.get(key).value;
+      const texte = String(brut);
+      return {
+        text: async () => texte,
+        json: async () => JSON.parse(texte),
+        // La reprise par le cron relit les octets de l'audio : le double R2
+        // doit donc rendre un ArrayBuffer, comme le binding.
+        arrayBuffer: async () => (brut instanceof ArrayBuffer ? brut : new TextEncoder().encode(texte).buffer),
+      };
     },
-    list: async () => ({ objects: [], truncated: false }),
+    // `list` du vrai binding : filtre par préfixe, rend les customMetadata
+    // quand on les demande, et pagine. Sans ça, la reprise du cron ne verrait
+    // jamais un seul objet et le test passerait pour de mauvaises raisons.
+    list: async ({ prefix = '', cursor, limit = 1000 } = {}) => {
+      const cles = [...m.keys()].filter((k) => k.startsWith(prefix)).sort();
+      const debut = cursor ? cles.indexOf(cursor) + 1 : 0;
+      const page = cles.slice(debut, debut + limit);
+      const objects = page.map((key) => ({
+        key,
+        customMetadata: (m.get(key).options || {}).customMetadata || {},
+        uploaded: (m.get(key).options || {}).uploaded || new Date(),
+      }));
+      const truncated = debut + limit < cles.length;
+      return { objects, truncated, cursor: truncated ? page[page.length - 1] : undefined };
+    },
     delete: async (key) => { m.delete(key); },
   };
 }
@@ -753,22 +774,23 @@ const ATTENDU_VERDICT = ['ok', 'reason', 'overlap', 'words_hit', 'words_ref', 'w
   verifie('référence absente → verdict rangé sous le textId demandé',
     cleVerdict(s4).endsWith('/reading-txt-inconnu.json'), cleVerdict(s4));
 
-  // ─── env.AI absent → ai_unavailable, upload intact ─────────────────────────
+  // ─── Panne d'infrastructure → AUCUN verdict, l'enregistrement reste en attente ─
+  // Le contraire (écrire ok:false) transforme une panne de NOTRE côté en échec
+  // définitif du côté de la personne : /validate ne compte « en attente » que
+  // les enregistrements SANS fichier de verdict, et répond sinon 400
+  // VERIFICATION_FAILED, qui ne se rejoue pas.
   const s5 = bucket();
   await semerReference(s5, 'txt1', TEXTE_REF);
   const r5 = await appel(s5); // aucun `ai` : l'env par défaut ne lie pas AI
-  const v5 = verdict(s5) || {};
   verifie('env.AI absent → upload 200 quand même', r5.statut === 200 && seuleCle(s5).startsWith('reusable/'), `${r5.statut}`);
-  verifie('env.AI absent → verdict ok:false ai_unavailable',
-    v5.ok === false && v5.reason === 'ai_unavailable' && v5.overlap === null, JSON.stringify(v5));
+  verifie('env.AI absent → AUCUN verdict écrit (en attente, pas « tombé »)',
+    cleVerdict(s5) === '', cleVerdict(s5));
 
-  // ─── IA en panne → ai_error, upload intact ─────────────────────────────────
   const s6 = bucket();
   await semerReference(s6, 'txt1', TEXTE_REF);
   const r6 = await appel(s6, { ai: iaFactice({ jette: true }) });
-  const v6 = verdict(s6) || {};
-  verifie('IA qui jette → upload 200, verdict ok:false ai_error',
-    r6.statut === 200 && v6.ok === false && v6.reason === 'ai_error', `${r6.statut} ${JSON.stringify(v6)}`);
+  verifie('IA qui jette → upload 200 et AUCUN verdict (la panne ne juge rien)',
+    r6.statut === 200 && cleVerdict(s6) === '', `${r6.statut} ${cleVerdict(s6)}`);
 
   // ─── Le modèle refuse `language` → second essai sans, verdict quand même ───
   const s7 = bucket();
@@ -788,8 +810,9 @@ const ATTENDU_VERDICT = ['ok', 'reason', 'overlap', 'words_hit', 'words_ref', 'w
   const s9 = bucket();
   await semerReference(s9, 'txt1', TEXTE_REF);
   await appel(s9, { ai: iaFactice({ reponse: { autre: 1 } }) });
-  verifie('réponse sans texte → ok:false ai_response_format',
-    (verdict(s9) || {}).reason === 'ai_response_format', JSON.stringify(verdict(s9)));
+  verifie('réponse illisible → AUCUN verdict (ai_response_format est une panne, pas un jugement)',
+    cleVerdict(s9) === '', cleVerdict(s9));
+
 
   // ─── Résumé : pas de référence, seuil de mots distincts ────────────────────
   const RESUME_20 = 'Cette histoire raconte comment plusieurs personnages traversent une longue période '
@@ -863,6 +886,90 @@ const ATTENDU_VERDICT = ['ok', 'reason', 'overlap', 'words_hit', 'words_ref', 'w
   verifie('> 8 Mo → upload 200, verdict audio_too_large, IA non appelée',
     r16.statut === 200 && (verdict(s16) || {}).reason === 'audio_too_large' && ia16._appels.length === 0,
     `${r16.statut} ${JSON.stringify(verdict(s16))}`);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+console.log("\nReprise par le cron : une panne ne doit pas bloquer quelqu'un pour toujours");
+{
+  // Ne pas écrire de verdict en cas de panne n'a de sens QUE si quelque chose
+  // reprend plus tard : la transcription n'a lieu qu'une fois, dans le
+  // `waitUntil` du dépôt. Sans reprise, l'enregistrement resterait « en
+  // attente » indéfiniment et /validate répondrait 409 pour toujours.
+  const cron = (store, ai, extra = {}) =>
+    worker.scheduled({}, { AUDIO_BUCKET: store, LEGAL_VERSIONS: CV, ...(ai ? { AI: ai } : {}), ...extra }, contexte());
+
+  // 1. Dépôt pendant une panne, puis reprise quand le modèle répond.
+  const sA = bucket();
+  await semerReference(sA, 'txt1', TEXTE_REF);
+  await appel(sA, { ai: iaFactice({ jette: true }) });
+  verifie('dépôt pendant la panne → audio écrit, aucun verdict',
+    clesAudio(sA).length === 1 && cleVerdict(sA) === '');
+  const iaOk = iaFactice({ texte: TRANSCRIPTION_50 });
+  await cron(sA, iaOk);
+  verifie('cron avec modèle rétabli → le verdict manquant est enfin écrit',
+    (verdict(sA) || {}).ok === true && iaOk._appels.length === 1, JSON.stringify(verdict(sA)));
+  verifie('la reprise relit bien les octets de l\'audio déposé (pas une clé vide)',
+    iaOk._appels[0].input.audio.length === 1024, `${(iaOk._appels[0].input.audio || []).length}`);
+
+  // 2. Le cron ne rejuge pas ce qui a déjà un verdict.
+  const iaBis = iaFactice({ texte: TRANSCRIPTION_50 });
+  await cron(sA, iaBis);
+  verifie('cron repassé → aucun appel au modèle, le verdict existant est laissé tel quel',
+    iaBis._appels.length === 0, `${iaBis._appels.length} appel(s)`);
+
+  // 3. Panne toujours là : rien n'est écrit, rien n'est perdu, on réessaiera.
+  const sB = bucket();
+  await semerReference(sB, 'txt1', TEXTE_REF);
+  await appel(sB, { ai: iaFactice({ jette: true }) });
+  await cron(sB, iaFactice({ jette: true }));
+  verifie('cron pendant que la panne dure → toujours aucun verdict (repris plus tard)',
+    cleVerdict(sB) === '' && clesAudio(sB).length === 1);
+
+  // 4. Un jugement NÉGATIF, lui, s'écrit et clôt le sujet.
+  const sC = bucket();
+  await semerReference(sC, 'txt1', TEXTE_REF);
+  await appel(sC, { ai: iaFactice({ jette: true }) });
+  await cron(sC, iaFactice({ texte: 'rien à voir avec ce texte' }));
+  verifie('reprise dont la lecture ne correspond pas → verdict ok:false low_overlap écrit',
+    (verdict(sC) || {}).ok === false && (verdict(sC) || {}).reason === 'low_overlap',
+    JSON.stringify(verdict(sC)));
+
+  // 5. Sans binding AI, le cron ne tente rien (et ne casse pas le ménage).
+  const sD = bucket();
+  await semerReference(sD, 'txt1', TEXTE_REF);
+  await appel(sD, { ai: iaFactice({ jette: true }) });
+  await cron(sD, null);
+  verifie('cron sans binding AI → aucun verdict, aucune exception', cleVerdict(sD) === '');
+
+  // 6. Borne de coût : chaque reprise consomme des neurones.
+  const sE = bucket();
+  await semerReference(sE, 'txt1', TEXTE_REF);
+  for (const session of ['s1', 's2', 's3']) {
+    await appel(sE, { ai: iaFactice({ jette: true }), entetes: { 'X-Session-Id': session } });
+  }
+  const iaBornee = iaFactice({ texte: TRANSCRIPTION_50 });
+  await cron(sE, iaBornee, { VERIFY_RETRY_MAX: '2' });
+  verifie('VERIFY_RETRY_MAX borne le nombre de reprises par exécution',
+    iaBornee._appels.length === 2, `${iaBornee._appels.length} appel(s)`);
+
+  // 7. Abandon après des échecs consécutifs : si l'allocation est de nouveau
+  //    épuisée, inutile de brûler le temps du cron sur 200 fichiers.
+  const sF = bucket();
+  await semerReference(sF, 'txt1', TEXTE_REF);
+  for (const session of ['s1', 's2', 's3', 's4', 's5']) {
+    await appel(sF, { ai: iaFactice({ jette: true }), entetes: { 'X-Session-Id': session } });
+  }
+  const iaQuota = iaFactice({ jette: true });
+  await cron(sF, iaQuota, { VERIFY_RETRY_GIVE_UP: '2' });
+  // Une vérification en échec coûte DEUX appels au modèle (le second sans
+  // `language`, cf. transcrire()). Abandonner après 2 enregistrements = 4
+  // appels ; ne pas abandonner en ferait 10 pour les 5 enregistrements.
+  verifie('échecs consécutifs → le cron abandonne tôt au lieu de tout retenter',
+    iaQuota._appels.length === 4, `${iaQuota._appels.length} appel(s), attendu 4 (2 enregistrements × 2 essais)`);
+
+  // 8. Le ménage passe toujours en premier (on ne transcrit pas ce qui va partir).
+  verifie('le cron fait le ménage ET la reprise (scheduled ne rend pas la main avant)',
+    typeof worker.scheduled === 'function');
 }
 
 console.log(`\n${ok} vérifications OK, ${echecs.length} en échec`);
