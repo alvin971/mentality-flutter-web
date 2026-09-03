@@ -701,8 +701,12 @@ console.log('\nConfiguration déployable (wrangler.toml)');
 
   verifie('aucun [[r2_buckets]] ACTIF (R2 désactivé sur le compte, erreur API 10042)',
     !actif.includes('[[r2_buckets]]'), 'binding R2 actif dans le toml');
-  verifie('aucun [[kv_namespaces]] ACTIF (le namespace RATE_KV n\'existe pas)',
-    !actif.includes('[[kv_namespaces]]'), 'binding KV actif dans le toml');
+  // Le namespace RATE_KV existe depuis le 2026-09-03 : le binding est ACTIF, et
+  // il doit porter un id hexadécimal réel (32 caractères) — jamais le placeholder,
+  // jamais celui d'un autre worker (garde REFERRAL_KV plus bas).
+  const idKv = (actif.match(/\[\[kv_namespaces\]\][\s\S]*?id\s*=\s*"([^"]+)"/) || [])[1] || '';
+  verifie('[[kv_namespaces]] RATE_KV ACTIF avec un id hexadécimal de 32 caractères',
+    /^[0-9a-f]{32}$/.test(idKv), `id KV lu : « ${idKv} »`);
   verifie('aucun `id` PLACEHOLDER actif (une chaîne littérale ferait échouer le deploy)',
     !actif.includes('REMPLACER_PAR_LA_SORTIE_DE'), 'placeholder actif dans le toml');
   verifie('l\'id de REFERRAL_KV n\'est collé nulle part (namespace d\'un AUTRE worker)',

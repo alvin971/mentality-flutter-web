@@ -72,7 +72,7 @@ compatibility_date = "2025-01-01"
 # jurisdiction = "eu"
 
 # ─────────────────────────────────────────────────────────────────────────────
-# [[kv_namespaces]] RATE_KV — COMMENTÉ : le namespace n'existe pas encore
+# [[kv_namespaces]] RATE_KV — ACTIF depuis le 2026-09-03 (id 76e73504…)
 # ─────────────────────────────────────────────────────────────────────────────
 # Namespace KV du worker. Il porte TROIS familles de clés, toutes agrégées ou
 # publiques (détail en tête d'index.js) : `issue:` (plafond d'émission),
@@ -99,9 +99,9 @@ compatibility_date = "2025-01-01"
 #   7. Le plafond d'émission reste INACTIF à ce stade — c'est voulu. Voir
 #      ISSUE_CAP_ENABLED plus bas : c'est un SECOND geste, séparé.
 #
-# [[kv_namespaces]]
-# binding = "RATE_KV"
-# id = "REMPLACER_PAR_LA_SORTIE_DE_wrangler_kv_namespace_create_RATE_KV"
+[[kv_namespaces]]
+binding = "RATE_KV"
+id = "76e73504afb548c0b00aa3e8f9039239"   # créé le 2026-09-03 : wrangler kv namespace create RATE_KV
 
 # ⚠️ `wrangler deploy` RÉÉCRIT toutes les [vars] depuis ce fichier : une valeur
 # changée à la main dans le dashboard est écrasée au prochain déploiement.
