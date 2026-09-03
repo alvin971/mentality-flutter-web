@@ -196,7 +196,14 @@ for (const it of banks) {
     () => emit('gold', it, 'zero_dontknow', 'ne sait pas = 0', pick(T.dontknow), 0),
     () => emit('gold', it, 'zero_repeat', 'répéter le stimulus = 0', isSI ? `${it.stimulus.word1} et ${it.stimulus.word2}` : it.stimulus.word, 0),
     () => { const o = otherItem(it, false); emit('gold', it, 'zero_other_one', "1 point d'un item sans rapport = 0", pick(o.one), 0, { from_item: o.id }); },
-    () => { const o = otherItem(it, true); emit('gold', it, 'zero_wrong_category', 'catégorie fausse (2 points d\'un autre item du même niveau) = 0', pick(o.two), 0, { from_item: o.id }); },
+    () => {
+      // En SI, les catégories des niveaux categorical/abstract se recouvrent souvent
+      // (« des qualités morales » convient à plusieurs paires abstraites) : l'emprunt
+      // n'y est pas un 0 certain. On se limite aux niveaux concret/fonctionnel ; en VO
+      // une définition d'un autre mot reste un 0 sûr à tout niveau.
+      if (isSI && !['concrete', 'functional'].includes(it.level)) { zeroKinds[(rot + 1) % 6](); return; }
+      const o = otherItem(it, true); emit('gold', it, 'zero_wrong_category', 'catégorie fausse (2 points d\'un autre item du même niveau) = 0', pick(o.two), 0, { from_item: o.id });
+    },
     () => {
       const gens = isSI ? T.generalSI : T.generalVO;
       const g = gens[rot % gens.length];
@@ -288,11 +295,11 @@ const HAND = [
   ['VO', 'fr', 'Livre', 'c\'est quand on lit une histoire', 1, 'définition par l\'usage = 1'],
   ['VO', 'fr', 'Livre', 'livre', 0, 'le mot lui-même = 0'],
   ['VO', 'fr', 'Livre', 'une livre c\'est à peu près 500 grammes', 0, 'homonyme = 0'],
-  ['VO', 'fr', 'Rapide', 'véloce', 2, 'synonyme exact = 2'],
+  ['VO', 'fr', 'Rapide', 'véloce', 1, 'synonyme nu = 1 (convention des banques : Joyeux, Speedy, Modest sont à 1 point)'],
   ['VO', 'fr', 'Rapide', 'qui n\'est pas lent', 1, 'définition par la négation = 1'],
   ['VO', 'fr', 'Rapide', 'un fleuve', 0, 'homonyme (un rapide) = 0'],
   ['VO', 'fr', 'Manger', 'se nourrir en avalant des aliments', 2, 'définition = 2'],
-  ['VO', 'fr', 'Manger', 'bouffer', 2, 'synonyme familier exact = 2'],
+  ['VO', 'fr', 'Manger', 'bouffer', 1, 'synonyme nu = 1 (convention des banques)'],
   ['VO', 'fr', 'Manger', 'manger', 0, 'le mot lui-même = 0'],
   // Similarities en
   ['SI', 'en', 'Orange/Banana', 'Fruit', 2, 'bare singular = 2'],
@@ -331,7 +338,7 @@ const HAND = [
   ['VO', 'en', 'Book', "it's when you read a story", 1, 'definition by use = 1'],
   ['VO', 'en', 'Book', 'book', 0, 'the word itself = 0'],
   ['VO', 'en', 'Book', 'to reserve a table at a restaurant', 0, 'homonym (to book) = 0'],
-  ['VO', 'en', 'Fast', 'quick', 2, 'exact synonym = 2'],
+  ['VO', 'en', 'Fast', 'quick', 1, 'bare synonym = 1 (bank convention: Speedy, Joyful, Modest are 1-point)'],
   ['VO', 'en', 'Fast', 'not slow', 1, 'definition by negation = 1'],
   ['VO', 'en', 'Fast', 'going without food for a while', 0, 'homonym (to fast) = 0'],
   ['VO', 'en', 'Eat', 'to take in food by chewing and swallowing it', 2, 'definition = 2'],

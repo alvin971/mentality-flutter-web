@@ -17,6 +17,20 @@ node run.mjs --prompt prompts/v1.md --set gold --set adversarial --determinism 2
 Clé API : `~/.secrets/mentality/anthropic_key` (une ligne, chmod 600) ou `ANTHROPIC_API_KEY`.
 Modèle : `claude-haiku-4-5-20251001`, température 0, sortie structurée JSON.
 
+## Chemin « abonnement » (sans clé API) — celui utilisé par la boucle
+
+```bash
+node prepare_batches.mjs --prompt prompts/v1.md --set gold --set adversarial [--sample 300 --tag smoke]
+# → batches/v1[.smoke]/NNN.jsonl ; un sous-agent Haiku par lot écrit NNN.out.jsonl
+node prepare_batches.mjs --prompt prompts/v1.md --set gold --set adversarial --tag smoke --missing   # relance des cas sans sortie
+node score.mjs --prompt prompts/v1.md --set gold --set adversarial [--tag smoke] [--blind]
+```
+
+Les sous-agents sont lancés depuis Claude Code (outil Agent, modèle haiku) avec la consigne :
+lire le prompt, lire le lot, écrire une ligne JSON `{id, score, confidence, reason}` par cas.
+`run.mjs` (API directe, un appel par cas, température 0, sortie structurée) reste la référence
+de fidélité pour le worker et sert à mesurer le déterminisme réel quand une clé existe.
+
 ## Fichiers
 
 | Fichier | Rôle |

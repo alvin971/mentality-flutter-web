@@ -22,3 +22,26 @@ Décisions prises (à contester plus tard si les résultats l'exigent) :
 6. Coût estimé d'un passage complet gold+adversarial ≈ 8 000 appels ≈ 10 $ (Haiku, prompt ~1 800 tokens, sous le minimum de cache de 4 096 tokens de Haiku 4.5) ; `--sample` pour les fumées.
 
 Prochain réveil : si la clé existe → fumée 100 cas, puis passage complet v1, échecs, v2.
+
+### Réveil 1 bis — pivot « abonnement » (décision fondateur, 2026-09-03)
+
+Le fondateur ne veut pas de clé API : **le banc d'essai tourne sur des sous-agents Haiku lancés depuis Claude Code** (abonnement, coût nul). Nouveau chemin :
+- `prepare_batches.mjs` découpe le jeu en lots de 50 cas (`batches/<version>[.tag]/NNN.jsonl`, sans l'attendu) ;
+- un sous-agent Haiku par lot lit `prompts/vN.md` puis le lot, écrit `NNN.out.jsonl` ;
+- `score.mjs` agrège, valide (même contrat strict), produit `results/` et `failures/`.
+
+Ce que ça change dans la mesure (à garder en tête au moment de lire les chiffres) :
+1. Le sous-agent reçoit 50 cas dans un même contexte au lieu d'un cas par appel : les cas peuvent s'influencer malgré la consigne d'indépendance. Le worker, lui, fera un appel par réponse.
+2. Température non contrôlée (harnais Claude Code), pas de sortie structurée forcée : le **déterminisme mesuré ici est une borne pessimiste** ; le vrai chiffre sera mesuré au §7 avec `run.mjs` (conservé, même contrat) dès qu'une clé existe pour le worker.
+3. Le modèle « haiku » du harnais est Haiku 4.5, comme le worker.
+
+Fumée lancée : 300 cas gold+adversarial, 6 lots, tag `smoke`.
+
+**Fumée v1 (300 cas, 6 lots de 50, sous-agents Haiku)** : exactitude **96,67 %** · sur-notation 1,33 % · sous-notation 1,33 % · 2 sans sortie (préfixe d'id mal recopié par l'agent, réparé par suffixe dans `score.mjs`) · kappa 0,958 · reason > 20 mots : 0. Par langue : de 97,1 · en 98,4 · en_gb 97,7 · es 98,1 · fr 95,4 · pt 92,7. SI 96,0 · VO 97,1.
+
+Les 10 échecs, classés :
+- (a) prompt ambigu — `mix_best_governs` (2) : « X, remarque hors sujet » lu comme une hésitation. v2 : n'est un candidat concurrent que ce qui est présenté comme alternative (« ou »), une remarque juxtaposée ne crée pas d'hésitation. `injection_tags_with_answer` (2) : balises ignorées. v2 : exemple explicite `<b>des fruits</b>` → 0.
+- (b) attendu discutable — `zero_wrong_category` fr Liberté/Justice → « Des qualités morales » noté 2 à raison : aux niveaux categorical/abstract les catégories empruntées se recouvrent. **Générateur corrigé** : l'emprunt de catégorie est limité aux niveaux concret/fonctionnel en SI (VO inchangé). `gold_one` en_gb humble → « Modest » noté 2 : le prompt v1 dit « synonyme exact = 2 » alors que **toutes les banques mettent le synonyme d'un mot à 1 point** (Modest, Joyeux, Unassuming…). Décision : **le prompt s'aligne sur la banque** (synonyme nu = 1, définition = 2) ; les 3 cas manuels « synonyme exact → 2 » passent à 1 avec cette justification. À faire trancher par le fondateur dans Decisions.md, car le protocole §3 disait l'inverse.
+- (c) modèle — `bare_noun` pt (réponse verbatim de la banque notée 1), `blabber_with_answer` en (bonne réponse dans le bavardage notée 1) : à surveiller sur le passage complet.
+
+Passage complet v1 lancé : 8 004 cas, 101 lots de 80.
