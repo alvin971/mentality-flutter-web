@@ -160,6 +160,10 @@ function cleExistante(cle) {
   const r = wrangler(['kv', 'key', 'get', '--binding', BINDING, '--remote', cle]);
   if (r.code === 0) return true;
   const bruit = `${r.stdout}\n${r.stderr}`;
+  // Clé absente : wrangler répond 404 « Not Found ». À tester AVANT la liste des
+  // erreurs bloquantes, car l'URL de l'API contient « namespaces » et faisait
+  // passer une absence normale pour une panne (constaté au premier lancement).
+  if (/\b404\b|Not Found/i.test(bruit)) return false;
   if (ERREURS_BLOQUANTES.test(bruit)) {
     mourir(
       `Lecture de ${cle} impossible (ce n'est PAS une clé absente) :\n${bruit.trim()}\n` +
