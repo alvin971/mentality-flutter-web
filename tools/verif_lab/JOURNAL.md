@@ -288,3 +288,45 @@ livraison.
 (vague 1). La comparaison `app` vs `none` sera close au prochain réveil.
 Synthèse des vagues 3 et 4 (480 cas : mp4 voix B, lectures partielles) en cours
 en local — elle ne consomme aucun neurone.
+
+## Réveil 5 — 2026-09-04 — quota encore fermé : le défaut du réveil 4 est corrigé
+
+Allocation Workers AI toujours épuisée jusqu'à 00:00 UTC — aucune mesure
+possible (§0). Temps employé au correctif du défaut trouvé au réveil 4, qui ne
+dépend ni du modèle ni du seuil retenus.
+
+**Correctif (`workers/r2-upload/`).**
+1. `RAISONS_INFRASTRUCTURE` = `ai_unavailable`, `ai_error`, `ai_response_format`,
+   `verify_error`. Dans ces cas, **aucun verdict n'est écrit** : la vérification
+   n'a pas eu lieu, elle n'a rien jugé. L'enregistrement reste « en attente »
+   (409 côté `/validate`) au lieu de devenir un échec définitif (400).
+   `low_overlap`, `too_few_words`, `no_reference` et `audio_too_large` restent
+   des verdicts écrits.
+2. **Reprise par le cron** (`reprendreVerifications`, appelée par `scheduled()`
+   après le ménage) : liste les audios sans verdict, relit les octets depuis R2,
+   rejoue la vérification. Sans elle, « ne pas écrire de verdict » laisserait la
+   personne en attente **pour toujours** — la transcription n'a lieu qu'une
+   fois, dans le `waitUntil` du dépôt. Le cron tourne à 03:00 UTC, après le
+   reset d'allocation de 00:00 UTC.
+3. Bornes déclarées dans `wrangler.toml` : `VERIFY_RETRY_MAX` (200 fichiers par
+   exécution) et `VERIFY_RETRY_GIVE_UP` (5 échecs consécutifs → on arrête, car
+   l'allocation est visiblement encore épuisée). Les enregistrements au-delà de
+   `RETENTION_DAYS` ne sont pas repris.
+
+**Tests** : `workers/r2-upload/scripts/selftest.mjs` passe de 140 à **150
+assertions, 0 échec**. Trois assertions existantes verrouillaient l'ancien
+comportement (« IA qui jette → verdict ai_error ») : réécrites. Dix nouvelles,
+dont le cycle complet panne → dépôt sans verdict → cron → verdict enfin écrit,
+le fait que le cron ne rejuge jamais un verdict existant, qu'une lecture qui ne
+correspond pas donne bien `low_overlap` à la reprise, et les deux bornes. Le
+double R2 du harnais a dû apprendre `list({prefix, cursor, include})` et
+`arrayBuffer()` — sans quoi la reprise n'aurait vu aucun objet et le test aurait
+passé pour de mauvaises raisons. `wrangler deploy --dry-run` OK (20,9 Kio).
+
+À noter pour le FINAL : le seuil de coût du §1 (0,1 ¢/bilan) est un peu
+dépassé (0,124 ¢ whisper, 0,141 ¢ turbo) mais l'allocation gratuite couvre
+≈ 99 bilans/jour — au rythme du lancement, la transcription est gratuite.
+
+Synthèse locale : vagues 3 et 4 complètes (480 cas, 1 039 fichiers, 644 min
+d'audio en réserve). Prochain réveil : quota rouvert → policy `none` bouclée,
+puis vagues 3–4 (mp4, lectures partielles).
