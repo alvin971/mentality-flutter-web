@@ -1210,6 +1210,81 @@ class AppLocalizationsEn extends AppLocalizations {
   String get oralQuit => 'Leave';
 
   @override
+  String get oralVerifTitle => 'Checking your recording…';
+
+  @override
+  String get oralVerifBody =>
+      'One moment: we are checking that your readings were properly recorded. This usually takes less than a minute.';
+
+  @override
+  String get oralVerifFailedTitle => 'Your recording could not be verified';
+
+  @override
+  String get oralVerifFailedBody =>
+      'The recording is missing, empty or does not match the texts read. Without a verified recording, the assessment results cannot be displayed.';
+
+  @override
+  String get oralVerifReRecord => 'Record again';
+
+  @override
+  String get oralVerifRetryCheck => 'Retry verification';
+
+  @override
+  String get oralVerifUnreachableTitle => 'Cannot reach the server';
+
+  @override
+  String get oralVerifUnreachableBody =>
+      'The verification could not be completed. Check your connection, then try again.';
+
+  @override
+  String get oralVerifRetry => 'Try again';
+
+  @override
+  String get oralVerifTimeoutTitle =>
+      'Verification is taking longer than expected';
+
+  @override
+  String get oralVerifTimeoutBody =>
+      'Your recordings have been received, but their analysis is not finished yet. You can try again in a moment.';
+
+  @override
+  String get oralVerifLeave => 'Leave for now';
+
+  @override
+  String get oralVerifRequiredHint =>
+      'Recording is required with a Free pass: without it, the results cannot be displayed.';
+
+  @override
+  String get rpaTitle => 'Results pending';
+
+  @override
+  String get rpaEyebrow => 'ASSESSMENT COMPLETE';
+
+  @override
+  String get rpaHero => 'One more step';
+
+  @override
+  String get rpaBody =>
+      'Your assessment is complete and your answers are saved. With a Free pass, the results are shown once your voice recording has been verified — and it could not be verified yet.';
+
+  @override
+  String get rpaResume => 'Resume recording';
+
+  @override
+  String get rpaCheckAgain => 'Check again';
+
+  @override
+  String get rpaStillPending =>
+      'Verification is still in progress. Try again in a moment.';
+
+  @override
+  String get rpaStillFailed =>
+      'The recording could not be verified. Resume the recording.';
+
+  @override
+  String get rpaNetwork => 'Server unreachable. Check your connection.';
+
+  @override
   String get preEyebrow => 'Before you start';
 
   @override
@@ -4974,6 +5049,81 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get oralQuit => 'Leave';
+
+  @override
+  String get oralVerifTitle => 'Checking your recording…';
+
+  @override
+  String get oralVerifBody =>
+      'One moment: we are checking that your readings were properly recorded. This usually takes less than a minute.';
+
+  @override
+  String get oralVerifFailedTitle => 'Your recording could not be verified';
+
+  @override
+  String get oralVerifFailedBody =>
+      'The recording is missing, empty or does not match the texts read. Without a verified recording, the assessment results cannot be displayed.';
+
+  @override
+  String get oralVerifReRecord => 'Record again';
+
+  @override
+  String get oralVerifRetryCheck => 'Retry verification';
+
+  @override
+  String get oralVerifUnreachableTitle => 'Cannot reach the server';
+
+  @override
+  String get oralVerifUnreachableBody =>
+      'The verification could not be completed. Check your connection, then try again.';
+
+  @override
+  String get oralVerifRetry => 'Try again';
+
+  @override
+  String get oralVerifTimeoutTitle =>
+      'Verification is taking longer than expected';
+
+  @override
+  String get oralVerifTimeoutBody =>
+      'Your recordings have been received, but their analysis is not finished yet. You can try again in a moment.';
+
+  @override
+  String get oralVerifLeave => 'Leave for now';
+
+  @override
+  String get oralVerifRequiredHint =>
+      'Recording is required with a Free pass: without it, the results cannot be displayed.';
+
+  @override
+  String get rpaTitle => 'Results pending';
+
+  @override
+  String get rpaEyebrow => 'ASSESSMENT COMPLETE';
+
+  @override
+  String get rpaHero => 'One more step';
+
+  @override
+  String get rpaBody =>
+      'Your assessment is complete and your answers are saved. With a Free pass, the results are shown once your voice recording has been verified — and it could not be verified yet.';
+
+  @override
+  String get rpaResume => 'Resume recording';
+
+  @override
+  String get rpaCheckAgain => 'Check again';
+
+  @override
+  String get rpaStillPending =>
+      'Verification is still in progress. Try again in a moment.';
+
+  @override
+  String get rpaStillFailed =>
+      'The recording could not be verified. Resume the recording.';
+
+  @override
+  String get rpaNetwork => 'Server unreachable. Check your connection.';
 
   @override
   String get preEyebrow => 'Before you start';

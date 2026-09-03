@@ -1220,6 +1220,81 @@ class AppLocalizationsDe extends AppLocalizations {
   String get oralQuit => 'Verlassen';
 
   @override
+  String get oralVerifTitle => 'Deine Aufnahme wird geprüft…';
+
+  @override
+  String get oralVerifBody =>
+      'Einen Moment: Wir prüfen, ob deine Lesungen richtig aufgenommen wurden. Das dauert meist weniger als eine Minute.';
+
+  @override
+  String get oralVerifFailedTitle =>
+      'Deine Aufnahme konnte nicht überprüft werden';
+
+  @override
+  String get oralVerifFailedBody =>
+      'Die Aufnahme fehlt, ist leer oder passt nicht zu den gelesenen Texten. Ohne geprüfte Aufnahme können die Ergebnisse nicht angezeigt werden.';
+
+  @override
+  String get oralVerifReRecord => 'Erneut aufnehmen';
+
+  @override
+  String get oralVerifRetryCheck => 'Prüfung erneut versuchen';
+
+  @override
+  String get oralVerifUnreachableTitle => 'Server nicht erreichbar';
+
+  @override
+  String get oralVerifUnreachableBody =>
+      'Die Prüfung konnte nicht abgeschlossen werden. Prüfe deine Verbindung und versuche es erneut.';
+
+  @override
+  String get oralVerifRetry => 'Erneut versuchen';
+
+  @override
+  String get oralVerifTimeoutTitle => 'Die Prüfung dauert länger als erwartet';
+
+  @override
+  String get oralVerifTimeoutBody =>
+      'Deine Aufnahmen sind angekommen, aber die Auswertung ist noch nicht abgeschlossen. Du kannst es gleich noch einmal versuchen.';
+
+  @override
+  String get oralVerifLeave => 'Vorerst verlassen';
+
+  @override
+  String get oralVerifRequiredHint =>
+      'Mit einem Gratis-Pass ist die Aufnahme unverzichtbar: Ohne sie können die Ergebnisse nicht angezeigt werden.';
+
+  @override
+  String get rpaTitle => 'Ergebnisse ausstehend';
+
+  @override
+  String get rpaEyebrow => 'TEST ABGESCHLOSSEN';
+
+  @override
+  String get rpaHero => 'Noch ein Schritt';
+
+  @override
+  String get rpaBody =>
+      'Dein Test ist abgeschlossen und deine Antworten sind gespeichert. Mit einem Gratis-Pass werden die Ergebnisse angezeigt, sobald deine Sprachaufnahme geprüft wurde – und das war bisher nicht möglich.';
+
+  @override
+  String get rpaResume => 'Aufnahme fortsetzen';
+
+  @override
+  String get rpaCheckAgain => 'Erneut prüfen';
+
+  @override
+  String get rpaStillPending =>
+      'Die Prüfung läuft noch. Versuche es gleich noch einmal.';
+
+  @override
+  String get rpaStillFailed =>
+      'Die Aufnahme konnte nicht überprüft werden. Setze die Aufnahme fort.';
+
+  @override
+  String get rpaNetwork => 'Server nicht erreichbar. Prüfe deine Verbindung.';
+
+  @override
   String get preEyebrow => 'Bevor es losgeht';
 
   @override

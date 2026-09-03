@@ -41,13 +41,24 @@ int completeStatus = 200;
 /// Simule une coupure réseau : toute requête échoue, comme hors-ligne.
 bool reseauInjoignable = false;
 
+/// Codes HTTP que le faux tokeniseur renvoie sur `/validate`, consommés dans
+/// l'ordre à chaque appel ; le DERNIER se répète. Vide = 200 `{ok:true}`.
+/// Le corps suit le contrat du Worker (2026-09-03) :
+///   200 → {ok:true} · 409 → VERIFICATION_PENDING · 400 → VERIFICATION_FAILED.
+List<int> validateStatuts = [];
+
 Iterable<Req> get declarationsDeFin =>
     journal.where((r) => r.url.path.endsWith('/complete'));
+
+/// Les appels à `/validate` (vérification de l'enregistrement oral).
+Iterable<Req> get validations =>
+    journal.where((r) => r.url.path.endsWith('/validate'));
 
 void installeFauxReseau() {
   journal = [];
   completeStatus = 200;
   reseauInjoignable = false;
+  validateStatuts = [];
   HttpOverrides.global = _Overrides();
   addTearDown(() => HttpOverrides.global = null);
 }
@@ -106,6 +117,7 @@ class _FakeRequest implements HttpClientRequest {
   Future<HttpClientResponse> close() async {
     journal.add(Req(method, uri, utf8.decode(_body)));
     if (reseauInjoignable) return _FakeResponse(503, '{"error":"offline"}');
+    if (uri.path.endsWith('/validate')) return _reponseValidate();
     final code = uri.path.endsWith('/complete') ? completeStatus : 200;
     final corps = code == 200
         ? jsonEncode({
@@ -117,6 +129,34 @@ class _FakeRequest implements HttpClientRequest {
           })
         : jsonEncode({'error': 'Session non plausible', 'credited': false});
     return _FakeResponse(code, corps);
+  }
+
+  /// Réponse du faux tokeniseur sur `/validate`, selon [validateStatuts].
+  _FakeResponse _reponseValidate() {
+    if (validateStatuts.isEmpty) return _FakeResponse(200, '{"ok":true}');
+    final code = validateStatuts.length > 1
+        ? validateStatuts.removeAt(0)
+        : validateStatuts.first;
+    return switch (code) {
+      200 => _FakeResponse(200, '{"ok":true}'),
+      409 => _FakeResponse(
+          409,
+          jsonEncode({
+            'ok': false,
+            'code': 'VERIFICATION_PENDING',
+            'verified': 2,
+            'pending': 3,
+          })),
+      400 => _FakeResponse(
+          400,
+          jsonEncode({
+            'ok': false,
+            'code': 'VERIFICATION_FAILED',
+            'verified': 1,
+            'failed': 4,
+          })),
+      _ => _FakeResponse(code, '{"ok":false,"error":"erreur serveur"}'),
+    };
   }
 
   @override
@@ -353,7 +393,12 @@ Future<void> joueLaBatterieDansWidget(
   }
 
   bloc.add(const StartTestEvent(300));
-  for (var i = 0; i < 60 && bloc.state is CompleteTestIntroState; i++) {
+  // Patience large : le démarrage enchaîne plusieurs écritures dans le coffre,
+  // et Hive y intercale parfois un compactage (des dizaines d'E/S, donc de
+  // tours) quand un fichier enchaîne plusieurs bilans. Soumettre un score
+  // AVANT l'état « en cours » le ferait ignorer en silence, et le bilan ne
+  // finirait jamais.
+  for (var i = 0; i < 400 && bloc.state is CompleteTestIntroState; i++) {
     await respire();
   }
   final seq = CompleteTestSession.testSequence;

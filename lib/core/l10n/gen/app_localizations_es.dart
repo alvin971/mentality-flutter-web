@@ -1215,6 +1215,82 @@ class AppLocalizationsEs extends AppLocalizations {
   String get oralQuit => 'Salir';
 
   @override
+  String get oralVerifTitle => 'Verificando tu grabación…';
+
+  @override
+  String get oralVerifBody =>
+      'Un momento: estamos comprobando que tus lecturas se han grabado correctamente. Suele tardar menos de un minuto.';
+
+  @override
+  String get oralVerifFailedTitle => 'No se ha podido verificar tu grabación';
+
+  @override
+  String get oralVerifFailedBody =>
+      'La grabación falta, está vacía o no corresponde a los textos leídos. Sin una grabación verificada, los resultados de la evaluación no pueden mostrarse.';
+
+  @override
+  String get oralVerifReRecord => 'Volver a grabar';
+
+  @override
+  String get oralVerifRetryCheck => 'Reintentar la verificación';
+
+  @override
+  String get oralVerifUnreachableTitle =>
+      'No se puede contactar con el servidor';
+
+  @override
+  String get oralVerifUnreachableBody =>
+      'La verificación no ha podido completarse. Comprueba tu conexión y vuelve a intentarlo.';
+
+  @override
+  String get oralVerifRetry => 'Reintentar';
+
+  @override
+  String get oralVerifTimeoutTitle =>
+      'La verificación está tardando más de lo previsto';
+
+  @override
+  String get oralVerifTimeoutBody =>
+      'Tus grabaciones han llegado, pero su análisis aún no ha terminado. Puedes volver a intentarlo en un momento.';
+
+  @override
+  String get oralVerifLeave => 'Salir por ahora';
+
+  @override
+  String get oralVerifRequiredHint =>
+      'La grabación es imprescindible con un pase Gratuito: sin ella, los resultados no podrán mostrarse.';
+
+  @override
+  String get rpaTitle => 'Resultados pendientes';
+
+  @override
+  String get rpaEyebrow => 'EVALUACIÓN TERMINADA';
+
+  @override
+  String get rpaHero => 'Un paso más';
+
+  @override
+  String get rpaBody =>
+      'Tu evaluación ha terminado y tus respuestas están guardadas. Con un pase Gratuito, los resultados se muestran una vez verificada tu grabación de voz, y aún no ha podido verificarse.';
+
+  @override
+  String get rpaResume => 'Reanudar la grabación';
+
+  @override
+  String get rpaCheckAgain => 'Verificar de nuevo';
+
+  @override
+  String get rpaStillPending =>
+      'La verificación sigue en curso. Vuelve a intentarlo en un momento.';
+
+  @override
+  String get rpaStillFailed =>
+      'No se ha podido verificar la grabación. Reanuda la grabación.';
+
+  @override
+  String get rpaNetwork => 'Servidor no disponible. Comprueba tu conexión.';
+
+  @override
   String get preEyebrow => 'Antes de empezar';
 
   @override

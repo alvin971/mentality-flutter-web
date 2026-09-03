@@ -23,11 +23,20 @@ class OralReadingTest extends StatefulWidget {
   final String sessionId;
   final void Function(String textId, String sessionId) onCompleted;
 
+  /// Peut-on passer l'étape quand le micro est refusé ou indisponible ?
+  ///
+  /// `true` (défaut) : comportement historique, le micro ne bloque jamais le
+  /// parcours. `false` : passe Gratuit — l'enregistrement est la contrepartie
+  /// du bilan et sa vérification conditionne l'affichage des résultats ; un
+  /// « passer » ici ne ferait que reporter l'échec à l'écran de vérification.
+  final bool peutSauter;
+
   const OralReadingTest({
     super.key,
     required this.text,
     required this.sessionId,
     required this.onCompleted,
+    this.peutSauter = true,
   });
 
   @override
@@ -155,14 +164,19 @@ class _OralReadingTestState extends State<OralReadingTest> {
     });
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(context.l10n.oralCanSkipToNextStep(message)),
+        content: Text(widget.peutSauter
+            ? context.l10n.oralCanSkipToNextStep(message)
+            : '$message ${context.l10n.oralVerifRequiredHint}'),
         backgroundColor: AppColors.error,
         duration: const Duration(seconds: 5),
-        action: SnackBarAction(
-          label: context.l10n.oralSkip,
-          textColor: KeplerColors.of(context).onAccentFill,
-          onPressed: () => widget.onCompleted(widget.text.id, widget.sessionId),
-        ),
+        action: widget.peutSauter
+            ? SnackBarAction(
+                label: context.l10n.oralSkip,
+                textColor: KeplerColors.of(context).onAccentFill,
+                onPressed: () =>
+                    widget.onCompleted(widget.text.id, widget.sessionId),
+              )
+            : null,
       ),
     );
   }
@@ -382,7 +396,7 @@ class _OralReadingTestState extends State<OralReadingTest> {
             _buildActionButton(),
           ],
         ),
-        if (_permissionDenied) ...[
+        if (_permissionDenied && widget.peutSauter) ...[
           SizedBox(height: 8.h),
           TextButton(
             onPressed: () =>
@@ -393,6 +407,15 @@ class _OralReadingTestState extends State<OralReadingTest> {
                   fontSize: 13.sp,
                   color: Theme.of(context).colorScheme.onSurfaceVariant),
             ),
+          ),
+        ] else if (_permissionDenied) ...[
+          SizedBox(height: 8.h),
+          Text(
+            context.l10n.oralVerifRequiredHint,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontSize: 12.sp,
+                color: Theme.of(context).colorScheme.onSurfaceVariant),
           ),
         ],
       ],

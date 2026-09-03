@@ -33,6 +33,7 @@ import '../../../../core/services/token_plan.dart';
 import '../../data/pretest_store.dart';
 import '../pretest_chain.dart';
 import 'complete_test_results_page.dart';
+import 'resultats_en_attente_page.dart';
 import '../../../../core/l10n/l10n_ext.dart';
 
 /// Traduit la clé technique d'un sous-test (français, issue de
@@ -323,11 +324,35 @@ class _OrchestratorViewState extends State<_OrchestratorView> {
     if (!context.mounted) return;
 
     if (plan.plan != TokenPlan.paid) {
-      await Navigator.push(
+      final verifie = await Navigator.push<bool>(
         context,
         MaterialPageRoute(builder: (_) => const OralTestFlow()),
       );
       if (!context.mounted) return;
+
+      // PASSE GRATUIT : les résultats ne s'affichent qu'une fois
+      // l'enregistrement VÉRIFIÉ par le serveur (décision fondateur,
+      // 2026-09-03). Un enregistrement absent, vide ou sans rapport avec les
+      // textes n'y donne pas droit ; l'étape orale revient alors sans `true`
+      // (refus, délai dépassé, réseau, ou retour arrière) et l'on affiche une
+      // page d'attente qui permet de reprendre l'enregistrement. Le bilan,
+      // lui, est bien terminé : déclaré et envoyé plus haut, il reste
+      // récupérable depuis l'accueil (reprise d'une passation complète).
+      //
+      // Passe sans plan lisible (`sv: 2`) : comportement d'avant, résultats
+      // quoi qu'il arrive.
+      if (plan.plan == TokenPlan.free && verifie != true) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => ResultatsEnAttentePage(
+              session: state.session,
+              ageInMonths: state.ageInMonths,
+            ),
+          ),
+        );
+        return;
+      }
     }
 
     Navigator.pushReplacement(

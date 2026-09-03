@@ -1,0 +1,112 @@
+{
+  "oralVerifTitle": {
+    "fr": "Vérification de ton enregistrement…",
+    "en": "Checking your recording…",
+    "desc": "Titre de l'écran d'attente, après le 5e cycle (passe Gratuit) : le serveur transcrit les lectures"
+  },
+  "oralVerifBody": {
+    "fr": "Un instant : nous vérifions que tes lectures ont bien été enregistrées. Cela prend en général moins d'une minute.",
+    "en": "One moment: we are checking that your readings were properly recorded. This usually takes less than a minute.",
+    "desc": "Corps de l'écran d'attente de vérification"
+  },
+  "oralVerifFailedTitle": {
+    "fr": "Ton enregistrement n'a pas pu être vérifié",
+    "en": "Your recording could not be verified",
+    "desc": "Titre de l'écran quand le serveur REFUSE l'enregistrement (absent, vide ou sans rapport avec les textes)"
+  },
+  "oralVerifFailedBody": {
+    "fr": "L'enregistrement est absent, vide ou ne correspond pas aux textes lus. Sans enregistrement vérifié, les résultats du bilan ne peuvent pas s'afficher.",
+    "en": "The recording is missing, empty or does not match the texts read. Without a verified recording, the assessment results cannot be displayed.",
+    "desc": "Corps de l'écran de refus de vérification"
+  },
+  "oralVerifReRecord": {
+    "fr": "Réenregistrer",
+    "en": "Record again",
+    "desc": "Bouton : relance les 5 cycles avec de nouveaux textes"
+  },
+  "oralVerifRetryCheck": {
+    "fr": "Réessayer la vérification",
+    "en": "Retry verification",
+    "desc": "Bouton : redemande la vérification au serveur sans réenregistrer"
+  },
+  "oralVerifUnreachableTitle": {
+    "fr": "Impossible de joindre le serveur",
+    "en": "Cannot reach the server",
+    "desc": "Titre de l'écran après plusieurs erreurs réseau consécutives pendant la vérification"
+  },
+  "oralVerifUnreachableBody": {
+    "fr": "La vérification n'a pas pu aboutir. Vérifie ta connexion, puis réessaie.",
+    "en": "The verification could not be completed. Check your connection, then try again.",
+    "desc": "Corps de l'écran d'erreur réseau prolongée"
+  },
+  "oralVerifRetry": {
+    "fr": "Réessayer",
+    "en": "Try again",
+    "desc": "Bouton de l'écran d'erreur réseau"
+  },
+  "oralVerifTimeoutTitle": {
+    "fr": "La vérification prend plus de temps que prévu",
+    "en": "Verification is taking longer than expected",
+    "desc": "Titre de l'écran quand le serveur répond toujours « en cours » après ~90 s"
+  },
+  "oralVerifTimeoutBody": {
+    "fr": "Tes enregistrements sont bien arrivés, mais leur analyse n'est pas terminée. Tu peux réessayer dans un instant.",
+    "en": "Your recordings have been received, but their analysis is not finished yet. You can try again in a moment.",
+    "desc": "Corps de l'écran de dépassement du délai de vérification"
+  },
+  "oralVerifLeave": {
+    "fr": "Quitter pour l'instant",
+    "en": "Leave for now",
+    "desc": "Bouton texte : referme l'étape orale sans vérification (les résultats resteront en attente)"
+  },
+  "oralVerifRequiredHint": {
+    "fr": "L'enregistrement est indispensable avec un passe Gratuit : sans lui, les résultats ne pourront pas s'afficher.",
+    "en": "Recording is required with a Free pass: without it, the results cannot be displayed.",
+    "desc": "Remplace le bouton « Passer cette étape » quand le micro est refusé et que le passe est Gratuit"
+  },
+  "rpaTitle": {
+    "fr": "Résultats en attente",
+    "en": "Results pending",
+    "desc": "Titre de la page affichée à la place des résultats tant que l'enregistrement oral n'est pas vérifié (passe Gratuit)"
+  },
+  "rpaEyebrow": {
+    "fr": "BILAN TERMINÉ",
+    "en": "ASSESSMENT COMPLETE",
+    "desc": "Sur-titre de la page « Résultats en attente »"
+  },
+  "rpaHero": {
+    "fr": "Encore une étape",
+    "en": "One more step",
+    "desc": "Accroche de la page « Résultats en attente »"
+  },
+  "rpaBody": {
+    "fr": "Ton bilan est terminé et tes réponses sont enregistrées. Avec un passe Gratuit, les résultats s'affichent une fois ton enregistrement vocal vérifié — et il n'a pas encore pu l'être.",
+    "en": "Your assessment is complete and your answers are saved. With a Free pass, the results are shown once your voice recording has been verified — and it could not be verified yet.",
+    "desc": "Corps de la page « Résultats en attente »"
+  },
+  "rpaResume": {
+    "fr": "Reprendre l'enregistrement",
+    "en": "Resume recording",
+    "desc": "Bouton principal : rouvre l'épreuve orale"
+  },
+  "rpaCheckAgain": {
+    "fr": "Vérifier à nouveau",
+    "en": "Check again",
+    "desc": "Bouton secondaire : redemande la vérification au serveur"
+  },
+  "rpaStillPending": {
+    "fr": "La vérification est toujours en cours. Réessaie dans un instant.",
+    "en": "Verification is still in progress. Try again in a moment.",
+    "desc": "Message furtif quand le serveur répond « en cours »"
+  },
+  "rpaStillFailed": {
+    "fr": "L'enregistrement n'a pas pu être vérifié. Reprends l'enregistrement.",
+    "en": "The recording could not be verified. Resume the recording.",
+    "desc": "Message furtif quand le serveur refuse l'enregistrement"
+  },
+  "rpaNetwork": {
+    "fr": "Serveur injoignable. Vérifie ta connexion.",
+    "en": "Server unreachable. Check your connection.",
+    "desc": "Message furtif en cas d'erreur réseau"
+  }
+}

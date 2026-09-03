@@ -2247,6 +2247,138 @@ abstract class AppLocalizations {
   /// **'Quitter'**
   String get oralQuit;
 
+  /// Titre de l'écran d'attente, après le 5e cycle (passe Gratuit) : le serveur transcrit les lectures
+  ///
+  /// In fr, this message translates to:
+  /// **'Vérification de ton enregistrement…'**
+  String get oralVerifTitle;
+
+  /// Corps de l'écran d'attente de vérification
+  ///
+  /// In fr, this message translates to:
+  /// **'Un instant : nous vérifions que tes lectures ont bien été enregistrées. Cela prend en général moins d\'une minute.'**
+  String get oralVerifBody;
+
+  /// Titre de l'écran quand le serveur REFUSE l'enregistrement (absent, vide ou sans rapport avec les textes)
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton enregistrement n\'a pas pu être vérifié'**
+  String get oralVerifFailedTitle;
+
+  /// Corps de l'écran de refus de vérification
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'enregistrement est absent, vide ou ne correspond pas aux textes lus. Sans enregistrement vérifié, les résultats du bilan ne peuvent pas s\'afficher.'**
+  String get oralVerifFailedBody;
+
+  /// Bouton : relance les 5 cycles avec de nouveaux textes
+  ///
+  /// In fr, this message translates to:
+  /// **'Réenregistrer'**
+  String get oralVerifReRecord;
+
+  /// Bouton : redemande la vérification au serveur sans réenregistrer
+  ///
+  /// In fr, this message translates to:
+  /// **'Réessayer la vérification'**
+  String get oralVerifRetryCheck;
+
+  /// Titre de l'écran après plusieurs erreurs réseau consécutives pendant la vérification
+  ///
+  /// In fr, this message translates to:
+  /// **'Impossible de joindre le serveur'**
+  String get oralVerifUnreachableTitle;
+
+  /// Corps de l'écran d'erreur réseau prolongée
+  ///
+  /// In fr, this message translates to:
+  /// **'La vérification n\'a pas pu aboutir. Vérifie ta connexion, puis réessaie.'**
+  String get oralVerifUnreachableBody;
+
+  /// Bouton de l'écran d'erreur réseau
+  ///
+  /// In fr, this message translates to:
+  /// **'Réessayer'**
+  String get oralVerifRetry;
+
+  /// Titre de l'écran quand le serveur répond toujours « en cours » après ~90 s
+  ///
+  /// In fr, this message translates to:
+  /// **'La vérification prend plus de temps que prévu'**
+  String get oralVerifTimeoutTitle;
+
+  /// Corps de l'écran de dépassement du délai de vérification
+  ///
+  /// In fr, this message translates to:
+  /// **'Tes enregistrements sont bien arrivés, mais leur analyse n\'est pas terminée. Tu peux réessayer dans un instant.'**
+  String get oralVerifTimeoutBody;
+
+  /// Bouton texte : referme l'étape orale sans vérification (les résultats resteront en attente)
+  ///
+  /// In fr, this message translates to:
+  /// **'Quitter pour l\'instant'**
+  String get oralVerifLeave;
+
+  /// Remplace le bouton « Passer cette étape » quand le micro est refusé et que le passe est Gratuit
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'enregistrement est indispensable avec un passe Gratuit : sans lui, les résultats ne pourront pas s\'afficher.'**
+  String get oralVerifRequiredHint;
+
+  /// Titre de la page affichée à la place des résultats tant que l'enregistrement oral n'est pas vérifié (passe Gratuit)
+  ///
+  /// In fr, this message translates to:
+  /// **'Résultats en attente'**
+  String get rpaTitle;
+
+  /// Sur-titre de la page « Résultats en attente »
+  ///
+  /// In fr, this message translates to:
+  /// **'BILAN TERMINÉ'**
+  String get rpaEyebrow;
+
+  /// Accroche de la page « Résultats en attente »
+  ///
+  /// In fr, this message translates to:
+  /// **'Encore une étape'**
+  String get rpaHero;
+
+  /// Corps de la page « Résultats en attente »
+  ///
+  /// In fr, this message translates to:
+  /// **'Ton bilan est terminé et tes réponses sont enregistrées. Avec un passe Gratuit, les résultats s\'affichent une fois ton enregistrement vocal vérifié — et il n\'a pas encore pu l\'être.'**
+  String get rpaBody;
+
+  /// Bouton principal : rouvre l'épreuve orale
+  ///
+  /// In fr, this message translates to:
+  /// **'Reprendre l\'enregistrement'**
+  String get rpaResume;
+
+  /// Bouton secondaire : redemande la vérification au serveur
+  ///
+  /// In fr, this message translates to:
+  /// **'Vérifier à nouveau'**
+  String get rpaCheckAgain;
+
+  /// Message furtif quand le serveur répond « en cours »
+  ///
+  /// In fr, this message translates to:
+  /// **'La vérification est toujours en cours. Réessaie dans un instant.'**
+  String get rpaStillPending;
+
+  /// Message furtif quand le serveur refuse l'enregistrement
+  ///
+  /// In fr, this message translates to:
+  /// **'L\'enregistrement n\'a pas pu être vérifié. Reprends l\'enregistrement.'**
+  String get rpaStillFailed;
+
+  /// Message furtif en cas d'erreur réseau
+  ///
+  /// In fr, this message translates to:
+  /// **'Serveur injoignable. Vérifie ta connexion.'**
+  String get rpaNetwork;
+
   /// Surtitre de l'unique question obligatoire du questionnaire préalable
   ///
   /// In fr, this message translates to:

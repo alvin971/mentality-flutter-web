@@ -1214,6 +1214,82 @@ class AppLocalizationsFr extends AppLocalizations {
   String get oralQuit => 'Quitter';
 
   @override
+  String get oralVerifTitle => 'Vérification de ton enregistrement…';
+
+  @override
+  String get oralVerifBody =>
+      'Un instant : nous vérifions que tes lectures ont bien été enregistrées. Cela prend en général moins d\'une minute.';
+
+  @override
+  String get oralVerifFailedTitle =>
+      'Ton enregistrement n\'a pas pu être vérifié';
+
+  @override
+  String get oralVerifFailedBody =>
+      'L\'enregistrement est absent, vide ou ne correspond pas aux textes lus. Sans enregistrement vérifié, les résultats du bilan ne peuvent pas s\'afficher.';
+
+  @override
+  String get oralVerifReRecord => 'Réenregistrer';
+
+  @override
+  String get oralVerifRetryCheck => 'Réessayer la vérification';
+
+  @override
+  String get oralVerifUnreachableTitle => 'Impossible de joindre le serveur';
+
+  @override
+  String get oralVerifUnreachableBody =>
+      'La vérification n\'a pas pu aboutir. Vérifie ta connexion, puis réessaie.';
+
+  @override
+  String get oralVerifRetry => 'Réessayer';
+
+  @override
+  String get oralVerifTimeoutTitle =>
+      'La vérification prend plus de temps que prévu';
+
+  @override
+  String get oralVerifTimeoutBody =>
+      'Tes enregistrements sont bien arrivés, mais leur analyse n\'est pas terminée. Tu peux réessayer dans un instant.';
+
+  @override
+  String get oralVerifLeave => 'Quitter pour l\'instant';
+
+  @override
+  String get oralVerifRequiredHint =>
+      'L\'enregistrement est indispensable avec un passe Gratuit : sans lui, les résultats ne pourront pas s\'afficher.';
+
+  @override
+  String get rpaTitle => 'Résultats en attente';
+
+  @override
+  String get rpaEyebrow => 'BILAN TERMINÉ';
+
+  @override
+  String get rpaHero => 'Encore une étape';
+
+  @override
+  String get rpaBody =>
+      'Ton bilan est terminé et tes réponses sont enregistrées. Avec un passe Gratuit, les résultats s\'affichent une fois ton enregistrement vocal vérifié — et il n\'a pas encore pu l\'être.';
+
+  @override
+  String get rpaResume => 'Reprendre l\'enregistrement';
+
+  @override
+  String get rpaCheckAgain => 'Vérifier à nouveau';
+
+  @override
+  String get rpaStillPending =>
+      'La vérification est toujours en cours. Réessaie dans un instant.';
+
+  @override
+  String get rpaStillFailed =>
+      'L\'enregistrement n\'a pas pu être vérifié. Reprends l\'enregistrement.';
+
+  @override
+  String get rpaNetwork => 'Serveur injoignable. Vérifie ta connexion.';
+
+  @override
   String get preEyebrow => 'Avant de commencer';
 
   @override

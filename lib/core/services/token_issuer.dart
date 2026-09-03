@@ -77,15 +77,25 @@ class TokenIssuer {
   /// Worker vérifie une preuve de complétion (enregistrements présents) puis
   /// pose un marqueur permanent côté serveur — voir workers/tokeniser/index.js.
   static Future<void> markCompleted(String token) async {
+    final resultat = await verifyCompletion(token);
+    if (!resultat.isOk) {
+      throw TokeniserException(
+          'validation refusée par le tokeniseur ($resultat)');
+    }
+  }
+
+  /// Demande au serveur où en est la vérification de la complétion, sans
+  /// lever : c'est le [TokenValidationResult] qui porte le verdict (vérifié,
+  /// en cours, refusé, injoignable). C'est ce qu'attend l'étape d'attente de
+  /// l'épreuve orale, qui doit distinguer « attendre » de « réenregistrer ».
+  ///
+  /// Sans tokeniseur configuré (DEV/TEST), il n'y a rien à vérifier côté
+  /// serveur : un token DEV bien formé vaut « vérifié », un token illisible
+  /// vaut « refusé ».
+  static Future<TokenValidationResult> verifyCompletion(String token) async {
     final tokeniser = TokeniserService.instance;
 
-    if (tokeniser.isConfigured) {
-      final ok = await tokeniser.validateToken(token);
-      if (!ok) {
-        throw const TokeniserException('validation refusée par le tokeniseur');
-      }
-      return;
-    }
+    if (tokeniser.isConfigured) return tokeniser.validateToken(token);
 
     // FALLBACK DEV/TEST — aucun backend pour enregistrer la complétion ; le
     // token DEV reste tel quel, on vérifie juste qu'il est bien formé.
@@ -95,8 +105,9 @@ class TokenIssuer {
       );
     }
     if (tryDecode(token) == null) {
-      throw const TokeniserException('token DEV invalide');
+      return const TokenValidationResult.failed(message: 'token DEV invalide');
     }
+    return const TokenValidationResult.ok();
   }
 
   /// Décode les claims d'un token DEV (utilitaire de debug / vérification).
