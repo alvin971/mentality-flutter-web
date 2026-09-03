@@ -80,3 +80,25 @@ Autres : `weird_case` 5 (une casse alternée prise pour une manipulation → v3 
 Cas retirés : aucun. Attendus modifiés : aucun.
 
 Décision de conduite : v2 est **la version de repli** (elle passe le §6 hors déterminisme/stabilité). v3 vise à éliminer les erreurs à haute confiance (cause 1). Si v3 ne fait pas mieux que v2 sur le passage complet, on stabilise v2.
+
+### PAUSE — 2026-09-03, demandée par le fondateur
+
+État exact au moment de la pause, pour reprendre sans rien relire :
+
+| version | jeu | cas | exactitude | sur-notation | sous-notation | invalides |
+|---|---|---|---|---|---|---|
+| v1 | gold+adversarial | 8 004 | 97,75 % | 1,59 % | 0,64 % | 1 |
+| **v2** | gold+adversarial | 7 973 | **98,86 %** | 0,31 % | 0,83 % | 0 |
+| **v2** | **holdout (aveugle)** | 1 446 | **99,03 %** | 0,35 % | 0,62 % | 0 |
+| v3 | gold+adversarial | 7 813 répondus (98 lots / 100) | ~98,9 % | 0,34 % | 0,73 % | 0 |
+
+**v2 satisfait déjà tous les seuils de précision du §6** (≥ 97 % global, ≥ 95 % par langue et sous-test, ≤ 1,5 % dans chaque direction, 0 JSON invalide), sur le jeu de tuning ET sur le holdout jamais utilisé pour la régler.
+
+**Reprise — dans cet ordre :**
+1. Finir v3 : lots `batches/v3/099.jsonl` et `100.jsonl` non notés, puis `node score.mjs --prompt prompts/v3.md --set gold --set adversarial`. Comparer à v2 ; si v3 n'améliore pas nettement, **retenir v2** (c'est la version de repli assumée).
+2. Holdout de la version retenue : lots déjà préparés dans `batches/v3.holdout/` si c'est v3 ; pour v2 c'est fait (99,03 %).
+3. **Déterminisme** : lots déjà préparés dans `batches/v2.detA/`, `detB/`, `detC/` (201 cas × 3, mêmes entrées). Noter les 9 lots, puis `node score.mjs --prompt prompts/v2.md --set gold --set adversarial --tag detA` (idem detB, detC) et `node determinism.mjs --prompt prompts/v2.md`. Seuil : ≥ 99 %.
+4. **Stabilité** : la même version doit tenir les seuils sur 3 passages consécutifs, ordre des cas mélangé (la graine change à chaque `prepare_batches.mjs`).
+5. Puis §7 : worker `workers/correcteur/`, migration admin 018, selftest ≥ 40 assertions, `wrangler deploy --dry-run` sans déployer.
+
+Tout est sur la branche `chantier/correcteur-ia`, poussée. Rien sur `main`. Aucun déploiement.
