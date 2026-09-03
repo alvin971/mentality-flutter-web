@@ -47,7 +47,7 @@
 
 import worker from '../index.js';
 import { TOKEN_SIGNING_PUBLIC_KEYS, sha256hex } from '../../_shared/token_verify.js';
-import { motsDistincts, recouvrement } from '../../_shared/text_norm.js';
+import { motsDistincts, motsNormalises, recouvrement, scoreOrdre } from '../../_shared/text_norm.js';
 
 const b64u = (bytes) => Buffer.from(bytes).toString('base64url');
 const segment = (obj) => Buffer.from(JSON.stringify(obj)).toString('base64url');
@@ -605,6 +605,64 @@ console.log('\nNormalisation partagée (text_norm.js) : accents, ponctuation, mo
     r.overlap === 0.5 && r.hit === 2 && r.ref === 4 && r.transcribed === 3, JSON.stringify(r));
   verifie('référence vide → recouvrement 0, jamais NaN',
     recouvrement([], ['mot']).overlap === 0 && recouvrement(null, null).overlap === 0);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+console.log("\nScore d'ordre (text_norm.js) : lire le texte ≠ réciter ses mots en vrac");
+{
+  // Référence = mots distincts DANS L'ORDRE du texte, exactement ce que
+  // contient déjà `corpus/<textId>.json` (aucune republication nécessaire).
+  const TEXTE = 'Les abeilles rendent un service essentiel à la nature : '
+    + 'elles transportent du pollen entre les fleurs sauvages des prairies voisines.';
+  const REF = motsDistincts(TEXTE);
+  verifie("la référence du score d'ordre est bien celle publiée dans R2 (motsDistincts, ordre du texte)",
+    REF[0] === 'abeilles' && REF[1] === 'rendent' && REF.length >= 10, REF.slice(0, 3).join(','));
+
+  const lecture = scoreOrdre(REF, motsNormalises(TEXTE));
+  verifie('lecture fidèle → ordre 1', lecture.ordre === 1 && lecture.suite === REF.length,
+    JSON.stringify(lecture));
+
+  // Le cas que le seuil ne peut pas voir : même vocabulaire, ordre détruit.
+  const vrac = scoreOrdre(REF, [...REF].reverse());
+  verifie("mots du texte à l'envers → recouvrement intact (1) mais ordre au plancher",
+    recouvrement(REF, [...REF].reverse()).overlap === 1 && vrac.ordre <= 0.2,
+    `ordre ${vrac.ordre}`);
+
+  // Une lecture qui saute un passage, hésite ou se répète reste dans l'ordre.
+  const sauts = motsNormalises(TEXTE).filter((_, i) => i % 3 !== 1);
+  verifie('lecture qui saute un mot sur trois → ordre 1 (le seuil juge la quantité, pas la règle)',
+    scoreOrdre(REF, sauts).ordre === 1, JSON.stringify(scoreOrdre(REF, sauts)));
+  const repete = motsNormalises(TEXTE).flatMap((m, i) => (i === 4 ? [m, m, m] : [m]));
+  verifie('mot répété trois fois → ordre 1 (seule la première apparition compte)',
+    scoreOrdre(REF, repete).ordre === 1);
+  const hesite = motsNormalises(`euh ${TEXTE} voila je crois`);
+  verifie('mots hors référence (hésitations) → ordre 1, ils sont ignorés',
+    scoreOrdre(REF, hesite).ordre === 1);
+
+  // Deux blocs inversés : l'ordre chute sans s'effondrer — la lecture partielle
+  // recollée n'est pas assimilée à du vrac.
+  const mots = motsNormalises(TEXTE);
+  const moitie = Math.floor(mots.length / 2);
+  const inverse = [...mots.slice(moitie), ...mots.slice(0, moitie)];
+  const deuxBlocs = scoreOrdre(REF, inverse);
+  verifie('deux moitiés interverties → ordre autour de 0,5, entre la lecture et le vrac',
+    deuxBlocs.ordre > 0.4 && deuxBlocs.ordre < 0.75, `ordre ${deuxBlocs.ordre}`);
+
+  // Garde-fou : moins de deux mots retrouvés n'est PAS une preuve d'ordre.
+  verifie("aucun mot retrouvé → ordre 1 et suite 0 (c'est au recouvrement de rejeter)",
+    scoreOrdre(REF, motsNormalises('bonjour tout le monde')).ordre === 1
+      && scoreOrdre(REF, motsNormalises('bonjour tout le monde')).suite === 0);
+  verifie('un seul mot retrouvé → ordre 1 et suite 1, jamais une division par zéro',
+    scoreOrdre(REF, ['abeilles']).ordre === 1 && scoreOrdre(REF, ['abeilles']).suite === 1);
+  verifie('entrées non tableaux → ordre 1, suite 0, jamais une exception',
+    scoreOrdre(null, null).ordre === 1 && scoreOrdre(undefined, ['abeilles']).suite === 0
+      && scoreOrdre(REF, 'abeilles').suite === 0);
+  verifie('référence vide → ordre 1, suite 0',
+    scoreOrdre([], motsNormalises(TEXTE)).ordre === 1 && scoreOrdre([], motsNormalises(TEXTE)).suite === 0);
+
+  // Le score est un rapport de comptes : jamais un mot transcrit ne survit.
+  verifie("le score d'ordre ne rend que des nombres (aucun mot transcrit)",
+    Object.values(scoreOrdre(REF, motsNormalises(TEXTE))).every((v) => typeof v === 'number'));
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

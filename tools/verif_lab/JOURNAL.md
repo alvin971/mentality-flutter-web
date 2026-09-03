@@ -176,3 +176,70 @@ plus proche d'une lecture réelle, et sans effet sur le sac de mots mesuré. Les
 `audio_index.json` (aucun n'avait été transcrit). Deuxième piège, sans rapport
 avec le banc : `pkill -f 'synth.mjs --wave 2'` tue le shell qui l'exécute (sa
 propre ligne de commande contient le motif) — tuer par PID, ou grep `synth[.]mjs`.
+
+## Réveil 3 — 2026-09-03 — vague 2 turbo : le sac de mots ne suffit pas, une règle d'ordre est ajoutée
+
+**Mesure — turbo, vague 2 (128 fichiers, 60,0 min, 0 erreur) : négatifs à audio
+propre, traductions lues, parole de fond, silence/bruit/musique, résumés.**
+Cumul avec la vague 1 : 203 fichiers mesurés (+296 paires dérivées).
+
+| contenu | n | recouvrement min/méd/max | ordre min/méd/max | couverture du dernier tiers |
+|---|---|---|---|---|
+| lecture intégrale | 74 | 0,819 / 0,962 / 1,000 | **0,983 / 1,000 / 1,000** | 0,704 / 0,964 / 1,000 |
+| **mots mélangés** | 24 | **0,389 / 0,839 / 0,961** | **0,159 / 0,207 / 0,250** | 0,292 / 0,813 / 1,000 |
+| 25 % puis silence | 22 | 0,200 / 0,250 / 0,344 | 1,000 | 0,000 |
+| phrase en boucle | 18 | 0,069 / 0,134 / 0,213 | 0,909 / 1,000 | 0,000 |
+| traduction lue | 6 | 0,000 / 0,038 / **0,688** | — | — |
+| parole de fond | 6 | 0,036 / 0,073 / 0,096 | 0,333 / 0,600 / 0,800 | 0,000 / 0,040 / 0,094 |
+| silence · bruit · musique | 14 | 0 partout | — | — |
+| résumés 20–40 mots / 8 mots / silence | 46 | 100 % dans le bon sens | — | — |
+
+**Le résultat qui décide.** Les mots du texte énoncés dans le désordre obtiennent
+un recouvrement médian de **0,84** : le sac de mots ne les rejette **jamais**,
+à aucun seuil praticable (0 % rejetés jusqu'à 0,40 ; 4 % à 0,45). C'est le cas
+que le §3 posait comme test du sac de mots — il échoue, franchement. Le score
+d'ordre, lui, sépare sans recouvrement : **lectures ≥ 0,983 · mélangés ≤ 0,250**,
+soit un fossé de 0,73 sans un seul cas dedans.
+
+**Règle ajoutée (une seule, §4.6)** : `scoreOrdre(reference, transcription)` dans
+`workers/_shared/text_norm.js` — part des mots retrouvés qui apparaissent dans
+l'ordre du texte (plus longue sous-suite croissante des premières apparitions,
+en n log n). Points de conception :
+- la référence attendue est `motsDistincts(texte)`, **déjà** ce que contient
+  `corpus/<textId>.json` (`words`, dans l'ordre du texte) : **aucune
+  republication R2 n'est nécessaire** ;
+- la transcription doit passer par `motsNormalises` (ordre conservé), pas
+  `motsDistincts` — c'est le seul changement d'appel côté worker ;
+- **moins de deux mots retrouvés → ordre 1** : une absence de preuve ne doit
+  jamais devenir une preuve d'ordre, c'est au recouvrement (quasi nul dans ce
+  cas) de rejeter ;
+- répétitions, hésitations et passages sautés n'abaissent pas le score : seul
+  le désordre le fait.
+- **12 assertions** ajoutées à `workers/r2-upload/scripts/selftest.mjs` (140 OK,
+  0 échec), dont le cas « texte à l'envers » : recouvrement 1,00 et ordre ≤ 0,2.
+- Le banc **importe** la règle (`lib/tokens.mjs` ne la redéfinit plus) et son
+  auto-test vérifie qu'il obtient le même score que le calcul de production.
+
+**Effet mesuré (turbo, seuil 0,30, ordre ≥ 0,60)** — positifs inchangés :
+
+| | sans règle | avec ordre ≥ 0,60 |
+|---|---|---|
+| mots mélangés rejetés | **0 %** | **100 %** |
+| négatifs, tous | 93,3 % | **99,5 %** |
+| lectures intégrales `ok` | 100 % | 100 % |
+| check-list §6 | ✗ | **✓ (seuil retenu 0,30)** |
+
+**Ce qui résiste : la traduction es → pt (recouvrement 0,688, ordre 0,93).**
+Une lecture du texte espagnol traduite en portugais garde assez de cognats pour
+franchir le seuil *et* rester dans l'ordre. Les cinq autres traductions
+mesurées tombent à 0,04. Ce n'est pas une fraude plausible (traduire un texte
+pour le lire est plus coûteux que le lire), mais c'est le seul trou connu ;
+23 autres traductions restent à mesurer. Piste, si les mesures la confirment :
+la langue détectée par turbo (`transcription_info.language`), juste 74/74 sur
+la vague 1 — **à condition de ne pas forcer `language`**, qui la fige à la
+valeur envoyée. D'où la mesure de la policy `none` au prochain réveil.
+
+**Décision.** Ordre ≥ 0,60 retenu comme règle candidate (marge ≥ 0,35 de chaque
+côté). Prochain réveil : vague 2 sous policy `none` (même fichiers, budget
+égal) pour trancher le paramètre `language` et instrumenter la détection de
+langue ; puis vagues 3–5 (mp4, partielles, dégradations).

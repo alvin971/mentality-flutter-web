@@ -15,7 +15,7 @@
  * (≥ LONGUEUR_MIN_MOT) est appliqué au moment du calcul.
  */
 import crypto from 'node:crypto';
-import { normaliseTexte, motsDistincts, recouvrement, LONGUEUR_MIN_MOT } from '../../../workers/_shared/text_norm.js';
+import { normaliseTexte, motsDistincts, recouvrement, scoreOrdre as scoreOrdrePartage, LONGUEUR_MIN_MOT } from '../../../workers/_shared/text_norm.js';
 
 export { LONGUEUR_MIN_MOT };
 
@@ -75,14 +75,18 @@ export function couvertureDernierTiers(hits, ref, minLen = LONGUEUR_MIN_MOT) {
   return Math.round((dernier.filter((i) => vus.has(i)).length / dernier.length) * 10000) / 10000;
 }
 
-/** Score d'ordre : plus longue sous-suite croissante des premières occurrences / nombre de hits distincts (§4.6). */
+/**
+ * Score d'ordre d'un cas — délègue à `scoreOrdre` de `workers/_shared/text_norm.js`
+ * (la règle de production, jamais une copie). Les indices du cache sont
+ * retraduits en la suite de mots que le worker verrait : les mots de la
+ * référence, dans l'ordre de la transcription. Les mots hors référence et ceux
+ * de moins de [minLen] caractères ne peuvent pas matcher : les omettre donne
+ * exactement le même score.
+ */
 export function scoreOrdre(hits, ref, minLen = LONGUEUR_MIN_MOT) {
-  const vus = new Set(); const seq = [];
-  for (const i of hits) if (ref.lens[i] >= minLen && !vus.has(i)) { vus.add(i); seq.push(i); }
-  if (seq.length < 2) return seq.length ? 1 : 0;
-  const tails = [];
-  for (const x of seq) { let lo = 0, hi = tails.length; while (lo < hi) { const m = (lo + hi) >> 1; if (tails[m] < x) lo = m + 1; else hi = m; } tails[lo] = x; }
-  return Math.round((tails.length / seq.length) * 10000) / 10000;
+  const reference = ref.tokens.filter((_, i) => ref.lens[i] >= minLen);
+  const transcription = hits.filter((i) => ref.lens[i] >= minLen).map((i) => ref.tokens[i]);
+  return scoreOrdrePartage(reference, transcription).ordre;
 }
 
 /** Signature comportementale de la normalisation partagée (change ⇒ cache à retranscrire). */
@@ -103,6 +107,8 @@ export function autoTest() {
     const obtenu = recouvrementDepuisHits(hits, ref);
     if (attendu.overlap !== obtenu.overlap || attendu.hit !== obtenu.hit || attendu.ref !== obtenu.ref) throw new Error(`divergence : ${JSON.stringify(attendu)} vs ${JSON.stringify(obtenu)}`);
     if (attendu.transcribed !== distinctsAuMoins(histogrammes(jetons(x)))) throw new Error('divergence words_transcribed');
+    const ordreAttendu = scoreOrdrePartage(motsDistincts(t), jetons(x)).ordre;
+    if (ordreAttendu !== scoreOrdre(hits, ref)) throw new Error(`divergence ordre : ${ordreAttendu} vs ${scoreOrdre(hits, ref)}`);
   }
   return true;
 }

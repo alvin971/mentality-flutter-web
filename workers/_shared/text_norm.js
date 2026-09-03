@@ -82,3 +82,60 @@ export function recouvrement(reference, transcription) {
   const overlap = ref.size === 0 ? 0 : Math.round((hit / ref.size) * 10000) / 10000;
   return { overlap, hit, ref: ref.size, transcribed: trans.size };
 }
+
+/**
+ * Score d'ORDRE d'une transcription par rapport à une référence — la part des
+ * mots retrouvés qui apparaissent dans le MÊME ORDRE que dans le texte à lire.
+ *
+ * POURQUOI. Le recouvrement est un sac de mots : il ne distingue pas une
+ * lecture du texte d'une récitation de ses mots dans le désordre. Mesuré au
+ * banc (`tools/verif_lab`, réveil 3, 24 cas par langue) : les mots du texte
+ * énoncés dans un ordre aléatoire obtiennent un recouvrement médian de 0,84 —
+ * au-dessus de tout seuil praticable — et ne sont donc JAMAIS rejetés par le
+ * seuil seul. Leur score d'ordre, lui, plafonne à 0,25 quand celui d'une
+ * lecture réelle ne descend pas sous 0,98.
+ *
+ * COMMENT. On garde, pour chaque mot de la référence retrouvé, le rang de sa
+ * PREMIÈRE apparition dans la transcription, puis on cherche la plus longue
+ * sous-suite strictement croissante de ces rangs (LIS, en n log n). Le score
+ * est sa longueur divisée par le nombre de mots retrouvés : 1 = tout le texte
+ * lu dans l'ordre, 0,2 = ordre aléatoire. Les répétitions et les mots hors
+ * référence sont ignorés ; une lecture qui saute un passage ou se répète garde
+ * donc un score élevé.
+ *
+ * [reference] : mots normalisés DISTINCTS du texte à lire, DANS L'ORDRE du
+ * texte — c'est exactement ce que produit `motsDistincts` et ce que contient
+ * déjà `corpus/<textId>.json` (`words`). Aucune republication n'est requise.
+ * [transcription] : mots normalisés de la transcription, DANS L'ORDRE, avec
+ * répétitions — c'est-à-dire `motsNormalises`, et non `motsDistincts`.
+ *
+ * Renvoie { ordre, suite } :
+ *   - suite : nombre de mots de la référence retrouvés (premières apparitions) ;
+ *   - ordre : score dans [0, 1], arrondi à 4 décimales. **Moins de deux mots
+ *     retrouvés → 1** : l'ordre n'est pas jugeable, c'est au recouvrement (qui
+ *     est alors quasi nul) de trancher. Cette règle ne doit jamais transformer
+ *     une absence de preuve en preuve d'ordre.
+ */
+export function scoreOrdre(reference, transcription) {
+  const rang = new Map();
+  if (Array.isArray(reference)) {
+    for (let i = 0; i < reference.length; i++) if (!rang.has(reference[i])) rang.set(reference[i], i);
+  }
+  const vus = new Set();
+  const suite = [];
+  if (Array.isArray(transcription)) {
+    for (const mot of transcription) {
+      const r = rang.get(mot);
+      if (r !== undefined && !vus.has(r)) { vus.add(r); suite.push(r); }
+    }
+  }
+  if (suite.length < 2) return { ordre: 1, suite: suite.length };
+  // Plus longue sous-suite strictement croissante (patience sorting).
+  const queues = [];
+  for (const x of suite) {
+    let lo = 0, hi = queues.length;
+    while (lo < hi) { const m = (lo + hi) >> 1; if (queues[m] < x) lo = m + 1; else hi = m; }
+    queues[lo] = x;
+  }
+  return { ordre: Math.round((queues.length / suite.length) * 10000) / 10000, suite: suite.length };
+}

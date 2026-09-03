@@ -36,6 +36,9 @@ const POLICY = opt('--language', 'app');
 const HOLDOUT = has('--holdout');
 const SEUIL_PROD = parseFloat(opt('--seuil', '0.30'));
 const MIN_SUM = parseInt(opt('--min-summary', '15'), 10);
+/** Règle d'ordre (réveil 3) : 0 = désactivée, sinon score d'ordre minimal exigé
+ *  en plus du seuil de recouvrement. `scoreOrdre` vient de _shared/text_norm.js. */
+const MIN_ORDRE = parseFloat(opt('--min-ordre', '0'));
 const QUIET = has('--quiet');
 const slug = SLUGS[MODEL];
 
@@ -96,7 +99,7 @@ for (const c of cas) {
 }
 
 // ─── verdicts et taux ──────────────────────────────────────────────────────
-const okA = (m, s) => (m.set === 'sum' ? m.words >= MIN_SUM : m.overlap >= s);
+const okA = (m, s) => (m.set === 'sum' ? m.words >= MIN_SUM : m.overlap >= s && m.ordre >= MIN_ORDRE);
 const taux = (liste, s, sens) => { // sens : 'ok' → part de verdicts ok ; 'rejet' → part de verdicts ok:false
   const l = liste.filter((m) => m.status === 'ok'); if (!l.length) return null;
   const k = l.filter((m) => okA(m, s) === (sens === 'ok')).length; return Math.round((k / l.length) * 10000) / 100;
@@ -175,7 +178,7 @@ const langDetect = {};
 for (const m of ok) if (m.lang_detected) { const k = `${m.lang}→${m.lang_detected}`; langDetect[k] = (langDetect[k] || 0) + 1; }
 
 const sortie = {
-  model: MODEL, policy: POLICY, holdout: HOLDOUT, day: new Date().toISOString().slice(0, 10), seuil_prod: SEUIL_PROD, min_summary: MIN_SUM,
+  model: MODEL, policy: POLICY, holdout: HOLDOUT, day: new Date().toISOString().slice(0, 10), seuil_prod: SEUIL_PROD, min_summary: MIN_SUM, min_ordre: MIN_ORDRE,
   couverture: { cas: cas.length, mesures_directes: mesures.filter((m) => !m.derived).length, derives: mesures.filter((m) => m.derived).length, non_couverts: nonCouverts, erreurs_modele: erreurs.length, fallback_sans_language: ok.filter((m) => m.fallback).length },
   seuil_retenu: seuilChoisi, seuil_tient_negatifs: retenu != null, checklist_retenu: checklist(seuilChoisi), checklist_prod: checklist(SEUIL_PROD),
   courbe, cout, latence, signaux, lang_detected: langDetect, resistent, erreurs: erreurs.map((m) => ({ id: m.id, status: m.status })).slice(0, 40),
@@ -187,7 +190,7 @@ fs.writeFileSync(outPath, JSON.stringify(sortie, null, 1));
 // ─── résumé lisible (JOURNAL) ──────────────────────────────────────────────
 if (!QUIET) {
   const f = (v) => (v == null ? '  —  ' : `${v.toFixed(1).padStart(5)}`);
-  console.log(`# ${MODEL} · language=${POLICY}${HOLDOUT ? ' · HOLDOUT' : ''} · cas ${cas.length} · mesurés ${sortie.couverture.mesures_directes} (+${sortie.couverture.derives} dérivés) · non couverts ${nonCouverts} · erreurs modèle ${erreurs.length}`);
+  console.log(`# ${MODEL} · language=${POLICY}${MIN_ORDRE ? ` · ordre ≥ ${MIN_ORDRE}` : ' · sans règle d\'ordre'}${HOLDOUT ? ' · HOLDOUT' : ''} · cas ${cas.length} · mesurés ${sortie.couverture.mesures_directes} (+${sortie.couverture.derives} dérivés) · non couverts ${nonCouverts} · erreurs modèle ${erreurs.length}`);
   console.log(`seuil | intég+75 | int.propre | int.dégr. |  p75  |  p60  | négatifs | silence | bruit | autre | trad. | p25sil | boucle | mélangé | fond`);
   for (const l of courbe) if (l.seuil >= 0.1 && l.seuil <= 0.7) console.log(`${l.seuil.toFixed(2)}  |${f(l.integrales_et_75)}   |${f(l.integrales_propres)}     |${f(l.integrales_degradees)}    |${f(l.p75)}|${f(l.p60)}|${f(l.negatifs)}   |${f(l.silence)}  |${f(l.bruit)}|${f(l.autre_texte)}|${f(l.traduction)}|${f(l.p25_puis_silence)} |${f(l.phrase_en_boucle)} |${f(l.mots_melanges)}  |${f(l.parole_de_fond)}`);
   const c = sortie.checklist_retenu;
