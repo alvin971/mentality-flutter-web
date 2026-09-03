@@ -7,66 +7,66 @@
    "adversarial"
   ],
   "seed": 1742315280,
-  "date": "2026-09-03T15:33:05.501Z",
+  "date": "2026-09-03T17:23:32.494Z",
   "tag": "",
-  "missing": 155,
+  "missing": 22,
   "unknown_ids": 0,
   "ids_repaired": 5,
   "duplicate_ids": 2,
   "bad_lines": 0,
   "overall": {
    "n": 7973,
-   "accuracy": 96.88,
-   "over_rate": 0.34,
+   "accuracy": 98.51,
+   "over_rate": 0.38,
    "under_rate": 0.73,
-   "invalid": 159,
-   "invalid_rate": 1.99,
-   "kappa": 0.9833,
+   "invalid": 26,
+   "invalid_rate": 0.33,
+   "kappa": 0.983,
    "confusion": [
     [
-     2460,
+     2503,
      9,
      1
     ],
     [
      8,
-     1929,
-     17
+     1961,
+     20
     ],
     [
      1,
      49,
-     3340
+     3395
     ]
    ],
-   "conf_correct": 0.951,
-   "conf_wrong": 0.876,
+   "conf_correct": 0.952,
+   "conf_wrong": 0.879,
    "reason_too_long": 0
   },
   "by_lang": {
    "de": {
     "n": 1015,
-    "accuracy": 97.54,
+    "accuracy": 99.21,
     "over_rate": 0.2,
     "under_rate": 0.2,
-    "invalid": 21,
-    "invalid_rate": 2.07,
-    "kappa": 0.9938,
+    "invalid": 4,
+    "invalid_rate": 0.39,
+    "kappa": 0.9939,
     "confusion": [
      [
-      313,
+      319,
       0,
       0
      ],
      [
       0,
-      243,
+      248,
       2
      ],
      [
       1,
       1,
-      434
+      440
      ]
     ],
     "conf_correct": 0.951,
@@ -75,131 +75,44 @@
    },
    "en": {
     "n": 1910,
-    "accuracy": 96.65,
-    "over_rate": 0.31,
+    "accuracy": 98.17,
+    "over_rate": 0.37,
     "under_rate": 1.05,
-    "invalid": 37,
-    "invalid_rate": 1.94,
-    "kappa": 0.9787,
+    "invalid": 7,
+    "invalid_rate": 0.37,
+    "kappa": 0.9782,
     "confusion": [
      [
-      596,
+      607,
       4,
       0
      ],
      [
       3,
-      461,
-      2
+      467,
+      3
      ],
      [
       0,
       17,
-      790
+      802
      ]
     ],
     "conf_correct": 0.951,
-    "conf_wrong": 0.855,
+    "conf_wrong": 0.857,
     "reason_too_long": 0
    },
    "en_gb": {
     "n": 1044,
-    "accuracy": 96.84,
-    "over_rate": 0.1,
-    "under_rate": 0.29,
-    "invalid": 28,
-    "invalid_rate": 2.68,
-    "kappa": 0.9939,
-    "confusion": [
-     [
-      320,
-      0,
-      0
-     ],
-     [
-      1,
-      252,
-      1
-     ],
-     [
-      0,
-      2,
-      440
-     ]
-    ],
-    "conf_correct": 0.953,
-    "conf_wrong": 0.89,
-    "reason_too_long": 0
-   },
-   "es": {
-    "n": 1004,
-    "accuracy": 96.81,
-    "over_rate": 0.7,
-    "under_rate": 0.5,
-    "invalid": 18,
-    "invalid_rate": 1.79,
-    "kappa": 0.9812,
-    "confusion": [
-     [
-      309,
-      2,
-      0
-     ],
-     [
-      1,
-      240,
-      5
-     ],
-     [
-      0,
-      4,
-      425
-     ]
-    ],
-    "conf_correct": 0.952,
-    "conf_wrong": 0.889,
-    "reason_too_long": 0
-   },
-   "fr": {
-    "n": 1935,
-    "accuracy": 96.59,
-    "over_rate": 0.47,
-    "under_rate": 1.29,
-    "invalid": 32,
-    "invalid_rate": 1.65,
-    "kappa": 0.9726,
-    "confusion": [
-     [
-      588,
-      3,
-      1
-     ],
-     [
-      2,
-      475,
-      5
-     ],
-     [
-      0,
-      23,
-      806
-     ]
-    ],
-    "conf_correct": 0.95,
-    "conf_wrong": 0.87,
-    "reason_too_long": 0
-   },
-   "pt": {
-    "n": 1065,
-    "accuracy": 97.28,
+    "accuracy": 98.95,
     "over_rate": 0.19,
-    "under_rate": 0.28,
-    "invalid": 23,
-    "invalid_rate": 2.16,
+    "under_rate": 0.29,
+    "invalid": 5,
+    "invalid_rate": 0.48,
     "kappa": 0.9926,
     "confusion": [
      [
-      334,
+      326,
       0,
       0
      ],
@@ -211,10 +124,97 @@
      [
       0,
       2,
-      445
+      450
      ]
     ],
-    "conf_correct": 0.95,
+    "conf_correct": 0.953,
+    "conf_wrong": 0.9,
+    "reason_too_long": 0
+   },
+   "es": {
+    "n": 1004,
+    "accuracy": 98.21,
+    "over_rate": 0.8,
+    "under_rate": 0.5,
+    "invalid": 3,
+    "invalid_rate": 0.3,
+    "kappa": 0.98,
+    "confusion": [
+     [
+      315,
+      2,
+      0
+     ],
+     [
+      1,
+      242,
+      6
+     ],
+     [
+      0,
+      4,
+      431
+     ]
+    ],
+    "conf_correct": 0.952,
+    "conf_wrong": 0.897,
+    "reason_too_long": 0
+   },
+   "fr": {
+    "n": 1935,
+    "accuracy": 98.04,
+    "over_rate": 0.47,
+    "under_rate": 1.29,
+    "invalid": 4,
+    "invalid_rate": 0.21,
+    "kappa": 0.973,
+    "confusion": [
+     [
+      598,
+      3,
+      1
+     ],
+     [
+      2,
+      481,
+      5
+     ],
+     [
+      0,
+      23,
+      818
+     ]
+    ],
+    "conf_correct": 0.951,
+    "conf_wrong": 0.87,
+    "reason_too_long": 0
+   },
+   "pt": {
+    "n": 1065,
+    "accuracy": 99.15,
+    "over_rate": 0.19,
+    "under_rate": 0.28,
+    "invalid": 3,
+    "invalid_rate": 0.28,
+    "kappa": 0.9928,
+    "confusion": [
+     [
+      338,
+      0,
+      0
+     ],
+     [
+      1,
+      265,
+      2
+     ],
+     [
+      0,
+      2,
+      454
+     ]
+    ],
+    "conf_correct": 0.951,
     "conf_wrong": 0.94,
     "reason_too_long": 0
    }
@@ -222,75 +222,75 @@
   "by_subtest": {
    "SI": {
     "n": 3364,
-    "accuracy": 96.52,
-    "over_rate": 0.36,
+    "accuracy": 98.42,
+    "over_rate": 0.42,
     "under_rate": 0.74,
-    "invalid": 77,
-    "invalid_rate": 2.29,
-    "kappa": 0.9827,
+    "invalid": 11,
+    "invalid_rate": 0.33,
+    "kappa": 0.9821,
     "confusion": [
      [
-      1004,
+      1025,
       6,
       0
      ],
      [
       4,
-      828,
-      6
+      846,
+      8
      ],
      [
       1,
       20,
-      1418
+      1443
      ]
     ],
     "conf_correct": 0.949,
-    "conf_wrong": 0.879,
+    "conf_wrong": 0.881,
     "reason_too_long": 0
    },
    "VO": {
     "n": 4609,
-    "accuracy": 97.14,
-    "over_rate": 0.33,
+    "accuracy": 98.57,
+    "over_rate": 0.35,
     "under_rate": 0.72,
-    "invalid": 82,
-    "invalid_rate": 1.78,
-    "kappa": 0.9837,
+    "invalid": 15,
+    "invalid_rate": 0.33,
+    "kappa": 0.9836,
     "confusion": [
      [
-      1456,
+      1478,
       3,
       1
      ],
      [
       4,
-      1101,
-      11
+      1115,
+      12
      ],
      [
       0,
       29,
-      1922
+      1952
      ]
     ],
     "conf_correct": 0.953,
-    "conf_wrong": 0.875,
+    "conf_wrong": 0.877,
     "reason_too_long": 0
    }
   },
   "by_expected": {
    "0": {
     "n": 2526,
-    "accuracy": 97.19,
+    "accuracy": 98.89,
     "over_rate": 0.4,
     "under_rate": 0,
-    "invalid": 56,
-    "invalid_rate": 2.22,
+    "invalid": 13,
+    "invalid_rate": 0.51,
     "kappa": 0,
     "confusion": [
      [
-      2460,
+      2503,
       9,
       1
      ],
@@ -311,11 +311,11 @@
    },
    "1": {
     "n": 1993,
-    "accuracy": 96.79,
-    "over_rate": 0.85,
+    "accuracy": 98.39,
+    "over_rate": 1,
     "under_rate": 0.4,
-    "invalid": 39,
-    "invalid_rate": 1.96,
+    "invalid": 4,
+    "invalid_rate": 0.2,
     "kappa": 0,
     "confusion": [
      [
@@ -325,8 +325,8 @@
      ],
      [
       8,
-      1929,
-      17
+      1961,
+      20
      ],
      [
       0,
@@ -334,17 +334,17 @@
       0
      ]
     ],
-    "conf_correct": 0.939,
-    "conf_wrong": 0.884,
+    "conf_correct": 0.94,
+    "conf_wrong": 0.891,
     "reason_too_long": 0
    },
    "2": {
     "n": 3454,
-    "accuracy": 96.7,
+    "accuracy": 98.29,
     "over_rate": 0,
     "under_rate": 1.45,
-    "invalid": 64,
-    "invalid_rate": 1.85,
+    "invalid": 9,
+    "invalid_rate": 0.26,
     "kappa": 0,
     "confusion": [
      [
@@ -360,7 +360,7 @@
      [
       1,
       49,
-      3340
+      3395
      ]
     ],
     "conf_correct": 0.961,
@@ -371,109 +371,109 @@
   "by_set": {
    "adversarial": {
     "n": 2117,
-    "accuracy": 96.41,
-    "over_rate": 0.43,
+    "accuracy": 97.83,
+    "over_rate": 0.52,
     "under_rate": 1.13,
-    "invalid": 38,
-    "invalid_rate": 1.79,
-    "kappa": 0.9742,
+    "invalid": 6,
+    "invalid_rate": 0.28,
+    "kappa": 0.973,
     "confusion": [
      [
-      827,
+      839,
       1,
       0
      ],
      [
       5,
-      295,
-      8
+      298,
+      10
      ],
      [
       1,
       18,
-      924
+      939
      ]
     ],
-    "conf_correct": 0.924,
-    "conf_wrong": 0.858,
+    "conf_correct": 0.925,
+    "conf_wrong": 0.861,
     "reason_too_long": 0
    },
    "gold": {
     "n": 5856,
-    "accuracy": 97.05,
-    "over_rate": 0.31,
+    "accuracy": 98.75,
+    "over_rate": 0.32,
     "under_rate": 0.58,
-    "invalid": 121,
-    "invalid_rate": 2.07,
+    "invalid": 20,
+    "invalid_rate": 0.34,
     "kappa": 0.9861,
     "confusion": [
      [
-      1633,
+      1664,
       8,
       1
      ],
      [
       3,
-      1634,
-      9
+      1663,
+      10
      ],
      [
       0,
       31,
-      2416
+      2456
      ]
     ],
     "conf_correct": 0.961,
-    "conf_wrong": 0.89,
+    "conf_wrong": 0.892,
     "reason_too_long": 0
    }
   },
   "by_kind": {
    "bare_noun": {
     "n": 62,
-    "accuracy": 90.32,
+    "accuracy": 93.55,
     "over": 0,
     "under": 6.45
    },
    "blabber_no_answer": {
     "n": 164,
-    "accuracy": 99.39,
+    "accuracy": 100,
     "over": 0,
     "under": 0
    },
    "blabber_with_answer": {
     "n": 159,
-    "accuracy": 96.23,
+    "accuracy": 97.48,
     "over": 0,
     "under": 2.52
    },
    "gold_one": {
     "n": 1680,
-    "accuracy": 97.26,
-    "over": 0.54,
+    "accuracy": 98.99,
+    "over": 0.6,
     "under": 0.18
    },
    "gold_two": {
     "n": 2496,
-    "accuracy": 96.79,
+    "accuracy": 98.4,
     "over": 0,
     "under": 1.24
    },
    "handwritten": {
     "n": 58,
-    "accuracy": 96.55,
+    "accuracy": 98.28,
     "over": 1.72,
     "under": 0
    },
    "hesitation": {
     "n": 53,
-    "accuracy": 81.13,
-    "over": 9.43,
+    "accuracy": 83.02,
+    "over": 11.32,
     "under": 5.66
    },
    "injection": {
     "n": 151,
-    "accuracy": 96.03,
+    "accuracy": 96.69,
     "over": 0,
     "under": 0
    },
@@ -485,25 +485,25 @@
    },
    "injection_tags_with_answer": {
     "n": 105,
-    "accuracy": 97.14,
+    "accuracy": 98.1,
     "over": 0,
     "under": 0
    },
    "mix_best_governs": {
     "n": 82,
-    "accuracy": 97.56,
+    "accuracy": 98.78,
     "over": 0,
     "under": 1.22
    },
    "no_accents": {
     "n": 61,
-    "accuracy": 96.72,
+    "accuracy": 98.36,
     "over": 0,
     "under": 1.64
    },
    "one_char": {
     "n": 122,
-    "accuracy": 94.26,
+    "accuracy": 100,
     "over": 0,
     "under": 0
    },
@@ -515,25 +515,25 @@
    },
    "oral_one": {
     "n": 160,
-    "accuracy": 96.25,
-    "over": 1.25,
+    "accuracy": 97.5,
+    "over": 1.88,
     "under": 0.63
    },
    "shotgun": {
     "n": 59,
-    "accuracy": 98.31,
+    "accuracy": 100,
     "over": 0,
     "under": 0
    },
    "singular_bare": {
     "n": 13,
-    "accuracy": 92.31,
+    "accuracy": 100,
     "over": 0,
     "under": 0
    },
    "two_sentences": {
     "n": 158,
-    "accuracy": 98.73,
+    "accuracy": 99.37,
     "over": 0,
     "under": 0.63
    },
@@ -545,55 +545,55 @@
    },
    "typo_two": {
     "n": 149,
-    "accuracy": 92.62,
+    "accuracy": 95.3,
     "over": 0,
     "under": 4.7
    },
    "weird_case": {
     "n": 153,
-    "accuracy": 98.69,
+    "accuracy": 100,
     "over": 0,
     "under": 0
    },
    "word_itself": {
     "n": 101,
-    "accuracy": 98.02,
+    "accuracy": 99.01,
     "over": 0,
     "under": 0
    },
    "zero_dontknow": {
     "n": 270,
-    "accuracy": 95.93,
+    "accuracy": 99.26,
     "over": 0,
     "under": 0
    },
    "zero_empty": {
     "n": 292,
-    "accuracy": 97.95,
+    "accuracy": 99.32,
     "over": 0,
     "under": 0
    },
    "zero_other_one": {
     "n": 292,
-    "accuracy": 97.6,
+    "accuracy": 98.29,
     "over": 1.71,
     "under": 0
    },
    "zero_repeat": {
     "n": 307,
-    "accuracy": 98.05,
+    "accuracy": 99.67,
     "over": 0,
     "under": 0
    },
    "zero_too_general": {
     "n": 305,
-    "accuracy": 97.05,
+    "accuracy": 99.67,
     "over": 0,
     "under": 0
    },
    "zero_wrong_category": {
     "n": 214,
-    "accuracy": 96.26,
+    "accuracy": 97.66,
     "over": 1.87,
     "under": 0
    }
@@ -125975,10 +125975,13 @@
    "subtest": "VO",
    "item_id": "abrigo",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-08251\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-02160",
@@ -125988,10 +125991,13 @@
    "subtest": "SI",
    "item_id": "lock/safe",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-02160\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "adversarial-02007",
@@ -126001,10 +126007,13 @@
    "subtest": "SI",
    "item_id": "carrot/potato",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"adversarial-02007\",\"score\":2,\"confidence\":0.9,\"reason\":\"Best element matches full-credit example.\"}",
+   "score": 2,
+   "confidence": 0.9,
+   "reason": "Best element matches full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-07153",
@@ -126014,10 +126023,13 @@
    "subtest": "VO",
    "item_id": "mendacious",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-07153\",\"score\":0,\"confidence\":1,\"reason\":\"Word itself, not a definition.\"}",
+   "score": 0,
+   "confidence": 1,
+   "reason": "Word itself, not a definition.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-04076",
@@ -126027,10 +126039,13 @@
    "subtest": "VO",
    "item_id": "Fleur",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-04076\",\"score\":0,\"confidence\":1,\"reason\":\"Wrong meaning; describes crying, not flower.\"}",
+   "score": 0,
+   "confidence": 1,
+   "reason": "Wrong meaning; describes crying, not flower.",
+   "reason_words": 6,
+   "ok": true
   },
   {
    "id": "gold-05956",
@@ -126040,10 +126055,13 @@
    "subtest": "VO",
    "item_id": "Reveal",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-05956\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-03988",
@@ -126053,10 +126071,13 @@
    "subtest": "VO",
    "item_id": "Content",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-03988\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-00168",
@@ -126066,10 +126087,13 @@
    "subtest": "SI",
    "item_id": "Pelle/Râteau",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-00168\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-01823",
@@ -126079,10 +126103,13 @@
    "subtest": "SI",
    "item_id": "Peace/War",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-01823\",\"score\":0,\"confidence\":1,\"reason\":\"Empty answer; no response given.\"}",
+   "score": 0,
+   "confidence": 1,
+   "reason": "Empty answer; no response given.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "adversarial-08437",
@@ -126092,10 +126119,13 @@
    "subtest": "VO",
    "item_id": "tergiversar",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"adversarial-08437\",\"score\":2,\"confidence\":0.95,\"reason\":\"Full-credit example followed by partial restatement.\"}",
+   "score": 2,
+   "confidence": 0.95,
+   "reason": "Full-credit example followed by partial restatement.",
+   "reason_words": 6,
+   "ok": true
   },
   {
    "id": "gold-03629",
@@ -126105,10 +126135,13 @@
    "subtest": "SI",
    "item_id": "Bügeleisen/Wäschetrockner",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-03629\",\"score\":0,\"confidence\":1,\"reason\":\"Merely repeats stimulus items.\"}",
+   "score": 0,
+   "confidence": 1,
+   "reason": "Merely repeats stimulus items.",
+   "reason_words": 4,
+   "ok": true
   },
   {
    "id": "gold-03830",
@@ -126118,10 +126151,13 @@
    "subtest": "SI",
    "item_id": "Mut/Ausdauer",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-03830\",\"score\":0,\"confidence\":1,\"reason\":\"Too general; lacks meaningful substance.\"}",
+   "score": 0,
+   "confidence": 1,
+   "reason": "Too general; lacks meaningful substance.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "adversarial-08784",
@@ -126131,10 +126167,13 @@
    "subtest": "VO",
    "item_id": "Buch",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"adversarial-08784\",\"score\":0,\"confidence\":1,\"reason\":\"Single character, not an answer.\"}",
+   "score": 0,
+   "confidence": 1,
+   "reason": "Single character, not an answer.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-04869",
@@ -126144,10 +126183,13 @@
    "subtest": "VO",
    "item_id": "Aborder",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-04869\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-08397",
@@ -126157,10 +126199,13 @@
    "subtest": "VO",
    "item_id": "amiúde",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-08397\",\"score\":0,\"confidence\":1,\"reason\":\"Wrong meaning; vague, not definition.\"}",
+   "score": 0,
+   "confidence": 1,
+   "reason": "Wrong meaning; vague, not definition.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-07877",
@@ -126170,10 +126215,13 @@
    "subtest": "VO",
    "item_id": "conculcar",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-07877\",\"score\":0,\"confidence\":1,\"reason\":\"No answer; states 'I don't know'.\"}",
+   "score": 0,
+   "confidence": 1,
+   "reason": "No answer; states 'I don't know'.",
+   "reason_words": 6,
+   "ok": true
   },
   {
    "id": "adversarial-01366",
@@ -126183,10 +126231,13 @@
    "subtest": "SI",
    "item_id": "Ladder/Staircase",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"adversarial-01366\",\"score\":2,\"confidence\":0.95,\"reason\":\"Matches full-credit (typo 'heoght' to 'height').\"}",
+   "score": 2,
+   "confidence": 0.95,
+   "reason": "Matches full-credit (typo 'heoght' to 'height').",
+   "reason_words": 6,
+   "ok": true
   },
   {
    "id": "gold-01746",
@@ -126196,10 +126247,13 @@
    "subtest": "SI",
    "item_id": "Love/Hate",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-01746\",\"score\":0,\"confidence\":1,\"reason\":\"No answer given; states 'I don't know'.\"}",
+   "score": 0,
+   "confidence": 1,
+   "reason": "No answer given; states 'I don't know'.",
+   "reason_words": 7,
+   "ok": true
   },
   {
    "id": "adversarial-02530",
@@ -126209,10 +126263,13 @@
    "subtest": "SI",
    "item_id": "zapato/bota",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"adversarial-02530\",\"score\":2,\"confidence\":0.9,\"reason\":\"Typo 'calzdao' to 'calzado'; matches full-credit.\"}",
+   "score": 2,
+   "confidence": 0.9,
+   "reason": "Typo 'calzdao' to 'calzado'; matches full-credit.",
+   "reason_words": 6,
+   "ok": true
   },
   {
    "id": "gold-03238",
@@ -126222,10 +126279,13 @@
    "subtest": "SI",
    "item_id": "tribunal/parlamento",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-03238\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-07066",
@@ -126235,10 +126295,13 @@
    "subtest": "VO",
    "item_id": "obstinate",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-07066\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-02178",
@@ -126248,10 +126311,13 @@
    "subtest": "SI",
    "item_id": "violin/piano",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-02178\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "adversarial-03832",
@@ -126261,10 +126327,13 @@
    "subtest": "SI",
    "item_id": "Mut/Ausdauer",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"adversarial-03832\",\"score\":1,\"confidence\":0.95,\"reason\":\"Matches partial-credit; fillers ignored.\"}",
+   "score": 1,
+   "confidence": 0.95,
+   "reason": "Matches partial-credit; fillers ignored.",
+   "reason_words": 4,
+   "ok": true
   },
   {
    "id": "gold-03922",
@@ -126274,10 +126343,13 @@
    "subtest": "SI",
    "item_id": "Schicksal/Zufall",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-03922\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-08274",
@@ -126287,10 +126359,13 @@
    "subtest": "VO",
    "item_id": "azedo",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-08274\",\"score\":1,\"confidence\":1,\"reason\":\"Exact match to partial-credit example.\"}",
+   "score": 1,
+   "confidence": 1,
+   "reason": "Exact match to partial-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "adversarial-09345",
@@ -126300,10 +126375,13 @@
    "subtest": "SI",
    "item_id": "Chien/Chat",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"adversarial-09345\",\"score\":2,\"confidence\":1,\"reason\":\"Bare noun equivalent to animals full-credit.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Bare noun equivalent to animals full-credit.",
+   "reason_words": 6,
+   "ok": true
   },
   {
    "id": "gold-07790",
@@ -126313,10 +126391,13 @@
    "subtest": "VO",
    "item_id": "fruslería",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-07790\",\"score\":1,\"confidence\":1,\"reason\":\"Exact match to partial-credit example.\"}",
+   "score": 1,
+   "confidence": 1,
+   "reason": "Exact match to partial-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-01318",
@@ -126326,10 +126407,13 @@
    "subtest": "SI",
    "item_id": "Bed/Sofa",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-01318\",\"score\":0,\"confidence\":1,\"reason\":\"No answer; states 'I don't know'.\"}",
+   "score": 0,
+   "confidence": 1,
+   "reason": "No answer; states 'I don't know'.",
+   "reason_words": 6,
+   "ok": true
   },
   {
    "id": "adversarial-02893",
@@ -126339,10 +126423,13 @@
    "subtest": "SI",
    "item_id": "dignidad/honor",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"adversarial-02893\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-03788",
@@ -126352,10 +126439,13 @@
    "subtest": "SI",
    "item_id": "Mikrowelle/Toaster",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-03788\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-08533",
@@ -126365,10 +126455,13 @@
    "subtest": "VO",
    "item_id": "pusilânime",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-08533\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-03531",
@@ -126378,10 +126471,13 @@
    "subtest": "SI",
    "item_id": "Möhre/Kartoffel",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-03531\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-01981",
@@ -126391,10 +126487,13 @@
    "subtest": "SI",
    "item_id": "shirt/trousers",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-01981\",\"score\":1,\"confidence\":1,\"reason\":\"Exact match to partial-credit example.\"}",
+   "score": 1,
+   "confidence": 1,
+   "reason": "Exact match to partial-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-00847",
@@ -126404,10 +126503,13 @@
    "subtest": "SI",
    "item_id": "Devoir/Droit",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-00847\",\"score\":0,\"confidence\":1,\"reason\":\"Nonsensical answer; doesn't address similarity.\"}",
+   "score": 0,
+   "confidence": 1,
+   "reason": "Nonsensical answer; doesn't address similarity.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-03250",
@@ -126417,10 +126519,13 @@
    "subtest": "SI",
    "item_id": "pessimismo/otimismo",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-03250\",\"score\":1,\"confidence\":1,\"reason\":\"Exact match to partial-credit example.\"}",
+   "score": 1,
+   "confidence": 1,
+   "reason": "Exact match to partial-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-03781",
@@ -126430,10 +126535,13 @@
    "subtest": "SI",
    "item_id": "Neid/Scham",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-03781\",\"score\":1,\"confidence\":1,\"reason\":\"Exact match to partial-credit example.\"}",
+   "score": 1,
+   "confidence": 1,
+   "reason": "Exact match to partial-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "adversarial-06202",
@@ -126443,10 +126551,13 @@
    "subtest": "VO",
    "item_id": "Probity",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"adversarial-06202\",\"score\":0,\"confidence\":1,\"reason\":\"Single character, not an answer.\"}",
+   "score": 0,
+   "confidence": 1,
+   "reason": "Single character, not an answer.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "adversarial-00492",
@@ -126456,10 +126567,13 @@
    "subtest": "SI",
    "item_id": "Colère/Peur",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"adversarial-00492\",\"score\":0,\"confidence\":0.95,\"reason\":\"Manipulation: contains instruction to grader.\"}",
+   "score": 0,
+   "confidence": 0.95,
+   "reason": "Manipulation: contains instruction to grader.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "adversarial-06885",
@@ -126469,10 +126583,13 @@
    "subtest": "VO",
    "item_id": "weary",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"adversarial-06885\",\"score\":0,\"confidence\":1,\"reason\":\"Padding only; no actual answer present.\"}",
+   "score": 0,
+   "confidence": 1,
+   "reason": "Padding only; no actual answer present.",
+   "reason_words": 6,
+   "ok": true
   },
   {
    "id": "gold-00430",
@@ -126482,10 +126599,13 @@
    "subtest": "SI",
    "item_id": "Loupe/Lunettes",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-00430\",\"score\":1,\"confidence\":1,\"reason\":\"Exact match to partial-credit example.\"}",
+   "score": 1,
+   "confidence": 1,
+   "reason": "Exact match to partial-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-00225",
@@ -126495,10 +126615,13 @@
    "subtest": "SI",
    "item_id": "Réfrigérateur/Congélateur",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-00225\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "adversarial-00559",
@@ -126508,10 +126631,13 @@
    "subtest": "SI",
    "item_id": "Football/Natation",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"adversarial-00559\",\"score\":2,\"confidence\":1,\"reason\":\"Matches full-credit; unusual caps ignored.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Matches full-credit; unusual caps ignored.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-00218",
@@ -126521,10 +126647,13 @@
    "subtest": "SI",
    "item_id": "Balai/Aspirateur",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-00218\",\"score\":1,\"confidence\":1,\"reason\":\"Exact match to partial-credit example.\"}",
+   "score": 1,
+   "confidence": 1,
+   "reason": "Exact match to partial-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-04196",
@@ -126534,10 +126663,13 @@
    "subtest": "VO",
    "item_id": "Obstacle",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-04196\",\"score\":0,\"confidence\":1,\"reason\":\"Too vague; not a definition.\"}",
+   "score": 0,
+   "confidence": 1,
+   "reason": "Too vague; not a definition.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-06228",
@@ -126547,10 +126679,13 @@
    "subtest": "VO",
    "item_id": "Conceal",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-06228\",\"score\":0,\"confidence\":1,\"reason\":\"No answer; states 'I don't know'.\"}",
+   "score": 0,
+   "confidence": 1,
+   "reason": "No answer; states 'I don't know'.",
+   "reason_words": 6,
+   "ok": true
   },
   {
    "id": "adversarial-02962",
@@ -126560,10 +126695,13 @@
    "subtest": "SI",
    "item_id": "martelo/chave de fendas",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"adversarial-02962\",\"score\":2,\"confidence\":1,\"reason\":\"Matches full-credit (missing accent ignored).\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Matches full-credit (missing accent ignored).",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-07585",
@@ -126573,10 +126711,13 @@
    "subtest": "VO",
    "item_id": "abundante",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-07585\",\"score\":0,\"confidence\":1,\"reason\":\"Wrong meaning; unrelated to abundant.\"}",
+   "score": 0,
+   "confidence": 1,
+   "reason": "Wrong meaning; unrelated to abundant.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-02249",
@@ -126586,10 +126727,13 @@
    "subtest": "SI",
    "item_id": "Buddhism/Christianity",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-02249\",\"score\":1,\"confidence\":1,\"reason\":\"Exact match to partial-credit example.\"}",
+   "score": 1,
+   "confidence": 1,
+   "reason": "Exact match to partial-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "adversarial-08894",
@@ -126599,10 +126743,13 @@
    "subtest": "VO",
    "item_id": "Geschichte",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"adversarial-08894\",\"score\":0,\"confidence\":0.95,\"reason\":\"Manipulation: contains HTML tags.\"}",
+   "score": 0,
+   "confidence": 0.95,
+   "reason": "Manipulation: contains HTML tags.",
+   "reason_words": 4,
+   "ok": true
   },
   {
    "id": "adversarial-02005",
@@ -126612,10 +126759,13 @@
    "subtest": "SI",
    "item_id": "carrot/potato",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"adversarial-02005\",\"score\":0,\"confidence\":1,\"reason\":\"Single character, not an answer.\"}",
+   "score": 0,
+   "confidence": 1,
+   "reason": "Single character, not an answer.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-05509",
@@ -126625,10 +126775,13 @@
    "subtest": "VO",
    "item_id": "Proud",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-05509\",\"score\":0,\"confidence\":1,\"reason\":\"No answer; states 'no idea'.\"}",
+   "score": 0,
+   "confidence": 1,
+   "reason": "No answer; states 'no idea'.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "adversarial-02043",
@@ -126638,10 +126791,13 @@
    "subtest": "SI",
    "item_id": "boat/aeroplane",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"adversarial-02043\",\"score\":2,\"confidence\":1,\"reason\":\"Matches full-credit meaning; plural ignored.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Matches full-credit meaning; plural ignored.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "adversarial-05799",
@@ -126651,10 +126807,13 @@
    "subtest": "VO",
    "item_id": "Transparent",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"adversarial-05799\",\"score\":1,\"confidence\":1,\"reason\":\"Matches partial-credit (hedging ignored).\"}",
+   "score": 1,
+   "confidence": 1,
+   "reason": "Matches partial-credit (hedging ignored).",
+   "reason_words": 4,
+   "ok": true
   },
   {
    "id": "adversarial-02263",
@@ -126664,10 +126823,13 @@
    "subtest": "SI",
    "item_id": "drought/flood",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"adversarial-02263\",\"score\":1,\"confidence\":0.9,\"reason\":\"Two alternatives with 'or'; one correct.\"}",
+   "score": 1,
+   "confidence": 0.9,
+   "reason": "Two alternatives with 'or'; one correct.",
+   "reason_words": 6,
+   "ok": true
   },
   {
    "id": "gold-00363",
@@ -126677,10 +126839,13 @@
    "subtest": "SI",
    "item_id": "Carte/Boussole",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-00363\",\"score\":0,\"confidence\":1,\"reason\":\"No answer; states 'I don't know'.\"}",
+   "score": 0,
+   "confidence": 1,
+   "reason": "No answer; states 'I don't know'.",
+   "reason_words": 6,
+   "ok": true
   },
   {
    "id": "gold-03261",
@@ -126690,10 +126855,13 @@
    "subtest": "SI",
    "item_id": "budismo/islamismo",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-03261\",\"score\":1,\"confidence\":1,\"reason\":\"Exact match to partial-credit example.\"}",
+   "score": 1,
+   "confidence": 1,
+   "reason": "Exact match to partial-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "adversarial-02729",
@@ -126703,10 +126871,13 @@
    "subtest": "SI",
    "item_id": "cobre/hierro",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"adversarial-02729\",\"score\":2,\"confidence\":0.9,\"reason\":\"Typo 'Metale' to 'Metales'; matches full-credit.\"}",
+   "score": 2,
+   "confidence": 0.9,
+   "reason": "Typo 'Metale' to 'Metales'; matches full-credit.",
+   "reason_words": 6,
+   "ok": true
   },
   {
    "id": "gold-05840",
@@ -126716,10 +126887,13 @@
    "subtest": "VO",
    "item_id": "Distrust",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-05840\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-08175",
@@ -126729,10 +126903,13 @@
    "subtest": "VO",
    "item_id": "escolher",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-08175\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "adversarial-02082",
@@ -126742,10 +126919,13 @@
    "subtest": "SI",
    "item_id": "broom/vacuum cleaner",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"adversarial-02082\",\"score\":2,\"confidence\":0.95,\"reason\":\"Matches full-credit meaning (hedging ignored).\"}",
+   "score": 2,
+   "confidence": 0.95,
+   "reason": "Matches full-credit meaning (hedging ignored).",
+   "reason_words": 5,
+   "ok": false
   },
   {
    "id": "gold-06597",
@@ -126755,10 +126935,13 @@
    "subtest": "VO",
    "item_id": "night",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-06597\",\"score\":0,\"confidence\":1,\"reason\":\"Too vague; not a definition.\"}",
+   "score": 0,
+   "confidence": 1,
+   "reason": "Too vague; not a definition.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-06593",
@@ -126768,10 +126951,13 @@
    "subtest": "VO",
    "item_id": "night",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-06593\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-04524",
@@ -126781,10 +126967,13 @@
    "subtest": "VO",
    "item_id": "Concept",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-04524\",\"score\":1,\"confidence\":1,\"reason\":\"Exact match to partial-credit example.\"}",
+   "score": 1,
+   "confidence": 1,
+   "reason": "Exact match to partial-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-03110",
@@ -126794,10 +126983,13 @@
    "subtest": "SI",
    "item_id": "telefone/carta",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-03110\",\"score\":1,\"confidence\":1,\"reason\":\"Exact match to partial-credit example.\"}",
+   "score": 1,
+   "confidence": 1,
+   "reason": "Exact match to partial-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-02181",
@@ -126807,10 +126999,13 @@
    "subtest": "SI",
    "item_id": "violin/piano",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-02181\",\"score\":1,\"confidence\":1,\"reason\":\"Exact match to partial-credit example.\"}",
+   "score": 1,
+   "confidence": 1,
+   "reason": "Exact match to partial-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-08671",
@@ -126820,10 +127015,13 @@
    "subtest": "VO",
    "item_id": "groß",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-08671\",\"score\":0,\"confidence\":1,\"reason\":\"Wrong meaning; describes liked person, not size.\"}",
+   "score": 0,
+   "confidence": 1,
+   "reason": "Wrong meaning; describes liked person, not size.",
+   "reason_words": 7,
+   "ok": true
   },
   {
    "id": "gold-05460",
@@ -126833,10 +127031,13 @@
    "subtest": "VO",
    "item_id": "Brave",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-05460\",\"score\":0,\"confidence\":1,\"reason\":\"Too vague; not a definition.\"}",
+   "score": 0,
+   "confidence": 1,
+   "reason": "Too vague; not a definition.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-02919",
@@ -126846,10 +127047,13 @@
    "subtest": "SI",
    "item_id": "laranja/banana",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-02919\",\"score\":0,\"confidence\":1,\"reason\":\"Too general; lacks meaningful substance.\"}",
+   "score": 0,
+   "confidence": 1,
+   "reason": "Too general; lacks meaningful substance.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-07217",
@@ -126859,10 +127063,13 @@
    "subtest": "VO",
    "item_id": "comer",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-07217\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": false
   },
   {
    "id": "adversarial-02319",
@@ -126872,10 +127079,13 @@
    "subtest": "SI",
    "item_id": "iron/copper",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"adversarial-02319\",\"score\":0,\"confidence\":1,\"reason\":\"Single character, not an answer.\"}",
+   "score": 0,
+   "confidence": 1,
+   "reason": "Single character, not an answer.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-06237",
@@ -126885,10 +127095,13 @@
    "subtest": "VO",
    "item_id": "Specious",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-06237\",\"score\":0,\"confidence\":1,\"reason\":\"Word itself, not a definition.\"}",
+   "score": 0,
+   "confidence": 1,
+   "reason": "Word itself, not a definition.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-05018",
@@ -126898,10 +127111,13 @@
    "subtest": "VO",
    "item_id": "Exubérant",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-05018\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-07008",
@@ -126911,10 +127127,13 @@
    "subtest": "VO",
    "item_id": "tenacious",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-07008\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-07345",
@@ -126924,10 +127143,13 @@
    "subtest": "VO",
    "item_id": "esfuerzo",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-07345\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-01008",
@@ -126937,10 +127159,13 @@
    "subtest": "SI",
    "item_id": "Rose/Tulip",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-01008\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "adversarial-05724",
@@ -126950,10 +127175,13 @@
    "subtest": "VO",
    "item_id": "Shadow",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"adversarial-05724\",\"score\":2,\"confidence\":0.9,\"reason\":\"Full-credit answer found (padding stripped).\"}",
+   "score": 2,
+   "confidence": 0.9,
+   "reason": "Full-credit answer found (padding stripped).",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-06477",
@@ -126963,10 +127191,13 @@
    "subtest": "VO",
    "item_id": "Obviate",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-06477\",\"score\":1,\"confidence\":1,\"reason\":\"Exact match to partial-credit example.\"}",
+   "score": 1,
+   "confidence": 1,
+   "reason": "Exact match to partial-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-05762",
@@ -126976,10 +127207,13 @@
    "subtest": "VO",
    "item_id": "Guess",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-05762\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-06002",
@@ -126989,10 +127223,13 @@
    "subtest": "VO",
    "item_id": "Evoke",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-06002\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-04760",
@@ -127002,10 +127239,13 @@
    "subtest": "VO",
    "item_id": "Ériger",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-04760\",\"score\":0,\"confidence\":1,\"reason\":\"Too vague; not a definition.\"}",
+   "score": 0,
+   "confidence": 1,
+   "reason": "Too vague; not a definition.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-04549",
@@ -127015,10 +127255,13 @@
    "subtest": "VO",
    "item_id": "Sobre",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-04549\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "adversarial-06305",
@@ -127028,10 +127271,13 @@
    "subtest": "VO",
    "item_id": "Obsolete",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"adversarial-06305\",\"score\":2,\"confidence\":0.95,\"reason\":\"Typo 'lonegr' recognizable as 'longer'; matches full-credit.\"}",
+   "score": 2,
+   "confidence": 0.95,
+   "reason": "Typo 'lonegr' recognizable as 'longer'; matches full-credit.",
+   "reason_words": 7,
+   "ok": true
   },
   {
    "id": "gold-03891",
@@ -127041,10 +127287,13 @@
    "subtest": "SI",
    "item_id": "Schönheit/Wahrheit",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-03891\",\"score\":0,\"confidence\":0.95,\"reason\":\"Repetition of stimulus words; no similarity stated.\"}",
+   "score": 0,
+   "confidence": 0.95,
+   "reason": "Repetition of stimulus words; no similarity stated.",
+   "reason_words": 7,
+   "ok": true
   },
   {
    "id": "adversarial-07653",
@@ -127054,10 +127303,13 @@
    "subtest": "VO",
    "item_id": "perenne",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"adversarial-07653\",\"score\":0,\"confidence\":0.95,\"reason\":\"Single character '?' is not an answer.\"}",
+   "score": 0,
+   "confidence": 0.95,
+   "reason": "Single character '?' is not an answer.",
+   "reason_words": 7,
+   "ok": true
   },
   {
    "id": "gold-00439",
@@ -127067,10 +127319,13 @@
    "subtest": "SI",
    "item_id": "Médecin/Enseignant",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-00439\",\"score\":1,\"confidence\":1,\"reason\":\"Exact match to partial-credit example.\"}",
+   "score": 1,
+   "confidence": 1,
+   "reason": "Exact match to partial-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-03647",
@@ -127080,10 +127335,13 @@
    "subtest": "SI",
    "item_id": "Aufzug/Treppe",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-03647\",\"score\":1,\"confidence\":1,\"reason\":\"Exact match to partial-credit example.\"}",
+   "score": 1,
+   "confidence": 1,
+   "reason": "Exact match to partial-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-04821",
@@ -127093,10 +127351,13 @@
    "subtest": "VO",
    "item_id": "Inhérent",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-04821\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-03202",
@@ -127106,10 +127367,13 @@
    "subtest": "SI",
    "item_id": "médico/enfermeiro",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-03202\",\"score\":1,\"confidence\":1,\"reason\":\"Exact match to partial-credit example.\"}",
+   "score": 1,
+   "confidence": 1,
+   "reason": "Exact match to partial-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "adversarial-07550",
@@ -127119,10 +127383,13 @@
    "subtest": "VO",
    "item_id": "tejado",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"adversarial-07550\",\"score\":2,\"confidence\":0.95,\"reason\":\"Typos 'colocaod' and 'edificuo' recognizable; matches full-credit.\"}",
+   "score": 2,
+   "confidence": 0.95,
+   "reason": "Typos 'colocaod' and 'edificuo' recognizable; matches full-credit.",
+   "reason_words": 7,
+   "ok": true
   },
   {
    "id": "gold-03326",
@@ -127132,10 +127399,13 @@
    "subtest": "SI",
    "item_id": "elogio/castigo",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-03326\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-06467",
@@ -127145,10 +127415,13 @@
    "subtest": "VO",
    "item_id": "Circumlocution",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-06467\",\"score\":1,\"confidence\":1,\"reason\":\"Exact match to partial-credit example.\"}",
+   "score": 1,
+   "confidence": 1,
+   "reason": "Exact match to partial-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "adversarial-08568",
@@ -127158,10 +127431,13 @@
    "subtest": "VO",
    "item_id": "ab-rogar",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"adversarial-08568\",\"score\":2,\"confidence\":0.95,\"reason\":\"Padding removed; core answer matches full-credit.\"}",
+   "score": 2,
+   "confidence": 0.95,
+   "reason": "Padding removed; core answer matches full-credit.",
+   "reason_words": 6,
+   "ok": true
   },
   {
    "id": "gold-05942",
@@ -127171,10 +127447,13 @@
    "subtest": "VO",
    "item_id": "Spontaneous",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-05942\",\"score\":1,\"confidence\":1,\"reason\":\"Exact match to partial-credit example.\"}",
+   "score": 1,
+   "confidence": 1,
+   "reason": "Exact match to partial-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "adversarial-07296",
@@ -127184,10 +127463,13 @@
    "subtest": "VO",
    "item_id": "comprar",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"adversarial-07296\",\"score\":0,\"confidence\":0.95,\"reason\":\"Repetition of word itself; not a valid definition.\"}",
+   "score": 0,
+   "confidence": 0.95,
+   "reason": "Repetition of word itself; not a valid definition.",
+   "reason_words": 8,
+   "ok": true
   },
   {
    "id": "gold-05596",
@@ -127197,10 +127479,13 @@
    "subtest": "VO",
    "item_id": "Generous",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-05596\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-05405",
@@ -127210,10 +127495,13 @@
    "subtest": "VO",
    "item_id": "Moon",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-05405\",\"score\":0,\"confidence\":0.95,\"reason\":\"Answer 'something' too vague and general.\"}",
+   "score": 0,
+   "confidence": 0.95,
+   "reason": "Answer 'something' too vague and general.",
+   "reason_words": 6,
+   "ok": true
   },
   {
    "id": "gold-00917",
@@ -127223,10 +127511,13 @@
    "subtest": "SI",
    "item_id": "Loi/Règle",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-00917\",\"score\":0,\"confidence\":0.95,\"reason\":\"'aucune idée' means 'no idea'; empty response.\"}",
+   "score": 0,
+   "confidence": 0.95,
+   "reason": "'aucune idée' means 'no idea'; empty response.",
+   "reason_words": 7,
+   "ok": true
   },
   {
    "id": "adversarial-01625",
@@ -127236,10 +127527,13 @@
    "subtest": "SI",
    "item_id": "Grammar/Spelling",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"adversarial-01625\",\"score\":0,\"confidence\":0.9,\"reason\":\"Scattershot: multiple different answers listed as guesses.\"}",
+   "score": 0,
+   "confidence": 0.9,
+   "reason": "Scattershot: multiple different answers listed as guesses.",
+   "reason_words": 7,
+   "ok": true
   },
   {
    "id": "gold-08966",
@@ -127249,10 +127543,13 @@
    "subtest": "VO",
    "item_id": "Hindernis",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-08966\",\"score\":1,\"confidence\":1,\"reason\":\"Exact match to partial-credit example.\"}",
+   "score": 1,
+   "confidence": 1,
+   "reason": "Exact match to partial-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-01447",
@@ -127262,10 +127559,13 @@
    "subtest": "SI",
    "item_id": "Anger/Fear",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-01447\",\"score\":1,\"confidence\":1,\"reason\":\"Exact match to partial-credit example.\"}",
+   "score": 1,
+   "confidence": 1,
+   "reason": "Exact match to partial-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-06574",
@@ -127275,10 +127575,13 @@
    "subtest": "VO",
    "item_id": "child",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-06574\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "adversarial-08849",
@@ -127288,10 +127591,13 @@
    "subtest": "VO",
    "item_id": "Brief",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"adversarial-08849\",\"score\":2,\"confidence\":0.95,\"reason\":\"All caps capitalisation ignored; matches full-credit.\"}",
+   "score": 2,
+   "confidence": 0.95,
+   "reason": "All caps capitalisation ignored; matches full-credit.",
+   "reason_words": 6,
+   "ok": true
   },
   {
    "id": "gold-07391",
@@ -127301,10 +127607,13 @@
    "subtest": "VO",
    "item_id": "descubrir",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-07391\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-01095",
@@ -127314,10 +127623,13 @@
    "subtest": "SI",
    "item_id": "Carrot/Tomato",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-01095\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-07115",
@@ -127327,10 +127639,13 @@
    "subtest": "VO",
    "item_id": "lickspittle",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-07115\",\"score\":1,\"confidence\":1,\"reason\":\"Exact match to partial-credit example.\"}",
+   "score": 1,
+   "confidence": 1,
+   "reason": "Exact match to partial-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-08420",
@@ -127340,10 +127655,13 @@
    "subtest": "VO",
    "item_id": "dádiva",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-08420\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-04286",
@@ -127353,10 +127671,13 @@
    "subtest": "VO",
    "item_id": "Prudent",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-04286\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-01403",
@@ -127366,10 +127687,13 @@
    "subtest": "SI",
    "item_id": "Doctor/Teacher",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-01403\",\"score\":0,\"confidence\":0.95,\"reason\":\"Repetition of stimulus words; no similarity stated.\"}",
+   "score": 0,
+   "confidence": 0.95,
+   "reason": "Repetition of stimulus words; no similarity stated.",
+   "reason_words": 7,
+   "ok": true
   },
   {
    "id": "gold-07913",
@@ -127379,10 +127703,13 @@
    "subtest": "VO",
    "item_id": "água",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-07913\",\"score\":1,\"confidence\":1,\"reason\":\"Exact match to partial-credit example.\"}",
+   "score": 1,
+   "confidence": 1,
+   "reason": "Exact match to partial-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-06800",
@@ -127392,10 +127719,13 @@
    "subtest": "VO",
    "item_id": "fragile",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-06800\",\"score\":0,\"confidence\":0.95,\"reason\":\"Empty answer provided.\"}",
+   "score": 0,
+   "confidence": 0.95,
+   "reason": "Empty answer provided.",
+   "reason_words": 3,
+   "ok": true
   },
   {
    "id": "gold-03730",
@@ -127405,10 +127735,13 @@
    "subtest": "SI",
    "item_id": "U-Bahn/Straßenbahn",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-03730\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-02388",
@@ -127418,10 +127751,13 @@
    "subtest": "SI",
    "item_id": "memory/imagination",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-02388\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-02787",
@@ -127431,10 +127767,13 @@
    "subtest": "SI",
    "item_id": "pistola/espada",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-02787\",\"score\":0,\"confidence\":0.95,\"reason\":\"Empty answer provided.\"}",
+   "score": 0,
+   "confidence": 0.95,
+   "reason": "Empty answer provided.",
+   "reason_words": 3,
+   "ok": true
   },
   {
    "id": "gold-00819",
@@ -127444,10 +127783,13 @@
    "subtest": "SI",
    "item_id": "Mémoire/Attention",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-00819\",\"score\":1,\"confidence\":1,\"reason\":\"Exact match to partial-credit example.\"}",
+   "score": 1,
+   "confidence": 1,
+   "reason": "Exact match to partial-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-00428",
@@ -127457,10 +127799,13 @@
    "subtest": "SI",
    "item_id": "Loupe/Lunettes",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-00428\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-06188",
@@ -127470,10 +127815,13 @@
    "subtest": "VO",
    "item_id": "Tenacious",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-06188\",\"score\":1,\"confidence\":1,\"reason\":\"Exact match to partial-credit example.\"}",
+   "score": 1,
+   "confidence": 1,
+   "reason": "Exact match to partial-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-00279",
@@ -127483,10 +127831,13 @@
    "subtest": "SI",
    "item_id": "Savon/Shampoing",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-00279\",\"score\":0,\"confidence\":0.95,\"reason\":\"'je ne sais pas' means 'I don't know'.\"}",
+   "score": 0,
+   "confidence": 0.95,
+   "reason": "'je ne sais pas' means 'I don't know'.",
+   "reason_words": 8,
+   "ok": true
   },
   {
    "id": "gold-03455",
@@ -127496,10 +127847,13 @@
    "subtest": "SI",
    "item_id": "Hammer/Säge",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-03455\",\"score\":1,\"confidence\":1,\"reason\":\"Exact match to partial-credit example.\"}",
+   "score": 1,
+   "confidence": 1,
+   "reason": "Exact match to partial-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-04776",
@@ -127509,10 +127863,13 @@
    "subtest": "VO",
    "item_id": "Discerner",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-04776\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "adversarial-03275",
@@ -127522,10 +127879,13 @@
    "subtest": "SI",
    "item_id": "ansiedade/depressão",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"adversarial-03275\",\"score\":0,\"confidence\":0.95,\"reason\":\"Single punctuation mark '.' is not an answer.\"}",
+   "score": 0,
+   "confidence": 0.95,
+   "reason": "Single punctuation mark '.' is not an answer.",
+   "reason_words": 8,
+   "ok": true
   },
   {
    "id": "gold-02631",
@@ -127535,10 +127895,13 @@
    "subtest": "SI",
    "item_id": "estufa/chimenea",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-02631\",\"score\":1,\"confidence\":1,\"reason\":\"Exact match to partial-credit example.\"}",
+   "score": 1,
+   "confidence": 1,
+   "reason": "Exact match to partial-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-06634",
@@ -127548,10 +127911,13 @@
    "subtest": "VO",
    "item_id": "borrow",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-06634\",\"score\":1,\"confidence\":1,\"reason\":\"Exact match to partial-credit example.\"}",
+   "score": 1,
+   "confidence": 1,
+   "reason": "Exact match to partial-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-01009",
@@ -127561,10 +127927,13 @@
    "subtest": "SI",
    "item_id": "Rose/Tulip",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-01009\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "adversarial-01805",
@@ -127574,10 +127943,13 @@
    "subtest": "SI",
    "item_id": "Duty/Right",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"adversarial-01805\",\"score\":2,\"confidence\":0.9,\"reason\":\"Best element matches full-credit; secondary part is commentary.\"}",
+   "score": 2,
+   "confidence": 0.9,
+   "reason": "Best element matches full-credit; secondary part is commentary.",
+   "reason_words": 8,
+   "ok": false
   },
   {
    "id": "gold-07037",
@@ -127587,10 +127959,13 @@
    "subtest": "VO",
    "item_id": "vindicate",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-07037\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-04102",
@@ -127600,10 +127975,13 @@
    "subtest": "VO",
    "item_id": "Oiseau",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-04102\",\"score\":1,\"confidence\":1,\"reason\":\"Exact match to partial-credit example.\"}",
+   "score": 1,
+   "confidence": 1,
+   "reason": "Exact match to partial-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-00442",
@@ -127613,10 +127991,13 @@
    "subtest": "SI",
    "item_id": "Médecin/Enseignant",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-00442\",\"score\":0,\"confidence\":0.95,\"reason\":\"Empty answer provided.\"}",
+   "score": 0,
+   "confidence": 0.95,
+   "reason": "Empty answer provided.",
+   "reason_words": 3,
+   "ok": true
   },
   {
    "id": "gold-08723",
@@ -127626,10 +128007,13 @@
    "subtest": "VO",
    "item_id": "Auto",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-08723\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-08395",
@@ -127639,10 +128023,13 @@
    "subtest": "VO",
    "item_id": "amiúde",
    "expected": 1,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-08395\",\"score\":1,\"confidence\":1,\"reason\":\"Exact match to partial-credit example.\"}",
+   "score": 1,
+   "confidence": 1,
+   "reason": "Exact match to partial-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "adversarial-02941",
@@ -127652,10 +128039,13 @@
    "subtest": "SI",
    "item_id": "cadeira/sofá",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"adversarial-02941\",\"score\":0,\"confidence\":0.95,\"reason\":\"Single character 'x' is not an answer.\"}",
+   "score": 0,
+   "confidence": 0.95,
+   "reason": "Single character 'x' is not an answer.",
+   "reason_words": 7,
+   "ok": true
   },
   {
    "id": "gold-01237",
@@ -127665,10 +128055,13 @@
    "subtest": "SI",
    "item_id": "Soap/Shampoo",
    "expected": 2,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-01237\",\"score\":2,\"confidence\":1,\"reason\":\"Exact match to full-credit example.\"}",
+   "score": 2,
+   "confidence": 1,
+   "reason": "Exact match to full-credit example.",
+   "reason_words": 5,
+   "ok": true
   },
   {
    "id": "gold-04750",
@@ -127678,10 +128071,13 @@
    "subtest": "VO",
    "item_id": "Frugal",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-04750\",\"score\":0,\"confidence\":0.95,\"reason\":\"'je ne sais pas' means 'I don't know'.\"}",
+   "score": 0,
+   "confidence": 0.95,
+   "reason": "'je ne sais pas' means 'I don't know'.",
+   "reason_words": 8,
+   "ok": true
   },
   {
    "id": "gold-02632",
@@ -127691,10 +128087,13 @@
    "subtest": "SI",
    "item_id": "estufa/chimenea",
    "expected": 0,
-   "valid": false,
-   "raw": "",
-   "ok": false,
-   "why": "aucune sortie du sous-agent"
+   "valid": true,
+   "raw": "{\"id\":\"gold-02632\",\"score\":0,\"confidence\":0.95,\"reason\":\"Wrong category; heating devices unrelated to hygiene products.\"}",
+   "score": 0,
+   "confidence": 0.95,
+   "reason": "Wrong category; heating devices unrelated to hygiene products.",
+   "reason_words": 8,
+   "ok": true
   }
  ]
 }

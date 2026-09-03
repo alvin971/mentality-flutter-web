@@ -1,0 +1,16 @@
+{
+ "version": "v2",
+ "n": 201,
+ "agreement": 99.5,
+ "all_valid": 201,
+ "disagreements": [
+  {
+   "id": "adversarial-04611",
+   "scores": [
+    2,
+    2,
+    1
+   ]
+  }
+ ]
+}

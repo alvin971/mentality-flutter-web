@@ -102,3 +102,14 @@ Décision de conduite : v2 est **la version de repli** (elle passe le §6 hors d
 5. Puis §7 : worker `workers/correcteur/`, migration admin 018, selftest ≥ 40 assertions, `wrangler deploy --dry-run` sans déployer.
 
 Tout est sur la branche `chantier/correcteur-ia`, poussée. Rien sur `main`. Aucun déploiement.
+
+## Réveil 4 — 2026-09-03 — reprise : v3 complète, déterminisme, stabilité
+
+**v3, passage complet** (7 973 cas) : exactitude **98,51 %** (98,8 % sur les 7 951 répondus) · sur-notation 0,38 % · sous-notation 0,73 % · 22 omissions d'agents · kappa 0,983. Par langue : de 99,2 · en 98,2 · en_gb 99,0 · es 98,2 · fr 98,0 · pt 99,2.
+Comparaison ciblée v2 → v3 : `gold_two` 99,44 → 98,40 (la poche « exemple 2 points noté 1 » s'est **aggravée**), `gold_one` 99,58 → 98,99, `injection_tags_with_answer` 100 → 98,1. Le renommage des listes n'a pas aidé : le modèle s'ancre sur le **fragment** d'exemple 1 point contenu dans l'exemple 2 points (« économe, qui se contente de peu » ⊃ « économe »). C'est un biais de lecture du modèle, pas une ambiguïté du prompt. Une v4 « ancrer sur l'exemple le plus long » reste possible, mais **v2 est meilleure sur tous les axes** : décision, **v2 retenue**, v3 abandonnée.
+
+**Déterminisme v2** : 201 cas × 3 rejouages indépendants → **99,5 %** d'accord (1 désaccord : `adversarial-04611`, 2/2/1). Seuil ≥ 99 % atteint, sur le chemin sous-agents (borne pessimiste : température non contrôlée ; l'API à température 0 fera au moins aussi bien).
+
+**Stabilité** : passage 1 = `results/v2.json` (98,86 %). Passages 2 et 3 lancés (`batches/v2.stab2/`, `batches/v2.stab3/`, ordres mélangés, graines 1749754737 / 1749754907).
+
+Bilan du §6 pour v2 : exactitude ✔ (98,86 / 99,03 holdout) · par langue et sous-test ✔ (min 98,2) · sur/sous-notation ✔ (0,31 / 0,83) · JSON invalide ✔ (0) · déterminisme ✔ (99,5) · stabilité : en cours.
