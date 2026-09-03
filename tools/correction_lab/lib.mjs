@@ -9,7 +9,9 @@ export const SUBTEST_NAME = { SI: 'similarities', VO: 'vocabulary' };
 export function userInput(c) {
   return {
     subtest: SUBTEST_NAME[c.subtest], lang: c.lang, stimulus: c.stimulus,
-    examples_2_points: c.two, examples_1_point: c.one, answer: c.response,
+    // v3 : noms distincts pour les deux listes — avec examples_2_points / examples_1_point,
+    // Haiku confondait les listes (14 réponses verbatim de la liste 2 notées 1 « car exemple 1 point »).
+    full_credit_examples: c.two, partial_credit_examples: c.one, answer: c.response,
   };
 }
 

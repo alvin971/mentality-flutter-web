@@ -1,0 +1,572 @@
+{
+ "metrics": {
+  "version": "v2",
+  "model": "haiku (sous-agent Claude Code, abonnement)",
+  "sets": [
+   "holdout"
+  ],
+  "seed": 1742097657,
+  "date": "2026-09-03T15:20:42.106Z",
+  "tag": "holdout",
+  "missing": 0,
+  "unknown_ids": 0,
+  "ids_repaired": 0,
+  "duplicate_ids": 0,
+  "bad_lines": 0,
+  "overall": {
+   "n": 1446,
+   "accuracy": 99.03,
+   "over_rate": 0.35,
+   "under_rate": 0.62,
+   "invalid": 0,
+   "invalid_rate": 0,
+   "kappa": 0.9851,
+   "confusion": [
+    [
+     450,
+     1,
+     1
+    ],
+    [
+     2,
+     360,
+     3
+    ],
+    [
+     0,
+     7,
+     622
+    ]
+   ],
+   "conf_correct": 0.952,
+   "conf_wrong": 0.891,
+   "reason_too_long": 0
+  },
+  "by_lang": {
+   "de": {
+    "n": 177,
+    "accuracy": 99.44,
+    "over_rate": 0,
+    "under_rate": 0.56,
+    "invalid": 0,
+    "invalid_rate": 0,
+    "kappa": 0.9913,
+    "confusion": [
+     [
+      55,
+      0,
+      0
+     ],
+     [
+      1,
+      44,
+      0
+     ],
+     [
+      0,
+      0,
+      77
+     ]
+    ],
+    "conf_correct": 0.953,
+    "conf_wrong": 0.9,
+    "reason_too_long": 0
+   },
+   "en": {
+    "n": 348,
+    "accuracy": 98.85,
+    "over_rate": 0.29,
+    "under_rate": 0.86,
+    "invalid": 0,
+    "invalid_rate": 0,
+    "kappa": 0.9823,
+    "confusion": [
+     [
+      107,
+      0,
+      0
+     ],
+     [
+      1,
+      88,
+      1
+     ],
+     [
+      0,
+      2,
+      149
+     ]
+    ],
+    "conf_correct": 0.952,
+    "conf_wrong": 0.9,
+    "reason_too_long": 0
+   },
+   "en_gb": {
+    "n": 182,
+    "accuracy": 99.45,
+    "over_rate": 0.55,
+    "under_rate": 0,
+    "invalid": 0,
+    "invalid_rate": 0,
+    "kappa": 0.9916,
+    "confusion": [
+     [
+      60,
+      0,
+      0
+     ],
+     [
+      0,
+      46,
+      1
+     ],
+     [
+      0,
+      0,
+      75
+     ]
+    ],
+    "conf_correct": 0.951,
+    "conf_wrong": 0.98,
+    "reason_too_long": 0
+   },
+   "es": {
+    "n": 179,
+    "accuracy": 98.32,
+    "over_rate": 1.12,
+    "under_rate": 0.56,
+    "invalid": 0,
+    "invalid_rate": 0,
+    "kappa": 0.9744,
+    "confusion": [
+     [
+      56,
+      1,
+      0
+     ],
+     [
+      0,
+      46,
+      1
+     ],
+     [
+      0,
+      1,
+      74
+     ]
+    ],
+    "conf_correct": 0.954,
+    "conf_wrong": 0.873,
+    "reason_too_long": 0
+   },
+   "fr": {
+    "n": 370,
+    "accuracy": 99.19,
+    "over_rate": 0.27,
+    "under_rate": 0.54,
+    "invalid": 0,
+    "invalid_rate": 0,
+    "kappa": 0.9874,
+    "confusion": [
+     [
+      113,
+      0,
+      1
+     ],
+     [
+      0,
+      88,
+      0
+     ],
+     [
+      0,
+      2,
+      166
+     ]
+    ],
+    "conf_correct": 0.951,
+    "conf_wrong": 0.873,
+    "reason_too_long": 0
+   },
+   "pt": {
+    "n": 190,
+    "accuracy": 98.95,
+    "over_rate": 0,
+    "under_rate": 1.05,
+    "invalid": 0,
+    "invalid_rate": 0,
+    "kappa": 0.9838,
+    "confusion": [
+     [
+      59,
+      0,
+      0
+     ],
+     [
+      0,
+      48,
+      0
+     ],
+     [
+      0,
+      2,
+      81
+     ]
+    ],
+    "conf_correct": 0.949,
+    "conf_wrong": 0.875,
+    "reason_too_long": 0
+   }
+  },
+  "by_subtest": {
+   "SI": {
+    "n": 621,
+    "accuracy": 98.87,
+    "over_rate": 0.48,
+    "under_rate": 0.64,
+    "invalid": 0,
+    "invalid_rate": 0,
+    "kappa": 0.9827,
+    "confusion": [
+     [
+      188,
+      1,
+      1
+     ],
+     [
+      0,
+      161,
+      1
+     ],
+     [
+      0,
+      4,
+      265
+     ]
+    ],
+    "conf_correct": 0.95,
+    "conf_wrong": 0.871,
+    "reason_too_long": 0
+   },
+   "VO": {
+    "n": 825,
+    "accuracy": 99.15,
+    "over_rate": 0.24,
+    "under_rate": 0.61,
+    "invalid": 0,
+    "invalid_rate": 0,
+    "kappa": 0.9869,
+    "confusion": [
+     [
+      262,
+      0,
+      0
+     ],
+     [
+      2,
+      199,
+      2
+     ],
+     [
+      0,
+      3,
+      357
+     ]
+    ],
+    "conf_correct": 0.953,
+    "conf_wrong": 0.91,
+    "reason_too_long": 0
+   }
+  },
+  "by_expected": {
+   "0": {
+    "n": 452,
+    "accuracy": 99.56,
+    "over_rate": 0.44,
+    "under_rate": 0,
+    "invalid": 0,
+    "invalid_rate": 0,
+    "kappa": 0,
+    "confusion": [
+     [
+      450,
+      1,
+      1
+     ],
+     [
+      0,
+      0,
+      0
+     ],
+     [
+      0,
+      0,
+      0
+     ]
+    ],
+    "conf_correct": 0.951,
+    "conf_wrong": 0.8,
+    "reason_too_long": 0
+   },
+   "1": {
+    "n": 365,
+    "accuracy": 98.63,
+    "over_rate": 0.82,
+    "under_rate": 0.55,
+    "invalid": 0,
+    "invalid_rate": 0,
+    "kappa": 0,
+    "confusion": [
+     [
+      0,
+      0,
+      0
+     ],
+     [
+      2,
+      360,
+      3
+     ],
+     [
+      0,
+      0,
+      0
+     ]
+    ],
+    "conf_correct": 0.944,
+    "conf_wrong": 0.924,
+    "reason_too_long": 0
+   },
+   "2": {
+    "n": 629,
+    "accuracy": 98.89,
+    "over_rate": 0,
+    "under_rate": 1.11,
+    "invalid": 0,
+    "invalid_rate": 0,
+    "kappa": 0,
+    "confusion": [
+     [
+      0,
+      0,
+      0
+     ],
+     [
+      0,
+      0,
+      0
+     ],
+     [
+      0,
+      7,
+      622
+     ]
+    ],
+    "conf_correct": 0.956,
+    "conf_wrong": 0.893,
+    "reason_too_long": 0
+   }
+  },
+  "by_set": {
+   "holdout": {
+    "n": 1446,
+    "accuracy": 99.03,
+    "over_rate": 0.35,
+    "under_rate": 0.62,
+    "invalid": 0,
+    "invalid_rate": 0,
+    "kappa": 0.9851,
+    "confusion": [
+     [
+      450,
+      1,
+      1
+     ],
+     [
+      2,
+      360,
+      3
+     ],
+     [
+      0,
+      7,
+      622
+     ]
+    ],
+    "conf_correct": 0.952,
+    "conf_wrong": 0.891,
+    "reason_too_long": 0
+   }
+  },
+  "by_kind": {
+   "bare_noun": {
+    "n": 6,
+    "accuracy": 100,
+    "over": 0,
+    "under": 0
+   },
+   "blabber_no_answer": {
+    "n": 21,
+    "accuracy": 100,
+    "over": 0,
+    "under": 0
+   },
+   "blabber_with_answer": {
+    "n": 25,
+    "accuracy": 96,
+    "over": 0,
+    "under": 4
+   },
+   "gold_one": {
+    "n": 300,
+    "accuracy": 99.33,
+    "over": 0.33,
+    "under": 0.33
+   },
+   "gold_two": {
+    "n": 445,
+    "accuracy": 99.78,
+    "over": 0,
+    "under": 0.22
+   },
+   "handwritten": {
+    "n": 32,
+    "accuracy": 100,
+    "over": 0,
+    "under": 0
+   },
+   "hesitation": {
+    "n": 15,
+    "accuracy": 93.33,
+    "over": 6.67,
+    "under": 0
+   },
+   "injection": {
+    "n": 34,
+    "accuracy": 100,
+    "over": 0,
+    "under": 0
+   },
+   "injection_any": {
+    "n": 20,
+    "accuracy": 100,
+    "over": 0,
+    "under": 0
+   },
+   "injection_tags_with_answer": {
+    "n": 19,
+    "accuracy": 100,
+    "over": 0,
+    "under": 0
+   },
+   "mix_best_governs": {
+    "n": 25,
+    "accuracy": 92,
+    "over": 0,
+    "under": 8
+   },
+   "no_accents": {
+    "n": 11,
+    "accuracy": 90.91,
+    "over": 0,
+    "under": 9.09
+   },
+   "one_char": {
+    "n": 24,
+    "accuracy": 100,
+    "over": 0,
+    "under": 0
+   },
+   "oral": {
+    "n": 22,
+    "accuracy": 95.45,
+    "over": 0,
+    "under": 4.55
+   },
+   "oral_one": {
+    "n": 24,
+    "accuracy": 95.83,
+    "over": 4.17,
+    "under": 0
+   },
+   "shotgun": {
+    "n": 9,
+    "accuracy": 88.89,
+    "over": 11.11,
+    "under": 0
+   },
+   "singular_bare": {
+    "n": 3,
+    "accuracy": 100,
+    "over": 0,
+    "under": 0
+   },
+   "two_sentences": {
+    "n": 27,
+    "accuracy": 100,
+    "over": 0,
+    "under": 0
+   },
+   "typo_one": {
+    "n": 19,
+    "accuracy": 94.74,
+    "over": 0,
+    "under": 5.26
+   },
+   "typo_two": {
+    "n": 27,
+    "accuracy": 96.3,
+    "over": 0,
+    "under": 3.7
+   },
+   "weird_case": {
+    "n": 22,
+    "accuracy": 100,
+    "over": 0,
+    "under": 0
+   },
+   "word_itself": {
+    "n": 16,
+    "accuracy": 100,
+    "over": 0,
+    "under": 0
+   },
+   "zero_dontknow": {
+    "n": 60,
+    "accuracy": 100,
+    "over": 0,
+    "under": 0
+   },
+   "zero_empty": {
+    "n": 38,
+    "accuracy": 100,
+    "over": 0,
+    "under": 0
+   },
+   "zero_other_one": {
+    "n": 38,
+    "accuracy": 100,
+    "over": 0,
+    "under": 0
+   },
+   "zero_repeat": {
+    "n": 59,
+    "accuracy": 98.31,
+    "over": 1.69,
+    "under": 0
+   },
+   "zero_too_general": {
+    "n": 62,
+    "accuracy": 100,
+    "over": 0,
+    "under": 0
+   },
+   "zero_wrong_category": {
+    "n": 43,
+    "accuracy": 100,
+    "over": 0,
+    "under": 0
+   }
+  }
+ }
+}

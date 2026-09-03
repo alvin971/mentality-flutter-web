@@ -62,3 +62,21 @@ Autres : `typo_*` 19 — le générateur v1 rendait des mots courts illisibles (
 Cas retirés : aucun. Cas dont l'attendu change : les 3 cas manuels « synonyme exact » (2 → 1, décidé au réveil 1 bis, confirmé par 35 échecs `gold_one` qui vont dans le même sens).
 
 v2 lancée sur gold+adversarial régénérés (mêmes items, mêmes familles ; ids renumérotés).
+
+## Réveil 3 — 2026-09-03 — v2 en masse + holdout → v3
+
+**v2, passage complet** (7 973 cas, 100 lots + relance de 12 cas omis par des agents) : exactitude **98,86 %** · sur-notation **0,31 %** · sous-notation **0,83 %** · 0 invalide · kappa 0,983 · conf juste/faux 0,953/0,823.
+Par langue : de 98,6 · en 98,5 · en_gb 99,2 · es 98,9 · fr 98,2 · pt 99,3. SI 98,8 · VO 98,7. Par attendu : 0 → 99,3 · 1 → 99,1 · 2 → 98,2.
+**v2, holdout en aveugle** (1 446 cas, 150 items jamais vus pendant le tuning) : exactitude **99,03 %** · sur-notation 0,35 % · sous-notation 0,62 % · 0 invalide · kappa 0,985. Toutes langues ≥ 91,6 → après relance du lot manquant, toutes ≥ 96 (chiffre global 99,03). Pas de sur-apprentissage : le holdout fait mieux que le jeu de tuning.
+
+→ v2 **satisfait tous les seuils du §6** sur gold+adversarial ET holdout. Manquent : déterminisme (≥ 99 %, mesuré sur 200 cas × 3) et stabilité (3 passages consécutifs).
+
+Les 102 échecs de v2 (91 valides + 11 omissions d'agents relancées), classés :
+1. **Confusion des deux listes d'exemples** (`gold_two` 14, `typo_two` 5, `no_accents` 2, `gold_one` 6) : le modèle note 1 des réponses **verbatim** de la liste 2 points en affirmant « exact match to examples_1_point » (confiance 0,95–1). Les noms `examples_2_points`/`examples_1_point` se ressemblent trop pour Haiku. (a)+(c). **v3 : clés renommées `full_credit_examples` / `partial_credit_examples`** (dans `lib.userInput`, donc aussi pour le worker) ; règle « vérifier d'abord la liste full-credit ; une correspondance verbatim y vaut toujours 2 ».
+2. **« Ne correspond pas aux exemples » → 0 à confiance 0,5** (`blabber_with_answer` 4, `oral*` 4, `two_sentences` 1, `typo_two` 3) : l'ancrage de v2 a été lu comme « pas d'ancre = 0 ». (a). **v3 : « ne ressembler à aucun exemple n'est jamais, en soi, un motif de 0 »**, répété à l'étape 3 et dans « en cas de doute ».
+3. **Comptage des candidats** (`mix_best_governs` 7, `two_sentences` 6, `shotgun` 4, `hesitation` 2) : une remarque juxtaposée absurde, ou une deuxième phrase vraie, comptée comme candidat concurrent ; à l'inverse une liste de 4 catégories lue comme « juxtaposition ». (a). **v3 : reformulation** — compter les *réponses différentes à la question* : une réponse + commentaires (même faux) → meilleur élément ; deux avec « ou » → un niveau en dessous ; trois noms de catégorie ou plus listés → 0. Quatre exemples annotés ajoutés (remarque absurde, deux phrases vraies, bavardage avec réponse, ancre + reformulation).
+Autres : `weird_case` 5 (une casse alternée prise pour une manipulation → v3 : « la casse inhabituelle n'est pas une manipulation ») ; `zero_other_one` 6 + `zero_wrong_category` 5 : bruit résiduel du générateur (« Colorful » pour Flower est une vraie propriété), accepté et non retiré ; `handwritten` 3 (« un félin domestique » noté 1 : le modèle exige plus qu'un trait distinctif ; exemple maintenu dans v3).
+
+Cas retirés : aucun. Attendus modifiés : aucun.
+
+Décision de conduite : v2 est **la version de repli** (elle passe le §6 hors déterminisme/stabilité). v3 vise à éliminer les erreurs à haute confiance (cause 1). Si v3 ne fait pas mieux que v2 sur le passage complet, on stabilise v2.
