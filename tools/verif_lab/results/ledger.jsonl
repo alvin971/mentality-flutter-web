@@ -1,1 +1,2 @@
 {"day":"2026-09-03","model":"@cf/openai/whisper","policy":"app","new_files":74,"new_minutes":59.4,"replayed":0,"cleared":0,"errors":0,"error_codes":{},"ms_per_audio_min":5492}
+{"day":"2026-09-03","model":"@cf/openai/whisper-large-v3-turbo","policy":"app","new_files":74,"new_minutes":59.4,"replayed":0,"cleared":0,"errors":0,"error_codes":{},"ms_per_audio_min":5418}

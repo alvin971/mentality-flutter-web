@@ -114,3 +114,49 @@ aucun échec. Rien n'est concluant tant que dégradations, partielles et négati
 à audio ne sont pas mesurés. Prochain réveil : **turbo sur la vague 1** (même
 74 fichiers, forme base64) pour la comparaison à budget égal ; puis alternance
 sur les vagues 2–5 du meilleur. Vague 2 (371 audios) en cours de synthèse.
+
+## Réveil 2 — 2026-09-03 — turbo sur la même vague 1
+
+**Mesure — `@cf/openai/whisper-large-v3-turbo`, mêmes 74 lectures intégrales
+(voix A / opus webm, 59,4 min), entrée base64 + `language` de l'app, 0 erreur,
+0 repli (le modèle accepte `en-GB` tel quel).** `results/whisper-large-v3-turbo.app.json`.
+
+| langue | n | pire recouvrement | médiane | meilleur imposteur | ms / min d'audio (méd.) | langue détectée |
+|---|---|---|---|---|---|---|
+| fr | 12 | 0,933 | 0,960 | 0,247 | 5 927 | fr=12 |
+| en | 13 | 0,925 | 0,977 | 0,176 | 4 831 | en=13 |
+| en_GB | 12 | 0,917 | 0,979 | 0,169 | 5 043 | en=12 |
+| es | 12 | 0,907 | 0,988 | 0,227 | 2 511 | es=12 |
+| pt | 12 | 0,835 | 0,934 | 0,183 | 4 519 | pt=12 |
+| de | 13 | 0,819 | 0,936 | 0,241 | 5 130 | de=13 |
+
+Comparaison à budget égal (mêmes fichiers) :
+
+| | whisper | turbo |
+|---|---|---|
+| pire positif intégral propre | 0,610 | **0,819** |
+| médiane | 0,863 | **0,962** |
+| meilleur imposteur (222 paires) | 0,296 | 0,296 |
+| marge au seuil (pire − imposteur) | 0,31 | **0,52** |
+| seuil le plus bas qui rejette 100 % des imposteurs | 0,20 | 0,20 |
+| latence méd. / p95 / max (par min d'audio, par fichier) | 4,7 s / 10,9 s / 16 s | 4,5 s / 12,8 s / 14,5 s |
+| coût par bilan (2,74 min) · bilans/jour gratuits | 0,124 ¢ · 88 | 0,141 ¢ · 78 |
+| forme d'entrée | octets (production) | **base64 (changement de worker)** |
+| langue détectée | non renvoyée | `transcription_info.language`, juste 74/74 |
+
+- Turbo transcrit ~10 points de recouvrement de plus sur des voix propres et
+  resserre surtout la queue basse (fr 0,69 → 0,93, en_GB 0,62 → 0,92, pt
+  0,61 → 0,84) : c'est la queue qui décide des faux négatifs sur vraies voix.
+- Les imposteurs ne bougent pas (même paire es à 0,296) : le bruit de fond des
+  « autres textes » vient du vocabulaire partagé, pas du modèle. Rien sous 0,30
+  avec les deux modèles, mais 0,30 est **trop proche** de 0,296 pour être
+  retenu tel quel : un seuil retenu doit se choisir dans la marge, pas à son bord.
+- Turbo renvoie la langue détectée : signal gratuit pour un futur garde-fou
+  (lecture dans une autre langue), à mesurer sur les cas `xlang` de la vague 2.
+- Coût : +13 % pour turbo ; les deux tiennent l'allocation gratuite jusqu'à
+  ~80 bilans/jour, et ~0,13 ¢ au-delà (le §1 visait 0,1 ¢ — écart à acter au FINAL).
+
+**Décision.** Turbo prend la tête ; la grille complète (vagues 2–7) se mesure
+d'abord sur turbo, whisper reste mesuré sur les vagues 2 puis 3 comme repli
+(il est le modèle déployé). Prochain réveil : reste de la vague 1 turbo
+(130 lectures, 2 réveils) ou vague 2 turbo si la synthèse a fini.
