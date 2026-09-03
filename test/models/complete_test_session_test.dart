@@ -82,4 +82,37 @@ void main() {
       expect(session.totalDuration?.inMinutes, equals(90));
     });
   });
+
+  group('awaitsAiScore — sous-test terminé, score confié à l\'IA', () {
+    test('Similitudes terminé sans score : en attente', () {
+      final session = CompleteTestSession(startTime: DateTime.now())
+        ..completedTests.add('Similitudes');
+      expect(session.awaitsAiScore('Similitudes'), isTrue);
+    });
+
+    test('Vocabulaire terminé sans score : en attente', () {
+      final session = CompleteTestSession(startTime: DateTime.now())
+        ..completedTests.add('Vocabulaire');
+      expect(session.awaitsAiScore('Vocabulaire'), isTrue);
+    });
+
+    test('pas terminé : rien à attendre (c\'est la reprise qui s\'en charge)', () {
+      final session = CompleteTestSession(startTime: DateTime.now());
+      expect(session.awaitsAiScore('Similitudes'), isFalse);
+    });
+
+    test('score déjà établi : plus en attente', () {
+      final session = CompleteTestSession(startTime: DateTime.now())
+        ..completedTests.add('Similitudes')
+        ..similaritiesScore = 30;
+      expect(session.awaitsAiScore('Similitudes'), isFalse);
+    });
+
+    test('un sous-test noté par l\'app n\'est jamais « en attente »', () {
+      final session = CompleteTestSession(startTime: DateTime.now())
+        ..completedTests.add('Cubes');
+      expect(session.awaitsAiScore('Cubes'), isFalse);
+      expect(session.awaitsAiScore('Inconnu'), isFalse);
+    });
+  });
 }

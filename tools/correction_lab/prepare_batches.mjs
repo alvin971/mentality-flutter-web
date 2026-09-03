@@ -14,7 +14,7 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, basename } from 'node:path';
-import { userInput, loadCases, shuffleSeeded } from './lib.mjs';
+import { userInput, inputFormatOf, loadCases, shuffleSeeded } from './lib.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const args = process.argv.slice(2);
@@ -23,6 +23,7 @@ const sets = args.flatMap((a, i) => (a === '--set' ? [args[i + 1]] : []));
 const promptPath = opt('--prompt');
 if (!promptPath || !sets.length) { console.error('usage : node prepare_batches.mjs --prompt prompts/vN.md --set gold [--set adversarial] [--sample N] [--size 50] [--tag x] [--missing]'); process.exit(2); }
 const version = basename(promptPath).replace(/\.md$/, '');
+const FORMAT = inputFormatOf(readFileSync(join(here, promptPath), 'utf8'));
 const TAG = opt('--tag', '');
 const SIZE = Number(opt('--size', 50));
 const SAMPLE = Number(opt('--sample', 0));
@@ -47,13 +48,13 @@ if (MISSING) {
   start = readdirSync(dir).filter((f) => /^\d+\.jsonl$/.test(f)).length;
   console.error(`relance : ${cases.length} cas sans sortie`);
 } else {
-  writeFileSync(join(dir, 'manifest.json'), JSON.stringify({ version, sets, seed, sample: SAMPLE, size: SIZE, ids: cases.map((c) => c.id) }));
+  writeFileSync(join(dir, 'manifest.json'), JSON.stringify({ version, format: FORMAT, sets, seed, sample: SAMPLE, size: SIZE, ids: cases.map((c) => c.id) }));
 }
 
 const files = [];
 for (let i = 0; i < cases.length; i += SIZE) {
   const name = String(start + files.length + 1).padStart(3, '0');
-  const lines = cases.slice(i, i + SIZE).map((c) => JSON.stringify({ id: c.id, input: userInput(c) }));
+  const lines = cases.slice(i, i + SIZE).map((c) => JSON.stringify({ id: c.id, input: userInput(c, FORMAT) }));
   writeFileSync(join(dir, `${name}.jsonl`), lines.join('\n') + '\n');
   files.push({ file: `${name}.jsonl`, n: lines.length });
 }

@@ -612,6 +612,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ctResumeFullTest => 'Resume the assessment';
 
   @override
+  String get ctScorePending => 'Being scored';
+
+  @override
   String get chatEyebrow => 'AI ASSISTANT';
 
   @override
@@ -4450,6 +4453,9 @@ class AppLocalizationsEnGb extends AppLocalizationsEn {
 
   @override
   String get ctResumeFullTest => 'Resume the assessment';
+
+  @override
+  String get ctScorePending => 'Being scored';
 
   @override
   String get chatEyebrow => 'AI ASSISTANT';

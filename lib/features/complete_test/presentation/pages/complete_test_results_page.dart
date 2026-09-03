@@ -504,7 +504,9 @@ class _SubtestDetails extends StatelessWidget {
             SizedBox(height: 8.h),
             for (final s in groups[i].$2)
               if (s.$3 != null)
-                _subRow(context, s.$1, s.$2, s.$3!, iq),
+                _subRow(context, s.$1, s.$2, s.$3!, iq)
+              else if (session.awaitsAiScore(_frLabel[s.$2] ?? ''))
+                _pendingRow(context, s.$1),
             if (i < groups.length - 1) ...[
               SizedBox(height: 14.h),
               Container(
@@ -512,6 +514,30 @@ class _SubtestDetails extends StatelessWidget {
               SizedBox(height: 14.h),
             ],
           ],
+        ],
+      ),
+    );
+  }
+
+  /// Codes des sous-tests à notation IA → libellé figé de [testSequence].
+  static const _frLabel = {'SI': 'Similitudes', 'VO': 'Vocabulaire'};
+
+  /// Sous-test terminé, score pas encore établi par le correcteur IA.
+  Widget _pendingRow(BuildContext context, String name) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 4.h),
+      child: Row(
+        children: [
+          Expanded(
+              flex: 3,
+              child: Text(name,
+                  style: AppText.of(context).body(color: KeplerColors.of(context).textPrimary))),
+          Expanded(
+            flex: 3,
+            child: Text(context.l10n.ctScorePending,
+                style: AppText.of(context).bodySmall(color: KeplerColors.of(context).textTertiary),
+                textAlign: TextAlign.right),
+          ),
         ],
       ),
     );
@@ -675,8 +701,10 @@ class _RawFallback extends StatelessWidget {
           Text(context.l10n.ctRawScoresHeader,
               style: AppText.of(context).monoLabel(color: KeplerColors.of(context).primary)),
           SizedBox(height: 16.h),
-          _row(context, context.l10n.ctTestSimilarities, session.similaritiesScore),
-          _row(context, context.l10n.ctTestVocabulary, session.vocabularyScore),
+          _row(context, context.l10n.ctTestSimilarities, session.similaritiesScore,
+              pending: session.awaitsAiScore('Similitudes')),
+          _row(context, context.l10n.ctTestVocabulary, session.vocabularyScore,
+              pending: session.awaitsAiScore('Vocabulaire')),
           _row(context, context.l10n.ctTestInformation, session.informationScore),
           _row(context, context.l10n.ctTestCubes, session.cubesScore),
           _row(context, context.l10n.ctTestMatrices, session.matricesScore),
@@ -692,15 +720,21 @@ class _RawFallback extends StatelessWidget {
     );
   }
 
-  Widget _row(BuildContext context, String name, int? score) {
+  Widget _row(BuildContext context, String name, int? score,
+      {bool pending = false}) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 6.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(name, style: AppText.of(context).body()),
-          Text(score?.toString() ?? '—',
-              style: AppText.of(context).monoScore(size: 18.sp)),
+          if (pending)
+            Text(context.l10n.ctScorePending,
+                style: AppText.of(context).bodySmall(
+                    color: KeplerColors.of(context).textTertiary))
+          else
+            Text(score?.toString() ?? '—',
+                style: AppText.of(context).monoScore(size: 18.sp)),
         ],
       ),
     );

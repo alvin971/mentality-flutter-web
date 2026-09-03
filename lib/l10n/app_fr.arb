@@ -773,6 +773,10 @@
   "@ctResumeFullTest": {
     "description": "Bouton de lancement quand un bilan interrompu est repris"
   },
+  "ctScorePending": "En cours de notation",
+  "@ctScorePending": {
+    "description": "Page de résultats : sous-test à réponse libre (Similitudes, Vocabulaire) terminé mais dont le score n'est pas encore établi par le correcteur IA"
+  },
   "chatEyebrow": "ASSISTANT IA",
   "@chatEyebrow": {
     "description": "App bar eyebrow on chat screen"

@@ -159,6 +159,22 @@ class CompleteTestSession {
   /// Nombre de tests complétés
   int get completedTestsCount => completedTests.length;
 
+  /// Vrai pour un sous-test à notation IA ([aiScoredSubtests]) TERMINÉ mais
+  /// dont le score n'est pas encore établi : la page de résultats l'affiche
+  /// « en cours de notation » au lieu de le passer sous silence.
+  ///
+  /// [testName] est un libellé de [testSequence] (français, figé).
+  bool awaitsAiScore(String testName) {
+    final code = subtestCodes[testName];
+    if (code == null || !aiScoredSubtests.contains(code)) return false;
+    if (!completedTests.contains(testName)) return false;
+    return switch (code) {
+      'similarities' => similaritiesScore == null,
+      'vocabulary' => vocabularyScore == null,
+      _ => false,
+    };
+  }
+
   /// Durée totale de la session
   Duration? get totalDuration =>
       endTime != null ? endTime!.difference(startTime) : null;

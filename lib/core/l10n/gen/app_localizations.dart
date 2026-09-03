@@ -1227,6 +1227,12 @@ abstract class AppLocalizations {
   /// **'Reprendre l\'évaluation'**
   String get ctResumeFullTest;
 
+  /// Page de résultats : sous-test à réponse libre (Similitudes, Vocabulaire) terminé mais dont le score n'est pas encore établi par le correcteur IA
+  ///
+  /// In fr, this message translates to:
+  /// **'En cours de notation'**
+  String get ctScorePending;
+
   /// App bar eyebrow on chat screen
   ///
   /// In fr, this message translates to:

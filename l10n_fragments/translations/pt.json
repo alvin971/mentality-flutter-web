@@ -1004,5 +1004,6 @@
   "rpaCheckAgain": "Verificar novamente",
   "rpaStillPending": "A verificação ainda está em curso. Tenta novamente dentro de instantes.",
   "rpaStillFailed": "Não foi possível verificar a gravação. Retoma a gravação.",
-  "rpaNetwork": "Servidor inacessível. Verifica a tua ligação."
+  "rpaNetwork": "Servidor inacessível. Verifica a tua ligação.",
+  "ctScorePending": "Correção em curso"
 }

@@ -28,7 +28,7 @@ import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, basename } from 'node:path';
 import { homedir } from 'node:os';
-import { userInput as inputObj, judge, allMetrics, writeReports, printSummary, loadCases, shuffleSeeded, pct } from './lib.mjs';
+import { userInput as inputObj, inputFormatOf, judge, allMetrics, writeReports, printSummary, loadCases, shuffleSeeded, pct } from './lib.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const args = process.argv.slice(2);
@@ -62,7 +62,7 @@ const SCHEMA = {
     reason: { type: 'string' },
   },
 };
-function userInput(c) { return JSON.stringify(inputObj(c)); }
+function userInput(c) { return JSON.stringify(inputObj(c, inputFormatOf(prompt))); }
 const sha = (s) => createHash('sha256').update(s).digest('hex');
 const cacheDir = join(here, 'cache');
 mkdirSync(cacheDir, { recursive: true });

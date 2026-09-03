@@ -618,6 +618,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get ctResumeFullTest => 'Bewertung fortsetzen';
 
   @override
+  String get ctScorePending => 'Bewertung läuft';
+
+  @override
   String get chatEyebrow => 'KI-ASSISTENT';
 
   @override

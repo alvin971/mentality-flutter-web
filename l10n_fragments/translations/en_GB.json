@@ -1004,5 +1004,6 @@
   "rpaCheckAgain": "Check again",
   "rpaStillPending": "Verification is still in progress. Try again in a moment.",
   "rpaStillFailed": "The recording could not be verified. Resume the recording.",
-  "rpaNetwork": "Server unreachable. Check your connection."
+  "rpaNetwork": "Server unreachable. Check your connection.",
+  "ctScorePending": "Being scored"
 }

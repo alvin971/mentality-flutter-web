@@ -187,6 +187,7 @@
   "ctPdfColRawScore": "Rohwert",
   "ctPdfDisclaimer": "HINWEIS: Dieser Bericht wird von einer Anwendung zur Unterstützung der Untersuchung erstellt und stellt keine offizielle klinische Diagnose dar. Er muss von einer qualifizierten medizinischen Fachperson interpretiert werden. Nicht ohne ergänzende fachliche Begutachtung für medizinische oder rechtliche Zwecke verwenden.",
   "ctResumeFullTest": "Bewertung fortsetzen",
+  "ctScorePending": "Bewertung läuft",
   "chatEyebrow": "KI-ASSISTENT",
   "chatNewConversation": "Neue Unterhaltung",
   "chatAssistantLabel": "MENTAL E.T.",

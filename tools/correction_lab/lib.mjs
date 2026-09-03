@@ -5,14 +5,20 @@ import { join } from 'node:path';
 
 export const SUBTEST_NAME = { SI: 'similarities', VO: 'vocabulary' };
 
+/** Format d'entrée dicté par le PROMPT : v1/v2 nomment les listes examples_2_points /
+ *  examples_1_point ; v3 les nomme full_credit_examples / partial_credit_examples.
+ *  Une version validée doit toujours être rejouée avec SON format — le 2026-09-03,
+ *  deux passages de stabilité de v2 ont été générés avec les clés de v3 et jetés. */
+export function inputFormatOf(promptText) {
+  return /full_credit_examples/.test(promptText) ? 'credit' : 'points';
+}
+
 /** Entrée du modèle : JSON brut, aucune normalisation de la réponse. Jamais l'attendu. */
-export function userInput(c) {
-  return {
-    subtest: SUBTEST_NAME[c.subtest], lang: c.lang, stimulus: c.stimulus,
-    // v3 : noms distincts pour les deux listes — avec examples_2_points / examples_1_point,
-    // Haiku confondait les listes (14 réponses verbatim de la liste 2 notées 1 « car exemple 1 point »).
-    full_credit_examples: c.two, partial_credit_examples: c.one, answer: c.response,
-  };
+export function userInput(c, format = 'points') {
+  const base = { subtest: SUBTEST_NAME[c.subtest], lang: c.lang, stimulus: c.stimulus };
+  return format === 'credit'
+    ? { ...base, full_credit_examples: c.two, partial_credit_examples: c.one, answer: c.response }
+    : { ...base, examples_2_points: c.two, examples_1_point: c.one, answer: c.response };
 }
 
 /** Validation stricte. Retourne {valid, parsed, why}. Ne répare rien. */

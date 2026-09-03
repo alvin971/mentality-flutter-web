@@ -1004,5 +1004,6 @@
   "rpaCheckAgain": "Erneut prüfen",
   "rpaStillPending": "Die Prüfung läuft noch. Versuche es gleich noch einmal.",
   "rpaStillFailed": "Die Aufnahme konnte nicht überprüft werden. Setze die Aufnahme fort.",
-  "rpaNetwork": "Server nicht erreichbar. Prüfe deine Verbindung."
+  "rpaNetwork": "Server nicht erreichbar. Prüfe deine Verbindung.",
+  "ctScorePending": "Bewertung läuft"
 }

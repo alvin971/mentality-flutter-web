@@ -614,6 +614,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get ctResumeFullTest => 'Reanudar la evaluación';
 
   @override
+  String get ctScorePending => 'Corrección en curso';
+
+  @override
   String get chatEyebrow => 'ASISTENTE IA';
 
   @override

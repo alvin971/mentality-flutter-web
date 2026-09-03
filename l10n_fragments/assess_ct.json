@@ -866,5 +866,10 @@
     "de": "Bewertung fortsetzen",
     "en_GB": "Resume the assessment",
     "desc": "Bouton de lancement quand un bilan interrompu est repris"
+  },
+  "ctScorePending": {
+    "fr": "En cours de notation",
+    "en": "Being scored",
+    "desc": "Page de résultats : sous-test à réponse libre (Similitudes, Vocabulaire) terminé mais dont le score n'est pas encore établi par le correcteur IA"
   }
 }

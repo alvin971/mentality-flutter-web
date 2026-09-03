@@ -1,0 +1,30 @@
+# Worker « correcteur » — notation IA des sous-tests verbaux (Similitudes, Vocabulaire)
+#
+# Déploiement (NE PAS déployer sans décision du fondateur — cf. tools/correction_lab/JOURNAL.md) :
+#   cd workers/correcteur
+#   wrangler secret put SUPABASE_URL
+#   wrangler secret put SUPABASE_SERVICE_KEY
+#   wrangler secret put ANTHROPIC_API_KEY      # clé NEUVE — jamais celle de claude-proxy (exposée)
+#   wrangler secret put ADMIN_SECRET           # protège POST /run
+#   wrangler deploy --dry-run                  # puis wrangler deploy
+#
+# Avant tout deploy : node scripts/selftest.mjs (zéro réseau).
+name = "mentality-correcteur"
+main = "index.js"
+compatibility_date = "2025-01-01"
+
+# Passe toutes les 10 minutes sur les sessions en attente (scoring_status = 'ai_pending').
+[triggers]
+crons = ["*/10 * * * *"]
+
+[vars]
+# Nombre max de lignes test_results (session × sous-test) traitées par passage.
+BATCH_ROWS = "40"
+# Au-delà, la session n'est plus retentée automatiquement (ai_review = true).
+MAX_ATTEMPTS = "5"
+# Confiance en dessous de laquelle une session est marquée pour relecture humaine.
+REVIEW_THRESHOLD = "0.6"
+MODEL = "claude-haiku-4-5-20251001"
+
+[observability]
+enabled = true

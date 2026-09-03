@@ -615,6 +615,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get ctResumeFullTest => 'Retomar a avaliação';
 
   @override
+  String get ctScorePending => 'Correção em curso';
+
+  @override
   String get chatEyebrow => 'ASSISTENTE IA';
 
   @override

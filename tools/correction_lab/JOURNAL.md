@@ -113,3 +113,62 @@ Comparaison ciblée v2 → v3 : `gold_two` 99,44 → 98,40 (la poche « exemple 
 **Stabilité** : passage 1 = `results/v2.json` (98,86 %). Passages 2 et 3 lancés (`batches/v2.stab2/`, `batches/v2.stab3/`, ordres mélangés, graines 1749754737 / 1749754907).
 
 Bilan du §6 pour v2 : exactitude ✔ (98,86 / 99,03 holdout) · par langue et sous-test ✔ (min 98,2) · sur/sous-notation ✔ (0,31 / 0,83) · JSON invalide ✔ (0) · déterminisme ✔ (99,5) · stabilité : en cours.
+
+## Réveil 5 — 2026-09-03 — stabilité : passages 2 invalidé puis refait, worker §7 construit
+
+**Invalidation de `stab2`/`stab3`.** Les lots avaient été générés avec les clés d'entrée de v3 (`full_credit_examples` / `partial_credit_examples`) alors que v2 attend `examples_2_points` / `examples_1_point` : le prompt n'aurait pas retrouvé ses listes d'ancrage. Les ~47 lots déjà notés de `stab2` sont **jetés**, pas comptés. Correctif structurel : le format d'entrée est désormais **dicté par le texte du prompt** (`lib.inputFormatOf`) dans `prepare_batches.mjs`, `run.mjs` et le manifeste — plus jamais choisi à la main. Passages régénérés : `v2.stabB` (graine 1750179848) et `v2.stabC`, format `points`, ordres mélangés.
+
+**Passage 2 (`stabB`, 7 973 cas, 1 relance de 32 omissions)** : exactitude **99,13 %** · sur-notation 0,21 % · sous-notation 0,60 % · invalides 0 · kappa 0,9875 · conf juste/faux 0,95/0,88. Par langue : de 99,5 · en 99,1 · en_gb 99,5 · es 99,5 · **fr 98,35** · pt 99,5. Par sous-test : SI 99,2 · VO 99,1. Tous les seuils du §6 tenus ; le point bas reste le français (sous-notation 1,19 %, poche `gold_two` inchangée).
+
+**Passage 3 (`stabC`)** : en cours, résultat ci-dessous.
+
+**Worker §7, construit pendant les passages** (`workers/correcteur/`) :
+- `export_worker_assets.mjs` → `banks.json` (990 items, 356 Ko, embarqué dans le bundle : pas de KV, une seule source de vérité versionnée avec le prompt) et `prompt.js` (généré depuis `prompts/FINAL.md`).
+- `index.js` : cron toutes les 10 min + `POST /run` (secret admin, comparaison à temps constant), lot de 40 lignes, langue par **vote** des `item_id` (18 collisions / 972 ids, jamais entre en et en_gb ; « Orange/Banane » existe en fr ET en de → une session d'un seul item ambigu est différée, ce qui n'arrive pas en pratique : ≥ 3 items par sous-test), résolution de tous les items **avant** le premier appel, règle d'arrêt post-hoc (3 zéros → 0 sans appel), vide/sauté → 0 sans appel, écriture atomique du point de vue métier (items puis ligne ; toute erreur → rien d'écrit, `ai_attempts + 1`, plafond → `ai_review`). Appel API brut (Haiku 4.5, T = 0, sortie structurée `json_schema`, retries 429/5xx ×3, timeout 30 s). Aucune réponse de personne dans les journaux.
+- `scripts/selftest.mjs` : **94 assertions, 0 échec**, zéro réseau (fetch intercepté : Supabase en mémoire, Anthropic scripté). Pièges rencontrés en l'écrivant : `*/` dans un commentaire d'en-tête fermait le bloc ; `import … from './banks.json'` exige `with { type: 'json' }` sous Node 22 (esbuild/wrangler l'accepte) ; `new Response('', {status: 204})` est refusé par undici (corps interdit) → `null`.
+- `wrangler deploy --dry-run` : **compile**, 394 Ko (125 Ko gzip), 4 variables liées. Pas déployé.
+- Migration **019** commitée dans `mentality-admin` sur `chantier/correcteur-ia` (`8f8f1ef`) : `test_items.ai_confidence`, `test_results.ai_attempts/ai_review/ai_scored_at`, index partiel de file, vue `ai_review_queue`.
+- App (§7.5) : `CompleteTestResultsPage` **omettait** silencieusement une ligne SI/VO sans score. Ajout de `CompleteTestSession.awaitsAiScore()` + libellé `ctScorePending` (6 langues, via `l10n_fragments/` + `_merge.py` + `gen-l10n`) affiché dans les scores standardisés et dans le repli brut ; 5 tests unitaires. `flutter test` complet en cours.
+
+**Passage 3 (`stabC`, 7 973 cas, 1 relance de 2 omissions)** : exactitude **98,96 %** · sur-notation 0,25 % · sous-notation 0,75 % · invalides 0 · kappa 0,9846. Par langue : de 99,5 · en 98,7 · en_gb 99,6 · es 99,0 · **fr 98,24** · pt 99,5. SI 98,96 · VO 98,96.
+
+## CONVERGÉ — 2026-09-03 — v2 = FINAL
+
+| Critère §6 | Seuil | Passage 1 (`v2`) | Passage 2 (`stabB`) | Passage 3 (`stabC`) | Holdout aveugle |
+|---|---|---|---|---|---|
+| Exactitude globale | ≥ 97 % | 98,86 % | 99,13 % | 98,96 % | 99,03 % |
+| Min. par langue | ≥ 95 % | 98,0 (fr) | 98,35 (fr) | 98,24 (fr) | ✔ |
+| Min. par sous-test | ≥ 95 % | 98,7 | 99,1 | 98,96 | ✔ |
+| Sur-notation | ≤ 1,5 % | 0,31 % | 0,21 % | 0,25 % | ✔ |
+| Sous-notation | ≤ 1,5 % | 0,83 % | 0,60 % | 0,75 % | ✔ |
+| JSON invalide | 0 / 1000 | 0 | 0 | 0 | 0 |
+| Déterminisme (201 × 3) | ≥ 99 % | 99,5 % | — | — | — |
+
+Trois passages consécutifs, ordres mélangés, même version, tous les seuils tenus : **`prompts/v2.md` copié tel quel en `prompts/FINAL.md`**. Point faible connu et documenté : le français (sous-notation 1,2–1,3 %, poche `gold_two` = ancrage sur un fragment d'exemple 1 point). Mesures prises sur des sous-agents Haiku à température non contrôlée : l'API à T = 0 fera au moins aussi bien.
+
+`export_worker_assets.mjs` relancé depuis FINAL.md (`prompt.js` → `PROMPT_SOURCE = "prompts/FINAL.md"`), auto-test 94/94, `wrangler deploy --dry-run` OK (394 Ko). `flutter test` : 1 100 verts (suite complète hors un fichier) + 11 verts (`questionnaire_runner_upload_test.dart` seul — dans la suite complète il restait bloqué en `tearDownAll` sous la charge des 20 sous-agents, pas un défaut du code).
+
+## Pour le fondateur
+
+Rien n'est déployé ni fusionné. Tout est sur `chantier/correcteur-ia` (app **et** admin).
+
+1. **Clé Anthropic NEUVE** — ne pas réutiliser celle de `claude-proxy` (dans l'historique git, **à révoquer** sur console.anthropic.com).
+2. **Migration** : appliquer `mentality-admin/supabase/migrations/019_ai_correcteur.sql` (branche `chantier/correcteur-ia` de l'admin, commit `8f8f1ef`) sur le projet Supabase Cloud `ktrnievuknfhwffbxaog`, AVANT le premier déploiement.
+3. **Secrets** (depuis `workers/correcteur/`) :
+   ```bash
+   wrangler secret put SUPABASE_URL
+   wrangler secret put SUPABASE_SERVICE_KEY
+   wrangler secret put ANTHROPIC_API_KEY
+   wrangler secret put ADMIN_SECRET
+   ```
+4. **Déployer** :
+   ```bash
+   node tools/correction_lab/export_worker_assets.mjs && node workers/correcteur/scripts/selftest.mjs
+   cd workers/correcteur && wrangler deploy
+   ```
+   (le binaire wrangler n'est pas dans le PATH sur le VPS : `ls -t ~/.npm/_npx/*/node_modules/.bin/wrangler | head -1`).
+5. **Premier passage à la main, sur 5 lignes**, puis vérifier `ai_review_queue` :
+   ```bash
+   curl -X POST -H "X-Admin-Secret: $ADMIN_SECRET" "https://mentality-correcteur.<compte>.workers.dev/run?limit=5"
+   ```
+6. **Fusionner** `chantier/correcteur-ia` dans `main` (app) et dans la branche de travail de l'admin — décision du fondateur, jamais de la boucle.
