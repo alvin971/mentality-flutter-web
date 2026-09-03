@@ -141,12 +141,18 @@ async function transcrire(f) {
 }
 
 // ─── exécution ─────────────────────────────────────────────────────────────
-const file = selection.slice(); let ok = 0, erreurs = 0, msTotal = 0, secondes = 0; const codes = {};
+const file = selection.slice(); let ok = 0, erreurs = 0, msTotal = 0, secondes = 0, consecutifs = 0, dernierErreur = null; const codes = {};
 await Promise.all(Array.from({ length: Math.min(JOBS, file.length) }, async () => {
   while (file.length) {
     const f = file.shift();
     try {
+      if (consecutifs >= 5) break; // quota du jour épuisé ou modèle en panne : on s'arrête, on consigne, on attend (§0)
       const e = await transcrire(f);
+      if (e.status === 'ai_error') { // jamais mis en cache : un échec (quota, panne) se rejoue au réveil suivant
+        erreurs++; consecutifs++; codes[e.status] = (codes[e.status] || 0) + 1; dernierErreur = e.error;
+        continue;
+      }
+      consecutifs = 0;
       fs.writeFileSync(path.join(cacheDir, `${f.k}.json`), JSON.stringify(e));
       msTotal += e.ms; secondes += f.meta.duration_s;
       if (e.status === 'ok') ok++; else { erreurs++; codes[e.status] = (codes[e.status] || 0) + 1; }
@@ -156,6 +162,6 @@ await Promise.all(Array.from({ length: Math.min(JOBS, file.length) }, async () =
     }
   }
 }));
-const ligne = { day: new Date().toISOString().slice(0, 10), model: MODEL, policy: POLICY, new_files: ok + erreurs, new_minutes: Math.round((secondes / 60) * 10) / 10, replayed: rejoues, cleared: vides, errors: erreurs, error_codes: codes, ms_per_audio_min: secondes ? Math.round(msTotal / (secondes / 60)) : null };
+const ligne = { day: new Date().toISOString().slice(0, 10), model: MODEL, policy: POLICY, new_files: ok + erreurs - (codes.ai_error || 0), aborted: consecutifs >= 5 ? dernierErreur : null, new_minutes: Math.round((secondes / 60) * 10) / 10, replayed: rejoues, cleared: vides, errors: erreurs, error_codes: codes, ms_per_audio_min: secondes ? Math.round(msTotal / (secondes / 60)) : null };
 fs.appendFileSync(path.join(ICI, 'results', 'ledger.jsonl'), JSON.stringify(ligne) + '\n');
 console.log(JSON.stringify(ligne));

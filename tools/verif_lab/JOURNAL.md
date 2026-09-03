@@ -118,8 +118,12 @@ sur les vagues 2–5 du meilleur. Vague 2 (371 audios) en cours de synthèse.
 ## Réveil 2 — 2026-09-03 — turbo sur la même vague 1
 
 **Mesure — `@cf/openai/whisper-large-v3-turbo`, mêmes 74 lectures intégrales
-(voix A / opus webm, 59,4 min), entrée base64 + `language` de l'app, 0 erreur,
-0 repli (le modèle accepte `en-GB` tel quel).** `results/whisper-large-v3-turbo.app.json`.
+(voix A / opus webm, 59,4 min), entrée base64 + `language` de l'app, 0 erreur.
+Correctif de lecture : 12 replis, pas 0 — turbo REFUSE `en-GB` (les 12 fichiers
+en_GB sont repartis sans `language`, comme le ferait le worker de production) ;
+la langue détectée reste juste. Si turbo est retenu, le worker devra ramener
+`X-Language` à son code ISO 639-1 (`en-GB` → `en`) avant l'appel.**
+`results/whisper-large-v3-turbo.app.json`.
 
 | langue | n | pire recouvrement | médiane | meilleur imposteur | ms / min d'audio (méd.) | langue détectée |
 |---|---|---|---|---|---|---|
