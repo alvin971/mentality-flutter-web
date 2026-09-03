@@ -64,7 +64,7 @@ const entreeDe = (c) => { const m = index[cheminAudio(c)]; return m ? cache.get(
 const mesures = []; // {id, set, lang, textId, target, content, proc, format, expected, overlap, words, ordre, couverture, status, ms, duration_s, derived}
 let nonCouverts = 0;
 const mesure = (c, e, target, derived = null) => {
-  const m = { id: c.id, set: c.set, lang: c.lang, textId: c.textId, target, content: derived || c.content, proc: c.proc, format: c.format, expected: derived ? false : c.expected, status: e.status, ms: e.ms, duration_s: e.duration_s, derived: !!derived, lang_detected: e.lang_detected, fallback: e.fallback };
+  const m = { id: derived ? `${c.id}→${target}` : c.id, set: derived ? 'neg' : c.set, lang: c.lang, textId: c.textId, target, content: derived || c.content, proc: c.proc, format: c.format, expected: derived ? false : c.expected, status: e.status, ms: e.ms, duration_s: e.duration_s, derived: !!derived, lang_detected: e.lang_detected, fallback: e.fallback };
   if (e.status === 'ok') {
     if (c.set === 'sum') m.words = distinctsAuMoins(e.histo);
     else {
@@ -198,6 +198,6 @@ if (!QUIET) {
   if (latence) console.log(`latence : ${latence.ms_par_minute_audio_med} ms/min (p95 ${latence.ms_par_minute_audio_p95}) · max ${latence.ms_max_par_fichier} ms/fichier · < 60 s : ${latence.sous_60_s}`);
   console.log('signaux (overlap med | ordre med | couverture dernier tiers med) : ' + Object.entries(signaux).filter(([, v]) => v.overlap).map(([k, v]) => `${k} ${v.overlap.med}|${v.ordre.med}|${v.couverture_dernier_tiers.med}`).join(' · '));
   if (Object.keys(langDetect).length) console.log('langue détectée : ' + Object.entries(langDetect).map(([k, v]) => `${k}=${v}`).join(' '));
-  if (resistent.length) console.log(`résistent au seuil ${seuilChoisi} (${resistent.length}) : ` + resistent.slice(0, 12).map((r) => `${r.id}${r.target !== r.id.split(':')[2] ? '→' + r.target : ''} ov=${r.overlap ?? r.words}`).join(' ; '));
+  if (resistent.length) console.log(`résistent au seuil ${seuilChoisi} (${resistent.length}) : ` + resistent.slice(0, 12).map((r) => `${r.id} ov=${r.overlap ?? r.words}`).join(' ; '));
   console.log(`→ ${path.relative(RACINE, outPath)}`);
 }

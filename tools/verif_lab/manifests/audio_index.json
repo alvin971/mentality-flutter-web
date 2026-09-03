@@ -1,0 +1,1022 @@
+{
+ "audio/fr/fr_00163.A.full.clean.webm": {
+  "bytes": 185383,
+  "duration_s": 45,
+  "sha256": "962a9084f573b5c99c797fb9ee998bdf128d08cf6baff7d2c2314d36d57fe87d"
+ },
+ "audio/fr/fr_00251.A.full.clean.webm": {
+  "bytes": 178614,
+  "duration_s": 42.71,
+  "sha256": "e1b69231496b6de9d4953e37545a4e34a5868203210d382d37dfed2c8bea18fb"
+ },
+ "audio/fr/fr_00355.A.full.clean.webm": {
+  "bytes": 189019,
+  "duration_s": 45.59,
+  "sha256": "4dd5c3a61563e1c2565b85aec614b65ab7295566fe59790340d0cc20ef902f01"
+ },
+ "audio/fr/fr_00201.A.full.clean.webm": {
+  "bytes": 169297,
+  "duration_s": 40.35,
+  "sha256": "847c40c9f90ec0f9480067bc01a5d798567eac9a37bf82cfc71e1ecaf7c20c46"
+ },
+ "audio/fr/fr_00301.A.full.clean.webm": {
+  "bytes": 174762,
+  "duration_s": 41.76,
+  "sha256": "cdf1ac0fcb4213595bfd0e1c46e05c8017dce7d78e4a24e625834c8967f0f117"
+ },
+ "audio/fr/fr_00178.A.full.clean.webm": {
+  "bytes": 182090,
+  "duration_s": 43.79,
+  "sha256": "6c26a7352ed8849304ebe843fe784f798d1187eca15fd2cf5fe044cf6bd5d01e"
+ },
+ "audio/fr/fr_00302.A.full.clean.webm": {
+  "bytes": 183634,
+  "duration_s": 43.84,
+  "sha256": "83ebd711d1e820b9a4bf13f87bd034cb4d133bd040e2b19be4333023b0da734d"
+ },
+ "audio/fr/fr_00213.A.full.clean.webm": {
+  "bytes": 175636,
+  "duration_s": 42.06,
+  "sha256": "059ca16112073a4ed4620b02e9296b58c4c090209f6a9bb4f3565936b49c421d"
+ },
+ "audio/fr/fr_00014.A.full.clean.webm": {
+  "bytes": 193251,
+  "duration_s": 46.36,
+  "sha256": "e9c641ad965e45fa2598a632d541e4968becacde801ba923ff0e91b87010070e"
+ },
+ "audio/fr/fr_00040.A.full.clean.webm": {
+  "bytes": 190183,
+  "duration_s": 45.62,
+  "sha256": "e6bd58ca8bb9bb4685fe3ad8350eea8648ae9a5ef2dee50250c1ebffc6f1c938"
+ },
+ "audio/fr/fr_00493.A.full.clean.webm": {
+  "bytes": 178065,
+  "duration_s": 42.92,
+  "sha256": "9097d2e7e63e5bde0e87b4da799907f1d93c48706d0840b7557f34040095c490"
+ },
+ "audio/fr/fr_00325.A.full.clean.webm": {
+  "bytes": 200742,
+  "duration_s": 48.13,
+  "sha256": "b82884b1b4079d5e885466faa7b149dd10d6fa91e4d91347cad7d400ed8ea24a"
+ },
+ "audio/fr/fr_00482.A.full.clean.webm": {
+  "bytes": 182022,
+  "duration_s": 43.67,
+  "sha256": "d8450a2a95ef4b8cd432a0dda1e31f5402bbb15755dd21417fe7dd53f97f190e"
+ },
+ "audio/fr/fr_00474.A.full.clean.webm": {
+  "bytes": 160392,
+  "duration_s": 38.39,
+  "sha256": "2770a0279145056992bfec5afe4f4e4f6eef37654830635ec4c47357311cf0df"
+ },
+ "audio/fr/fr_00080.A.full.clean.webm": {
+  "bytes": 176222,
+  "duration_s": 42.19,
+  "sha256": "5822feb6cae601b8ef1405734d0c2ea9168b7a23d6740ea3d2b3afd7ffc78913"
+ },
+ "audio/fr/fr_00490.A.full.clean.webm": {
+  "bytes": 182422,
+  "duration_s": 44.02,
+  "sha256": "ae5d401943043ec651ca0a5318e137027d35c524ae92483c42ef8eb416553df4"
+ },
+ "audio/fr/fr_00324.A.full.clean.webm": {
+  "bytes": 182700,
+  "duration_s": 43.5,
+  "sha256": "230bb0cd86f02545ce7dc4acf38354cfd48f8a734104133ad21c9905c08213a7"
+ },
+ "audio/fr/fr_00459.A.full.clean.webm": {
+  "bytes": 167271,
+  "duration_s": 40.24,
+  "sha256": "e0270b86260b9993554271e5524f248b80cd3a3563b8c7bf565cba0f2c43a280"
+ },
+ "audio/fr/fr_00032.A.full.clean.webm": {
+  "bytes": 179251,
+  "duration_s": 43.17,
+  "sha256": "712f59a323bef96b82033f07afe4103c87258a5610c600e1e10e88054db01f36"
+ },
+ "audio/fr/fr_00072.A.full.clean.webm": {
+  "bytes": 165895,
+  "duration_s": 39.44,
+  "sha256": "ffcb51e901a51bcaf8df75e9cb6e9a0eb3e5fa73bc058cf5f0cf1b4a3e4586af"
+ },
+ "audio/fr/fr_00456.A.full.clean.webm": {
+  "bytes": 178977,
+  "duration_s": 43.06,
+  "sha256": "c67b72b4c3ac32df21f041b50caf3e1b593382daed770901be3fc4862587d353"
+ },
+ "audio/fr/fr_00060.A.full.clean.webm": {
+  "bytes": 186816,
+  "duration_s": 44.92,
+  "sha256": "42010ae029ef6b332fc1675a5e4384398096056223aa2a4135235e8fa04d0b24"
+ },
+ "audio/fr/fr_00450.A.full.clean.webm": {
+  "bytes": 175059,
+  "duration_s": 41.76,
+  "sha256": "d178511ca5554eddb52c503c765e842202ac2de9a689b56d59c1ae78362ecc87"
+ },
+ "audio/fr/fr_00015.A.full.clean.webm": {
+  "bytes": 188788,
+  "duration_s": 44.99,
+  "sha256": "d19b22c531ea2b1191b875ed0d74ae4f9e8e15995df5b59bc6e1465bbd62ee50"
+ },
+ "audio/fr/fr_00160.A.full.clean.webm": {
+  "bytes": 197584,
+  "duration_s": 47.04,
+  "sha256": "73e55b793572c0ad62b5ca046ffd299dfa1a2f4425e2fd2a65999ab72312778e"
+ },
+ "audio/fr/fr_00375.A.full.clean.webm": {
+  "bytes": 173380,
+  "duration_s": 41.35,
+  "sha256": "3c9a4ca753c9f4eddb89028f8d24d0922927f2863b8b49851d01b9a0404e25fa"
+ },
+ "audio/fr/fr_00457.A.full.clean.webm": {
+  "bytes": 177748,
+  "duration_s": 42.47,
+  "sha256": "9392814642fa0e7b91fee12b04cc136cd6ec019486b40785d65436215714d676"
+ },
+ "audio/fr/fr_00380.A.full.clean.webm": {
+  "bytes": 193488,
+  "duration_s": 46.25,
+  "sha256": "489e6abaf38599128f7bd74bea51a0202289097b7cb0e369b176e6a0ebdd602b"
+ },
+ "audio/fr/fr_00327.A.full.clean.webm": {
+  "bytes": 176993,
+  "duration_s": 42.34,
+  "sha256": "dd1ca809d3857ba0c64333f98109bc4ba98eab1f6d6ff731c17eb3a73ff1a99f"
+ },
+ "audio/fr/fr_00140.A.full.clean.webm": {
+  "bytes": 196982,
+  "duration_s": 47.09,
+  "sha256": "2cc3d4891f1dab169a2573b5e4557ac0578aa1d8bb8b6ac3037320baf0d19ec0"
+ },
+ "audio/fr/fr_00141.A.full.clean.webm": {
+  "bytes": 174879,
+  "duration_s": 41.66,
+  "sha256": "4fc2a8a119eb7883ac6e34776f5e67dca0d97d0728291d05ba3e7b2e106a7a32"
+ },
+ "audio/fr/fr_00475.A.full.clean.webm": {
+  "bytes": 190356,
+  "duration_s": 45.86,
+  "sha256": "7f1432686064faf5a3072af1f027760e41e7aba0ca3f6fffc14513ff2b81e6a9"
+ },
+ "audio/fr/fr_00328.A.full.clean.webm": {
+  "bytes": 185788,
+  "duration_s": 44.59,
+  "sha256": "c23844d364f3760626f8caa8f1be1a495c1403d04aa5aa598acdb5d1639d5d7c"
+ },
+ "audio/fr/fr_00435.A.full.clean.webm": {
+  "bytes": 173960,
+  "duration_s": 41.44,
+  "sha256": "b9048ce762a0c25cbee76831926ec181c8128e1921b4ebc972bb2c71defb49e2"
+ },
+ "audio/en/en_00045.A.full.clean.webm": {
+  "bytes": 169142,
+  "duration_s": 41.9,
+  "sha256": "8b38106f0a858b87f9feb76ca8f1f89d86176d7d3507b8ed2888ec05f34b6e34"
+ },
+ "audio/en/en_00041.A.full.clean.webm": {
+  "bytes": 194981,
+  "duration_s": 47.53,
+  "sha256": "1e219241546e22bab8893c0f65cb555135500f390a30c7d41e60e0eeac9c6096"
+ },
+ "audio/en/en_00022.A.full.clean.webm": {
+  "bytes": 174873,
+  "duration_s": 42.41,
+  "sha256": "d17d12f3bd8498b773a30e0af211819c34b53aeb7bf5f953f3630d83774e520f"
+ },
+ "audio/en/en_00033.A.full.clean.webm": {
+  "bytes": 189509,
+  "duration_s": 46.23,
+  "sha256": "e28f333a5607f00a75f4c6eb3a4d0ee75009776ef5d991ef0fef2d90890904f9"
+ },
+ "audio/en/en_00026.A.full.clean.webm": {
+  "bytes": 192721,
+  "duration_s": 46.85,
+  "sha256": "d8b32b25b419cb3d4f44576191a6943310e68e70073f894408d7939becec1d24"
+ },
+ "audio/en/en_00023.A.full.clean.webm": {
+  "bytes": 166463,
+  "duration_s": 40.36,
+  "sha256": "0c766874ede8c81b05cc0f410d758680ed194ecb31efa342882443e6cbc4fce8"
+ },
+ "audio/en/en_00008.A.full.clean.webm": {
+  "bytes": 190326,
+  "duration_s": 46.06,
+  "sha256": "9160a0852f0405b92f4d9cd36583f8ea8a4ce8251b39c99af52b7b5927062260"
+ },
+ "audio/en/en_00016.A.full.clean.webm": {
+  "bytes": 162546,
+  "duration_s": 39.83,
+  "sha256": "d68acdef7147be7b0156439d969b72bcecf8d9559cff6a2ccf1e3529675c3729"
+ },
+ "audio/en/en_00036.A.full.clean.webm": {
+  "bytes": 172027,
+  "duration_s": 42.28,
+  "sha256": "7fa14c9d191104ed237bede789d132418c603bbf60f09ad6355409b2a5d3c0af"
+ },
+ "audio/en/en_00014.A.full.clean.webm": {
+  "bytes": 179792,
+  "duration_s": 44.39,
+  "sha256": "92f0ddec530b5dae65ca9dd9875ff061d69db2c7fd8ec26073b9cb18f063135d"
+ },
+ "audio/en/en_00048.A.full.clean.webm": {
+  "bytes": 183949,
+  "duration_s": 44.88,
+  "sha256": "d08b54388af529d3cfbbf19d64780dd9e5a0e6372acf4af36e90fc23fd67e265"
+ },
+ "audio/en/en_00050.A.full.clean.webm": {
+  "bytes": 177357,
+  "duration_s": 43.09,
+  "sha256": "fcdd1dc18f2cd2ce70ac58b09b6f26706260fa106f2a3760f402b53da1991f75"
+ },
+ "audio/en/en_00003.A.full.clean.webm": {
+  "bytes": 168922,
+  "duration_s": 41.29,
+  "sha256": "b79a6e58c408bfc23eea5c7b453782fdc951b45f505473c28fa8fd6863469d5a"
+ },
+ "audio/en/en_00030.A.full.clean.webm": {
+  "bytes": 202179,
+  "duration_s": 49.28,
+  "sha256": "ae380aca803953ca865d0ea021bd1e175a1e13a225d53e07e7b995d5ee9a03b6"
+ },
+ "audio/en/en_00040.A.full.clean.webm": {
+  "bytes": 171293,
+  "duration_s": 41.48,
+  "sha256": "69d57972376d723567cedf7576218f7034bd303563c172df4f1f76fb2012c018"
+ },
+ "audio/en/en_00038.A.full.clean.webm": {
+  "bytes": 182392,
+  "duration_s": 44.52,
+  "sha256": "418443d09c0b4185d766a07a5c336094fcce0f8df03bf863423e42038be5365a"
+ },
+ "audio/en/en_00001.A.full.clean.webm": {
+  "bytes": 159944,
+  "duration_s": 38.99,
+  "sha256": "9f772426761fc09b1307da53f7e216cc6dac514bf003b680a92aabf9f0c6910e"
+ },
+ "audio/en/en_00047.A.full.clean.webm": {
+  "bytes": 171296,
+  "duration_s": 41.78,
+  "sha256": "c814b1cc1e9a9209435e5ff50d1495d0929c377f53ad7509df8861bd1d0b47d0"
+ },
+ "audio/en/en_00027.A.full.clean.webm": {
+  "bytes": 187059,
+  "duration_s": 45.7,
+  "sha256": "17d86457384da1d5c7a0bbf86af6e80631c81c5b0ba79d4d5588d14b7bd8f42e"
+ },
+ "audio/en/en_00031.A.full.clean.webm": {
+  "bytes": 181662,
+  "duration_s": 44.56,
+  "sha256": "1ca325946b5e795eb91e9a220ca5c2a22f2d5f191d9c461d8e043072de533507"
+ },
+ "audio/en/en_00025.A.full.clean.webm": {
+  "bytes": 189760,
+  "duration_s": 46.15,
+  "sha256": "90a7a8d8daccfd254b33d76a1ab12f72c49cfc68a036e38820d785709aeb455a"
+ },
+ "audio/en/en_00032.A.full.clean.webm": {
+  "bytes": 190115,
+  "duration_s": 46.48,
+  "sha256": "ef4b9d732e57ef498d0f5a53ee4ff0787aa41d2046e137a183d31b992e1c0630"
+ },
+ "audio/en/en_00011.A.full.clean.webm": {
+  "bytes": 174652,
+  "duration_s": 43.15,
+  "sha256": "6d752725692f83461b4fdc0438be41ec1c813d151de78cbc5a8093a4c3979c97"
+ },
+ "audio/en/en_00046.A.full.clean.webm": {
+  "bytes": 181120,
+  "duration_s": 44.65,
+  "sha256": "100a7df2ac44800596566f649af33c23a7edef9f90b36ab0f4a4443070383be2"
+ },
+ "audio/en/en_00042.A.full.clean.webm": {
+  "bytes": 194166,
+  "duration_s": 47.18,
+  "sha256": "7c63f7a08e92ac7787eeee98083474950ef5f8c0d351d9962715e0b5b9f049f5"
+ },
+ "audio/en/en_00044.A.full.clean.webm": {
+  "bytes": 206884,
+  "duration_s": 50.4,
+  "sha256": "3e775d49b2dbf3bfefdd05f177fda3bbef3a54c21cf5c5b14717eab7f8173efd"
+ },
+ "audio/en/en_00018.A.full.clean.webm": {
+  "bytes": 188228,
+  "duration_s": 46,
+  "sha256": "8abd4800b23cce8a6da8790d8748239bfcd0fef3fd6ae2bd370cf7e4845c889d"
+ },
+ "audio/en/en_00009.A.full.clean.webm": {
+  "bytes": 158999,
+  "duration_s": 38.65,
+  "sha256": "35b773fb4faba3fa371e8ec04b48f40a27b7c6c56874546ab10ef5dcb2b21262"
+ },
+ "audio/en/en_00006.A.full.clean.webm": {
+  "bytes": 193029,
+  "duration_s": 46.69,
+  "sha256": "62e777e2c580f66d8bdce4bc257c2ea136168413d3333ba2a23ccc97b4fb30d3"
+ },
+ "audio/en/en_00017.A.full.clean.webm": {
+  "bytes": 156598,
+  "duration_s": 37.89,
+  "sha256": "317e4b39d725a4094d077d2e98b6808b3d4466301a546b290eb6b29cc078bca0"
+ },
+ "audio/en/en_00037.A.full.clean.webm": {
+  "bytes": 161255,
+  "duration_s": 39.59,
+  "sha256": "7db70209990ef368acf9c9351afef3ff1d2a3c0ea5c9d7fed05f9771f48f9e2b"
+ },
+ "audio/en/en_00043.A.full.clean.webm": {
+  "bytes": 182669,
+  "duration_s": 44.37,
+  "sha256": "e3eb873872ae6f577e87aad958988e503fce0ca5a1411ebb02b04ac44ca492f1"
+ },
+ "audio/en/en_00028.A.full.clean.webm": {
+  "bytes": 187520,
+  "duration_s": 45.76,
+  "sha256": "039cdd28a319c6922a36b29c701e7e1bd97db3c563b21f2286e3ed3cbcf531f3"
+ },
+ "audio/en/en_00020.A.full.clean.webm": {
+  "bytes": 170616,
+  "duration_s": 41.64,
+  "sha256": "fe7172ddf1b0bed092f2876c34c9402362d8a9fea4779f9a78f9011fb8d8d8c0"
+ },
+ "audio/en_GB/en_GB_00048.A.full.clean.webm": {
+  "bytes": 210084,
+  "duration_s": 48.92,
+  "sha256": "6a9660be23e1b1ab1ac9f6da743a29d689fbd7efe2d12de769cb3b128960b5d3"
+ },
+ "audio/en_GB/en_GB_00045.A.full.clean.webm": {
+  "bytes": 211412,
+  "duration_s": 49.22,
+  "sha256": "bdd27c7ac8a1e79cce7a2a19c1d6f1effecd32b24fd0e826084908d4f91a557c"
+ },
+ "audio/en_GB/en_GB_00040.A.full.clean.webm": {
+  "bytes": 242676,
+  "duration_s": 56.46,
+  "sha256": "293cc64dc465d7d69aa9dd507b06981b9cd88864353fa812624606ed4ec9132c"
+ },
+ "audio/en_GB/en_GB_00034.A.full.clean.webm": {
+  "bytes": 237067,
+  "duration_s": 55.25,
+  "sha256": "faf60ff9ff0df49a5fb4ba253a21166eaeb8e799e7d21d996d8fd71da637ec87"
+ },
+ "audio/en_GB/en_GB_00009.A.full.clean.webm": {
+  "bytes": 180795,
+  "duration_s": 42.16,
+  "sha256": "eb596c6854c9bca31298fa818fae9d5fcbf86ba1ae7b6cf0527db28bb057d04c"
+ },
+ "audio/en_GB/en_GB_00008.A.full.clean.webm": {
+  "bytes": 183697,
+  "duration_s": 42.73,
+  "sha256": "8d21317e218e68e9ab75696aff839553fca3d3e64a4781fd6a3eb3e362407079"
+ },
+ "audio/en_GB/en_GB_00032.A.full.clean.webm": {
+  "bytes": 234515,
+  "duration_s": 54.62,
+  "sha256": "2dd0b3546e4a6a3d84e64be2a568938680a62110cda8f5f512d1bbaca2dc41f9"
+ },
+ "audio/en_GB/en_GB_00013.A.full.clean.webm": {
+  "bytes": 174001,
+  "duration_s": 40.49,
+  "sha256": "b191c89ed7a800d8f0c53b01e581fd0e8af7a769613e849f058ca766464e2bc0"
+ },
+ "audio/en_GB/en_GB_00050.A.full.clean.webm": {
+  "bytes": 237501,
+  "duration_s": 55.29,
+  "sha256": "341f82bd7bdfb9ec0698a012f0cafe9ee69084c4bc4f37beec6dc9193cd616f6"
+ },
+ "audio/en_GB/en_GB_00014.A.full.clean.webm": {
+  "bytes": 176525,
+  "duration_s": 41.17,
+  "sha256": "2558de0948e606881b19b75ac38fc14f6e5d60fc36909bc86a86630589f34e00"
+ },
+ "audio/en_GB/en_GB_00004.A.full.clean.webm": {
+  "bytes": 198979,
+  "duration_s": 46.31,
+  "sha256": "1fb6b8567f00b24bedde46cb8cee996b5e2875ce7f7000be8602362cef7c7c8c"
+ },
+ "audio/en_GB/en_GB_00033.A.full.clean.webm": {
+  "bytes": 201545,
+  "duration_s": 46.84,
+  "sha256": "1ed2e26881176e2f498b887cce20ef53320b3f1c3c03fc0b09a2870b2f821e3d"
+ },
+ "audio/en_GB/en_GB_00017.A.full.clean.webm": {
+  "bytes": 242791,
+  "duration_s": 56.43,
+  "sha256": "ffaa96cbc3e9becea6e76283ad589346382e3b40da9f4223a6573574e1f06517"
+ },
+ "audio/en_GB/en_GB_00002.A.full.clean.webm": {
+  "bytes": 204680,
+  "duration_s": 47.67,
+  "sha256": "d2995ce06b8afe059ccf1c140500368cd1adbe47ba9ad17a6c97d1c99147e5c8"
+ },
+ "audio/en_GB/en_GB_00046.A.full.clean.webm": {
+  "bytes": 221084,
+  "duration_s": 51.44,
+  "sha256": "359c6364c92ea0b57d5b2c84ecc8f363cd1d041d26e94bf2afa9adc306856e53"
+ },
+ "audio/en_GB/en_GB_00041.A.full.clean.webm": {
+  "bytes": 251565,
+  "duration_s": 58.45,
+  "sha256": "00c19652a7295c290b62ec92ccbad96d903cd97486c0b46b911100cc8bcdbb62"
+ },
+ "audio/en_GB/en_GB_00003.A.full.clean.webm": {
+  "bytes": 194273,
+  "duration_s": 45.17,
+  "sha256": "a623969d0f61e846a84bf083c478d395cd4659b1ed3755773b72ab117d438bd6"
+ },
+ "audio/en_GB/en_GB_00039.A.full.clean.webm": {
+  "bytes": 223027,
+  "duration_s": 51.86,
+  "sha256": "ac1dc3fd3401b9076eea9170afc9f63bda2abeb2ff5507a260e584b37c68a708"
+ },
+ "audio/en_GB/en_GB_00006.A.full.clean.webm": {
+  "bytes": 206851,
+  "duration_s": 48.34,
+  "sha256": "8278a62f17441e63dfa5b0d4a595867668a5a6acfff2b71ad2955e92cab70c76"
+ },
+ "audio/en_GB/en_GB_00043.A.full.clean.webm": {
+  "bytes": 271026,
+  "duration_s": 63.07,
+  "sha256": "337ae6022cbab5cabc6a31a57d5168a13743c4e6e6c92ad4d2b6139bdf0068a7"
+ },
+ "audio/en_GB/en_GB_00030.A.full.clean.webm": {
+  "bytes": 245817,
+  "duration_s": 57.28,
+  "sha256": "31a076baa0e7986d48580ca45121794ee1ebf5a742feb56c0eab1ba31ef31774"
+ },
+ "audio/en_GB/en_GB_00019.A.full.clean.webm": {
+  "bytes": 245045,
+  "duration_s": 57.12,
+  "sha256": "31bae6b9d93e482f2e29221be3198ff05bc9b654f16104797836d29385c217fa"
+ },
+ "audio/en_GB/en_GB_00038.A.full.clean.webm": {
+  "bytes": 234080,
+  "duration_s": 54.62,
+  "sha256": "0d7bda1ae126b666ab64b35466664da77e228ff7875e77285db52270e51d746f"
+ },
+ "audio/en_GB/en_GB_00031.A.full.clean.webm": {
+  "bytes": 203832,
+  "duration_s": 47.48,
+  "sha256": "5da1e5596cf6bb7f12234720c89c595806753f5653c645ac877df075d11d5823"
+ },
+ "audio/en_GB/en_GB_00020.A.full.clean.webm": {
+  "bytes": 211670,
+  "duration_s": 49.35,
+  "sha256": "95bdc4e635df6388a99d939f7740e9d8a35245629dfc203adb6b0d8b9a6cad8a"
+ },
+ "audio/en_GB/en_GB_00005.A.full.clean.webm": {
+  "bytes": 177585,
+  "duration_s": 41.4,
+  "sha256": "9c7af4eec2bfe1bc526f1ed7075cddac2e54d4b18479b7dcfbbf84510f10aed8"
+ },
+ "audio/en_GB/en_GB_00018.A.full.clean.webm": {
+  "bytes": 192553,
+  "duration_s": 44.94,
+  "sha256": "ab78b46760317126e11348426dcdca798ae228516c78634db934800f67d6d55d"
+ },
+ "audio/en_GB/en_GB_00047.A.full.clean.webm": {
+  "bytes": 211641,
+  "duration_s": 49.19,
+  "sha256": "85f488b3b8bbba384e2fe1bd3b9a53472747548245703d1315d0e38402746cd0"
+ },
+ "audio/en_GB/en_GB_00001.A.full.clean.webm": {
+  "bytes": 219596,
+  "duration_s": 51.06,
+  "sha256": "36f0b560d456d09827a626c71602eb600f9f24a635b6316e516a1d8768f9ef0e"
+ },
+ "audio/en_GB/en_GB_00026.A.full.clean.webm": {
+  "bytes": 230604,
+  "duration_s": 53.76,
+  "sha256": "dda60f62b4474998c29ee0468c1609738fe2840b00784d14aeed2815e0ba2740"
+ },
+ "audio/en_GB/en_GB_00035.A.full.clean.webm": {
+  "bytes": 209299,
+  "duration_s": 48.91,
+  "sha256": "c8d9c097c25b6b1cd30a281f5b973008b8d3a1f6ae107ae7324795b1ce9aa983"
+ },
+ "audio/en_GB/en_GB_00011.A.full.clean.webm": {
+  "bytes": 184924,
+  "duration_s": 43.09,
+  "sha256": "5991c0e7e522c3fe930219dfc59675df87280d4111bd1bc2bf7bdbfbff1b52ae"
+ },
+ "audio/en_GB/en_GB_00012.A.full.clean.webm": {
+  "bytes": 210422,
+  "duration_s": 48.96,
+  "sha256": "f0533f99227a2d4c6e9ae9394fce09dcd45def8dd37d432c33226c82609c7ae5"
+ },
+ "audio/en_GB/en_GB_00037.A.full.clean.webm": {
+  "bytes": 218006,
+  "duration_s": 50.74,
+  "sha256": "f67e202b1eb521258eb83b802a038d4f01cc1cd5f9a6031d03f4dbb1fe2ee16d"
+ },
+ "audio/es/es_00028.A.full.clean.webm": {
+  "bytes": 257549,
+  "duration_s": 60.46,
+  "sha256": "cc206e0ff04d0f7d74ed2bf0313d6fb88fcebe0ec25bf7364192d491b83b211d"
+ },
+ "audio/es/es_00020.A.full.clean.webm": {
+  "bytes": 240926,
+  "duration_s": 56.62,
+  "sha256": "cc709a91eb3836a6fc63f354c6f169f804ac58dd81ea5d74e8a74bbaca51b08c"
+ },
+ "audio/es/es_00035.A.full.clean.webm": {
+  "bytes": 231873,
+  "duration_s": 54.59,
+  "sha256": "6b069f41eda939314272c3caf1223bb4cefc4dd1527e7fa54a3a10a7cade4664"
+ },
+ "audio/es/es_00050.A.full.clean.webm": {
+  "bytes": 248103,
+  "duration_s": 58.56,
+  "sha256": "790ba459bf3ab9776917cd8f2508c78525526fcd6f8ce9e1628e824718b2b91e"
+ },
+ "audio/es/es_00047.A.full.clean.webm": {
+  "bytes": 251298,
+  "duration_s": 58.87,
+  "sha256": "8e779defd6bbd7721b7d7f3f6f59686117f0076e61a6bbefaa9ae193a2bfa9f2"
+ },
+ "audio/es/es_00005.A.full.clean.webm": {
+  "bytes": 206591,
+  "duration_s": 48.26,
+  "sha256": "38476f625c6155f92bcbba82529f5f6051b24cb9bfd8154ce7e9fa364e3f1245"
+ },
+ "audio/es/es_00031.A.full.clean.webm": {
+  "bytes": 212585,
+  "duration_s": 50.01,
+  "sha256": "98d5cb7adfc2145f5ce6e68a1fdf08ba05ed0cd9c259246d4b57f4941c78f724"
+ },
+ "audio/es/es_00015.A.full.clean.webm": {
+  "bytes": 230753,
+  "duration_s": 54.01,
+  "sha256": "c1aa4f1dd047977c6b082ba63895ee9b97093459ecff2e57ce583b20875873e5"
+ },
+ "audio/es/es_00036.A.full.clean.webm": {
+  "bytes": 220993,
+  "duration_s": 52,
+  "sha256": "e1a8a24f34aea3ea2e35db7d4b3f0973bd6a82c6d60b98bdfd5712c027144ee8"
+ },
+ "audio/es/es_00006.A.full.clean.webm": {
+  "bytes": 213749,
+  "duration_s": 50.06,
+  "sha256": "7964119ff76ae2ba7e6c41a30613489ea2dd81f5a0e2e1b78c978e73bc936655"
+ },
+ "audio/es/es_00041.A.full.clean.webm": {
+  "bytes": 252609,
+  "duration_s": 59.31,
+  "sha256": "9d95719b1913be0787bc578968aae2ac564c3d3f2c29e13f87c06d20362ac088"
+ },
+ "audio/es/es_00013.A.full.clean.webm": {
+  "bytes": 223667,
+  "duration_s": 52.87,
+  "sha256": "942dd4b101d61e07d95a6ac5806833a39ebf395360ac29376f28d5a0cf9315ad"
+ },
+ "audio/es/es_00016.A.full.clean.webm": {
+  "bytes": 255745,
+  "duration_s": 59.99,
+  "sha256": "1a80ff9ae83050539bcf8c33883a55a2a257f07a375d3e982d899285c00e220a"
+ },
+ "audio/es/es_00021.A.full.clean.webm": {
+  "bytes": 229941,
+  "duration_s": 53.7,
+  "sha256": "44e628b3627282a5a7d2097b2ad2a9b468795e3a520acc65025ed5cd1ced8d69"
+ },
+ "audio/es/es_00019.A.full.clean.webm": {
+  "bytes": 243727,
+  "duration_s": 57.43,
+  "sha256": "5e8cac3e58184964970fff1122737996a3ab0b118e80aecc2c5bbf276b203872"
+ },
+ "audio/es/es_00004.A.full.clean.webm": {
+  "bytes": 218091,
+  "duration_s": 50.94,
+  "sha256": "1d19c8e8c17268adb47542aaa7ad5dbc6ac6551b404c1d163ca5beaf2b338b7e"
+ },
+ "audio/es/es_00033.A.full.clean.webm": {
+  "bytes": 230297,
+  "duration_s": 53.98,
+  "sha256": "26f197341164549e5d4f6af6f0eac258df1e708098d005494ebc1478596928a9"
+ },
+ "audio/es/es_00048.A.full.clean.webm": {
+  "bytes": 244873,
+  "duration_s": 57.23,
+  "sha256": "1ef46708dc86af90f488e6fbb2e71d4eb05ca27f338c80a51ce41db1292e6d82"
+ },
+ "audio/es/es_00039.A.full.clean.webm": {
+  "bytes": 222983,
+  "duration_s": 52.33,
+  "sha256": "326cdb3dfc61e08578ec0dd4b4a8f15768b9d9ec6677477826938f5c58420c50"
+ },
+ "audio/es/es_00012.A.full.clean.webm": {
+  "bytes": 240941,
+  "duration_s": 56.39,
+  "sha256": "f4cd8079925c3d61d3d971bb056ecda8b403eba2b9bf3b48be176a83b2b80067"
+ },
+ "audio/es/es_00024.A.full.clean.webm": {
+  "bytes": 225402,
+  "duration_s": 52.79,
+  "sha256": "eefa078321000fe84a4f8643aecc8c287f7bf132721da78fce92be61ac85e1e4"
+ },
+ "audio/es/es_00023.A.full.clean.webm": {
+  "bytes": 218029,
+  "duration_s": 51.01,
+  "sha256": "3cc36dc2c241e5ca897c24d64057b08db8afebd231bf9db56a8062ca21467169"
+ },
+ "audio/es/es_00001.A.full.clean.webm": {
+  "bytes": 217007,
+  "duration_s": 50.98,
+  "sha256": "a7233c6077ba8e321666f685ac7014c29c272dc5fd1d8dc3d0bb6a33f151a7d6"
+ },
+ "audio/es/es_00037.A.full.clean.webm": {
+  "bytes": 236715,
+  "duration_s": 55.45,
+  "sha256": "fb4442f37bfa72d3341610d07834cd9bb74a738ba5c521d0f03f84ee2c1308ff"
+ },
+ "audio/es/es_00045.A.full.clean.webm": {
+  "bytes": 249456,
+  "duration_s": 58.53,
+  "sha256": "b82b76429b63d6502aa2f329248b267bee1d167b09adf4956a2c6eec1e9e1356"
+ },
+ "audio/es/es_00042.A.full.clean.webm": {
+  "bytes": 234076,
+  "duration_s": 54.78,
+  "sha256": "d2dee115f3e7422fc848d6d26f40e1fe71e77b4474f8903076442da5cabe2f3b"
+ },
+ "audio/es/es_00003.A.full.clean.webm": {
+  "bytes": 222478,
+  "duration_s": 52.24,
+  "sha256": "b2e126871fdc1d2ae01c4697556b130e9fae6212854eb33fd1f60435267a4fd0"
+ },
+ "audio/es/es_00002.A.full.clean.webm": {
+  "bytes": 205373,
+  "duration_s": 48.12,
+  "sha256": "d97a88f313423b9693715cc69bcbf91e97bbde68e9eaea5863f3592719f278cb"
+ },
+ "audio/es/es_00030.A.full.clean.webm": {
+  "bytes": 243512,
+  "duration_s": 57.21,
+  "sha256": "a7467279a388cb2f2070481b1662bed8cd2972ce9858323aa79d3546c02b68f6"
+ },
+ "audio/es/es_00029.A.full.clean.webm": {
+  "bytes": 266155,
+  "duration_s": 62.03,
+  "sha256": "16b43c9c62af4a7c8c6cbbca208b1ca7a5f024b81eea206eebbdd4884256514e"
+ },
+ "audio/es/es_00008.A.full.clean.webm": {
+  "bytes": 220105,
+  "duration_s": 51.45,
+  "sha256": "b2c36e6b7c1333e61fbf8e98368e8d586f72d562db9747f95fdeb706d586ac72"
+ },
+ "audio/es/es_00032.A.full.clean.webm": {
+  "bytes": 218933,
+  "duration_s": 51.52,
+  "sha256": "02ec32627fd96dc5be4efc0152f9f0ad5173795ca6fe88ec3e012cdaca0b415c"
+ },
+ "audio/es/es_00010.A.full.clean.webm": {
+  "bytes": 214424,
+  "duration_s": 50.3,
+  "sha256": "569dd570e75c418e3218b99fd88f98baa2199a031a864f674f7075fb53f44802"
+ },
+ "audio/es/es_00034.A.full.clean.webm": {
+  "bytes": 215501,
+  "duration_s": 50.62,
+  "sha256": "e9a2ad1f3c73c9ae2dbe631dc5eab9279ad092e6fea508be61d19528568e6966"
+ },
+ "audio/pt/pt_00017.A.full.clean.webm": {
+  "bytes": 210359,
+  "duration_s": 48.93,
+  "sha256": "01186f87f7c651fff08378a308a92e9540d3b8d2f34d1472cfe9b853b016fd95"
+ },
+ "audio/pt/pt_00040.A.full.clean.webm": {
+  "bytes": 199089,
+  "duration_s": 46.29,
+  "sha256": "c82bcf45048ee84d11c88299ad5e67ec0c730f5bd6b53a6631097ff08e88a33d"
+ },
+ "audio/pt/pt_00032.A.full.clean.webm": {
+  "bytes": 186105,
+  "duration_s": 43.39,
+  "sha256": "bdc656045709a04faec75d33940073296204a4e4b183409bb9e205f6fa1cc318"
+ },
+ "audio/pt/pt_00012.A.full.clean.webm": {
+  "bytes": 170550,
+  "duration_s": 39.69,
+  "sha256": "0ca1f01d29c30968b09eb724aa00679dcf11e8747f56cd36b1fc0df8a26d141c"
+ },
+ "audio/pt/pt_00033.A.full.clean.webm": {
+  "bytes": 178311,
+  "duration_s": 41.6,
+  "sha256": "5a23822b257f9b1da8f6900a1a209a44b6767f73033e0019d3f109858b2b7b53"
+ },
+ "audio/pt/pt_00025.A.full.clean.webm": {
+  "bytes": 234853,
+  "duration_s": 54.81,
+  "sha256": "6444499e588c692a508e20c76c532df89e918d25a31120e20011b0f176869f56"
+ },
+ "audio/pt/pt_00034.A.full.clean.webm": {
+  "bytes": 222493,
+  "duration_s": 51.94,
+  "sha256": "296c5af50e9a59712e65c201fb1caea0cc4a9eab7a2f70b408e1e1ab2e98fd40"
+ },
+ "audio/pt/pt_00014.A.full.clean.webm": {
+  "bytes": 182353,
+  "duration_s": 42.48,
+  "sha256": "bc3fd23638af1a4388fed800f276ca4fa455c0391a40d6c98a5669e9923d4e1f"
+ },
+ "audio/pt/pt_00042.A.full.clean.webm": {
+  "bytes": 209909,
+  "duration_s": 49.1,
+  "sha256": "8e05ee2ff147892735c31a616e3b02d31ab5ade70c1b3fb02a0f611c77418aa5"
+ },
+ "audio/pt/pt_00026.A.full.clean.webm": {
+  "bytes": 205351,
+  "duration_s": 47.91,
+  "sha256": "1617c88bcbd650f42bc5e4075ebdb7f60af94b48bfb984b5f5d5c70f6e207ace"
+ },
+ "audio/pt/pt_00035.A.full.clean.webm": {
+  "bytes": 195873,
+  "duration_s": 45.61,
+  "sha256": "4d4d890927ed15684492278a93ac4153ae69439e8679a57b8c199cf4e6cdb9ea"
+ },
+ "audio/pt/pt_00049.A.full.clean.webm": {
+  "bytes": 217012,
+  "duration_s": 50.73,
+  "sha256": "2e7f8a97fd3b0ad7fc5c15e41abe85d56657244a3a43d63693743c7c880e43bb"
+ },
+ "audio/pt/pt_00043.A.full.clean.webm": {
+  "bytes": 197233,
+  "duration_s": 45.97,
+  "sha256": "7a9d1040910766d46eef81cd828cf4c2d921004ccd6469de5b289d8d7f346efd"
+ },
+ "audio/pt/pt_00007.A.full.clean.webm": {
+  "bytes": 196654,
+  "duration_s": 45.86,
+  "sha256": "bdb441507caa37fd9072ed010c6cda2696d32aca51ea8cdcaaa66fe38c76a4d0"
+ },
+ "audio/pt/pt_00046.A.full.clean.webm": {
+  "bytes": 221479,
+  "duration_s": 51.57,
+  "sha256": "b0cfe54b517bcadea36de4ba518c6c243979ff01fde1a4ce0096da80473502b7"
+ },
+ "audio/pt/pt_00008.A.full.clean.webm": {
+  "bytes": 200137,
+  "duration_s": 46.73,
+  "sha256": "c1b3645862540a9b452bf3c05e89dedcd85d99b4a32f98121371b52ca4a77f9a"
+ },
+ "audio/pt/pt_00015.A.full.clean.webm": {
+  "bytes": 182814,
+  "duration_s": 42.63,
+  "sha256": "c266920bf6ac899cc61606e5c62338230d8da951019dcea740be600c4256185f"
+ },
+ "audio/pt/pt_00029.A.full.clean.webm": {
+  "bytes": 240532,
+  "duration_s": 56.03,
+  "sha256": "d86cb01776e183714bd7b4e8e7acf5c614d70dc84c4373ba96a3ae5213443891"
+ },
+ "audio/pt/pt_00047.A.full.clean.webm": {
+  "bytes": 217160,
+  "duration_s": 50.63,
+  "sha256": "8d4dbed5e9b43b06e38831f796051af48648116a41549ebb6c273eff362effd7"
+ },
+ "audio/pt/pt_00045.A.full.clean.webm": {
+  "bytes": 241377,
+  "duration_s": 56.3,
+  "sha256": "68936e7829cf318c4441fbbca51bf08661066fc83c1ff9249e414b120b28058b"
+ },
+ "audio/pt/pt_00044.A.full.clean.webm": {
+  "bytes": 214955,
+  "duration_s": 50.09,
+  "sha256": "1407bb236566cc1137ba9ff14a17e68ac5394030cbdf95cc2a774255ba45da4a"
+ },
+ "audio/pt/pt_00001.A.full.clean.webm": {
+  "bytes": 239625,
+  "duration_s": 55.9,
+  "sha256": "a17372e91b5db6c5aafa25bcef0658ab9e36b2a449d1ba85c2a98b1dc12a7afe"
+ },
+ "audio/pt/pt_00028.A.full.clean.webm": {
+  "bytes": 216558,
+  "duration_s": 50.42,
+  "sha256": "1f2dd6a82d3bb4b63e1dbcaaef5e8e98aa5d3df10d841e4ac70390dad9debeb7"
+ },
+ "audio/pt/pt_00011.A.full.clean.webm": {
+  "bytes": 187047,
+  "duration_s": 43.62,
+  "sha256": "608aa41b15efd97f1bbe90253aeb82875f55e35dc364bd1a1f42f5e8e7c35c2c"
+ },
+ "audio/pt/pt_00002.A.full.clean.webm": {
+  "bytes": 178394,
+  "duration_s": 41.65,
+  "sha256": "7322785def7b0386ca4ccdb2976f5cc6e9445b0257d9264853a63ab9efa8841d"
+ },
+ "audio/pt/pt_00004.A.full.clean.webm": {
+  "bytes": 206569,
+  "duration_s": 48.26,
+  "sha256": "bd4f986196d3d3b4d2ac2fd22a7595df2c130639dbce3c04ac73cc71704d3447"
+ },
+ "audio/pt/pt_00013.A.full.clean.webm": {
+  "bytes": 169873,
+  "duration_s": 39.55,
+  "sha256": "b0238c3ca56a0adf8995950222ff6426ff81f938151f8d1478b349ede64575b0"
+ },
+ "audio/pt/pt_00036.A.full.clean.webm": {
+  "bytes": 217593,
+  "duration_s": 50.74,
+  "sha256": "4fd8ad31f64bdf5ef03c5f12dada8d9380233eee3ffff2dfec9627300f865519"
+ },
+ "audio/pt/pt_00050.A.full.clean.webm": {
+  "bytes": 230858,
+  "duration_s": 53.84,
+  "sha256": "0feb40f8ce62cb9ee8b265e1769bec7df8fe5b1b8f83594f31f848e66664dcba"
+ },
+ "audio/pt/pt_00010.A.full.clean.webm": {
+  "bytes": 203134,
+  "duration_s": 47.3,
+  "sha256": "700e0ea8a29cb90ac8f60680c1d54362e2c2bef3a8f0812852ddc993af466517"
+ },
+ "audio/pt/pt_00005.A.full.clean.webm": {
+  "bytes": 195589,
+  "duration_s": 45.6,
+  "sha256": "83c6d57b8a9f3d01fe76f6c760242b68594885754348a6313f9ea8fced6e7a8f"
+ },
+ "audio/pt/pt_00037.A.full.clean.webm": {
+  "bytes": 194820,
+  "duration_s": 45.54,
+  "sha256": "601b2c871fa789d1192df3e648998f6c77f6e25a21102c5194c500cd26da2474"
+ },
+ "audio/pt/pt_00041.A.full.clean.webm": {
+  "bytes": 212577,
+  "duration_s": 49.57,
+  "sha256": "7efe3548eecc48820e6577b8c88308a17ecd05a08eadec131f3714b856b6bb0c"
+ },
+ "audio/pt/pt_00030.A.full.clean.webm": {
+  "bytes": 232404,
+  "duration_s": 54.16,
+  "sha256": "f5a2701197cbf8d58478321adc283eb19d956cf645351699cc6181572a75f5ca"
+ },
+ "audio/de/de_00046.A.full.clean.webm": {
+  "bytes": 238174,
+  "duration_s": 55.37,
+  "sha256": "d6df64a29c7b585cfdad5e49ad9608a05c32b9f82aaafc0350fc070bafda6537"
+ },
+ "audio/de/de_00014.A.full.clean.webm": {
+  "bytes": 235039,
+  "duration_s": 54.73,
+  "sha256": "fb80b13c07a0d89586edf847af974869d991dc6a9a7c962f7229f42fa59f4ebe"
+ },
+ "audio/de/de_00029.A.full.clean.webm": {
+  "bytes": 236988,
+  "duration_s": 55.21,
+  "sha256": "752ad8611e627b90e8b44e7b0e0d475484a155b391dbbc56ac94a8feef28aaeb"
+ },
+ "audio/de/de_00027.A.full.clean.webm": {
+  "bytes": 231522,
+  "duration_s": 53.85,
+  "sha256": "c86a890da2b8fe9f95e7e586d26a0ff7b146a202a7f658c92dd583b7489ac203"
+ },
+ "audio/de/de_00040.A.full.clean.webm": {
+  "bytes": 212540,
+  "duration_s": 49.46,
+  "sha256": "7e5d38743d358fa34a0550ac48f68add97f3f8345577e35ab09653e297c9bfbe"
+ },
+ "audio/de/de_00034.A.full.clean.webm": {
+  "bytes": 241462,
+  "duration_s": 56.12,
+  "sha256": "92cd96f0a78f625591f4188b0e0ed4d1719f8846a1b4d3b6ae1bc473a25562b1"
+ },
+ "audio/de/de_00041.A.full.clean.webm": {
+  "bytes": 217544,
+  "duration_s": 50.6,
+  "sha256": "18fbe3cb0e61f47dfc09e069f1a68d1bc9e1aa389d395d4e0c84b2457bff80c3"
+ },
+ "audio/de/de_00008.A.full.clean.webm": {
+  "bytes": 211647,
+  "duration_s": 49.27,
+  "sha256": "6449dd823fa10e75f76cc6b45fc5371fe68ccd5275cfab4aeaa782f37f30cd9c"
+ },
+ "audio/de/de_00023.A.full.clean.webm": {
+  "bytes": 205830,
+  "duration_s": 47.85,
+  "sha256": "ee29fdfc527e7dd353165f526248b4d710e2b98b3d34da8ecc02b9ffe76ec1f2"
+ },
+ "audio/de/de_00019.A.full.clean.webm": {
+  "bytes": 206058,
+  "duration_s": 47.93,
+  "sha256": "a7f6b8852b00badaf958fcfb4aa8060423e7a80a010632a7a3b882eb2c949c4d"
+ },
+ "audio/de/de_00048.A.full.clean.webm": {
+  "bytes": 192344,
+  "duration_s": 44.78,
+  "sha256": "550afed517e9771393061b66a46cc35ecd431d0560ca79eee7cd4ae7ac51954a"
+ },
+ "audio/de/de_00001.A.full.clean.webm": {
+  "bytes": 249680,
+  "duration_s": 58.06,
+  "sha256": "7987b45d95d972dd83be99d32fbcf7c83ddea2fb246219cfa246358b90cca9ae"
+ },
+ "audio/de/de_00044.A.full.clean.webm": {
+  "bytes": 214086,
+  "duration_s": 49.77,
+  "sha256": "4ab070c5bb202d072f1389ea8d905f8cba96aa103ace1248469a883018bda007"
+ },
+ "audio/de/de_00003.A.full.clean.webm": {
+  "bytes": 311724,
+  "duration_s": 72.55,
+  "sha256": "62d700f502c6f4866a8ef6ac38dfeb3980a13ecce35097fe63f45b70526480b6"
+ },
+ "audio/de/de_00022.A.full.clean.webm": {
+  "bytes": 239182,
+  "duration_s": 55.67,
+  "sha256": "7dd3f909d9dd7fba74c2fece7a81d91d3e921a4d2e7933e3168e0820557e927d"
+ },
+ "audio/de/de_00036.A.full.clean.webm": {
+  "bytes": 237199,
+  "duration_s": 55.14,
+  "sha256": "4bd670a82e135cb701cad9e0a1e2a38444bf8362d751456eb8fd97926a469d2d"
+ },
+ "audio/de/de_00037.A.full.clean.webm": {
+  "bytes": 238058,
+  "duration_s": 55.45,
+  "sha256": "37a363bc52d34e41e57844f5c89d19a5481016a3a8e66b16aa36a9b71b038b8f"
+ },
+ "audio/de/de_00024.A.full.clean.webm": {
+  "bytes": 225619,
+  "duration_s": 52.42,
+  "sha256": "6314ac2fb10f5a4948bb58157eada07e2156308ed70dd4555b4ad88693d92b16"
+ },
+ "audio/de/de_00006.A.full.clean.webm": {
+  "bytes": 267432,
+  "duration_s": 62.22,
+  "sha256": "054f202e107fd2c89bc0e044b3ece81801479d69bd3651e37f8b3d989ebbfddb"
+ },
+ "audio/de/de_00039.A.full.clean.webm": {
+  "bytes": 222123,
+  "duration_s": 51.62,
+  "sha256": "387342eb44cc2eb3e2665dcd9e588f42450394c1a53ca26ea8dad997eabe8655"
+ },
+ "audio/de/de_00032.A.full.clean.webm": {
+  "bytes": 232291,
+  "duration_s": 54.02,
+  "sha256": "bb81e5094ab818d70da5fe7a1dcca11b0b92feb9507fe2a443d7a72f3eeab473"
+ },
+ "audio/de/de_00021.A.full.clean.webm": {
+  "bytes": 191381,
+  "duration_s": 44.54,
+  "sha256": "8b69d0823fc837ea1a85907254c257d2e3df819edfcfff202b4df48a41f555e8"
+ },
+ "audio/de/de_00025.A.full.clean.webm": {
+  "bytes": 213719,
+  "duration_s": 49.69,
+  "sha256": "a2a24ae0202523707562498003e228663192d2e8d5d29a5a6071fd7f13f0103f"
+ },
+ "audio/de/de_00050.A.full.clean.webm": {
+  "bytes": 184747,
+  "duration_s": 42.97,
+  "sha256": "62cafab2437599459008bc1944ede21bdd81ecf6dbd60e24ca7ce3660a556f09"
+ },
+ "audio/de/de_00002.A.full.clean.webm": {
+  "bytes": 291293,
+  "duration_s": 67.83,
+  "sha256": "cc86c6aa49a4db409298a0b461257f21b247fd5604a5901b0799604a40b14c59"
+ },
+ "audio/de/de_00043.A.full.clean.webm": {
+  "bytes": 210254,
+  "duration_s": 48.87,
+  "sha256": "a2448a83205f92d9e72a5848133567c43e856362cf03d4198b5f9c3e0bbf4448"
+ },
+ "audio/de/de_00012.A.full.clean.webm": {
+  "bytes": 240592,
+  "duration_s": 55.99,
+  "sha256": "551e4e9c5e49329db2325ae5af57a982de66a4b05c012c40d92f16e21c90b9ca"
+ },
+ "audio/de/de_00045.A.full.clean.webm": {
+  "bytes": 232517,
+  "duration_s": 54.01,
+  "sha256": "3eb971899872f19d713d0f42a1df09ac9465519452324c353b151ab82cf45315"
+ },
+ "audio/de/de_00026.A.full.clean.webm": {
+  "bytes": 213954,
+  "duration_s": 49.8,
+  "sha256": "83b2f1b8a18257f56e2368706a06603e3dd5ebc30af08b366ca8fe7718aaedc5"
+ },
+ "audio/de/de_00033.A.full.clean.webm": {
+  "bytes": 230983,
+  "duration_s": 53.7,
+  "sha256": "39c62dc74709de822be359124fa95bb46f54bfd5219e7d6e0eb813a4bd1c43a4"
+ },
+ "audio/de/de_00005.A.full.clean.webm": {
+  "bytes": 258581,
+  "duration_s": 60.26,
+  "sha256": "c4ccd0712879d219dad23768c950bb075c390792943dc70a122d2dd37cd9d147"
+ },
+ "audio/de/de_00042.A.full.clean.webm": {
+  "bytes": 227205,
+  "duration_s": 52.86,
+  "sha256": "a78fbcb0aa7e0dfb129aa2981b684b00fee388f94c04087fb40b98f8c7b5f3ad"
+ },
+ "audio/de/de_00009.A.full.clean.webm": {
+  "bytes": 197885,
+  "duration_s": 46.09,
+  "sha256": "83cd235c9489128bde1df78968cb871d165c40bf96e91fe4428325208a9202a8"
+ },
+ "audio/de/de_00011.A.full.clean.webm": {
+  "bytes": 212614,
+  "duration_s": 49.59,
+  "sha256": "c19468cfb971762e3ae1fdbe02f3f587d8a85fd2ee216bf75238621b6eabb05d"
+ }
+}

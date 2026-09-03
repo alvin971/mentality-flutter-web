@@ -74,3 +74,43 @@ les « traductions lues » (24) et les résumés (48 × sum30 20–27 mots + sum
    comme repli.
 5. Piper est ~10× temps réel sur cette machine (chargée par ailleurs, load > 80) :
    la synthèse tourne en arrière-plan, `OMP_NUM_THREADS=2` par processus.
+
+**Mesure — `@cf/openai/whisper`, vague 1 partielle (budget 59,4 min = 74 lectures
+intégrales voix A / opus webm, 12–13 par langue, 0 erreur modèle).** Cache
+`cache/whisper/app`, ledger `results/ledger.jsonl`, détail `results/whisper.app.json`.
+
+| langue | n | pire recouvrement | médiane | meilleur imposteur (max sur 33 « autres textes ») | ms / min d'audio (méd.) |
+|---|---|---|---|---|---|
+| fr | 12 | 0,694 | 0,800 | 0,200 | 7 068 |
+| en | 13 | 0,919 | 0,968 | 0,173 | 4 670 |
+| en_GB | 12 | 0,615 | 0,942 | 0,169 | 4 615 |
+| es | 12 | 0,783 | 0,886 | 0,240 | 4 257 |
+| pt | 12 | 0,610 | 0,747 | 0,179 | 5 712 |
+| de | 13 | 0,611 | 0,840 | 0,195 | 4 933 |
+
+- Positifs intégraux propres : **100 % `ok` jusqu'au seuil 0,60** (pire 0,610 pt,
+  médiane globale 0,863). Chute au-delà : 96 % à 0,65, 89 % à 0,70.
+- Négatifs dérivés « autre texte, même langue » (222 paires) : **100 % rejetés
+  dès 0,20** (99,1 % à 0,15, 88 % à 0,10) ; meilleur imposteur 0,296 (une paire
+  es). « Autre langue » (74 paires) : médiane 0,05, max ≈ 0,16.
+- **Marge** (pire positif propre − meilleur imposteur) = **0,31** au seuil 0,30
+  de production : le seuil actuel est dans la bonne zone, mais on ne sait encore
+  rien des lectures dégradées, partielles, ni des formats mp4/wav.
+- Signaux d'ordre : intégrales ordre (LIS) médian 1,00, couverture du dernier
+  tiers 0,88 ; « autre texte » ordre 0,60, couverture 0,04. Les règles §4.6
+  auront de quoi mordre si les mots mélangés / 25 % + silence passent le seuil.
+- **Coût** : 2,74 min d'audio par bilan (3 × 48,8 s + résumé estimé 20 s) →
+  **0,124 ¢/bilan** (whisper 0,000453 $/min), soit **88 bilans/jour dans
+  l'allocation gratuite**. Légèrement au-dessus des 0,1 ¢ du §1 hors allocation ;
+  dans l'allocation aux volumes du lancement — à trancher au FINAL.
+- **Latence** : 4,7 s par minute d'audio (méd.), p95 10,9 s, max 16 s par
+  fichier — très loin des 60 s de `ctx.waitUntil`. fr est le plus lent (7 s/min).
+- Le paramètre `language` n'a produit aucun repli (`fallback` 0), et comme vu
+  sur la sonde il ne change pas la sortie de ce modèle : la policy `none` ne
+  sera mesurée que sur turbo, où il compte.
+
+**Décision.** Whisper (production) tient §6 sur la seule tranche mesurée, sans
+aucun échec. Rien n'est concluant tant que dégradations, partielles et négatifs
+à audio ne sont pas mesurés. Prochain réveil : **turbo sur la vague 1** (même
+74 fichiers, forme base64) pour la comparaison à budget égal ; puis alternance
+sur les vagues 2–5 du meilleur. Vague 2 (371 audios) en cours de synthèse.

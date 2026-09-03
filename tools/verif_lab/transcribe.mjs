@@ -57,9 +57,12 @@ const DRY = has('--dry-run');
 const manifests = path.join(ICI, 'manifests');
 const index = JSON.parse(fs.readFileSync(path.join(manifests, 'audio_index.json'), 'utf8'));
 const texts = JSON.parse(fs.readFileSync(path.join(manifests, 'texts.json'), 'utf8')).texts;
+const texteIndex = new Map(texts.map((t) => [t.id, t.index]));
+/** Ordre d'équité : à vague égale, le texte n° 0 de chaque langue avant le n° 1, etc. — un budget partiel couvre toutes les langues. */
+const indexDe = (c) => texteIndex.get(c.textId) ?? 0;
 const cas = fs.readFileSync(path.join(manifests, 'cases.jsonl'), 'utf8').trim().split('\n').map(JSON.parse)
   .filter((c) => (!WAVES || WAVES.includes(c.wave)) && (!SETS || SETS.includes(c.set)) && (!LANGS || LANGS.includes(c.lang)) && (HOLDOUT || !c.holdout))
-  .sort((a, b) => a.wave - b.wave || a.lang.localeCompare(b.lang) || a.id.localeCompare(b.id));
+  .sort((a, b) => a.wave - b.wave || indexDe(a) - indexDe(b) || a.lang.localeCompare(b.lang) || a.id.localeCompare(b.id));
 const corpus = new Map();
 for (const lang of LANGUES) for (const l of fs.readFileSync(path.join(CORPUS, `${lang}.jsonl`), 'utf8').trim().split('\n')) { const o = JSON.parse(l); corpus.set(o.id, o.text); }
 const refs = new Map(texts.map((t) => [t.id, reference(corpus.get(t.id))]));

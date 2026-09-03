@@ -1,0 +1,1434 @@
+{
+ "model": "@cf/openai/whisper",
+ "policy": "app",
+ "holdout": false,
+ "day": "2026-09-03",
+ "seuil_prod": 0.3,
+ "min_summary": 15,
+ "couverture": {
+  "cas": 1805,
+  "mesures_directes": 74,
+  "derives": 296,
+  "non_couverts": 1731,
+  "erreurs_modele": 0,
+  "fallback_sans_language": 0
+ },
+ "seuil_retenu": 0.2,
+ "seuil_tient_negatifs": true,
+ "checklist_retenu": {
+  "seuil": 0.2,
+  "integrales_et_75": {
+   "global": 100,
+   "ok": true,
+   "par_langue_min": 100,
+   "par_format_min": 100
+  },
+  "p60": {
+   "global": null,
+   "ok": true
+  },
+  "negatifs": {
+   "global": 100,
+   "ok": true,
+   "silence": null,
+   "bruit": null,
+   "autre_texte": 100,
+   "cent_pour_cent": true
+  },
+  "resumes": {
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "ok": true
+  },
+  "marge": {
+   "pire_positif_integral_propre": 0.6104,
+   "pire_positif_integral_tous": 0.6104,
+   "meilleur_autre_texte": 0.2958,
+   "marge_propre": 0.3146,
+   "ok": true
+  },
+  "tout_ok": true
+ },
+ "checklist_prod": {
+  "seuil": 0.3,
+  "integrales_et_75": {
+   "global": 100,
+   "ok": true,
+   "par_langue_min": 100,
+   "par_format_min": 100
+  },
+  "p60": {
+   "global": null,
+   "ok": true
+  },
+  "negatifs": {
+   "global": 100,
+   "ok": true,
+   "silence": null,
+   "bruit": null,
+   "autre_texte": 100,
+   "cent_pour_cent": true
+  },
+  "resumes": {
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "ok": true
+  },
+  "marge": {
+   "pire_positif_integral_propre": 0.6104,
+   "pire_positif_integral_tous": 0.6104,
+   "meilleur_autre_texte": 0.2958,
+   "marge_propre": 0.3146,
+   "ok": true
+  },
+  "tout_ok": true
+ },
+ "courbe": [
+  {
+   "seuil": 0.05,
+   "integrales_et_75": 100,
+   "integrales_propres": 100,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": 58.78,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": 50.45,
+   "autre_texte_autre_langue": 83.78,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": 100,
+     "neg": 43.75
+    },
+    "en": {
+     "pos": 100,
+     "neg": 25
+    },
+    "en_GB": {
+     "pos": 100,
+     "neg": 58.33
+    },
+    "es": {
+     "pos": 100,
+     "neg": 89.58
+    },
+    "pt": {
+     "pos": 100,
+     "neg": 72.92
+    },
+    "de": {
+     "pos": 100,
+     "neg": 65.38
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": 100,
+     "neg": 58.78
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {
+    "full/clean": 100
+   }
+  },
+  {
+   "seuil": 0.1,
+   "integrales_et_75": 100,
+   "integrales_propres": 100,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": 90.88,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": 88.29,
+   "autre_texte_autre_langue": 98.65,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": 100,
+     "neg": 85.42
+    },
+    "en": {
+     "pos": 100,
+     "neg": 86.54
+    },
+    "en_GB": {
+     "pos": 100,
+     "neg": 87.5
+    },
+    "es": {
+     "pos": 100,
+     "neg": 97.92
+    },
+    "pt": {
+     "pos": 100,
+     "neg": 95.83
+    },
+    "de": {
+     "pos": 100,
+     "neg": 92.31
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": 100,
+     "neg": 90.88
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {
+    "full/clean": 100
+   }
+  },
+  {
+   "seuil": 0.15,
+   "integrales_et_75": 100,
+   "integrales_propres": 100,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": 99.32,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": 99.1,
+   "autre_texte_autre_langue": 100,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": 100,
+     "neg": 97.92
+    },
+    "en": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en_GB": {
+     "pos": 100,
+     "neg": 100
+    },
+    "es": {
+     "pos": 100,
+     "neg": 100
+    },
+    "pt": {
+     "pos": 100,
+     "neg": 97.92
+    },
+    "de": {
+     "pos": 100,
+     "neg": 100
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": 100,
+     "neg": 99.32
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {
+    "full/clean": 100
+   }
+  },
+  {
+   "seuil": 0.2,
+   "integrales_et_75": 100,
+   "integrales_propres": 100,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": 100,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": 100,
+   "autre_texte_autre_langue": 100,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en_GB": {
+     "pos": 100,
+     "neg": 100
+    },
+    "es": {
+     "pos": 100,
+     "neg": 100
+    },
+    "pt": {
+     "pos": 100,
+     "neg": 100
+    },
+    "de": {
+     "pos": 100,
+     "neg": 100
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": 100,
+     "neg": 100
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {
+    "full/clean": 100
+   }
+  },
+  {
+   "seuil": 0.25,
+   "integrales_et_75": 100,
+   "integrales_propres": 100,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": 100,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": 100,
+   "autre_texte_autre_langue": 100,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en_GB": {
+     "pos": 100,
+     "neg": 100
+    },
+    "es": {
+     "pos": 100,
+     "neg": 100
+    },
+    "pt": {
+     "pos": 100,
+     "neg": 100
+    },
+    "de": {
+     "pos": 100,
+     "neg": 100
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": 100,
+     "neg": 100
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {
+    "full/clean": 100
+   }
+  },
+  {
+   "seuil": 0.3,
+   "integrales_et_75": 100,
+   "integrales_propres": 100,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": 100,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": 100,
+   "autre_texte_autre_langue": 100,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en_GB": {
+     "pos": 100,
+     "neg": 100
+    },
+    "es": {
+     "pos": 100,
+     "neg": 100
+    },
+    "pt": {
+     "pos": 100,
+     "neg": 100
+    },
+    "de": {
+     "pos": 100,
+     "neg": 100
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": 100,
+     "neg": 100
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {
+    "full/clean": 100
+   }
+  },
+  {
+   "seuil": 0.35,
+   "integrales_et_75": 100,
+   "integrales_propres": 100,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": 100,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": 100,
+   "autre_texte_autre_langue": 100,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en_GB": {
+     "pos": 100,
+     "neg": 100
+    },
+    "es": {
+     "pos": 100,
+     "neg": 100
+    },
+    "pt": {
+     "pos": 100,
+     "neg": 100
+    },
+    "de": {
+     "pos": 100,
+     "neg": 100
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": 100,
+     "neg": 100
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {
+    "full/clean": 100
+   }
+  },
+  {
+   "seuil": 0.4,
+   "integrales_et_75": 100,
+   "integrales_propres": 100,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": 100,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": 100,
+   "autre_texte_autre_langue": 100,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en_GB": {
+     "pos": 100,
+     "neg": 100
+    },
+    "es": {
+     "pos": 100,
+     "neg": 100
+    },
+    "pt": {
+     "pos": 100,
+     "neg": 100
+    },
+    "de": {
+     "pos": 100,
+     "neg": 100
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": 100,
+     "neg": 100
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {
+    "full/clean": 100
+   }
+  },
+  {
+   "seuil": 0.45,
+   "integrales_et_75": 100,
+   "integrales_propres": 100,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": 100,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": 100,
+   "autre_texte_autre_langue": 100,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en_GB": {
+     "pos": 100,
+     "neg": 100
+    },
+    "es": {
+     "pos": 100,
+     "neg": 100
+    },
+    "pt": {
+     "pos": 100,
+     "neg": 100
+    },
+    "de": {
+     "pos": 100,
+     "neg": 100
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": 100,
+     "neg": 100
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {
+    "full/clean": 100
+   }
+  },
+  {
+   "seuil": 0.5,
+   "integrales_et_75": 100,
+   "integrales_propres": 100,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": 100,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": 100,
+   "autre_texte_autre_langue": 100,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en_GB": {
+     "pos": 100,
+     "neg": 100
+    },
+    "es": {
+     "pos": 100,
+     "neg": 100
+    },
+    "pt": {
+     "pos": 100,
+     "neg": 100
+    },
+    "de": {
+     "pos": 100,
+     "neg": 100
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": 100,
+     "neg": 100
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {
+    "full/clean": 100
+   }
+  },
+  {
+   "seuil": 0.55,
+   "integrales_et_75": 100,
+   "integrales_propres": 100,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": 100,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": 100,
+   "autre_texte_autre_langue": 100,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en_GB": {
+     "pos": 100,
+     "neg": 100
+    },
+    "es": {
+     "pos": 100,
+     "neg": 100
+    },
+    "pt": {
+     "pos": 100,
+     "neg": 100
+    },
+    "de": {
+     "pos": 100,
+     "neg": 100
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": 100,
+     "neg": 100
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {
+    "full/clean": 100
+   }
+  },
+  {
+   "seuil": 0.6,
+   "integrales_et_75": 100,
+   "integrales_propres": 100,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": 100,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": 100,
+   "autre_texte_autre_langue": 100,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en_GB": {
+     "pos": 100,
+     "neg": 100
+    },
+    "es": {
+     "pos": 100,
+     "neg": 100
+    },
+    "pt": {
+     "pos": 100,
+     "neg": 100
+    },
+    "de": {
+     "pos": 100,
+     "neg": 100
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": 100,
+     "neg": 100
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {
+    "full/clean": 100
+   }
+  },
+  {
+   "seuil": 0.65,
+   "integrales_et_75": 95.95,
+   "integrales_propres": 95.95,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": 100,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": 100,
+   "autre_texte_autre_langue": 100,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en_GB": {
+     "pos": 91.67,
+     "neg": 100
+    },
+    "es": {
+     "pos": 100,
+     "neg": 100
+    },
+    "pt": {
+     "pos": 91.67,
+     "neg": 100
+    },
+    "de": {
+     "pos": 92.31,
+     "neg": 100
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": 95.95,
+     "neg": 100
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {
+    "full/clean": 95.95
+   }
+  },
+  {
+   "seuil": 0.7,
+   "integrales_et_75": 89.19,
+   "integrales_propres": 89.19,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": 100,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": 100,
+   "autre_texte_autre_langue": 100,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": 91.67,
+     "neg": 100
+    },
+    "en": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en_GB": {
+     "pos": 75,
+     "neg": 100
+    },
+    "es": {
+     "pos": 100,
+     "neg": 100
+    },
+    "pt": {
+     "pos": 75,
+     "neg": 100
+    },
+    "de": {
+     "pos": 92.31,
+     "neg": 100
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": 89.19,
+     "neg": 100
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {
+    "full/clean": 89.19
+   }
+  },
+  {
+   "seuil": 0.75,
+   "integrales_et_75": 79.73,
+   "integrales_propres": 79.73,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": 100,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": 100,
+   "autre_texte_autre_langue": 100,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": 75,
+     "neg": 100
+    },
+    "en": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en_GB": {
+     "pos": 75,
+     "neg": 100
+    },
+    "es": {
+     "pos": 100,
+     "neg": 100
+    },
+    "pt": {
+     "pos": 41.67,
+     "neg": 100
+    },
+    "de": {
+     "pos": 84.62,
+     "neg": 100
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": 79.73,
+     "neg": 100
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {
+    "full/clean": 79.73
+   }
+  },
+  {
+   "seuil": 0.8,
+   "integrales_et_75": 71.62,
+   "integrales_propres": 71.62,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": 100,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": 100,
+   "autre_texte_autre_langue": 100,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": 50,
+     "neg": 100
+    },
+    "en": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en_GB": {
+     "pos": 75,
+     "neg": 100
+    },
+    "es": {
+     "pos": 91.67,
+     "neg": 100
+    },
+    "pt": {
+     "pos": 41.67,
+     "neg": 100
+    },
+    "de": {
+     "pos": 69.23,
+     "neg": 100
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": 71.62,
+     "neg": 100
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {
+    "full/clean": 71.62
+   }
+  },
+  {
+   "seuil": 0.85,
+   "integrales_et_75": 56.76,
+   "integrales_propres": 56.76,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": 100,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": 100,
+   "autre_texte_autre_langue": 100,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": 16.67,
+     "neg": 100
+    },
+    "en": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en_GB": {
+     "pos": 75,
+     "neg": 100
+    },
+    "es": {
+     "pos": 83.33,
+     "neg": 100
+    },
+    "pt": {
+     "pos": 25,
+     "neg": 100
+    },
+    "de": {
+     "pos": 38.46,
+     "neg": 100
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": 56.76,
+     "neg": 100
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {
+    "full/clean": 56.76
+   }
+  },
+  {
+   "seuil": 0.9,
+   "integrales_et_75": 36.49,
+   "integrales_propres": 36.49,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": 100,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": 100,
+   "autre_texte_autre_langue": 100,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": 0,
+     "neg": 100
+    },
+    "en": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en_GB": {
+     "pos": 75,
+     "neg": 100
+    },
+    "es": {
+     "pos": 33.33,
+     "neg": 100
+    },
+    "pt": {
+     "pos": 0,
+     "neg": 100
+    },
+    "de": {
+     "pos": 7.69,
+     "neg": 100
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": 36.49,
+     "neg": 100
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {
+    "full/clean": 36.49
+   }
+  },
+  {
+   "seuil": 0.95,
+   "integrales_et_75": 18.92,
+   "integrales_propres": 18.92,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": 100,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": 100,
+   "autre_texte_autre_langue": 100,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": 0,
+     "neg": 100
+    },
+    "en": {
+     "pos": 61.54,
+     "neg": 100
+    },
+    "en_GB": {
+     "pos": 25,
+     "neg": 100
+    },
+    "es": {
+     "pos": 25,
+     "neg": 100
+    },
+    "pt": {
+     "pos": 0,
+     "neg": 100
+    },
+    "de": {
+     "pos": 0,
+     "neg": 100
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": 18.92,
+     "neg": 100
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {
+    "full/clean": 18.92
+   }
+  }
+ ],
+ "cout": {
+  "minutes_par_bilan": 2.74,
+  "cents_par_bilan": 0.124,
+  "bilans_par_jour_gratuits": 88
+ },
+ "latence": {
+  "fichiers": 74,
+  "ms_par_minute_audio_med": 4680,
+  "ms_par_minute_audio_p95": 10882,
+  "ms_max_par_fichier": 16096,
+  "sous_60_s": true
+ },
+ "signaux": {
+  "integrales_propres": {
+   "overlap": {
+    "n": 74,
+    "min": 0.6104,
+    "p10": 0.6944,
+    "med": 0.863,
+    "p90": 0.975,
+    "max": 1
+   },
+   "ordre": {
+    "n": 74,
+    "min": 0.95,
+    "p10": 0.9811,
+    "med": 1,
+    "p90": 1,
+    "max": 1
+   },
+   "couverture_dernier_tiers": {
+    "n": 74,
+    "min": 0.5152,
+    "p10": 0.6667,
+    "med": 0.8846,
+    "p90": 1,
+    "max": 1
+   }
+  },
+  "integrales_degradees": {
+   "overlap": null,
+   "ordre": null,
+   "couverture_dernier_tiers": null
+  },
+  "p75": {
+   "overlap": null,
+   "ordre": null,
+   "couverture_dernier_tiers": null
+  },
+  "p60": {
+   "overlap": null,
+   "ordre": null,
+   "couverture_dernier_tiers": null
+  },
+  "mots_melanges": {
+   "overlap": null,
+   "ordre": null,
+   "couverture_dernier_tiers": null
+  },
+  "p25_puis_silence": {
+   "overlap": null,
+   "ordre": null,
+   "couverture_dernier_tiers": null
+  },
+  "phrase_en_boucle": {
+   "overlap": null,
+   "ordre": null,
+   "couverture_dernier_tiers": null
+  },
+  "autre_texte": {
+   "overlap": {
+    "n": 222,
+    "min": 0,
+    "p10": 0.0135,
+    "med": 0.0495,
+    "p90": 0.1,
+    "max": 0.1622
+   },
+   "ordre": {
+    "n": 222,
+    "min": 0,
+    "p10": 0.375,
+    "med": 0.6,
+    "p90": 1,
+    "max": 1
+   },
+   "couverture_dernier_tiers": {
+    "n": 222,
+    "min": 0,
+    "p10": 0,
+    "med": 0.0385,
+    "p90": 0.1111,
+    "max": 0.2
+   }
+  },
+  "traduction": {
+   "overlap": null,
+   "ordre": null,
+   "couverture_dernier_tiers": null
+  },
+  "parole_de_fond": {
+   "overlap": null,
+   "ordre": null,
+   "couverture_dernier_tiers": null
+  }
+ },
+ "lang_detected": {},
+ "resistent": [],
+ "erreurs": []
+}
