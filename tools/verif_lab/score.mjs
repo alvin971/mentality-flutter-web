@@ -172,6 +172,57 @@ for (const g of ['integrales_propres', 'integrales_degradees', 'p75', 'p60', 'mo
   const l = mesures.filter((m) => groupes[g](m) && m.status === 'ok');
   signaux[g] = { overlap: quantiles(l, 'overlap'), ordre: quantiles(l, 'ordre'), couverture_dernier_tiers: quantiles(l, 'couverture') };
 }
+/**
+ * Distribution COMPLÈTE des imposteurs, calculée sur le cache — donc gratuite.
+ *
+ * Le taux de rejet des négatifs « autre texte » est mesuré sur un échantillon
+ * équilibré (3 cibles en rotation par lecture), pour ne pas noyer les négatifs
+ * à audio réel sous des milliers de paires dérivées. Mais la MARGE du §6 se
+ * joue sur le pire cas, et un maximum estimé sur 3 tirages est fragile : on
+ * calcule donc ici TOUTES les paires (chaque lecture intégrale propre contre
+ * tous les autres textes de sa langue, puis contre ceux des autres langues).
+ */
+function distributionImposteurs() {
+  const memeLangue = [];
+  const autreLangue = [];
+  let pireMeme = { overlap: -1 };
+  for (const c of cas) {
+    if (!(c.set === 'pos' && c.content === 'full' && c.proc === 'clean')) continue;
+    const e = entreeDe(c);
+    if (!e || e.status !== 'ok') continue;
+    for (const t of texts) {
+      if (t.id === c.target || t.holdout !== HOLDOUT) continue;
+      const hits = (e.hits || {})[t.id] || [];
+      const r = recouvrementDepuisHits(hits, refs.get(t.id));
+      const ordre = scoreOrdre(hits, refs.get(t.id));
+      const entree = { overlap: r.overlap, ordre, lu: c.textId, contre: t.id };
+      if (t.lang === c.lang) {
+        memeLangue.push(entree);
+        if (r.overlap > pireMeme.overlap) pireMeme = entree;
+      } else autreLangue.push(entree);
+    }
+  }
+  const stats = (liste) => {
+    if (!liste.length) return null;
+    const v = liste.map((x) => x.overlap).sort((a, b) => a - b);
+    const q = (p) => v[Math.min(v.length - 1, Math.floor(v.length * p))];
+    return { paires: v.length, med: q(0.5), p95: q(0.95), p99: q(0.99), p999: q(0.999), max: v[v.length - 1] };
+  };
+  return {
+    meme_langue: stats(memeLangue),
+    autre_langue: stats(autreLangue),
+    // Le pire imposteur, avec son score d'ordre : si la règle d'ordre le
+    // rejetait, la marge du seuil compterait moins.
+    pire_meme_langue: pireMeme.overlap >= 0 ? pireMeme : null,
+    // Combien de paires franchiraient un seuil donné, AVEC et SANS la règle d'ordre.
+    au_dessus: Object.fromEntries([0.2, 0.25, 0.3, 0.35, 0.4].map((s) => [s, {
+      seuil_seul: memeLangue.filter((x) => x.overlap >= s).length,
+      avec_ordre: memeLangue.filter((x) => x.overlap >= s && x.ordre >= (MIN_ORDRE || 0)).length,
+    }])),
+  };
+}
+const imposteurs = distributionImposteurs();
+
 const erreurs = mesures.filter((m) => !m.derived && m.status !== 'ok');
 const resistent = mesures.filter((m) => m.status === 'ok' && okA(m, seuilChoisi) !== m.expected).map((m) => ({ id: m.id, target: m.target, content: m.content, overlap: m.overlap, words: m.words, ordre: m.ordre, couverture: m.couverture })).slice(0, 60);
 const langDetect = {};
@@ -181,7 +232,7 @@ const sortie = {
   model: MODEL, policy: POLICY, holdout: HOLDOUT, day: new Date().toISOString().slice(0, 10), seuil_prod: SEUIL_PROD, min_summary: MIN_SUM, min_ordre: MIN_ORDRE,
   couverture: { cas: cas.length, mesures_directes: mesures.filter((m) => !m.derived).length, derives: mesures.filter((m) => m.derived).length, non_couverts: nonCouverts, erreurs_modele: erreurs.length, fallback_sans_language: ok.filter((m) => m.fallback).length },
   seuil_retenu: seuilChoisi, seuil_tient_negatifs: retenu != null, checklist_retenu: checklist(seuilChoisi), checklist_prod: checklist(SEUIL_PROD),
-  courbe, cout, latence, signaux, lang_detected: langDetect, resistent, erreurs: erreurs.map((m) => ({ id: m.id, status: m.status })).slice(0, 40),
+  courbe, cout, latence, signaux, imposteurs, lang_detected: langDetect, resistent, erreurs: erreurs.map((m) => ({ id: m.id, status: m.status })).slice(0, 40),
 };
 fs.mkdirSync(path.join(ICI, 'results'), { recursive: true });
 const outPath = path.join(ICI, 'results', `${slug}.${POLICY}${HOLDOUT ? '.holdout' : ''}.json`);
@@ -199,6 +250,13 @@ if (!QUIET) {
   if (l) { console.log('par langue (pos/neg) : ' + LANGUES.map((k) => `${k} ${l.par_langue[k].pos ?? '—'}/${l.par_langue[k].neg ?? '—'}`).join(' · ')); console.log('par format (pos/neg) : ' + ['webm', 'mp4', 'wav'].map((k) => `${k} ${l.par_format[k].pos ?? '—'}/${l.par_format[k].neg ?? '—'}`).join(' · ')); console.log('par variante : ' + Object.entries(l.par_variante).map(([k, v]) => `${k} ${v}`).join(' · ')); }
   if (cout) console.log(`coût : ${cout.minutes_par_bilan} min/bilan → ${cout.cents_par_bilan} ¢/bilan · ${cout.bilans_par_jour_gratuits} bilans/jour dans l'allocation gratuite`);
   if (latence) console.log(`latence : ${latence.ms_par_minute_audio_med} ms/min (p95 ${latence.ms_par_minute_audio_p95}) · max ${latence.ms_max_par_fichier} ms/fichier · < 60 s : ${latence.sous_60_s}`);
+  if (imposteurs.meme_langue) {
+    const i = imposteurs.meme_langue;
+    console.log(`imposteurs (toutes paires) : même langue n=${i.paires} méd ${i.med} · p99 ${i.p99} · max ${i.max}` +
+      (imposteurs.autre_langue ? ` | autre langue n=${imposteurs.autre_langue.paires} max ${imposteurs.autre_langue.max}` : '') +
+      (imposteurs.pire_meme_langue ? ` | pire : ${imposteurs.pire_meme_langue.lu} lu contre ${imposteurs.pire_meme_langue.contre} (ordre ${imposteurs.pire_meme_langue.ordre})` : ''));
+    console.log('paires au-dessus du seuil : ' + Object.entries(imposteurs.au_dessus).map(([k, v]) => `${k}→${v.seuil_seul}${MIN_ORDRE ? `/${v.avec_ordre}` : ''}`).join(' · '));
+  }
   console.log('signaux (overlap med | ordre med | couverture dernier tiers med) : ' + Object.entries(signaux).filter(([, v]) => v.overlap).map(([k, v]) => `${k} ${v.overlap.med}|${v.ordre.med}|${v.couverture_dernier_tiers.med}`).join(' · '));
   if (Object.keys(langDetect).length) console.log('langue détectée : ' + Object.entries(langDetect).map(([k, v]) => `${k}=${v}`).join(' '));
   if (resistent.length) console.log(`résistent au seuil ${seuilChoisi} (${resistent.length}) : ` + resistent.slice(0, 12).map((r) => `${r.id} ov=${r.overlap ?? r.words}`).join(' ; '));

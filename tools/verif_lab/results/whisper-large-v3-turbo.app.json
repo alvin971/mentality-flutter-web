@@ -2,7 +2,7 @@
  "model": "@cf/openai/whisper-large-v3-turbo",
  "policy": "app",
  "holdout": false,
- "day": "2026-09-03",
+ "day": "2026-09-04",
  "seuil_prod": 0.3,
  "min_summary": 15,
  "min_ordre": 0.6,
@@ -1531,6 +1531,52 @@
     "med": 0.04,
     "p90": 0.0938,
     "max": 0.0938
+   }
+  }
+ },
+ "imposteurs": {
+  "meme_langue": {
+   "paires": 2442,
+   "med": 0.055,
+   "p95": 0.1196,
+   "p99": 0.1538,
+   "p999": 0.2267,
+   "max": 0.2471
+  },
+  "autre_langue": {
+   "paires": 12580,
+   "med": 0,
+   "p95": 0.0526,
+   "p99": 0.1023,
+   "p999": 0.15,
+   "max": 0.2958
+  },
+  "pire_meme_langue": {
+   "overlap": 0.2471,
+   "ordre": 0.5238,
+   "lu": "fr_00251",
+   "contre": "fr_00140"
+  },
+  "au_dessus": {
+   "0.2": {
+    "seuil_seul": 6,
+    "avec_ordre": 1
+   },
+   "0.25": {
+    "seuil_seul": 0,
+    "avec_ordre": 0
+   },
+   "0.3": {
+    "seuil_seul": 0,
+    "avec_ordre": 0
+   },
+   "0.35": {
+    "seuil_seul": 0,
+    "avec_ordre": 0
+   },
+   "0.4": {
+    "seuil_seul": 0,
+    "avec_ordre": 0
    }
   }
  },

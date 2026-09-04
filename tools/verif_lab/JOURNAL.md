@@ -360,3 +360,38 @@ micro saturé, croisement voix × format, wav). Le banc dispose désormais de
 holdout. À 4,2 h d'audio par fenêtre d'allocation, il faut **≈ 5 fenêtres** pour
 tout mesurer sur un modèle — la contrainte de la boucle est le quota, plus
 jamais la synthèse.
+
+## Réveil 7 — 2026-09-04 09:55 UTC — quota toujours fermé ; la marge du §6 est mesurée sur toutes les paires
+
+Sonde refusée à 09:55 UTC, soit **12 h 18 après le dernier appel accepté**
+(21:37 UTC). Ni minuit UTC ni douze heures ne réarment l'allocation : reste
+l'hypothèse d'une fenêtre glissante de 24 h (réouverture attendue vers 20:20–21:37
+UTC, l'heure du premier et du dernier appel d'hier). Le poller a été interrompu ;
+chaque réveil sonde désormais lui-même avec un fichier de 5 s.
+
+**Travail sans quota : la marge du §6 ne repose plus sur un échantillon.** Le
+taux de rejet des négatifs « autre texte » se mesure sur 3 cibles en rotation
+par lecture (pool équilibré, sinon les paires dérivées noieraient les négatifs à
+audio réel). Mais la **marge** du §6 se joue sur le pire cas, et un maximum tiré
+de 3 échantillons est fragile. `score.mjs` calcule maintenant **toutes** les
+paires depuis le cache — gratuit, aucun neurone :
+
+| paires | n | médiane | p99 | max |
+|---|---|---|---|---|
+| imposteur de la **même langue** | **2 442** | 0,055 | 0,154 | **0,247** |
+| imposteur d'une **autre langue** | **12 580** | — | — | **0,296** |
+
+Paires franchissant un seuil donné (seuil seul / avec ordre ≥ 0,60) :
+**0,20 → 6/1 · 0,25 → 0/0 · 0,30 → 0/0**.
+
+Autrement dit, sur **15 022 paires**, **aucune** ne dépasse 0,25, et la seule
+qui approche 0,30 vient d'une autre langue. La marge au seuil 0,30 tient donc
+sur des milliers de cas et non sur 222 : pire lecture intégrale honnête 0,819
+contre meilleur imposteur 0,296, soit **0,52** — cinq fois le minimum de 0,10
+exigé au §6. Le pire imposteur de même langue (`fr_00251` lu contre `fr_00140`,
+0,247) a un score d'ordre de 0,52 : la règle d'ordre le rejetterait aussi.
+
+**Ce que ça ne dit pas encore** : tout ceci porte sur des lectures **propres**.
+Les dégradations (vitesse, bruit, micro faible ou saturé), le mp4 et les
+lectures partielles sont synthétisés mais pas transcrits — c'est la queue basse
+des positifs, pas celle des négatifs, qui décidera du seuil final.
