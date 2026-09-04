@@ -330,3 +330,33 @@ dépassé (0,124 ¢ whisper, 0,141 ¢ turbo) mais l'allocation gratuite couvre
 Synthèse locale : vagues 3 et 4 complètes (480 cas, 1 039 fichiers, 644 min
 d'audio en réserve). Prochain réveil : quota rouvert → policy `none` bouclée,
 puis vagues 3–4 (mp4, lectures partielles).
+
+## Réveil 6 — 2026-09-04 — l'allocation ne se réarme PAS à 00:00 UTC
+
+**Mesure (négative, mais utile).** Dernier appel accepté : **21:37 UTC** le
+2026-09-03. Sondes rejetées à 22:41, 23:53, 00:01→00:14 (poller au ralenti) et
+**00:19 UTC** : toujours `4006 … daily free allocation of 10 000 neurons`.
+L'allocation « par jour » **ne se réarme donc pas à minuit UTC** — c'est une
+fenêtre glissante, ou un jour de facturation propre au compte. La documentation
+publique dit « per day » sans préciser l'origine : elle ne suffit pas à prévoir
+la reprise. Poller mis en place toutes les 15 min sur un fichier de **5 s**
+(coût négligeable) pour dater précisément la réouverture ; l'écart avec 21:37
+UTC donnera la vraie période.
+
+**Conséquence produit à écrire au FINAL** : un jour où le service dépasse
+~99 bilans, la vérification s'arrête et **ne repart pas forcément le lendemain à
+minuit**. Le cron de reprise ajouté au réveil 5 tourne à 03:00 UTC — s'il
+tombe avant la réouverture réelle, il repart bredouille (5 échecs consécutifs →
+abandon, par construction) et rien n'est repris avant 24 h de plus. Deux
+options à trancher au FINAL : avancer/multiplier les passages du cron (par
+exemple toutes les 6 h), ou passer le compte en Workers Paid. Le correctif du
+réveil 5 protège déjà du pire (aucun échec définitif), c'est le délai de
+reprise qui reste à borner.
+
+**Synthèse locale terminée pendant l'attente** : vagues 5, 6 et 7 produites
+(750 fichiers : vitesse ×0,8/×1,3, bruit −20/−10 dB, fond pièce, micro faible,
+micro saturé, croisement voix × format, wav). Le banc dispose désormais de
+**1 802 fichiers = 1 255 min d'audio** prêts à transcrire, soit tout le §3 hors
+holdout. À 4,2 h d'audio par fenêtre d'allocation, il faut **≈ 5 fenêtres** pour
+tout mesurer sur un modèle — la contrainte de la boucle est le quota, plus
+jamais la synthèse.
