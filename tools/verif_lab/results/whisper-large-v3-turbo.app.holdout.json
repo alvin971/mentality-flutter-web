@@ -1,0 +1,1372 @@
+{
+ "model": "@cf/openai/whisper-large-v3-turbo",
+ "policy": "app",
+ "holdout": true,
+ "day": "2026-09-04",
+ "seuil_prod": 0.3,
+ "min_summary": 15,
+ "min_ordre": 0.6,
+ "couverture": {
+  "cas": 192,
+  "mesures_directes": 0,
+  "derives": 0,
+  "non_couverts": 192,
+  "erreurs_modele": 0,
+  "fallback_sans_language": 0
+ },
+ "seuil_retenu": 0.05,
+ "seuil_tient_negatifs": false,
+ "checklist_retenu": {
+  "seuil": 0.05,
+  "integrales_et_75": {
+   "global": null,
+   "ok": false,
+   "par_langue_min": 100,
+   "par_format_min": 100
+  },
+  "p60": {
+   "global": null,
+   "ok": true
+  },
+  "negatifs": {
+   "global": null,
+   "ok": false,
+   "silence": null,
+   "bruit": null,
+   "autre_texte": null,
+   "cent_pour_cent": true
+  },
+  "resumes": {
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "ok": true
+  },
+  "marge": {
+   "pire_positif_integral_propre": null,
+   "pire_positif_integral_tous": null,
+   "meilleur_autre_texte": null,
+   "marge_propre": null,
+   "ok": false
+  },
+  "tout_ok": false
+ },
+ "checklist_prod": {
+  "seuil": 0.3,
+  "integrales_et_75": {
+   "global": null,
+   "ok": false,
+   "par_langue_min": 100,
+   "par_format_min": 100
+  },
+  "p60": {
+   "global": null,
+   "ok": true
+  },
+  "negatifs": {
+   "global": null,
+   "ok": false,
+   "silence": null,
+   "bruit": null,
+   "autre_texte": null,
+   "cent_pour_cent": true
+  },
+  "resumes": {
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "ok": true
+  },
+  "marge": {
+   "pire_positif_integral_propre": null,
+   "pire_positif_integral_tous": null,
+   "meilleur_autre_texte": null,
+   "marge_propre": null,
+   "ok": false
+  },
+  "tout_ok": false
+ },
+ "courbe": [
+  {
+   "seuil": 0.05,
+   "integrales_et_75": null,
+   "integrales_propres": null,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": null,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": null,
+   "autre_texte_autre_langue": null,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": null,
+     "neg": null
+    },
+    "en": {
+     "pos": null,
+     "neg": null
+    },
+    "en_GB": {
+     "pos": null,
+     "neg": null
+    },
+    "es": {
+     "pos": null,
+     "neg": null
+    },
+    "pt": {
+     "pos": null,
+     "neg": null
+    },
+    "de": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": null,
+     "neg": null
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {}
+  },
+  {
+   "seuil": 0.1,
+   "integrales_et_75": null,
+   "integrales_propres": null,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": null,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": null,
+   "autre_texte_autre_langue": null,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": null,
+     "neg": null
+    },
+    "en": {
+     "pos": null,
+     "neg": null
+    },
+    "en_GB": {
+     "pos": null,
+     "neg": null
+    },
+    "es": {
+     "pos": null,
+     "neg": null
+    },
+    "pt": {
+     "pos": null,
+     "neg": null
+    },
+    "de": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": null,
+     "neg": null
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {}
+  },
+  {
+   "seuil": 0.15,
+   "integrales_et_75": null,
+   "integrales_propres": null,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": null,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": null,
+   "autre_texte_autre_langue": null,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": null,
+     "neg": null
+    },
+    "en": {
+     "pos": null,
+     "neg": null
+    },
+    "en_GB": {
+     "pos": null,
+     "neg": null
+    },
+    "es": {
+     "pos": null,
+     "neg": null
+    },
+    "pt": {
+     "pos": null,
+     "neg": null
+    },
+    "de": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": null,
+     "neg": null
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {}
+  },
+  {
+   "seuil": 0.2,
+   "integrales_et_75": null,
+   "integrales_propres": null,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": null,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": null,
+   "autre_texte_autre_langue": null,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": null,
+     "neg": null
+    },
+    "en": {
+     "pos": null,
+     "neg": null
+    },
+    "en_GB": {
+     "pos": null,
+     "neg": null
+    },
+    "es": {
+     "pos": null,
+     "neg": null
+    },
+    "pt": {
+     "pos": null,
+     "neg": null
+    },
+    "de": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": null,
+     "neg": null
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {}
+  },
+  {
+   "seuil": 0.25,
+   "integrales_et_75": null,
+   "integrales_propres": null,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": null,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": null,
+   "autre_texte_autre_langue": null,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": null,
+     "neg": null
+    },
+    "en": {
+     "pos": null,
+     "neg": null
+    },
+    "en_GB": {
+     "pos": null,
+     "neg": null
+    },
+    "es": {
+     "pos": null,
+     "neg": null
+    },
+    "pt": {
+     "pos": null,
+     "neg": null
+    },
+    "de": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": null,
+     "neg": null
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {}
+  },
+  {
+   "seuil": 0.3,
+   "integrales_et_75": null,
+   "integrales_propres": null,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": null,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": null,
+   "autre_texte_autre_langue": null,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": null,
+     "neg": null
+    },
+    "en": {
+     "pos": null,
+     "neg": null
+    },
+    "en_GB": {
+     "pos": null,
+     "neg": null
+    },
+    "es": {
+     "pos": null,
+     "neg": null
+    },
+    "pt": {
+     "pos": null,
+     "neg": null
+    },
+    "de": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": null,
+     "neg": null
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {}
+  },
+  {
+   "seuil": 0.35,
+   "integrales_et_75": null,
+   "integrales_propres": null,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": null,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": null,
+   "autre_texte_autre_langue": null,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": null,
+     "neg": null
+    },
+    "en": {
+     "pos": null,
+     "neg": null
+    },
+    "en_GB": {
+     "pos": null,
+     "neg": null
+    },
+    "es": {
+     "pos": null,
+     "neg": null
+    },
+    "pt": {
+     "pos": null,
+     "neg": null
+    },
+    "de": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": null,
+     "neg": null
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {}
+  },
+  {
+   "seuil": 0.4,
+   "integrales_et_75": null,
+   "integrales_propres": null,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": null,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": null,
+   "autre_texte_autre_langue": null,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": null,
+     "neg": null
+    },
+    "en": {
+     "pos": null,
+     "neg": null
+    },
+    "en_GB": {
+     "pos": null,
+     "neg": null
+    },
+    "es": {
+     "pos": null,
+     "neg": null
+    },
+    "pt": {
+     "pos": null,
+     "neg": null
+    },
+    "de": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": null,
+     "neg": null
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {}
+  },
+  {
+   "seuil": 0.45,
+   "integrales_et_75": null,
+   "integrales_propres": null,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": null,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": null,
+   "autre_texte_autre_langue": null,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": null,
+     "neg": null
+    },
+    "en": {
+     "pos": null,
+     "neg": null
+    },
+    "en_GB": {
+     "pos": null,
+     "neg": null
+    },
+    "es": {
+     "pos": null,
+     "neg": null
+    },
+    "pt": {
+     "pos": null,
+     "neg": null
+    },
+    "de": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": null,
+     "neg": null
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {}
+  },
+  {
+   "seuil": 0.5,
+   "integrales_et_75": null,
+   "integrales_propres": null,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": null,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": null,
+   "autre_texte_autre_langue": null,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": null,
+     "neg": null
+    },
+    "en": {
+     "pos": null,
+     "neg": null
+    },
+    "en_GB": {
+     "pos": null,
+     "neg": null
+    },
+    "es": {
+     "pos": null,
+     "neg": null
+    },
+    "pt": {
+     "pos": null,
+     "neg": null
+    },
+    "de": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": null,
+     "neg": null
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {}
+  },
+  {
+   "seuil": 0.55,
+   "integrales_et_75": null,
+   "integrales_propres": null,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": null,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": null,
+   "autre_texte_autre_langue": null,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": null,
+     "neg": null
+    },
+    "en": {
+     "pos": null,
+     "neg": null
+    },
+    "en_GB": {
+     "pos": null,
+     "neg": null
+    },
+    "es": {
+     "pos": null,
+     "neg": null
+    },
+    "pt": {
+     "pos": null,
+     "neg": null
+    },
+    "de": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": null,
+     "neg": null
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {}
+  },
+  {
+   "seuil": 0.6,
+   "integrales_et_75": null,
+   "integrales_propres": null,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": null,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": null,
+   "autre_texte_autre_langue": null,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": null,
+     "neg": null
+    },
+    "en": {
+     "pos": null,
+     "neg": null
+    },
+    "en_GB": {
+     "pos": null,
+     "neg": null
+    },
+    "es": {
+     "pos": null,
+     "neg": null
+    },
+    "pt": {
+     "pos": null,
+     "neg": null
+    },
+    "de": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": null,
+     "neg": null
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {}
+  },
+  {
+   "seuil": 0.65,
+   "integrales_et_75": null,
+   "integrales_propres": null,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": null,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": null,
+   "autre_texte_autre_langue": null,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": null,
+     "neg": null
+    },
+    "en": {
+     "pos": null,
+     "neg": null
+    },
+    "en_GB": {
+     "pos": null,
+     "neg": null
+    },
+    "es": {
+     "pos": null,
+     "neg": null
+    },
+    "pt": {
+     "pos": null,
+     "neg": null
+    },
+    "de": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": null,
+     "neg": null
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {}
+  },
+  {
+   "seuil": 0.7,
+   "integrales_et_75": null,
+   "integrales_propres": null,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": null,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": null,
+   "autre_texte_autre_langue": null,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": null,
+     "neg": null
+    },
+    "en": {
+     "pos": null,
+     "neg": null
+    },
+    "en_GB": {
+     "pos": null,
+     "neg": null
+    },
+    "es": {
+     "pos": null,
+     "neg": null
+    },
+    "pt": {
+     "pos": null,
+     "neg": null
+    },
+    "de": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": null,
+     "neg": null
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {}
+  },
+  {
+   "seuil": 0.75,
+   "integrales_et_75": null,
+   "integrales_propres": null,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": null,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": null,
+   "autre_texte_autre_langue": null,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": null,
+     "neg": null
+    },
+    "en": {
+     "pos": null,
+     "neg": null
+    },
+    "en_GB": {
+     "pos": null,
+     "neg": null
+    },
+    "es": {
+     "pos": null,
+     "neg": null
+    },
+    "pt": {
+     "pos": null,
+     "neg": null
+    },
+    "de": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": null,
+     "neg": null
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {}
+  },
+  {
+   "seuil": 0.8,
+   "integrales_et_75": null,
+   "integrales_propres": null,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": null,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": null,
+   "autre_texte_autre_langue": null,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": null,
+     "neg": null
+    },
+    "en": {
+     "pos": null,
+     "neg": null
+    },
+    "en_GB": {
+     "pos": null,
+     "neg": null
+    },
+    "es": {
+     "pos": null,
+     "neg": null
+    },
+    "pt": {
+     "pos": null,
+     "neg": null
+    },
+    "de": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": null,
+     "neg": null
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {}
+  },
+  {
+   "seuil": 0.85,
+   "integrales_et_75": null,
+   "integrales_propres": null,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": null,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": null,
+   "autre_texte_autre_langue": null,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": null,
+     "neg": null
+    },
+    "en": {
+     "pos": null,
+     "neg": null
+    },
+    "en_GB": {
+     "pos": null,
+     "neg": null
+    },
+    "es": {
+     "pos": null,
+     "neg": null
+    },
+    "pt": {
+     "pos": null,
+     "neg": null
+    },
+    "de": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": null,
+     "neg": null
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {}
+  },
+  {
+   "seuil": 0.9,
+   "integrales_et_75": null,
+   "integrales_propres": null,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": null,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": null,
+   "autre_texte_autre_langue": null,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": null,
+     "neg": null
+    },
+    "en": {
+     "pos": null,
+     "neg": null
+    },
+    "en_GB": {
+     "pos": null,
+     "neg": null
+    },
+    "es": {
+     "pos": null,
+     "neg": null
+    },
+    "pt": {
+     "pos": null,
+     "neg": null
+    },
+    "de": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": null,
+     "neg": null
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {}
+  },
+  {
+   "seuil": 0.95,
+   "integrales_et_75": null,
+   "integrales_propres": null,
+   "integrales_degradees": null,
+   "p75": null,
+   "p60": null,
+   "negatifs": null,
+   "silence": null,
+   "bruit": null,
+   "musique": null,
+   "autre_texte": null,
+   "autre_texte_autre_langue": null,
+   "traduction": null,
+   "p25_puis_silence": null,
+   "phrase_en_boucle": null,
+   "mots_melanges": null,
+   "parole_de_fond": null,
+   "resume_30": null,
+   "resume_8": null,
+   "resume_silence": null,
+   "par_langue": {
+    "fr": {
+     "pos": null,
+     "neg": null
+    },
+    "en": {
+     "pos": null,
+     "neg": null
+    },
+    "en_GB": {
+     "pos": null,
+     "neg": null
+    },
+    "es": {
+     "pos": null,
+     "neg": null
+    },
+    "pt": {
+     "pos": null,
+     "neg": null
+    },
+    "de": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": null,
+     "neg": null
+    },
+    "mp4": {
+     "pos": null,
+     "neg": null
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {}
+  }
+ ],
+ "cout": null,
+ "latence": null,
+ "signaux": {
+  "integrales_propres": {
+   "overlap": null,
+   "ordre": null,
+   "couverture_dernier_tiers": null
+  },
+  "integrales_degradees": {
+   "overlap": null,
+   "ordre": null,
+   "couverture_dernier_tiers": null
+  },
+  "p75": {
+   "overlap": null,
+   "ordre": null,
+   "couverture_dernier_tiers": null
+  },
+  "p60": {
+   "overlap": null,
+   "ordre": null,
+   "couverture_dernier_tiers": null
+  },
+  "mots_melanges": {
+   "overlap": null,
+   "ordre": null,
+   "couverture_dernier_tiers": null
+  },
+  "p25_puis_silence": {
+   "overlap": null,
+   "ordre": null,
+   "couverture_dernier_tiers": null
+  },
+  "phrase_en_boucle": {
+   "overlap": null,
+   "ordre": null,
+   "couverture_dernier_tiers": null
+  },
+  "autre_texte": {
+   "overlap": null,
+   "ordre": null,
+   "couverture_dernier_tiers": null
+  },
+  "traduction": {
+   "overlap": null,
+   "ordre": null,
+   "couverture_dernier_tiers": null
+  },
+  "parole_de_fond": {
+   "overlap": null,
+   "ordre": null,
+   "couverture_dernier_tiers": null
+  }
+ },
+ "imposteurs": {
+  "meme_langue": null,
+  "autre_langue": null,
+  "pire_meme_langue": null,
+  "au_dessus": {
+   "0.2": {
+    "seuil_seul": 0,
+    "avec_ordre": 0
+   },
+   "0.25": {
+    "seuil_seul": 0,
+    "avec_ordre": 0
+   },
+   "0.3": {
+    "seuil_seul": 0,
+    "avec_ordre": 0
+   },
+   "0.35": {
+    "seuil_seul": 0,
+    "avec_ordre": 0
+   },
+   "0.4": {
+    "seuil_seul": 0,
+    "avec_ordre": 0
+   }
+  }
+ },
+ "lang_detected": {},
+ "resistent": [],
+ "erreurs": []
+}

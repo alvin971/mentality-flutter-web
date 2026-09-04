@@ -395,3 +395,17 @@ exigé au §6. Le pire imposteur de même langue (`fr_00251` lu contre `fr_00140
 Les dégradations (vitesse, bruit, micro faible ou saturé), le mp4 et les
 lectures partielles sont synthétisés mais pas transcrits — c'est la queue basse
 des positifs, pas celle des négatifs, qui décidera du seuil final.
+
+## Veille quota — réveil 8 (2026-09-04 11:08 UTC)
+
+Sonde de 5 s toujours refusée, **13 h 31** après le dernier appel accepté. Rien
+de mesurable : aucune ligne de résultat ne bouge. L'historique des sondes est
+tenu comme donnée dans `results/quota_probes.jsonl` (une ligne par sonde, pas
+une section de journal par réveil vide).
+
+Pré-vol de l'outillage sans consommer un neurone, pour ne pas gâcher la fenêtre
+à sa réouverture : `--clear-sample 0.10 --seed 42` en `--dry-run` tire bien 11
+entrées sur 74 **sans les supprimer** (le garde `if (!DRY)` est en place, cache
+vérifié intact : 202 turbo/app, 91 turbo/none, 74 whisper/app) ; `--holdout`
+s'exécute et rend « 0 mesuré », ce qui est l'état attendu tant que la vague 9
+n'est pas transcrite.
