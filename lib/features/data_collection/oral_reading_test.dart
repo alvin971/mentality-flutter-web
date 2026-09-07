@@ -5,6 +5,7 @@
 // Sauvegarde un enregistrement Layer C dans mentality_sell.
 
 import 'dart:async';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:record/record.dart';
@@ -15,6 +16,7 @@ import '../../core/theme/app_colors.dart';
 import '../../data/reading_texts.dart';
 import '../../services/data_collection_service.dart';
 import '../../services/r2_upload_service.dart';
+import '../../services/recording_bytes.dart';
 import 'widgets/adaptive_reading_text.dart';
 import '../../core/theme/kepler_colors.dart';
 
@@ -184,8 +186,10 @@ class _OralReadingTestState extends State<OralReadingTest> {
   // ─── Enregistrement ───────────────────────────────────────────────────────────
 
   Future<void> _startRecording() async {
-    // Sur Flutter Web, le paramètre path est symbolique.
-    // recorder.stop() retourne un blob URL (blob:https://...).
+    // Le chemin n'est symbolique QUE sur le web (le navigateur rend un blob
+    // et ignore la valeur). Sur mobile il doit être réel et inscriptible :
+    // un nom relatif n'est pas créable dans le bac à sable iOS, `stop()` rendait
+    // alors un chemin qui ne menait à rien et l'envoi échouait en silence.
     _encoder = await _resolveSupportedEncoder();
     await _recorder.start(
       RecordConfig(
@@ -196,7 +200,7 @@ class _OralReadingTestState extends State<OralReadingTest> {
         // Divise par ~4 le poids audio vs le défaut (128 kbps) du package.
         bitRate: 32000,
       ),
-      path: 'mentality_reading.webm',
+      path: await cheminEnregistrement('mentality_reading', _extensionPour(_encoder)),
     );
     if (!mounted) return;
     setState(() => _isRecording = true);
@@ -206,11 +210,14 @@ class _OralReadingTestState extends State<OralReadingTest> {
   /// Choisit un encodeur réellement supporté par le navigateur courant.
   /// opus (webm) : Chrome/Firefox/Edge — aacLc (mp4) : Safari — wav : secours.
   Future<AudioEncoder> _resolveSupportedEncoder() async {
-    for (final enc in const [
-      AudioEncoder.opus,
-      AudioEncoder.aacLc,
-      AudioEncoder.wav,
-    ]) {
+    // L'ordre dépend de la plateforme. Sur mobile, `opus` produit un conteneur
+    // OGG que le worker REFUSE (il n'accepte que webm, mp4/m4a et wav) : on
+    // demande donc AAC en premier, supporté par iOS comme par Android, et
+    // mesuré au banc au même niveau que l'opus/webm du navigateur.
+    final candidats = kIsWeb
+        ? const [AudioEncoder.opus, AudioEncoder.aacLc, AudioEncoder.wav]
+        : const [AudioEncoder.aacLc, AudioEncoder.wav];
+    for (final enc in candidats) {
       try {
         if (await _recorder.isEncoderSupported(enc)) return enc;
       } catch (_) {
@@ -219,6 +226,16 @@ class _OralReadingTestState extends State<OralReadingTest> {
     }
     return AudioEncoder.opus;
   }
+
+  /// Extension de fichier correspondant à l'encodeur retenu. Sur mobile elle
+  /// détermine le conteneur réellement écrit sur le disque ; sur le web elle
+  /// n'est que décorative (le navigateur rend un blob).
+  String _extensionPour(AudioEncoder enc) => switch (enc) {
+        AudioEncoder.opus => kIsWeb ? 'webm' : 'ogg',
+        AudioEncoder.aacLc => kIsWeb ? 'mp4' : 'm4a',
+        AudioEncoder.wav => 'wav',
+        _ => kIsWeb ? 'webm' : 'm4a',
+      };
 
   /// Type MIME correspondant à l'encodeur retenu (pour l'upload R2).
   String _contentTypeFor(AudioEncoder enc) => switch (enc) {

@@ -9,3 +9,8 @@ Future<Uint8List?> lireOctetsEnregistrement(String source) async {
   if (resp.statusCode != 200 || resp.bodyBytes.isEmpty) return null;
   return resp.bodyBytes;
 }
+
+/// Web : le chemin passé à `record` est purement symbolique — le navigateur
+/// rend un blob et ignore cette valeur.
+Future<String> cheminEnregistrement(String base, String extension) async =>
+    '$base.$extension';
