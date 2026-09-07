@@ -13,6 +13,8 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 
+import 'recording_bytes.dart';
+
 import '../core/constants/app_constants.dart';
 import '../core/services/auth_local_store.dart';
 
@@ -60,23 +62,25 @@ class R2UploadService {
       return null;
     }
     if (blobUrl.isEmpty) {
-      dernierDiagnostic = "le micro n'a rien rendu (blob vide)";
+      dernierDiagnostic = "le micro n'a rien rendu (source vide)";
       return null;
     }
     try {
-      // 1. Lire les octets du blob (XHR/fetch supporte les URLs blob: sur web).
-      final blobResp = await http.get(Uri.parse(blobUrl));
-      if (blobResp.statusCode != 200 || blobResp.bodyBytes.isEmpty) {
-        dernierDiagnostic = 'blob illisible (HTTP ${blobResp.statusCode}, '
-            '${blobResp.bodyBytes.length} octets)';
+      // 1. Lire les octets SELON LA PLATEFORME : URL blob: sur le web, chemin
+      //    de fichier sur mobile. Un `http.get` sur un chemin de fichier
+      //    echouait en silence — c'est ce qui empechait TOUT envoi mobile.
+      final octets = await lireOctetsEnregistrement(blobUrl);
+      if (octets == null || octets.isEmpty) {
+        dernierDiagnostic = 'enregistrement illisible a la source';
         return null;
       }
       return uploadBytes(
-        bytes: blobResp.bodyBytes,
+        bytes: octets,
         contentType: contentType,
         meta: meta,
       );
-    } catch (_) {
+    } catch (e) {
+      dernierDiagnostic = "lecture de l'enregistrement impossible : $e";
       return null; // non bloquant
     }
   }
