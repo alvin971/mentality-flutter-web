@@ -441,3 +441,61 @@ encore mesurées : c'est là que la queue basse des positifs se joue.
 **Reste à transcrire sur turbo : 1 495 fichiers = 1 076 min ≈ 4,3 fenêtres
 d'allocation.** Détail : vague 1 (107 min), 2 (112), 3 (159), 4 (98), 5 (386),
 6 (105), 7 (110). Le holdout (vague 9, 192 cas) n'est pas encore synthétisé.
+
+## Décision fondateur — 2026-09-07 : un nombre de mots, une seule lecture
+
+Deux corrections apportées par le fondateur, l'une confirmée par les mesures,
+l'autre appliquée telle quelle.
+
+**1. Le rejeu du fichier d'un ami n'est pas une menace.** Les textes sont tirés
+d'un corpus de 753 et changent à chaque passation. La mesure le confirme
+indépendamment : lire un AUTRE texte de la même langue plafonne à 21 mots
+retrouvés (2 442 paires), très loin des 59 minimum d'une vraie lecture. Le cas
+« fraude par rejeu » du §3 est donc structurellement mort.
+
+**2. Juger sur le NOMBRE de mots retrouvés, pas sur le ratio.** Mesuré sur le
+cache, sans un neurone de plus :
+
+| ce qui est lu | mots retrouvés (min / p5 / méd / max) |
+|---|---|
+| lecture intégrale | **59** / 64 / 75 / 95 |
+| lecture à 75 % | **44** / 46 / 57 / 73 |
+| lecture à 60 % | **37** / 38 / 46 / 55 |
+| 25 % puis silence | 15 / 16 / 20 / **25** |
+| phrase en boucle | 5 / 5 / 11 / **20** |
+| autre texte, même langue (2 442 paires) | 0 / 1 / 4 / **21** |
+| parole de fond | 3 / 3 / 7 / **9** |
+
+Le nombre absolu **sépare mieux que le ratio**, et pour une raison nette : le
+ratio divise par la longueur du texte, si bien que lire 25 % d'un texte long
+donnait un ratio suffisant (`p25sil` montait à 0,34, au-dessus du seuil 0,30 —
+95,5 % rejetés seulement). En mots, tout `p25sil` plafonne à 25 et tombe.
+
+**Seuil retenu : ≥ 30 mots retrouvés** (+ ordre ≥ 0,60 pour les mots mélangés,
+que le compte seul ne voit pas). Comparaison à 25 / 30 / 35 mots :
+
+| | ≥ 25 | **≥ 30** | ≥ 35 |
+|---|---|---|---|
+| intégrales + 75 % | 100 % | **100 %** | 100 % |
+| lecture à 60 % | 100 % | **100 %** | 100 % |
+| 25 % puis silence rejetés | 95,5 % | **100 %** | 100 % |
+| négatifs, tous | 99,48 % | **99,74 %** | 99,74 % |
+
+30 est le premier seuil qui rejette tous les `p25sil`, et 35 n'apporte rien de
+plus tout en rognant la marge des lectures honnêtes. Marge à 30 : **7 mots**
+sous la pire lecture à 60 % (37) et **5 mots** au-dessus du pire tronqué (25).
+Marge confortable face au vrai adversaire (autre texte, 21) : **9 mots**.
+⚠️ Voix synthétiques = marge optimiste ; c'est le suivi sur vraies voix (§7.4)
+qui dira s'il faut descendre à 25.
+
+**3. Une seule lecture vérifiée suffit** (`MIN_VERIFIED_READINGS` 3 → 1).
+Conséquence à connaître, non bloquante : l'app enregistre toujours 3 lectures +
+1 résumé, et c'est cette voix qui paie le bilan Gratuit. Avec une seule lecture
+exigée, quelqu'un peut valider avec 1 bonne lecture et 2 silences — les
+résultats sortent, mais le corpus reçoit 2 fichiers vides. Compromis assumé :
+mieux vaut un corpus un peu plus maigre qu'une personne honnête bloquée.
+
+À appliquer à la livraison (§7) : `VERIFY_MIN_WORDS_HIT = "30"` remplace
+`VERIFY_MIN_OVERLAP` dans `r2-upload`, `VERIFY_MIN_ORDER = "0.60"`,
+`MIN_VERIFIED_READINGS = "1"` dans le tokeniser. Le verdict garde `overlap`
+(information) mais ne le juge plus.

@@ -6,6 +6,7 @@
  "seuil_prod": 0.3,
  "min_summary": 15,
  "min_ordre": 0.6,
+ "min_mots": 35,
  "couverture": {
   "cas": 1805,
   "mesures_directes": 308,
@@ -14,10 +15,10 @@
   "erreurs_modele": 0,
   "fallback_sans_language": 49
  },
- "seuil_retenu": 0.3,
+ "seuil_retenu": 0.05,
  "seuil_tient_negatifs": true,
  "checklist_retenu": {
-  "seuil": 0.3,
+  "seuil": 0.05,
   "integrales_et_75": {
    "global": 100,
    "ok": true,
@@ -29,7 +30,7 @@
    "ok": true
   },
   "negatifs": {
-   "global": 99.48,
+   "global": 99.74,
    "ok": true,
    "silence": 100,
    "bruit": 100,
@@ -64,7 +65,7 @@
    "ok": true
   },
   "negatifs": {
-   "global": 99.48,
+   "global": 99.74,
    "ok": true,
    "silence": 100,
    "bruit": 100,
@@ -94,349 +95,14 @@
    "integrales_degradees": null,
    "p75": 100,
    "p60": 100,
-   "negatifs": 77.84,
-   "silence": 100,
-   "bruit": 100,
-   "musique": 100,
-   "autre_texte": 81.98,
-   "autre_texte_autre_langue": 97.3,
-   "traduction": 66.67,
-   "p25_puis_silence": 0,
-   "phrase_en_boucle": 0,
-   "mots_melanges": 100,
-   "parole_de_fond": 66.67,
-   "resume_30": 100,
-   "resume_8": 100,
-   "resume_silence": 100,
-   "par_langue": {
-    "fr": {
-     "pos": 100,
-     "neg": 80.26
-    },
-    "en": {
-     "pos": 100,
-     "neg": 75.38
-    },
-    "en_GB": {
-     "pos": 100,
-     "neg": 78.69
-    },
-    "es": {
-     "pos": 100,
-     "neg": 81.67
-    },
-    "pt": {
-     "pos": 100,
-     "neg": 81.97
-    },
-    "de": {
-     "pos": 100,
-     "neg": 69.23
-    }
-   },
-   "par_format": {
-    "webm": {
-     "pos": 100,
-     "neg": 77.37
-    },
-    "mp4": {
-     "pos": 100,
-     "neg": 100
-    },
-    "wav": {
-     "pos": null,
-     "neg": null
-    }
-   },
-   "par_variante": {
-    "full/clean": 100,
-    "p75/clean": 100,
-    "p60/clean": 100
-   }
-  },
-  {
-   "seuil": 0.1,
-   "integrales_et_75": 100,
-   "integrales_propres": 100,
-   "integrales_degradees": null,
-   "p75": 100,
-   "p60": 100,
-   "negatifs": 89.43,
-   "silence": 100,
-   "bruit": 100,
-   "musique": 100,
-   "autre_texte": 98.65,
-   "autre_texte_autre_langue": 100,
-   "traduction": 83.33,
-   "p25_puis_silence": 0,
-   "phrase_en_boucle": 16.67,
-   "mots_melanges": 100,
-   "parole_de_fond": 100,
-   "resume_30": 100,
-   "resume_8": 100,
-   "resume_silence": 100,
-   "par_langue": {
-    "fr": {
-     "pos": 100,
-     "neg": 92.11
-    },
-    "en": {
-     "pos": 100,
-     "neg": 87.69
-    },
-    "en_GB": {
-     "pos": 100,
-     "neg": 88.52
-    },
-    "es": {
-     "pos": 100,
-     "neg": 90
-    },
-    "pt": {
-     "pos": 100,
-     "neg": 88.52
-    },
-    "de": {
-     "pos": 100,
-     "neg": 89.23
-    }
-   },
-   "par_format": {
-    "webm": {
-     "pos": 100,
-     "neg": 89.21
-    },
-    "mp4": {
-     "pos": 100,
-     "neg": 100
-    },
-    "wav": {
-     "pos": null,
-     "neg": null
-    }
-   },
-   "par_variante": {
-    "full/clean": 100,
-    "p75/clean": 100,
-    "p60/clean": 100
-   }
-  },
-  {
-   "seuil": 0.15,
-   "integrales_et_75": 100,
-   "integrales_propres": 100,
-   "integrales_degradees": null,
-   "p75": 100,
-   "p60": 100,
-   "negatifs": 92.53,
+   "negatifs": 99.74,
    "silence": 100,
    "bruit": 100,
    "musique": 100,
    "autre_texte": 100,
    "autre_texte_autre_langue": 100,
    "traduction": 83.33,
-   "p25_puis_silence": 0,
-   "phrase_en_boucle": 66.67,
-   "mots_melanges": 100,
-   "parole_de_fond": 100,
-   "resume_30": 100,
-   "resume_8": 100,
-   "resume_silence": 100,
-   "par_langue": {
-    "fr": {
-     "pos": 100,
-     "neg": 96.05
-    },
-    "en": {
-     "pos": 100,
-     "neg": 92.31
-    },
-    "en_GB": {
-     "pos": 100,
-     "neg": 88.52
-    },
-    "es": {
-     "pos": 100,
-     "neg": 93.33
-    },
-    "pt": {
-     "pos": 100,
-     "neg": 91.8
-    },
-    "de": {
-     "pos": 100,
-     "neg": 92.31
-    }
-   },
-   "par_format": {
-    "webm": {
-     "pos": 100,
-     "neg": 92.37
-    },
-    "mp4": {
-     "pos": 100,
-     "neg": 100
-    },
-    "wav": {
-     "pos": null,
-     "neg": null
-    }
-   },
-   "par_variante": {
-    "full/clean": 100,
-    "p75/clean": 100,
-    "p60/clean": 100
-   }
-  },
-  {
-   "seuil": 0.2,
-   "integrales_et_75": 100,
-   "integrales_propres": 100,
-   "integrales_degradees": null,
-   "p75": 100,
-   "p60": 100,
-   "negatifs": 93.81,
-   "silence": 100,
-   "bruit": 100,
-   "musique": 100,
-   "autre_texte": 100,
-   "autre_texte_autre_langue": 100,
-   "traduction": 83.33,
-   "p25_puis_silence": 0,
-   "phrase_en_boucle": 94.44,
-   "mots_melanges": 100,
-   "parole_de_fond": 100,
-   "resume_30": 100,
-   "resume_8": 100,
-   "resume_silence": 100,
-   "par_langue": {
-    "fr": {
-     "pos": 100,
-     "neg": 96.05
-    },
-    "en": {
-     "pos": 100,
-     "neg": 93.85
-    },
-    "en_GB": {
-     "pos": 100,
-     "neg": 91.8
-    },
-    "es": {
-     "pos": 100,
-     "neg": 93.33
-    },
-    "pt": {
-     "pos": 100,
-     "neg": 93.44
-    },
-    "de": {
-     "pos": 100,
-     "neg": 93.85
-    }
-   },
-   "par_format": {
-    "webm": {
-     "pos": 100,
-     "neg": 93.68
-    },
-    "mp4": {
-     "pos": 100,
-     "neg": 100
-    },
-    "wav": {
-     "pos": null,
-     "neg": null
-    }
-   },
-   "par_variante": {
-    "full/clean": 100,
-    "p75/clean": 100,
-    "p60/clean": 100
-   }
-  },
-  {
-   "seuil": 0.25,
-   "integrales_et_75": 100,
-   "integrales_propres": 100,
-   "integrales_degradees": null,
-   "p75": 100,
-   "p60": 100,
-   "negatifs": 96.91,
-   "silence": 100,
-   "bruit": 100,
-   "musique": 100,
-   "autre_texte": 100,
-   "autre_texte_autre_langue": 100,
-   "traduction": 83.33,
-   "p25_puis_silence": 50,
-   "phrase_en_boucle": 100,
-   "mots_melanges": 100,
-   "parole_de_fond": 100,
-   "resume_30": 100,
-   "resume_8": 100,
-   "resume_silence": 100,
-   "par_langue": {
-    "fr": {
-     "pos": 100,
-     "neg": 98.68
-    },
-    "en": {
-     "pos": 100,
-     "neg": 96.92
-    },
-    "en_GB": {
-     "pos": 100,
-     "neg": 95.08
-    },
-    "es": {
-     "pos": 100,
-     "neg": 96.67
-    },
-    "pt": {
-     "pos": 100,
-     "neg": 98.36
-    },
-    "de": {
-     "pos": 100,
-     "neg": 95.38
-    }
-   },
-   "par_format": {
-    "webm": {
-     "pos": 100,
-     "neg": 96.84
-    },
-    "mp4": {
-     "pos": 100,
-     "neg": 100
-    },
-    "wav": {
-     "pos": null,
-     "neg": null
-    }
-   },
-   "par_variante": {
-    "full/clean": 100,
-    "p75/clean": 100,
-    "p60/clean": 100
-   }
-  },
-  {
-   "seuil": 0.3,
-   "integrales_et_75": 100,
-   "integrales_propres": 100,
-   "integrales_degradees": null,
-   "p75": 100,
-   "p60": 100,
-   "negatifs": 99.48,
-   "silence": 100,
-   "bruit": 100,
-   "musique": 100,
-   "autre_texte": 100,
-   "autre_texte_autre_langue": 100,
-   "traduction": 83.33,
-   "p25_puis_silence": 95.45,
+   "p25_puis_silence": 100,
    "phrase_en_boucle": 100,
    "mots_melanges": 100,
    "parole_de_fond": 100,
@@ -466,13 +132,348 @@
     },
     "de": {
      "pos": 100,
-     "neg": 98.46
+     "neg": 100
     }
    },
    "par_format": {
     "webm": {
      "pos": 100,
-     "neg": 99.47
+     "neg": 99.74
+    },
+    "mp4": {
+     "pos": 100,
+     "neg": 100
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {
+    "full/clean": 100,
+    "p75/clean": 100,
+    "p60/clean": 100
+   }
+  },
+  {
+   "seuil": 0.1,
+   "integrales_et_75": 100,
+   "integrales_propres": 100,
+   "integrales_degradees": null,
+   "p75": 100,
+   "p60": 100,
+   "negatifs": 99.74,
+   "silence": 100,
+   "bruit": 100,
+   "musique": 100,
+   "autre_texte": 100,
+   "autre_texte_autre_langue": 100,
+   "traduction": 83.33,
+   "p25_puis_silence": 100,
+   "phrase_en_boucle": 100,
+   "mots_melanges": 100,
+   "parole_de_fond": 100,
+   "resume_30": 100,
+   "resume_8": 100,
+   "resume_silence": 100,
+   "par_langue": {
+    "fr": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en_GB": {
+     "pos": 100,
+     "neg": 100
+    },
+    "es": {
+     "pos": 100,
+     "neg": 98.33
+    },
+    "pt": {
+     "pos": 100,
+     "neg": 100
+    },
+    "de": {
+     "pos": 100,
+     "neg": 100
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": 100,
+     "neg": 99.74
+    },
+    "mp4": {
+     "pos": 100,
+     "neg": 100
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {
+    "full/clean": 100,
+    "p75/clean": 100,
+    "p60/clean": 100
+   }
+  },
+  {
+   "seuil": 0.15,
+   "integrales_et_75": 100,
+   "integrales_propres": 100,
+   "integrales_degradees": null,
+   "p75": 100,
+   "p60": 100,
+   "negatifs": 99.74,
+   "silence": 100,
+   "bruit": 100,
+   "musique": 100,
+   "autre_texte": 100,
+   "autre_texte_autre_langue": 100,
+   "traduction": 83.33,
+   "p25_puis_silence": 100,
+   "phrase_en_boucle": 100,
+   "mots_melanges": 100,
+   "parole_de_fond": 100,
+   "resume_30": 100,
+   "resume_8": 100,
+   "resume_silence": 100,
+   "par_langue": {
+    "fr": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en_GB": {
+     "pos": 100,
+     "neg": 100
+    },
+    "es": {
+     "pos": 100,
+     "neg": 98.33
+    },
+    "pt": {
+     "pos": 100,
+     "neg": 100
+    },
+    "de": {
+     "pos": 100,
+     "neg": 100
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": 100,
+     "neg": 99.74
+    },
+    "mp4": {
+     "pos": 100,
+     "neg": 100
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {
+    "full/clean": 100,
+    "p75/clean": 100,
+    "p60/clean": 100
+   }
+  },
+  {
+   "seuil": 0.2,
+   "integrales_et_75": 100,
+   "integrales_propres": 100,
+   "integrales_degradees": null,
+   "p75": 100,
+   "p60": 100,
+   "negatifs": 99.74,
+   "silence": 100,
+   "bruit": 100,
+   "musique": 100,
+   "autre_texte": 100,
+   "autre_texte_autre_langue": 100,
+   "traduction": 83.33,
+   "p25_puis_silence": 100,
+   "phrase_en_boucle": 100,
+   "mots_melanges": 100,
+   "parole_de_fond": 100,
+   "resume_30": 100,
+   "resume_8": 100,
+   "resume_silence": 100,
+   "par_langue": {
+    "fr": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en_GB": {
+     "pos": 100,
+     "neg": 100
+    },
+    "es": {
+     "pos": 100,
+     "neg": 98.33
+    },
+    "pt": {
+     "pos": 100,
+     "neg": 100
+    },
+    "de": {
+     "pos": 100,
+     "neg": 100
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": 100,
+     "neg": 99.74
+    },
+    "mp4": {
+     "pos": 100,
+     "neg": 100
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {
+    "full/clean": 100,
+    "p75/clean": 100,
+    "p60/clean": 100
+   }
+  },
+  {
+   "seuil": 0.25,
+   "integrales_et_75": 100,
+   "integrales_propres": 100,
+   "integrales_degradees": null,
+   "p75": 100,
+   "p60": 100,
+   "negatifs": 99.74,
+   "silence": 100,
+   "bruit": 100,
+   "musique": 100,
+   "autre_texte": 100,
+   "autre_texte_autre_langue": 100,
+   "traduction": 83.33,
+   "p25_puis_silence": 100,
+   "phrase_en_boucle": 100,
+   "mots_melanges": 100,
+   "parole_de_fond": 100,
+   "resume_30": 100,
+   "resume_8": 100,
+   "resume_silence": 100,
+   "par_langue": {
+    "fr": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en_GB": {
+     "pos": 100,
+     "neg": 100
+    },
+    "es": {
+     "pos": 100,
+     "neg": 98.33
+    },
+    "pt": {
+     "pos": 100,
+     "neg": 100
+    },
+    "de": {
+     "pos": 100,
+     "neg": 100
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": 100,
+     "neg": 99.74
+    },
+    "mp4": {
+     "pos": 100,
+     "neg": 100
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {
+    "full/clean": 100,
+    "p75/clean": 100,
+    "p60/clean": 100
+   }
+  },
+  {
+   "seuil": 0.3,
+   "integrales_et_75": 100,
+   "integrales_propres": 100,
+   "integrales_degradees": null,
+   "p75": 100,
+   "p60": 100,
+   "negatifs": 99.74,
+   "silence": 100,
+   "bruit": 100,
+   "musique": 100,
+   "autre_texte": 100,
+   "autre_texte_autre_langue": 100,
+   "traduction": 83.33,
+   "p25_puis_silence": 100,
+   "phrase_en_boucle": 100,
+   "mots_melanges": 100,
+   "parole_de_fond": 100,
+   "resume_30": 100,
+   "resume_8": 100,
+   "resume_silence": 100,
+   "par_langue": {
+    "fr": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en": {
+     "pos": 100,
+     "neg": 100
+    },
+    "en_GB": {
+     "pos": 100,
+     "neg": 100
+    },
+    "es": {
+     "pos": 100,
+     "neg": 98.33
+    },
+    "pt": {
+     "pos": 100,
+     "neg": 100
+    },
+    "de": {
+     "pos": 100,
+     "neg": 100
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": 100,
+     "neg": 99.74
     },
     "mp4": {
      "pos": 100,
@@ -763,7 +764,7 @@
    "integrales_propres": 100,
    "integrales_degradees": null,
    "p75": 100,
-   "p60": 83.33,
+   "p60": 100,
    "negatifs": 99.74,
    "silence": 100,
    "bruit": 100,
@@ -821,16 +822,16 @@
    "par_variante": {
     "full/clean": 100,
     "p75/clean": 100,
-    "p60/clean": 83.33
+    "p60/clean": 100
    }
   },
   {
    "seuil": 0.6,
-   "integrales_et_75": 98.71,
+   "integrales_et_75": 100,
    "integrales_propres": 100,
    "integrales_degradees": null,
-   "p75": 97.53,
-   "p60": 33.33,
+   "p75": 100,
+   "p60": 100,
    "negatifs": 99.74,
    "silence": 100,
    "bruit": 100,
@@ -867,17 +868,17 @@
      "neg": 100
     },
     "de": {
-     "pos": 92.59,
+     "pos": 100,
      "neg": 100
     }
    },
    "par_format": {
     "webm": {
-     "pos": 99.21,
+     "pos": 100,
      "neg": 99.74
     },
     "mp4": {
-     "pos": 96.55,
+     "pos": 100,
      "neg": 100
     },
     "wav": {
@@ -887,17 +888,17 @@
    },
    "par_variante": {
     "full/clean": 100,
-    "p75/clean": 97.53,
-    "p60/clean": 33.33
+    "p75/clean": 100,
+    "p60/clean": 100
    }
   },
   {
    "seuil": 0.65,
-   "integrales_et_75": 96.77,
+   "integrales_et_75": 100,
    "integrales_propres": 100,
    "integrales_degradees": null,
-   "p75": 93.83,
-   "p60": 4.17,
+   "p75": 100,
+   "p60": 100,
    "negatifs": 99.74,
    "silence": 100,
    "bruit": 100,
@@ -930,21 +931,21 @@
      "neg": 98.33
     },
     "pt": {
-     "pos": 91.67,
+     "pos": 100,
      "neg": 100
     },
     "de": {
-     "pos": 88.89,
+     "pos": 100,
      "neg": 100
     }
    },
    "par_format": {
     "webm": {
-     "pos": 97.62,
+     "pos": 100,
      "neg": 99.74
     },
     "mp4": {
-     "pos": 93.1,
+     "pos": 100,
      "neg": 100
     },
     "wav": {
@@ -954,24 +955,24 @@
    },
    "par_variante": {
     "full/clean": 100,
-    "p75/clean": 93.83,
-    "p60/clean": 4.17
+    "p75/clean": 100,
+    "p60/clean": 100
    }
   },
   {
    "seuil": 0.7,
-   "integrales_et_75": 85.81,
+   "integrales_et_75": 100,
    "integrales_propres": 100,
    "integrales_degradees": null,
-   "p75": 72.84,
-   "p60": 4.17,
-   "negatifs": 100,
+   "p75": 100,
+   "p60": 100,
+   "negatifs": 99.74,
    "silence": 100,
    "bruit": 100,
    "musique": 100,
    "autre_texte": 100,
    "autre_texte_autre_langue": 100,
-   "traduction": 100,
+   "traduction": 83.33,
    "p25_puis_silence": 100,
    "phrase_en_boucle": 100,
    "mots_melanges": 100,
@@ -981,11 +982,11 @@
    "resume_silence": 100,
    "par_langue": {
     "fr": {
-     "pos": 88,
+     "pos": 100,
      "neg": 100
     },
     "en": {
-     "pos": 85.19,
+     "pos": 100,
      "neg": 100
     },
     "en_GB": {
@@ -993,25 +994,25 @@
      "neg": 100
     },
     "es": {
-     "pos": 84.62,
-     "neg": 100
+     "pos": 100,
+     "neg": 98.33
     },
     "pt": {
-     "pos": 70.83,
+     "pos": 100,
      "neg": 100
     },
     "de": {
-     "pos": 85.19,
+     "pos": 100,
      "neg": 100
     }
    },
    "par_format": {
     "webm": {
-     "pos": 88.89,
-     "neg": 100
+     "pos": 100,
+     "neg": 99.74
     },
     "mp4": {
-     "pos": 72.41,
+     "pos": 100,
      "neg": 100
     },
     "wav": {
@@ -1021,24 +1022,24 @@
    },
    "par_variante": {
     "full/clean": 100,
-    "p75/clean": 72.84,
-    "p60/clean": 4.17
+    "p75/clean": 100,
+    "p60/clean": 100
    }
   },
   {
    "seuil": 0.75,
-   "integrales_et_75": 63.23,
+   "integrales_et_75": 100,
    "integrales_propres": 100,
    "integrales_degradees": null,
-   "p75": 29.63,
-   "p60": 0,
-   "negatifs": 100,
+   "p75": 100,
+   "p60": 100,
+   "negatifs": 99.74,
    "silence": 100,
    "bruit": 100,
    "musique": 100,
    "autre_texte": 100,
    "autre_texte_autre_langue": 100,
-   "traduction": 100,
+   "traduction": 83.33,
    "p25_puis_silence": 100,
    "phrase_en_boucle": 100,
    "mots_melanges": 100,
@@ -1048,37 +1049,37 @@
    "resume_silence": 100,
    "par_langue": {
     "fr": {
-     "pos": 64,
+     "pos": 100,
      "neg": 100
     },
     "en": {
-     "pos": 59.26,
+     "pos": 100,
      "neg": 100
     },
     "en_GB": {
-     "pos": 84.62,
+     "pos": 100,
      "neg": 100
     },
     "es": {
-     "pos": 57.69,
-     "neg": 100
+     "pos": 100,
+     "neg": 98.33
     },
     "pt": {
-     "pos": 58.33,
+     "pos": 100,
      "neg": 100
     },
     "de": {
-     "pos": 55.56,
+     "pos": 100,
      "neg": 100
     }
    },
    "par_format": {
     "webm": {
-     "pos": 70.63,
-     "neg": 100
+     "pos": 100,
+     "neg": 99.74
     },
     "mp4": {
-     "pos": 31.03,
+     "pos": 100,
      "neg": 100
     },
     "wav": {
@@ -1088,24 +1089,24 @@
    },
    "par_variante": {
     "full/clean": 100,
-    "p75/clean": 29.63,
-    "p60/clean": 0
+    "p75/clean": 100,
+    "p60/clean": 100
    }
   },
   {
    "seuil": 0.8,
-   "integrales_et_75": 47.74,
+   "integrales_et_75": 100,
    "integrales_propres": 100,
    "integrales_degradees": null,
-   "p75": 0,
-   "p60": 0,
-   "negatifs": 100,
+   "p75": 100,
+   "p60": 100,
+   "negatifs": 99.74,
    "silence": 100,
    "bruit": 100,
    "musique": 100,
    "autre_texte": 100,
    "autre_texte_autre_langue": 100,
-   "traduction": 100,
+   "traduction": 83.33,
    "p25_puis_silence": 100,
    "phrase_en_boucle": 100,
    "mots_melanges": 100,
@@ -1115,37 +1116,37 @@
    "resume_silence": 100,
    "par_langue": {
     "fr": {
-     "pos": 48,
+     "pos": 100,
      "neg": 100
     },
     "en": {
-     "pos": 48.15,
+     "pos": 100,
      "neg": 100
     },
     "en_GB": {
-     "pos": 46.15,
+     "pos": 100,
      "neg": 100
     },
     "es": {
-     "pos": 46.15,
-     "neg": 100
+     "pos": 100,
+     "neg": 98.33
     },
     "pt": {
-     "pos": 50,
+     "pos": 100,
      "neg": 100
     },
     "de": {
-     "pos": 48.15,
+     "pos": 100,
      "neg": 100
     }
    },
    "par_format": {
     "webm": {
-     "pos": 58.73,
-     "neg": 100
+     "pos": 100,
+     "neg": 99.74
     },
     "mp4": {
-     "pos": 0,
+     "pos": 100,
      "neg": 100
     },
     "wav": {
@@ -1155,24 +1156,24 @@
    },
    "par_variante": {
     "full/clean": 100,
-    "p75/clean": 0,
-    "p60/clean": 0
+    "p75/clean": 100,
+    "p60/clean": 100
    }
   },
   {
    "seuil": 0.85,
-   "integrales_et_75": 46.45,
-   "integrales_propres": 97.3,
+   "integrales_et_75": 100,
+   "integrales_propres": 100,
    "integrales_degradees": null,
-   "p75": 0,
-   "p60": 0,
-   "negatifs": 100,
+   "p75": 100,
+   "p60": 100,
+   "negatifs": 99.74,
    "silence": 100,
    "bruit": 100,
    "musique": 100,
    "autre_texte": 100,
    "autre_texte_autre_langue": 100,
-   "traduction": 100,
+   "traduction": 83.33,
    "p25_puis_silence": 100,
    "phrase_en_boucle": 100,
    "mots_melanges": 100,
@@ -1182,37 +1183,37 @@
    "resume_silence": 100,
    "par_langue": {
     "fr": {
-     "pos": 48,
+     "pos": 100,
      "neg": 100
     },
     "en": {
-     "pos": 48.15,
+     "pos": 100,
      "neg": 100
     },
     "en_GB": {
-     "pos": 46.15,
+     "pos": 100,
      "neg": 100
     },
     "es": {
-     "pos": 46.15,
-     "neg": 100
+     "pos": 100,
+     "neg": 98.33
     },
     "pt": {
-     "pos": 45.83,
+     "pos": 100,
      "neg": 100
     },
     "de": {
-     "pos": 44.44,
+     "pos": 100,
      "neg": 100
     }
    },
    "par_format": {
     "webm": {
-     "pos": 57.14,
-     "neg": 100
+     "pos": 100,
+     "neg": 99.74
     },
     "mp4": {
-     "pos": 0,
+     "pos": 100,
      "neg": 100
     },
     "wav": {
@@ -1221,25 +1222,25 @@
     }
    },
    "par_variante": {
-    "full/clean": 97.3,
-    "p75/clean": 0,
-    "p60/clean": 0
+    "full/clean": 100,
+    "p75/clean": 100,
+    "p60/clean": 100
    }
   },
   {
    "seuil": 0.9,
-   "integrales_et_75": 43.87,
-   "integrales_propres": 91.89,
+   "integrales_et_75": 100,
+   "integrales_propres": 100,
    "integrales_degradees": null,
-   "p75": 0,
-   "p60": 0,
-   "negatifs": 100,
+   "p75": 100,
+   "p60": 100,
+   "negatifs": 99.74,
    "silence": 100,
    "bruit": 100,
    "musique": 100,
    "autre_texte": 100,
    "autre_texte_autre_langue": 100,
-   "traduction": 100,
+   "traduction": 83.33,
    "p25_puis_silence": 100,
    "phrase_en_boucle": 100,
    "mots_melanges": 100,
@@ -1249,37 +1250,37 @@
    "resume_silence": 100,
    "par_langue": {
     "fr": {
-     "pos": 48,
+     "pos": 100,
      "neg": 100
     },
     "en": {
-     "pos": 48.15,
+     "pos": 100,
      "neg": 100
     },
     "en_GB": {
-     "pos": 46.15,
+     "pos": 100,
      "neg": 100
     },
     "es": {
-     "pos": 46.15,
-     "neg": 100
+     "pos": 100,
+     "neg": 98.33
     },
     "pt": {
-     "pos": 33.33,
+     "pos": 100,
      "neg": 100
     },
     "de": {
-     "pos": 40.74,
+     "pos": 100,
      "neg": 100
     }
    },
    "par_format": {
     "webm": {
-     "pos": 53.97,
-     "neg": 100
+     "pos": 100,
+     "neg": 99.74
     },
     "mp4": {
-     "pos": 0,
+     "pos": 100,
      "neg": 100
     },
     "wav": {
@@ -1288,25 +1289,25 @@
     }
    },
    "par_variante": {
-    "full/clean": 91.89,
-    "p75/clean": 0,
-    "p60/clean": 0
+    "full/clean": 100,
+    "p75/clean": 100,
+    "p60/clean": 100
    }
   },
   {
    "seuil": 0.95,
-   "integrales_et_75": 28.39,
-   "integrales_propres": 59.46,
+   "integrales_et_75": 100,
+   "integrales_propres": 100,
    "integrales_degradees": null,
-   "p75": 0,
-   "p60": 0,
-   "negatifs": 100,
+   "p75": 100,
+   "p60": 100,
+   "negatifs": 99.74,
    "silence": 100,
    "bruit": 100,
    "musique": 100,
    "autre_texte": 100,
    "autre_texte_autre_langue": 100,
-   "traduction": 100,
+   "traduction": 83.33,
    "p25_puis_silence": 100,
    "phrase_en_boucle": 100,
    "mots_melanges": 100,
@@ -1316,37 +1317,37 @@
    "resume_silence": 100,
    "par_langue": {
     "fr": {
-     "pos": 28,
+     "pos": 100,
      "neg": 100
     },
     "en": {
-     "pos": 44.44,
+     "pos": 100,
      "neg": 100
     },
     "en_GB": {
-     "pos": 34.62,
+     "pos": 100,
      "neg": 100
     },
     "es": {
-     "pos": 30.77,
-     "neg": 100
+     "pos": 100,
+     "neg": 98.33
     },
     "pt": {
-     "pos": 16.67,
+     "pos": 100,
      "neg": 100
     },
     "de": {
-     "pos": 14.81,
+     "pos": 100,
      "neg": 100
     }
    },
    "par_format": {
     "webm": {
-     "pos": 34.92,
-     "neg": 100
+     "pos": 100,
+     "neg": 99.74
     },
     "mp4": {
-     "pos": 0,
+     "pos": 100,
      "neg": 100
     },
     "wav": {
@@ -1355,9 +1356,9 @@
     }
    },
    "par_variante": {
-    "full/clean": 59.46,
-    "p75/clean": 0,
-    "p60/clean": 0
+    "full/clean": 100,
+    "p75/clean": 100,
+    "p60/clean": 100
    }
   }
  ],
@@ -1678,15 +1679,6 @@
    "words": 76,
    "ordre": 0.9273,
    "couverture": 0.6667
-  },
-  {
-   "id": "neg:de:de_00048:A:p25sil:clean:webm:de_00048",
-   "target": "de_00048",
-   "content": "p25sil",
-   "overlap": 0.3443,
-   "words": 21,
-   "ordre": 1,
-   "couverture": 0
   }
  ],
  "erreurs": []
