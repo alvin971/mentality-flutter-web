@@ -499,3 +499,34 @@ mieux vaut un corpus un peu plus maigre qu'une personne honnête bloquée.
 `VERIFY_MIN_OVERLAP` dans `r2-upload`, `VERIFY_MIN_ORDER = "0.60"`,
 `MIN_VERIFIED_READINGS = "1"` dans le tokeniser. Le verdict garde `overlap`
 (information) mais ne le juge plus.
+
+## Livraison — 2026-09-07 : déployé en production
+
+Fusion en avance rapide dans `main` (`e4b02b1` → `434a46e`), puis
+`wrangler deploy` des deux workers — le dépôt n'a **aucun workflow GitHub qui
+déploie les workers** (seulement Android, iOS et ASC) : pousser sur `main` ne
+suffit pas, le déploiement est manuel et l'a toujours été.
+
+| worker | version | ce qui change |
+|---|---|---|
+| `mentality-r2-upload` | `2314b5c5` | turbo + base64, `VERIFY_MIN_WORDS_HIT=30`, `VERIFY_MIN_ORDER=0.60`, reprise par cron (03:00 UTC) |
+| `mentality-tokeniser` | `9b7f8dbd` | `MIN_VERIFIED_READINGS=1` |
+
+Vérifié en ligne : dépôt sans passe → 401, `/validate` sans passe → 400, les
+deux scripts présents à l'API. Tests avant fusion : r2-upload 154, tokeniser 76,
+partagé 10 — 0 échec. Bout en bout sur le VRAI modèle : 8/8 conformes.
+
+**La calibration n'est pas finie pour autant.** Ce qui est déployé repose sur
+14 % du corpus d'essai (308 fichiers sur 1 802). Restent à mesurer, quand
+l'allocation le permet : les 386 min de dégradations acoustiques (vague 5), les
+vagues 3, 6 et 7, le holdout (à synthétiser), et le contrôle de stabilité du §6.
+Le seuil de 30 peut encore bouger — c'est maintenant la **distribution réelle**
+qui tranchera :
+
+```bash
+wrangler r2 object list mentality-audio --jurisdiction eu --prefix "verified/"
+```
+
+`words_hit`, `words_ref` et `order` sont dans les `customMetadata` : la
+distribution se lit sans télécharger un verdict ni conserver un mot transcrit.
+Si les vraies lectures tombent entre 30 et 40 mots, descendre à 25.
