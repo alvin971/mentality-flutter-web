@@ -59,6 +59,29 @@ CLEANUP_MAX_OBJECTS = "20000"
 VERIFY_MIN_OVERLAP = "0.30"
 # Résumé (pas de référence) : nombre minimal de mots distincts (≥ 4 caractères,
 # après normalisation) dans la transcription pour que le verdict soit ok.
+# ─────────────────────────────────────────────────────────────────────────────
+# PREUVE DE LECTURE — calibrée au banc (tools/verif_lab, 2026-09-07)
+#
+# On juge sur un NOMBRE de mots du texte retrouvés dans la transcription, pas
+# sur un ratio : le ratio divise par la longueur du texte, si bien que lire
+# 25 % d'un texte long donnait 0,34 et passait l'ancien seuil de 0,30.
+#
+# Mesuré sur voix synthétiques, 6 langues, modèle whisper-large-v3-turbo :
+#   lecture complète .................. 59 mots au minimum
+#   lecture à 75 % .................... 44
+#   lecture à 60 % .................... 37
+#   « 25 % puis silence » ............. 25 au maximum
+#   autre texte du corpus ............. 21 au maximum (2 442 paires)
+# 30 est le premier seuil qui rejette tous les tronqués sans toucher aux
+# lectures honnêtes. ⚠️ Voix synthétiques = marge optimiste : lire la
+# distribution réelle (customMetadata words_hit des verdicts) avant de bouger.
+VERIFY_MIN_WORDS_HIT = "30"
+
+# Score d'ordre minimal. Le compte seul ne voit pas la récitation des mots du
+# texte EN VRAC (28 à 85 mots retrouvés, elle passerait) ; son score d'ordre
+# plafonne à 0,25 quand une vraie lecture ne descend pas sous 0,98.
+VERIFY_MIN_ORDER = "0.60"
+
 VERIFY_MIN_SUMMARY_WORDS = "15"
 
 # Reprise des vérifications manquantes par le cron (handler scheduled()).

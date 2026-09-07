@@ -690,16 +690,29 @@ console.log("\nScore d'ordre (text_norm.js) : lire le texte ≠ réciter ses mot
 console.log('\nVérification des enregistrements : transcription de fond, verdict sans texte');
 // Référence : 20 mots distincts de 4+ caractères, accentués pour exercer la
 // normalisation des deux côtés (référence ET transcription).
+// Le verdict se juge sur un NOMBRE de mots retrouvés (30 par défaut) : la
+// référence du scénario doit donc ressembler à un vrai texte du corpus. Le
+// plus pauvre des 753 en compte 59 (`de_00050`) ; celui-ci en a 60.
 const TEXTE_REF = 'La montagne, la rivière, la forêt, le village, le soleil, le nuage, le chemin, '
   + 'la maison, le jardin, la fenêtre, le bateau, le marché, l\'école, la musique, la lecture, '
-  + 'l\'histoire, le voyage, la cuisine, la saison, la lumière.';
+  + 'l\'histoire, le voyage, la cuisine, la saison, la lumière, la falaise, le torrent, '
+  + 'la clairière, le hameau, l\'aurore, la brume, le sentier, la grange, le verger, la lucarne, '
+  + 'la barque, la foire, le collège, la chanson, l\'écriture, la légende, la traversée, '
+  + 'la recette, l\'automne, la clarté, la colline, le ruisseau, la futaie, le bourg, '
+  + 'le couchant, la nuée, la piste, la ferme, le potager, la verrière, le radeau, '
+  + 'la halle, le lycée, la mélodie, la relecture, le conte, la croisière, la marmite, '
+  + 'l\'hiver, la pénombre.';
 const MOTS_REF = motsDistincts(TEXTE_REF);
-verifie('texte de référence du scénario : 20 mots distincts', MOTS_REF.length === 20, String(MOTS_REF.length));
-// Transcriptions : 10 mots sur 20 (50 %), 2 sur 20 (10 %), avec du bruit.
+verifie('texte de référence du scénario : 60 mots distincts, comme un vrai texte du corpus',
+  MOTS_REF.length === 60, String(MOTS_REF.length));
+// Transcription « honnête » : les 40 premiers mots du texte, dans l'ordre, avec
+// des hésitations — au-dessus du seuil de 30. Puis une lecture qui s'arrête tôt.
 const TRANSCRIPTION_50 = 'Euh la montagne la rivière et puis la forêt le village le soleil… '
-  + 'nuage, chemin, maison, jardin, fenêtre. Voilà.';
+  + 'nuage, chemin, maison, jardin, fenêtre, bateau, marché, école, musique, lecture, '
+  + 'histoire, voyage, cuisine, saison, lumière, falaise, torrent, clairière, hameau, aurore, '
+  + 'brume, sentier, grange, verger, lucarne, barque, foire, collège, chanson, écriture. Voilà.';
 const TRANSCRIPTION_10 = 'Bonjour bonjour, la montagne et la rivière, merci beaucoup.';
-const ATTENDU_VERDICT = ['ok', 'reason', 'overlap', 'words_hit', 'words_ref', 'words_transcribed', 'model', 'day'];
+const ATTENDU_VERDICT = ['ok', 'reason', 'overlap', 'order', 'words_hit', 'words_ref', 'words_transcribed', 'model', 'day'];
 {
   // ─── Lecture, 50 % des mots retrouvés → ok ─────────────────────────────────
   const s = bucket();
@@ -711,8 +724,8 @@ const ATTENDU_VERDICT = ['ok', 'reason', 'overlap', 'words_hit', 'words_ref', 'w
   verifie('lecture : verdict écrit sous verified/<account>/<session>/reading-<textId>.json',
     cleVerdict(s) === `verified/${ACCOUNT}/${SESSION}/reading-txt1.json`, cleVerdict(s));
   const v = verdict(s) || {};
-  verifie('lecture 50 % → ok:true, overlap 0.5, 10 mots sur 20',
-    v.ok === true && v.reason === null && v.overlap === 0.5 && v.words_hit === 10 && v.words_ref === 20,
+  verifie('lecture de 35 mots sur 60, dans l\'ordre → ok:true (seuil : 30 mots)',
+    v.ok === true && v.reason === null && v.words_hit === 35 && v.words_ref === 60 && v.order === 1,
     JSON.stringify(v));
   verifie('lecture : words_transcribed = mots distincts ≥ 4 de la transcription',
     v.words_transcribed === motsDistincts(TRANSCRIPTION_50).length, `${v.words_transcribed}`);
@@ -721,17 +734,18 @@ const ATTENDU_VERDICT = ['ok', 'reason', 'overlap', 'words_hit', 'words_ref', 'w
     JSON.stringify(Object.keys(v)));
   verifie('verdict : jour seul (AAAA-MM-JJ), jamais l\'heure',
     /^\d{4}-\d{2}-\d{2}$/.test(v.day), String(v.day));
-  verifie('verdict : modèle nommé', v.model === '@cf/openai/whisper', String(v.model));
+  verifie('verdict : modèle nommé', v.model === '@cf/openai/whisper-large-v3-turbo', String(v.model));
   const brut = String(s._m.get(cleVerdict(s)).value)
     + JSON.stringify(s._m.get(cleVerdict(s)).options.customMetadata);
   verifie('verdict et ses métadonnées : AUCUN mot transcrit conservé',
     !motsDistincts(TRANSCRIPTION_50).some((mot) => brut.toLowerCase().includes(mot))
     && !brut.includes('montagne') && !brut.includes('Bonjour'), brut);
-  verifie('modèle appelé avec les octets du fichier et la langue (X-Language)',
-    ia._appels.length === 1 && ia._appels[0].modele === '@cf/openai/whisper'
-    && Array.isArray(ia._appels[0].input.audio) && ia._appels[0].input.audio.length === 1024
+  // turbo attend l'audio en BASE64 (il refuse le tableau d'octets) : 1 024 octets → 1 368 caractères.
+  verifie('modèle appelé en base64 avec la langue (X-Language)',
+    ia._appels.length === 1 && ia._appels[0].modele === '@cf/openai/whisper-large-v3-turbo'
+    && typeof ia._appels[0].input.audio === 'string' && ia._appels[0].input.audio.length === 1368
     && ia._appels[0].input.language === 'fr',
-    JSON.stringify(ia._appels.map((a) => ({ modele: a.modele, language: a.input.language, n: a.input.audio.length }))));
+    JSON.stringify(ia._appels.map((a) => ({ modele: a.modele, language: a.input.language, type: typeof a.input.audio, n: a.input.audio.length }))));
   verifie('la réponse HTTP ne dit rien du verdict (clé, taille, reusable seulement)',
     JSON.stringify(Object.keys(r.corps).sort()) === JSON.stringify(['key', 'reusable', 'size']),
     JSON.stringify(r.corps));
@@ -741,8 +755,8 @@ const ATTENDU_VERDICT = ['ok', 'reason', 'overlap', 'words_hit', 'words_ref', 'w
   await semerReference(s2, 'txt1', TEXTE_REF);
   await appel(s2, { ai: iaFactice({ texte: TRANSCRIPTION_10 }) });
   const v2 = verdict(s2) || {};
-  verifie('lecture 10 % → ok:false, reason low_overlap, overlap 0.1',
-    v2.ok === false && v2.reason === 'low_overlap' && v2.overlap === 0.1 && v2.words_hit === 2,
+  verifie('lecture de 2 mots seulement → ok:false, reason too_few_words_found',
+    v2.ok === false && v2.reason === 'too_few_words_found' && v2.words_hit === 2,
     JSON.stringify(v2));
 
   // ─── Seuil surchargé par la var ────────────────────────────────────────────
@@ -750,17 +764,50 @@ const ATTENDU_VERDICT = ['ok', 'reason', 'overlap', 'words_hit', 'words_ref', 'w
   await semerReference(s3, 'txt1', TEXTE_REF);
   await appel(s3, {
     ai: iaFactice({ texte: TRANSCRIPTION_50 }),
-    env: { AUDIO_BUCKET: s3, LEGAL_VERSIONS: CV, AI: iaFactice({ texte: TRANSCRIPTION_50 }), VERIFY_MIN_OVERLAP: '0.60' },
+    env: { AUDIO_BUCKET: s3, LEGAL_VERSIONS: CV, AI: iaFactice({ texte: TRANSCRIPTION_50 }), VERIFY_MIN_WORDS_HIT: '40' },
   });
-  verifie('VERIFY_MIN_OVERLAP="0.60" : 50 % ne suffit plus → ok:false',
-    (verdict(s3) || {}).ok === false && (verdict(s3) || {}).overlap === 0.5, JSON.stringify(verdict(s3)));
+  verifie('VERIFY_MIN_WORDS_HIT="40" : 35 mots ne suffisent plus → ok:false',
+    (verdict(s3) || {}).ok === false && (verdict(s3) || {}).words_hit === 35, JSON.stringify(verdict(s3)));
   const s3b = bucket();
   await semerReference(s3b, 'txt1', TEXTE_REF);
   await appel(s3b, {
-    env: { AUDIO_BUCKET: s3b, LEGAL_VERSIONS: CV, AI: iaFactice({ texte: TRANSCRIPTION_10 }), VERIFY_MIN_OVERLAP: 'n\'importe quoi' },
+    env: { AUDIO_BUCKET: s3b, LEGAL_VERSIONS: CV, AI: iaFactice({ texte: TRANSCRIPTION_10 }), VERIFY_MIN_WORDS_HIT: 'n\'importe quoi' },
   });
-  verifie('VERIFY_MIN_OVERLAP illisible → défaut 0.30 (10 % refusé)',
+  verifie('VERIFY_MIN_WORDS_HIT illisible → défaut 30 (2 mots refusés)',
     (verdict(s3b) || {}).ok === false, JSON.stringify(verdict(s3b)));
+
+  // ─── Le compte seul ne suffit pas : les mêmes mots EN VRAC ────────────────
+  // 35 mots retrouvés, largement au-dessus du seuil — mais dans le désordre.
+  const s3c = bucket();
+  await semerReference(s3c, 'txt1', TEXTE_REF);
+  const enVrac = motsDistincts(TRANSCRIPTION_50).reverse().join(' ');
+  await appel(s3c, { ai: iaFactice({ texte: enVrac }) });
+  const v3c = verdict(s3c) || {};
+  verifie('mots du texte EN VRAC → assez de mots mais ok:false, reason words_out_of_order',
+    v3c.ok === false && v3c.reason === 'words_out_of_order' && v3c.words_hit >= 30 && v3c.order < 0.6,
+    JSON.stringify(v3c));
+  const s3d = bucket();
+  await semerReference(s3d, 'txt1', TEXTE_REF);
+  await appel(s3d, {
+    env: { AUDIO_BUCKET: s3d, LEGAL_VERSIONS: CV, AI: iaFactice({ texte: enVrac }), VERIFY_MIN_ORDER: '0' },
+  });
+  verifie('VERIFY_MIN_ORDER="0" : la règle d\'ordre se désarme sans toucher au reste',
+    (verdict(s3d) || {}).ok === true, JSON.stringify(verdict(s3d)));
+
+  // ─── Le verdict est lisible d'un `list()`, sans télécharger chaque fichier ─
+  const meta3 = s._m.get(cleVerdict(s)).options.customMetadata;
+  verifie('métadonnées du verdict : words_hit, words_ref et order lisibles en list()',
+    meta3.words_hit === '35' && meta3.words_ref === '60' && meta3.order === '1',
+    JSON.stringify(meta3));
+
+  // ─── turbo refuse l'étiquette régionale : on la ramène à ISO 639-1 ────────
+  const s3e = bucket();
+  await semerReference(s3e, 'txt1', TEXTE_REF);
+  const ia3e = iaFactice({ texte: TRANSCRIPTION_50 });
+  await appel(s3e, { ai: ia3e, entetes: { 'X-Language': 'en-GB' } });
+  verifie('X-Language "en-GB" → le modèle reçoit "en" (turbo refuse la variante régionale)',
+    ia3e._appels.length === 1 && ia3e._appels[0].input.language === 'en',
+    JSON.stringify(ia3e._appels.map((a) => a.input.language)));
 
   // ─── Référence absente → no_reference, sans appeler l'IA ───────────────────
   const s4 = bucket();
@@ -909,7 +956,7 @@ console.log("\nReprise par le cron : une panne ne doit pas bloquer quelqu'un pou
   verifie('cron avec modèle rétabli → le verdict manquant est enfin écrit',
     (verdict(sA) || {}).ok === true && iaOk._appels.length === 1, JSON.stringify(verdict(sA)));
   verifie('la reprise relit bien les octets de l\'audio déposé (pas une clé vide)',
-    iaOk._appels[0].input.audio.length === 1024, `${(iaOk._appels[0].input.audio || []).length}`);
+    iaOk._appels[0].input.audio.length === 1368, `${(iaOk._appels[0].input.audio || []).length}`);
 
   // 2. Le cron ne rejuge pas ce qui a déjà un verdict.
   const iaBis = iaFactice({ texte: TRANSCRIPTION_50 });
@@ -930,8 +977,8 @@ console.log("\nReprise par le cron : une panne ne doit pas bloquer quelqu'un pou
   await semerReference(sC, 'txt1', TEXTE_REF);
   await appel(sC, { ai: iaFactice({ jette: true }) });
   await cron(sC, iaFactice({ texte: 'rien à voir avec ce texte' }));
-  verifie('reprise dont la lecture ne correspond pas → verdict ok:false low_overlap écrit',
-    (verdict(sC) || {}).ok === false && (verdict(sC) || {}).reason === 'low_overlap',
+  verifie('reprise dont la lecture ne correspond pas → verdict ok:false écrit (jugement, pas panne)',
+    (verdict(sC) || {}).ok === false && (verdict(sC) || {}).reason === 'too_few_words_found',
     JSON.stringify(verdict(sC)));
 
   // 5. Sans binding AI, le cron ne tente rien (et ne casse pas le ménage).

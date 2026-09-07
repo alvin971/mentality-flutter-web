@@ -84,7 +84,7 @@
 
 import { verifyToken, TOKEN_SIGNING_PUBLIC_KEYS, sha256hex } from '../_shared/token_verify.js';
 import { readPlan } from '../_shared/token_plan.js';
-import { motsDistincts, recouvrement } from '../_shared/text_norm.js';
+import { motsDistincts, motsNormalises, recouvrement, scoreOrdre } from '../_shared/text_norm.js';
 
 const ALLOWED_ORIGINS = [
   'https://mentality-flutter-web.pages.dev',
@@ -110,13 +110,31 @@ const SCHEMA_VERSION_PLAN = 3;
 // Modèle Workers AI de transcription. Bon marché et approximatif : il suffit,
 // on ne cherche pas une transcription exacte mais une preuve que le texte
 // attendu a bien été lu (cf. en-tête de fichier).
-const MODELE_TRANSCRIPTION = '@cf/openai/whisper';
+const MODELE_TRANSCRIPTION = '@cf/openai/whisper-large-v3-turbo';
 // Au-delà, on ne transcrit pas : les octets sont recopiés dans un tableau JS
 // pour le modèle, et un fichier de 25 Mo ferait déborder la mémoire du worker.
 // À 32 kbps (Opus forcé par l'app), 8 Mo ≈ 33 minutes : très au-dessus d'une
 // lecture ou d'un résumé réels.
 const VERIFY_MAX_BYTES = 8 * 1024 * 1024;
 // Seuils par défaut, surchargeables par [vars] (chaînes, comme toute var wrangler).
+/**
+ * Seuil de PREUVE DE LECTURE : nombre de mots du texte retrouvés dans la
+ * transcription. Un NOMBRE, pas un ratio — le ratio divise par la longueur du
+ * texte, si bien que lire 25 % d'un texte long donnait 0,34, au-dessus de
+ * l'ancien seuil 0,30, et passait. Mesuré au banc sur turbo (2026-09-07,
+ * `tools/verif_lab/JOURNAL.md`) : lecture complète 59 mots au minimum, lecture
+ * à 60 % 37 au minimum, « 25 % puis silence » 25 au maximum, lecture d'un
+ * autre texte du corpus 21 au maximum sur 2 442 paires. 30 sépare les deux.
+ */
+const VERIFY_MIN_WORDS_HIT_DEFAUT = 30;
+/**
+ * Score d'ORDRE minimal (cf. `scoreOrdre` dans `_shared/text_norm.js`). Le
+ * compte seul ne distingue pas une lecture d'une récitation des mêmes mots en
+ * vrac : mesuré, le désordre retrouve 28 à 85 mots — il passerait. Son score
+ * d'ordre plafonne à 0,25 quand une vraie lecture ne descend pas sous 0,98.
+ */
+const VERIFY_MIN_ORDER_DEFAUT = 0.60;
+/** Conservé pour information dans le verdict ; ne décide plus rien. */
 const VERIFY_MIN_OVERLAP_DEFAUT = 0.30;
 const VERIFY_MIN_SUMMARY_WORDS_DEFAUT = 15;
 // Types d'enregistrement vérifiés. Tout autre type (défaut 'audio' d'un client
@@ -359,6 +377,7 @@ async function verifierEnregistrement(env, champs) {
     ok,
     reason: ok ? null : (resultat.reason || 'unknown'),
     overlap: typeof resultat.overlap === 'number' ? resultat.overlap : null,
+    order: typeof resultat.order === 'number' ? resultat.order : null,
     words_hit: resultat.words_hit || 0,
     words_ref: resultat.words_ref || 0,
     words_transcribed: resultat.words_transcribed || 0,
@@ -378,6 +397,12 @@ async function verifierEnregistrement(env, champs) {
         text_id: textId || '',
         ok: String(ok),
         reason: verdict.reason || '',
+        // Lisibles par un simple `list({ include: ['customMetadata'] })`, pour
+        // suivre la distribution réelle sans télécharger chaque verdict ni
+        // conserver un seul mot transcrit (§ suivi sur vraies voix).
+        words_hit: String(verdict.words_hit),
+        words_ref: String(verdict.words_ref),
+        order: verdict.order === null ? '' : String(verdict.order),
         day: verdict.day,
       },
     });
@@ -423,11 +448,20 @@ async function calculerVerdict(env, { recordType, textId, language, audio }) {
     };
   }
   const r = recouvrement(reference, transcrits);
-  const seuil = tauxEntreZeroEtUn(env.VERIFY_MIN_OVERLAP, VERIFY_MIN_OVERLAP_DEFAUT);
+  // L'ordre se juge sur les mots DANS L'ORDRE de la transcription (motsNormalises),
+  // pas sur l'ensemble distinct : c'est la suite qui porte l'information.
+  const o = scoreOrdre(reference, motsNormalises(texte));
+  const minMots = entierPositif(env.VERIFY_MIN_WORDS_HIT, VERIFY_MIN_WORDS_HIT_DEFAUT);
+  const minOrdre = tauxEntreZeroEtUn(env.VERIFY_MIN_ORDER, VERIFY_MIN_ORDER_DEFAUT);
+  const assezDeMots = r.hit >= minMots;
+  const dansLOrdre = o.ordre >= minOrdre;
   return {
-    ok: r.overlap >= seuil,
-    reason: 'low_overlap',
-    overlap: r.overlap,
+    // Deux conditions, dans cet ordre de diagnostic : a-t-on lu assez du texte,
+    // et l'a-t-on lu dans son ordre.
+    ok: assezDeMots && dansLOrdre,
+    reason: assezDeMots ? 'words_out_of_order' : 'too_few_words_found',
+    overlap: r.overlap, // information seulement — ne décide plus rien
+    order: o.ordre,
     words_hit: r.hit,
     words_ref: r.ref,
     words_transcribed: r.transcribed,
@@ -463,14 +497,32 @@ async function chargerReference(bucket, textId) {
  * Jette si le modèle échoue les deux fois.
  */
 async function transcrire(ai, audio, language) {
-  const octets = [...new Uint8Array(audio)];
+  // `whisper-large-v3-turbo` attend l'audio en BASE64 (il refuse le tableau
+  // d'octets qu'acceptait `@cf/openai/whisper` : « 'string' not in
+  // 'array','binary' »). Au passage c'est plus léger en mémoire qu'un tableau
+  // JS d'un élément par octet.
+  const b64 = base64(audio);
+  // Le modèle refuse une étiquette régionale (`en-GB`) : on ramène à ISO 639-1,
+  // ce que l'app envoie déjà pour toutes les autres langues.
+  const lang = typeof language === 'string' ? language.split('-')[0] : language;
   let reponse;
   try {
-    reponse = await ai.run(MODELE_TRANSCRIPTION, { audio: octets, language });
+    reponse = await ai.run(MODELE_TRANSCRIPTION, { audio: b64, language: lang });
   } catch {
-    reponse = await ai.run(MODELE_TRANSCRIPTION, { audio: octets });
+    reponse = await ai.run(MODELE_TRANSCRIPTION, { audio: b64 });
   }
   return extraireTexte(reponse);
+}
+
+/** ArrayBuffer → base64, par tranches (une seule String.fromCharCode sur
+ *  plusieurs Mo dépasse la taille d'argument admise). */
+function base64(buffer) {
+  const bytes = new Uint8Array(buffer);
+  let bin = '';
+  for (let i = 0; i < bytes.length; i += 0x8000) {
+    bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+  }
+  return btoa(bin);
 }
 
 function extraireTexte(reponse) {

@@ -117,7 +117,14 @@ MIN_RECORDINGS = "1"
 # ci-dessus n'est plus qu'un garde-fou amont (aucun objet → 400 immédiat).
 # En dessous du seuil : 409 VERIFICATION_PENDING si des verdicts manquent
 # encore (l'app réessaie), 400 VERIFICATION_FAILED sinon.
-MIN_VERIFIED_READINGS = "3"
+# Une seule lecture valide suffit (décision fondateur 2026-09-07). Les textes
+# sont tirés d'un corpus de 753 et changent à chaque passation : rejouer le
+# fichier d'un ami suppose qu'il ait lu EXACTEMENT le même texte, et un autre
+# texte du corpus ne retrouve que 21 mots au maximum, très loin des 30 exigés.
+# L'app enregistre toujours 3 lectures + 1 résumé (c'est la voix qui paie le
+# bilan Gratuit) : n'en exiger qu'une valide protège la personne honnête, au
+# prix d'un corpus parfois plus maigre.
+MIN_VERIFIED_READINGS = "1"
 # Plafond d'émission : fenêtre (minutes) et maximum d'émissions par fenêtre.
 # Valeurs de départ actées avec le fondateur (2026-08-06) : 300/heure —
 # prudent-large, à affiner après observation du compteur en KV.
