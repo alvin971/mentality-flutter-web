@@ -134,8 +134,19 @@ dans une vraie pièce. Lire la distribution réelle avant de bouger le seuil —
 `list()` suffit, sans télécharger un seul verdict :
 
 ```bash
-wrangler r2 object list mentality-audio --jurisdiction eu --prefix "verified/"
+bash workers/r2-upload/scripts/distribution.sh
 ```
+
+⚠️ **Ne pas chercher à le faire au CLI** : `wrangler r2 object` n'a pas de
+sous-commande `list` (seulement get/put/delete), et sur un bucket en
+juridiction EU le `get` répond « key does not exist » à tort. Seul le binding
+R2 d'un worker lit correctement — d'où le mini-worker de lecture seule
+(`scripts/distribution/`), lancé le temps d'une requête par le script ci-dessus,
+puis arrêté. Rien n'est déployé.
+
+Le script affiche : nombre de lectures acceptées et refusées, raisons de refus,
+répartition des mots retrouvés par tranches de 10, score d'ordre, et surtout
+**les cas entre 25 et 45 mots** — ceux qui disent s'il faut bouger le seuil.
 
 Verdict écrit sous `verified/<account>/<sessionId>/<recordType>-<textId>.json` :
 

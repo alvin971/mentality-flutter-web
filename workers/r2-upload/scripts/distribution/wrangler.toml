@@ -1,0 +1,16 @@
+# Mini-worker de LECTURE SEULE, jamais déployé : il ne tourne que sous
+# `wrangler dev --remote`, le temps d'afficher la distribution des verdicts.
+#
+# Pourquoi un worker plutôt que le CLI : `wrangler r2 object` n'a pas de
+# sous-commande `list` (seulement get/put/delete), et sur un bucket en
+# juridiction EU le `get` ment (« key does not exist »). Le binding R2, lui,
+# lit correctement — c'est le contournement déjà consigné au vault.
+name = "mentality-distribution-lecture"
+main = "index.js"
+compatibility_date = "2025-01-01"
+workers_dev = false
+
+[[r2_buckets]]
+binding = "AUDIO_BUCKET"
+bucket_name = "mentality-audio"
+jurisdiction = "eu"
