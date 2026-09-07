@@ -268,6 +268,21 @@ class _OralReadingTestState extends State<OralReadingTest> {
       );
       if (upload != null) record['r2_key'] = upload.key;
 
+      // TEMPORAIRE (2026-09-07) — RETIRER AVEC L'ENTREE DE TEST DES SOUS-TESTS.
+      // L'envoi est volontairement silencieux en production ; pendant la
+      // campagne de test il faut voir s'il est parti, sinon on teste a
+      // l'aveugle (cas vecu : aucune requete n'atteignait le worker et rien
+      // ne le disait).
+      if (mounted) {
+        final diag = R2UploadService.dernierDiagnostic ?? 'aucun diagnostic';
+        final ok = upload != null;
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          duration: Duration(seconds: ok ? 4 : 12),
+          backgroundColor: ok ? Colors.green.shade800 : Colors.red.shade900,
+          content: Text(ok ? 'Audio envoye — $diag' : 'Audio NON envoye — $diag'),
+        ));
+      }
+
       await DataCollectionService.instance.saveAudioRecord(record);
     } catch (_) {
       // L'échec de sauvegarde ne doit pas bloquer le parcours.

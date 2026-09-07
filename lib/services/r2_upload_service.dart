@@ -32,6 +32,18 @@ class R2UploadService {
   bool get isConfigured =>
       !AppConstants.r2UploadWorkerUrl.contains('YOUR_SUBDOMAIN');
 
+  /// TEMPORAIRE (2026-09-07) — RETIRER AVEC L'ENTREE DE TEST DES SOUS-TESTS.
+  ///
+  /// Pourquoi : tout echec d'envoi est volontairement SILENCIEUX (« non
+  /// bloquant ») — un enregistrement qui ne part pas ne doit jamais casser le
+  /// parcours de quelqu'un. Mais pendant une campagne de test, ce silence rend
+  /// impossible de distinguer « l'audio est parti » de « il n'est jamais
+  /// parti ». Ce champ retient la DERNIERE raison, pour l'afficher a l'ecran.
+  ///
+  /// Ne contient jamais de donnee personnelle : un code de cause, au plus un
+  /// code HTTP.
+  static String? dernierDiagnostic;
+
   /// Récupère les octets d'un blob web (`blob:https://...`) renvoyé par le
   /// recorder, puis les envoie au worker R2. Renvoie la clé R2 ou `null`.
   ///
@@ -43,11 +55,22 @@ class R2UploadService {
     required String contentType,
     required Map<String, String> meta,
   }) async {
-    if (!isConfigured || blobUrl.isEmpty) return null;
+    if (!isConfigured) {
+      dernierDiagnostic = 'worker non configure (URL placeholder)';
+      return null;
+    }
+    if (blobUrl.isEmpty) {
+      dernierDiagnostic = "le micro n'a rien rendu (blob vide)";
+      return null;
+    }
     try {
       // 1. Lire les octets du blob (XHR/fetch supporte les URLs blob: sur web).
       final blobResp = await http.get(Uri.parse(blobUrl));
-      if (blobResp.statusCode != 200 || blobResp.bodyBytes.isEmpty) return null;
+      if (blobResp.statusCode != 200 || blobResp.bodyBytes.isEmpty) {
+        dernierDiagnostic = 'blob illisible (HTTP ${blobResp.statusCode}, '
+            '${blobResp.bodyBytes.length} octets)';
+        return null;
+      }
       return uploadBytes(
         bytes: blobResp.bodyBytes,
         contentType: contentType,
@@ -64,10 +87,21 @@ class R2UploadService {
     required String contentType,
     required Map<String, String> meta,
   }) async {
-    if (!isConfigured || bytes.isEmpty) return null;
+    if (!isConfigured) {
+      dernierDiagnostic = 'worker non configure (URL placeholder)';
+      return null;
+    }
+    if (bytes.isEmpty) {
+      dernierDiagnostic = 'enregistrement vide (0 octet)';
+      return null;
+    }
     // Le worker exige un token signé valide ; sans token, inutile d'uploader.
     final token = await AuthLocalStore.instance.getToken();
-    if (token == null || token.isEmpty) return null;
+    if (token == null || token.isEmpty) {
+      dernierDiagnostic = "AUCUN PASSE en memoire : envoi saute. "
+          "Passer par l'inscription pour obtenir un passe Gratuit signe.";
+      return null;
+    }
     try {
       final resp = await http.post(
         Uri.parse(AppConstants.r2UploadWorkerUrl),
@@ -85,17 +119,26 @@ class R2UploadService {
         },
         body: bytes,
       );
-      if (resp.statusCode != 200) return null;
+      if (resp.statusCode != 200) {
+        dernierDiagnostic = 'worker a refuse : HTTP ${resp.statusCode} '
+            '${resp.body.length > 160 ? resp.body.substring(0, 160) : resp.body}';
+        return null;
+      }
       // Réponse : {"key": "...", "size": N, "reusable": bool}
       final data = jsonDecode(resp.body) as Map<String, dynamic>;
       final key = data['key'] as String?;
-      if (key == null) return null;
+      if (key == null) {
+        dernierDiagnostic = 'reponse du worker sans cle';
+        return null;
+      }
+      dernierDiagnostic = 'OK — ${bytes.length} octets envoyes';
       return R2UploadResult(
         key: key,
         size: (data['size'] as num?)?.toInt() ?? bytes.length,
         reusable: data['reusable'] as bool? ?? false,
       );
-    } catch (_) {
+    } catch (e) {
+      dernierDiagnostic = 'reseau : $e';
       return null; // non bloquant
     }
   }
