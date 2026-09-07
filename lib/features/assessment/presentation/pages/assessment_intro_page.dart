@@ -19,6 +19,8 @@ import '../../../exercises_implementations/arithmetic/presentation/pages/arithme
 import '../../../exercises_implementations/picture_span/presentation/pages/picture_span_test_page.dart';
 import '../../../exercises_implementations/coding/presentation/pages/coding_test_page.dart';
 import '../../../exercises_implementations/symbol_search/presentation/pages/symbol_search_test_page.dart';
+// TEMPORAIRE (2026-09-07) — voir l'entrée « Lecture à voix haute » plus bas.
+import '../../../data_collection/oral_test_flow.dart';
 import '../../../../core/l10n/l10n_ext.dart';
 
 class AssessmentIntroPage extends StatefulWidget {
@@ -315,6 +317,22 @@ class _IndividualTests extends StatelessWidget {
       ('PSI', context.l10n.assessSubtestCoding, () => const CodingTestPage()),
       ('PSI', context.l10n.assessSubtestSymbolSearch,
           () => const SymbolSearchTestPage()),
+      // ─────────────────────────────────────────────────────────────────────
+      // TEMPORAIRE — À RETIRER APRÈS LA CAMPAGNE DE TEST (ajouté le 2026-09-07)
+      //
+      // L'étape orale ne fait PLUS partie du parcours fixe : elle est décidée
+      // par le plan du passe (`oral_plan_gate`), et n'apparaît donc que pour
+      // un passe Gratuit, au milieu du bilan. Impossible à déclencher seul
+      // pour vérifier la preuve de lecture qui vient d'être déployée (seuil
+      // de 30 mots + ordre) — d'où cette entrée de test.
+      //
+      // Libellé en dur À DESSEIN : les `lib/l10n/*.arb` sont régénérés depuis
+      // les fragments par `_merge.py`, on n'y ajoute pas une clé pour une
+      // entrée destinée à disparaître.
+      //
+      // Se lance sans paramètre et lit le plan dans le passe : avec un passe
+      // Payant, l'écran rend la main immédiatement — c'est voulu.
+      ('LO', 'Lecture à voix haute (test)', () => const OralTestFlow()),
     ];
     return Column(
       children: [
