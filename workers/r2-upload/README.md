@@ -92,25 +92,66 @@ Après chaque `put` réussi, le worker lance **en tâche de fond**
 
 1. `reading` : charge `corpus/<X-Text-Id>.json` (absent → verdict
    `no_reference`, le modèle n'est pas appelé), transcrit avec
-   `@cf/openai/whisper` (binding `AI`, `[ai]` du `wrangler.toml`), normalise
-   les deux côtés avec `workers/_shared/text_norm.js` (minuscules, sans accent,
-   sans ponctuation, mots ≥ 4 caractères) et calcule
-   `overlap = |transcrits ∩ référence| / |référence|`.
-   `ok` si `overlap ≥ VERIFY_MIN_OVERLAP` (var, défaut `"0.30"`).
+   `@cf/openai/whisper-large-v3-turbo` (binding `AI`, audio en **base64** — ce
+   modèle refuse le tableau d'octets qu'acceptait `@cf/openai/whisper`, et
+   refuse aussi l'étiquette régionale `en-GB`, ramenée à `en`), normalise les
+   deux côtés avec `workers/_shared/text_norm.js` (minuscules, sans accent,
+   sans ponctuation, mots ≥ 4 caractères), puis applique **deux** règles :
+   - **assez de mots lus** : au moins `VERIFY_MIN_WORDS_HIT` mots du texte
+     retrouvés dans la transcription (var, défaut `"30"`) ;
+   - **lus dans l'ordre** : `scoreOrdre` ≥ `VERIFY_MIN_ORDER` (var, défaut `"0.60"`).
 2. `summary` (pas de référence) : `ok` si la transcription compte au moins
    `VERIFY_MIN_SUMMARY_WORDS` mots distincts (var, défaut `"15"`).
 3. Tout autre `X-Record-Type` (défaut `audio`) est stocké **sans verdict**.
 
+### Pourquoi un NOMBRE de mots, et pas un pourcentage
+
+Le ratio divise par la longueur du texte : lire 25 % d'un texte long donnait
+0,34 — au-dessus de l'ancien seuil de 0,30 — et **passait**. Mesuré au banc
+(`tools/verif_lab`, 6 langues, voix synthétiques, modèle turbo) :
+
+| ce qui est enregistré | mots du texte retrouvés |
+|---|---|
+| lecture complète | 59 → 95 |
+| lecture à 75 % | 44 → 73 |
+| lecture à 60 % | 37 → 55 |
+| 25 % du texte puis silence | 15 → **25** |
+| une phrase répétée en boucle | 5 → **20** |
+| un autre texte du corpus, même langue *(2 442 paires)* | 0 → **21** |
+| les mots du texte **en vrac** | 28 → 85 ⚠️ |
+
+30 est le premier seuil qui rejette tous les tronqués sans toucher aux lectures
+honnêtes. La dernière ligne justifie la seconde règle : réciter les mots du
+texte dans le désordre franchit n'importe quel seuil de quantité ; seul l'ordre
+le rejette (0,25 au maximum, contre 0,98 au minimum pour une vraie lecture).
+
+Le texte le plus pauvre des 753 du corpus compte 59 mots de référence : un seuil
+de 30 reste donc toujours atteignable, quelle que soit la langue.
+
+⚠️ Ces marges viennent de **voix synthétiques**, plus propres qu'un vrai micro
+dans une vraie pièce. Lire la distribution réelle avant de bouger le seuil —
+`words_hit`, `words_ref` et `order` sont dans les `customMetadata`, donc un
+`list()` suffit, sans télécharger un seul verdict :
+
+```bash
+wrangler r2 object list mentality-audio --jurisdiction eu --prefix "verified/"
+```
+
 Verdict écrit sous `verified/<account>/<sessionId>/<recordType>-<textId>.json` :
 
 ```json
-{ "ok": true, "reason": null, "overlap": 0.5, "words_hit": 10, "words_ref": 20,
-  "words_transcribed": 14, "model": "@cf/openai/whisper", "day": "2026-09-03" }
+{ "ok": true, "reason": null, "overlap": 0.63, "order": 1, "words_hit": 49,
+  "words_ref": 78, "words_transcribed": 61,
+  "model": "@cf/openai/whisper-large-v3-turbo", "day": "2026-09-07" }
 ```
 
-`reason` (quand `ok:false`) : `low_overlap`, `too_few_words`, `no_reference`,
-`audio_too_large` (> 8 Mo). Ce sont des **jugements** (ou des faits stables) :
-ils s'écrivent et clôturent le sujet.
+`overlap` est conservé pour information et **ne décide plus rien**.
+
+`reason` (quand `ok:false`) : `too_few_words_found` (pas assez de mots du
+texte), `words_out_of_order` (assez de mots, mais pas dans l'ordre),
+`too_few_words` (résumé trop court), `no_reference`, `audio_too_large`
+(> 8 Mo). Ce sont des **jugements** (ou des faits stables) : ils s'écrivent et
+clôturent le sujet.
 
 ### Panne d'infrastructure : aucun verdict, et une reprise
 
@@ -286,7 +327,8 @@ branché sur un bucket R2 en mémoire. Il verrouille notamment :
 - qu'un fragment de clé hors format est refusé (400) au lieu d'être nettoyé ;
 - la vérification des enregistrements (binding `AI` factice pilotable, `ctx`
   qui collecte les promesses de `waitUntil`) : recouvrement 50 % → `ok`,
-  10 % → `low_overlap`, référence absente → `no_reference` sans appel au
+  2 mots → `too_few_words_found`, mots en vrac → `words_out_of_order`,
+  référence absente → `no_reference` sans appel au
   modèle, `AI` absent → `ai_unavailable` avec upload 200, modèle en panne →
   `ai_error`, résumé 20 mots → `ok` / 5 mots → `too_few_words`, verdict sans
   aucun mot transcrit, réponse HTTP rendue avant la transcription ;
