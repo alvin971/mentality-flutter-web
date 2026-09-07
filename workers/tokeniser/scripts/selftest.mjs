@@ -721,9 +721,15 @@ console.log('\nConfiguration déployable (wrangler.toml)');
     actif.includes('ISSUE_CAP_ENABLED') && actif.includes('ISSUE_MAX_PER_WINDOW') &&
     actif.includes('CORPUS_CONSENT_REQUIRED') && actif.includes('MIN_RECORDINGS'),
     'une [vars] a disparu');
-  verifie('MIN_VERIFIED_READINGS livrée à "3" (seuil de lectures vérifiées de /validate)',
-    /MIN_VERIFIED_READINGS\s*=\s*"3"/.test(actif),
-    'MIN_VERIFIED_READINGS absente ou ≠ "3" dans le toml livré');
+  // Une seule lecture valide suffit (décision fondateur 2026-09-07) : les textes
+  // sont tirés d'un corpus de 753 et changent à chaque passation, et un autre
+  // texte du corpus ne retrouve que 21 mots au maximum contre 30 exigés — le
+  // rejeu du fichier d'un tiers est structurellement hors d'atteinte. Exiger
+  // 3 lectures ne protégeait de rien et bloquait la personne honnête dont une
+  // seule lecture avait mal été enregistrée.
+  verifie('MIN_VERIFIED_READINGS livrée à "1" (seuil de lectures vérifiées de /validate)',
+    /MIN_VERIFIED_READINGS\s*=\s*"1"/.test(actif),
+    'MIN_VERIFIED_READINGS absente ou ≠ "1" dans le toml livré');
   verifie('CORPUS_CONSENT_REQUIRED livrée à "true" (pas de passe Gratuit sans consentement corpus)',
     /CORPUS_CONSENT_REQUIRED\s*=\s*"true"/.test(actif),
     'CORPUS_CONSENT_REQUIRED absente ou ≠ "true" dans le toml livré');
