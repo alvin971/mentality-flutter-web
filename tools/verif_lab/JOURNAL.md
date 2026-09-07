@@ -409,3 +409,35 @@ entrées sur 74 **sans les supprimer** (le garde `if (!DRY)` est en place, cache
 vérifié intact : 202 turbo/app, 91 turbo/none, 74 whisper/app) ; `--holdout`
 s'exécute et rend « 0 mesuré », ce qui est l'état attendu tant que la vague 9
 n'est pas transcrite.
+
+## Réveil 9 — 2026-09-07 10:51 UTC — quota rouvert, lectures partielles et mp4 mesurés
+
+La boucle est restée sans réveil du 2026-09-04 11:08 au 2026-09-07 10:51 UTC
+(session interrompue, tâches de fond orphelines). L'allocation est rouverte —
+la sonde de 5 s passe en 1,1 s. Impossible de dater la réouverture : entre
+13 h 31 et 3 jours après épuisement. Le point reste ouvert pour la cadence du
+cron de reprise (§7).
+
+**Mesure (turbo, 105 fichiers, 59,7 min, 0 erreur) : vague 4 — lectures
+partielles — et premiers mp4.**
+
+| variante | verdict `ok` au seuil 0,30 + ordre ≥ 0,60 |
+|---|---|
+| lecture à **75 %** | **100 %** |
+| lecture à **60 %** | **100 %** (le §6 n'exige que 90 %) |
+| format **mp4** (AAC 32 kbps) | **100 %** positifs, 100 % négatifs |
+
+Une lecture tronquée à 60 % garde donc un recouvrement au-dessus de 0,30 : la
+personne qui bute sur la fin n'est pas punie, ce qui était l'inquiétude
+principale du §1 (faux négatifs = gens honnêtes privés de résultats).
+
+**Check-list §6 au seuil 0,30 + ordre ≥ 0,60, sur tout ce qui est mesuré
+(308 fichiers, 604 verdicts avec les paires dérivées)** : intégrales+75 % à
+100 % (min par langue 100, par format 100) ✓ · p60 100 % ✓ · négatifs 99,5 % ✓ ·
+résumés 100/100/100 ✓ · marge 0,52 ✓ → **tout est vert, mais sur 14 % du corpus
+d'essai seulement**. Les dégradations acoustiques (vague 5, 386 min) ne sont pas
+encore mesurées : c'est là que la queue basse des positifs se joue.
+
+**Reste à transcrire sur turbo : 1 495 fichiers = 1 076 min ≈ 4,3 fenêtres
+d'allocation.** Détail : vague 1 (107 min), 2 (112), 3 (159), 4 (98), 5 (386),
+6 (105), 7 (110). Le holdout (vague 9, 192 cas) n'est pas encore synthétisé.

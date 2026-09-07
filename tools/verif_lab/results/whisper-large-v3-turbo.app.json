@@ -2,17 +2,17 @@
  "model": "@cf/openai/whisper-large-v3-turbo",
  "policy": "app",
  "holdout": false,
- "day": "2026-09-04",
+ "day": "2026-09-07",
  "seuil_prod": 0.3,
  "min_summary": 15,
  "min_ordre": 0.6,
  "couverture": {
   "cas": 1805,
-  "mesures_directes": 203,
+  "mesures_directes": 308,
   "derives": 296,
-  "non_couverts": 1602,
+  "non_couverts": 1497,
   "erreurs_modele": 0,
-  "fallback_sans_language": 31
+  "fallback_sans_language": 49
  },
  "seuil_retenu": 0.3,
  "seuil_tient_negatifs": true,
@@ -25,7 +25,7 @@
    "par_format_min": 100
   },
   "p60": {
-   "global": null,
+   "global": 100,
    "ok": true
   },
   "negatifs": {
@@ -60,7 +60,7 @@
    "par_format_min": 100
   },
   "p60": {
-   "global": null,
+   "global": 100,
    "ok": true
   },
   "negatifs": {
@@ -92,8 +92,8 @@
    "integrales_et_75": 100,
    "integrales_propres": 100,
    "integrales_degradees": null,
-   "p75": null,
-   "p60": null,
+   "p75": 100,
+   "p60": 100,
    "negatifs": 77.84,
    "silence": 100,
    "bruit": 100,
@@ -140,7 +140,7 @@
      "neg": 77.37
     },
     "mp4": {
-     "pos": null,
+     "pos": 100,
      "neg": 100
     },
     "wav": {
@@ -149,7 +149,9 @@
     }
    },
    "par_variante": {
-    "full/clean": 100
+    "full/clean": 100,
+    "p75/clean": 100,
+    "p60/clean": 100
    }
   },
   {
@@ -157,8 +159,8 @@
    "integrales_et_75": 100,
    "integrales_propres": 100,
    "integrales_degradees": null,
-   "p75": null,
-   "p60": null,
+   "p75": 100,
+   "p60": 100,
    "negatifs": 89.43,
    "silence": 100,
    "bruit": 100,
@@ -205,7 +207,7 @@
      "neg": 89.21
     },
     "mp4": {
-     "pos": null,
+     "pos": 100,
      "neg": 100
     },
     "wav": {
@@ -214,7 +216,9 @@
     }
    },
    "par_variante": {
-    "full/clean": 100
+    "full/clean": 100,
+    "p75/clean": 100,
+    "p60/clean": 100
    }
   },
   {
@@ -222,8 +226,8 @@
    "integrales_et_75": 100,
    "integrales_propres": 100,
    "integrales_degradees": null,
-   "p75": null,
-   "p60": null,
+   "p75": 100,
+   "p60": 100,
    "negatifs": 92.53,
    "silence": 100,
    "bruit": 100,
@@ -270,7 +274,7 @@
      "neg": 92.37
     },
     "mp4": {
-     "pos": null,
+     "pos": 100,
      "neg": 100
     },
     "wav": {
@@ -279,7 +283,9 @@
     }
    },
    "par_variante": {
-    "full/clean": 100
+    "full/clean": 100,
+    "p75/clean": 100,
+    "p60/clean": 100
    }
   },
   {
@@ -287,8 +293,8 @@
    "integrales_et_75": 100,
    "integrales_propres": 100,
    "integrales_degradees": null,
-   "p75": null,
-   "p60": null,
+   "p75": 100,
+   "p60": 100,
    "negatifs": 93.81,
    "silence": 100,
    "bruit": 100,
@@ -335,7 +341,7 @@
      "neg": 93.68
     },
     "mp4": {
-     "pos": null,
+     "pos": 100,
      "neg": 100
     },
     "wav": {
@@ -344,7 +350,9 @@
     }
    },
    "par_variante": {
-    "full/clean": 100
+    "full/clean": 100,
+    "p75/clean": 100,
+    "p60/clean": 100
    }
   },
   {
@@ -352,8 +360,8 @@
    "integrales_et_75": 100,
    "integrales_propres": 100,
    "integrales_degradees": null,
-   "p75": null,
-   "p60": null,
+   "p75": 100,
+   "p60": 100,
    "negatifs": 96.91,
    "silence": 100,
    "bruit": 100,
@@ -400,7 +408,7 @@
      "neg": 96.84
     },
     "mp4": {
-     "pos": null,
+     "pos": 100,
      "neg": 100
     },
     "wav": {
@@ -409,7 +417,9 @@
     }
    },
    "par_variante": {
-    "full/clean": 100
+    "full/clean": 100,
+    "p75/clean": 100,
+    "p60/clean": 100
    }
   },
   {
@@ -417,8 +427,8 @@
    "integrales_et_75": 100,
    "integrales_propres": 100,
    "integrales_degradees": null,
-   "p75": null,
-   "p60": null,
+   "p75": 100,
+   "p60": 100,
    "negatifs": 99.48,
    "silence": 100,
    "bruit": 100,
@@ -465,7 +475,7 @@
      "neg": 99.47
     },
     "mp4": {
-     "pos": null,
+     "pos": 100,
      "neg": 100
     },
     "wav": {
@@ -474,7 +484,9 @@
     }
    },
    "par_variante": {
-    "full/clean": 100
+    "full/clean": 100,
+    "p75/clean": 100,
+    "p60/clean": 100
    }
   },
   {
@@ -482,8 +494,8 @@
    "integrales_et_75": 100,
    "integrales_propres": 100,
    "integrales_degradees": null,
-   "p75": null,
-   "p60": null,
+   "p75": 100,
+   "p60": 100,
    "negatifs": 99.74,
    "silence": 100,
    "bruit": 100,
@@ -530,7 +542,7 @@
      "neg": 99.74
     },
     "mp4": {
-     "pos": null,
+     "pos": 100,
      "neg": 100
     },
     "wav": {
@@ -539,7 +551,9 @@
     }
    },
    "par_variante": {
-    "full/clean": 100
+    "full/clean": 100,
+    "p75/clean": 100,
+    "p60/clean": 100
    }
   },
   {
@@ -547,8 +561,8 @@
    "integrales_et_75": 100,
    "integrales_propres": 100,
    "integrales_degradees": null,
-   "p75": null,
-   "p60": null,
+   "p75": 100,
+   "p60": 100,
    "negatifs": 99.74,
    "silence": 100,
    "bruit": 100,
@@ -595,7 +609,7 @@
      "neg": 99.74
     },
     "mp4": {
-     "pos": null,
+     "pos": 100,
      "neg": 100
     },
     "wav": {
@@ -604,7 +618,9 @@
     }
    },
    "par_variante": {
-    "full/clean": 100
+    "full/clean": 100,
+    "p75/clean": 100,
+    "p60/clean": 100
    }
   },
   {
@@ -612,8 +628,8 @@
    "integrales_et_75": 100,
    "integrales_propres": 100,
    "integrales_degradees": null,
-   "p75": null,
-   "p60": null,
+   "p75": 100,
+   "p60": 100,
    "negatifs": 99.74,
    "silence": 100,
    "bruit": 100,
@@ -660,7 +676,7 @@
      "neg": 99.74
     },
     "mp4": {
-     "pos": null,
+     "pos": 100,
      "neg": 100
     },
     "wav": {
@@ -669,7 +685,9 @@
     }
    },
    "par_variante": {
-    "full/clean": 100
+    "full/clean": 100,
+    "p75/clean": 100,
+    "p60/clean": 100
    }
   },
   {
@@ -677,8 +695,8 @@
    "integrales_et_75": 100,
    "integrales_propres": 100,
    "integrales_degradees": null,
-   "p75": null,
-   "p60": null,
+   "p75": 100,
+   "p60": 100,
    "negatifs": 99.74,
    "silence": 100,
    "bruit": 100,
@@ -725,7 +743,7 @@
      "neg": 99.74
     },
     "mp4": {
-     "pos": null,
+     "pos": 100,
      "neg": 100
     },
     "wav": {
@@ -734,7 +752,9 @@
     }
    },
    "par_variante": {
-    "full/clean": 100
+    "full/clean": 100,
+    "p75/clean": 100,
+    "p60/clean": 100
    }
   },
   {
@@ -742,8 +762,8 @@
    "integrales_et_75": 100,
    "integrales_propres": 100,
    "integrales_degradees": null,
-   "p75": null,
-   "p60": null,
+   "p75": 100,
+   "p60": 83.33,
    "negatifs": 99.74,
    "silence": 100,
    "bruit": 100,
@@ -790,7 +810,7 @@
      "neg": 99.74
     },
     "mp4": {
-     "pos": null,
+     "pos": 100,
      "neg": 100
     },
     "wav": {
@@ -799,16 +819,18 @@
     }
    },
    "par_variante": {
-    "full/clean": 100
+    "full/clean": 100,
+    "p75/clean": 100,
+    "p60/clean": 83.33
    }
   },
   {
    "seuil": 0.6,
-   "integrales_et_75": 100,
+   "integrales_et_75": 98.71,
    "integrales_propres": 100,
    "integrales_degradees": null,
-   "p75": null,
-   "p60": null,
+   "p75": 97.53,
+   "p60": 33.33,
    "negatifs": 99.74,
    "silence": 100,
    "bruit": 100,
@@ -845,17 +867,17 @@
      "neg": 100
     },
     "de": {
-     "pos": 100,
+     "pos": 92.59,
      "neg": 100
     }
    },
    "par_format": {
     "webm": {
-     "pos": 100,
+     "pos": 99.21,
      "neg": 99.74
     },
     "mp4": {
-     "pos": null,
+     "pos": 96.55,
      "neg": 100
     },
     "wav": {
@@ -864,16 +886,18 @@
     }
    },
    "par_variante": {
-    "full/clean": 100
+    "full/clean": 100,
+    "p75/clean": 97.53,
+    "p60/clean": 33.33
    }
   },
   {
    "seuil": 0.65,
-   "integrales_et_75": 100,
+   "integrales_et_75": 96.77,
    "integrales_propres": 100,
    "integrales_degradees": null,
-   "p75": null,
-   "p60": null,
+   "p75": 93.83,
+   "p60": 4.17,
    "negatifs": 99.74,
    "silence": 100,
    "bruit": 100,
@@ -904,283 +928,23 @@
     "es": {
      "pos": 100,
      "neg": 98.33
-    },
-    "pt": {
-     "pos": 100,
-     "neg": 100
-    },
-    "de": {
-     "pos": 100,
-     "neg": 100
-    }
-   },
-   "par_format": {
-    "webm": {
-     "pos": 100,
-     "neg": 99.74
-    },
-    "mp4": {
-     "pos": null,
-     "neg": 100
-    },
-    "wav": {
-     "pos": null,
-     "neg": null
-    }
-   },
-   "par_variante": {
-    "full/clean": 100
-   }
-  },
-  {
-   "seuil": 0.7,
-   "integrales_et_75": 100,
-   "integrales_propres": 100,
-   "integrales_degradees": null,
-   "p75": null,
-   "p60": null,
-   "negatifs": 100,
-   "silence": 100,
-   "bruit": 100,
-   "musique": 100,
-   "autre_texte": 100,
-   "autre_texte_autre_langue": 100,
-   "traduction": 100,
-   "p25_puis_silence": 100,
-   "phrase_en_boucle": 100,
-   "mots_melanges": 100,
-   "parole_de_fond": 100,
-   "resume_30": 100,
-   "resume_8": 100,
-   "resume_silence": 100,
-   "par_langue": {
-    "fr": {
-     "pos": 100,
-     "neg": 100
-    },
-    "en": {
-     "pos": 100,
-     "neg": 100
-    },
-    "en_GB": {
-     "pos": 100,
-     "neg": 100
-    },
-    "es": {
-     "pos": 100,
-     "neg": 100
-    },
-    "pt": {
-     "pos": 100,
-     "neg": 100
-    },
-    "de": {
-     "pos": 100,
-     "neg": 100
-    }
-   },
-   "par_format": {
-    "webm": {
-     "pos": 100,
-     "neg": 100
-    },
-    "mp4": {
-     "pos": null,
-     "neg": 100
-    },
-    "wav": {
-     "pos": null,
-     "neg": null
-    }
-   },
-   "par_variante": {
-    "full/clean": 100
-   }
-  },
-  {
-   "seuil": 0.75,
-   "integrales_et_75": 100,
-   "integrales_propres": 100,
-   "integrales_degradees": null,
-   "p75": null,
-   "p60": null,
-   "negatifs": 100,
-   "silence": 100,
-   "bruit": 100,
-   "musique": 100,
-   "autre_texte": 100,
-   "autre_texte_autre_langue": 100,
-   "traduction": 100,
-   "p25_puis_silence": 100,
-   "phrase_en_boucle": 100,
-   "mots_melanges": 100,
-   "parole_de_fond": 100,
-   "resume_30": 100,
-   "resume_8": 100,
-   "resume_silence": 100,
-   "par_langue": {
-    "fr": {
-     "pos": 100,
-     "neg": 100
-    },
-    "en": {
-     "pos": 100,
-     "neg": 100
-    },
-    "en_GB": {
-     "pos": 100,
-     "neg": 100
-    },
-    "es": {
-     "pos": 100,
-     "neg": 100
-    },
-    "pt": {
-     "pos": 100,
-     "neg": 100
-    },
-    "de": {
-     "pos": 100,
-     "neg": 100
-    }
-   },
-   "par_format": {
-    "webm": {
-     "pos": 100,
-     "neg": 100
-    },
-    "mp4": {
-     "pos": null,
-     "neg": 100
-    },
-    "wav": {
-     "pos": null,
-     "neg": null
-    }
-   },
-   "par_variante": {
-    "full/clean": 100
-   }
-  },
-  {
-   "seuil": 0.8,
-   "integrales_et_75": 100,
-   "integrales_propres": 100,
-   "integrales_degradees": null,
-   "p75": null,
-   "p60": null,
-   "negatifs": 100,
-   "silence": 100,
-   "bruit": 100,
-   "musique": 100,
-   "autre_texte": 100,
-   "autre_texte_autre_langue": 100,
-   "traduction": 100,
-   "p25_puis_silence": 100,
-   "phrase_en_boucle": 100,
-   "mots_melanges": 100,
-   "parole_de_fond": 100,
-   "resume_30": 100,
-   "resume_8": 100,
-   "resume_silence": 100,
-   "par_langue": {
-    "fr": {
-     "pos": 100,
-     "neg": 100
-    },
-    "en": {
-     "pos": 100,
-     "neg": 100
-    },
-    "en_GB": {
-     "pos": 100,
-     "neg": 100
-    },
-    "es": {
-     "pos": 100,
-     "neg": 100
-    },
-    "pt": {
-     "pos": 100,
-     "neg": 100
-    },
-    "de": {
-     "pos": 100,
-     "neg": 100
-    }
-   },
-   "par_format": {
-    "webm": {
-     "pos": 100,
-     "neg": 100
-    },
-    "mp4": {
-     "pos": null,
-     "neg": 100
-    },
-    "wav": {
-     "pos": null,
-     "neg": null
-    }
-   },
-   "par_variante": {
-    "full/clean": 100
-   }
-  },
-  {
-   "seuil": 0.85,
-   "integrales_et_75": 97.3,
-   "integrales_propres": 97.3,
-   "integrales_degradees": null,
-   "p75": null,
-   "p60": null,
-   "negatifs": 100,
-   "silence": 100,
-   "bruit": 100,
-   "musique": 100,
-   "autre_texte": 100,
-   "autre_texte_autre_langue": 100,
-   "traduction": 100,
-   "p25_puis_silence": 100,
-   "phrase_en_boucle": 100,
-   "mots_melanges": 100,
-   "parole_de_fond": 100,
-   "resume_30": 100,
-   "resume_8": 100,
-   "resume_silence": 100,
-   "par_langue": {
-    "fr": {
-     "pos": 100,
-     "neg": 100
-    },
-    "en": {
-     "pos": 100,
-     "neg": 100
-    },
-    "en_GB": {
-     "pos": 100,
-     "neg": 100
-    },
-    "es": {
-     "pos": 100,
-     "neg": 100
     },
     "pt": {
      "pos": 91.67,
      "neg": 100
     },
     "de": {
-     "pos": 92.31,
+     "pos": 88.89,
      "neg": 100
     }
    },
    "par_format": {
     "webm": {
-     "pos": 97.3,
-     "neg": 100
+     "pos": 97.62,
+     "neg": 99.74
     },
     "mp4": {
-     "pos": null,
+     "pos": 93.1,
      "neg": 100
     },
     "wav": {
@@ -1189,16 +953,286 @@
     }
    },
    "par_variante": {
-    "full/clean": 97.3
+    "full/clean": 100,
+    "p75/clean": 93.83,
+    "p60/clean": 4.17
+   }
+  },
+  {
+   "seuil": 0.7,
+   "integrales_et_75": 85.81,
+   "integrales_propres": 100,
+   "integrales_degradees": null,
+   "p75": 72.84,
+   "p60": 4.17,
+   "negatifs": 100,
+   "silence": 100,
+   "bruit": 100,
+   "musique": 100,
+   "autre_texte": 100,
+   "autre_texte_autre_langue": 100,
+   "traduction": 100,
+   "p25_puis_silence": 100,
+   "phrase_en_boucle": 100,
+   "mots_melanges": 100,
+   "parole_de_fond": 100,
+   "resume_30": 100,
+   "resume_8": 100,
+   "resume_silence": 100,
+   "par_langue": {
+    "fr": {
+     "pos": 88,
+     "neg": 100
+    },
+    "en": {
+     "pos": 85.19,
+     "neg": 100
+    },
+    "en_GB": {
+     "pos": 100,
+     "neg": 100
+    },
+    "es": {
+     "pos": 84.62,
+     "neg": 100
+    },
+    "pt": {
+     "pos": 70.83,
+     "neg": 100
+    },
+    "de": {
+     "pos": 85.19,
+     "neg": 100
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": 88.89,
+     "neg": 100
+    },
+    "mp4": {
+     "pos": 72.41,
+     "neg": 100
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {
+    "full/clean": 100,
+    "p75/clean": 72.84,
+    "p60/clean": 4.17
+   }
+  },
+  {
+   "seuil": 0.75,
+   "integrales_et_75": 63.23,
+   "integrales_propres": 100,
+   "integrales_degradees": null,
+   "p75": 29.63,
+   "p60": 0,
+   "negatifs": 100,
+   "silence": 100,
+   "bruit": 100,
+   "musique": 100,
+   "autre_texte": 100,
+   "autre_texte_autre_langue": 100,
+   "traduction": 100,
+   "p25_puis_silence": 100,
+   "phrase_en_boucle": 100,
+   "mots_melanges": 100,
+   "parole_de_fond": 100,
+   "resume_30": 100,
+   "resume_8": 100,
+   "resume_silence": 100,
+   "par_langue": {
+    "fr": {
+     "pos": 64,
+     "neg": 100
+    },
+    "en": {
+     "pos": 59.26,
+     "neg": 100
+    },
+    "en_GB": {
+     "pos": 84.62,
+     "neg": 100
+    },
+    "es": {
+     "pos": 57.69,
+     "neg": 100
+    },
+    "pt": {
+     "pos": 58.33,
+     "neg": 100
+    },
+    "de": {
+     "pos": 55.56,
+     "neg": 100
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": 70.63,
+     "neg": 100
+    },
+    "mp4": {
+     "pos": 31.03,
+     "neg": 100
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {
+    "full/clean": 100,
+    "p75/clean": 29.63,
+    "p60/clean": 0
+   }
+  },
+  {
+   "seuil": 0.8,
+   "integrales_et_75": 47.74,
+   "integrales_propres": 100,
+   "integrales_degradees": null,
+   "p75": 0,
+   "p60": 0,
+   "negatifs": 100,
+   "silence": 100,
+   "bruit": 100,
+   "musique": 100,
+   "autre_texte": 100,
+   "autre_texte_autre_langue": 100,
+   "traduction": 100,
+   "p25_puis_silence": 100,
+   "phrase_en_boucle": 100,
+   "mots_melanges": 100,
+   "parole_de_fond": 100,
+   "resume_30": 100,
+   "resume_8": 100,
+   "resume_silence": 100,
+   "par_langue": {
+    "fr": {
+     "pos": 48,
+     "neg": 100
+    },
+    "en": {
+     "pos": 48.15,
+     "neg": 100
+    },
+    "en_GB": {
+     "pos": 46.15,
+     "neg": 100
+    },
+    "es": {
+     "pos": 46.15,
+     "neg": 100
+    },
+    "pt": {
+     "pos": 50,
+     "neg": 100
+    },
+    "de": {
+     "pos": 48.15,
+     "neg": 100
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": 58.73,
+     "neg": 100
+    },
+    "mp4": {
+     "pos": 0,
+     "neg": 100
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {
+    "full/clean": 100,
+    "p75/clean": 0,
+    "p60/clean": 0
+   }
+  },
+  {
+   "seuil": 0.85,
+   "integrales_et_75": 46.45,
+   "integrales_propres": 97.3,
+   "integrales_degradees": null,
+   "p75": 0,
+   "p60": 0,
+   "negatifs": 100,
+   "silence": 100,
+   "bruit": 100,
+   "musique": 100,
+   "autre_texte": 100,
+   "autre_texte_autre_langue": 100,
+   "traduction": 100,
+   "p25_puis_silence": 100,
+   "phrase_en_boucle": 100,
+   "mots_melanges": 100,
+   "parole_de_fond": 100,
+   "resume_30": 100,
+   "resume_8": 100,
+   "resume_silence": 100,
+   "par_langue": {
+    "fr": {
+     "pos": 48,
+     "neg": 100
+    },
+    "en": {
+     "pos": 48.15,
+     "neg": 100
+    },
+    "en_GB": {
+     "pos": 46.15,
+     "neg": 100
+    },
+    "es": {
+     "pos": 46.15,
+     "neg": 100
+    },
+    "pt": {
+     "pos": 45.83,
+     "neg": 100
+    },
+    "de": {
+     "pos": 44.44,
+     "neg": 100
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": 57.14,
+     "neg": 100
+    },
+    "mp4": {
+     "pos": 0,
+     "neg": 100
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {
+    "full/clean": 97.3,
+    "p75/clean": 0,
+    "p60/clean": 0
    }
   },
   {
    "seuil": 0.9,
-   "integrales_et_75": 91.89,
+   "integrales_et_75": 43.87,
    "integrales_propres": 91.89,
    "integrales_degradees": null,
-   "p75": null,
-   "p60": null,
+   "p75": 0,
+   "p60": 0,
    "negatifs": 100,
    "silence": 100,
    "bruit": 100,
@@ -1215,84 +1249,19 @@
    "resume_silence": 100,
    "par_langue": {
     "fr": {
-     "pos": 100,
+     "pos": 48,
      "neg": 100
     },
     "en": {
-     "pos": 100,
+     "pos": 48.15,
      "neg": 100
     },
     "en_GB": {
-     "pos": 100,
+     "pos": 46.15,
      "neg": 100
     },
     "es": {
-     "pos": 100,
-     "neg": 100
-    },
-    "pt": {
-     "pos": 66.67,
-     "neg": 100
-    },
-    "de": {
-     "pos": 84.62,
-     "neg": 100
-    }
-   },
-   "par_format": {
-    "webm": {
-     "pos": 91.89,
-     "neg": 100
-    },
-    "mp4": {
-     "pos": null,
-     "neg": 100
-    },
-    "wav": {
-     "pos": null,
-     "neg": null
-    }
-   },
-   "par_variante": {
-    "full/clean": 91.89
-   }
-  },
-  {
-   "seuil": 0.95,
-   "integrales_et_75": 59.46,
-   "integrales_propres": 59.46,
-   "integrales_degradees": null,
-   "p75": null,
-   "p60": null,
-   "negatifs": 100,
-   "silence": 100,
-   "bruit": 100,
-   "musique": 100,
-   "autre_texte": 100,
-   "autre_texte_autre_langue": 100,
-   "traduction": 100,
-   "p25_puis_silence": 100,
-   "phrase_en_boucle": 100,
-   "mots_melanges": 100,
-   "parole_de_fond": 100,
-   "resume_30": 100,
-   "resume_8": 100,
-   "resume_silence": 100,
-   "par_langue": {
-    "fr": {
-     "pos": 58.33,
-     "neg": 100
-    },
-    "en": {
-     "pos": 92.31,
-     "neg": 100
-    },
-    "en_GB": {
-     "pos": 75,
-     "neg": 100
-    },
-    "es": {
-     "pos": 66.67,
+     "pos": 46.15,
      "neg": 100
     },
     "pt": {
@@ -1300,17 +1269,17 @@
      "neg": 100
     },
     "de": {
-     "pos": 30.77,
+     "pos": 40.74,
      "neg": 100
     }
    },
    "par_format": {
     "webm": {
-     "pos": 59.46,
+     "pos": 53.97,
      "neg": 100
     },
     "mp4": {
-     "pos": null,
+     "pos": 0,
      "neg": 100
     },
     "wav": {
@@ -1319,7 +1288,76 @@
     }
    },
    "par_variante": {
-    "full/clean": 59.46
+    "full/clean": 91.89,
+    "p75/clean": 0,
+    "p60/clean": 0
+   }
+  },
+  {
+   "seuil": 0.95,
+   "integrales_et_75": 28.39,
+   "integrales_propres": 59.46,
+   "integrales_degradees": null,
+   "p75": 0,
+   "p60": 0,
+   "negatifs": 100,
+   "silence": 100,
+   "bruit": 100,
+   "musique": 100,
+   "autre_texte": 100,
+   "autre_texte_autre_langue": 100,
+   "traduction": 100,
+   "p25_puis_silence": 100,
+   "phrase_en_boucle": 100,
+   "mots_melanges": 100,
+   "parole_de_fond": 100,
+   "resume_30": 100,
+   "resume_8": 100,
+   "resume_silence": 100,
+   "par_langue": {
+    "fr": {
+     "pos": 28,
+     "neg": 100
+    },
+    "en": {
+     "pos": 44.44,
+     "neg": 100
+    },
+    "en_GB": {
+     "pos": 34.62,
+     "neg": 100
+    },
+    "es": {
+     "pos": 30.77,
+     "neg": 100
+    },
+    "pt": {
+     "pos": 16.67,
+     "neg": 100
+    },
+    "de": {
+     "pos": 14.81,
+     "neg": 100
+    }
+   },
+   "par_format": {
+    "webm": {
+     "pos": 34.92,
+     "neg": 100
+    },
+    "mp4": {
+     "pos": 0,
+     "neg": 100
+    },
+    "wav": {
+     "pos": null,
+     "neg": null
+    }
+   },
+   "par_variante": {
+    "full/clean": 59.46,
+    "p75/clean": 0,
+    "p60/clean": 0
    }
   }
  ],
@@ -1329,9 +1367,9 @@
   "bilans_par_jour_gratuits": 83
  },
  "latence": {
-  "fichiers": 203,
-  "ms_par_minute_audio_med": 5773,
-  "ms_par_minute_audio_p95": 23250,
+  "fichiers": 308,
+  "ms_par_minute_audio_med": 5385,
+  "ms_par_minute_audio_p95": 20110,
   "ms_max_par_fichier": 16966,
   "sous_60_s": true
  },
@@ -1368,14 +1406,56 @@
    "couverture_dernier_tiers": null
   },
   "p75": {
-   "overlap": null,
-   "ordre": null,
-   "couverture_dernier_tiers": null
+   "overlap": {
+    "n": 81,
+    "min": 0.5974,
+    "p10": 0.6714,
+    "med": 0.7284,
+    "p90": 0.7674,
+    "max": 0.7895
+   },
+   "ordre": {
+    "n": 81,
+    "min": 0.9773,
+    "p10": 0.9855,
+    "med": 1,
+    "p90": 1,
+    "max": 1
+   },
+   "couverture_dernier_tiers": {
+    "n": 81,
+    "min": 0.1111,
+    "p10": 0.1724,
+    "med": 0.2692,
+    "p90": 0.3448,
+    "max": 0.4231
+   }
   },
   "p60": {
-   "overlap": null,
-   "ordre": null,
-   "couverture_dernier_tiers": null
+   "overlap": {
+    "n": 24,
+    "min": 0.5063,
+    "p10": 0.5352,
+    "med": 0.5875,
+    "p90": 0.6324,
+    "max": 0.7049
+   },
+   "ordre": {
+    "n": 24,
+    "min": 1,
+    "p10": 1,
+    "med": 1,
+    "p90": 1,
+    "max": 1
+   },
+   "couverture_dernier_tiers": {
+    "n": 24,
+    "min": 0,
+    "p10": 0,
+    "med": 0,
+    "p90": 0,
+    "max": 0.1429
+   }
   },
   "mots_melanges": {
    "overlap": {
@@ -1581,13 +1661,13 @@
   }
  },
  "lang_detected": {
-  "fr→fr": 47,
-  "en→en": 32,
-  "en_GB→en": 30,
+  "fr→fr": 64,
+  "en→en": 50,
+  "en_GB→en": 48,
   "en_GB→fr": 1,
-  "es→es": 30,
-  "pt→pt": 31,
-  "de→de": 32
+  "es→es": 48,
+  "pt→pt": 47,
+  "de→de": 50
  },
  "resistent": [
   {
